@@ -720,6 +720,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
 				texts = this.toStringChangeBattlerGraphics(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
+				texts = this.toStringDisplayHideABattler(iterator, parameters, properties);
+				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
 				break;
@@ -1979,15 +1982,32 @@ class MapObjectCommand extends Base {
 	toStringChangeBattlerGraphics(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		let text = this.toStringSelectionHero(iterator, properties, parameters, true);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			const faceset = this.toStringDynamicValue(iterator, properties, parameters, [], true);
+			const faceset = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.FACESETS),
+				true
+			);
 			const indexX = this.command[iterator.i++];
 			const indexY = this.command[iterator.i++];
 			text += ` ${t('faceset')}=${faceset} x=${indexX} y=${indexY}`;
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			text += ` ${t('battler')}=${this.toStringDynamicValue(iterator, properties, parameters, [], true)}`;
+			text += ` ${t('battler')}=${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.BATTLERS),
+				true
+			)}`;
 		}
 		return [text];
+	}
+
+	toStringDisplayHideABattler(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const selection = this.toStringSelectionHero(iterator, properties, parameters, true);
+		return [`${selection} ${t('hidden')}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
 	}
 
 	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

@@ -40,6 +40,7 @@ import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjec
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
 import DialogCommandDisplayAPicture from '../commands/DialogCommandDisplayAPicture';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
+import DialogCommandDisplayHideABattler from '../commands/DialogCommandDisplayHideABattler';
 import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandIf from '../commands/DialogCommandIf';
@@ -269,9 +270,9 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.START_BATTLE)}
 						{getButton(EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS)}
-						{getButton(EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER, true)}
-						{getButton(EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER, true)}
-						{getButton(EVENT_COMMAND_KIND.FORCE_AN_ACTION, true)}
+						{getButton(EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER)}
+						{getButton(EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER)}
+						{getButton(EVENT_COMMAND_KIND.FORCE_AN_ACTION)}
 						{getButton(EVENT_COMMAND_KIND.END_BATTLE)}
 					</Flex>
 				</Groupbox>
@@ -419,6 +420,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandStartBattle {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
 				return <DialogCommandChangeBattlerGraphics {...options} />;
+			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
+				return <DialogCommandDisplayHideABattler {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return <DialogCommandChangeAStatistic {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
