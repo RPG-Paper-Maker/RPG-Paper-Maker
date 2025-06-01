@@ -77,11 +77,11 @@ function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept
 
 	useEffect(() => {
 		setWeaponID(weapons[0]?.id ?? 1);
-	}, [weapons]);
+	}, [weapons, setWeaponID]);
 
 	useEffect(() => {
 		setArmorID(armors[0]?.id ?? 1);
-	}, [armors]);
+	}, [armors, setArmorID]);
 
 	return (
 		<Dialog

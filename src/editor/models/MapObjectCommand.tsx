@@ -72,6 +72,7 @@ import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
 import { MapObjectEvent } from './MapObjectEvent';
 import { Plugin } from './Plugin';
 import { PluginCommand } from './PluginCommand';
+import { TroopMonster } from './TroopMonster';
 
 export type MapObjectCommandType = number | string | boolean | JSONType;
 const { t } = i18next;
@@ -479,6 +480,10 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				return MapObjectCommand.COLOR_BLUE;
 			case EVENT_COMMAND_KIND.START_BATTLE:
+			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
+			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
+			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
+			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
 			case EVENT_COMMAND_KIND.END_BATTLE:
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
@@ -712,6 +717,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				texts = this.toStringStartBattle(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
+				texts = this.toStringChangeBattlerGraphics(iterator, parameters, properties);
+				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
 				break;
@@ -913,20 +921,37 @@ class MapObjectCommand extends Base {
 		}
 	}
 
-	toStringSelectionHero(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
-		switch (this.command[iterator.i++]) {
-			case 0:
-				return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
-					iterator,
-					properties,
-					parameters
-				)}`;
-			case 1:
-				return `${t('the.entire').toLowerCase()} ${i18next
-					.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
-					.toLowerCase()}`;
-			default:
-				return '';
+	toStringSelectionHero(iterator: ITERATOR, properties: Base[], parameters: Base[], isEnemy = false): string {
+		if (isEnemy) {
+			switch (this.command[iterator.i++]) {
+				case 0:
+					return `${t('enemy').toLowerCase()} ${
+						TroopMonster.currentMonsters[this.command[iterator.i++] as number]?.toString() ?? ''
+					}`;
+				case 1:
+					return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters
+					)}`;
+				default:
+					return '';
+			}
+		} else {
+			switch (this.command[iterator.i++]) {
+				case 0:
+					return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters
+					)}`;
+				case 1:
+					return `${t('the.entire').toLowerCase()} ${i18next
+						.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+						.toLowerCase()}`;
+				default:
+					return '';
+			}
 		}
 	}
 
@@ -1949,6 +1974,20 @@ class MapObjectCommand extends Base {
 		texts.push(transition);
 		texts.push(options);
 		return texts;
+	}
+
+	toStringChangeBattlerGraphics(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let text = this.toStringSelectionHero(iterator, properties, parameters, true);
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const faceset = this.toStringDynamicValue(iterator, properties, parameters, [], true);
+			const indexX = this.command[iterator.i++];
+			const indexY = this.command[iterator.i++];
+			text += ` ${t('faceset')}=${faceset} x=${indexX} y=${indexY}`;
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			text += ` ${t('battler')}=${this.toStringDynamicValue(iterator, properties, parameters, [], true)}`;
+		}
+		return [text];
 	}
 
 	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

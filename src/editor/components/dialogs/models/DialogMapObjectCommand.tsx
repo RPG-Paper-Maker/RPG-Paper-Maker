@@ -22,6 +22,7 @@ import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllo
 import DialogCommandCallACommonReaction from '../commands/DialogCommandCallACommonReaction';
 import DialogCommandChangeASkill from '../commands/DialogCommandChangeASkill';
 import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
+import DialogCommandChangeBattlerGraphics from '../commands/DialogCommandChangeBattlerGraphics';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeClass from '../commands/DialogCommandChangeClass';
 import DialogCommandChangeEquipment from '../commands/DialogCommandChangeEquipment';
@@ -267,7 +268,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				<Groupbox title={t('battles')}>
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.START_BATTLE)}
-						{getButton(EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS, true)}
+						{getButton(EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS)}
 						{getButton(EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER, true)}
 						{getButton(EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER, true)}
 						{getButton(EVENT_COMMAND_KIND.FORCE_AN_ACTION, true)}
@@ -416,6 +417,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandAllowForbidSavesMainMenu {...options} />;
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				return <DialogCommandStartBattle {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
+				return <DialogCommandChangeBattlerGraphics {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return <DialogCommandChangeAStatistic {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:

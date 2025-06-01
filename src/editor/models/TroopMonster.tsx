@@ -18,6 +18,8 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class TroopMonster extends Base {
+	public static currentMonsters: TroopMonster[] = [];
+
 	public monsterID!: number;
 	public level!: DynamicValue;
 	public hidden!: DynamicValue;
@@ -48,17 +50,25 @@ class TroopMonster extends Base {
 
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(TroopMonster.getBindings(additionnalBinding));
+		this.monsterID = 1;
 	}
 
 	getDialog(options: DIALOG_OPTIONS): ReactNode {
 		return <DialogTroopMonster {...options} />;
 	}
 
+	getName(): string {
+		return Project.current!.monsters.getByID(this.monsterID)?.getName() ?? '';
+	}
+
+	toString(): string | ReactNode {
+		return this.id === -1
+			? super.toString()
+			: `${Base.STRING_START + this.getName()} (lv.${this.level.toString()})`;
+	}
+
 	toStrings(): string[] {
-		return [
-			Base.STRING_START + (Project.current!.monsters.getByID(this.monsterID)?.getName() ?? this.monsterID),
-			this.level.toString(),
-		];
+		return this.id === -1 ? super.toStrings() : [Base.STRING_START + this.getName(), this.level.toString()];
 	}
 
 	copy(troopMonster: TroopMonster): void {

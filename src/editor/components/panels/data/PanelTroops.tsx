@@ -17,7 +17,7 @@ import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Base } from '../../../models';
+import { Base, TroopMonster } from '../../../models';
 import BattleMapPreviewer from '../../BattleMapPreviewer';
 import Button from '../../Button';
 import DialogTroopBattleTest from '../../dialogs/DialogTroopBattleTest';
@@ -56,6 +56,7 @@ const PanelTroops = forwardRef((props, ref) => {
 		setSelectedTroop(troop);
 		if (troop) {
 			setMonsters(Node.createList(troop.list, false));
+			TroopMonster.currentMonsters = troop.list;
 			setReactions(Node.createList(troop.reactions, false));
 		} else {
 			setMonsters([]);
@@ -70,6 +71,7 @@ const PanelTroops = forwardRef((props, ref) => {
 	const handleMonstersListUpdated = () => {
 		if (selectedTroop) {
 			selectedTroop.list = Node.createListFromNodes(monsters);
+			TroopMonster.currentMonsters = selectedTroop.list;
 		}
 	};
 
@@ -176,6 +178,7 @@ const PanelTroops = forwardRef((props, ref) => {
 											noScrollOnForce
 											scrollable
 											applyDefault
+											showEditName
 										/>
 									</Flex>
 									<Flex one column spaced>

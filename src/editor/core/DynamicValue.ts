@@ -247,6 +247,10 @@ class DynamicValue extends Serializable {
 		this.update(DYNAMIC_VALUE_KIND.FORMULA, formula);
 	}
 
+	updateToNone() {
+		this.update(DYNAMIC_VALUE_KIND.NONE, undefined);
+	}
+
 	equals(dynamic: DynamicValue): boolean {
 		return this.kind === dynamic.kind && this.value === dynamic.value;
 	}
