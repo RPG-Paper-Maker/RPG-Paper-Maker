@@ -58,7 +58,7 @@ class TroopMonster extends Base {
 	}
 
 	getName(): string {
-		return Project.current!.monsters.getByID(this.monsterID)?.getName() ?? '';
+		return this.id === -1 ? '' : Project.current!.monsters.getByID(this.monsterID)?.getName() ?? '';
 	}
 
 	toString(): string | ReactNode {
@@ -68,7 +68,7 @@ class TroopMonster extends Base {
 	}
 
 	toStrings(): string[] {
-		return this.id === -1 ? super.toStrings() : [Base.STRING_START + this.getName(), this.level.toString()];
+		return [Base.STRING_START + this.getName(), this.level.toString()];
 	}
 
 	copy(troopMonster: TroopMonster): void {

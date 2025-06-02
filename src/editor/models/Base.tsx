@@ -238,6 +238,7 @@ class Base extends Serializable {
 		'at.least.one.player',
 		'player.with.instance.id',
 	]);
+	public static SELECTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'last.target', 'custom']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

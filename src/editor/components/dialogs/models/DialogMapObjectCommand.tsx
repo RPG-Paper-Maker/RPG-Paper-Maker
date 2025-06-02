@@ -43,6 +43,7 @@ import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandDisplayHideABattler from '../commands/DialogCommandDisplayHideABattler';
 import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
+import DialogCommandForceAndAction from '../commands/DialogCommandForceAnAction';
 import DialogCommandIf from '../commands/DialogCommandIf';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandLabel from '../commands/DialogCommandLabel';
@@ -425,6 +426,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandDisplayHideABattler {...options} />;
 			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
 				return <DialogCommandTransformABattler {...options} />;
+			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
+				return <DialogCommandForceAndAction {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return <DialogCommandChangeAStatistic {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:

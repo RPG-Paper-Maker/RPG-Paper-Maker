@@ -55,6 +55,7 @@ import {
 	ITEM_KIND,
 	ITERATOR,
 	JSONType,
+	MONSTER_ACTION_KIND,
 	PICTURE_KIND,
 	SONG_KIND,
 	Utils,
@@ -725,6 +726,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
 				texts = this.toStringTransformABattler(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
+				texts = this.toStringForceAnAction(iterator, parameters, properties);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
@@ -2018,6 +2022,42 @@ class MapObjectCommand extends Base {
 		const monsterID = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.monsters.list);
 		const level = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${selection} ${t('monster.id')}=${monsterID} ${t('level')}=${level}`];
+	}
+
+	toStringForceAnAction(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let text = this.toStringSelectionHero(iterator, properties, parameters, true);
+		text += ` - ${t('action')} `;
+		const actionKind = this.command[iterator.i++] as MONSTER_ACTION_KIND;
+		switch (actionKind) {
+			case MONSTER_ACTION_KIND.USE_SKILL:
+				text += `${t('use.skill.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.skills.list
+				)}`;
+				break;
+			case MONSTER_ACTION_KIND.USE_ITEM:
+				text += `${t('use.item.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.items.list
+				)}`;
+				break;
+			case MONSTER_ACTION_KIND.DO_NOTHING:
+				text += t('do.nothing');
+				break;
+		}
+		const targetKind = this.command[iterator.i++] as number;
+		text += ` - ${t('target')} ${t(Base.SELECTION_TARGET_OPTIONS[targetKind].name)}`;
+		if (targetKind === 2) {
+			text += ' ' + this.toStringSelectionHero(iterator, properties, parameters, true);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			text += ` [${t('use.battler.turn')}]`;
+		}
+		return [text];
 	}
 
 	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
