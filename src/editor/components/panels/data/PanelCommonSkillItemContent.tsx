@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	COMMON_SKILL_ITEM_KIND,
+	DAMAGES_KIND,
 	DYNAMIC_VALUE_OPTIONS_TYPE,
 	INPUT_TYPE_WIDTH,
 	PICTURE_KIND,
@@ -23,7 +24,7 @@ import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Base, CommonSkillItem, Cost, Effect, Localization } from '../../../models';
+import { Base, Characteristic, CommonSkillItem, Cost, Effect, Localization } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
@@ -47,8 +48,17 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 
 	const playSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
 
+	const getDefaultCost = () => {
+		const cost = new Cost();
+		cost.applyDefault();
+		cost.kind = DAMAGES_KIND.STAT;
+		cost.valueFormula.value = '1';
+		return cost;
+	};
+
 	const [elementType, setElementType] = useStateNumber();
 	const [consumable, setConsumable] = useStateBool();
+	const [oneHand, setOneHand] = useStateBool();
 	const [iconID, setIconID] = useStateNumber();
 	const [iconIndexX, setIconIndexX] = useStateNumber();
 	const [iconIndexY, setIconIndexY] = useStateNumber();
@@ -62,12 +72,28 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 	const [canBeSold, setCanBeSold] = useStateDynamicValue();
 	const [battleMessage, setBattleMessage] = useState<Localization>(new Localization());
 	const [price, setPrice] = useState<Node[]>([]);
+	const [costs, setCosts] = useState<Node[]>([]);
+	const [defaultCost] = useState(getDefaultCost());
 	const [effects, setEffects] = useState<Node[]>([]);
+	const [characteristics, setCharacteristics] = useState<Node[]>([]);
+
+	const types = useMemo(() => {
+		switch (kind) {
+			case COMMON_SKILL_ITEM_KIND.ITEM:
+				return Project.current!.systems.itemsTypes;
+			case COMMON_SKILL_ITEM_KIND.WEAPON:
+				return Project.current!.battleSystem.weaponsKind;
+			case COMMON_SKILL_ITEM_KIND.ARMOR:
+				return Project.current!.battleSystem.armorsKind;
+		}
+		return [];
+	}, [kind]);
 
 	const update = () => {
 		if (selectedElement) {
 			setElementType(selectedElement.type);
 			setConsumable(selectedElement.consumable);
+			setOneHand(selectedElement.oneHand);
 			setIconID(selectedElement.pictureID);
 			setIconIndexX(selectedElement.pictureIndexX);
 			setIconIndexY(selectedElement.pictureIndexY);
@@ -82,7 +108,9 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 			setCanBeSold(selectedElement.canBeSold);
 			setBattleMessage(selectedElement.battleMessage);
 			setPrice(Node.createList(selectedElement.price, false));
+			setCosts(Node.createList(selectedElement.costs, false));
 			setEffects(Node.createList(selectedElement.effects, false));
+			setCharacteristics(Node.createList(selectedElement.characteristics, false));
 		}
 	};
 
@@ -94,6 +122,11 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 	const handleChangeConsumable = (b: boolean) => {
 		setConsumable(b);
 		selectedElement!.consumable = b;
+	};
+
+	const handleChangeOneHand = (b: boolean) => {
+		setOneHand(b);
+		selectedElement!.oneHand = b;
 	};
 
 	const handleChangeIcon = (id: number, indexX: number, indexY: number) => {
@@ -116,8 +149,16 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 		selectedElement!.price = Node.createListFromNodes(price);
 	};
 
+	const handleUpdateCosts = () => {
+		selectedElement!.costs = Node.createListFromNodes(costs);
+	};
+
 	const handleUpdateEffects = () => {
 		selectedElement!.effects = Node.createListFromNodes(effects);
+	};
+
+	const handleUpdateCharacteristics = () => {
+		selectedElement!.characteristics = Node.createListFromNodes(characteristics);
 	};
 
 	useLayoutEffect(() => {
@@ -128,17 +169,28 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 	return (
 		<Flex one column spacedLarge fillWidth fillHeight>
 			<Flex spaced centerV>
-				<Flex disabledLabel={disabled}>{t('type')}:</Flex>
-				<Dropdown
-					selectedID={elementType}
-					onChange={handleChangeElementType}
-					options={Project.current!.systems.itemsTypes}
-					disabled={disabled}
-					displayIDs
-				/>
-				<Checkbox isChecked={consumable} onChange={handleChangeConsumable} disabled={disabled}>
-					{t('consomable')}
-				</Checkbox>
+				{kind !== COMMON_SKILL_ITEM_KIND.SKILL && (
+					<>
+						<Flex disabledLabel={disabled}>{t('type')}:</Flex>
+						<Dropdown
+							selectedID={elementType}
+							onChange={handleChangeElementType}
+							options={types}
+							disabled={disabled}
+							displayIDs
+						/>
+					</>
+				)}
+				{kind === COMMON_SKILL_ITEM_KIND.ITEM && (
+					<Checkbox isChecked={consumable} onChange={handleChangeConsumable} disabled={disabled}>
+						{t('consomable')}
+					</Checkbox>
+				)}
+				{kind === COMMON_SKILL_ITEM_KIND.WEAPON && (
+					<Checkbox isChecked={oneHand} onChange={handleChangeOneHand} disabled={disabled}>
+						{t('one.hand')}
+					</Checkbox>
+				)}
 				<Flex one />
 				<Flex disabledLabel={disabled}>{t('icon')}:</Flex>
 				<AssetSelector
@@ -188,24 +240,34 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								addNoneOption
 							/>
 						</Value>
-						<Label disabled={disabled}>{t('available')}</Label>
-						<Value>
-							<Dropdown
-								selectedID={availableKind}
-								onChange={handleChangeAvailableKind}
-								options={Base.AVAILABLE_KIND_OPTIONS}
-								disabled={disabled}
-								translateOptions
-							/>
-						</Value>
-						<Label disabled={disabled}>{`${t('sound.effect')} (${t('main.menu').toLowerCase()})`}</Label>
-						<Value>
-							<PlaySongSelector
-								songKind={SONG_KIND.MUSIC}
-								ref={playSoundSelectorRef}
-								disabled={disabled}
-							/>
-						</Value>
+						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+							<>
+								<Label disabled={disabled}>{t('available')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={availableKind}
+										onChange={handleChangeAvailableKind}
+										options={Base.AVAILABLE_KIND_OPTIONS}
+										disabled={disabled}
+										translateOptions
+									/>
+								</Value>
+							</>
+						)}
+						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+							<>
+								<Label disabled={disabled}>{`${t('sound.effect')} (${t(
+									'main.menu'
+								).toLowerCase()})`}</Label>
+								<Value>
+									<PlaySongSelector
+										songKind={SONG_KIND.MUSIC}
+										ref={playSoundSelectorRef}
+										disabled={disabled}
+									/>
+								</Value>
+							</>
+						)}
 						<Label disabled={disabled}>{t('user.animation.id')}</Label>
 						<Value>
 							<DynamicValueSelector
@@ -234,14 +296,18 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								disabled={disabled}
 							/>
 						</Value>
-						<Label disabled={disabled}>{t('battle.message')}</Label>
-						<Value>
-							<InputLocalization
-								localization={battleMessage}
-								disabled={disabled}
-								widthType={INPUT_TYPE_WIDTH.FILL}
-							/>
-						</Value>
+						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+							<>
+								<Label disabled={disabled}>{t('battle.message')}</Label>
+								<Value>
+									<InputLocalization
+										localization={battleMessage}
+										disabled={disabled}
+										widthType={INPUT_TYPE_WIDTH.FILL}
+									/>
+								</Value>
+							</>
+						)}
 					</Form>
 					<Flex one>
 						<Groupbox title={t('price')} disabled={disabled} fillWidth>
@@ -258,6 +324,23 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								/>
 							</Flex>
 						</Groupbox>
+						{(kind === COMMON_SKILL_ITEM_KIND.WEAPON || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+							<Groupbox title={t('costs')} disabled={disabled} fillWidth>
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Cost}
+										list={costs}
+										onListUpdated={handleUpdateCosts}
+										disabled={disabled}
+										defaultNewModel={defaultCost}
+										noScrollOnForce
+										scrollable
+										canBeEmpty
+										byIndex
+									/>
+								</Flex>
+							</Groupbox>
+						)}
 					</Flex>
 				</Flex>
 				<Flex one column>
@@ -277,6 +360,24 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 							</Flex>
 						</Groupbox>
 					</Flex>
+					{(kind === COMMON_SKILL_ITEM_KIND.WEAPON || kind === COMMON_SKILL_ITEM_KIND.ARMOR) && (
+						<Flex one>
+							<Groupbox title={t('characteristics')} disabled={disabled} fillWidth>
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Characteristic}
+										list={characteristics}
+										onListUpdated={handleUpdateCharacteristics}
+										disabled={disabled}
+										noScrollOnForce
+										scrollable
+										canBeEmpty
+										byIndex
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+					)}
 				</Flex>
 			</Flex>
 		</Flex>
