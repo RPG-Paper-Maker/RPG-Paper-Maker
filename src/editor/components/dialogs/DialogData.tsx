@@ -41,6 +41,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelTroopsRef = useRef(null);
 	const panelItemsRef = useRef(null);
 	const panelWeaponsRef = useRef(null);
+	const panelArmorsRef = useRef(null);
 
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
@@ -60,6 +61,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelWeaponsRef.current) {
 			await Project.current!.weapons.save();
+		}
+		if (panelArmorsRef.current) {
+			await Project.current!.armors.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -83,6 +87,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelWeaponsRef.current) {
 			await Project.current!.weapons.load();
+		}
+		if (panelArmorsRef.current) {
+			await Project.current!.armors.load();
 		}
 		setIsOpen(false);
 	};
@@ -117,7 +124,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					<PanelTroops key={3} ref={panelTroopsRef} />,
 					<PanelCommonSkillItem key={4} kind={COMMON_SKILL_ITEM_KIND.ITEM} ref={panelItemsRef} />,
 					<PanelCommonSkillItem key={5} kind={COMMON_SKILL_ITEM_KIND.WEAPON} ref={panelWeaponsRef} />,
-					null,
+					<PanelCommonSkillItem key={6} kind={COMMON_SKILL_ITEM_KIND.ARMOR} ref={panelArmorsRef} />,
 					null,
 					null,
 					null,

@@ -221,73 +221,77 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								addNoneOption
 							/>
 						</Value>
-						<Label disabled={disabled}>{t('target')}</Label>
-						<Value>
-							<Dropdown
-								selectedID={targetKind}
-								onChange={handleChangeTargetKind}
-								options={Base.TARGET_KIND_OPTIONS}
-								disabled={disabled}
-								translateOptions
-							/>
-						</Value>
-						<Label disabled={disabled}>{t('target.conditions.formula')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={targetConditionFormula}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								disabled={disabled}
-								addNoneOption
-							/>
-						</Value>
-						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+						{kind !== COMMON_SKILL_ITEM_KIND.ARMOR && (
 							<>
-								<Label disabled={disabled}>{t('available')}</Label>
+								<Label disabled={disabled}>{t('target')}</Label>
 								<Value>
 									<Dropdown
-										selectedID={availableKind}
-										onChange={handleChangeAvailableKind}
-										options={Base.AVAILABLE_KIND_OPTIONS}
+										selectedID={targetKind}
+										onChange={handleChangeTargetKind}
+										options={Base.TARGET_KIND_OPTIONS}
 										disabled={disabled}
 										translateOptions
 									/>
 								</Value>
-							</>
-						)}
-						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
-							<>
-								<Label disabled={disabled}>{`${t('sound.effect')} (${t(
-									'main.menu'
-								).toLowerCase()})`}</Label>
+								<Label disabled={disabled}>{t('target.conditions.formula')}</Label>
 								<Value>
-									<PlaySongSelector
-										songKind={SONG_KIND.MUSIC}
-										ref={playSoundSelectorRef}
+									<DynamicValueSelector
+										value={targetConditionFormula}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
 										disabled={disabled}
+										addNoneOption
+									/>
+								</Value>
+								{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+									<>
+										<Label disabled={disabled}>{t('available')}</Label>
+										<Value>
+											<Dropdown
+												selectedID={availableKind}
+												onChange={handleChangeAvailableKind}
+												options={Base.AVAILABLE_KIND_OPTIONS}
+												disabled={disabled}
+												translateOptions
+											/>
+										</Value>
+									</>
+								)}
+								{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
+									<>
+										<Label disabled={disabled}>{`${t('sound.effect')} (${t(
+											'main.menu'
+										).toLowerCase()})`}</Label>
+										<Value>
+											<PlaySongSelector
+												songKind={SONG_KIND.MUSIC}
+												ref={playSoundSelectorRef}
+												disabled={disabled}
+											/>
+										</Value>
+									</>
+								)}
+								<Label disabled={disabled}>{t('user.animation.id')}</Label>
+								<Value>
+									<DynamicValueSelector
+										value={animationUserID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={Project.current!.animations.list}
+										disabled={disabled}
+										addNoneOption
+									/>
+								</Value>
+								<Label disabled={disabled}>{t('target.animation.id')}</Label>
+								<Value>
+									<DynamicValueSelector
+										value={animationTargetID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={Project.current!.animations.list}
+										disabled={disabled}
+										addNoneOption
 									/>
 								</Value>
 							</>
 						)}
-						<Label disabled={disabled}>{t('user.animation.id')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={animationUserID}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-								databaseOptions={Project.current!.animations.list}
-								disabled={disabled}
-								addNoneOption
-							/>
-						</Value>
-						<Label disabled={disabled}>{t('target.animation.id')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={animationTargetID}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-								databaseOptions={Project.current!.animations.list}
-								disabled={disabled}
-								addNoneOption
-							/>
-						</Value>
 						<Label disabled={disabled}>{t('can.be.sold')}</Label>
 						<Value>
 							<DynamicValueSelector
@@ -344,22 +348,24 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 					</Flex>
 				</Flex>
 				<Flex one column>
-					<Flex one>
-						<Groupbox title={t('effects')} disabled={disabled} fillWidth>
-							<Flex one fillHeight>
-								<Tree
-									constructorType={Effect}
-									list={effects}
-									onListUpdated={handleUpdateEffects}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-									byIndex
-								/>
-							</Flex>
-						</Groupbox>
-					</Flex>
+					{kind !== COMMON_SKILL_ITEM_KIND.ARMOR && (
+						<Flex one>
+							<Groupbox title={t('effects')} disabled={disabled} fillWidth>
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Effect}
+										list={effects}
+										onListUpdated={handleUpdateEffects}
+										disabled={disabled}
+										noScrollOnForce
+										scrollable
+										canBeEmpty
+										byIndex
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+					)}
 					{(kind === COMMON_SKILL_ITEM_KIND.WEAPON || kind === COMMON_SKILL_ITEM_KIND.ARMOR) && (
 						<Flex one>
 							<Groupbox title={t('characteristics')} disabled={disabled} fillWidth>
