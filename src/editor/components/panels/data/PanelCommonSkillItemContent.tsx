@@ -292,14 +292,18 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								</Value>
 							</>
 						)}
-						<Label disabled={disabled}>{t('can.be.sold')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={canBeSold}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH}
-								disabled={disabled}
-							/>
-						</Value>
+						{kind !== COMMON_SKILL_ITEM_KIND.SKILL && (
+							<>
+								<Label disabled={disabled}>{t('can.be.sold')}</Label>
+								<Value>
+									<DynamicValueSelector
+										value={canBeSold}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH}
+										disabled={disabled}
+									/>
+								</Value>
+							</>
+						)}
 						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
 							<>
 								<Label disabled={disabled}>{t('battle.message')}</Label>
@@ -314,20 +318,22 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 						)}
 					</Form>
 					<Flex one>
-						<Groupbox title={t('price')} disabled={disabled} fillWidth>
-							<Flex one fillHeight>
-								<Tree
-									constructorType={Cost}
-									list={price}
-									onListUpdated={handleUpdatePrice}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-									byIndex
-								/>
-							</Flex>
-						</Groupbox>
+						{kind !== COMMON_SKILL_ITEM_KIND.SKILL && (
+							<Groupbox title={t('price')} disabled={disabled} fillWidth>
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Cost}
+										list={price}
+										onListUpdated={handleUpdatePrice}
+										disabled={disabled}
+										noScrollOnForce
+										scrollable
+										canBeEmpty
+										byIndex
+									/>
+								</Flex>
+							</Groupbox>
+						)}
 						{(kind === COMMON_SKILL_ITEM_KIND.WEAPON || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
 							<Groupbox title={t('costs')} disabled={disabled} fillWidth>
 								<Flex one fillHeight>
