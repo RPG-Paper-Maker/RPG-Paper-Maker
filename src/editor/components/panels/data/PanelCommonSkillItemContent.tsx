@@ -23,7 +23,7 @@ import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Base, CommonSkillItem, Cost, Localization } from '../../../models';
+import { Base, CommonSkillItem, Cost, Effect, Localization } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
@@ -62,6 +62,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 	const [canBeSold, setCanBeSold] = useStateDynamicValue();
 	const [battleMessage, setBattleMessage] = useState<Localization>(new Localization());
 	const [price, setPrice] = useState<Node[]>([]);
+	const [effects, setEffects] = useState<Node[]>([]);
 
 	const update = () => {
 		if (selectedElement) {
@@ -81,6 +82,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 			setCanBeSold(selectedElement.canBeSold);
 			setBattleMessage(selectedElement.battleMessage);
 			setPrice(Node.createList(selectedElement.price, false));
+			setEffects(Node.createList(selectedElement.effects, false));
 		}
 	};
 
@@ -112,6 +114,10 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 
 	const handleUpdatePrice = () => {
 		selectedElement!.price = Node.createListFromNodes(price);
+	};
+
+	const handleUpdateEffects = () => {
+		selectedElement!.effects = Node.createListFromNodes(effects);
 	};
 
 	useLayoutEffect(() => {
@@ -254,7 +260,24 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 						</Groupbox>
 					</Flex>
 				</Flex>
-				<Flex one></Flex>
+				<Flex one column>
+					<Flex one>
+						<Groupbox title={t('effects')} disabled={disabled} fillWidth>
+							<Flex one fillHeight>
+								<Tree
+									constructorType={Effect}
+									list={effects}
+									onListUpdated={handleUpdateEffects}
+									disabled={disabled}
+									noScrollOnForce
+									scrollable
+									canBeEmpty
+									byIndex
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+				</Flex>
 			</Flex>
 		</Flex>
 	);

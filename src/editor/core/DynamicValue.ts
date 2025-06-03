@@ -18,6 +18,7 @@ import { Project } from './Project';
 import { BindingType, Serializable } from './Serializable';
 
 const { t } = i18next;
+
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
 	public value!: unknown;

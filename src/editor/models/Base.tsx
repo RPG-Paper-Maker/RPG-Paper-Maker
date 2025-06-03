@@ -247,8 +247,15 @@ class Base extends Serializable {
 		'all.enemies',
 		'all.allies',
 	]);
-
 	public static AVAILABLE_KIND_OPTIONS = Base.mapListIndex(['battle.only', 'main.menu.only', 'always', 'never']);
+	public static ADD_REMOVE_OPTIONS = Base.mapListIndex(['add', 'remove']);
+	public static EFFECT_SPECIAL_ACTION_OPTIONS = Base.mapListIndex([
+		'apply.weapon.effects',
+		'open.skills.choice',
+		'open.items.choice',
+		'escape',
+		'end.turn',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
