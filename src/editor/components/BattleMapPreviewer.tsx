@@ -30,10 +30,11 @@ const createOverlayLine = (x1: number, y1: number, x2: number, y2: number, color
 
 type Props = {
 	monsters: Model.TroopMonster[];
+	triggerUpdate?: boolean;
 	disabled?: boolean;
 };
 
-function BattleMapPreviewer({ monsters, disabled = false }: Props) {
+function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props) {
 	const [firstLoading, setFirstLoading] = useState(false);
 	const [dataURL, setDataURL] = useState('');
 
@@ -102,7 +103,7 @@ function BattleMapPreviewer({ monsters, disabled = false }: Props) {
 		overlayScene.add(hLine);
 		overlayScene.add(vLine);
 		Manager.GL.staticRender.autoClear = false;
-		Manager.GL.staticRender.clearDepth(); // Clear depth buffer so overlay isn't occluded
+		Manager.GL.staticRender.clearDepth();
 		Manager.GL.staticRender.render(overlayScene, overlayCamera);
 		Manager.GL.staticRender.autoClear = true;
 		setDataURL(Manager.GL.staticRender.domElement.toDataURL('image/png'));
@@ -120,7 +121,7 @@ function BattleMapPreviewer({ monsters, disabled = false }: Props) {
 		Battler.monsters = monsters;
 		update().catch(console.error);
 		// eslint-disable-next-line
-	}, [monsters]);
+	}, [monsters, triggerUpdate]);
 
 	return (
 		<>

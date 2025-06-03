@@ -11,8 +11,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrayUtils, Paths } from '../../common';
-import { openGame, writeJSON } from '../../common/Platform';
+import { ArrayUtils, JSONType, Paths } from '../../common';
+import { openGame, readJSON, writeJSON } from '../../common/Platform';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import useStateNumber from '../../hooks/useStateNumber';
@@ -46,6 +46,7 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 	const [tabIndex, setTabIndex] = useState(0);
 	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 	const [copied, setCopied] = useState<TroopBattleTestHero | null>(null);
+	const [previousJSON, setPreviousJSON] = useState<JSONType | null>(null);
 
 	const titles = useMemo(
 		() => heroes.map((hero) => Base.create(hero.id, Project.current!.heroes.getByID(hero.heroID)?.getName() ?? '')),
@@ -60,6 +61,7 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 		setBattleMapID(battle.battleMapID);
 		setHeroes(battle.heroes);
 		setCopied(null);
+		setPreviousJSON(null);
 	};
 
 	const handleCurrentIndexChanged = (index: number) => {
@@ -117,6 +119,8 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 	};
 
 	const handleAccept = async () => {
+		setPreviousJSON(await readJSON(Project.current!.troops.getPath()));
+		Project.current!.troops.save();
 		model!.battleMapID = battleMapID;
 		const json = {};
 		model!.write(json);
@@ -125,6 +129,9 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 	};
 
 	const handleReject = async () => {
+		if (previousJSON) {
+			await writeJSON(Project.current!.troops.getPath(), previousJSON);
+		}
 		setIsOpen(false);
 	};
 

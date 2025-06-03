@@ -40,6 +40,7 @@ const PanelTroops = forwardRef((props, ref) => {
 	const [isDialogReactionConditionsOpen, setIsDialogReactionConditionsOpen] = useStateBool();
 	const [frequency, setFrequency] = useStateNumber();
 	const [commands, setCommands] = useState<Node[]>([]);
+	const [triggerUpdate, setTriggerUpdate] = useStateBool();
 
 	const isTroopDisabled = useMemo(() => selectedTroop === null || selectedTroop.id === -1, [selectedTroop]);
 	const isReactionDisabled = useMemo(
@@ -72,6 +73,7 @@ const PanelTroops = forwardRef((props, ref) => {
 		if (selectedTroop) {
 			selectedTroop.list = Node.createListFromNodes(monsters);
 			TroopMonster.currentMonsters = selectedTroop.list;
+			setTriggerUpdate((v) => !v);
 		}
 	};
 
@@ -162,7 +164,11 @@ const PanelTroops = forwardRef((props, ref) => {
 										</Groupbox>
 									</Flex>
 								</Flex>
-								<BattleMapPreviewer monsters={selectedTroop?.list ?? []} disabled={isTroopDisabled} />
+								<BattleMapPreviewer
+									monsters={selectedTroop?.list ?? []}
+									triggerUpdate={triggerUpdate}
+									disabled={isTroopDisabled}
+								/>
 							</Flex>
 							<Groupbox title={t('reactions')} disabled={isTroopDisabled}>
 								<Flex spacedLarge>
