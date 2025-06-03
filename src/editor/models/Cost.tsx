@@ -98,7 +98,7 @@ class Cost extends Base {
 	}
 
 	toString(): string {
-		let str = '';
+		let str = Base.STRING_START;
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
 				str += this.statisticID.toString(Project.current!.battleSystem.statistics);

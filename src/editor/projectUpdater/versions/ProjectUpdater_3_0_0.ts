@@ -215,30 +215,6 @@ class ProjectUpdater_3_0_0 {
 				(json.gk as number)--;
 			}
 		});
-
-		// Battle system texts to formulas
-		const jsonBattle = await readJSON(Paths.join(projectPath, 'battleSystem.json'));
-		if (jsonBattle) {
-			if (jsonBattle.fisdead && (jsonBattle.fisdead as JSONType).k === 8) {
-				(jsonBattle.fisdead as JSONType).k = 9;
-			}
-			if (jsonBattle.fc && (jsonBattle.fc as JSONType).k === 8) {
-				(jsonBattle.fc as JSONType).k = 9;
-			}
-			if (jsonBattle.heroesBattlersCenterOffset && (jsonBattle.heroesBattlersCenterOffset as JSONType).k === 8) {
-				(jsonBattle.heroesBattlersCenterOffset as JSONType).k = 9;
-			}
-			if (jsonBattle.heroesBattlersOffset && (jsonBattle.heroesBattlersOffset as JSONType).k === 8) {
-				(jsonBattle.heroesBattlersOffset as JSONType).k = 9;
-			}
-			if (jsonBattle.troopsBattlersCenterOffset && (jsonBattle.troopsBattlersCenterOffset as JSONType).k === 8) {
-				(jsonBattle.troopsBattlersCenterOffset as JSONType).k = 9;
-			}
-			if (jsonBattle.troopsBattlersOffset && (jsonBattle.troopsBattlersOffset as JSONType).k === 8) {
-				(jsonBattle.troopsBattlersOffset as JSONType).k = 9;
-			}
-			await writeJSON(Paths.join(projectPath, 'battleSystem.json'), jsonBattle);
-		}
 		callback(80);
 
 		// Title screen commands ids unique

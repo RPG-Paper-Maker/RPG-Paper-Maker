@@ -80,6 +80,12 @@ class CommonSkillItem extends Icon {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(CommonSkillItem.getBindings(additionnalBinding));
+		this.description = Localization.create(-1, '');
+		this.battleMessage = Localization.create(-1, '');
+	}
+
 	copy(skillItem: CommonSkillItem): void {
 		super.copy(skillItem, CommonSkillItem.getBindings([]));
 	}

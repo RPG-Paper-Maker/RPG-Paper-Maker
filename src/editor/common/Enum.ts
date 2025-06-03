@@ -697,3 +697,10 @@ export enum HEROES_MONSTERS_KIND {
 	HEROES,
 	MONSTERS,
 }
+
+export enum COMMON_SKILL_ITEM_KIND {
+	ITEM,
+	WEAPON,
+	ARMOR,
+	SKILL,
+}

@@ -239,6 +239,16 @@ class Base extends Serializable {
 		'player.with.instance.id',
 	]);
 	public static SELECTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'last.target', 'custom']);
+	public static TARGET_KIND_OPTIONS = Base.mapListIndex([
+		'none',
+		'user',
+		'an.enemy',
+		'an.ally',
+		'all.enemies',
+		'all.allies',
+	]);
+
+	public static AVAILABLE_KIND_OPTIONS = Base.mapListIndex(['battle.only', 'main.menu.only', 'always', 'never']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

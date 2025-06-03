@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
+import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
@@ -32,6 +32,7 @@ type Props = {
 	onChangeValue?: (v: unknown) => void;
 	min?: number;
 	max?: number;
+	addNoneOption?: boolean;
 };
 
 function DynamicValueSelector({
@@ -43,6 +44,7 @@ function DynamicValueSelector({
 	onChangeValue,
 	min,
 	max,
+	addNoneOption = false,
 }: Props) {
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
@@ -278,6 +280,9 @@ function DynamicValueSelector({
 			default:
 				break;
 		}
+		if (addNoneOption) {
+			ArrayUtils.insertFirst(list, DYNAMIC_VALUE_KIND.NONE);
+		}
 		return list;
 	};
 
@@ -435,6 +440,9 @@ function DynamicValueSelector({
 			(value.kind === DYNAMIC_VALUE_KIND.PROPERTY && Project.current!.currentMapObjectProperties.length === 0)
 		) {
 			value.kind = getOptionsKind()[0];
+		}
+		if (value.kind === DYNAMIC_VALUE_KIND.TEXT && optionsType === DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA) {
+			value.kind = DYNAMIC_VALUE_KIND.FORMULA;
 		}
 		setKind(value.kind);
 		onChangeKind?.(value.kind);

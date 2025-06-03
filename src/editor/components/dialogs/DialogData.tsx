@@ -12,10 +12,12 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { COMMON_SKILL_ITEM_KIND } from '../../common';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
 import PanelClasses from '../panels/data/PanelClasses';
+import PanelCommonSkillItem from '../panels/data/PanelCommonSkillItem';
 import PanelHeroes from '../panels/data/PanelHeroes';
 import PanelMonsters from '../panels/data/PanelMonsters';
 import PanelTroops from '../panels/data/PanelTroops';
@@ -37,6 +39,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelHeroesRef = useRef(null);
 	const panelMonstersRef = useRef(null);
 	const panelTroopsRef = useRef(null);
+	const panelItemsRef = useRef(null);
 
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
@@ -50,6 +53,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTroopsRef.current) {
 			await Project.current!.troops.save();
+		}
+		if (panelItemsRef.current) {
+			await Project.current!.items.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -67,6 +73,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTroopsRef.current) {
 			await Project.current!.troops.load();
+		}
+		if (panelItemsRef.current) {
+			await Project.current!.items.load();
 		}
 		setIsOpen(false);
 	};
@@ -99,7 +108,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					<PanelHeroes key={1} ref={panelHeroesRef} />,
 					<PanelMonsters key={2} ref={panelMonstersRef} />,
 					<PanelTroops key={3} ref={panelTroopsRef} />,
-					null,
+					<PanelCommonSkillItem key={4} kind={COMMON_SKILL_ITEM_KIND.ITEM} ref={panelItemsRef} />,
 					null,
 					null,
 					null,

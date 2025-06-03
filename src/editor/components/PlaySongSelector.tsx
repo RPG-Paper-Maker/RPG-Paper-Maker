@@ -23,17 +23,24 @@ export interface PlaySongSelectorRef {
 
 type Props = {
 	songKind: SONG_KIND;
+	disabled?: boolean;
+	dynamicUpdate?: boolean;
 };
 
-const PlaySongSelector = forwardRef(({ songKind }: Props, ref) => {
+const PlaySongSelector = forwardRef(({ songKind, disabled = false, dynamicUpdate = false }: Props, ref) => {
 	const [id, setID] = useStateNumber();
-	const [dynamicID] = useStateDynamicValue();
-	const [songOptions] = useState(Model.PlaySong.createPlaySong(songKind));
+	const [dynamicID, setDynamicID] = useStateDynamicValue();
+	const [songOptions, setSongOptions] = useState(Model.PlaySong.createPlaySong(songKind));
 
 	const initialize = (song: Model.PlaySong) => {
 		setID(song.id);
-		dynamicID.copy(song.songID);
-		songOptions.copy(song);
+		if (dynamicUpdate) {
+			setDynamicID(song.songID);
+			setSongOptions(song);
+		} else {
+			dynamicID.copy(song.songID);
+			songOptions.copy(song);
+		}
 	};
 
 	const accept = (song: Model.PlaySong) => {
@@ -61,6 +68,7 @@ const PlaySongSelector = forwardRef(({ songKind }: Props, ref) => {
 			onChange={setID}
 			selectedDynamic={dynamicID}
 			songOptions={songOptions}
+			disabled={disabled}
 			active
 		/>
 	);
