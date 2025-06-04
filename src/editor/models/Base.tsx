@@ -256,6 +256,7 @@ class Base extends Serializable {
 		'escape',
 		'end.turn',
 	]);
+	public static ANIMATION_POSITION_OPTIONS = Base.mapListIndex(['top', 'middle', 'bottom', 'screen.center']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

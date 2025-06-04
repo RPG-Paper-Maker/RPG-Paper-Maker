@@ -237,6 +237,7 @@ a {
 
 .scrollable {
 	overflow: auto;
+	overflow-x: overlay;
 	overflow-y: overlay;
 }
 

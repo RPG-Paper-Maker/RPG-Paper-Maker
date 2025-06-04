@@ -33,6 +33,11 @@ class Animation extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Animation.getBindings(additionnalBinding));
+		this.frames = [];
+	}
+
 	copy(animation: Animation): void {
 		super.copy(animation, Animation.getBindings([]));
 	}

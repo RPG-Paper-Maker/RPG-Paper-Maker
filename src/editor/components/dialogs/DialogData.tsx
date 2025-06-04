@@ -16,6 +16,7 @@ import { COMMON_SKILL_ITEM_KIND } from '../../common';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
+import PanelAnimations from '../panels/data/PanelAnimations';
 import PanelClasses from '../panels/data/PanelClasses';
 import PanelCommonSkillItem from '../panels/data/PanelCommonSkillItem';
 import PanelHeroes from '../panels/data/PanelHeroes';
@@ -43,6 +44,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelWeaponsRef = useRef(null);
 	const panelArmorsRef = useRef(null);
 	const panelSkillsRef = useRef(null);
+	const panelAnimationsRef = useRef(null);
 
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
@@ -68,6 +70,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelSkillsRef.current) {
 			await Project.current!.skills.save();
+		}
+		if (panelAnimationsRef.current) {
+			await Project.current!.animations.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -97,6 +102,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelSkillsRef.current) {
 			await Project.current!.skills.load();
+		}
+		if (panelAnimationsRef.current) {
+			await Project.current!.animations.load();
 		}
 		setIsOpen(false);
 	};
@@ -133,7 +141,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					<PanelCommonSkillItem key={5} kind={COMMON_SKILL_ITEM_KIND.WEAPON} ref={panelWeaponsRef} />,
 					<PanelCommonSkillItem key={6} kind={COMMON_SKILL_ITEM_KIND.ARMOR} ref={panelArmorsRef} />,
 					<PanelCommonSkillItem key={7} kind={COMMON_SKILL_ITEM_KIND.SKILL} ref={panelSkillsRef} />,
-					null,
+					<PanelAnimations key={8} ref={panelAnimationsRef} />,
 					null,
 					null,
 				]}

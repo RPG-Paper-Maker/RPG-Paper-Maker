@@ -76,8 +76,10 @@ type Props = {
 	cannotAddEditRemoveRoot?: boolean;
 	hideCheck?: boolean;
 	triggerUpdate?: boolean;
+	doNotOpenDialog?: boolean;
 };
 
+export const TREES_SMALL_MIN_WIDTH = 75;
 export const TREES_MIN_WIDTH = 150;
 export const TREES_MIN_HEIGHT = 100;
 export const TREES_LARGE_MIN_WIDTH = 250;
@@ -123,6 +125,7 @@ function Tree({
 	isLocalization = false,
 	cannotAddEditRemoveRoot = false,
 	hideCheck = false,
+	doNotOpenDialog = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -263,7 +266,11 @@ function Tree({
 		}
 		model.id = Node.getNewID(list);
 		setNewModel(model);
-		setIsOpenDialog(true);
+		if (doNotOpenDialog) {
+			handleAcceptDialog(model);
+		} else {
+			setIsOpenDialog(true);
+		}
 	};
 
 	const handleEditItem = async () => {
@@ -364,11 +371,14 @@ function Tree({
 		}
 	};
 
-	const handleAcceptDialog = () => {
+	const handleAcceptDialog = (model?: Model.Base | null) => {
+		if (model === undefined) {
+			model = newModel;
+		}
 		let node: Node | null = null;
-		if (newModel && currentSelectedItemNode) {
+		if (model && currentSelectedItemNode) {
 			const currentList = currentSelectedItemNode.parent?.children ?? list;
-			node = Node.create(newModel);
+			node = Node.create(model);
 			node.parent = currentSelectedItemNode.parent;
 			ArrayUtils.insertAt(currentList, getNewIndex(), node);
 			onCreateItem?.(node);
