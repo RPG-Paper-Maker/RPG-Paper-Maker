@@ -16,6 +16,8 @@ class RPM {
 	public static treeCurrentItem: Node | null;
 	public static treeCurrentSetSelectedItem: (n: Node) => void;
 	public static treeCurrentForceUpdate: () => void;
+	public static treeArrowTime: number = 0;
+	public static TREE_ARROW_LIMIT = 300;
 }
 
 export { RPM };

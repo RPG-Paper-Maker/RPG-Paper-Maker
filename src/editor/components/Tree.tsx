@@ -202,8 +202,8 @@ function Tree({
 
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
 
-	const scrollToSelectedElement = () => {
-		if (!noScrollOnForce && selectedElementRef.current) {
+	const scrollToSelectedElement = (force = false) => {
+		if (selectedElementRef.current && (force || !noScrollOnForce)) {
 			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
 		}
 	};
@@ -618,15 +618,28 @@ function Tree({
 	useEffect(() => {
 		const handleKeyDown = async (event: KeyboardEvent) => {
 			if (isFocused) {
+				const currentTime = new Date().getTime();
 				switch (event.key.toUpperCase()) {
 					case 'ARROWUP':
 						if (currentSelectedItemNode?.previous) {
-							setCurrentSelectedItemNode(currentSelectedItemNode.previous);
+							event.preventDefault();
+							if (currentTime >= RPM.treeArrowTime + RPM.TREE_ARROW_LIMIT) {
+								RPM.treeArrowTime = currentTime;
+								setCurrentSelectedItemNode(currentSelectedItemNode.previous);
+								onSelectedItem?.(currentSelectedItemNode.previous, true);
+								scrollToSelectedElement(true);
+							}
 						}
 						break;
 					case 'ARROWDOWN':
 						if (currentSelectedItemNode?.next) {
-							setCurrentSelectedItemNode(currentSelectedItemNode.next);
+							event.preventDefault();
+							if (currentTime >= RPM.treeArrowTime + RPM.TREE_ARROW_LIMIT) {
+								RPM.treeArrowTime = currentTime;
+								setCurrentSelectedItemNode(currentSelectedItemNode.next);
+								onSelectedItem?.(currentSelectedItemNode.next, true);
+								scrollToSelectedElement(true);
+							}
 						}
 						break;
 					default:
@@ -635,7 +648,6 @@ function Tree({
 			}
 			return true;
 		};
-
 		window.addEventListener('keydown', handleKeyDown);
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);

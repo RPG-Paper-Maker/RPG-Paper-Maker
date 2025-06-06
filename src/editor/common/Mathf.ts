@@ -243,6 +243,25 @@ class Mathf {
 		positions.push(current);
 		return positions;
 	}
+
+	static rotatePoint(x: number, y: number, cx: number, cy: number, angle: number): [number, number] {
+		const s = Math.sin(angle * (Math.PI / 180));
+		const c = Math.cos(angle * (Math.PI / 180));
+
+		// translate point back to origin:
+		x -= cx;
+		y -= cy;
+
+		// rotate point
+		const xNew = x * c - y * s;
+		const yNew = x * s + y * c;
+
+		// translate point back:
+		x = Math.round(xNew + cx);
+		y = Math.round(yNew + cy);
+
+		return [x, y];
+	}
 }
 
 export { Mathf };

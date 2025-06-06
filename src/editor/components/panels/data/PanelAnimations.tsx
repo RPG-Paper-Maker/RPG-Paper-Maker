@@ -33,7 +33,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [positionKind, setPositionKind] = useStateNumber();
 	const [selectedAnimation, setSelectedAnimation] = useState<Animation | null>(null);
 	const [frames, setFrames] = useState<Node[]>([]);
+	const [selectedFrame, setSelectedFrame] = useState<AnimationFrame | null>(null);
 	const [battlerID, setBattlerID] = useState(1);
+	const [rows, setRows] = useStateNumber();
+	const [columns, setColumns] = useStateNumber();
 
 	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), []);
 
@@ -53,6 +56,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 			setFrames(Node.createList(animation.frames, false));
 			setPictureID(animation.pictureID);
 			setPositionKind(animation.positionKind);
+			setRows(animation.rows);
+			setColumns(animation.cols);
 		}
 	};
 
@@ -73,6 +78,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	const handleSelectFrame = (node: Node | null) => {
 		const frame = (node?.content as AnimationFrame) ?? null;
+		setSelectedFrame(frame);
 		if (frame) {
 		}
 	};
@@ -92,9 +98,13 @@ const PanelAnimations = forwardRef((props, ref) => {
 						<Flex column one>
 							<Flex one zeroHeight>
 								<AnimationPreviewer
+									animation={selectedAnimation}
 									pictureID={pictureID}
 									battlerID={battlerID}
 									positionKind={positionKind}
+									rows={rows}
+									columns={columns}
+									currentFrame={selectedFrame}
 								/>
 							</Flex>
 						</Flex>

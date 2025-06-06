@@ -70,6 +70,10 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Troop: () => Model.Troop,
 	TroopMonster: () => Model.TroopMonster,
 	TroopReaction: () => Model.TroopReaction,
+	CommonSkillItem: () => Model.CommonSkillItem,
+	Effect: () => Model.Effect,
+	Animation: () => Model.Animation,
+	AnimationFrame: () => Model.AnimationFrame,
 };
 
 class Node extends Serializable {
