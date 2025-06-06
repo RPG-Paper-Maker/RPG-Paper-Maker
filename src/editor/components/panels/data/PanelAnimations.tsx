@@ -11,17 +11,20 @@
 
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PICTURE_KIND } from '../../../common';
+import { INPUT_TYPE_WIDTH, PICTURE_KIND } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Animation, AnimationFrame, Base } from '../../../models';
+import { Animation, AnimationFrame, Base, Picture } from '../../../models';
 import AnimationPreviewer from '../../AnimationPreviewer';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
+import DialogPictures from '../../dialogs/DialogPictures';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
+import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import InputNumber from '../../InputNumber';
 import Tab from '../../Tab';
 import Tree, { TREES_MIN_WIDTH, TREES_SMALL_MIN_WIDTH } from '../../Tree';
 
@@ -35,6 +38,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [frames, setFrames] = useState<Node[]>([]);
 	const [selectedFrame, setSelectedFrame] = useState<AnimationFrame | null>(null);
 	const [battlerID, setBattlerID] = useState(1);
+	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
 	const [rows, setRows] = useStateNumber();
 	const [columns, setColumns] = useStateNumber();
 
@@ -83,6 +87,15 @@ const PanelAnimations = forwardRef((props, ref) => {
 		}
 	};
 
+	const handleClickChangeBattler = () => {
+		setIsDialogBattlerOpen(true);
+	};
+
+	const handleAcceptChangeBattler = (picture: Picture) => {
+		setBattlerID(picture.id);
+		setIsDialogBattlerOpen(false);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -111,9 +124,33 @@ const PanelAnimations = forwardRef((props, ref) => {
 					</Flex>
 				</Flex>
 				<Groupbox title={t('options')}>
-					<Flex column spaced>
-						<Button>{t('change.battler')}...</Button>
-						<Button>{t('change.battler')}...</Button>
+					<Flex column spacedLarge>
+						<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
+						<div className='horizontalSeparator' />
+						<Flex column spaced>
+							<Button onClick={handleClickChangeBattler}>{t('copy.frames')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('clear.frames')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('create.transition')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('apply.texture')}</Button>
+						</Flex>
+						<div className='horizontalSeparator' />
+						<Flex column spaced>
+							<Button onClick={handleClickChangeBattler}>{t('play.hit')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('play.miss')}...</Button>
+							<Button onClick={handleClickChangeBattler}>{t('play.crit')}...</Button>
+						</Flex>
+						<div className='horizontalSeparator' />
+						<Form>
+							<Label>{t('rows')}:</Label>
+							<Value>
+								<InputNumber value={rows} onChange={setRows} widthType={INPUT_TYPE_WIDTH.SMALL} />
+							</Value>
+							<Label>{t('columns')}:</Label>
+							<Value>
+								<InputNumber value={columns} onChange={setColumns} widthType={INPUT_TYPE_WIDTH.SMALL} />
+							</Value>
+						</Form>
 					</Flex>
 				</Groupbox>
 			</Flex>
@@ -195,6 +232,15 @@ const PanelAnimations = forwardRef((props, ref) => {
 					</Flex>
 				</Flex>
 			</Flex>
+			{isDialogBattlerOpen && (
+				<DialogPictures
+					kind={PICTURE_KIND.BATTLERS}
+					isOpen
+					setIsOpen={setIsDialogBattlerOpen}
+					pictureID={battlerID}
+					onAccept={handleAcceptChangeBattler}
+				/>
+			)}
 		</>
 	);
 });

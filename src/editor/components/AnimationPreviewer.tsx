@@ -26,6 +26,7 @@ type CurrentStateProps = {
 	currentFrameID: number;
 	selectedElement: AnimationFrameElement | null;
 	hoveredElement: AnimationFrameElement | null;
+	isMoving: boolean;
 };
 
 type Props = {
@@ -53,6 +54,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 		currentFrameID: 1,
 		selectedElement: null,
 		hoveredElement: null,
+		isMoving: false,
 	})[0];
 	const [loadingState, setLoadingState] = useState(0);
 
@@ -82,7 +84,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 		ctx.clearRect(0, 0, WIDTH, HEIGHT);
 	};
 
-	const draw = (x?: number, y?: number, canvasX?: number, canvasY?: number) => {
+	const draw = (x?: number, y?: number) => {
 		const ctx = getContext();
 		if (ctx) {
 			if (currentState.picture && currentState.battler) {
@@ -93,8 +95,20 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				ctx.fillRect(0, 0, WIDTH, HEIGHT);
 				drawLines(ctx);
 				drawBattler(ctx);
-				if (x !== undefined && y !== undefined && canvasX !== undefined && canvasY !== undefined) {
-					drawCoordinates(ctx, x, y, canvasX, canvasY);
+				const canvas = refCanvas.current;
+				if (canvas) {
+					const rect = canvas.getBoundingClientRect();
+					const canvasX = canvas.offsetLeft + 70 - rect.left;
+					const canvasY = canvas.offsetTop + 20 - rect.top;
+					drawCoordinates(
+						ctx,
+
+						canvasX,
+						canvasY,
+						canvas.parentElement!.parentElement!.parentElement!.parentElement!.offsetWidth,
+						x,
+						y
+					);
 				}
 				drawElements(ctx);
 			}
@@ -208,11 +222,34 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 		}
 	};
 
-	const drawCoordinates = (ctx: CanvasRenderingContext2D, x: number, y: number, canvasX: number, canvasY: number) => {
-		ctx.font = '12px sans-serif';
-		ctx.fillStyle = 'white';
-		ctx.textBaseline = 'top';
-		ctx.fillText(`[${x}, ${y}]`, canvasX, canvasY);
+	const drawCoordinates = (
+		ctx: CanvasRenderingContext2D,
+		canvasX: number,
+		canvasY: number,
+		canvasWidth: number,
+		x?: number,
+		y?: number
+	) => {
+		if (x !== undefined && y !== undefined) {
+			ctx.font = '12px sans-serif';
+			ctx.fillStyle = 'white';
+			ctx.textBaseline = 'top';
+			ctx.fillText(`[${x}, ${y}]`, canvasX, canvasY);
+		}
+		if (currentState.selectedElement !== null && animation) {
+			const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+			if (frame && frame.elements.includes(currentState.selectedElement)) {
+				ctx.font = '12px sans-serif';
+				ctx.fillStyle = '#78ad51';
+				ctx.textAlign = 'right';
+				ctx.fillText(
+					`[${currentState.selectedElement.x}, ${currentState.selectedElement.y}]`,
+					canvasX + canvasWidth - 10,
+					canvasY
+				);
+				ctx.textAlign = 'left';
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -246,13 +283,12 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 	useEffect(() => {
 		const canvas = refCanvas.current;
 		if (loadingState === 0 && canvas) {
+			const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!;
 			const drawWithCoords = async () => {
 				const rect = canvas.getBoundingClientRect();
 				const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
 				const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
-				const canvasX = canvas.offsetLeft + 65 - rect.left;
-				const canvasY = canvas.offsetTop + 20 - rect.top;
-				draw(x, y, canvasX, canvasY);
+				draw(x, y);
 			};
 			const handleMouseMove = (e: MouseEvent) => {
 				currentState.mouseX = e.clientX;
@@ -260,22 +296,28 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				const rect = canvas.getBoundingClientRect();
 				let x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
 				let y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
-				currentState.hoveredElement = null;
-				if (animation && currentState.picture) {
-					const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
-					if (frame) {
-						for (const element of frame.elements) {
-							const cx = element.x;
-							const cy = element.y;
-							const w = Math.round((currentState.picture.width / columns) * (element.zoom / 100));
-							const h = Math.round((currentState.picture.height / rows) * (element.zoom / 100));
-							const ex = cx - w / 2;
-							const ey = cy - h / 2;
-							const rect = new Rectangle(ex, ey, w, h);
-							const [a, b] = Mathf.rotatePoint(x, y, cx, cy, -element.angle);
-							if (rect.isInside(a, b)) {
-								currentState.hoveredElement = element;
-								break;
+				if (currentState.isMoving && currentState.picture) {
+					currentState.hoveredElement!.x = x;
+					currentState.hoveredElement!.y = y;
+				} else {
+					currentState.hoveredElement = null;
+					if (animation && currentState.picture) {
+						const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+						if (frame) {
+							for (let i = frame.elements.length - 1; i >= 0; i--) {
+								const element = frame.elements[i];
+								const cx = element.x;
+								const cy = element.y;
+								const w = Math.round((currentState.picture.width / columns) * (element.zoom / 100));
+								const h = Math.round((currentState.picture.height / rows) * (element.zoom / 100));
+								const ex = cx - w / 2;
+								const ey = cy - h / 2;
+								const rect = new Rectangle(ex, ey, w, h);
+								const [a, b] = Mathf.rotatePoint(x, y, cx, cy, -element.angle);
+								if (rect.isInside(a, b)) {
+									currentState.hoveredElement = element;
+									break;
+								}
 							}
 						}
 					}
@@ -288,6 +330,15 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 			const handleMouseDown = (e: MouseEvent) => {
 				if (e.button === 0) {
 					currentState.selectedElement = currentState.hoveredElement;
+					if (currentState.selectedElement !== null) {
+						currentState.isMoving = true;
+					}
+					drawWithCoords();
+				}
+			};
+			const handleMouseUp = (e: MouseEvent) => {
+				if (e.button === 0) {
+					currentState.isMoving = false;
 				}
 			};
 			const handleScroll = () => {
@@ -296,7 +347,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mouseleave', handleMouseLeave);
 			canvas.addEventListener('mousedown', handleMouseDown);
-			const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!;
+			canvas.addEventListener('mouseup', handleMouseUp);
 			scrollArea.scrollLeft = (scrollArea.scrollWidth - scrollArea.clientWidth) / 2;
 			scrollArea.scrollTop = (scrollArea.scrollHeight - scrollArea.clientHeight) / 2;
 			scrollArea.addEventListener('scroll', handleScroll);
@@ -305,6 +356,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mouseleave', handleMouseLeave);
 				canvas.removeEventListener('mousedown', handleMouseDown);
+				canvas.removeEventListener('mouseup', handleMouseUp);
 				scrollArea.removeEventListener('scroll', handleScroll);
 			};
 		}
