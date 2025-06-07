@@ -37,13 +37,25 @@ type Props = {
 	rows: number;
 	columns: number;
 	currentFrame: AnimationFrame | null;
+	selectedColumn: number;
+	selectedRow: number;
 };
 
 const WIDTH = 640;
 const HEIGHT = 480;
 const ELEMENT_INDEX_SIZE = 16;
 
-function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, rows, columns, currentFrame }: Props) {
+function AnimationPreviewer({
+	pictureID,
+	battlerID,
+	positionKind,
+	animation,
+	rows,
+	columns,
+	currentFrame,
+	selectedColumn,
+	selectedRow,
+}: Props) {
 	const currentState = useState<CurrentStateProps>({
 		pictureID: -1,
 		picture: null,
@@ -102,7 +114,6 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 					const canvasY = canvas.offsetTop + 20 - rect.top;
 					drawCoordinates(
 						ctx,
-
 						canvasX,
 						canvasY,
 						canvas.parentElement!.parentElement!.parentElement!.parentElement!.offsetWidth,
@@ -210,7 +221,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 					ctx.fillStyle = 'white';
 					ctx.textBaseline = 'top';
 					ctx.fillText('' + element.id, -hw + 2, -hh + ELEMENT_INDEX_SIZE - 12);
-					if (currentState.hoveredElement == element) {
+					if (currentState.hoveredElement === element) {
 						ctx.fillStyle = '#323232';
 						ctx.globalAlpha = 0.5;
 						ctx.fillRect(-hw, -hh, w, h);
@@ -254,6 +265,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 
 	useEffect(() => {
 		initialize().catch(console.error);
+		// eslint-disable-next-line
 	}, [pictureID, battlerID]);
 
 	useEffect(() => {
@@ -271,6 +283,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				ctx.imageSmoothingEnabled = false;
 			}
 		}
+		// eslint-disable-next-line
 	}, [PIXEL_RATIO]);
 
 	useEffect(() => {
@@ -278,6 +291,7 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 			currentState.currentFrameID = currentFrame.id;
 			draw();
 		}
+		// eslint-disable-next-line
 	}, [currentFrame]);
 
 	useEffect(() => {
@@ -294,8 +308,8 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				currentState.mouseX = e.clientX;
 				currentState.mouseY = e.clientY;
 				const rect = canvas.getBoundingClientRect();
-				let x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
-				let y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
+				const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
+				const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
 				if (currentState.isMoving && currentState.picture) {
 					currentState.hoveredElement!.x = x;
 					currentState.hoveredElement!.y = y;
@@ -332,6 +346,21 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 					currentState.selectedElement = currentState.hoveredElement;
 					if (currentState.selectedElement !== null) {
 						currentState.isMoving = true;
+					} else {
+						if (animation) {
+							const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+							if (frame) {
+								const newElement = new AnimationFrameElement();
+								newElement.applyDefault();
+								newElement.id = Math.max(...frame.elements.map((element) => element.id)) + 1;
+								const rect = canvas.getBoundingClientRect();
+								newElement.x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
+								newElement.y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
+								newElement.texCol = selectedColumn;
+								newElement.texRow = selectedRow;
+								frame.elements.push(newElement);
+							}
+						}
 					}
 					drawWithCoords();
 				}
@@ -360,7 +389,8 @@ function AnimationPreviewer({ pictureID, battlerID, positionKind, animation, row
 				scrollArea.removeEventListener('scroll', handleScroll);
 			};
 		}
-	}, [loadingState, pictureID, battlerID, positionKind, rows, columns, animation]);
+		// eslint-disable-next-line
+	}, [loadingState, pictureID, battlerID, positionKind, rows, columns, animation, selectedColumn, selectedRow]);
 
 	return <canvas ref={refCanvas} className='pointer' />;
 }

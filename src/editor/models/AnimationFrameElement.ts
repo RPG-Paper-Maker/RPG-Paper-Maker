@@ -38,6 +38,10 @@ class AnimationFrameElement extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(AnimationFrameElement.getBindings(additionnalBinding));
+	}
+
 	copy(animationFrameElement: AnimationFrameElement): void {
 		super.copy(animationFrameElement, AnimationFrameElement.getBindings([]));
 	}

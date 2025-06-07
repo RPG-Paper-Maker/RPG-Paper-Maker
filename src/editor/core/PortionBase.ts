@@ -24,11 +24,24 @@ class PortionBase {
 		return [this.x, this.y, this.z].join('+');
 	}
 
-	readFromKey(key: string): void {}
+	readFromKey(key: string): void {
+		const values = key.split('+');
+		this.x = Number(values[0]);
+		this.y = Number(values[1]);
+		this.z = Number(values[3]);
+	}
 
-	read(json: number[]) {}
+	read(json: number[]) {
+		this.x = json[0];
+		this.y = json[1];
+		this.z = json[2];
+	}
 
-	write(json: number[]) {}
+	write(json: number[]) {
+		json.push(this.x);
+		json.push(this.y);
+		json.push(this.z);
+	}
 }
 
 export { PortionBase };

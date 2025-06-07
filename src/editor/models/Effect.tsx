@@ -184,7 +184,7 @@ class Effect extends Base {
 	toString(): string | ReactNode {
 		let text = Base.STRING_START;
 		switch (this.kind) {
-			case EFFECT_KIND.DAMAGES:
+			case EFFECT_KIND.DAMAGES: {
 				text += `${t('damages.on')} ${Base.DAMAGE_KIND_OPTIONS[this.damageKind].name} `;
 				switch (this.damageKind) {
 					case DAMAGES_KIND.STAT:
@@ -229,6 +229,7 @@ class Effect extends Base {
 					text += ` [${options.join(', ')}]`;
 				}
 				break;
+			}
 			case EFFECT_KIND.STATUS:
 				text += `${t(this.isAddStatus ? 'add' : 'remove')} ${t('status.id')} ${this.statusID.toString(
 					Project.current!.status.list

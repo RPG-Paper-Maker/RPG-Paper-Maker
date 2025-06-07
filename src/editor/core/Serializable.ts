@@ -25,6 +25,7 @@ export type BindingType = [
 ];
 
 class Serializable {
+	// eslint-disable-next-line
 	equals(s: Serializable): boolean {
 		return false;
 	}

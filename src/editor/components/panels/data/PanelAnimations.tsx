@@ -17,6 +17,7 @@ import { Project } from '../../../core/Project';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Animation, AnimationFrame, Base, Picture } from '../../../models';
 import AnimationPreviewer from '../../AnimationPreviewer';
+import AnimationPreviewerTexture from '../../AnimationPreviewerTexture';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
 import DialogPictures from '../../dialogs/DialogPictures';
@@ -41,8 +42,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
 	const [rows, setRows] = useStateNumber();
 	const [columns, setColumns] = useStateNumber();
+	const [selectedColumn, setSelectedColumn] = useState(0);
+	const [selectedRow, setSelectedRow] = useState(0);
 
-	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), []);
+	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), [t]);
 
 	const isAnimationDisabled = useMemo(
 		() => selectedAnimation === null || selectedAnimation.id === -1,
@@ -62,6 +65,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 			setPositionKind(animation.positionKind);
 			setRows(animation.rows);
 			setColumns(animation.cols);
+			setSelectedColumn(0);
+			setSelectedRow(0);
 		}
 	};
 
@@ -83,8 +88,9 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const handleSelectFrame = (node: Node | null) => {
 		const frame = (node?.content as AnimationFrame) ?? null;
 		setSelectedFrame(frame);
+		/*
 		if (frame) {
-		}
+		}*/
 	};
 
 	const handleClickChangeBattler = () => {
@@ -118,6 +124,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 									rows={rows}
 									columns={columns}
 									currentFrame={selectedFrame}
+									selectedColumn={selectedColumn}
+									selectedRow={selectedRow}
 								/>
 							</Flex>
 						</Flex>
@@ -154,14 +162,23 @@ const PanelAnimations = forwardRef((props, ref) => {
 					</Flex>
 				</Groupbox>
 			</Flex>
-			<Groupbox title={t('options')}>
-				<Flex column spaced>
-					<Button>{t('change.battler')}...</Button>
-					<Button>{t('change.battler')}...</Button>
-					<Button>{t('change.battler')}...</Button>
-					<Button>{t('change.battler')}...</Button>
+			<Flex one scrollable>
+				<Flex one zeroWidth>
+					<Flex column one>
+						<Flex one zeroHeight>
+							<AnimationPreviewerTexture
+								pictureID={pictureID}
+								rows={rows}
+								columns={columns}
+								selectedColumn={selectedColumn}
+								setSelectedColumn={setSelectedColumn}
+								selectedRow={selectedRow}
+								setSelectedRow={setSelectedRow}
+							/>
+						</Flex>
+					</Flex>
 				</Flex>
-			</Groupbox>
+			</Flex>
 		</Flex>
 	);
 

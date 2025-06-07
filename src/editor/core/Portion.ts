@@ -45,27 +45,8 @@ class Portion extends PortionBase {
 		return portion;
 	}
 
-	readFromKey(key: string): void {
-		const values = key.split('+');
-		this.x = Number(values[0]);
-		this.y = Number(values[1]);
-		this.z = Number(values[3]);
-	}
-
 	equals(portion: Portion): boolean {
 		return this.x === portion.x && this.y === portion.y && this.z === portion.z;
-	}
-
-	read(json: number[]) {
-		this.x = json[0];
-		this.y = json[1];
-		this.z = json[2];
-	}
-
-	write(json: number[]) {
-		json.push(this.x);
-		json.push(this.y);
-		json.push(this.z);
 	}
 }
 
