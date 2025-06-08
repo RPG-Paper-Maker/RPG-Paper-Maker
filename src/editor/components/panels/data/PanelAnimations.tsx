@@ -20,6 +20,7 @@ import AnimationPreviewer from '../../AnimationPreviewer';
 import AnimationPreviewerTexture from '../../AnimationPreviewerTexture';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
+import DialogAnimationClearFrames from '../../dialogs/DialogAnimationClearFrames';
 import DialogAnimationCopyFrames from '../../dialogs/DialogAnimationCopyFrames';
 import DialogPictures from '../../dialogs/DialogPictures';
 import Dropdown from '../../Dropdown';
@@ -35,6 +36,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
 	const [isDialogCopyFramesOpen, setIsDialogCopyFramesOpen] = useState(false);
+	const [isDialogClearFramesOpen, setIsDialogClearFramesOpen] = useState(false);
 	const [animations, setAnimations] = useState<Node[]>([]);
 	const [pictureID, setPictureID] = useStateNumber();
 	const [positionKind, setPositionKind] = useStateNumber();
@@ -53,6 +55,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 		() => selectedAnimation === null || selectedAnimation.id === -1,
 		[selectedAnimation]
 	);
+	const isFrameDisabled = useMemo(() => selectedFrame === null || selectedFrame.id === -1, [selectedFrame]);
 
 	const initialize = () => {
 		setAnimations(Node.createList(Project.current!.animations.list, false));
@@ -108,6 +111,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 		setIsDialogCopyFramesOpen(true);
 	};
 
+	const handleClickClearFrames = () => {
+		setIsDialogClearFramesOpen(true);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -132,37 +139,84 @@ const PanelAnimations = forwardRef((props, ref) => {
 									currentFrame={selectedFrame}
 									selectedColumn={selectedColumn}
 									selectedRow={selectedRow}
+									disabled={isAnimationDisabled || isFrameDisabled}
 								/>
 							</Flex>
 						</Flex>
 					</Flex>
 				</Flex>
-				<Groupbox title={t('options')}>
+				<Groupbox title={t('options')} disabled={isAnimationDisabled || isFrameDisabled}>
 					<Flex column spacedLarge>
-						<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
+						<Button onClick={handleClickChangeBattler} disabled={isAnimationDisabled || isFrameDisabled}>
+							{t('change.battler')}...
+						</Button>
 						<div className='horizontalSeparator' />
 						<Flex column spaced>
-							<Button onClick={handleClickCopyFrames}>{t('copy.frames')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('clear.frames')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('create.transition')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('apply.texture')}</Button>
+							<Button onClick={handleClickCopyFrames} disabled={isAnimationDisabled || isFrameDisabled}>
+								{t('copy.frames')}...
+							</Button>
+							<Button onClick={handleClickClearFrames} disabled={isAnimationDisabled || isFrameDisabled}>
+								{t('clear.frames')}...
+							</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('change.battler')}...
+							</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('create.transition')}...
+							</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('apply.texture')}
+							</Button>
 						</Flex>
 						<div className='horizontalSeparator' />
 						<Flex column spaced>
-							<Button onClick={handleClickChangeBattler}>{t('play.hit')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('play.miss')}...</Button>
-							<Button onClick={handleClickChangeBattler}>{t('play.crit')}...</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('play.hit')}...
+							</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('play.miss')}...
+							</Button>
+							<Button
+								onClick={handleClickChangeBattler}
+								disabled={isAnimationDisabled || isFrameDisabled}
+							>
+								{t('play.crit')}...
+							</Button>
 						</Flex>
 						<div className='horizontalSeparator' />
 						<Form>
-							<Label>{t('rows')}:</Label>
+							<Label disabled={isAnimationDisabled || isFrameDisabled}>{t('rows')}</Label>
 							<Value>
-								<InputNumber value={rows} onChange={setRows} widthType={INPUT_TYPE_WIDTH.SMALL} />
+								<InputNumber
+									value={rows}
+									onChange={setRows}
+									widthType={INPUT_TYPE_WIDTH.SMALL}
+									disabled={isAnimationDisabled || isFrameDisabled}
+								/>
 							</Value>
-							<Label>{t('columns')}:</Label>
+							<Label disabled={isAnimationDisabled || isFrameDisabled}>{t('columns')}</Label>
 							<Value>
-								<InputNumber value={columns} onChange={setColumns} widthType={INPUT_TYPE_WIDTH.SMALL} />
+								<InputNumber
+									value={columns}
+									onChange={setColumns}
+									widthType={INPUT_TYPE_WIDTH.SMALL}
+									disabled={isAnimationDisabled || isFrameDisabled}
+								/>
 							</Value>
 						</Form>
 					</Flex>
@@ -180,6 +234,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 								setSelectedColumn={setSelectedColumn}
 								selectedRow={selectedRow}
 								setSelectedRow={setSelectedRow}
+								disabled={isAnimationDisabled || isFrameDisabled}
 							/>
 						</Flex>
 					</Flex>
@@ -224,6 +279,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							selectedID={positionKind}
 							onChange={setPositionKind}
 							options={Base.ANIMATION_POSITION_OPTIONS}
+							disabled={isAnimationDisabled}
 							translateOptions
 						/>
 					</Flex>
@@ -266,6 +322,13 @@ const PanelAnimations = forwardRef((props, ref) => {
 			)}
 			{isDialogCopyFramesOpen && selectedAnimation && (
 				<DialogAnimationCopyFrames isOpen setIsOpen={setIsDialogCopyFramesOpen} animation={selectedAnimation} />
+			)}
+			{isDialogClearFramesOpen && selectedAnimation && (
+				<DialogAnimationClearFrames
+					isOpen
+					setIsOpen={setIsDialogClearFramesOpen}
+					animation={selectedAnimation}
+				/>
 			)}
 		</>
 	);

@@ -20,9 +20,10 @@ type Props = {
 	items?: MenuItemType[];
 	isFocused: boolean;
 	setIsFocused: (b: boolean) => void;
+	disabled?: boolean;
 };
 
-function ContextMenu({ children, items = [], isFocused, setIsFocused }: Props) {
+function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled = false }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
 	const refComplete = useRef<HTMLDivElement>(null);
@@ -41,6 +42,9 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused }: Props) {
 	};
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		if (disabled) {
+			return;
+		}
 		setIsFocused(true);
 		switch (e.button) {
 			case 0:
@@ -59,6 +63,9 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused }: Props) {
 	};
 
 	const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
+		if (disabled) {
+			return;
+		}
 		const id = setTimeout(() => {
 			openContext(e.touches[0].pageX, e.touches[0].pageY);
 		}, 500);

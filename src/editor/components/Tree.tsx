@@ -652,6 +652,7 @@ function Tree({
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 		};
+		// eslint-disable-next-line
 	}, [list, isFocused, currentSelectedItemNode, setCurrentSelectedItemNode]);
 
 	const headers = constructorType.getTreeHeader();

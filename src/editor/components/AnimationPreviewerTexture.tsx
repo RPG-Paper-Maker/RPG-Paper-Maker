@@ -26,6 +26,7 @@ type Props = {
 	setSelectedColumn: (n: number) => void;
 	selectedRow: number;
 	setSelectedRow: (n: number) => void;
+	disabled?: boolean;
 };
 
 function AnimationPreviewerTexture({
@@ -36,6 +37,7 @@ function AnimationPreviewerTexture({
 	setSelectedColumn,
 	selectedRow,
 	setSelectedRow,
+	disabled = false,
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
@@ -96,16 +98,26 @@ function AnimationPreviewerTexture({
 						);
 					}
 				}
-				ctx.strokeStyle = 'white';
-				ctx.lineWidth = 2;
-				ctx.beginPath();
-				const col = selectedColumn + selectedRow * columns;
-				ctx.moveTo(1 + col * w * scale, 1);
-				ctx.lineTo(-1 + col * w * scale + w * scale, 1);
-				ctx.lineTo(-1 + col * w * scale + w * scale, -1 + h * scale);
-				ctx.lineTo(1 + col * w * scale, 1 + h * scale);
-				ctx.lineTo(1 + col * w * scale, 1);
-				ctx.stroke();
+				if (!disabled) {
+					ctx.strokeStyle = 'white';
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					const col = selectedColumn + selectedRow * columns;
+					ctx.moveTo(1 + col * w * scale, 1);
+					ctx.lineTo(-1 + col * w * scale + w * scale, 1);
+					ctx.lineTo(-1 + col * w * scale + w * scale, -1 + h * scale);
+					ctx.lineTo(1 + col * w * scale, -1 + h * scale);
+					ctx.lineTo(1 + col * w * scale, 1);
+					ctx.stroke();
+				} else {
+					const canvas = refCanvas.current;
+					if (canvas) {
+						ctx.fillStyle = '#323232';
+						ctx.globalAlpha = 0.5;
+						ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+						ctx.globalAlpha = 1;
+					}
+				}
 			}
 		}
 	};
@@ -128,6 +140,9 @@ function AnimationPreviewerTexture({
 				ctx.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
 				ctx.imageSmoothingEnabled = false;
 				const handleMouseDown = (e: MouseEvent) => {
+					if (disabled) {
+						return;
+					}
 					const rect = canvas.getBoundingClientRect();
 					const x = Math.round(e.clientX - rect.left);
 					const totalColumns = Math.floor(x / (w / (rows * columns)));
@@ -139,9 +154,9 @@ function AnimationPreviewerTexture({
 				return () => canvas.removeEventListener('mousedown', handleMouseDown);
 			}
 		}
-	}, [loadingState, rows, columns, selectedColumn, selectedRow]);
+	}, [loadingState, rows, columns, selectedColumn, selectedRow, disabled]);
 
-	return <canvas ref={refCanvas} className='pointer' />;
+	return <canvas ref={refCanvas} className={disabled ? undefined : 'pointer'} />;
 }
 
 export default AnimationPreviewerTexture;

@@ -24,9 +24,10 @@ type Props = {
 	sourceRectangle?: Rectangle;
 	scale?: number;
 	base64?: boolean;
+	noPointer?: boolean;
 };
 
-function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false }: Props) {
+function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false, noPointer = false }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		path: '',
@@ -90,7 +91,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false 
 		// eslint-disable-next-line
 	}, [texture, sourceRectangle]);
 
-	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'} />;
+	return <canvas ref={refCanvas} className={noPointer ? undefined : 'pointer'} width={'0'} height={'0'} />;
 }
 
 export default TexturePreviewer;

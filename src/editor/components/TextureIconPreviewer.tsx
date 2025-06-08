@@ -41,7 +41,15 @@ function TextureIconPreviewer({ id, indexX, indexY }: Props) {
 		[indexX, indexY]
 	);
 
-	return <TexturePreviewer texture={texture} sourceRectangle={sourceRectangle} scale={1} base64={!picture.isBR} />;
+	return (
+		<TexturePreviewer
+			texture={texture}
+			sourceRectangle={sourceRectangle}
+			scale={1}
+			base64={!picture.isBR}
+			noPointer
+		/>
+	);
 }
 
 export default TextureIconPreviewer;

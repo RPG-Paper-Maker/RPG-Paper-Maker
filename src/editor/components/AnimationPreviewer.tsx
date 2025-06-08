@@ -42,6 +42,7 @@ type Props = {
 	currentFrame: AnimationFrame | null;
 	selectedColumn: number;
 	selectedRow: number;
+	disabled?: boolean;
 };
 
 const WIDTH = 640;
@@ -58,6 +59,7 @@ function AnimationPreviewer({
 	currentFrame,
 	selectedColumn,
 	selectedRow,
+	disabled = false,
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		pictureID: -1,
@@ -94,6 +96,9 @@ function AnimationPreviewer({
 		setLoadingState((v) => v - 1);
 	};
 
+	const getScrollArea = () =>
+		refCanvas.current!.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
+
 	const getCurrentFrame = (): AnimationFrame | null => {
 		if (animation) {
 			return Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame | null;
@@ -122,21 +127,16 @@ function AnimationPreviewer({
 				ctx.fillStyle = '#221f2e';
 				ctx.fillRect(0, 0, WIDTH, HEIGHT);
 				drawLines(ctx);
-				drawBattler(ctx);
-				const canvas = refCanvas.current;
-				if (canvas) {
-					const rect = canvas.getBoundingClientRect();
-					const canvasX = canvas.offsetLeft + 70 - rect.left;
-					const canvasY = canvas.offsetTop + 20 - rect.top;
-					drawCoordinates(
-						ctx,
-						canvasX,
-						canvasY,
-						canvas.parentElement!.parentElement!.parentElement!.parentElement!.offsetWidth,
-						showMouseCoords
-					);
+				if (!disabled) {
+					drawBattler(ctx);
+					drawCoordinates(ctx, showMouseCoords);
+					drawElements(ctx);
+				} else {
+					ctx.fillStyle = '#323232';
+					ctx.globalAlpha = 0.5;
+					ctx.fillRect(0, 0, WIDTH, HEIGHT);
+					ctx.globalAlpha = 1;
 				}
-				drawElements(ctx);
 			}
 		}
 	};
@@ -248,15 +248,12 @@ function AnimationPreviewer({
 		}
 	};
 
-	const drawCoordinates = (
-		ctx: CanvasRenderingContext2D,
-		canvasX: number,
-		canvasY: number,
-		canvasWidth: number,
-		showMouseCoords = true
-	) => {
+	const drawCoordinates = (ctx: CanvasRenderingContext2D, showMouseCoords = true) => {
+		const rect = refCanvas.current!.getBoundingClientRect();
+		const canvasX = refCanvas.current!.offsetLeft + 70 - rect.left;
+		const canvasY = refCanvas.current!.offsetTop + 20 - rect.top;
+		const canvasWidth = getScrollArea().offsetWidth;
 		if (showMouseCoords && currentState.mouseX !== null && currentState.mouseY !== null) {
-			const rect = refCanvas.current!.getBoundingClientRect();
 			const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
 			const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
 			ctx.font = '12px sans-serif';
@@ -359,7 +356,7 @@ function AnimationPreviewer({
 				canvas.style.height = h + 'px';
 				ctx.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
 				ctx.imageSmoothingEnabled = false;
-				const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
+				const scrollArea = getScrollArea();
 				scrollArea.scrollLeft = (scrollArea.scrollWidth - scrollArea.clientWidth) / 2;
 				scrollArea.scrollTop = (scrollArea.scrollHeight - scrollArea.clientHeight) / 2;
 			}
@@ -379,6 +376,9 @@ function AnimationPreviewer({
 		const canvas = refCanvas.current;
 		if (loadingState === 0 && canvas) {
 			const handleMouseMove = (e: MouseEvent) => {
+				if (disabled) {
+					return;
+				}
 				currentState.mouseX = e.clientX;
 				currentState.mouseY = e.clientY;
 				const rect = canvas.getBoundingClientRect();
@@ -417,9 +417,15 @@ function AnimationPreviewer({
 				draw();
 			};
 			const handleMouseLeave = () => {
+				if (disabled) {
+					return;
+				}
 				draw(false);
 			};
 			const handleMouseDown = (e: MouseEvent) => {
+				if (disabled) {
+					return;
+				}
 				if (e.button === 0) {
 					currentState.selectedElement = currentState.hoveredElement;
 					setSelectedElement(currentState.hoveredElement);
@@ -436,18 +442,24 @@ function AnimationPreviewer({
 				}
 			};
 			const handleMouseUp = (e: MouseEvent) => {
+				if (disabled) {
+					return;
+				}
 				if (e.button === 0) {
 					currentState.isMoving = false;
 				}
 			};
 			const handleScroll = () => {
+				if (disabled) {
+					return;
+				}
 				draw();
 			};
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mouseleave', handleMouseLeave);
 			canvas.addEventListener('mousedown', handleMouseDown);
 			canvas.addEventListener('mouseup', handleMouseUp);
-			const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
+			const scrollArea = getScrollArea();
 			scrollArea.addEventListener('scroll', handleScroll);
 			draw();
 			return () => {
@@ -459,7 +471,18 @@ function AnimationPreviewer({
 			};
 		}
 		// eslint-disable-next-line
-	}, [loadingState, pictureID, battlerID, positionKind, rows, columns, animation, selectedColumn, selectedRow]);
+	}, [
+		loadingState,
+		pictureID,
+		battlerID,
+		positionKind,
+		rows,
+		columns,
+		animation,
+		selectedColumn,
+		selectedRow,
+		disabled,
+	]);
 
 	const getContextMenuItems = () => {
 		return [
@@ -491,8 +514,13 @@ function AnimationPreviewer({
 
 	return (
 		<>
-			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<canvas ref={refCanvas} className='pointer' />
+			<ContextMenu
+				items={getContextMenuItems()}
+				isFocused={isFocused}
+				setIsFocused={setIsFocused}
+				disabled={disabled}
+			>
+				<canvas ref={refCanvas} className={disabled ? undefined : 'pointer'} />
 			</ContextMenu>
 			{isDialogElementOpen && selectedElement && (
 				<DialogAnimationFrameElement
