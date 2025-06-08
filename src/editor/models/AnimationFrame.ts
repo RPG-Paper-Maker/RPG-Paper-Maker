@@ -29,6 +29,12 @@ class AnimationFrame extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(AnimationFrame.getBindings(additionnalBinding));
+		this.elements = [];
+		this.effects = [];
+	}
+
 	toString(): string | ReactNode {
 		return this.id === -1 ? Base.STRING_START : `${Base.STRING_START} ${this.id}`;
 	}

@@ -20,6 +20,7 @@ import AnimationPreviewer from '../../AnimationPreviewer';
 import AnimationPreviewerTexture from '../../AnimationPreviewerTexture';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
+import DialogAnimationCopyFrames from '../../dialogs/DialogAnimationCopyFrames';
 import DialogPictures from '../../dialogs/DialogPictures';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
@@ -32,6 +33,8 @@ import Tree, { TREES_MIN_WIDTH, TREES_SMALL_MIN_WIDTH } from '../../Tree';
 const PanelAnimations = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
+	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
+	const [isDialogCopyFramesOpen, setIsDialogCopyFramesOpen] = useState(false);
 	const [animations, setAnimations] = useState<Node[]>([]);
 	const [pictureID, setPictureID] = useStateNumber();
 	const [positionKind, setPositionKind] = useStateNumber();
@@ -39,7 +42,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [frames, setFrames] = useState<Node[]>([]);
 	const [selectedFrame, setSelectedFrame] = useState<AnimationFrame | null>(null);
 	const [battlerID, setBattlerID] = useState(1);
-	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
 	const [rows, setRows] = useStateNumber();
 	const [columns, setColumns] = useStateNumber();
 	const [selectedColumn, setSelectedColumn] = useState(0);
@@ -102,6 +104,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 		setIsDialogBattlerOpen(false);
 	};
 
+	const handleClickCopyFrames = () => {
+		setIsDialogCopyFramesOpen(true);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -136,7 +142,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 						<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
 						<div className='horizontalSeparator' />
 						<Flex column spaced>
-							<Button onClick={handleClickChangeBattler}>{t('copy.frames')}...</Button>
+							<Button onClick={handleClickCopyFrames}>{t('copy.frames')}...</Button>
 							<Button onClick={handleClickChangeBattler}>{t('clear.frames')}...</Button>
 							<Button onClick={handleClickChangeBattler}>{t('change.battler')}...</Button>
 							<Button onClick={handleClickChangeBattler}>{t('create.transition')}...</Button>
@@ -257,6 +263,9 @@ const PanelAnimations = forwardRef((props, ref) => {
 					pictureID={battlerID}
 					onAccept={handleAcceptChangeBattler}
 				/>
+			)}
+			{isDialogCopyFramesOpen && selectedAnimation && (
+				<DialogAnimationCopyFrames isOpen setIsOpen={setIsDialogCopyFramesOpen} animation={selectedAnimation} />
 			)}
 		</>
 	);

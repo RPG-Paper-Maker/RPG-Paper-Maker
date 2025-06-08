@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ANIMATION_EFFECT_CONDITION_KIND, BINDING, JSONType } from '../common';
+import { ANIMATION_EFFECT_CONDITION_KIND, BINDING, JSONType, SONG_KIND } from '../common';
 import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 import { PlaySong } from './PlaySong';
@@ -27,6 +27,11 @@ class AnimationFrameEffect extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(AnimationFrameEffect.getBindings(additionnalBinding));
+		this.se = PlaySong.createPlaySong(SONG_KIND.SOUND);
 	}
 
 	copy(animationFrameEffect: AnimationFrameEffect): void {

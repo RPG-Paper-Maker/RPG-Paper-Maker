@@ -70,7 +70,7 @@ function DialogChangeLanguage({ isOpen, setIsOpen }: Props) {
 
 	return (
 		<Dialog
-			title={`${t('change.language')}`}
+			title={`${t('change.language')}...`}
 			isOpen={isOpen}
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
