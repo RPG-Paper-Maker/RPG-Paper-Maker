@@ -22,6 +22,7 @@ import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
 import DialogAnimationClearFrames from '../../dialogs/DialogAnimationClearFrames';
 import DialogAnimationCopyFrames from '../../dialogs/DialogAnimationCopyFrames';
+import DialogAnimationCreateTransition from '../../dialogs/DialogAnimationCreateTransition';
 import DialogPictures from '../../dialogs/DialogPictures';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
@@ -37,6 +38,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [isDialogBattlerOpen, setIsDialogBattlerOpen] = useState(false);
 	const [isDialogCopyFramesOpen, setIsDialogCopyFramesOpen] = useState(false);
 	const [isDialogClearFramesOpen, setIsDialogClearFramesOpen] = useState(false);
+	const [isDialogCreateTransitionOpen, setIsDialogcreateTransitionOpen] = useState(false);
 	const [animations, setAnimations] = useState<Node[]>([]);
 	const [pictureID, setPictureID] = useStateNumber();
 	const [positionKind, setPositionKind] = useStateNumber();
@@ -115,6 +117,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 		setIsDialogClearFramesOpen(true);
 	};
 
+	const handleClickCreateTransition = () => {
+		setIsDialogcreateTransitionOpen(true);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -159,13 +165,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 								{t('clear.frames')}...
 							</Button>
 							<Button
-								onClick={handleClickChangeBattler}
-								disabled={isAnimationDisabled || isFrameDisabled}
-							>
-								{t('change.battler')}...
-							</Button>
-							<Button
-								onClick={handleClickChangeBattler}
+								onClick={handleClickCreateTransition}
 								disabled={isAnimationDisabled || isFrameDisabled}
 							>
 								{t('create.transition')}...
@@ -327,6 +327,13 @@ const PanelAnimations = forwardRef((props, ref) => {
 				<DialogAnimationClearFrames
 					isOpen
 					setIsOpen={setIsDialogClearFramesOpen}
+					animation={selectedAnimation}
+				/>
+			)}
+			{isDialogCreateTransitionOpen && selectedAnimation && (
+				<DialogAnimationCreateTransition
+					isOpen
+					setIsOpen={setIsDialogcreateTransitionOpen}
 					animation={selectedAnimation}
 				/>
 			)}

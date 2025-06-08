@@ -41,6 +41,100 @@ class ProgressionTable extends Base {
 		progressionTable.finalValue = f;
 		progressionTable.equation = e;
 		return progressionTable;
+	} /*(int e, double x, double start, double
+    change, double duration)*/
+
+	static easing(
+		equation: number,
+		x: number,
+		change: number,
+		duration: number,
+		start: number,
+		decimal = false
+	): number {
+		let result = 0;
+		switch (equation) {
+			case 0:
+				result = this.easingLinear(x, change, duration, start);
+				break;
+			case -1:
+				result = this.easingQuadraticIn(x, change, duration, start);
+				break;
+			case 1:
+				result = this.easingQuadraticOut(x, change, duration, start);
+				break;
+			case -2:
+				result = this.easingCubicIn(x, change, duration, start);
+				break;
+			case 2:
+				result = this.easingCubicOut(x, change, duration, start);
+				break;
+			case -3:
+				result = this.easingQuarticIn(x, change, duration, start);
+				break;
+			case 3:
+				result = this.easingQuarticOut(x, change, duration, start);
+				break;
+			case -4:
+				result = this.easingQuinticIn(x, change, duration, start);
+				break;
+			case 4:
+				result = this.easingQuinticOut(x, change, duration, start);
+				break;
+			default:
+				result = 0;
+		}
+		if (!decimal) {
+			result = Math.floor(result);
+		}
+		return result;
+	}
+
+	static easingLinear(x: number, change: number, duration: number, start: number): number {
+		return (change * x) / duration + start;
+	}
+
+	static easingQuadraticIn(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		return change * x * x + start;
+	}
+
+	static easingQuadraticOut(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		return -change * x * (x - 2) + start;
+	}
+
+	static easingCubicIn(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		return change * x * x * x + start;
+	}
+
+	static easingCubicOut(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		x--;
+		return change * (x * x * x + 1) + start;
+	}
+
+	static easingQuarticIn(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		return change * x * x * x * x + start;
+	}
+
+	static easingQuarticOut(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		x--;
+		return -change * (x * x * x * x - 1) + start;
+	}
+
+	static easingQuinticIn(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		return change * x * x * x * x * x + start;
+	}
+
+	static easingQuinticOut(x: number, change: number, duration: number, start: number): number {
+		x /= duration;
+		x--;
+		return change * (x * x * x * x * x + 1) + start;
 	}
 
 	getTableValues(initialLevel: number, finalLevel: number): string[][] {
@@ -57,91 +151,12 @@ class ProgressionTable extends Base {
 			if (tableValue) {
 				result = tableValue.v as number;
 			} else {
-				switch (this.equation) {
-					case 0:
-						result = this.easingLinear(i, change, duration, start);
-						break;
-					case -1:
-						result = this.easingQuadraticIn(i, change, duration, start);
-						break;
-					case 1:
-						result = this.easingQuadraticOut(i, change, duration, start);
-						break;
-					case -2:
-						result = this.easingCubicIn(i, change, duration, start);
-						break;
-					case 2:
-						result = this.easingCubicOut(i, change, duration, start);
-						break;
-					case -3:
-						result = this.easingQuarticIn(i, change, duration, start);
-						break;
-					case 3:
-						result = this.easingQuarticOut(i, change, duration, start);
-						break;
-					case -4:
-						result = this.easingQuinticIn(i, change, duration, start);
-						break;
-					case 4:
-						result = this.easingQuinticOut(i, change, duration, start);
-						break;
-					default:
-						result = 0;
-						break;
-				}
-				result = Math.floor(result);
+				result = ProgressionTable.easing(this.equation, i, change, duration, start);
 			}
 			line[1] = '' + result;
 			values[i] = line;
 		}
 		return values;
-	}
-
-	easingLinear(x: number, change: number, duration: number, start: number): number {
-		return (change * x) / duration + start;
-	}
-
-	easingQuadraticIn(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		return change * x * x + start;
-	}
-
-	easingQuadraticOut(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		return -change * x * (x - 2) + start;
-	}
-
-	easingCubicIn(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		return change * x * x * x + start;
-	}
-
-	easingCubicOut(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		x--;
-		return change * (x * x * x + 1) + start;
-	}
-
-	easingQuarticIn(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		return change * x * x * x * x + start;
-	}
-
-	easingQuarticOut(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		x--;
-		return -change * (x * x * x * x - 1) + start;
-	}
-
-	easingQuinticIn(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		return change * x * x * x * x * x + start;
-	}
-
-	easingQuinticOut(x: number, change: number, duration: number, start: number): number {
-		x /= duration;
-		x--;
-		return change * (x * x * x * x * x + 1) + start;
 	}
 
 	applyDefault(): void {
