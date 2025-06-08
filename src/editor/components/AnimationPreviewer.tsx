@@ -10,19 +10,22 @@
 */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ANIMATION_POSITION_KIND, Constants, Mathf, PICTURE_KIND } from '../common';
+import { useTranslation } from 'react-i18next';
+import { ANIMATION_POSITION_KIND, ArrayUtils, Constants, KEY, Mathf, PICTURE_KIND, SPECIAL_KEY } from '../common';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import { Animation, AnimationFrame, AnimationFrameElement, Base } from '../models';
+import ContextMenu from './ContextMenu';
+import DialogAnimationFrameElement from './dialogs/models/DialogAnimationFrameElement';
 
 type CurrentStateProps = {
 	pictureID: number;
 	picture: HTMLImageElement | null;
 	battlerID: number;
 	battler: HTMLImageElement | null;
-	mouseX: number;
-	mouseY: number;
+	mouseX: number | null;
+	mouseY: number | null;
 	currentFrameID: number;
 	selectedElement: AnimationFrameElement | null;
 	hoveredElement: AnimationFrameElement | null;
@@ -61,14 +64,20 @@ function AnimationPreviewer({
 		picture: null,
 		battlerID: -1,
 		battler: null,
-		mouseX: 0,
-		mouseY: 0,
+		mouseX: null,
+		mouseY: null,
 		currentFrameID: 1,
 		selectedElement: null,
 		hoveredElement: null,
 		isMoving: false,
 	})[0];
+	const { t } = useTranslation();
+
 	const [loadingState, setLoadingState] = useState(0);
+	const [isFocused, setIsFocused] = useState(false);
+	const [selectedElement, setSelectedElement] = useState<AnimationFrameElement | null>(null);
+	const [isDialogElementOpen, setIsDialogElementOpen] = useState(false);
+	const [copiedElement, setCopiedElement] = useState<AnimationFrameElement | null>(null);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -85,6 +94,13 @@ function AnimationPreviewer({
 		setLoadingState((v) => v - 1);
 	};
 
+	const getCurrentFrame = (): AnimationFrame | null => {
+		if (animation) {
+			return Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame | null;
+		}
+		return null;
+	};
+
 	const getContext = () => {
 		if (refCanvas.current) {
 			return refCanvas.current.getContext('2d');
@@ -96,7 +112,7 @@ function AnimationPreviewer({
 		ctx.clearRect(0, 0, WIDTH, HEIGHT);
 	};
 
-	const draw = (x?: number, y?: number) => {
+	const draw = (showMouseCoords = true) => {
 		const ctx = getContext();
 		if (ctx) {
 			if (currentState.picture && currentState.battler) {
@@ -117,8 +133,7 @@ function AnimationPreviewer({
 						canvasX,
 						canvasY,
 						canvas.parentElement!.parentElement!.parentElement!.parentElement!.offsetWidth,
-						x,
-						y
+						showMouseCoords
 					);
 				}
 				drawElements(ctx);
@@ -177,7 +192,7 @@ function AnimationPreviewer({
 			ctx.font = '10px sans-serif';
 			ctx.fillStyle = 'white';
 			ctx.textBaseline = 'top';
-			const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+			const frame = getCurrentFrame();
 			if (frame) {
 				for (const element of frame.elements) {
 					const textureWidth = currentState.picture!.width;
@@ -209,7 +224,7 @@ function AnimationPreviewer({
 					ctx.translate(x + hw, y + hh);
 					ctx.rotate(angle);
 					ctx.globalAlpha = 1;
-					ctx.strokeStyle = currentState.selectedElement === element ? '#78ad51' : '#25bbb9';
+					ctx.strokeStyle = currentState.selectedElement === element ? '#25bbb9' : '#78ad51';
 					ctx.strokeRect(-hw, -hh, w, h);
 					ctx.strokeRect(-hw + 1, -hh + 1, w - 2, h - 2);
 					ctx.fillStyle = '#218584';
@@ -238,29 +253,92 @@ function AnimationPreviewer({
 		canvasX: number,
 		canvasY: number,
 		canvasWidth: number,
-		x?: number,
-		y?: number
+		showMouseCoords = true
 	) => {
-		if (x !== undefined && y !== undefined) {
+		if (showMouseCoords && currentState.mouseX !== null && currentState.mouseY !== null) {
+			const rect = refCanvas.current!.getBoundingClientRect();
+			const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
+			const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
 			ctx.font = '12px sans-serif';
 			ctx.fillStyle = 'white';
 			ctx.textBaseline = 'top';
 			ctx.fillText(`[${x}, ${y}]`, canvasX, canvasY);
 		}
-		if (currentState.selectedElement !== null && animation) {
-			const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+		if (currentState.selectedElement !== null) {
+			const frame = getCurrentFrame();
 			if (frame && frame.elements.includes(currentState.selectedElement)) {
 				ctx.font = '12px sans-serif';
-				ctx.fillStyle = '#78ad51';
+				ctx.fillStyle = '#25bbb9';
 				ctx.textAlign = 'right';
 				ctx.fillText(
 					`[${currentState.selectedElement.x}, ${currentState.selectedElement.y}]`,
-					canvasX + canvasWidth - 10,
+					canvasX + canvasWidth,
 					canvasY
 				);
 				ctx.textAlign = 'left';
 			}
 		}
+	};
+
+	const addNewElement = (isCopy = false) => {
+		const canvas = refCanvas.current;
+		if (canvas && currentState.mouseX !== null && currentState.mouseY !== null) {
+			const frame = getCurrentFrame();
+			if (frame) {
+				const newElement = new AnimationFrameElement();
+				if (isCopy && copiedElement) {
+					newElement.copy(copiedElement);
+				} else {
+					newElement.applyDefault();
+				}
+				newElement.id = Math.max(...frame.elements.map((element) => element.id)) + 1;
+				const rect = canvas.getBoundingClientRect();
+				newElement.x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
+				newElement.y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
+				newElement.texCol = selectedColumn;
+				newElement.texRow = selectedRow;
+				frame.elements.push(newElement);
+				frame.elements.sort((a, b) => a.id - b.id);
+				currentState.selectedElement = newElement;
+				setSelectedElement(newElement);
+			}
+		}
+	};
+
+	const handleNewElement = async () => {
+		addNewElement();
+		draw();
+	};
+
+	const handleEditElement = async () => {
+		setIsDialogElementOpen(true);
+	};
+
+	const handleEditElementAccept = () => {
+		const frame = getCurrentFrame();
+		if (frame) {
+			frame.elements.sort((a, b) => a.id - b.id);
+		}
+		draw();
+	};
+
+	const handleCopyElement = async () => {
+		setCopiedElement(selectedElement);
+	};
+
+	const handlePasteElement = async () => {
+		addNewElement(true);
+		draw();
+	};
+
+	const handleDeleteElement = async () => {
+		const frame = getCurrentFrame();
+		if (frame) {
+			ArrayUtils.removeElement(frame.elements, selectedElement);
+		}
+		currentState.selectedElement = null;
+		setSelectedElement(null);
+		draw();
 	};
 
 	useEffect(() => {
@@ -281,6 +359,9 @@ function AnimationPreviewer({
 				canvas.style.height = h + 'px';
 				ctx.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
 				ctx.imageSmoothingEnabled = false;
+				const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
+				scrollArea.scrollLeft = (scrollArea.scrollWidth - scrollArea.clientWidth) / 2;
+				scrollArea.scrollTop = (scrollArea.scrollHeight - scrollArea.clientHeight) / 2;
 			}
 		}
 		// eslint-disable-next-line
@@ -297,26 +378,23 @@ function AnimationPreviewer({
 	useEffect(() => {
 		const canvas = refCanvas.current;
 		if (loadingState === 0 && canvas) {
-			const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!;
-			const drawWithCoords = async () => {
-				const rect = canvas.getBoundingClientRect();
-				const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
-				const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
-				draw(x, y);
-			};
 			const handleMouseMove = (e: MouseEvent) => {
 				currentState.mouseX = e.clientX;
 				currentState.mouseY = e.clientY;
 				const rect = canvas.getBoundingClientRect();
-				const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
-				const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
+				const x = (currentState.mouseX < 0 ? Math.ceil : Math.floor)(
+					currentState.mouseX - rect.left - WIDTH / 2
+				);
+				const y = (currentState.mouseY < 0 ? Math.ceil : Math.floor)(
+					currentState.mouseY - rect.top - HEIGHT / 2
+				);
 				if (currentState.isMoving && currentState.picture) {
 					currentState.hoveredElement!.x = x;
 					currentState.hoveredElement!.y = y;
 				} else {
 					currentState.hoveredElement = null;
-					if (animation && currentState.picture) {
-						const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
+					if (currentState.picture) {
+						const frame = getCurrentFrame();
 						if (frame) {
 							for (let i = frame.elements.length - 1; i >= 0; i--) {
 								const element = frame.elements[i];
@@ -336,33 +414,25 @@ function AnimationPreviewer({
 						}
 					}
 				}
-				drawWithCoords();
+				draw();
 			};
 			const handleMouseLeave = () => {
-				draw();
+				draw(false);
 			};
 			const handleMouseDown = (e: MouseEvent) => {
 				if (e.button === 0) {
 					currentState.selectedElement = currentState.hoveredElement;
+					setSelectedElement(currentState.hoveredElement);
 					if (currentState.selectedElement !== null) {
 						currentState.isMoving = true;
 					} else {
-						if (animation) {
-							const frame = Base.getByID(animation.frames, currentState.currentFrameID) as AnimationFrame;
-							if (frame) {
-								const newElement = new AnimationFrameElement();
-								newElement.applyDefault();
-								newElement.id = Math.max(...frame.elements.map((element) => element.id)) + 1;
-								const rect = canvas.getBoundingClientRect();
-								newElement.x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
-								newElement.y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
-								newElement.texCol = selectedColumn;
-								newElement.texRow = selectedRow;
-								frame.elements.push(newElement);
-							}
-						}
+						addNewElement();
 					}
-					drawWithCoords();
+					draw();
+				} else if (e.button === 2) {
+					currentState.selectedElement = currentState.hoveredElement;
+					setSelectedElement(currentState.hoveredElement);
+					draw();
 				}
 			};
 			const handleMouseUp = (e: MouseEvent) => {
@@ -371,14 +441,13 @@ function AnimationPreviewer({
 				}
 			};
 			const handleScroll = () => {
-				drawWithCoords();
+				draw();
 			};
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mouseleave', handleMouseLeave);
 			canvas.addEventListener('mousedown', handleMouseDown);
 			canvas.addEventListener('mouseup', handleMouseUp);
-			scrollArea.scrollLeft = (scrollArea.scrollWidth - scrollArea.clientWidth) / 2;
-			scrollArea.scrollTop = (scrollArea.scrollHeight - scrollArea.clientHeight) / 2;
+			const scrollArea = canvas.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!;
 			scrollArea.addEventListener('scroll', handleScroll);
 			draw();
 			return () => {
@@ -392,7 +461,49 @@ function AnimationPreviewer({
 		// eslint-disable-next-line
 	}, [loadingState, pictureID, battlerID, positionKind, rows, columns, animation, selectedColumn, selectedRow]);
 
-	return <canvas ref={refCanvas} className='pointer' />;
+	const getContextMenuItems = () => {
+		return [
+			{
+				title: `${t(selectedElement === null ? 'new' : 'edit')}...`,
+				shortcut: [KEY.ENTER],
+				onClick: selectedElement === null ? handleNewElement : handleEditElement,
+			},
+			{
+				title: t('copy'),
+				shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+				onClick: handleCopyElement,
+				disabled: selectedElement === null,
+			},
+			{
+				title: t('paste'),
+				shortcut: [SPECIAL_KEY.CTRL, KEY.V],
+				onClick: handlePasteElement,
+				disabled: copiedElement === null,
+			},
+			{
+				title: t('delete'),
+				shortcut: [KEY.DELETE],
+				onClick: handleDeleteElement,
+				disabled: selectedElement === null,
+			},
+		];
+	};
+
+	return (
+		<>
+			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
+				<canvas ref={refCanvas} className='pointer' />
+			</ContextMenu>
+			{isDialogElementOpen && selectedElement && (
+				<DialogAnimationFrameElement
+					isOpen
+					setIsOpen={setIsDialogElementOpen}
+					element={selectedElement}
+					onAccept={handleEditElementAccept}
+				/>
+			)}
+		</>
+	);
 }
 
 export default AnimationPreviewer;

@@ -772,21 +772,21 @@ function Tree({
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
 					return {
-						title: 'Edit...',
+						title: `${t('edit')}...`,
 						shortcut: [KEY.ENTER],
 						onClick: handleEditItem,
 						disabled: disableAll || isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
-						title: 'New...',
+						title: `${t('new')}...`,
 						shortcut: [KEY.ENTER],
 						onClick: handleNewItem,
 						disabled: disableAll || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
-						title: 'Copy',
+						title: t('copy'),
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
 						disabled:
@@ -794,14 +794,14 @@ function Tree({
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
-						title: 'Paste',
+						title: t('paste'),
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
 						disabled: disableAll || !canPaste() || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {
-						title: 'Delete',
+						title: t('delete'),
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
 						disabled:
