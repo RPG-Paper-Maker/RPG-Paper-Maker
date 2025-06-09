@@ -16,7 +16,7 @@ import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Animation, AnimationFrame, Base, Picture } from '../../../models';
+import { Animation, AnimationFrame, AnimationFrameEffect, Base, Picture } from '../../../models';
 import AnimationPreviewer from '../../AnimationPreviewer';
 import AnimationPreviewerTexture from '../../AnimationPreviewerTexture';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
@@ -53,6 +53,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [selectedRow, setSelectedRow] = useState(0);
 	const [triggerDraw, setTriggerDraw] = useStateBool();
 	const [triggerApplyTexture, setTriggerApplyTexture] = useStateBool();
+	const [animationFrameEffects, setAnimationFrameEffects] = useState<Node[]>([]);
 
 	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), [t]);
 
@@ -98,6 +99,15 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const handleSelectFrame = (node: Node | null) => {
 		const frame = (node?.content as AnimationFrame) ?? null;
 		setSelectedFrame(frame);
+		if (frame) {
+			setAnimationFrameEffects(Node.createList(frame.effects, false));
+		}
+	};
+
+	const handleFrameEffectsUpdated = () => {
+		if (selectedFrame) {
+			selectedFrame.effects = Node.createListFromNodes(animationFrameEffects);
+		}
 	};
 
 	const handleClickChangeBattler = () => {
@@ -250,7 +260,18 @@ const PanelAnimations = forwardRef((props, ref) => {
 		</Flex>
 	);
 
-	const getSoundEffectsFlashsContent = () => null;
+	const getSoundEffectsFlashsContent = () => (
+		<Tree
+			constructorType={AnimationFrameEffect}
+			list={animationFrameEffects}
+			minWidth={TREES_MIN_WIDTH}
+			onListUpdated={handleFrameEffectsUpdated}
+			noScrollOnForce
+			scrollable
+			applyDefault
+			byIndex
+		/>
+	);
 
 	return (
 		<>

@@ -13,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Constants, PICTURE_KIND } from '../common';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
+import useStateBool from '../hooks/useStateBool';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -42,7 +43,7 @@ function AnimationPreviewerTexture({
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 	})[0];
-	const [loadingState, setLoadingState] = useState(0);
+	const [loadingState, setLoadingState] = useStateBool();
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -54,11 +55,10 @@ function AnimationPreviewerTexture({
 	const getHeight = () => (currentState.picture!.height / rows) * scale;
 
 	const initialize = async () => {
-		setLoadingState((v) => v + 1);
 		currentState.picture = await Picture2D.loadImage(
 			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? ''
 		);
-		setLoadingState((v) => v - 1);
+		setLoadingState((v) => !v);
 	};
 
 	const getContext = () => {
@@ -156,7 +156,7 @@ function AnimationPreviewerTexture({
 			}
 		}
 		// eslint-disable-next-line
-	}, [loadingState, rows, columns, selectedColumn, selectedRow, disabled]);
+	}, [currentState.picture, loadingState, rows, columns, selectedColumn, selectedRow, disabled]);
 
 	return <canvas ref={refCanvas} className={disabled ? undefined : 'pointer'} />;
 }
