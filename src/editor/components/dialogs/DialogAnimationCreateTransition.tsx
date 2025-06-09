@@ -27,9 +27,10 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
+	onAccept: () => void;
 };
 
-function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation }: Props) {
+function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [fromFrames, setFromFrames] = useStateNumber();
@@ -136,6 +137,7 @@ function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation }: Props
 				}
 			}
 		}
+		onAccept();
 		setIsOpen(false);
 	};
 

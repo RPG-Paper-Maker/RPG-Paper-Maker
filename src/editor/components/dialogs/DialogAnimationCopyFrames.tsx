@@ -23,9 +23,10 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
+	onAccept: () => void;
 };
 
-function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation }: Props) {
+function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [from, setFrom] = useStateNumber();
@@ -50,7 +51,7 @@ function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation }: Props) {
 				}
 			}
 		}
-
+		onAccept();
 		setIsOpen(false);
 	};
 

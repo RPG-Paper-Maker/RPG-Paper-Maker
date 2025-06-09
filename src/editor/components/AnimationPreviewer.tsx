@@ -42,6 +42,8 @@ type Props = {
 	currentFrame: AnimationFrame | null;
 	selectedColumn: number;
 	selectedRow: number;
+	triggerDraw?: boolean;
+	triggerApplyTexture?: boolean;
 	disabled?: boolean;
 };
 
@@ -59,6 +61,8 @@ function AnimationPreviewer({
 	currentFrame,
 	selectedColumn,
 	selectedRow,
+	triggerDraw,
+	triggerApplyTexture,
 	disabled = false,
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
@@ -249,10 +253,11 @@ function AnimationPreviewer({
 	};
 
 	const drawCoordinates = (ctx: CanvasRenderingContext2D, showMouseCoords = true) => {
+		const scrollArea = getScrollArea();
 		const rect = refCanvas.current!.getBoundingClientRect();
-		const canvasX = refCanvas.current!.offsetLeft + 70 - rect.left;
-		const canvasY = refCanvas.current!.offsetTop + 20 - rect.top;
-		const canvasWidth = getScrollArea().offsetWidth;
+		const canvasX = scrollArea.scrollLeft;
+		const canvasY = scrollArea.scrollTop;
+		const canvasWidth = scrollArea.offsetWidth - 10;
 		if (showMouseCoords && currentState.mouseX !== null && currentState.mouseY !== null) {
 			const x = Math.round(currentState.mouseX - rect.left - WIDTH / 2);
 			const y = Math.round(currentState.mouseY - rect.top - HEIGHT / 2);
@@ -483,6 +488,20 @@ function AnimationPreviewer({
 		selectedRow,
 		disabled,
 	]);
+
+	useEffect(() => {
+		draw();
+		// eslint-disable-next-line
+	}, [triggerDraw]);
+
+	useEffect(() => {
+		if (selectedElement) {
+			selectedElement.texCol = selectedColumn;
+			selectedElement.texRow = selectedRow;
+			draw();
+		}
+		// eslint-disable-next-line
+	}, [triggerApplyTexture]);
 
 	const getContextMenuItems = () => {
 		return [

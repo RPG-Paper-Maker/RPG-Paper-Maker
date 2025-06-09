@@ -22,9 +22,10 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
+	onAccept: () => void;
 };
 
-function DialogAnimationClearFrames({ isOpen, setIsOpen, animation }: Props) {
+function DialogAnimationClearFrames({ isOpen, setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [from, setFrom] = useStateNumber();
@@ -44,7 +45,7 @@ function DialogAnimationClearFrames({ isOpen, setIsOpen, animation }: Props) {
 				frame.id = id;
 			}
 		}
-
+		onAccept();
 		setIsOpen(false);
 	};
 

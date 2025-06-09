@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH, PICTURE_KIND } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
+import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Animation, AnimationFrame, Base, Picture } from '../../../models';
 import AnimationPreviewer from '../../AnimationPreviewer';
@@ -50,6 +51,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [columns, setColumns] = useStateNumber();
 	const [selectedColumn, setSelectedColumn] = useState(0);
 	const [selectedRow, setSelectedRow] = useState(0);
+	const [triggerDraw, setTriggerDraw] = useStateBool();
+	const [triggerApplyTexture, setTriggerApplyTexture] = useStateBool();
 
 	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), [t]);
 
@@ -95,9 +98,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const handleSelectFrame = (node: Node | null) => {
 		const frame = (node?.content as AnimationFrame) ?? null;
 		setSelectedFrame(frame);
-		/*
-		if (frame) {
-		}*/
 	};
 
 	const handleClickChangeBattler = () => {
@@ -107,6 +107,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const handleAcceptChangeBattler = (picture: Picture) => {
 		setBattlerID(picture.id);
 		setIsDialogBattlerOpen(false);
+	};
+
+	const handleTriggerDraw = () => {
+		setTriggerDraw((v) => !v);
 	};
 
 	const handleClickCopyFrames = () => {
@@ -119,6 +123,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	const handleClickCreateTransition = () => {
 		setIsDialogcreateTransitionOpen(true);
+	};
+
+	const handleClickApplyTexture = () => {
+		setTriggerApplyTexture((v) => !v);
 	};
 
 	useImperativeHandle(ref, () => ({}));
@@ -145,6 +153,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 									currentFrame={selectedFrame}
 									selectedColumn={selectedColumn}
 									selectedRow={selectedRow}
+									triggerDraw={triggerDraw}
+									triggerApplyTexture={triggerApplyTexture}
 									disabled={isAnimationDisabled || isFrameDisabled}
 								/>
 							</Flex>
@@ -170,10 +180,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							>
 								{t('create.transition')}...
 							</Button>
-							<Button
-								onClick={handleClickChangeBattler}
-								disabled={isAnimationDisabled || isFrameDisabled}
-							>
+							<Button onClick={handleClickApplyTexture} disabled={isAnimationDisabled || isFrameDisabled}>
 								{t('apply.texture')}
 							</Button>
 						</Flex>
@@ -321,13 +328,19 @@ const PanelAnimations = forwardRef((props, ref) => {
 				/>
 			)}
 			{isDialogCopyFramesOpen && selectedAnimation && (
-				<DialogAnimationCopyFrames isOpen setIsOpen={setIsDialogCopyFramesOpen} animation={selectedAnimation} />
+				<DialogAnimationCopyFrames
+					isOpen
+					setIsOpen={setIsDialogCopyFramesOpen}
+					animation={selectedAnimation}
+					onAccept={handleTriggerDraw}
+				/>
 			)}
 			{isDialogClearFramesOpen && selectedAnimation && (
 				<DialogAnimationClearFrames
 					isOpen
 					setIsOpen={setIsDialogClearFramesOpen}
 					animation={selectedAnimation}
+					onAccept={handleTriggerDraw}
 				/>
 			)}
 			{isDialogCreateTransitionOpen && selectedAnimation && (
@@ -335,6 +348,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 					isOpen
 					setIsOpen={setIsDialogcreateTransitionOpen}
 					animation={selectedAnimation}
+					onAccept={handleTriggerDraw}
 				/>
 			)}
 		</>
