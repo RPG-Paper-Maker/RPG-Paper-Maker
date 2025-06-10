@@ -11,7 +11,7 @@
 
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INPUT_TYPE_WIDTH, PICTURE_KIND } from '../../../common';
+import { ANIMATION_EFFECT_CONDITION_KIND, INPUT_TYPE_WIDTH, PICTURE_KIND } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
@@ -54,6 +54,8 @@ const PanelAnimations = forwardRef((props, ref) => {
 	const [triggerDraw, setTriggerDraw] = useStateBool();
 	const [triggerApplyTexture, setTriggerApplyTexture] = useStateBool();
 	const [animationFrameEffects, setAnimationFrameEffects] = useState<Node[]>([]);
+	const [isPlaying, setIsPlaying] = useState(false);
+	const [playingType, setPlayingType] = useStateNumber();
 
 	const titles = useMemo(() => Base.mapListIndex([t('graphics'), t('sound.effects.flashs')]), [t]);
 
@@ -139,6 +141,21 @@ const PanelAnimations = forwardRef((props, ref) => {
 		setTriggerApplyTexture((v) => !v);
 	};
 
+	const handleClickPlayHit = () => {
+		setPlayingType(ANIMATION_EFFECT_CONDITION_KIND.HIT);
+		setIsPlaying(true);
+	};
+
+	const handleClickPlayMiss = () => {
+		setPlayingType(ANIMATION_EFFECT_CONDITION_KIND.MISS);
+		setIsPlaying(true);
+	};
+
+	const handleClickPlayCrit = () => {
+		setPlayingType(ANIMATION_EFFECT_CONDITION_KIND.CRITICAL);
+		setIsPlaying(true);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -165,74 +182,89 @@ const PanelAnimations = forwardRef((props, ref) => {
 									selectedRow={selectedRow}
 									triggerDraw={triggerDraw}
 									triggerApplyTexture={triggerApplyTexture}
+									isPlaying={isPlaying}
+									setIsPlaying={setIsPlaying}
+									playingType={playingType}
 									disabled={isAnimationDisabled || isFrameDisabled}
 								/>
 							</Flex>
 						</Flex>
 					</Flex>
 				</Flex>
-				<Groupbox title={t('options')} disabled={isAnimationDisabled || isFrameDisabled}>
+				<Groupbox title={t('options')} disabled={isAnimationDisabled || isFrameDisabled || isPlaying}>
 					<Flex column spacedLarge>
-						<Button onClick={handleClickChangeBattler} disabled={isAnimationDisabled || isFrameDisabled}>
+						<Button
+							onClick={handleClickChangeBattler}
+							disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
+						>
 							{t('change.battler')}...
 						</Button>
 						<div className='horizontalSeparator' />
 						<Flex column spaced>
-							<Button onClick={handleClickCopyFrames} disabled={isAnimationDisabled || isFrameDisabled}>
+							<Button
+								onClick={handleClickCopyFrames}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
+							>
 								{t('copy.frames')}...
 							</Button>
-							<Button onClick={handleClickClearFrames} disabled={isAnimationDisabled || isFrameDisabled}>
+							<Button
+								onClick={handleClickClearFrames}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
+							>
 								{t('clear.frames')}...
 							</Button>
 							<Button
 								onClick={handleClickCreateTransition}
-								disabled={isAnimationDisabled || isFrameDisabled}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 							>
 								{t('create.transition')}...
 							</Button>
-							<Button onClick={handleClickApplyTexture} disabled={isAnimationDisabled || isFrameDisabled}>
+							<Button
+								onClick={handleClickApplyTexture}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
+							>
 								{t('apply.texture')}
 							</Button>
 						</Flex>
 						<div className='horizontalSeparator' />
 						<Flex column spaced>
 							<Button
-								onClick={handleClickChangeBattler}
-								disabled={isAnimationDisabled || isFrameDisabled}
+								onClick={handleClickPlayHit}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 							>
 								{t('play.hit')}...
 							</Button>
 							<Button
-								onClick={handleClickChangeBattler}
-								disabled={isAnimationDisabled || isFrameDisabled}
+								onClick={handleClickPlayMiss}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 							>
 								{t('play.miss')}...
 							</Button>
 							<Button
-								onClick={handleClickChangeBattler}
-								disabled={isAnimationDisabled || isFrameDisabled}
+								onClick={handleClickPlayCrit}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 							>
 								{t('play.crit')}...
 							</Button>
 						</Flex>
 						<div className='horizontalSeparator' />
 						<Form>
-							<Label disabled={isAnimationDisabled || isFrameDisabled}>{t('rows')}</Label>
+							<Label disabled={isAnimationDisabled || isFrameDisabled || isPlaying}>{t('rows')}</Label>
 							<Value>
 								<InputNumber
 									value={rows}
 									onChange={setRows}
 									widthType={INPUT_TYPE_WIDTH.SMALL}
-									disabled={isAnimationDisabled || isFrameDisabled}
+									disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 								/>
 							</Value>
-							<Label disabled={isAnimationDisabled || isFrameDisabled}>{t('columns')}</Label>
+							<Label disabled={isAnimationDisabled || isFrameDisabled || isPlaying}>{t('columns')}</Label>
 							<Value>
 								<InputNumber
 									value={columns}
 									onChange={setColumns}
 									widthType={INPUT_TYPE_WIDTH.SMALL}
-									disabled={isAnimationDisabled || isFrameDisabled}
+									disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 								/>
 							</Value>
 						</Form>
@@ -251,7 +283,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 								setSelectedColumn={setSelectedColumn}
 								selectedRow={selectedRow}
 								setSelectedRow={setSelectedRow}
-								disabled={isAnimationDisabled || isFrameDisabled}
+								disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 							/>
 						</Flex>
 					</Flex>
@@ -276,7 +308,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 	return (
 		<>
 			<Flex spacedLarge fillWidth fillHeight>
-				<Groupbox title={t('animations')}>
+				<Groupbox title={t('animations')} disabled={isPlaying}>
 					<Flex one fillHeight>
 						<Tree
 							constructorType={Animation}
@@ -284,6 +316,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleSelectAnimation}
 							onListUpdated={handleListUpdated}
+							disabled={isPlaying}
 							noScrollOnForce
 							scrollable
 							showEditName
@@ -294,26 +327,26 @@ const PanelAnimations = forwardRef((props, ref) => {
 				</Groupbox>
 				<Flex one column spacedLarge>
 					<Flex spaced centerV>
-						<Flex disabledLabel={isAnimationDisabled}>{t('picture')}:</Flex>
+						<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('picture')}:</Flex>
 						<AssetSelector
 							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
 							kind={PICTURE_KIND.ANIMATIONS}
 							selectedID={pictureID}
 							onChange={handleChangePictureID}
-							disabled={isAnimationDisabled}
+							disabled={isAnimationDisabled || isPlaying}
 						/>
-						<Flex disabledLabel={isAnimationDisabled}>{t('position')}:</Flex>
+						<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('position')}:</Flex>
 						<Dropdown
 							selectedID={positionKind}
 							onChange={setPositionKind}
 							options={Base.ANIMATION_POSITION_OPTIONS}
-							disabled={isAnimationDisabled}
+							disabled={isAnimationDisabled || isPlaying}
 							translateOptions
 						/>
 					</Flex>
 					<Flex one>
 						<Flex>
-							<Groupbox title={t('frames')} fillWidth disabled={isAnimationDisabled}>
+							<Groupbox title={t('frames')} fillWidth disabled={isAnimationDisabled || isPlaying}>
 								<Tree
 									constructorType={AnimationFrame}
 									list={frames}
@@ -323,7 +356,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 									noScrollOnForce
 									scrollable
 									applyDefault
-									disabled={isAnimationDisabled}
+									disabled={isAnimationDisabled || isPlaying}
 									doNotOpenDialog
 								/>
 							</Groupbox>
@@ -332,7 +365,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							<Tab
 								titles={titles}
 								contents={[getGraphicsContent(), getSoundEffectsFlashsContent()]}
-								disabled={isAnimationDisabled}
+								disabled={isAnimationDisabled || isPlaying}
 								hideScroll
 							/>
 						</Flex>

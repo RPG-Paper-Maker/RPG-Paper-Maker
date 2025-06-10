@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { SONG_KIND } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
+import Button from '../../Button';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -90,11 +91,18 @@ function DialogAnimationFrameEffect({ isOpen, setIsOpen, model, onAccept, onReje
 							<Value>
 								<PlaySongSelector songKind={SONG_KIND.SOUND} ref={playSoundSelectorRef} />
 							</Value>
+							<Label>
+								<RadioButton value={SELECTION_TYPE.FLASH} disabled>
+									{t('flash')}:
+								</RadioButton>
+							</Label>
+							<Value>
+								<Button disabled>{t('edit')}...</Button>
+							</Value>
 						</Form>
 					</RadioGroup>
 				</Groupbox>
-				<Flex spaced>
-					{' '}
+				<Flex spaced centerV>
 					<div>{t('condition')}:</div>
 					<Dropdown
 						selectedID={condition}

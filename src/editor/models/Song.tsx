@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths, SONG_KIND } from '../common';
+import { Constants, Paths, SONG_KIND } from '../common';
+import { LocalFile } from '../core/LocalFile';
 import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
@@ -51,6 +52,10 @@ class Song extends Asset {
 
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+	}
+
+	async getPathOrBase64(): Promise<string> {
+		return this.isBR && !Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
 	}
 
 	copy(song: Song): void {

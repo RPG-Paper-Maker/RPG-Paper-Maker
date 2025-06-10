@@ -11,7 +11,17 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ANIMATION_POSITION_KIND, ArrayUtils, Constants, KEY, Mathf, PICTURE_KIND, SPECIAL_KEY } from '../common';
+import {
+	ANIMATION_EFFECT_CONDITION_KIND,
+	ANIMATION_POSITION_KIND,
+	ArrayUtils,
+	Constants,
+	KEY,
+	Mathf,
+	PICTURE_KIND,
+	SONG_KIND,
+	SPECIAL_KEY,
+} from '../common';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
@@ -30,6 +40,7 @@ type CurrentStateProps = {
 	selectedElement: AnimationFrameElement | null;
 	hoveredElement: AnimationFrameElement | null;
 	isMoving: boolean;
+	effects: Map<number, Howl[]>;
 };
 
 type Props = {
@@ -42,8 +53,11 @@ type Props = {
 	currentFrame: AnimationFrame | null;
 	selectedColumn: number;
 	selectedRow: number;
-	triggerDraw?: boolean;
-	triggerApplyTexture?: boolean;
+	triggerDraw: boolean;
+	triggerApplyTexture: boolean;
+	isPlaying: boolean;
+	setIsPlaying: (b: boolean) => void;
+	playingType: ANIMATION_EFFECT_CONDITION_KIND;
 	disabled?: boolean;
 };
 
@@ -63,6 +77,9 @@ function AnimationPreviewer({
 	selectedRow,
 	triggerDraw,
 	triggerApplyTexture,
+	isPlaying,
+	setIsPlaying,
+	playingType,
 	disabled = false,
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
@@ -76,6 +93,7 @@ function AnimationPreviewer({
 		selectedElement: null,
 		hoveredElement: null,
 		isMoving: false,
+		effects: new Map(),
 	})[0];
 	const { t } = useTranslation();
 
@@ -133,7 +151,9 @@ function AnimationPreviewer({
 				drawLines(ctx);
 				if (!disabled) {
 					drawBattler(ctx);
-					drawCoordinates(ctx, showMouseCoords);
+					if (!isPlaying) {
+						drawCoordinates(ctx, showMouseCoords);
+					}
 					drawElements(ctx);
 				} else {
 					ctx.fillStyle = '#323232';
@@ -223,30 +243,33 @@ function AnimationPreviewer({
 					ctx.rotate(angle);
 					ctx.globalAlpha = element.opacity / 100;
 					ctx.drawImage(currentState.picture!, sx, sy, sw, sh, -hw, -hh, w, h);
-					ctx.restore();
-					ctx.save();
-					ctx.translate(x + hw, y + hh);
-					ctx.rotate(angle);
 					ctx.globalAlpha = 1;
-					ctx.strokeStyle = currentState.selectedElement === element ? '#25bbb9' : '#78ad51';
-					ctx.strokeRect(-hw, -hh, w, h);
-					ctx.strokeRect(-hw + 1, -hh + 1, w - 2, h - 2);
-					ctx.fillStyle = '#218584';
-					ctx.globalAlpha = 0.75;
-					ctx.fillRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
-					ctx.strokeRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
-					ctx.strokeRect(-hw, -hh, ELEMENT_INDEX_SIZE + 1, ELEMENT_INDEX_SIZE + 1);
-					ctx.font = '12px sans-serif';
-					ctx.fillStyle = 'white';
-					ctx.textBaseline = 'top';
-					ctx.fillText('' + element.id, -hw + 2, -hh + ELEMENT_INDEX_SIZE - 12);
-					if (currentState.hoveredElement === element) {
-						ctx.fillStyle = '#323232';
-						ctx.globalAlpha = 0.5;
-						ctx.fillRect(-hw, -hh, w, h);
+					ctx.restore();
+					if (!isPlaying) {
+						ctx.save();
+						ctx.translate(x + hw, y + hh);
+						ctx.rotate(angle);
+						ctx.globalAlpha = 1;
+						ctx.strokeStyle = currentState.selectedElement === element ? '#25bbb9' : '#78ad51';
+						ctx.strokeRect(-hw, -hh, w, h);
+						ctx.strokeRect(-hw + 1, -hh + 1, w - 2, h - 2);
+						ctx.fillStyle = '#218584';
+						ctx.globalAlpha = 0.75;
+						ctx.fillRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
+						ctx.strokeRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
+						ctx.strokeRect(-hw, -hh, ELEMENT_INDEX_SIZE + 1, ELEMENT_INDEX_SIZE + 1);
+						ctx.font = '12px sans-serif';
+						ctx.fillStyle = 'white';
+						ctx.textBaseline = 'top';
+						ctx.fillText('' + element.id, -hw + 2, -hh + ELEMENT_INDEX_SIZE - 12);
+						if (currentState.hoveredElement === element) {
+							ctx.fillStyle = '#323232';
+							ctx.globalAlpha = 0.5;
+							ctx.fillRect(-hw, -hh, w, h);
+							ctx.globalAlpha = 1;
+						}
+						ctx.restore();
 					}
-					ctx.globalAlpha = 1;
-					ctx.restore();
 				}
 			}
 		}
@@ -280,6 +303,59 @@ function AnimationPreviewer({
 				ctx.textAlign = 'left';
 			}
 		}
+	};
+
+	const playAnimation = async () => {
+		currentState.effects.clear();
+		if (animation) {
+			for (const frame of animation.frames) {
+				const effects: Howl[] = [];
+				for (const effect of frame.effects) {
+					if (effect.condition === ANIMATION_EFFECT_CONDITION_KIND.NONE || effect.condition === playingType) {
+						if (effect.isSE) {
+							const song = Project.current!.songs.getByID(SONG_KIND.SOUND, effect.se.id);
+							if (song) {
+								const path = await song.getPathOrBase64();
+								const { Howl } = await import('howler');
+								const howl = new Howl({
+									src: [path],
+									html5: true,
+								});
+								effects.push(howl);
+							}
+						}
+					}
+				}
+				if (effects.length > 0) {
+					currentState.effects.set(frame.id, effects);
+				}
+			}
+		}
+		drawAnimationLoop();
+	};
+
+	const playEffect = () => {
+		const effects = currentState.effects.get(currentState.currentFrameID);
+		if (effects) {
+			for (const howl of effects) {
+				howl.play();
+			}
+		}
+	};
+
+	const drawAnimationLoop = () => {
+		if (animation && animation.frames.length > 0) {
+			const maxID = Math.max(...animation.frames.map((frame) => frame.id));
+			if (currentState.currentFrameID <= maxID) {
+				draw();
+				playEffect();
+				currentState.currentFrameID++;
+				requestAnimationFrame(drawAnimationLoop);
+				return;
+			}
+		}
+		currentState.currentFrameID = currentFrame?.id ?? -1;
+		setIsPlaying(false);
 	};
 
 	const addNewElement = (isCopy = false) => {
@@ -381,7 +457,7 @@ function AnimationPreviewer({
 		const canvas = refCanvas.current;
 		if (loadingState === 0 && canvas) {
 			const handleMouseMove = (e: MouseEvent) => {
-				if (disabled) {
+				if (disabled || isPlaying) {
 					return;
 				}
 				currentState.mouseX = e.clientX;
@@ -422,13 +498,13 @@ function AnimationPreviewer({
 				draw();
 			};
 			const handleMouseLeave = () => {
-				if (disabled) {
+				if (disabled || isPlaying) {
 					return;
 				}
 				draw(false);
 			};
 			const handleMouseDown = (e: MouseEvent) => {
-				if (disabled) {
+				if (disabled || isPlaying) {
 					return;
 				}
 				if (e.button === 0) {
@@ -447,7 +523,7 @@ function AnimationPreviewer({
 				}
 			};
 			const handleMouseUp = (e: MouseEvent) => {
-				if (disabled) {
+				if (disabled || isPlaying) {
 					return;
 				}
 				if (e.button === 0) {
@@ -455,7 +531,7 @@ function AnimationPreviewer({
 				}
 			};
 			const handleScroll = () => {
-				if (disabled) {
+				if (disabled || isPlaying) {
 					return;
 				}
 				draw();
@@ -466,7 +542,9 @@ function AnimationPreviewer({
 			canvas.addEventListener('mouseup', handleMouseUp);
 			const scrollArea = getScrollArea();
 			scrollArea.addEventListener('scroll', handleScroll);
-			draw();
+			if (!isPlaying) {
+				draw();
+			}
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mouseleave', handleMouseLeave);
@@ -487,6 +565,7 @@ function AnimationPreviewer({
 		selectedColumn,
 		selectedRow,
 		disabled,
+		isPlaying,
 	]);
 
 	useEffect(() => {
@@ -502,6 +581,14 @@ function AnimationPreviewer({
 		}
 		// eslint-disable-next-line
 	}, [triggerApplyTexture]);
+
+	useEffect(() => {
+		if (isPlaying) {
+			currentState.currentFrameID = 1;
+			playAnimation().catch(console.error);
+		}
+		// eslint-disable-next-line
+	}, [isPlaying]);
 
 	const getContextMenuItems = () => {
 		return [

@@ -15,11 +15,10 @@ import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
-import { Node } from '../../core/Node';
-import { Project } from '../../core/Project';
-
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
+import { Node } from '../../core/Node';
+import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateDynamicValue from '../../hooks/useStateDynamicValue';
