@@ -9,10 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactNode } from 'react';
 import { BINDING, DYNAMIC_VALUE_KIND, JSONType, OPERATION_KIND } from '../common';
+import DialogStatusReleaseTurn from '../components/dialogs/models/DialogStatusReleaseTurn';
 import { DynamicValue } from '../core/DynamicValue';
 import { BindingType } from '../core/Serializable';
-import { Base } from './Base';
+import { Base, DIALOG_OPTIONS } from './Base';
 
 class StatusReleaseTurn extends Base {
 	public operationTurnKind!: OPERATION_KIND;
@@ -41,6 +43,10 @@ class StatusReleaseTurn extends Base {
 
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(StatusReleaseTurn.getBindings(additionnalBinding));
+	}
+
+	getDialog(options: DIALOG_OPTIONS): ReactNode {
+		return <DialogStatusReleaseTurn {...options} />;
 	}
 
 	toStrings(): string[] {

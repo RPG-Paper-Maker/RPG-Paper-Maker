@@ -117,6 +117,12 @@ class Status extends Icon {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		if (!this.isReleaseAfterAttacked) {
+			this.chanceReleaseAfterAttacked.updateToDefaultNumber(0, true);
+		}
+		if (!this.isReleaseStartTurn) {
+			this.releaseStartTurn = [];
+		}
 		super.write(json, Status.getBindings(additionnalBinding));
 	}
 }
