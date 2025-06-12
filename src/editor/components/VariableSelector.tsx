@@ -24,10 +24,18 @@ type Props = {
 	onChange: (id: number) => void;
 	forcedVariableID?: number | null;
 	setForcedVariableID?: (v: number | null) => void;
+	fillWidth?: boolean;
 	disabled?: boolean;
 };
 
-function VariableSelector({ variableID, onChange, forcedVariableID, setForcedVariableID, disabled = false }: Props) {
+function VariableSelector({
+	variableID,
+	onChange,
+	forcedVariableID,
+	setForcedVariableID,
+	fillWidth = false,
+	disabled = false,
+}: Props) {
 	const getNodeContent = (id: number) =>
 		Model.Base.create(id, Project.current!.variables.getVariableByID(id)?.name || '');
 
@@ -59,7 +67,7 @@ function VariableSelector({ variableID, onChange, forcedVariableID, setForcedVar
 				one
 				spaced
 				onDoubleClick={handleOpenVariables}
-				style={{ minWidth: INPUT_WIDTH, maxWidth: INPUT_WIDTH }}
+				style={{ minWidth: INPUT_WIDTH, maxWidth: fillWidth ? undefined : INPUT_WIDTH }}
 			>
 				<Tree
 					list={[node]}

@@ -32,6 +32,12 @@ class Localization extends Base {
 		return localization;
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Localization.getBindings(additionnalBinding));
+		this.names = new Map();
+		this.names.set('1', '');
+	}
+
 	initializeCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
 		const id = command[iterator.i++] as string;
 		const name = command[iterator.i++] as string;

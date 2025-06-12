@@ -33,6 +33,7 @@ type Props = {
 	min?: number;
 	max?: number;
 	addNoneOption?: boolean;
+	fillWidth?: boolean;
 };
 
 function DynamicValueSelector({
@@ -45,6 +46,7 @@ function DynamicValueSelector({
 	min,
 	max,
 	addNoneOption = false,
+	fillWidth = false,
 }: Props) {
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
@@ -558,7 +560,7 @@ function DynamicValueSelector({
 					<InputNumber
 						value={valueNumber}
 						onChange={handleChangeNumber}
-						widthType={INPUT_TYPE_WIDTH.LARGE}
+						widthType={fillWidth ? INPUT_TYPE_WIDTH.FILL : INPUT_TYPE_WIDTH.LARGE}
 						decimals={kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL}
 						disabled={disabled}
 						min={min}
@@ -573,6 +575,7 @@ function DynamicValueSelector({
 						setForcedVariableID={setForcedVariabledID}
 						onChange={handleChangeVariable}
 						disabled={disabled}
+						fillWidth={fillWidth}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.TEXT:
@@ -581,7 +584,7 @@ function DynamicValueSelector({
 					<InputText
 						value={valueText}
 						onChange={handleChangeText}
-						widthType={INPUT_TYPE_WIDTH.NORMAL}
+						widthType={fillWidth ? INPUT_TYPE_WIDTH.FILL : INPUT_TYPE_WIDTH.NORMAL}
 						disabled={disabled}
 					/>
 				);

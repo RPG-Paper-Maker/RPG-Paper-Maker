@@ -28,6 +28,11 @@ class Icon extends Localization {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Icon.getBindings(additionnalBinding));
+		this.pictureID = -1;
+	}
+
 	copy(icon: Icon, additionnalBinding: BindingType[]): void {
 		super.copy(icon, Icon.getBindings(additionnalBinding));
 	}

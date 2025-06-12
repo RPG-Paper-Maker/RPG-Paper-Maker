@@ -35,6 +35,21 @@ class StatusReleaseTurn extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	static getTreeHeader(): string[] {
+		return ['turn', 'chance'];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(StatusReleaseTurn.getBindings(additionnalBinding));
+	}
+
+	toStrings(): string[] {
+		return [
+			`${Base.STRING_START}${Base.getCompareOptions()[this.operationTurnKind].name} ${this.turn.toString()}`,
+			`${this.chance.toString()}%`,
+		];
+	}
+
 	copy(statusReleaseTurn: StatusReleaseTurn): void {
 		super.copy(statusReleaseTurn, StatusReleaseTurn.getBindings([]));
 	}

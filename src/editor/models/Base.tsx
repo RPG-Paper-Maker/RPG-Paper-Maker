@@ -258,6 +258,16 @@ class Base extends Serializable {
 	]);
 	public static ANIMATION_POSITION_OPTIONS = Base.mapListIndex(['top', 'middle', 'bottom', 'screen.center']);
 	public static ANIMATION_EFFECT_CONDITION_OPTIONS = Base.mapListIndex(['none', 'hit', 'miss', 'critical']);
+	public static STATUS_RESTRICTIONS_OPTIONS = Base.mapListIndex([
+		'none',
+		'cant.do.anything',
+		'cant.use.skills',
+		'cant.use.items',
+		'cant.escape',
+		'attack.random.target',
+		'attack.random.ally',
+		'attack.random.enemy',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

@@ -67,7 +67,7 @@ class Status extends Icon {
 			DynamicValue,
 		],
 		['isReleaseStartTurn', 'isReleaseStartTurn', false, BINDING.BOOLEAN],
-		['releaseStartTurn', 'releaseStartTurn', [], BINDING.OBJECT, StatusReleaseTurn],
+		['releaseStartTurn', 'releaseStartTurn', [], BINDING.LIST, StatusReleaseTurn],
 		[
 			'messageAllyAffected',
 			'messageAllyAffected',
@@ -102,6 +102,10 @@ class Status extends Icon {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Status.getBindings(additionnalBinding));
 	}
 
 	copy(status: Status): void {
