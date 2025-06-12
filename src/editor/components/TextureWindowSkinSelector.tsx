@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Utils } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
@@ -45,7 +45,7 @@ function TextureWindowSkinSelector({
 	})[0];
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
-	const zoomFactor = (() => {
+	const zoomFactor = useMemo(() => {
 		if (zoom === 5) {
 			return 1;
 		} else if (zoom > 5) {
@@ -53,7 +53,7 @@ function TextureWindowSkinSelector({
 		} else {
 			return Math.pow(0.5, 5 - zoom);
 		}
-	})();
+	}, [zoom]);
 
 	const initialize = async () => {
 		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;

@@ -10,12 +10,11 @@
 */
 
 import { BINDING, JSONType } from '../common';
-import { Project } from './Project';
 import { Rectangle } from './Rectangle';
 import { BindingType, Serializable } from './Serializable';
 
 class CollisionSquare extends Serializable {
-	public rect: Rectangle;
+	public rect: Rectangle | null;
 	public left: boolean;
 	public right: boolean;
 	public top: boolean;
@@ -24,7 +23,6 @@ class CollisionSquare extends Serializable {
 	public climbing: boolean;
 
 	public static readonly bindings: BindingType[] = [
-		['rect', 'rec', null, BINDING.RECTANGLE],
 		['left', 'l', true, BINDING.BOOLEAN],
 		['right', 'r', true, BINDING.BOOLEAN],
 		['top', 't', true, BINDING.BOOLEAN],
@@ -39,7 +37,7 @@ class CollisionSquare extends Serializable {
 
 	constructor() {
 		super();
-		this.rect = new Rectangle(0, 0, Project.current!.systems.SQUARE_SIZE, Project.current!.systems.SQUARE_SIZE);
+		this.rect = null;
 		this.left = true;
 		this.right = true;
 		this.top = true;
@@ -61,10 +59,28 @@ class CollisionSquare extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CollisionSquare.getBindings(additionnalBinding));
+		if (json.rec !== undefined) {
+			if (json.rec !== null) {
+				this.rect = new Rectangle();
+				this.rect.read(json.rec as number[]);
+			} else {
+				this.rect = null;
+			}
+		} else {
+			this.rect = new Rectangle(0, 0, 100, 100);
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, CollisionSquare.getBindings(additionnalBinding));
+		if (this.rect !== null) {
+			if (this.rect.x !== 0 || this.rect.y !== 0 || this.rect.width !== 100 || this.rect.height !== 100) {
+				json.rec = [];
+				this.rect.write(json.rec as number[]);
+			}
+		} else {
+			json.rec = null;
+		}
 	}
 }
 

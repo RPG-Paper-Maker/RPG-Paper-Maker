@@ -22,6 +22,8 @@ class Constants {
 	public static readonly MAX_PICTURE_SIZE = 4096;
 	public static readonly PRECISION_POSITION = 0.000000001;
 	public static readonly DEFAULT_FONT_NAME = 'Arial';
+	public static readonly COLOR_DARK_BACKGROUND = '#221f2e';
+	public static readonly COLOR_HOVER_GREY = '#323232';
 	public static IS_MOBILE = false;
 	public static IS_DESKTOP = false;
 	public static USER_LOCALE = '';

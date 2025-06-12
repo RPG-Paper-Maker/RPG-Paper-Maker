@@ -13,15 +13,15 @@ import { BINDING, Constants, JSONType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare } from '../core/CollisionSquare';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
+import { Point } from '../core/Point';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Asset } from './Asset';
 
 class Picture extends Asset {
 	public kind!: PICTURE_KIND;
-	public jsonCollisions!: JSONType[];
 	public collisionsRepeat!: boolean;
-	public collisions: CollisionSquare[] = [];
+	public collisions!: Map<string, CollisionSquare>;
 	public picture!: Picture2D;
 	public width!: number;
 	public height!: number;
@@ -34,7 +34,6 @@ class Picture extends Asset {
 	}
 
 	public static readonly bindings: BindingType[] = [
-		['jsonCollisions', 'col', [], BINDING.NUMBER],
 		['collisionsRepeat', 'rcol', false, BINDING.BOOLEAN],
 		['isStopAnimation', 'isStopAnimation', false, BINDING.BOOLEAN],
 		['isClimbAnimation', 'ica', false, BINDING.BOOLEAN],
@@ -96,6 +95,7 @@ class Picture extends Asset {
 
 	applyDefault(): void {
 		super.applyDefault(Picture.getBindings([]));
+		this.collisions = new Map();
 	}
 
 	getPath(): string {
@@ -113,16 +113,40 @@ class Picture extends Asset {
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {
 		super.copy(picture, Picture.getBindings(additionnalBinding));
 		this.kind = picture.kind;
-		this.jsonCollisions = [...picture.jsonCollisions];
-		this.collisions = picture.collisions?.map((collision) => collision.clone());
+		this.collisions = new Map<string, CollisionSquare>(
+			[...picture.collisions.entries()].map(([point, collision]) => [point, collision.clone()])
+		);
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Picture.getBindings(additionnalBinding));
+		this.collisions = new Map();
+		if (json.col) {
+			for (const obj of json.col as JSONType[]) {
+				const point = new Point();
+				point.read(obj.k as number[]);
+				const collision = new CollisionSquare();
+				collision.read(obj.v as JSONType);
+				this.collisions.set(point.toKey(), collision);
+			}
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Picture.getBindings(additionnalBinding));
+		if (this.collisions.size > 0) {
+			const tab: JSONType[] = [];
+			for (const [key, collision] of this.collisions.entries()) {
+				const obj: JSONType = {};
+				obj.k = [];
+				const point = Point.fromKey(key);
+				point.write(obj.k as number[]);
+				obj.v = {};
+				collision.write(obj.v as JSONType);
+				tab.push(obj);
+			}
+			json.col = tab;
+		}
 	}
 }
 

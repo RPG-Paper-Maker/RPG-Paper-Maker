@@ -238,27 +238,6 @@ function TextureSquareSelector({
 					(currentState.picture.width * 2) / divideWidth,
 					(currentState.picture.height * 2) / divideHeight
 				);
-
-				/*
-					for (let i = 0, l = currentState.picture.width / Project.SQUARE_SIZE / divideWidth; i < l; i++) {
-						for (
-							let j = 0, ll = currentState.picture.height / Project.SQUARE_SIZE / divideHeight;
-							j < ll;
-							j++
-						) {
-							ctx.drawImage(
-								currentState.picture,
-								i * Project.SQUARE_SIZE * divideWidth,
-								j * Project.SQUARE_SIZE * divideHeight,
-								Project.SQUARE_SIZE,
-								Project.SQUARE_SIZE,
-								i * Project.SQUARE_SIZE * 2,
-								j * Project.SQUARE_SIZE * 2,
-								Project.SQUARE_SIZE * 2,
-								Project.SQUARE_SIZE * 2
-							);
-						}
-					}*/
 			}
 		},
 		[currentState, divideWidth, divideHeight]

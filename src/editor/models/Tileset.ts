@@ -17,32 +17,22 @@ import { Base } from './Base';
 class Tileset extends Base {
 	public pictureID!: number;
 	public battleMap!: DynamicValue;
-	public autotiles!: number[];
-	public walls!: number[];
-	public mountains!: number[];
-	public objects!: number[];
 
 	public static bindings: BindingType[] = [
 		['pictureID', 'pic', undefined, BINDING.NUMBER],
 		['battleMap', 'bm', DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
-		['autotiles', 'auto', undefined, BINDING.NUMBER],
-		['walls', 'walls', undefined, BINDING.NUMBER],
-		['mountains', 'moun', undefined, BINDING.NUMBER],
-		['objects', 'objs', undefined, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Tileset.getBindings(additionnalBinding));
+	}
+
 	copy(tileset: Tileset): void {
 		super.copy(tileset);
-		this.pictureID = tileset.pictureID;
-		this.battleMap = tileset.battleMap.clone();
-		this.autotiles = [...tileset.autotiles];
-		this.walls = [...tileset.walls];
-		this.mountains = [...tileset.mountains];
-		this.objects = [...tileset.objects];
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

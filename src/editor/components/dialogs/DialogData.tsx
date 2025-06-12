@@ -22,6 +22,7 @@ import PanelCommonSkillItem from '../panels/data/PanelCommonSkillItem';
 import PanelHeroes from '../panels/data/PanelHeroes';
 import PanelMonsters from '../panels/data/PanelMonsters';
 import PanelStatus from '../panels/data/PanelStatus';
+import PanelTilesets from '../panels/data/PanelTilesets';
 import PanelTroops from '../panels/data/PanelTroops';
 import Tab from '../Tab';
 import Dialog from './Dialog';
@@ -47,6 +48,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelSkillsRef = useRef(null);
 	const panelAnimationsRef = useRef(null);
 	const panelStatusRef = useRef(null);
+	const panelTilesetsRef = useRef(null);
 
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
@@ -78,6 +80,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelStatusRef.current) {
 			await Project.current!.status.save();
+		}
+		if (panelTilesetsRef.current) {
+			await Project.current!.tilesets.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -113,6 +118,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelStatusRef.current) {
 			await Project.current!.status.load();
+		}
+		if (panelTilesetsRef.current) {
+			await Project.current!.tilesets.load();
 		}
 		setIsOpen(false);
 	};
@@ -151,7 +159,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					<PanelCommonSkillItem key={7} kind={COMMON_SKILL_ITEM_KIND.SKILL} ref={panelSkillsRef} />,
 					<PanelAnimations key={8} ref={panelAnimationsRef} />,
 					<PanelStatus key={9} ref={panelStatusRef} />,
-					null,
+					<PanelTilesets key={10} ref={panelTilesetsRef} />,
 				]}
 				padding
 				lazyLoadingContent
