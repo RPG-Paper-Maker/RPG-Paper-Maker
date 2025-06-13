@@ -36,6 +36,14 @@ type CurrentStateProps = {
 	pictureModel: Picture | null;
 	mouseX: number;
 	mouseY: number;
+	hoveredPoint: string | null;
+	selectedPoint: string | null;
+	isResizing: boolean;
+	isResizingLeft: boolean;
+	isResizingRight: boolean;
+	isResizingTop: boolean;
+	isResizingBot: boolean;
+	originalRect: Rectangle | null;
 };
 
 type Props = {
@@ -52,6 +60,14 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		pictureModel: null,
 		mouseX: -1,
 		mouseY: -1,
+		hoveredPoint: null,
+		selectedPoint: null,
+		isResizing: false,
+		isResizingLeft: false,
+		isResizingRight: false,
+		isResizingTop: false,
+		isResizingBot: false,
+		originalRect: null,
 	})[0];
 	const [zoom, setZoom] = useState(Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)));
 	const [selectedCollisionType, setSelectedCollisionType] = useState(COLLISION_TYPE.PRATICABLE);
@@ -82,6 +98,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		() => Base.mapListIndex(collisionTypes.map((i) => t(COLLISION_OPTIONS[i]))),
 		[collisionTypes]
 	);
+	const cursorOffset = useMemo(() => 2 * zoomFactor, [zoomFactor]);
 
 	const initialize = async () => {
 		currentState.pictureModel =
@@ -110,6 +127,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		const ctx = getContext();
 		const canvas = refCanvas.current;
 		if (ctx && canvas && currentState.picture) {
+			if (!currentState.isResizing) {
+				canvas.style.cursor = 'pointer';
+			}
 			clear(ctx);
 			ctx.lineWidth = 1;
 			ctx.imageSmoothingEnabled = false;
@@ -146,14 +166,71 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 						((collision.rect.width * Project.SQUARE_SIZE) / 100) * zoomFactor,
 						((collision.rect.height * Project.SQUARE_SIZE) / 100) * zoomFactor
 					);
-					if (rect.isInside(currentState.mouseX, currentState.mouseY)) {
+					if (currentState.selectedPoint === key) {
+						ctx.fillStyle = Constants.COLOR_PRIMARY;
+						ctx.globalAlpha = 0.25;
+						ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+						ctx.globalAlpha = 1;
+					}
+					if (
+						(currentState.isResizing && currentState.selectedPoint === key) ||
+						(!currentState.isResizing && rect.isInside(currentState.mouseX, currentState.mouseY))
+					) {
+						currentState.hoveredPoint = key;
 						ctx.fillStyle = Constants.COLOR_HOVER_GREY;
 						ctx.globalAlpha = 0.5;
 						ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
 						ctx.globalAlpha = 1;
+						if (!currentState.isResizing) {
+							currentState.isResizingLeft = currentState.mouseX <= rect.x + cursorOffset;
+							currentState.isResizingRight = currentState.mouseX >= rect.x + rect.width - cursorOffset;
+							if (currentState.isResizingLeft && currentState.isResizingRight) {
+								const distToLeft = Math.abs(currentState.mouseX - rect.x);
+								const distToRight = Math.abs(currentState.mouseX - (rect.x + rect.width));
+								if (distToLeft < distToRight) {
+									currentState.isResizingRight = false;
+								} else {
+									currentState.isResizingLeft = false;
+								}
+							}
+							currentState.isResizingTop = currentState.mouseY <= rect.y + cursorOffset;
+							currentState.isResizingBot = currentState.mouseY >= rect.y + rect.height - cursorOffset;
+							if (currentState.isResizingTop && currentState.isResizingBot) {
+								const distToTop = Math.abs(currentState.mouseY - rect.y);
+								const distToBot = Math.abs(currentState.mouseY - (rect.y + rect.height));
+								if (distToTop < distToBot) {
+									currentState.isResizingBot = false;
+								} else {
+									currentState.isResizingTop = false;
+								}
+							}
+							if (
+								(currentState.isResizingLeft || currentState.isResizingRight) &&
+								!currentState.isResizingBot &&
+								!currentState.isResizingTop
+							) {
+								refCanvas.current!.style.cursor = 'ew-resize';
+							} else if (
+								(currentState.isResizingTop || currentState.isResizingBot) &&
+								!currentState.isResizingLeft &&
+								!currentState.isResizingRight
+							) {
+								refCanvas.current!.style.cursor = 'ns-resize';
+							} else if (
+								(currentState.isResizingTop && currentState.isResizingLeft) ||
+								(currentState.isResizingBot && currentState.isResizingRight)
+							) {
+								refCanvas.current!.style.cursor = 'nwse-resize';
+							} else if (
+								(currentState.isResizingTop && currentState.isResizingRight) ||
+								(currentState.isResizingBot && currentState.isResizingLeft)
+							) {
+								refCanvas.current!.style.cursor = 'nesw-resize';
+							}
+						}
 					}
-					ctx.setLineDash([4 * zoomFactor, 2 * zoomFactor]);
-					ctx.strokeStyle = 'white';
+					ctx.setLineDash([4 * zoomFactor, zoomFactor]);
+					ctx.strokeStyle = currentState.selectedPoint === key ? Constants.COLOR_PRIMARY : 'white';
 					ctx.lineWidth = 2;
 					ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
 				}
@@ -199,11 +276,99 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				const rect = canvas.getBoundingClientRect();
 				currentState.mouseX = e.clientX - rect.left;
 				currentState.mouseY = e.clientY - rect.top;
+				if (currentState.isResizing) {
+					const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
+					if (collision) {
+						const point = Point.fromKey(currentState.selectedPoint!);
+						const newX =
+							(Math.round(
+								Math.max(
+									currentState.isResizingLeft
+										? 0
+										: (currentState.originalRect!.x * Project.SQUARE_SIZE) / 100,
+									Math.min(
+										currentState.mouseX / zoomFactor - point.x * Project.SQUARE_SIZE,
+										currentState.isResizingRight
+											? Project.SQUARE_SIZE
+											: ((currentState.originalRect!.x + currentState.originalRect!.width) *
+													Project.SQUARE_SIZE) /
+													100
+									)
+								)
+							) /
+								Project.SQUARE_SIZE) *
+							100;
+						const newY =
+							(Math.round(
+								Math.max(
+									currentState.isResizingTop
+										? 0
+										: (currentState.originalRect!.y * Project.SQUARE_SIZE) / 100,
+									Math.min(
+										currentState.mouseY / zoomFactor - point.y * Project.SQUARE_SIZE,
+										currentState.isResizingBot
+											? Project.SQUARE_SIZE
+											: ((currentState.originalRect!.y + currentState.originalRect!.height) *
+													Project.SQUARE_SIZE) /
+													100
+									)
+								)
+							) /
+								Project.SQUARE_SIZE) *
+							100;
+						if (currentState.isResizingLeft) {
+							const dif = newX - collision.rect!.x;
+							collision.rect!.x = newX;
+							collision.rect!.width -= dif;
+							if (collision.rect!.width === 0) {
+								collision.rect!.x -= (1 / Project.SQUARE_SIZE) * 100;
+								collision.rect!.width += (1 / Project.SQUARE_SIZE) * 100;
+							}
+						}
+						if (currentState.isResizingRight) {
+							const dif = collision.rect!.x + collision.rect!.width - newX;
+							collision.rect!.width -= dif;
+							if (collision.rect!.width === 0) {
+								collision.rect!.width += (1 / Project.SQUARE_SIZE) * 100;
+							}
+						}
+						if (currentState.isResizingTop) {
+							const dif = newY - collision.rect!.y;
+							collision.rect!.y = newY;
+							collision.rect!.height -= dif;
+							if (collision.rect!.height === 0) {
+								collision.rect!.y -= (1 / Project.SQUARE_SIZE) * 100;
+								collision.rect!.height += (1 / Project.SQUARE_SIZE) * 100;
+							}
+						}
+						if (currentState.isResizingBot) {
+							const dif = collision.rect!.y + collision.rect!.height - newY;
+							collision.rect!.height -= dif;
+							if (collision.rect!.height === 0) {
+								collision.rect!.height += (1 / Project.SQUARE_SIZE) * 100;
+							}
+						}
+					}
+				}
 				draw();
 			};
+			const handleMouseDown = () => {
+				currentState.selectedPoint = currentState.hoveredPoint;
+				currentState.originalRect =
+					currentState.pictureModel!.collisions.get(currentState.selectedPoint!)?.rect?.clone() ?? null;
+				currentState.isResizing = true;
+				draw();
+			};
+			const handleMouseUp = () => {
+				currentState.isResizing = false;
+			};
 			canvas.addEventListener('mousemove', handleMouseMove);
+			canvas.addEventListener('mousedown', handleMouseDown);
+			window.addEventListener('mouseup', handleMouseUp);
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
+				canvas.removeEventListener('mousedown', handleMouseDown);
+				window.removeEventListener('mouseup', handleMouseUp);
 			};
 		}
 		// eslint-disable-next-line
@@ -223,7 +388,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				<Flex one zeroWidth>
 					<Flex column one>
 						<Flex one zeroHeight>
-							<canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>
+							<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
 						</Flex>
 					</Flex>
 				</Flex>
