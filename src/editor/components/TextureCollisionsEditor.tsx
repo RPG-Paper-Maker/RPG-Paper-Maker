@@ -11,16 +11,19 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, PICTURE_KIND } from '../common';
+import { Constants, KEY, PICTURE_KIND } from '../common';
+import { CollisionSquare } from '../core/CollisionSquare';
 import { Picture2D } from '../core/Picture2D';
 import { Point } from '../core/Point';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import { Base, Picture } from '../models';
+import ContextMenu from './ContextMenu';
 import Flex from './Flex';
 import Groupbox from './Groupbox';
 import Slider from './Slider';
 import Tab from './Tab';
+import DialogRectangle from './dialogs/DialogRectangle';
 
 export enum COLLISION_TYPE {
 	PRATICABLE,
@@ -71,6 +74,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 	})[0];
 	const [zoom, setZoom] = useState(Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)));
 	const [selectedCollisionType, setSelectedCollisionType] = useState(COLLISION_TYPE.PRATICABLE);
+	const [isFocused, setIsFocused] = useState(false);
+	const [editingRectangle, setEditingRectangle] = useState<Rectangle | null>(null);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -96,7 +101,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 	}, [pictureKind]);
 	const titles = useMemo(
 		() => Base.mapListIndex(collisionTypes.map((i) => t(COLLISION_OPTIONS[i]))),
-		[collisionTypes]
+		[collisionTypes, t]
 	);
 	const cursorOffset = useMemo(() => 2 * zoomFactor, [zoomFactor]);
 
@@ -176,7 +181,6 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 						(currentState.isResizing && currentState.selectedPoint === key) ||
 						(!currentState.isResizing && rect.isInside(currentState.mouseX, currentState.mouseY))
 					) {
-						currentState.hoveredPoint = key;
 						ctx.fillStyle = Constants.COLOR_HOVER_GREY;
 						ctx.globalAlpha = 0.5;
 						ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
@@ -254,6 +258,51 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		setSelectedCollisionType(collisionTypes[index]);
 	};
 
+	const handleEditPraticable = async () => {
+		const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
+		if (collision && collision.rect) {
+			setEditingRectangle(
+				new Rectangle(
+					(collision.rect.x * Project.SQUARE_SIZE) / 100,
+					(collision.rect.y * Project.SQUARE_SIZE) / 100,
+					(collision.rect.width * Project.SQUARE_SIZE) / 100,
+					(collision.rect.height * Project.SQUARE_SIZE) / 100
+				)
+			);
+		}
+	};
+
+	const handleChangePraticable = () => {
+		const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
+		if (collision && collision.rect && editingRectangle) {
+			const newRect = new Rectangle(
+				(editingRectangle.x / Project.SQUARE_SIZE) * 100,
+				(editingRectangle.y / Project.SQUARE_SIZE) * 100,
+				(editingRectangle.width / Project.SQUARE_SIZE) * 100,
+				(editingRectangle.height / Project.SQUARE_SIZE) * 100
+			);
+			collision.rect.copy(newRect);
+			draw();
+		}
+	};
+
+	const handleSetIsOpenEditRectangle = (b: boolean) => {
+		if (!b) {
+			setEditingRectangle(null);
+		}
+	};
+
+	const handleDeletePraticable = async () => {
+		const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
+		if (collision) {
+			collision.rect = null;
+			if (collision.isEmpty()) {
+				currentState.pictureModel!.collisions.delete(currentState.selectedPoint!);
+			}
+			draw();
+		}
+	};
+
 	useEffect(() => {
 		resize();
 		// eslint-disable-next-line
@@ -276,6 +325,10 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				const rect = canvas.getBoundingClientRect();
 				currentState.mouseX = e.clientX - rect.left;
 				currentState.mouseY = e.clientY - rect.top;
+				currentState.hoveredPoint = new Point(
+					Math.floor(currentState.mouseX / zoomFactor / Project.SQUARE_SIZE),
+					Math.floor(currentState.mouseY / zoomFactor / Project.SQUARE_SIZE)
+				).toKey();
 				if (currentState.isResizing) {
 					const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
 					if (collision) {
@@ -352,51 +405,102 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				}
 				draw();
 			};
-			const handleMouseDown = () => {
-				currentState.selectedPoint = currentState.hoveredPoint;
-				currentState.originalRect =
-					currentState.pictureModel!.collisions.get(currentState.selectedPoint!)?.rect?.clone() ?? null;
-				currentState.isResizing = true;
-				draw();
+			const handleMouseDown = (e: MouseEvent) => {
+				if (currentState.hoveredPoint) {
+					const rect = currentState.pictureModel!.collisions.get(currentState.hoveredPoint)?.rect ?? null;
+					if (rect === null) {
+						currentState.pictureModel!.collisions.set(currentState.hoveredPoint, new CollisionSquare());
+					} else {
+						currentState.selectedPoint = currentState.hoveredPoint;
+						if (e.button === 0) {
+							currentState.originalRect = rect.clone();
+							currentState.isResizing = true;
+						}
+					}
+					draw();
+				}
 			};
 			const handleMouseUp = () => {
 				currentState.isResizing = false;
 			};
+			const handleWheel = (event: WheelEvent) => {
+				if (event.ctrlKey) {
+					event.preventDefault();
+					setZoom((v) => Math.min(Math.max(0, v + (event.deltaY < 0 ? 1 : -1)), 10));
+				}
+			};
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mousedown', handleMouseDown);
 			window.addEventListener('mouseup', handleMouseUp);
+			window.addEventListener('wheel', handleWheel, { passive: false });
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mousedown', handleMouseDown);
 				window.removeEventListener('mouseup', handleMouseUp);
+				window.removeEventListener('wheel', handleWheel, { passive: false } as AddEventListenerOptions);
 			};
 		}
 		// eslint-disable-next-line
 	}, [pictureID, selectedCollisionType, zoom]);
 
+	const getContextMenuItems = () =>
+		selectedCollisionType === COLLISION_TYPE.PRATICABLE
+			? [
+					{
+						title: `${t('edit')}...`,
+						shortcut: [KEY.ENTER],
+						onClick: handleEditPraticable,
+					},
+					{
+						title: t('delete'),
+						shortcut: [KEY.DELETE],
+						onClick: handleDeletePraticable,
+					},
+			  ]
+			: [];
+
 	return (
-		<Flex column spacedLarge fillWidth>
-			<Flex>
-				<Tab
-					titles={titles}
-					disabled={disabled}
-					onCurrentIndexChanged={handleCurrentIndexTabChanged}
-					hideScroll
-				/>
-			</Flex>
-			<Flex one scrollable>
-				<Flex one zeroWidth>
-					<Flex column one>
-						<Flex one zeroHeight>
-							<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
+		<>
+			<Flex column spacedLarge fillWidth>
+				<Flex>
+					<Tab
+						titles={titles}
+						disabled={disabled}
+						onCurrentIndexChanged={handleCurrentIndexTabChanged}
+						hideScroll
+					/>
+				</Flex>
+				<Flex one scrollable>
+					<Flex one zeroWidth>
+						<Flex column one>
+							<Flex one zeroHeight>
+								<ContextMenu
+									items={getContextMenuItems()}
+									isFocused={isFocused}
+									setIsFocused={setIsFocused}
+									disabled={disabled}
+								>
+									<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
+								</ContextMenu>
+							</Flex>
 						</Flex>
 					</Flex>
 				</Flex>
+				<Groupbox title={t('zoom')} disabled={disabled}>
+					<Slider value={zoom} onChange={setZoom} min={0} max={10} disabled={disabled} fillWidth />
+				</Groupbox>
 			</Flex>
-			<Groupbox title={t('zoom')} disabled={disabled}>
-				<Slider value={zoom} onChange={setZoom} min={0} max={10} disabled={disabled} fillWidth />
-			</Groupbox>
-		</Flex>
+			{editingRectangle !== null && (
+				<DialogRectangle
+					isOpen
+					setIsOpen={handleSetIsOpenEditRectangle}
+					rectangle={editingRectangle}
+					onChange={handleChangePraticable}
+					maxSize={Project.SQUARE_SIZE}
+					keepSize
+				/>
+			)}
+		</>
 	);
 }
 

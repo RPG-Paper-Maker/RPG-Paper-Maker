@@ -46,6 +46,18 @@ class CollisionSquare extends Serializable {
 		this.climbing = false;
 	}
 
+	isEmpty(): boolean {
+		return (
+			this.rect === null &&
+			this.left &&
+			this.right &&
+			this.top &&
+			this.bot &&
+			this.terrain === 0 &&
+			!this.climbing
+		);
+	}
+
 	copy(collision: CollisionSquare): void {
 		super.copy(collision);
 		this.rect = collision.rect?.clone() ?? null;

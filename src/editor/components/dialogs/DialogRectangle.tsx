@@ -23,10 +23,12 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	rectangle: Rectangle;
-	onChange: () => void;
+	onChange?: () => void;
+	maxSize?: number;
+	keepSize?: boolean;
 };
 
-function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange }: Props) {
+function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange, maxSize, keepSize = false }: Props) {
 	const { t } = useTranslation();
 
 	const [x, setX] = useStateNumber();
@@ -42,27 +44,39 @@ function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange }: Props) {
 	};
 
 	const handleChangeX = (x: number) => {
+		if (keepSize) {
+			const dif = x - rectangle.x;
+			const w = rectangle.width - dif;
+			setW(w);
+			rectangle.width = w;
+		}
 		rectangle.x = x;
 		setX(x);
-		onChange();
+		onChange?.();
 	};
 
 	const handleChangeY = (y: number) => {
+		if (keepSize) {
+			const dif = y - rectangle.y;
+			const h = rectangle.height - dif;
+			setH(h);
+			rectangle.height = h;
+		}
 		rectangle.y = y;
 		setY(y);
-		onChange();
+		onChange?.();
 	};
 
 	const handleChangeWidth = (w: number) => {
 		rectangle.width = w;
 		setW(w);
-		onChange();
+		onChange?.();
 	};
 
 	const handleChangeHeight = (h: number) => {
 		rectangle.height = h;
 		setH(h);
-		onChange();
+		onChange?.();
 	};
 
 	const handleClose = () => {
@@ -87,28 +101,48 @@ function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange }: Props) {
 				<Label>X</Label>
 				<Value>
 					<Flex spaced centerV>
-						<InputNumber value={x} onChange={handleChangeX} min={0} />
+						<InputNumber
+							value={x}
+							onChange={handleChangeX}
+							min={0}
+							max={maxSize === undefined ? undefined : maxSize - 1}
+						/>
 						px
 					</Flex>
 				</Value>
 				<Label>Y</Label>
 				<Value>
 					<Flex spaced centerV>
-						<InputNumber value={y} onChange={handleChangeY} min={0} />
+						<InputNumber
+							value={y}
+							onChange={handleChangeY}
+							min={0}
+							max={maxSize === undefined ? undefined : maxSize - 1}
+						/>
 						px
 					</Flex>
 				</Value>
 				<Label>{t('width')}</Label>
 				<Value>
 					<Flex spaced centerV>
-						<InputNumber value={w} onChange={handleChangeWidth} min={1} />
+						<InputNumber
+							value={w}
+							onChange={handleChangeWidth}
+							min={1}
+							max={maxSize === undefined ? undefined : maxSize - x}
+						/>
 						px
 					</Flex>
 				</Value>
 				<Label>{t('height')}</Label>
 				<Value>
 					<Flex spaced centerV>
-						<InputNumber value={h} onChange={handleChangeHeight} min={1} />
+						<InputNumber
+							value={h}
+							onChange={handleChangeHeight}
+							min={1}
+							max={maxSize === undefined ? undefined : maxSize - y}
+						/>
 						px
 					</Flex>
 				</Value>
