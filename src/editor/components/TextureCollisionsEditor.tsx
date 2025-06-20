@@ -162,6 +162,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				case COLLISION_TYPE.TERRAIN:
 					drawTerrain(ctx);
 					break;
+				case COLLISION_TYPE.CLIMBING:
+					drawClimbing(ctx);
+					break;
 			}
 			if (disabled) {
 				ctx.fillStyle = Constants.COLOR_HOVER_GREY;
@@ -370,13 +373,13 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		}
 	};
 
-	const drawStrokeText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number) => {
+	const drawStrokeText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color = 'white') => {
 		ctx.font = `${9 * zoomFactor}px sans-serif`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.lineWidth = 1 * zoomFactor;
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = color;
 		ctx.strokeStyle = 'black';
 		ctx.strokeText(text, x, y);
 		ctx.fillText(text, x, y);
@@ -395,6 +398,27 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 					'' + (collision?.terrain ?? 0),
 					(i * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
 					(j * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor
+				);
+				ctx.globalAlpha = 1;
+			}
+		}
+	};
+
+	const drawClimbing = (ctx: CanvasRenderingContext2D) => {
+		for (let i = 0; i < currentState.picture!.width / Project.SQUARE_SIZE; i++) {
+			for (let j = 0; j < currentState.picture!.height / Project.SQUARE_SIZE; j++) {
+				const key = new Point(i, j).toKey();
+				const collision = currentState.pictureModel!.collisions.get(key);
+				if (key !== currentState.hoveredPoint) {
+					ctx.globalAlpha = 0.75;
+				}
+				const climbing = collision?.climbing ?? false;
+				drawStrokeText(
+					ctx,
+					climbing ? 'o' : 'x',
+					(i * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
+					(j * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
+					climbing ? Constants.COLOR_GREEN : Constants.COLOR_RED
 				);
 				ctx.globalAlpha = 1;
 			}
@@ -615,30 +639,24 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 			};
 			const handleMouseDown = (e: MouseEvent) => {
 				if (currentState.hoveredPoint) {
+					let collision = currentState.pictureModel!.collisions.get(currentState.hoveredPoint);
+					if (!collision) {
+						collision = new CollisionSquare();
+						currentState.pictureModel!.collisions.set(currentState.hoveredPoint, collision);
+					}
 					switch (selectedCollisionType) {
-						case COLLISION_TYPE.PRATICABLE: {
-							const rect =
-								currentState.pictureModel!.collisions.get(currentState.hoveredPoint)?.rect ?? null;
-							if (rect === null) {
-								currentState.pictureModel!.collisions.set(
-									currentState.hoveredPoint,
-									new CollisionSquare()
-								);
+						case COLLISION_TYPE.PRATICABLE:
+							if (collision.rect === null) {
+								collision.rect = new Rectangle(0, 0, 100, 100);
 							} else {
 								currentState.selectedPoint = currentState.hoveredPoint;
 								if (e.button === 0) {
-									currentState.originalRect = rect.clone();
+									currentState.originalRect = collision.rect.clone();
 									currentState.isResizing = true;
 								}
 							}
 							break;
-						}
-						case COLLISION_TYPE.DIRECTIONS: {
-							let collision = currentState.pictureModel!.collisions.get(currentState.hoveredPoint);
-							if (!collision) {
-								collision = new CollisionSquare();
-								currentState.pictureModel!.collisions.set(currentState.hoveredPoint, collision);
-							}
+						case COLLISION_TYPE.DIRECTIONS:
 							switch (currentState.hoveredDirection) {
 								case HOVERED_DIRECTION_TYPE.TOP:
 									collision.top = !collision.top;
@@ -659,26 +677,19 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 									collision.left = !collision.left;
 									break;
 							}
-							if (collision.isEmpty()) {
-								currentState.pictureModel!.collisions.delete(currentState.hoveredPoint);
-							}
 							break;
-						}
-						case COLLISION_TYPE.TERRAIN: {
-							let collision = currentState.pictureModel!.collisions.get(currentState.hoveredPoint);
-							if (!collision) {
-								collision = new CollisionSquare();
-								currentState.pictureModel!.collisions.set(currentState.hoveredPoint, collision);
-							}
+						case COLLISION_TYPE.TERRAIN:
 							collision.terrain = collision.terrain + (e.button === 0 ? 1 : -1);
 							if (collision.terrain < 0) {
 								collision.terrain = 0;
 							}
-							if (collision.isEmpty()) {
-								currentState.pictureModel!.collisions.delete(currentState.hoveredPoint);
-							}
 							break;
-						}
+						case COLLISION_TYPE.CLIMBING:
+							collision.climbing = !collision.climbing;
+							break;
+					}
+					if (collision.isEmpty()) {
+						currentState.pictureModel!.collisions.delete(currentState.hoveredPoint);
 					}
 					draw();
 				}

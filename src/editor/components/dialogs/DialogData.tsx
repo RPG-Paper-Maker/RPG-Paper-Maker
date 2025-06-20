@@ -83,6 +83,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTilesetsRef.current) {
 			await Project.current!.tilesets.save();
+			await Project.current!.pictures.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -121,6 +122,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTilesetsRef.current) {
 			await Project.current!.tilesets.load();
+			await Project.current!.pictures.load();
 		}
 		setIsOpen(false);
 	};

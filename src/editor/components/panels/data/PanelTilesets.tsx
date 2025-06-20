@@ -30,7 +30,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 	const [tilesets, setTilesets] = useState<Node[]>([]);
 	const [selectedTileset, setSelectedTileset] = useState<Tileset | null>(null);
 	const [pictureID, setPictureID] = useStateNumber();
-	const [battleMap] = useStateDynamicValue();
+	const [battleMap, setBattleMap] = useStateDynamicValue();
 
 	const isTilesetDisabled = useMemo(() => selectedTileset === null || selectedTileset.id === -1, [selectedTileset]);
 
@@ -43,7 +43,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 		setSelectedTileset(tileset);
 		if (tileset) {
 			setPictureID(tileset.pictureID);
-			battleMap.copy(tileset.battleMap);
+			setBattleMap(tileset.battleMap);
 		}
 	};
 

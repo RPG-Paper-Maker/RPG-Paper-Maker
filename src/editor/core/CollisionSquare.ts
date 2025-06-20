@@ -37,7 +37,7 @@ class CollisionSquare extends Serializable {
 
 	constructor() {
 		super();
-		this.rect = new Rectangle(0, 0, 100, 100);
+		this.rect = null;
 		this.left = true;
 		this.right = true;
 		this.top = true;
