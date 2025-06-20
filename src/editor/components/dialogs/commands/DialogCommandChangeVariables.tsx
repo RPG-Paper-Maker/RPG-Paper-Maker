@@ -17,7 +17,7 @@ import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { MapObjectCommandType } from '../../../models';
+import { MapObjectCommandType, TroopMonster } from '../../../models';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
@@ -73,7 +73,7 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 	const [valueStatisticID] = useStateDynamicValue();
 	const [valueObjectID] = useStateDynamicValue();
 	const [valueObjectCharacteristicIndex, setValueObjectCharacteristicIndex] = useStateNumber();
-	const [valueEnemyIndex, setValueEnemyIndex] = useStateNumber();
+	const [valueEnemyID, setValueEnemyID] = useStateNumber();
 	const [valueOtherCharacteristicsIndex, setValueOtherCharacteristicsIndex] = useStateNumber();
 	const [, setTrigger] = useStateBool();
 
@@ -108,7 +108,7 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 		valueStatisticID.updateToDefaultDatabase();
 		valueObjectID.updateToDefaultDatabase(-1);
 		setValueObjectCharacteristicIndex(0);
-		setValueEnemyIndex(0);
+		setValueEnemyID(TroopMonster.currentMonsters[0]?.id ?? -1);
 		setValueOtherCharacteristicsIndex(0);
 		if (list) {
 			const iterator = Utils.generateIterator();
@@ -157,7 +157,7 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 					setValueObjectCharacteristicIndex(list[iterator.i++] as number);
 					break;
 				case SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID:
-					setValueEnemyIndex(list[iterator.i++] as number);
+					setValueEnemyID(TroopMonster.currentMonsters[list[iterator.i++] as number]?.id ?? -1);
 					break;
 				case SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS:
 					setValueOtherCharacteristicsIndex(list[iterator.i++] as number);
@@ -228,7 +228,7 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 				newList.push(valueObjectCharacteristicIndex);
 				break;
 			case SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID:
-				newList.push(valueEnemyIndex);
+				newList.push(TroopMonster.currentMonsters.findIndex((monster) => monster.id === valueEnemyID));
 				break;
 			case SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS:
 				newList.push(valueOtherCharacteristicsIndex);
@@ -433,11 +433,11 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 							<Value>
 								<Flex spaced centerV>
 									<Dropdown
-										selectedID={valueEnemyIndex}
-										onChange={setValueEnemyIndex}
-										options={[]} // TODO
+										selectedID={valueEnemyID}
+										onChange={setValueEnemyID}
+										options={TroopMonster.currentMonsters}
 										disabled={!isEnemyInstanceID}
-										translateOptions
+										displayIDs
 									/>
 									<Flex disabledLabel={!isEnemyInstanceID}>{t('instance.id').toLowerCase()}</Flex>
 								</Flex>

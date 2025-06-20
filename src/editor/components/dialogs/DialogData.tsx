@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { COMMON_SKILL_ITEM_KIND } from '../../common';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
+import { TroopMonster } from '../../models';
 import { setNeedsReloadMap } from '../../store';
 import PanelAnimations from '../panels/data/PanelAnimations';
 import PanelClasses from '../panels/data/PanelClasses';
@@ -62,6 +63,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTroopsRef.current) {
 			await Project.current!.troops.save();
+			TroopMonster.currentMonsters = [];
 		}
 		if (panelItemsRef.current) {
 			await Project.current!.items.save();
@@ -101,6 +103,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelTroopsRef.current) {
 			await Project.current!.troops.load();
+			TroopMonster.currentMonsters = [];
 		}
 		if (panelItemsRef.current) {
 			await Project.current!.items.load();

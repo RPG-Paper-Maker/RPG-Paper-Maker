@@ -2434,8 +2434,9 @@ class MapObjectCommand extends Base {
 				);
 				break;
 			case 8:
-				iterator.i++; // TODO
-				str += `${t('enemy').toLowerCase()} [TODO] ${t('instance.id').toLowerCase()} `;
+				str += `${t('enemy')} ${
+					TroopMonster.currentMonsters[this.command[iterator.i++] as number]?.toString() ?? ''
+				} ${t('instance.id').toLowerCase()}`;
 				break;
 			case 9:
 				str += t(
