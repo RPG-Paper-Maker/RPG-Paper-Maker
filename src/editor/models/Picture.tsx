@@ -98,6 +98,10 @@ class Picture extends Asset {
 		this.collisions = new Map();
 	}
 
+	getRows(): number {
+		return 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0);
+	}
+
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}

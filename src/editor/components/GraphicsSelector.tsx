@@ -99,7 +99,7 @@ function GraphicsSelector({
 		rect: Rectangle,
 		isTileset: boolean
 	) => {
-		const rows = 4 + (picture.isStopAnimation ? 4 : 0) + (picture.isClimbAnimation ? 4 : 0);
+		const rows = picture.getRows();
 		const columns = 4;
 		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : image.width / columns;
 		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : image.height / rows;

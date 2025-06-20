@@ -15,7 +15,7 @@ import { PICTURE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
-import { Tileset } from '../../models';
+import { Picture, Tileset } from '../../models';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import Tab from '../Tab';
@@ -34,14 +34,23 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const [tilesets, setTilesets] = useState<Node[]>([]);
 	const [selectedTileset, setSelectedTileset] = useState<Tileset | null>(null);
+	const [characters, setCharacters] = useState<Node[]>([]);
+	const [selectedCharacter, setSelectedCharacter] = useState<Picture | null>(null);
 
 	const initialize = () => {
 		setTilesets(Node.createList(Project.current!.tilesets.list, false));
+		const chars = Node.createList(Project.current!.pictures.getList(PICTURE_KIND.CHARACTERS), false);
+		chars.shift();
+		chars.shift();
+		setCharacters(chars);
 	};
 
 	const handleSelectTileset = (node: Node | null) => {
-		const tileset = (node?.content as Tileset) ?? null;
-		setSelectedTileset(tileset);
+		setSelectedTileset((node?.content as Tileset) ?? null);
+	};
+
+	const handleSelectCharacter = (node: Node | null) => {
+		setSelectedCharacter((node?.content as Picture) ?? null);
 	};
 
 	const handleAccept = async () => {
@@ -59,15 +68,20 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
-	const getTilesetsContent = () => (
+	const getTabContent = (
+		title: string,
+		list: Node[],
+		onSelectedItem: (node: Node | null) => void,
+		pictureID: number,
+		pictureKind: PICTURE_KIND
+	) => (
 		<Flex fillWidth fillHeight spacedLarge>
-			<Groupbox title={t('tilesets')}>
+			<Groupbox title={t(title)}>
 				<Flex one fillHeight>
 					<Tree
-						constructorType={Tileset}
-						list={tilesets}
+						list={list}
 						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectTileset}
+						onSelectedItem={onSelectedItem}
 						noScrollOnForce
 						scrollable
 						cannotAdd
@@ -78,15 +92,28 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 				</Flex>
 			</Groupbox>
 			<Flex one fillWidth>
-				{selectedTileset && (
-					<TextureCollisionsEditor
-						pictureID={selectedTileset.pictureID}
-						pictureKind={PICTURE_KIND.TILESETS}
-					/>
-				)}
+				<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} />
 			</Flex>
 		</Flex>
 	);
+
+	const getTilesetsContent = () =>
+		getTabContent(
+			'tilesets',
+			tilesets,
+			handleSelectTileset,
+			selectedTileset?.pictureID ?? -1,
+			PICTURE_KIND.TILESETS
+		);
+
+	const getCharactersContent = () =>
+		getTabContent(
+			'characters',
+			characters,
+			handleSelectCharacter,
+			selectedCharacter?.id ?? -1,
+			PICTURE_KIND.CHARACTERS
+		);
 
 	return (
 		<Dialog
@@ -106,7 +133,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 					t('mountains'),
 					t('threed.objects'),
 				])}
-				contents={[getTilesetsContent(), null, null, null, null, null]}
+				contents={[getTilesetsContent(), getCharactersContent(), null, null, null, null]}
 				padding
 				lazyLoadingContent
 				noScrollToSelectedElement
