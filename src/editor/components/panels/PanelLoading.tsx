@@ -112,6 +112,7 @@ function PanelLoading({ setLoaded }: Props) {
 		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
 		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');
+		Picture2D.PICTURE_DIRECTION = await Picture2D.loadImage('./Assets/direction.png');
 	};
 
 	const initializeGL = async () => {

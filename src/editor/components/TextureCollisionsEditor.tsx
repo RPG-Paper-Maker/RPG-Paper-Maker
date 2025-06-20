@@ -32,6 +32,15 @@ export enum COLLISION_TYPE {
 	CLIMBING,
 }
 
+enum HOVERED_DIRECTION_TYPE {
+	NONE,
+	TOP,
+	RIGHT,
+	BOT,
+	LEFT,
+	CENTER,
+}
+
 const COLLISION_OPTIONS = ['praticable', 'directions', 'terrain', 'climbing'];
 
 type CurrentStateProps = {
@@ -47,6 +56,7 @@ type CurrentStateProps = {
 	isResizingTop: boolean;
 	isResizingBot: boolean;
 	originalRect: Rectangle | null;
+	hoveredDirection: HOVERED_DIRECTION_TYPE;
 };
 
 type Props = {
@@ -71,6 +81,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		isResizingTop: false,
 		isResizingBot: false,
 		originalRect: null,
+		hoveredDirection: HOVERED_DIRECTION_TYPE.NONE,
 	})[0];
 	const [zoom, setZoom] = useState(Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)));
 	const [selectedCollisionType, setSelectedCollisionType] = useState(COLLISION_TYPE.PRATICABLE);
@@ -144,6 +155,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 			switch (selectedCollisionType) {
 				case COLLISION_TYPE.PRATICABLE:
 					drawPraticable(ctx);
+					break;
+				case COLLISION_TYPE.DIRECTIONS:
+					drawDirections(ctx);
 					break;
 			}
 			if (disabled) {
@@ -242,6 +256,117 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		}
 	};
 
+	const drawDirections = (ctx: CanvasRenderingContext2D) => {
+		for (let i = 0; i < currentState.picture!.width / Project.SQUARE_SIZE; i++) {
+			for (let j = 0; j < currentState.picture!.height / Project.SQUARE_SIZE; j++) {
+				const key = new Point(i, j).toKey();
+				const collision = currentState.pictureModel!.collisions.get(key);
+				const left = collision?.left ?? true;
+				const right = collision?.right ?? true;
+				const top = collision?.top ?? true;
+				const bot = collision?.bot ?? true;
+				const hovered = currentState.hoveredPoint === key;
+				drawArrow(ctx, HOVERED_DIRECTION_TYPE.TOP, hovered, top, 0, Project.SQUARE_SIZE / 4, 0, i, j);
+				drawArrow(
+					ctx,
+					HOVERED_DIRECTION_TYPE.RIGHT,
+					hovered,
+					right,
+					90,
+					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.width + 0.5,
+					Project.SQUARE_SIZE / 4 + 0.5,
+					i,
+					j
+				);
+				drawArrow(
+					ctx,
+					HOVERED_DIRECTION_TYPE.BOT,
+					hovered,
+					bot,
+					180,
+					Project.SQUARE_SIZE / 4,
+					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.height,
+					i,
+					j
+				);
+				drawArrow(
+					ctx,
+					HOVERED_DIRECTION_TYPE.LEFT,
+					hovered,
+					left,
+					270,
+					-0.5,
+					Project.SQUARE_SIZE / 4 + 0.5,
+					i,
+					j
+				);
+				drawArrow(
+					ctx,
+					HOVERED_DIRECTION_TYPE.CENTER,
+					hovered,
+					false,
+					0,
+					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.width / 2,
+					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.height / 2,
+					i,
+					j
+				);
+			}
+		}
+	};
+
+	const drawArrow = (
+		ctx: CanvasRenderingContext2D,
+		direction: HOVERED_DIRECTION_TYPE,
+		hovered: boolean,
+		arrow: boolean,
+		angle: number,
+		dx: number,
+		dy: number,
+		i: number,
+		j: number
+	) => {
+		const x = (i * Project.SQUARE_SIZE + dx) * zoomFactor;
+		const y = (j * Project.SQUARE_SIZE + dy) * zoomFactor;
+		if (arrow) {
+			ctx.save();
+			ctx.translate(
+				x + (Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
+				y + (Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor
+			);
+			ctx.rotate((angle * Math.PI) / 180);
+			if (hovered && direction === currentState.hoveredDirection) {
+				ctx.globalAlpha = 0.5;
+			}
+			ctx.drawImage(
+				Picture2D.PICTURE_DIRECTION,
+				0,
+				0,
+				Picture2D.PICTURE_DIRECTION.width,
+				Picture2D.PICTURE_DIRECTION.height,
+				-(Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
+				-(Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor,
+				Picture2D.PICTURE_DIRECTION.width * zoomFactor,
+				Picture2D.PICTURE_DIRECTION.height * zoomFactor
+			);
+			ctx.restore();
+		} else {
+			ctx.strokeStyle = Constants.COLOR_HOVER_GREY;
+			ctx.lineWidth = 0.5 * zoomFactor;
+			ctx.globalAlpha = 0.5;
+			const x = (i * Project.SQUARE_SIZE + dx - 1 + Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor;
+			const y = (j * Project.SQUARE_SIZE + dy - 1 + Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor;
+			const w = 2 * zoomFactor;
+			const h = 2 * zoomFactor;
+			if (hovered && direction === currentState.hoveredDirection) {
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x, y, w, h);
+			}
+			ctx.strokeRect(x, y, w, h);
+			ctx.globalAlpha = 1;
+		}
+	};
+
 	const resize = () => {
 		if (refCanvas.current && currentState.picture) {
 			const w = currentState.picture.width * zoomFactor;
@@ -309,6 +434,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 	}, [zoom]);
 
 	useEffect(() => {
+		resize();
 		draw();
 		// eslint-disable-next-line
 	}, [selectedCollisionType]);
@@ -325,10 +451,58 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 				const rect = canvas.getBoundingClientRect();
 				currentState.mouseX = e.clientX - rect.left;
 				currentState.mouseY = e.clientY - rect.top;
-				currentState.hoveredPoint = new Point(
-					Math.floor(currentState.mouseX / zoomFactor / Project.SQUARE_SIZE),
-					Math.floor(currentState.mouseY / zoomFactor / Project.SQUARE_SIZE)
-				).toKey();
+				const x = Math.floor(currentState.mouseX / zoomFactor / Project.SQUARE_SIZE);
+				const y = Math.floor(currentState.mouseY / zoomFactor / Project.SQUARE_SIZE);
+				currentState.hoveredPoint = new Point(x, y).toKey();
+				if (selectedCollisionType === COLLISION_TYPE.DIRECTIONS) {
+					currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.NONE;
+					const size = 6;
+					const center = new Rectangle(
+						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						size * zoomFactor,
+						size * zoomFactor
+					);
+					if (center.isInside(currentState.mouseX, currentState.mouseY)) {
+						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.CENTER;
+					}
+					const top = new Rectangle(
+						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						y * Project.SQUARE_SIZE * zoomFactor,
+						size * zoomFactor,
+						size * zoomFactor
+					);
+					if (top.isInside(currentState.mouseX, currentState.mouseY)) {
+						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.TOP;
+					}
+					const bot = new Rectangle(
+						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size)) * zoomFactor,
+						size * zoomFactor,
+						size * zoomFactor
+					);
+					if (bot.isInside(currentState.mouseX, currentState.mouseY)) {
+						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.BOT;
+					}
+					const left = new Rectangle(
+						x * Project.SQUARE_SIZE * zoomFactor,
+						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						size * zoomFactor,
+						size * zoomFactor
+					);
+					if (left.isInside(currentState.mouseX, currentState.mouseY)) {
+						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.LEFT;
+					}
+					const right = new Rectangle(
+						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size)) * zoomFactor,
+						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
+						size * zoomFactor,
+						size * zoomFactor
+					);
+					if (right.isInside(currentState.mouseX, currentState.mouseY)) {
+						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.RIGHT;
+					}
+				}
 				if (currentState.isResizing) {
 					const collision = currentState.pictureModel!.collisions.get(currentState.selectedPoint!);
 					if (collision) {
@@ -407,14 +581,53 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 			};
 			const handleMouseDown = (e: MouseEvent) => {
 				if (currentState.hoveredPoint) {
-					const rect = currentState.pictureModel!.collisions.get(currentState.hoveredPoint)?.rect ?? null;
-					if (rect === null) {
-						currentState.pictureModel!.collisions.set(currentState.hoveredPoint, new CollisionSquare());
-					} else {
-						currentState.selectedPoint = currentState.hoveredPoint;
-						if (e.button === 0) {
-							currentState.originalRect = rect.clone();
-							currentState.isResizing = true;
+					switch (selectedCollisionType) {
+						case COLLISION_TYPE.PRATICABLE: {
+							const rect =
+								currentState.pictureModel!.collisions.get(currentState.hoveredPoint)?.rect ?? null;
+							if (rect === null) {
+								currentState.pictureModel!.collisions.set(
+									currentState.hoveredPoint,
+									new CollisionSquare()
+								);
+							} else {
+								currentState.selectedPoint = currentState.hoveredPoint;
+								if (e.button === 0) {
+									currentState.originalRect = rect.clone();
+									currentState.isResizing = true;
+								}
+							}
+							break;
+						}
+						case COLLISION_TYPE.DIRECTIONS: {
+							let collision = currentState.pictureModel!.collisions.get(currentState.hoveredPoint);
+							if (!collision) {
+								collision = new CollisionSquare();
+								currentState.pictureModel!.collisions.set(currentState.hoveredPoint, collision);
+							}
+							switch (currentState.hoveredDirection) {
+								case HOVERED_DIRECTION_TYPE.TOP:
+									collision.top = !collision.top;
+									break;
+								case HOVERED_DIRECTION_TYPE.RIGHT:
+									collision.right = !collision.right;
+									break;
+								case HOVERED_DIRECTION_TYPE.BOT:
+									collision.bot = !collision.bot;
+									break;
+								case HOVERED_DIRECTION_TYPE.LEFT:
+									collision.left = !collision.left;
+									break;
+								case HOVERED_DIRECTION_TYPE.CENTER:
+									collision.top = !collision.top;
+									collision.right = !collision.right;
+									collision.bot = !collision.bot;
+									collision.left = !collision.left;
+									break;
+							}
+							if (collision.isEmpty()) {
+								currentState.pictureModel!.collisions.delete(currentState.hoveredPoint);
+							}
 						}
 					}
 					draw();

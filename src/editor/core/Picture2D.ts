@@ -10,6 +10,8 @@
 */
 
 class Picture2D {
+	static PICTURE_DIRECTION: HTMLImageElement;
+
 	static async loadImage(path: string): Promise<HTMLImageElement> {
 		return await new Promise((resolve) => {
 			const image = new Image();
