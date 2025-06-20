@@ -24,7 +24,7 @@ import {
 } from 'react-icons/ai';
 import { BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { FaArrowDown, FaArrowUp, FaPlug } from 'react-icons/fa';
+import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
@@ -74,6 +74,7 @@ import {
 	setProjectMenuIndex,
 	setProjects,
 	setUndoRedoIndex,
+	triggerCollisions,
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
@@ -96,6 +97,7 @@ import '../styles/MainMenuBar.css';
 import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
+import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogNewProject from './dialogs/DialogNewProject';
@@ -122,6 +124,7 @@ function MainMenuBar() {
 	const [isDialogDataOpen, setIsDialogDataOpen] = useState(false);
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
+	const [isDialogCollisionsOpen, setIsDialogCollisionsOpen] = useState(false);
 	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
 	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
@@ -452,6 +455,10 @@ function MainMenuBar() {
 		setIsDialogVariablesOpen(true);
 	};
 
+	const handleCollisionsManager = async () => {
+		setIsDialogCollisionsOpen(true);
+	};
+
 	const handlePluginsManager = async () => {
 		setIsDialogPluginsOpen(true);
 	};
@@ -690,6 +697,12 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
+					title: `${t('collisions.manager')}...`,
+					icon: <FaArrowsAlt />,
+					onClick: handleCollisionsManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('plugins.manager')}...`,
 					icon: <FaPlug />,
 					onClick: handlePluginsManager,
@@ -791,6 +804,9 @@ function MainMenuBar() {
 		} else if (triggers.variables) {
 			dispatch(triggerVariables(false));
 			handleVariablesManager().catch(console.error);
+		} else if (triggers.collisions) {
+			dispatch(triggerCollisions(false));
+			handleCollisionsManager().catch(console.error);
 		} else if (triggers.plugins) {
 			dispatch(triggerPlugins(false));
 			handlePluginsManager().catch(console.error);
@@ -907,21 +923,20 @@ function MainMenuBar() {
 				)}
 			</div>
 			<Toolbar />
-			<DialogNewProject
-				isOpen={isDialogNewProjectOpen}
-				setIsOpen={setIsDialogNewProjectOpen}
-				onAccept={handleAcceptNewProject}
-			/>
-			<DialogData isOpen={isDialogDataOpen} setIsOpen={setIsDialogDataOpen} />
-			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
-			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
-			<DialogPlugins isOpen={isDialogPluginsOpen} setIsOpen={setIsDialogPluginsOpen} />
-			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />
-			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
-			<DialogSongs isOpen={isDialogSongsOpen} setIsOpen={setIsDialogSongsOpen} />
-			<DialogShapes isOpen={isDialogShapesOpen} setIsOpen={setIsDialogShapesOpen} />
-			<DialogFonts manager isOpen={isDialogFontsOpen} setIsOpen={setIsDialogFontsOpen} />
-			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
+			{isDialogNewProjectOpen && (
+				<DialogNewProject isOpen setIsOpen={setIsDialogNewProjectOpen} onAccept={handleAcceptNewProject} />
+			)}
+			{isDialogDataOpen && <DialogData isOpen setIsOpen={setIsDialogDataOpen} />}
+			{isDialogSystemsOpen && <DialogSystems isOpen setIsOpen={setIsDialogSystemsOpen} />}
+			{isDialogVariablesOpen && <DialogVariables isOpen setIsOpen={setIsDialogVariablesOpen} />}
+			{isDialogCollisionsOpen && <DialogCollisions isOpen setIsOpen={setIsDialogCollisionsOpen} />}
+			{isDialogPluginsOpen && <DialogPlugins isOpen setIsOpen={setIsDialogPluginsOpen} />}
+			{isDialogPicturesOpen && <DialogPictures isOpen setIsOpen={setIsDialogPicturesOpen} />}
+			{isDialogVideosOpen && <DialogVideos manager isOpen setIsOpen={setIsDialogVideosOpen} />}
+			{isDialogSongsOpen && <DialogSongs isOpen setIsOpen={setIsDialogSongsOpen} />}
+			{isDialogShapesOpen && <DialogShapes isOpen setIsOpen={setIsDialogShapesOpen} />}
+			{isDialogFontsOpen && <DialogFonts manager isOpen setIsOpen={setIsDialogFontsOpen} />}
+			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog
 				title={t('warning')}
 				isOpen={isDialogWarningProjectVersionOpen}

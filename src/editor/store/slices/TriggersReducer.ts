@@ -30,6 +30,7 @@ const TriggersSlice = createSlice({
 			data: false,
 			systems: false,
 			variables: false,
+			collisions: false,
 			plugins: false,
 			pictures: false,
 			videos: false,
@@ -73,6 +74,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerVariables(state, action: PayloadAction<boolean>) {
 			state.mainBar.variables = action.payload;
+		},
+		triggerCollisions(state, action: PayloadAction<boolean>) {
+			state.mainBar.collisions = action.payload;
 		},
 		triggerPlugins(state, action: PayloadAction<boolean>) {
 			state.mainBar.plugins = action.payload;
@@ -129,6 +133,7 @@ export const {
 	triggerData,
 	triggerSystems,
 	triggerVariables,
+	triggerCollisions,
 	triggerPlugins,
 	triggerPictures,
 	triggerSongs,

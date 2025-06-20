@@ -77,6 +77,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	AnimationFrameEffect: () => Model.AnimationFrameEffect,
 	Status: () => Model.Status,
 	StatusReleaseTurn: () => Model.StatusReleaseTurn,
+	Tileset: () => Model.Tileset,
 };
 
 class Node extends Serializable {

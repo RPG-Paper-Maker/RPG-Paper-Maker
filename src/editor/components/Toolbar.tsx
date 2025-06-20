@@ -30,6 +30,7 @@ import { Constants } from '../common';
 import { Project } from '../core/Project';
 import {
 	RootState,
+	triggerCollisions,
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
@@ -97,6 +98,10 @@ function Toolbar() {
 
 	const handleVariablesManager = () => {
 		dispatch(triggerVariables(true));
+	};
+
+	const handleCollisionsManager = () => {
+		dispatch(triggerCollisions(true));
 	};
 
 	const handlePluginsManager = () => {
@@ -167,7 +172,7 @@ function Toolbar() {
 					<MenuItem icon={<TbNumbers />} onClick={handleVariablesManager} disabled={!isProjectOpened}>
 						{t('variables.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>
+					<MenuItem icon={<FaArrowsAlt />} onClick={handleCollisionsManager} disabled={!isProjectOpened}>
 						{t('collisions.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
