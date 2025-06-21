@@ -78,7 +78,7 @@
 	"simplified": "Спрощені",
 	"custom": "Користувацькі",
 	"default": "Стандартно",
-	"according.height.angle": "за висотою та кутом",
+	"according.height.angle": "Стандартно (за висотою та кутом)",
 	"force.always.collides": "Примусове постійне зіткнення",
 	"force.never.collides": "Примусова відсутність зіткнення",
 	"set.max": "Змінити максимум",

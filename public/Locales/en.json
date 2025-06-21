@@ -78,7 +78,7 @@
 	"simplified": "Simplified",
 	"custom": "Custom",
 	"default": "Default",
-	"according.height.angle": "according to height and angle",
+	"according.height.angle": "Default (according to height and angle)",
 	"force.always.collides": "Force always collides",
 	"force.never.collides": "Force never collides",
 	"set.max": "Set max",

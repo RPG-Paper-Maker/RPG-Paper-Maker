@@ -78,7 +78,7 @@
 	"simplified": "Proste",
 	"custom": "Własne",
 	"default": "Domyślne",
-	"according.height.angle": "zależne od wysokości i kąta",
+	"according.height.angle": "Domyślne (zależne od wysokości i kąta)",
 	"force.always.collides": "Wymuś kolizję",
 	"force.never.collides": "Wymuś brak kolizji",
 	"set.max": "Nowa ilość",

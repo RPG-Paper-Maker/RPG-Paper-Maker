@@ -78,7 +78,7 @@
 	"simplified": "シンプル",
 	"custom": "カスタム",
 	"default": "デフォルト",
-	"according.height.angle": "高さと角度に応じる",
+	"according.height.angle": "デフォルト (高さと角度に応じる)",
 	"force.always.collides": "常に衝突する",
 	"force.never.collides": "常に衝突しない",
 	"set.max": "最大値",

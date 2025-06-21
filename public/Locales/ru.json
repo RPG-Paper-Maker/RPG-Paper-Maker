@@ -78,7 +78,7 @@
 	"simplified": "Упрощенный",
 	"custom": "На заказ",
 	"default": "По умолчанию",
-	"according.height.angle": "по высоте и углу",
+	"according.height.angle": "По умолчанию (по высоте и углу)",
 	"force.always.collides": "Сила всегда сталкивается",
 	"force.never.collides": "Сила никогда не сталкивается",
 	"set.max": "макс.",

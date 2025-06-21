@@ -78,7 +78,7 @@
 	"simplified": "Simplifié",
 	"custom": "Personnalisé",
 	"default": "Par défaut",
-	"according.height.angle": "en fonction de la hauteur et de l'angle",
+	"according.height.angle": "Par défaut (en fonction de la hauteur et de l'angle)",
 	"force.always.collides": "Toujours forcer la collision",
 	"force.never.collides": "Toujours forcer la non-collision",
 	"set.max": "Mod. max",

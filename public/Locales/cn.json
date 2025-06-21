@@ -78,7 +78,7 @@
 	"simplified": "簡化",
 	"custom": "自定義",
 	"default": "默認",
-	"according.height.angle": "取決於高度和角度",
+	"according.height.angle": "默認 (取決於高度和角度)",
 	"force.always.collides": "始終強行碰撞",
 	"force.never.collides": "始終強制不碰撞",
 	"set.max": "最大",

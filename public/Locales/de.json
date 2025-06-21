@@ -78,7 +78,7 @@
 	"simplified": "Vereinfacht",
 	"custom": "Benutzerdefiniert",
 	"default": "Standart",
-	"according.height.angle": "nach Höhe und Winkel",
+	"according.height.angle": "Standart (nach Höhe und Winkel)",
 	"force.always.collides": "Erzwinge immer kollidieren",
 	"force.never.collides": "Erzwinge niemals kollidieren",
 	"set.max": "Setze max.",

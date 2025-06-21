@@ -268,6 +268,11 @@ class Base extends Serializable {
 		'attack.random.ally',
 		'attack.random.enemy',
 	]);
+	public static MOUNTAIN_COLLISION_OPTIONS = Base.mapListIndex([
+		'according.height.angle',
+		'force.always.collides',
+		'force.never.collides',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
