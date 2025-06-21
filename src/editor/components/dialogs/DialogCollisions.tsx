@@ -15,7 +15,7 @@ import { PICTURE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
-import { Autotile, Picture, Tileset } from '../../models';
+import { Autotile, Picture, SpecialElement, Tileset } from '../../models';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import Tab from '../Tab';
@@ -38,6 +38,8 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	const [selectedCharacter, setSelectedCharacter] = useState<Picture | null>(null);
 	const [autotiles, setAutotiles] = useState<Node[]>([]);
 	const [selectedAutotile, setSelectedAutotile] = useState<Autotile | null>(null);
+	const [walls, setWalls] = useState<Node[]>([]);
+	const [selectedWall, setSelectedWall] = useState<SpecialElement | null>(null);
 
 	const initialize = () => {
 		setTilesets(Node.createList(Project.current!.tilesets.list, false));
@@ -45,7 +47,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		chars.shift();
 		chars.shift();
 		setCharacters(chars);
-		setAutotiles(Node.createList(Project.current!.specialElements.autotiles, false));
+		setWalls(Node.createList(Project.current!.specialElements.walls, false));
 	};
 
 	const handleSelectTileset = (node: Node | null) => {
@@ -58,6 +60,10 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const handleSelectAutotile = (node: Node | null) => {
 		setSelectedAutotile((node?.content as Autotile) ?? null);
+	};
+
+	const handleSelectWall = (node: Node | null) => {
+		setSelectedWall((node?.content as SpecialElement) ?? null);
 	};
 
 	const handleAccept = async () => {
@@ -133,6 +139,9 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			selectedAutotile?.isAnimated ?? false
 		);
 
+	const getWallsContent = () =>
+		getTabContent('walls', walls, handleSelectWall, selectedWall?.pictureID ?? -1, PICTURE_KIND.WALLS);
+
 	return (
 		<Dialog
 			title={`${t('collisions.manager')}...`}
@@ -151,7 +160,14 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 					t('mountains'),
 					t('threed.objects'),
 				])}
-				contents={[getTilesetsContent(), getCharactersContent(), getAutotilesContent(), null, null, null]}
+				contents={[
+					getTilesetsContent(),
+					getCharactersContent(),
+					getAutotilesContent(),
+					getWallsContent(),
+					null,
+					null,
+				]}
 				padding
 				lazyLoadingContent
 				noScrollToSelectedElement

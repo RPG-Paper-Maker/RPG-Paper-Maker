@@ -109,6 +109,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				return [COLLISION_TYPE.PRATICABLE];
 			case PICTURE_KIND.AUTOTILES:
 				return [COLLISION_TYPE.PRATICABLE, COLLISION_TYPE.DIRECTIONS, COLLISION_TYPE.TERRAIN];
+			case PICTURE_KIND.WALLS:
+				return [COLLISION_TYPE.PRATICABLE, COLLISION_TYPE.CLIMBING];
 			default:
 				return [
 					COLLISION_TYPE.PRATICABLE,

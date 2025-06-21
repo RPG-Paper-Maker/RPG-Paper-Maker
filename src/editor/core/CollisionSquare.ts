@@ -28,7 +28,7 @@ class CollisionSquare extends Serializable {
 		['top', 't', true, BINDING.BOOLEAN],
 		['bot', 'b', true, BINDING.BOOLEAN],
 		['terrain', 'terrain', 0, BINDING.NUMBER],
-		['climbing', 'l', true, BINDING.BOOLEAN],
+		['climbing', 'l', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
