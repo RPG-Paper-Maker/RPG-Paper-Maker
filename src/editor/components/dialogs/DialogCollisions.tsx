@@ -11,14 +11,22 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MOUNTAIN_COLLISION_KIND, PICTURE_KIND } from '../../common';
+import {
+	CUSTOM_SHAPE_KIND,
+	MOUNTAIN_COLLISION_KIND,
+	OBJECT_COLLISION_KIND,
+	PICTURE_KIND,
+	SHAPE_KIND,
+} from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
-import { Autotile, Base, Mountain, Picture, SpecialElement, Tileset } from '../../models';
+import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, Tileset } from '../../models';
+import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
+import PreviewerObject3D from '../PreviewerObject3D';
 import Tab from '../Tab';
 import TextureCollisionsEditor from '../TextureCollisionsEditor';
 import TexturePreviewer from '../TexturePreviewer';
@@ -45,6 +53,9 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	const [mountains, setMountains] = useState<Node[]>([]);
 	const [selectedMountain, setSelectedMountain] = useState<Mountain | null>(null);
 	const [mountainCollisionKind, setMountainCollisionKind] = useState(MOUNTAIN_COLLISION_KIND.DEFAULT);
+	const [objects, setObjects] = useState<Node[]>([]);
+	const [selectedObject, setSelectedObject] = useState<Object3D | null>(null);
+	const [objectCollisionKind, setObjectCollisionKind] = useState(OBJECT_COLLISION_KIND.NONE);
 
 	const mountainPicture = useMemo(
 		() => Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain?.pictureID ?? -1),
@@ -60,6 +71,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		setAutotiles(Node.createList(Project.current!.specialElements.autotiles, false));
 		setWalls(Node.createList(Project.current!.specialElements.walls, false));
 		setMountains(Node.createList(Project.current!.specialElements.mountains, false));
+		setObjects(Node.createList(Project.current!.specialElements.objects3D, false));
 	};
 
 	const handleSelectTileset = (node: Node | null) => {
@@ -93,10 +105,30 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
+	const handleSelectObject = (node: Node | null) => {
+		const obj = (node?.content as Object3D) ?? null;
+		setSelectedObject(obj);
+		if (obj) {
+			setObjectCollisionKind(obj.collisionKind);
+		}
+	};
+
+	const handleChangeObjectCollisionKind = (n: number) => {
+		if (selectedObject) {
+			selectedObject.collisionKind = n;
+			setObjectCollisionKind(n);
+		}
+	};
+
+	const handleChangeObjectCollisionCustomID = (id: number) => {
+		if (selectedObject) {
+			selectedObject.collisionCustomID = id;
+		}
+	};
+
 	const handleAccept = async () => {
-		console.log(selectedMountain);
 		await Project.current!.pictures.save();
-		if (selectedMountain !== null) {
+		if (selectedMountain !== null || selectedObject !== null) {
 			await Project.current!.specialElements.save();
 		}
 		setIsOpen(false);
@@ -104,7 +136,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const handleReject = async () => {
 		await Project.current!.pictures.load();
-		if (selectedMountain !== null) {
+		if (selectedMountain !== null || selectedObject !== null) {
 			await Project.current!.specialElements.load();
 		}
 		setIsOpen(false);
@@ -210,6 +242,40 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			) : null
 		);
 
+	const getObjectsContent = () =>
+		getTabContentWithChildren(
+			'threed.objects',
+			objects,
+			handleSelectObject,
+			selectedObject ? (
+				<Flex column fillWidth fillHeight spacedLarge>
+					<Flex spaced centerV>
+						<div>{t('collisions')}:</div>
+						<Dropdown
+							selectedID={objectCollisionKind}
+							disabledIds={
+								selectedObject.shapeKind === SHAPE_KIND.BOX
+									? [OBJECT_COLLISION_KIND.SIMPLIFIED, OBJECT_COLLISION_KIND.CUSTOM]
+									: [OBJECT_COLLISION_KIND.PERFECT]
+							}
+							onChange={handleChangeObjectCollisionKind}
+							options={Model.Base.OBJECT_COLLISION_KIND_OPTIONS}
+							translateOptions
+						/>
+						{selectedObject.collisionKind === OBJECT_COLLISION_KIND.CUSTOM && (
+							<AssetSelector
+								selectionType={ASSET_SELECTOR_TYPE.SHAPES}
+								kind={CUSTOM_SHAPE_KIND.COLLISIONS}
+								selectedID={selectedObject.collisionCustomID}
+								onChange={handleChangeObjectCollisionCustomID}
+							/>
+						)}
+					</Flex>
+					<PreviewerObject3D sceneID='dialog-object-3D-preview' objectID={selectedObject.id} />
+				</Flex>
+			) : null
+		);
+
 	return (
 		<Dialog
 			title={`${t('collisions.manager')}...`}
@@ -234,7 +300,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 					getAutotilesContent(),
 					getWallsContent(),
 					getMountainsContent(),
-					null,
+					getObjectsContent(),
 				]}
 				padding
 				lazyLoadingContent

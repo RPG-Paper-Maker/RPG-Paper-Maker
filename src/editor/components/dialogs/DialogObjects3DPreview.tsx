@@ -299,7 +299,7 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 										translateOptions
 									/>
 								</Value>
-								<Label>{t('texture.size')}</Label>
+								<Label>{t('texture')}</Label>
 								<Value>
 									<Dropdown
 										selectedID={selectedObject3D.stretch ? 1 : 2}
