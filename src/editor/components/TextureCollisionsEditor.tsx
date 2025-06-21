@@ -64,10 +64,11 @@ type CurrentStateProps = {
 type Props = {
 	pictureID: number;
 	pictureKind: PICTURE_KIND;
+	isAnimated?: boolean;
 	disabled?: boolean;
 };
 
-function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: Props) {
+function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, disabled = false }: Props) {
 	const { t } = useTranslation();
 
 	const currentState = useState<CurrentStateProps>({
@@ -106,6 +107,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		switch (pictureKind) {
 			case PICTURE_KIND.CHARACTERS:
 				return [COLLISION_TYPE.PRATICABLE];
+			case PICTURE_KIND.AUTOTILES:
+				return [COLLISION_TYPE.PRATICABLE, COLLISION_TYPE.DIRECTIONS, COLLISION_TYPE.TERRAIN];
 			default:
 				return [
 					COLLISION_TYPE.PRATICABLE,
@@ -129,9 +132,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 		currentState.pictureModel =
 			Project.current!.pictures.getByID(pictureKind, pictureID) ??
 			Project.current!.pictures.getByID(pictureKind, -1);
+		setRepeat(currentState.pictureModel.collisionsRepeat);
 		const path = await currentState.pictureModel.getPathOrBase64();
 		currentState.picture = await Picture2D.loadImage(path);
-		setRepeat(currentState.pictureModel.collisionsRepeat);
 		resize();
 	};
 
@@ -187,13 +190,33 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 
 	const drawTexture = (ctx: CanvasRenderingContext2D) => {
 		const canvas = refCanvas.current!;
-		ctx.drawImage(currentState.picture!, 0, 0, canvas.width, canvas.height);
+		if (pictureKind === PICTURE_KIND.AUTOTILES) {
+			const columns = canvas.width / Project.SQUARE_SIZE;
+			const rows = canvas.height / Project.SQUARE_SIZE;
+			for (let i = 0; i < columns; i++) {
+				for (let j = 0; j < rows; j++) {
+					ctx.drawImage(
+						currentState.picture!,
+						i * Project.SQUARE_SIZE * 2 * (isAnimated ? Project.current!.systems.autotilesFrames : 1),
+						j * Project.SQUARE_SIZE * 3,
+						Project.SQUARE_SIZE,
+						Project.SQUARE_SIZE,
+						i * Project.SQUARE_SIZE * zoomFactor,
+						j * Project.SQUARE_SIZE * zoomFactor,
+						Project.SQUARE_SIZE * zoomFactor,
+						Project.SQUARE_SIZE * zoomFactor
+					);
+				}
+			}
+		} else {
+			ctx.drawImage(currentState.picture!, 0, 0, canvas.width, canvas.height);
+		}
 	};
 
 	const drawPraticable = (ctx: CanvasRenderingContext2D) => {
 		if (currentState.pictureModel) {
-			const columns = repeat ? Project.current!.systems.FRAMES : 1;
-			const rows = repeat ? currentState.pictureModel.getRows() : 1;
+			const columns = currentState.pictureModel.collisionsRepeat ? Project.current!.systems.FRAMES : 1;
+			const rows = currentState.pictureModel.collisionsRepeat ? currentState.pictureModel.getRows() : 1;
 			const characterWidth = currentState.picture!.width / columns;
 			const characterHeight = currentState.picture!.height / rows;
 			for (let i = 0; i < columns; i++) {
@@ -288,7 +311,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 					}
 				}
 			}
-			if (repeat) {
+			if (currentState.pictureModel.collisionsRepeat) {
 				const characterWidth = currentState.picture!.width / Project.current!.systems.FRAMES;
 				const characterHeight = currentState.picture!.height / currentState.pictureModel.getRows();
 				ctx.fillStyle = 'black';
@@ -475,8 +498,15 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 
 	const resize = () => {
 		if (refCanvas.current && currentState.picture) {
-			const w = currentState.picture.width * zoomFactor;
-			const h = currentState.picture.height * zoomFactor;
+			let w = currentState.picture.width * zoomFactor;
+			let h = currentState.picture.height * zoomFactor;
+			if (pictureKind === PICTURE_KIND.AUTOTILES) {
+				w /= 2;
+				h /= 3;
+				if (isAnimated) {
+					w /= Project.current!.systems.autotilesFrames;
+				}
+			}
 			refCanvas.current.width = w;
 			refCanvas.current.height = h;
 			refCanvas.current.style.width = `${w}px`;
@@ -715,7 +745,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 					}
 					switch (selectedCollisionType) {
 						case COLLISION_TYPE.PRATICABLE:
-							if (repeat) {
+							if (currentState.pictureModel!.collisionsRepeat) {
 								const columns = Project.current!.systems.FRAMES;
 								const rows = currentState.pictureModel!.getRows();
 								const characterWidth = (currentState.picture!.width / columns) * zoomFactor;
@@ -785,7 +815,6 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 			canvas.addEventListener('mousedown', handleMouseDown);
 			window.addEventListener('mouseup', handleMouseUp);
 			window.addEventListener('wheel', handleWheel, { passive: false });
-			draw();
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mousedown', handleMouseDown);
@@ -794,7 +823,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, disabled = false }: P
 			};
 		}
 		// eslint-disable-next-line
-	}, [pictureID, selectedCollisionType, zoom, repeat]);
+	}, [pictureID, selectedCollisionType, zoom]);
 
 	const getContextMenuItems = () =>
 		selectedCollisionType === COLLISION_TYPE.PRATICABLE

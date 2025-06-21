@@ -15,12 +15,12 @@ import { PICTURE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
-import { Picture, Tileset } from '../../models';
+import { Autotile, Picture, Tileset } from '../../models';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import Tab from '../Tab';
 import TextureCollisionsEditor from '../TextureCollisionsEditor';
-import Tree, { TREES_MIN_WIDTH } from '../Tree';
+import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
@@ -36,6 +36,8 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	const [selectedTileset, setSelectedTileset] = useState<Tileset | null>(null);
 	const [characters, setCharacters] = useState<Node[]>([]);
 	const [selectedCharacter, setSelectedCharacter] = useState<Picture | null>(null);
+	const [autotiles, setAutotiles] = useState<Node[]>([]);
+	const [selectedAutotile, setSelectedAutotile] = useState<Autotile | null>(null);
 
 	const initialize = () => {
 		setTilesets(Node.createList(Project.current!.tilesets.list, false));
@@ -43,6 +45,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		chars.shift();
 		chars.shift();
 		setCharacters(chars);
+		setAutotiles(Node.createList(Project.current!.specialElements.autotiles, false));
 	};
 
 	const handleSelectTileset = (node: Node | null) => {
@@ -51,6 +54,10 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const handleSelectCharacter = (node: Node | null) => {
 		setSelectedCharacter((node?.content as Picture) ?? null);
+	};
+
+	const handleSelectAutotile = (node: Node | null) => {
+		setSelectedAutotile((node?.content as Autotile) ?? null);
 	};
 
 	const handleAccept = async () => {
@@ -73,14 +80,15 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		list: Node[],
 		onSelectedItem: (node: Node | null) => void,
 		pictureID: number,
-		pictureKind: PICTURE_KIND
+		pictureKind: PICTURE_KIND,
+		isAnimated = false
 	) => (
 		<Flex fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
 				<Flex one fillHeight>
 					<Tree
 						list={list}
-						minWidth={TREES_MIN_WIDTH}
+						minWidth={TREES_LARGE_MIN_WIDTH}
 						onSelectedItem={onSelectedItem}
 						noScrollOnForce
 						scrollable
@@ -92,7 +100,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 				</Flex>
 			</Groupbox>
 			<Flex one fillWidth>
-				<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} />
+				<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} isAnimated={isAnimated} />
 			</Flex>
 		</Flex>
 	);
@@ -115,6 +123,16 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			PICTURE_KIND.CHARACTERS
 		);
 
+	const getAutotilesContent = () =>
+		getTabContent(
+			'autotiles',
+			autotiles,
+			handleSelectAutotile,
+			selectedAutotile?.pictureID ?? -1,
+			PICTURE_KIND.AUTOTILES,
+			selectedAutotile?.isAnimated ?? false
+		);
+
 	return (
 		<Dialog
 			title={`${t('collisions.manager')}...`}
@@ -133,7 +151,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 					t('mountains'),
 					t('threed.objects'),
 				])}
-				contents={[getTilesetsContent(), getCharactersContent(), null, null, null, null]}
+				contents={[getTilesetsContent(), getCharactersContent(), getAutotilesContent(), null, null, null]}
 				padding
 				lazyLoadingContent
 				noScrollToSelectedElement
