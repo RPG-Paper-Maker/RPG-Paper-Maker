@@ -58,6 +58,7 @@ import {
 } from '../common/Platform';
 import { Project } from '../core/Project';
 
+import { GiBrickWall } from 'react-icons/gi';
 import { LocalFile } from '../core/LocalFile';
 import { EngineSettings } from '../data/EngineSettings';
 import { Data, Manager, Model, Scene } from '../Editor';
@@ -94,6 +95,7 @@ import {
 	triggerTreeMap,
 	triggerVariables,
 	triggerVideos,
+	triggerWalls,
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
@@ -134,6 +136,7 @@ function MainMenuBar() {
 	const [isDialogShapesOpen, setIsDialogShapesOpen] = useState(false);
 	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
 	const [isDialogAutotilesOpen, setIsDialogAutotilesOpen] = useState(false);
+	const [isDialogWallsOpen, setIsDialogWallsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -490,6 +493,10 @@ function MainMenuBar() {
 		setIsDialogAutotilesOpen(true);
 	};
 
+	const handleWalls = async () => {
+		setIsDialogWallsOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -751,6 +758,12 @@ function MainMenuBar() {
 					onClick: handleAutotiles,
 					disabled: !isProjectOpened,
 				},
+				{
+					title: `${t('walls')}...`,
+					icon: <GiBrickWall />,
+					onClick: handleWalls,
+					disabled: !isProjectOpened,
+				},
 			],
 		},
 		{
@@ -837,6 +850,9 @@ function MainMenuBar() {
 		} else if (triggers.autotiles) {
 			dispatch(triggerAutotiles(false));
 			handleAutotiles().catch(console.error);
+		} else if (triggers.autotiles) {
+			dispatch(triggerWalls(false));
+			handleWalls().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -950,6 +966,9 @@ function MainMenuBar() {
 			{isDialogFontsOpen && <DialogFonts manager isOpen setIsOpen={setIsDialogFontsOpen} />}
 			{isDialogAutotilesOpen && (
 				<DialogCollisions kind={PICTURE_KIND.AUTOTILES} isOpen setIsOpen={setIsDialogAutotilesOpen} />
+			)}
+			{isDialogWallsOpen && (
+				<DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={setIsDialogWallsOpen} />
 			)}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog

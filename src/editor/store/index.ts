@@ -73,6 +73,7 @@ import {
 	triggerTreeMap,
 	triggerVariables,
 	triggerVideos,
+	triggerWalls,
 } from './slices/TriggersReducer';
 
 const store = configureStore({
@@ -144,5 +145,6 @@ export {
 	triggerTreeMap,
 	triggerVariables,
 	triggerVideos,
+	triggerWalls,
 };
 export type RootState = ReturnType<typeof store.getState>;

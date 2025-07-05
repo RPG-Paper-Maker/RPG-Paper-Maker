@@ -47,6 +47,7 @@ import {
 	triggerSystems,
 	triggerVariables,
 	triggerVideos,
+	triggerWalls,
 } from '../store';
 import '../styles/Toolbar.css';
 import Menu from './Menu';
@@ -133,6 +134,10 @@ function Toolbar() {
 		dispatch(triggerAutotiles(true));
 	};
 
+	const handleWalls = () => {
+		dispatch(triggerWalls(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -216,7 +221,7 @@ function Toolbar() {
 					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleAutotiles} disabled={!isProjectOpened}>
 						{t('autotiles.tool')}
 					</MenuItem>
-					<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
+					<MenuItem icon={<GiBrickWall />} onClick={handleWalls} disabled={!isProjectOpened}>
 						{t('walls.tool')}
 					</MenuItem>
 					<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>

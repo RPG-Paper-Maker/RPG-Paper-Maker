@@ -56,6 +56,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	const [autotileIsAnimated, setAutotileIsAnimated] = useStateBool();
 	const [walls, setWalls] = useState<Node[]>([]);
 	const [selectedWall, setSelectedWall] = useState<SpecialElement | null>(null);
+	const [wallPictureID, setWallPictureID] = useStateNumber();
 	const [mountains, setMountains] = useState<Node[]>([]);
 	const [selectedMountain, setSelectedMountain] = useState<Mountain | null>(null);
 	const [mountainCollisionKind, setMountainCollisionKind] = useState(MOUNTAIN_COLLISION_KIND.DEFAULT);
@@ -67,6 +68,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		switch (kind) {
 			case PICTURE_KIND.AUTOTILES:
 				return 'autotiles';
+			case PICTURE_KIND.WALLS:
+				return 'walls';
 			default:
 				return 'collisions.manager';
 		}
@@ -79,6 +82,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		() => selectedAutotile === null || selectedAutotile.id === -1,
 		[selectedAutotile]
 	);
+	const isWallDisabled = useMemo(() => selectedWall === null || selectedWall.id === -1, [selectedWall]);
 
 	const initialize = () => {
 		if (kind === undefined) {
@@ -132,7 +136,18 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	};
 
 	const handleSelectWall = (node: Node | null) => {
-		setSelectedWall((node?.content as SpecialElement) ?? null);
+		const wall = (node?.content as SpecialElement) ?? null;
+		setSelectedWall(wall);
+		if (kind === PICTURE_KIND.WALLS) {
+			setWallPictureID(wall?.pictureID ?? -1);
+		}
+	};
+
+	const handleChangeWallPictureID = (id: number) => {
+		if (selectedWall) {
+			selectedWall.pictureID = id;
+			setWallPictureID(id);
+		}
 	};
 
 	const handleUpdateWalls = () => {
@@ -333,13 +348,37 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		);
 
 	const getWallsContent = () =>
-		getTabContent(
+		getTabContentWithChildren(
 			'walls',
 			walls,
 			handleSelectWall,
 			handleUpdateWalls,
-			selectedWall?.pictureID ?? -1,
-			PICTURE_KIND.WALLS
+			selectedWall ? (
+				kind === PICTURE_KIND.WALLS ? (
+					<Flex column fillWidth fillHeight spacedLarge>
+						<Flex spaced centerV>
+							<Flex disabledLabel={isWallDisabled}>{t('texture')}:</Flex>
+							<AssetSelector
+								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+								kind={PICTURE_KIND.WALLS}
+								selectedID={wallPictureID}
+								onChange={handleChangeWallPictureID}
+								disabled={isWallDisabled}
+							/>
+						</Flex>
+						<Flex one>
+							<TextureCollisionsEditor
+								pictureID={wallPictureID}
+								pictureKind={PICTURE_KIND.WALLS}
+								disabled={isWallDisabled}
+							/>
+						</Flex>
+					</Flex>
+				) : (
+					<TextureCollisionsEditor pictureID={selectedWall.pictureID} pictureKind={PICTURE_KIND.WALLS} />
+				)
+			) : null,
+			Model.SpecialElement
 		);
 
 	const getMountainsContent = () =>
@@ -403,6 +442,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		switch (kind) {
 			case PICTURE_KIND.AUTOTILES:
 				return getAutotilesContent();
+			case PICTURE_KIND.WALLS:
+				return getWallsContent();
 			default:
 				return (
 					<Tab

@@ -38,6 +38,7 @@ const TriggersSlice = createSlice({
 			shapes: false,
 			fonts: false,
 			autotiles: false,
+			walls: false,
 			play: false,
 		},
 		splitting: false,
@@ -100,6 +101,9 @@ const TriggersSlice = createSlice({
 		triggerAutotiles(state, action: PayloadAction<boolean>) {
 			state.mainBar.autotiles = action.payload;
 		},
+		triggerWalls(state, action: PayloadAction<boolean>) {
+			state.mainBar.walls = action.payload;
+		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
 		},
@@ -149,6 +153,7 @@ export const {
 	triggerSplitting,
 	triggerTreeMap,
 	triggerMenu,
+	triggerWalls,
 	setNeedsReloadPageUpdate,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,
