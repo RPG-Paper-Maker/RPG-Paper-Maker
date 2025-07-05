@@ -78,6 +78,10 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Status: () => Model.Status,
 	StatusReleaseTurn: () => Model.StatusReleaseTurn,
 	Tileset: () => Model.Tileset,
+	Autotile: () => Model.Autotile,
+	SpecialElement: () => Model.SpecialElement,
+	Mountain: () => Model.Mountain,
+	Object: () => Model.Object3D,
 };
 
 class Node extends Serializable {

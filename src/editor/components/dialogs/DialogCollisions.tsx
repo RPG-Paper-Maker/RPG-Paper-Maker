@@ -21,8 +21,11 @@ import {
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
+import useStateBool from '../../hooks/useStateBool';
+import useStateNumber from '../../hooks/useStateNumber';
 import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, Tileset } from '../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
+import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
@@ -37,9 +40,10 @@ import FooterCancelOK from './footers/FooterCancelOK';
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
+	kind?: PICTURE_KIND;
 };
 
-function DialogCollisions({ isOpen, setIsOpen }: Props) {
+function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	const { t } = useTranslation();
 
 	const [tilesets, setTilesets] = useState<Node[]>([]);
@@ -48,6 +52,8 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	const [selectedCharacter, setSelectedCharacter] = useState<Picture | null>(null);
 	const [autotiles, setAutotiles] = useState<Node[]>([]);
 	const [selectedAutotile, setSelectedAutotile] = useState<Autotile | null>(null);
+	const [autotilePictureID, setAutotilePictureID] = useStateNumber();
+	const [autotileIsAnimated, setAutotileIsAnimated] = useStateBool();
 	const [walls, setWalls] = useState<Node[]>([]);
 	const [selectedWall, setSelectedWall] = useState<SpecialElement | null>(null);
 	const [mountains, setMountains] = useState<Node[]>([]);
@@ -57,18 +63,34 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	const [selectedObject, setSelectedObject] = useState<Object3D | null>(null);
 	const [objectCollisionKind, setObjectCollisionKind] = useState(OBJECT_COLLISION_KIND.NONE);
 
+	const title = useMemo(() => {
+		switch (kind) {
+			case PICTURE_KIND.AUTOTILES:
+				return 'autotiles';
+			default:
+				return 'collisions.manager';
+		}
+	}, [kind]);
 	const mountainPicture = useMemo(
 		() => Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain?.pictureID ?? -1),
 		[selectedMountain]
 	);
+	const isAutotileDisabled = useMemo(
+		() => selectedAutotile === null || selectedAutotile.id === -1,
+		[selectedAutotile]
+	);
 
 	const initialize = () => {
-		setTilesets(Node.createList(Project.current!.tilesets.list, false));
-		const chars = Node.createList(Project.current!.pictures.getList(PICTURE_KIND.CHARACTERS), false);
-		chars.shift();
-		chars.shift();
-		setCharacters(chars);
-		setAutotiles(Node.createList(Project.current!.specialElements.autotiles, false));
+		if (kind === undefined) {
+			setTilesets(Node.createList(Project.current!.tilesets.list, false));
+			const chars = Node.createList(Project.current!.pictures.getList(PICTURE_KIND.CHARACTERS), false);
+			chars.shift();
+			chars.shift();
+			setCharacters(chars);
+		}
+		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
+			setAutotiles(Node.createList(Project.current!.specialElements.autotiles, false));
+		}
 		setWalls(Node.createList(Project.current!.specialElements.walls, false));
 		setMountains(Node.createList(Project.current!.specialElements.mountains, false));
 		setObjects(Node.createList(Project.current!.specialElements.objects3D, false));
@@ -83,11 +105,38 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 	};
 
 	const handleSelectAutotile = (node: Node | null) => {
-		setSelectedAutotile((node?.content as Autotile) ?? null);
+		const autotile = (node?.content as Autotile) ?? null;
+		setSelectedAutotile(autotile);
+		if (kind === PICTURE_KIND.AUTOTILES) {
+			setAutotilePictureID(autotile?.pictureID ?? -1);
+			setAutotileIsAnimated(autotile?.isAnimated ?? false);
+		}
+	};
+
+	const handleChangeAutotilePictureID = (id: number) => {
+		if (selectedAutotile) {
+			selectedAutotile.pictureID = id;
+			setAutotilePictureID(id);
+		}
+	};
+
+	const handleChangeAutotileIsAnimated = (b: boolean) => {
+		if (selectedAutotile) {
+			selectedAutotile.isAnimated = b;
+			setAutotileIsAnimated(b);
+		}
+	};
+
+	const handleUpdateAutotiles = () => {
+		Project.current!.specialElements.autotiles = Node.createListFromNodes(autotiles);
 	};
 
 	const handleSelectWall = (node: Node | null) => {
 		setSelectedWall((node?.content as SpecialElement) ?? null);
+	};
+
+	const handleUpdateWalls = () => {
+		Project.current!.specialElements.walls = Node.createListFromNodes(walls);
 	};
 
 	const handleSelectMountain = async (node: Node | null) => {
@@ -96,6 +145,10 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		if (mountain) {
 			setMountainCollisionKind(mountain.collisionKind);
 		}
+	};
+
+	const handleUpdateMountains = () => {
+		Project.current!.specialElements.mountains = Node.createListFromNodes(mountains);
 	};
 
 	const handleChangeMountainCollisionKind = (n: number) => {
@@ -113,6 +166,10 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
+	const handleUpdateObjects = () => {
+		Project.current!.specialElements.objects3D = Node.createListFromNodes(objects);
+	};
+
 	const handleChangeObjectCollisionKind = (n: number) => {
 		if (selectedObject) {
 			selectedObject.collisionKind = n;
@@ -128,7 +185,13 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const handleAccept = async () => {
 		await Project.current!.pictures.save();
-		if (selectedMountain !== null || selectedObject !== null) {
+		if (
+			kind !== undefined ||
+			selectedAutotile !== null ||
+			selectedWall !== null ||
+			selectedMountain !== null ||
+			selectedObject !== null
+		) {
 			await Project.current!.specialElements.save();
 		}
 		setIsOpen(false);
@@ -136,7 +199,13 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 
 	const handleReject = async () => {
 		await Project.current!.pictures.load();
-		if (selectedMountain !== null || selectedObject !== null) {
+		if (
+			kind !== undefined ||
+			selectedAutotile !== null ||
+			selectedWall !== null ||
+			selectedMountain !== null ||
+			selectedObject !== null
+		) {
 			await Project.current!.specialElements.load();
 		}
 		setIsOpen(false);
@@ -151,21 +220,25 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		title: string,
 		list: Node[],
 		onSelectedItem: (node: Node | null) => void,
-		children: ReactNode | ReactNode[]
+		onListUpdated: () => void,
+		children: ReactNode | ReactNode[],
+		constructorType = Model.Base
 	) => (
 		<Flex fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
 				<Flex one fillHeight>
 					<Tree
+						constructorType={constructorType}
 						list={list}
 						minWidth={TREES_LARGE_MIN_WIDTH}
 						onSelectedItem={onSelectedItem}
+						onListUpdated={kind === undefined ? undefined : onListUpdated}
 						noScrollOnForce
 						scrollable
-						cannotAdd
-						cannotDelete
-						cannotDragDrop
-						cannotEdit
+						cannotAdd={kind === undefined}
+						cannotDelete={kind === undefined}
+						cannotDragDrop={kind === undefined}
+						cannotEdit={kind === undefined}
 					/>
 				</Flex>
 			</Groupbox>
@@ -179,15 +252,18 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 		title: string,
 		list: Node[],
 		onSelectedItem: (node: Node | null) => void,
+		onListUpdated: () => void,
 		pictureID: number,
 		pictureKind: PICTURE_KIND,
-		isAnimated = false
+		constructorType = Model.Base
 	) =>
 		getTabContentWithChildren(
 			title,
 			list,
 			onSelectedItem,
-			<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} isAnimated={isAnimated} />
+			onListUpdated,
+			<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} />,
+			constructorType
 		);
 
 	const getTilesetsContent = () =>
@@ -195,6 +271,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			'tilesets',
 			tilesets,
 			handleSelectTileset,
+			() => {},
 			selectedTileset?.pictureID ?? -1,
 			PICTURE_KIND.TILESETS
 		);
@@ -204,28 +281,73 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			'characters',
 			characters,
 			handleSelectCharacter,
+			() => {},
 			selectedCharacter?.id ?? -1,
 			PICTURE_KIND.CHARACTERS
 		);
 
 	const getAutotilesContent = () =>
-		getTabContent(
+		getTabContentWithChildren(
 			'autotiles',
 			autotiles,
 			handleSelectAutotile,
-			selectedAutotile?.pictureID ?? -1,
-			PICTURE_KIND.AUTOTILES,
-			selectedAutotile?.isAnimated ?? false
+			handleUpdateAutotiles,
+			selectedAutotile ? (
+				kind === PICTURE_KIND.AUTOTILES ? (
+					<Flex column fillWidth fillHeight spacedLarge>
+						<Flex spaced centerV>
+							<Flex disabledLabel={isAutotileDisabled}>{t('texture')}:</Flex>
+							<AssetSelector
+								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+								kind={PICTURE_KIND.AUTOTILES}
+								selectedID={autotilePictureID}
+								onChange={handleChangeAutotilePictureID}
+								disabled={isAutotileDisabled}
+							/>
+						</Flex>
+						<Flex one>
+							<TextureCollisionsEditor
+								pictureID={autotilePictureID}
+								pictureKind={PICTURE_KIND.AUTOTILES}
+								isAnimated={autotileIsAnimated}
+								disabled={isAutotileDisabled}
+							/>
+						</Flex>
+						<Checkbox
+							isChecked={autotileIsAnimated}
+							onChange={handleChangeAutotileIsAnimated}
+							disabled={isAutotileDisabled}
+						>
+							{t('animated')}
+						</Checkbox>
+					</Flex>
+				) : (
+					<TextureCollisionsEditor
+						pictureID={selectedAutotile.pictureID}
+						pictureKind={PICTURE_KIND.AUTOTILES}
+						isAnimated={selectedAutotile.isAnimated}
+					/>
+				)
+			) : null,
+			Model.Autotile
 		);
 
 	const getWallsContent = () =>
-		getTabContent('walls', walls, handleSelectWall, selectedWall?.pictureID ?? -1, PICTURE_KIND.WALLS);
+		getTabContent(
+			'walls',
+			walls,
+			handleSelectWall,
+			handleUpdateWalls,
+			selectedWall?.pictureID ?? -1,
+			PICTURE_KIND.WALLS
+		);
 
 	const getMountainsContent = () =>
 		getTabContentWithChildren(
 			'mountains',
 			mountains,
 			handleSelectMountain,
+			handleUpdateMountains,
 			mountainPicture ? (
 				<Flex column fillWidth fillHeight spacedLarge>
 					<Flex spaced centerV>
@@ -247,6 +369,7 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			'threed.objects',
 			objects,
 			handleSelectObject,
+			handleUpdateObjects,
 			selectedObject ? (
 				<Flex column fillWidth fillHeight spacedLarge>
 					<Flex spaced centerV>
@@ -276,37 +399,48 @@ function DialogCollisions({ isOpen, setIsOpen }: Props) {
 			) : null
 		);
 
+	const getContent = () => {
+		switch (kind) {
+			case PICTURE_KIND.AUTOTILES:
+				return getAutotilesContent();
+			default:
+				return (
+					<Tab
+						titles={Model.Base.mapListIndex([
+							t('tilesets'),
+							t('characters'),
+							t('autotiles'),
+							t('walls'),
+							t('mountains'),
+							t('threed.objects'),
+						])}
+						contents={[
+							getTilesetsContent(),
+							getCharactersContent(),
+							getAutotilesContent(),
+							getWallsContent(),
+							getMountainsContent(),
+							getObjectsContent(),
+						]}
+						padding
+						lazyLoadingContent
+						noScrollToSelectedElement
+						hideScroll
+					/>
+				);
+		}
+	};
+
 	return (
 		<Dialog
-			title={`${t('collisions.manager')}...`}
+			title={`${t(title)}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1100px'
 			initialHeight='700px'
 		>
-			<Tab
-				titles={Model.Base.mapListIndex([
-					t('tilesets'),
-					t('characters'),
-					t('autotiles'),
-					t('walls'),
-					t('mountains'),
-					t('threed.objects'),
-				])}
-				contents={[
-					getTilesetsContent(),
-					getCharactersContent(),
-					getAutotilesContent(),
-					getWallsContent(),
-					getMountainsContent(),
-					getObjectsContent(),
-				]}
-				padding
-				lazyLoadingContent
-				noScrollToSelectedElement
-				hideScroll
-			/>
+			{getContent()}
 		</Dialog>
 	);
 }

@@ -37,6 +37,7 @@ const TriggersSlice = createSlice({
 			songs: false,
 			shapes: false,
 			fonts: false,
+			autotiles: false,
 			play: false,
 		},
 		splitting: false,
@@ -96,6 +97,9 @@ const TriggersSlice = createSlice({
 		triggerFonts(state, action: PayloadAction<boolean>) {
 			state.mainBar.fonts = action.payload;
 		},
+		triggerAutotiles(state, action: PayloadAction<boolean>) {
+			state.mainBar.autotiles = action.payload;
+		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
 		},
@@ -140,6 +144,7 @@ export const {
 	triggerFonts,
 	triggerShapes,
 	triggerVideos,
+	triggerAutotiles,
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,

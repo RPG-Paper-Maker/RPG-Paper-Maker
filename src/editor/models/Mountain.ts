@@ -24,6 +24,10 @@ class Mountain extends SpecialElement {
 		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
+	copy(mountain: Mountain, additionnalBinding: BindingType[] = []): void {
+		super.copy(mountain, Mountain.getBindings(additionnalBinding));
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Mountain.getBindings(additionnalBinding));
 	}

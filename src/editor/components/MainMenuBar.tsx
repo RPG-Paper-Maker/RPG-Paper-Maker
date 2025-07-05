@@ -28,7 +28,7 @@ import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
-import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
+import { MdAutoAwesomeMosaic, MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
 import { TfiVideoClapper } from 'react-icons/tfi';
@@ -43,6 +43,7 @@ import {
 	KEY,
 	MenuItemType,
 	Paths,
+	PICTURE_KIND,
 	SPECIAL_KEY,
 	Utils,
 } from '../common';
@@ -74,6 +75,7 @@ import {
 	setProjectMenuIndex,
 	setProjects,
 	setUndoRedoIndex,
+	triggerAutotiles,
 	triggerCollisions,
 	triggerData,
 	triggerFonts,
@@ -131,6 +133,7 @@ function MainMenuBar() {
 	const [isDialogSongsOpen, setIsDialogSongsOpen] = useState(false);
 	const [isDialogShapesOpen, setIsDialogShapesOpen] = useState(false);
 	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
+	const [isDialogAutotilesOpen, setIsDialogAutotilesOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -483,6 +486,10 @@ function MainMenuBar() {
 		setIsDialogFontsOpen(true);
 	};
 
+	const handleAutotiles = async () => {
+		setIsDialogAutotilesOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -738,11 +745,13 @@ function MainMenuBar() {
 					onClick: handleFontsManager,
 					disabled: !isProjectOpened,
 				},
+				{
+					title: `${t('autotiles')}...`,
+					icon: <MdAutoAwesomeMosaic />,
+					onClick: handleAutotiles,
+					disabled: !isProjectOpened,
+				},
 			],
-		},
-		{
-			title: t('special.elements'),
-			disabled: true,
 		},
 		{
 			title: t('options'),
@@ -825,6 +834,9 @@ function MainMenuBar() {
 		} else if (triggers.fonts) {
 			dispatch(triggerFonts(false));
 			handleFontsManager().catch(console.error);
+		} else if (triggers.autotiles) {
+			dispatch(triggerAutotiles(false));
+			handleAutotiles().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -936,6 +948,9 @@ function MainMenuBar() {
 			{isDialogSongsOpen && <DialogSongs isOpen setIsOpen={setIsDialogSongsOpen} />}
 			{isDialogShapesOpen && <DialogShapes isOpen setIsOpen={setIsDialogShapesOpen} />}
 			{isDialogFontsOpen && <DialogFonts manager isOpen setIsOpen={setIsDialogFontsOpen} />}
+			{isDialogAutotilesOpen && (
+				<DialogCollisions kind={PICTURE_KIND.AUTOTILES} isOpen setIsOpen={setIsDialogAutotilesOpen} />
+			)}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog
 				title={t('warning')}

@@ -22,6 +22,10 @@ class Autotile extends SpecialElement {
 		return [...Autotile.bindings, ...additionnalBinding];
 	}
 
+	copy(autotile: Autotile, additionnalBinding: BindingType[] = []): void {
+		super.copy(autotile, Autotile.getBindings(additionnalBinding));
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Autotile.getBindings(additionnalBinding));
 	}

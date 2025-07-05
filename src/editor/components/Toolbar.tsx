@@ -30,6 +30,7 @@ import { Constants } from '../common';
 import { Project } from '../core/Project';
 import {
 	RootState,
+	triggerAutotiles,
 	triggerCollisions,
 	triggerData,
 	triggerFonts,
@@ -128,6 +129,10 @@ function Toolbar() {
 		dispatch(triggerFonts(true));
 	};
 
+	const handleAutotiles = () => {
+		dispatch(triggerAutotiles(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -208,7 +213,7 @@ function Toolbar() {
 						{t('fonts.manager.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
-					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
+					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleAutotiles} disabled={!isProjectOpened}>
 						{t('autotiles.tool')}
 					</MenuItem>
 					<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>

@@ -596,7 +596,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		resize();
 		draw();
 		// eslint-disable-next-line
-	}, [selectedCollisionType]);
+	}, [selectedCollisionType, isAnimated]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
@@ -825,7 +825,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			};
 		}
 		// eslint-disable-next-line
-	}, [pictureID, selectedCollisionType, zoom]);
+	}, [pictureID, selectedCollisionType, zoom, isAnimated]);
 
 	const getContextMenuItems = () =>
 		selectedCollisionType === COLLISION_TYPE.PRATICABLE
