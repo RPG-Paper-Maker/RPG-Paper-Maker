@@ -39,6 +39,8 @@ const TriggersSlice = createSlice({
 			fonts: false,
 			autotiles: false,
 			walls: false,
+			objects3D: false,
+			mountains: false,
 			play: false,
 		},
 		splitting: false,
@@ -104,6 +106,12 @@ const TriggersSlice = createSlice({
 		triggerWalls(state, action: PayloadAction<boolean>) {
 			state.mainBar.walls = action.payload;
 		},
+		triggerObjects3D(state, action: PayloadAction<boolean>) {
+			state.mainBar.objects3D = action.payload;
+		},
+		triggerMountains(state, action: PayloadAction<boolean>) {
+			state.mainBar.mountains = action.payload;
+		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
 		},
@@ -154,6 +162,8 @@ export const {
 	triggerTreeMap,
 	triggerMenu,
 	triggerWalls,
+	triggerObjects3D,
+	triggerMountains,
 	setNeedsReloadPageUpdate,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,

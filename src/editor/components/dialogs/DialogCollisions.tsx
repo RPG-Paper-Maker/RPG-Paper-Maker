@@ -70,6 +70,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 				return 'autotiles';
 			case PICTURE_KIND.WALLS:
 				return 'walls';
+			case PICTURE_KIND.OBJECTS_3D:
+				return 'threed.objects';
 			default:
 				return 'collisions.manager';
 		}

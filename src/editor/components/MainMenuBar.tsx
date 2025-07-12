@@ -22,7 +22,7 @@ import {
 	AiOutlineZoomIn,
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
-import { BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
+import { BiCube, BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
@@ -82,6 +82,7 @@ import {
 	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
+	triggerObjects3D,
 	triggerOpenDialogProject,
 	triggerOpenProject,
 	triggerPictures,
@@ -105,6 +106,7 @@ import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogNewProject from './dialogs/DialogNewProject';
+import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogPlugins from './dialogs/DialogPlugins';
 import DialogShapes from './dialogs/DialogShapes';
@@ -137,6 +139,7 @@ function MainMenuBar() {
 	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
 	const [isDialogAutotilesOpen, setIsDialogAutotilesOpen] = useState(false);
 	const [isDialogWallsOpen, setIsDialogWallsOpen] = useState(false);
+	const [isDialogObjects3DOpen, setIsDialogObjects3DOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -497,6 +500,10 @@ function MainMenuBar() {
 		setIsDialogWallsOpen(true);
 	};
 
+	const handleObjects3D = async () => {
+		setIsDialogObjects3DOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -753,15 +760,21 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
-					title: `${t('autotiles')}...`,
+					title: `${t('autotiles.tool')}...`,
 					icon: <MdAutoAwesomeMosaic />,
 					onClick: handleAutotiles,
 					disabled: !isProjectOpened,
 				},
 				{
-					title: `${t('walls')}...`,
+					title: `${t('walls.tool')}...`,
 					icon: <GiBrickWall />,
 					onClick: handleWalls,
+					disabled: !isProjectOpened,
+				},
+				{
+					title: `${t('threed.objects.tool')}...`,
+					icon: <BiCube />,
+					onClick: handleObjects3D,
 					disabled: !isProjectOpened,
 				},
 			],
@@ -850,9 +863,12 @@ function MainMenuBar() {
 		} else if (triggers.autotiles) {
 			dispatch(triggerAutotiles(false));
 			handleAutotiles().catch(console.error);
-		} else if (triggers.autotiles) {
+		} else if (triggers.walls) {
 			dispatch(triggerWalls(false));
 			handleWalls().catch(console.error);
+		} else if (triggers.objects3D) {
+			dispatch(triggerObjects3D(false));
+			handleObjects3D().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -970,6 +986,7 @@ function MainMenuBar() {
 			{isDialogWallsOpen && (
 				<DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={setIsDialogWallsOpen} />
 			)}
+			{isDialogObjects3DOpen && <DialogObjects3DPreview manager isOpen setIsOpen={setIsDialogObjects3DOpen} />}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog
 				title={t('warning')}

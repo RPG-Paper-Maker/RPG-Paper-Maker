@@ -36,6 +36,7 @@ import {
 	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
+	triggerObjects3D,
 	triggerOpenDialogProject,
 	triggerPictures,
 	triggerPlay,
@@ -138,6 +139,10 @@ function Toolbar() {
 		dispatch(triggerWalls(true));
 	};
 
+	const handleObjects3D = () => {
+		dispatch(triggerObjects3D(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -224,7 +229,7 @@ function Toolbar() {
 					<MenuItem icon={<GiBrickWall />} onClick={handleWalls} disabled={!isProjectOpened}>
 						{t('walls.tool')}
 					</MenuItem>
-					<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BiCube />} onClick={handleObjects3D} disabled={!isProjectOpened}>
 						{t('threed.objects.tool')}
 					</MenuItem>
 					<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>

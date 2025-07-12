@@ -33,11 +33,12 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	object3DID?: number;
+	manager?: boolean;
 	onAccept?: (object3D: Model.Object3D) => void;
 	onReject?: () => void;
 };
 
-function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onReject }: Props) {
+function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [triggerUpdate, setTriggerUpdate] = useState(false);
@@ -169,12 +170,14 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 	};
 
 	const handleAccept = async () => {
-		if (!selectedObject3D || selectedObject3D.id === -1) {
+		if (!manager && (!selectedObject3D || selectedObject3D.id === -1)) {
 			dispatch(showWarning(t('warning.asset.selection')));
 		} else {
 			updateObjects3DList();
 			await Project.current!.specialElements.save();
-			onAccept?.(selectedObject3D);
+			if (selectedObject3D) {
+				onAccept?.(selectedObject3D);
+			}
 			setIsOpen(false);
 		}
 	};
