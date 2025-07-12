@@ -1,6 +1,8 @@
 // errorLogger.js
 import { ReactNode } from 'react';
+import { FaRegCopy } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import Button from '../components/Button';
 import { TOASTER_OPTIONS } from './ToasterUtils';
 
 const originalConsoleError = console.error;
@@ -9,7 +11,20 @@ const notifyError = (text: string | ReactNode) => {
 	toast.error(text, TOASTER_OPTIONS);
 };
 
+const copyToClipboard = async (text: string): Promise<void> => {
+	try {
+		await navigator.clipboard.writeText(text);
+		toast.success('Copied to clipboard!');
+	} catch (err) {}
+};
+
+let errorCount = 0;
+const MAX_ERROR_COUNT = 10; // Limit the number of error notifications
+
 console.error = (...args) => {
+	if (errorCount++ >= MAX_ERROR_COUNT) {
+		return;
+	}
 	let message = '';
 	let stack = '';
 
@@ -26,7 +41,14 @@ console.error = (...args) => {
 
 	notifyError(
 		<div>
-			<strong>Error:</strong>
+			<strong>
+				<div style={{ display: 'flex' }}>
+					Error:
+					<Button onClick={() => copyToClipboard(message)}>
+						<FaRegCopy />
+					</Button>
+				</div>
+			</strong>
 			<pre
 				style={{
 					maxWidth: '250px',
@@ -55,11 +77,21 @@ console.error = (...args) => {
 };
 
 window.onerror = function (message, source, lineno, colno, error) {
+	if (errorCount++ >= MAX_ERROR_COUNT) {
+		return;
+	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
 
 	notifyError(
 		<div>
-			<strong>Error:</strong>
+			<strong>
+				<div style={{ display: 'flex' }}>
+					Error:
+					<Button onClick={() => copyToClipboard(message as string)}>
+						<FaRegCopy />
+					</Button>
+				</div>
+			</strong>
 			<pre>{message as string}</pre>
 			<details>
 				<summary>Stack Trace</summary>
@@ -77,13 +109,23 @@ window.onerror = function (message, source, lineno, colno, error) {
 };
 
 window.addEventListener('unhandledrejection', (event) => {
+	if (errorCount++ >= MAX_ERROR_COUNT) {
+		return;
+	}
 	const reason = event.reason;
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
 
 	notifyError(
 		<div>
-			<strong>Error:</strong>
+			<strong>
+				<div style={{ display: 'flex' }}>
+					Error:
+					<Button onClick={() => copyToClipboard(message)}>
+						<FaRegCopy />
+					</Button>
+				</div>
+			</strong>
 			<pre>{message}</pre>
 			{stack && (
 				<details>
