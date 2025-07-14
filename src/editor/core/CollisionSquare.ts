@@ -28,7 +28,7 @@ class CollisionSquare extends Serializable {
 		['top', 't', true, BINDING.BOOLEAN],
 		['bot', 'b', true, BINDING.BOOLEAN],
 		['terrain', 'terrain', 0, BINDING.NUMBER],
-		['climbing', 'l', false, BINDING.BOOLEAN],
+		['climbing', 'c', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -75,8 +75,6 @@ class CollisionSquare extends Serializable {
 			if (json.rec !== null) {
 				this.rect = new Rectangle();
 				this.rect.read(json.rec as number[]);
-			} else {
-				this.rect = null;
 			}
 		} else {
 			this.rect = new Rectangle(0, 0, 100, 100);

@@ -241,6 +241,7 @@ function Dialog({
 	useEffect(() => {
 		const dialogs = document.getElementsByClassName('dialog');
 		Inputs.isMapFocused = dialogs.length === 0;
+		console.log(dialogs);
 		if (dialogRef.current && isOpen) {
 			dialogRef.current.style.width = initialWidth || '';
 			dialogRef.current.style.height = initialHeight || '';
@@ -259,6 +260,12 @@ function Dialog({
 		}
 		// eslint-disable-next-line
 	}, [isOpen]);
+
+	useEffect(() => {
+		return () => {
+			Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
+		};
+	}, []);
 
 	const root = document.getElementById('root');
 	if (!root || !isOpen) {
