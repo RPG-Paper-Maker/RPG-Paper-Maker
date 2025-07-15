@@ -76,7 +76,6 @@ function DialogCurrency({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

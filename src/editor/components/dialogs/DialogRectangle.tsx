@@ -87,7 +87,6 @@ function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange, maxSize, keep
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

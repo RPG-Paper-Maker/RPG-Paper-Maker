@@ -64,7 +64,6 @@ function DialogPluginCommand({ isOpen, setIsOpen, model, onAccept, onReject }: P
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (

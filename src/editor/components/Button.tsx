@@ -91,7 +91,6 @@ function Button({
 				current.removeEventListener('pointerdown', handle);
 			};
 		}
-		// eslint-disable-next-line
 	}, []);
 
 	return (

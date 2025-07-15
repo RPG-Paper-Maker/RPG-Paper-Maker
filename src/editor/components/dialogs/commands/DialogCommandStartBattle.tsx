@@ -117,7 +117,6 @@ function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAcce
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

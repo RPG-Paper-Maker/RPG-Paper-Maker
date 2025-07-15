@@ -158,7 +158,6 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getRectangleButtons = (label: string, rectangle: Rectangle, setRectangle: (r: Rectangle) => void) => (

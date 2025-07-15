@@ -256,7 +256,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		if (firstScroll && displayCanvas) {
 			initializeCanvas().catch(console.error);
 		}
-		// eslint-disable-next-line
 	}, [firstScroll]);
 
 	useEffect(() => {
@@ -267,7 +266,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				content.removeEventListener('scroll', handleScroll);
 			};
 		}
-		// eslint-disable-next-line
 	}, [minToDisplay, maxToDisplay]);
 
 	useEffect(() => {

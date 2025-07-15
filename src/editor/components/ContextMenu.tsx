@@ -98,12 +98,10 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled =
 				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 			};
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useEffect(() => {
 		setIsFocused(false);
-		// eslint-disable-next-line
 	}, [isOpeningNewDialog]);
 
 	return (

@@ -160,7 +160,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	const getGraphicsContent = () => (
@@ -408,5 +407,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+PanelAnimations.displayName = 'PanelAnimations';
 
 export default PanelAnimations;

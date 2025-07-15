@@ -150,7 +150,6 @@ function DialogCommandModifyTeam({ commandKind, isOpen, setIsOpen, list, onAccep
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

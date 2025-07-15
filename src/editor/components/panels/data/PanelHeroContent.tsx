@@ -111,7 +111,6 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 
 	useLayoutEffect(() => {
 		update();
-		// eslint-disable-next-line
 	}, [selectedHero]);
 
 	return (

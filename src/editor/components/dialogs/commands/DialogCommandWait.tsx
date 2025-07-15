@@ -54,7 +54,6 @@ function DialogCommandWait({ commandKind, isOpen, setIsOpen, list, onAccept, onR
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

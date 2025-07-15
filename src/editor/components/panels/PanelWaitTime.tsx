@@ -71,4 +71,6 @@ const PanelWaitTime = forwardRef(({ defaultSeconds = 0 }: Props, ref) => {
 	);
 });
 
+PanelWaitTime.displayName = 'PanelWaitTime';
+
 export default PanelWaitTime;

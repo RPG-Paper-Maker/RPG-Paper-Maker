@@ -62,7 +62,6 @@ const PanelTilesets = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -111,5 +110,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelTilesets.displayName = 'PanelTilesets';
 
 export default PanelTilesets;

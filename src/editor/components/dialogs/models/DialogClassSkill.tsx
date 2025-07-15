@@ -68,7 +68,6 @@ function DialogClassSkill({ isOpen, setIsOpen, model, isNew, onAccept, onReject 
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

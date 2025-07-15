@@ -119,7 +119,6 @@ function Tab({
 			}
 			setForcedCurrentIndex(null);
 		}
-		// eslint-disable-next-line
 	}, [forcedCurrentIndex, setForcedCurrentIndex]);
 
 	useEffect(() => {
@@ -130,7 +129,6 @@ function Tab({
 			}
 			setNextIndex(-1);
 		}
-		// eslint-disable-next-line
 	}, [nextIndex, setNextIndex]);
 
 	useEffect(() => {
@@ -138,12 +136,10 @@ function Tab({
 		if (!openedTabs.includes(currentIndex)) {
 			setOpenedTabs([...openedTabs, currentIndex]);
 		}
-		// eslint-disable-next-line
 	}, [currentIndex]);
 
 	useEffect(() => {
 		scrollToSelectedElement();
-		// eslint-disable-next-line
 	}, []);
 
 	const getTitles = () =>

@@ -64,7 +64,6 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 
 	useLayoutEffect(() => {
 		update();
-		// eslint-disable-next-line
 	}, [selectedMonster]);
 
 	const getCurrenciesContents = () =>
@@ -78,7 +77,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 				);
 				selectedMonster.currencies.set(currency.id, progression);
 			}
-			return <PanelProgression progression={progression} disabled={disabled} />;
+			return <PanelProgression progression={progression} disabled={disabled} key={currency.id} />;
 		});
 
 	return (

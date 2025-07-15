@@ -124,7 +124,6 @@ function PanelProject() {
 			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
 			dispatch(setCurrentObject3DID(Project.current!.settings.mapEditorCurrentObject3DID));
 		}
-		// eslint-disable-next-line
 	}, [openLoading]);
 
 	useEffect(() => {
@@ -132,7 +131,6 @@ function PanelProject() {
 			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
 			Project.current!.treeMaps.save().catch(console.error);
 		}
-		// eslint-disable-next-line
 	}, [mapsTabsTitles]);
 
 	return (

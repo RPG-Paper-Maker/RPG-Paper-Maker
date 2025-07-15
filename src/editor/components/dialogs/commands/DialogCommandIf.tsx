@@ -408,7 +408,6 @@ function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onRej
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getVariablesParamPropContent = () => (

@@ -44,7 +44,6 @@ const PanelHeroes = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -73,5 +72,7 @@ const PanelHeroes = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelHeroes.displayName = 'PanelHeroes';
 
 export default PanelHeroes;

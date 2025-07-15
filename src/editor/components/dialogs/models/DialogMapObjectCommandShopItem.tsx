@@ -92,7 +92,6 @@ function DialogMapObjectCommandShopItem({ isOpen, setIsOpen, model, onAccept, on
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

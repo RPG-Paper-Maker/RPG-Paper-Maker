@@ -93,7 +93,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -244,5 +243,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelTitleScreenGameOver.displayName = 'PanelTitleScreenGameOver';
 
 export default PanelTitleScreenGameOver;

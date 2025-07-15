@@ -53,7 +53,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -114,5 +113,7 @@ const PanelMainMenu = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelMainMenu.displayName = 'PanelMainMenu';
 
 export default PanelMainMenu;

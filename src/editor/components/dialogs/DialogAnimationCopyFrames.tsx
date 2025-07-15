@@ -63,7 +63,6 @@ function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation, onAccept }: P
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

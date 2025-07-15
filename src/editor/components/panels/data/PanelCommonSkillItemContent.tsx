@@ -163,7 +163,6 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 
 	useLayoutEffect(() => {
 		update();
-		// eslint-disable-next-line
 	}, [selectedElement]);
 
 	return (

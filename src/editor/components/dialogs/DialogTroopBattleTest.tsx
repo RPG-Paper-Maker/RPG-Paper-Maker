@@ -50,7 +50,7 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 
 	const titles = useMemo(
 		() => heroes.map((hero) => Base.create(hero.id, Project.current!.heroes.getByID(hero.heroID)?.getName() ?? '')),
-		// eslint-disable-next-line
+
 		[heroes, heroID]
 	);
 	const contents = useMemo(() => heroes.map(() => null), [heroes]);
@@ -139,12 +139,10 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useEffect(() => {
 		handleCurrentIndexChanged(0);
-		// eslint-disable-next-line
 	}, [model]);
 
 	const getFooter = () => (

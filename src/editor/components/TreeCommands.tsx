@@ -119,7 +119,6 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 	useLayoutEffect(() => {
 		Node.attributeIDsToList(list);
 		setUpdatedList(list);
-		// eslint-disable-next-line
 	}, [list]);
 
 	return updatedList ? (

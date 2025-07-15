@@ -74,7 +74,6 @@ function DialogMapObjectCommandMove({ isOpen, setIsOpen, model, isNew, onAccept,
 			onReject();
 			setIsOpen(false);
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return getDialogCommand();

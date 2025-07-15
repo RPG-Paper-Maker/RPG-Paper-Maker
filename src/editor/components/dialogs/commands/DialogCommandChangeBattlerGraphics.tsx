@@ -105,7 +105,6 @@ function DialogCommandChangeBattlerGraphics({
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

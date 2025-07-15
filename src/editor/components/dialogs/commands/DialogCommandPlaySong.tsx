@@ -97,7 +97,6 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 		} else {
 			setIsInitialized(false);
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

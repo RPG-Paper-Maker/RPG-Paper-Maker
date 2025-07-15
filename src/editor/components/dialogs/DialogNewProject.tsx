@@ -193,7 +193,6 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 			initialize();
 			setIsOpen(true);
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

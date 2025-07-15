@@ -89,8 +89,6 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 
 	useLayoutEffect(() => {
 		initialize();
-
-		// eslint-disable-next-line
 	}, []);
 
 	return (

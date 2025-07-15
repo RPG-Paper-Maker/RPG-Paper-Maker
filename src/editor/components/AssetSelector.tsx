@@ -86,7 +86,6 @@ function AssetSelector({
 				break;
 		}
 		return Node.create(base ? base : Model.Base.create(-1, '<NONE>'));
-		// eslint-disable-next-line
 	}, [selectedID, selectionType, kind]);
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -136,7 +135,6 @@ function AssetSelector({
 				? Node.create(Model.Base.create(-1, selectedDynamic.toString()))
 				: getSelectedItem(),
 		]);
-		// eslint-disable-next-line
 	}, [selectedID, selectedDynamic?.kind, selectedDynamic?.value, getSelectedItem]);
 
 	const getIcon = (): JSX.Element => {

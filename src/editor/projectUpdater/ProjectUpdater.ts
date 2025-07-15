@@ -38,7 +38,7 @@ class ProjectUpdater {
 				if (passed || this.checkVersion(version, newVersion)) {
 					passed = true;
 					const className = `ProjectUpdater_${newVersion.replaceAll('.', '_')}`;
-					const module = await import(`./versions/${className}`);
+					const module = await import(`./versions/${className}.ts`);
 					const updaterClass = module[className];
 					if (updaterClass && typeof updaterClass.update === 'function') {
 						const label = `Updating to version ${newVersion}...`;

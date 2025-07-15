@@ -69,7 +69,6 @@ function DialogAnimationFrameElement({ isOpen, setIsOpen, element, onAccept }: P
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -54,7 +54,6 @@ function DialogCommandLabel({ commandKind, isOpen, setIsOpen, list, onAccept, on
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

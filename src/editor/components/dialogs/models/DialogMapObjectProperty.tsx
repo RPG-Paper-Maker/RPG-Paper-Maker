@@ -64,7 +64,6 @@ function DialogMapObjectProperty({ isOpen, setIsOpen, model, isNew, onAccept, on
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return initialValue ? (

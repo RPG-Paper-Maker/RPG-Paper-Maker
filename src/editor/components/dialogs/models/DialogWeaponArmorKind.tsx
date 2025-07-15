@@ -56,7 +56,6 @@ function DialogWeaponArmorKind({ isOpen, setIsOpen, model, onAccept, onReject }:
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

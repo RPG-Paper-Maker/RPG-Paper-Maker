@@ -54,7 +54,6 @@ function DialogHeroStatisticDisplay({ isOpen, setIsOpen, model, onAccept, onReje
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

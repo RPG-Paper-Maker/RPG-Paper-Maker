@@ -542,7 +542,6 @@ function Tree({
 				onSelectedItem(node, false);
 			}
 		}
-		// eslint-disable-next-line
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
 	useLayoutEffect(() => {
@@ -565,7 +564,6 @@ function Tree({
 				onSelectedItem(node, false);
 			}
 		}
-		// eslint-disable-next-line
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useLayoutEffect(() => {
@@ -579,7 +577,6 @@ function Tree({
 				onSelectedItem(node, false);
 			}
 		}
-		// eslint-disable-next-line
 	}, [list]);
 
 	useEffect(() => {
@@ -587,7 +584,6 @@ function Tree({
 			scrollToSelectedElement();
 			setNeedScroll(false);
 		}
-		// eslint-disable-next-line
 	}, [needScroll, currentSelectedItemNode]);
 
 	useEffect(() => {
@@ -612,7 +608,6 @@ function Tree({
 		return () => {
 			dialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
@@ -652,7 +647,6 @@ function Tree({
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 		};
-		// eslint-disable-next-line
 	}, [list, isFocused, currentSelectedItemNode, setCurrentSelectedItemNode]);
 
 	const headers = constructorType.getTreeHeader();

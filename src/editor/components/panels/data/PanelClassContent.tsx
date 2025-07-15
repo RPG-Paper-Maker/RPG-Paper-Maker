@@ -51,7 +51,6 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 			}
 		}
 		return elements;
-		// eslint-disable-next-line
 	}, [selectedClass, experienceToNextLevelValues, initialLevel]);
 
 	const update = () => {
@@ -226,7 +225,6 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 
 	useLayoutEffect(() => {
 		update();
-		// eslint-disable-next-line
 	}, [selectedClass]);
 
 	const getContentExperience = (total: boolean) => {

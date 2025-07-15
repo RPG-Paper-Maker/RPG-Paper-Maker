@@ -58,7 +58,6 @@ function VariableSelector({
 			node.content = getNodeContent(forcedVariableID);
 			setForcedVariableID(null);
 		}
-		// eslint-disable-next-line
 	}, [forcedVariableID, setForcedVariableID]);
 
 	return (

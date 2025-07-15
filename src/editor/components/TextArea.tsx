@@ -68,7 +68,6 @@ function TextArea({
 			insertTextAtCaret(triggerInsertText);
 			setTriggerInsertText(null);
 		}
-		// eslint-disable-next-line
 	}, [triggerInsertText]);
 
 	return (

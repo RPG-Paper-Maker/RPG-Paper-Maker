@@ -303,4 +303,6 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 	);
 });
 
+PanelPosition.displayName = 'PanelPosition';
+
 export default PanelPosition;

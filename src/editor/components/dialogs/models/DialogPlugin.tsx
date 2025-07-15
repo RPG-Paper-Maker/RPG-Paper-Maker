@@ -261,14 +261,12 @@ const inject = Manager.Plugins.inject;
 		if (!loadingPlugins) {
 			handleOnlineTabChanged(0);
 		}
-		// eslint-disable-next-line
 	}, [loadingPlugins]);
 
 	useLayoutEffect(() => {
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

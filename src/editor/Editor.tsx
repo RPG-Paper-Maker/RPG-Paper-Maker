@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import Flex from './components/Flex';
-import MainMenuBar from './components/MainMenuBar';
-import PanelLoading from './components/panels/PanelLoading';
-import PanelMain from './components/panels/PanelMain';
+const MainMenuBar = lazy(() => import('./components/MainMenuBar'));
+const PanelLoading = lazy(() => import('./components/panels/PanelLoading'));
+const PanelMain = lazy(() => import('./components/panels/PanelMain'));
 import i18n from './i18n/i18n';
 import { Inputs } from './managers/Inputs';
 import { store } from './store';

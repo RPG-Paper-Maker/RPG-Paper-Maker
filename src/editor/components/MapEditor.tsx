@@ -247,18 +247,15 @@ function MapEditor() {
 				cancelAnimationFrame(Scene.Map.animationFrameID);
 			};
 		}
-		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		clearMap();
 		initializeMap().catch(console.error);
-		// eslint-disable-next-line
 	}, [currentMapTag]);
 
 	useEffect(() => {
 		initializeMap().catch(console.error);
-		// eslint-disable-next-line
 	}, [needsReloadMap]);
 
 	// Resize after rendering

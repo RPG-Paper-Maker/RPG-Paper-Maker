@@ -62,7 +62,6 @@ import {
 } from '../common';
 import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObjectCommand';
 import Flex from '../components/Flex';
-
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Scene } from '../Editor';

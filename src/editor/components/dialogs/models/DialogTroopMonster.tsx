@@ -71,7 +71,6 @@ function DialogTroopMonster({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

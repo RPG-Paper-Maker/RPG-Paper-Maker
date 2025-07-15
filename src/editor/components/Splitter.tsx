@@ -75,7 +75,6 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 		}
 		document.body.addEventListener('mouseup', handleMouseUp);
 		return () => document.body.removeEventListener('mouseup', handleMouseUp);
-		// eslint-disable-next-line
 	}, []);
 
 	return children[0] && children[1] ? (

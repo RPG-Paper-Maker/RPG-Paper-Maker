@@ -75,7 +75,6 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -120,7 +120,6 @@ const PanelTroops = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -238,5 +237,7 @@ const PanelTroops = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+PanelTroops.displayName = 'PanelTroops';
 
 export default PanelTroops;

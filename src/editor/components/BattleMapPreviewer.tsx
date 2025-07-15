@@ -114,13 +114,11 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 		return () => {
 			clearMap();
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		Battler.monsters = monsters;
 		update().catch(console.error);
-		// eslint-disable-next-line
 	}, [monsters, triggerUpdate]);
 
 	return (

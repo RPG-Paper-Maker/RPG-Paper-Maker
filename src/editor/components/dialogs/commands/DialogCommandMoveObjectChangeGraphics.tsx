@@ -158,7 +158,6 @@ function DialogCommandMoveObjectChangeGraphics({ isOpen, setIsOpen, model, isNew
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

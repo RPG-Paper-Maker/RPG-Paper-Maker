@@ -147,7 +147,6 @@ function Dropdown({
 				container.style.width = v;
 			}
 		}
-		// eslint-disable-next-line
 	}, [fillWidth]);
 
 	useLayoutEffect(() => {

@@ -421,7 +421,6 @@ function AnimationPreviewer({
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, [pictureID, battlerID]);
 
 	useEffect(() => {
@@ -442,7 +441,6 @@ function AnimationPreviewer({
 				scrollArea.scrollTop = (scrollArea.scrollHeight - scrollArea.clientHeight) / 2;
 			}
 		}
-		// eslint-disable-next-line
 	}, [PIXEL_RATIO]);
 
 	useEffect(() => {
@@ -450,7 +448,6 @@ function AnimationPreviewer({
 			currentState.currentFrameID = currentFrame.id;
 			draw();
 		}
-		// eslint-disable-next-line
 	}, [currentFrame]);
 
 	useEffect(() => {
@@ -553,7 +550,6 @@ function AnimationPreviewer({
 				scrollArea.removeEventListener('scroll', handleScroll);
 			};
 		}
-		// eslint-disable-next-line
 	}, [
 		loadingState,
 		pictureID,
@@ -570,7 +566,6 @@ function AnimationPreviewer({
 
 	useEffect(() => {
 		draw();
-		// eslint-disable-next-line
 	}, [triggerDraw]);
 
 	useEffect(() => {
@@ -579,7 +574,6 @@ function AnimationPreviewer({
 			selectedElement.texRow = selectedRow;
 			draw();
 		}
-		// eslint-disable-next-line
 	}, [triggerApplyTexture]);
 
 	useEffect(() => {
@@ -587,7 +581,6 @@ function AnimationPreviewer({
 			currentState.currentFrameID = 1;
 			playAnimation().catch(console.error);
 		}
-		// eslint-disable-next-line
 	}, [isPlaying]);
 
 	const getContextMenuItems = () => {

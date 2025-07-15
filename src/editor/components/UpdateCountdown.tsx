@@ -54,7 +54,6 @@ function UpdateCountdown() {
 
 	useEffect(() => {
 		tryGetDate().catch(console.error);
-		// eslint-disable-next-line
 	}, []);
 
 	return targetDate ? (

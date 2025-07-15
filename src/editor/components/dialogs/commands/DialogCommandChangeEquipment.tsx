@@ -106,7 +106,6 @@ function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, on
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

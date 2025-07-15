@@ -57,7 +57,6 @@ function DialogAnimationClearFrames({ isOpen, setIsOpen, animation, onAccept }: 
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

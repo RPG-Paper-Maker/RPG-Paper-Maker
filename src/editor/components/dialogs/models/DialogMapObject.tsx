@@ -50,7 +50,6 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		if (!isOpen) {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

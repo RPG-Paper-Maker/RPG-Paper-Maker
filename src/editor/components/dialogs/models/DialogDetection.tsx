@@ -152,7 +152,6 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		} else {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

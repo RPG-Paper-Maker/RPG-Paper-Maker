@@ -144,7 +144,6 @@ function MenuCustom({
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 		};
-		// eslint-disable-next-line
 	}, [allowKeyboard, items]);
 
 	return (

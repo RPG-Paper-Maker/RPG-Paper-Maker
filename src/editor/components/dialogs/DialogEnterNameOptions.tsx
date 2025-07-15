@@ -77,7 +77,6 @@ function DialogEnterNameOptions({ isOpen, setIsOpen, options, onAccept }: Props)
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

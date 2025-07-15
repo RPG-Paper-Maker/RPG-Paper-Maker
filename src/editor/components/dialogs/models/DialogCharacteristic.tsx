@@ -78,7 +78,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 				beginEquipmentID,
 				beginWeaponArmorSelection === 0
 			),
-		// eslint-disable-next-line
+
 		[beginEquipmentUpdate, beginWeaponArmorSelection]
 	);
 
@@ -179,7 +179,6 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useLayoutEffect(() => {

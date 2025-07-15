@@ -52,7 +52,6 @@ function DialogName({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 			setFocustFirst(true);
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

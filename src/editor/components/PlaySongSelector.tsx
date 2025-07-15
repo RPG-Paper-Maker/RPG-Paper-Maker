@@ -74,4 +74,6 @@ const PlaySongSelector = forwardRef(({ songKind, disabled = false, dynamicUpdate
 	);
 });
 
+PlaySongSelector.displayName = 'PlaySongSelector';
+
 export default PlaySongSelector;

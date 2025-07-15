@@ -359,7 +359,6 @@ function TextureSquareSelector({
 	useEffect(() => {
 		currentState.selectedRect = getDefaultRectangle();
 		update();
-		// eslint-disable-next-line
 	}, [currentMapElementKind]);
 
 	useEffect(() => {
@@ -387,7 +386,6 @@ function TextureSquareSelector({
 				}
 			};
 		}
-		// eslint-disable-next-line
 	}, [texture]);
 
 	useEffect(() => {

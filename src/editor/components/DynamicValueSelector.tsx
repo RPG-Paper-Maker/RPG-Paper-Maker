@@ -448,7 +448,6 @@ function DynamicValueSelector({
 		}
 		setKind(value.kind);
 		onChangeKind?.(value.kind);
-		// eslint-disable-next-line
 	}, [value.kind]);
 
 	useLayoutEffect(() => {
@@ -535,21 +534,18 @@ function DynamicValueSelector({
 				break;
 		}
 		onChangeValue?.(value.value);
-		// eslint-disable-next-line
 	}, [value.value]);
 
 	useEffect(() => {
 		if (min !== undefined && valueNumber < min) {
 			setValueNumber(min);
 		}
-		// eslint-disable-next-line
 	}, [min]);
 
 	useEffect(() => {
 		if (max !== undefined && valueNumber > max) {
 			setValueNumber(max);
 		}
-		// eslint-disable-next-line
 	}, [max]);
 
 	const getValueDisplay = () => {

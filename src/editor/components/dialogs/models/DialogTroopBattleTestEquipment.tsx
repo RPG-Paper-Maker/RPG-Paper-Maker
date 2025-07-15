@@ -72,7 +72,6 @@ function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useEffect(() => {

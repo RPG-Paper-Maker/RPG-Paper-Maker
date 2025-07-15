@@ -74,7 +74,6 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 			setFocustFirst(true);
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getTabContents = () =>

@@ -118,7 +118,6 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -76,7 +76,6 @@ function PreviewerObject3D({
 
 	useEffect(() => {
 		update().catch(console.error);
-		// eslint-disable-next-line
 	}, [objectID, shape]);
 
 	useEffect(() => {
@@ -84,7 +83,6 @@ function PreviewerObject3D({
 			update().catch(console.error);
 			setTriggerUpdate(false);
 		}
-		// eslint-disable-next-line
 	}, [triggerUpdate]);
 
 	useEffect(() => {
@@ -94,7 +92,6 @@ function PreviewerObject3D({
 			window.removeEventListener('resize', resize);
 			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
-		// eslint-disable-next-line
 	}, [sceneID]);
 
 	return (

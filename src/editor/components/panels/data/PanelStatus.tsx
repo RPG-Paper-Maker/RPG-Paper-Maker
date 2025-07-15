@@ -143,7 +143,6 @@ const PanelStatus = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -350,5 +349,7 @@ const PanelStatus = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelStatus.displayName = 'PanelMapObject';
 
 export default PanelStatus;

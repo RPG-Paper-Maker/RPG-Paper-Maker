@@ -180,4 +180,6 @@ const PanelSelectMapPosition = forwardRef(
 	}
 );
 
+PanelSelectMapPosition.displayName = 'PanelSelectMapPosition';
+
 export default PanelSelectMapPosition;

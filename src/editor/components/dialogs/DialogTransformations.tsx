@@ -93,7 +93,6 @@ function DialogTransformations({
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

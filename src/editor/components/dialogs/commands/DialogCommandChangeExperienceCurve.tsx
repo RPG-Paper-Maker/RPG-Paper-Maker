@@ -82,7 +82,6 @@ function DialogCommandChangeExperienceCurve({
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

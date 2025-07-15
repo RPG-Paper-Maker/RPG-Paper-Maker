@@ -230,7 +230,6 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 
 	useEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	const getTabContentWithChildren = (

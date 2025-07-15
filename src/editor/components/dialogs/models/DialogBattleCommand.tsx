@@ -53,7 +53,6 @@ function DialogBattleCommand({ isOpen, setIsOpen, model, onAccept, onReject }: P
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -96,7 +96,6 @@ function DialogCommandMoveObjectJump({ isOpen, setIsOpen, model, isNew, onAccept
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

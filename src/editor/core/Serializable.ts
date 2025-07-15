@@ -25,8 +25,27 @@ export type BindingType = [
 ];
 
 class Serializable {
-	// eslint-disable-next-line
-	equals(s: Serializable): boolean {
+	static readList(list: Serializable[], json: JSONType[], constructor: typeof Serializable) {
+		if (json) {
+			for (const jsonModel of json) {
+				const model = new constructor();
+				model.read(jsonModel);
+				list.push(model);
+			}
+		}
+	}
+
+	static writeList(list: Serializable[], json: JSONType, jsonName: string) {
+		const jsonList: JSONType[] = [];
+		for (const model of list) {
+			const jsonModel = {};
+			model.write(jsonModel);
+			jsonList.push(jsonModel);
+		}
+		json[jsonName] = jsonList;
+	}
+
+	equals(_s: Serializable): boolean {
 		return false;
 	}
 
@@ -86,8 +105,7 @@ class Serializable {
 		return serializable as this;
 	}
 
-	// eslint-disable-next-line
-	getPath(temp: boolean = false): string {
+	getPath(_temp: boolean = false): string {
 		return '';
 	}
 
@@ -111,8 +129,7 @@ class Serializable {
 		await writeJSON(this.getPath(temp), json);
 	}
 
-	// eslint-disable-next-line
-	static fromJSON(json: JSONType): Serializable {
+	static fromJSON(_json: JSONType): Serializable {
 		return new Serializable();
 	}
 

@@ -274,7 +274,6 @@ function DialogPictures({
 		if (selectedKind === undefined) {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [selectedKind]);
 
 	useLayoutEffect(() => {
@@ -282,7 +281,6 @@ function DialogPictures({
 			reset();
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen, selectedKind]);
 
 	const getPreviewerContent = () => {

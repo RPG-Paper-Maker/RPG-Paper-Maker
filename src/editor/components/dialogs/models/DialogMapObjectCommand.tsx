@@ -143,7 +143,6 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 		} else {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getButton = (kind: EVENT_COMMAND_KIND, disabled = false) => {
@@ -472,7 +471,6 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			setIsOpen(false);
 			onReject();
 		}
-		// eslint-disable-next-line
 	}, [isOpen, isNew, selectedCommand]);
 
 	return (

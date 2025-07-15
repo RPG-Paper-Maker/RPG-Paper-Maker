@@ -97,7 +97,6 @@ function DialogCommandTeleportObject({ commandKind, isOpen, setIsOpen, list, onA
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

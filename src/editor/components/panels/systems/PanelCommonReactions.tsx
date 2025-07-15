@@ -81,7 +81,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -131,5 +130,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelCommonReactions.displayName = 'PanelCommonReactions';
 
 export default PanelCommonReactions;

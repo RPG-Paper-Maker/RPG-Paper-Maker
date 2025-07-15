@@ -192,14 +192,12 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 		if (isInitiating) {
 			updateObjects3DList();
 		}
-		// eslint-disable-next-line
 	}, [objects3D.length]);
 
 	useEffect(() => {
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getPreviewerContent = () => {

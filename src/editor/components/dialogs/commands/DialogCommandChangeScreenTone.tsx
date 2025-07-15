@@ -103,7 +103,6 @@ function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, o
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -69,7 +69,6 @@ function Game({ location, battleTest = false }: Props) {
 			document.body.removeChild(canvas);
 			document.body.removeChild(style);
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	return (

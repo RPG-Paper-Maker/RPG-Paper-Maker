@@ -206,7 +206,6 @@ const PanelSystem = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -529,5 +528,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+PanelSystem.displayName = 'PanelSystem';
 
 export default PanelSystem;

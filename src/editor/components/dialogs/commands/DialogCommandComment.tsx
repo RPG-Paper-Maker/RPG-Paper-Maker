@@ -54,7 +54,6 @@ function DialogCommandComment({ commandKind, isOpen, setIsOpen, list, onAccept, 
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -88,7 +88,6 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, [texture, sourceRectangle]);
 
 	return <canvas ref={refCanvas} className={noPointer ? undefined : 'pointer'} width={'0'} height={'0'} />;

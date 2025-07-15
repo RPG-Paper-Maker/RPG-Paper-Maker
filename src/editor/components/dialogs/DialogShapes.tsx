@@ -163,14 +163,12 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 		if (selectedKind === undefined) {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [selectedKind]);
 
 	useLayoutEffect(() => {
 		if (isOpen && selectedKind !== undefined) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen, selectedKind]);
 
 	const getPreviewerContent = () => {

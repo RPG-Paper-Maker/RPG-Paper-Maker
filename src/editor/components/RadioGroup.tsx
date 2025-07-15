@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 
 export const RadioGroupContext = React.createContext({
 	selected: 0,
-	// eslint-disable-next-line
-	onChange: (n: number) => {
+
+	onChange: (_n: number) => {
 		console.error('Not implemented radio group');
 	},
 });

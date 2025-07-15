@@ -54,7 +54,6 @@ function DialogDynamicNumber({ isOpen, setIsOpen, model, decimal = false, onAcce
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

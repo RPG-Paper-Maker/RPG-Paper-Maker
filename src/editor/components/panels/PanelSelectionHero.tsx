@@ -175,4 +175,6 @@ const PanelSelectionHero = forwardRef(({ isEnemy = false }: Props, ref) => {
 	);
 });
 
+PanelSelectionHero.displayName = 'PanelSelectionHero';
+
 export default PanelSelectionHero;

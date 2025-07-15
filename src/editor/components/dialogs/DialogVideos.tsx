@@ -202,7 +202,6 @@ function DialogVideos({
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getPreviewerContent = () => {

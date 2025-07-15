@@ -108,7 +108,6 @@ function DialogMonsterLoot({ isOpen, setIsOpen, model, onAccept, onReject }: Pro
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

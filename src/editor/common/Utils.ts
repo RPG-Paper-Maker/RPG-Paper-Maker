@@ -10,7 +10,6 @@
 */
 
 import { Constants, ITERATOR, JSONType } from '.';
-import { Serializable } from '../core/Serializable';
 
 class Utils {
 	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
@@ -35,26 +34,6 @@ class Utils {
 
 	static isString(value: unknown): boolean {
 		return typeof value === Constants.STRING;
-	}
-
-	static readList(list: Serializable[], json: JSONType[], constructor: typeof Serializable) {
-		if (json) {
-			for (const jsonModel of json) {
-				const model = new constructor();
-				model.read(jsonModel);
-				list.push(model);
-			}
-		}
-	}
-
-	static writeList(list: Serializable[], json: JSONType, jsonName: string) {
-		const jsonList: JSONType[] = [];
-		for (const model of list) {
-			const jsonModel = {};
-			model.write(jsonModel);
-			jsonList.push(jsonModel);
-		}
-		json[jsonName] = jsonList;
 	}
 
 	static formatNumber(num: number, size: number): string {

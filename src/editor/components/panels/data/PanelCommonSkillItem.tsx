@@ -74,7 +74,6 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	const getLabel = () => {
@@ -114,5 +113,7 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 		</Flex>
 	);
 });
+
+PanelCommonSkillItem.displayName = 'PanelCommonSkillItem';
 
 export default PanelCommonSkillItem;

@@ -157,4 +157,6 @@ const PanelObjectEvent = forwardRef(({ event, isNew }: Props, ref) => {
 	);
 });
 
+PanelObjectEvent.displayName = 'PanelObjectEvent';
+
 export default PanelObjectEvent;

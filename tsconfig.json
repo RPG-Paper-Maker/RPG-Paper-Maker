@@ -19,9 +19,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "downlevelIteration": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "incremental": false,
+    "composite": false
   },
   "include": [
-    "src"
-, "eslint.config.mjs"  ]
+    "src",
+    "eslint.config.js",
+    "vite.config.ts"
+  ]
 }

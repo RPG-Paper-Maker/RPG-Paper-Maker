@@ -43,7 +43,6 @@ const PanelMonsters = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -72,5 +71,7 @@ const PanelMonsters = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelMonsters.displayName = 'PanelMonsters';
 
 export default PanelMonsters;

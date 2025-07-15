@@ -145,12 +145,10 @@ function TextureWindowSkinSelector({
 				};
 			}
 		}
-		// eslint-disable-next-line
 	}, [selectedRectangle, isSelecting]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, [texture, zoom]);
 
 	return (

@@ -95,13 +95,11 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 				cancelAnimationFrame(Scene.Map.positionSelectorAnimationFrameID);
 			};
 		}
-		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		clearMap();
 		initializeMap().catch(console.error);
-		// eslint-disable-next-line
 	}, [currentMapTag]);
 
 	// Resize after rendering

@@ -50,7 +50,6 @@ const PanelPluginDetails = forwardRef(
 
 		useLayoutEffect(() => {
 			initialize();
-			// eslint-disable-next-line
 		}, [plugin, triggerUpdateParameters]);
 
 		return (
@@ -150,5 +149,7 @@ const PanelPluginDetails = forwardRef(
 		);
 	}
 );
+
+PanelPluginDetails.displayName = 'PanelPluginDetails';
 
 export default PanelPluginDetails;

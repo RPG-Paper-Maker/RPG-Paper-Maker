@@ -159,7 +159,6 @@ function DialogCommandChangeMapProperties({ commandKind, isOpen, setIsOpen, list
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -155,7 +155,6 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		} else {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getMapStartupReactionsContent = () => (

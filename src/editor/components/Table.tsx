@@ -65,7 +65,6 @@ function Table({ values, onChange, highlightedElements, disabled = false }: Prop
 		return () => {
 			currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	return (

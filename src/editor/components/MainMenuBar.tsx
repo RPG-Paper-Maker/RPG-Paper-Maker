@@ -873,7 +873,6 @@ function MainMenuBar() {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
 		}
-		// eslint-disable-next-line
 	}, [triggers]);
 
 	useEffect(() => {

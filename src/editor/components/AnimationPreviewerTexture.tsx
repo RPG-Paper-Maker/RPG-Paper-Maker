@@ -124,7 +124,6 @@ function AnimationPreviewerTexture({
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, [pictureID]);
 
 	useEffect(() => {
@@ -155,7 +154,6 @@ function AnimationPreviewerTexture({
 				return () => canvas.removeEventListener('mousedown', handleMouseDown);
 			}
 		}
-		// eslint-disable-next-line
 	}, [currentState.picture, loadingState, rows, columns, selectedColumn, selectedRow, disabled]);
 
 	return <canvas ref={refCanvas} className={disabled ? undefined : 'pointer'} />;

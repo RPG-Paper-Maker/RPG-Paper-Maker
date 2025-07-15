@@ -187,15 +187,15 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleEditorDidMount = (editor: unknown, monaco: any) => {
+	const handleEditorDidMount = (_editor: unknown, _monaco: unknown) => {
 		/* TODO: Add declaration file for global classes, should not contain exports */
+		/*
 		const dts = `
 		  declare class Constants {
 
 }
-		`;
-		monaco.languages.typescript.javascriptDefaults.addExtraLib(dts, 'filename/constants.d.ts');
+		`;*/
+		//monaco.languages.typescript.javascriptDefaults.addExtraLib(dts, 'filename/constants.d.ts');
 	};
 
 	const unsavePlugin = () => {
@@ -370,7 +370,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		return () => {
 			document.removeEventListener('keydown', handleSaveShortcut);
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	useLayoutEffect(() => {
@@ -379,7 +378,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		} else {
 			reset();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const getPluginsContent = () => (

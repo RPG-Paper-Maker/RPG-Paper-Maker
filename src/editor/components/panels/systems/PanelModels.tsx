@@ -93,7 +93,6 @@ const PanelModels = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	useLayoutEffect(() => {
@@ -101,7 +100,6 @@ const PanelModels = forwardRef((props, ref) => {
 			panelMapObjectRef.current?.reset();
 			panelMapObjectRef.current?.initialize();
 		}
-		// eslint-disable-next-line
 	}, [panelMapObjectRef.current, selectedModel]);
 
 	return (
@@ -137,5 +135,7 @@ const PanelModels = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelModels.displayName = 'PanelModels';
 
 export default PanelModels;

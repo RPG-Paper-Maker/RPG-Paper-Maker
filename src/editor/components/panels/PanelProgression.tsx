@@ -42,7 +42,6 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 			elements[(k as number) - ProgressionTable.selectedClassInitialLevel] = [1];
 		}
 		return elements;
-		// eslint-disable-next-line
 	}, [progression, tableValues]);
 	const xValues = useMemo(() => {
 		return Array.from(
@@ -123,7 +122,6 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 
 	useEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, [progression]);
 
 	const getTableContent = () => (

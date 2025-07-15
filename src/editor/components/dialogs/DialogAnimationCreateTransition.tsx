@@ -149,7 +149,6 @@ function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccep
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -105,7 +105,6 @@ function DialogTroopReactionConditions({ isOpen, setIsOpen, conditions }: Props)
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

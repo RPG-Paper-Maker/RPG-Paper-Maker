@@ -589,18 +589,15 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 
 	useEffect(() => {
 		resize();
-		// eslint-disable-next-line
 	}, [zoom]);
 
 	useEffect(() => {
 		resize();
 		draw();
-		// eslint-disable-next-line
 	}, [selectedCollisionType, isAnimated]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, [pictureID]);
 
 	useEffect(() => {
@@ -824,7 +821,6 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				window.removeEventListener('wheel', handleWheel, { passive: false } as AddEventListenerOptions);
 			};
 		}
-		// eslint-disable-next-line
 	}, [pictureID, selectedCollisionType, zoom, isAnimated]);
 
 	const getContextMenuItems = () =>

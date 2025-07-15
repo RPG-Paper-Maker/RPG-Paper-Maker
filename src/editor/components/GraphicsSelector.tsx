@@ -169,7 +169,6 @@ function GraphicsSelector({
 				clear(ctx);
 			}
 		}
-		// eslint-disable-next-line
 	}, [graphicsID, graphicsKind]);
 
 	useEffect(() => {

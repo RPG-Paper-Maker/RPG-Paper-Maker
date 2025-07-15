@@ -74,7 +74,6 @@ function DialogCommandChangeASkill({ commandKind, isOpen, setIsOpen, list, onAcc
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

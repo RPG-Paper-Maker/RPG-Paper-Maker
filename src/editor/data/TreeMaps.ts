@@ -11,7 +11,7 @@
 
 import i18next from 'i18next';
 import { Model } from '../Editor';
-import { BINDING, JSONType, Paths, Utils } from '../common';
+import { BINDING, JSONType, Paths } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
@@ -122,7 +122,7 @@ class TreeMaps extends Serializable {
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, TreeMaps.getBindings(additionnalBinding));
-		Utils.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
+		Serializable.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
 	}
 }
 

@@ -117,7 +117,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -280,5 +279,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelBattleSystem.displayName = 'PanelBattleSystem';
 
 export default PanelBattleSystem;

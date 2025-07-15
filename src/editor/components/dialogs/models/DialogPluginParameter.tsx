@@ -75,7 +75,6 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (

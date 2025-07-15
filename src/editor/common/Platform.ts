@@ -54,6 +54,11 @@ export const MIME_TYPES: Record<string, string> = {
 	mtl: 'text/plain',
 };
 
+type ZipType = {
+	folder: (name: string) => ZipType;
+	file: (name: string, content: Blob | string) => void;
+};
+
 export const checkFileExists = async (path: string): Promise<boolean> => {
 	return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
 };
@@ -181,8 +186,7 @@ export const loadZip = async (
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getFolderZip = async (zip: any, path: string) => {
+export const getFolderZip = async (zip: ZipType, path: string) => {
 	const [folders, files] = await getFoldersFiles(path);
 	for (const folderName of folders) {
 		const folder = zip.folder(folderName);
@@ -259,7 +263,7 @@ export const exportFolder = async (location: string) => {
 	const fileName = Paths.getFileName(location) || '';
 	const JSZip = (await import('jszip')).default;
 	const zip = new JSZip();
-	const folder = zip.folder(fileName);
+	const folder = zip.folder(fileName) as ZipType | null;
 	if (folder) {
 		await getFolderZip(folder, location);
 		const blob = await zip.generateAsync({ type: 'blob' });

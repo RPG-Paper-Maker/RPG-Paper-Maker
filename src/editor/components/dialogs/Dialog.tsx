@@ -241,7 +241,6 @@ function Dialog({
 	useEffect(() => {
 		const dialogs = document.getElementsByClassName('dialog');
 		Inputs.isMapFocused = dialogs.length === 0;
-		console.log(dialogs);
 		if (dialogRef.current && isOpen) {
 			dialogRef.current.style.width = initialWidth || '';
 			dialogRef.current.style.height = initialHeight || '';
@@ -258,7 +257,6 @@ function Dialog({
 			setIsClickedIn(false);
 			setIsResizing(false);
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useEffect(() => {

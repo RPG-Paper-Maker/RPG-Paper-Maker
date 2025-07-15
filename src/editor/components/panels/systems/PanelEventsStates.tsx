@@ -61,7 +61,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -118,5 +117,7 @@ const PanelEventsStates = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelEventsStates.displayName = 'PanelEventsStates';
 
 export default PanelEventsStates;

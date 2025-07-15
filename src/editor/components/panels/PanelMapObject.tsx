@@ -455,7 +455,6 @@ const PanelMapObject = forwardRef(
 					accept();
 				};
 			}
-			// eslint-disable-next-line
 		}, []);
 
 		return (
@@ -705,5 +704,7 @@ const PanelMapObject = forwardRef(
 		);
 	}
 );
+
+PanelMapObject.displayName = 'PanelMapObject';
 
 export default PanelMapObject;

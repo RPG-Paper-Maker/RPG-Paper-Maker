@@ -43,7 +43,6 @@ const PanelClasses = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -70,5 +69,7 @@ const PanelClasses = forwardRef((props, ref) => {
 		</Flex>
 	);
 });
+
+PanelClasses.displayName = 'PanelClasses';
 
 export default PanelClasses;

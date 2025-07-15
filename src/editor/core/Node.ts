@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { createFile, readFile } from '../common/Platform';
 import { Model } from '../Editor';
 import { Project } from './Project';
@@ -316,7 +316,7 @@ class Node extends Serializable {
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Node.getBindings(additionnalBinding));
 		this.content.write(json);
-		Utils.writeList(this.children, json, Node.JSON_CHILDREN);
+		Serializable.writeList(this.children, json, Node.JSON_CHILDREN);
 	}
 }
 

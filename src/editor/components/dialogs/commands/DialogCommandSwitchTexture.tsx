@@ -139,7 +139,6 @@ function DialogCommandSwitchTexture({ commandKind, isOpen, setIsOpen, list, onAc
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

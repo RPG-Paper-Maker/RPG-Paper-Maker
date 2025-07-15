@@ -10,8 +10,8 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
-import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
+import PixelIcon from '../../assets/icons/pixel.svg?react';
+import SquareIcon from '../../assets/icons/square.svg?react';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import Flex from './Flex';
@@ -132,21 +132,18 @@ function MapEditorDetection({
 				cancelAnimationFrame(Scene.Map.positionSelectorAnimationFrameID);
 			};
 		}
-		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		if (Scene.Map.currentpositionSelector && boxes) {
 			Scene.Map.currentpositionSelector.initializeDetectionBoxes(boxes);
 		}
-		// eslint-disable-next-line
 	}, [Scene.Map.currentpositionSelector, boxes]);
 
 	useEffect(() => {
 		if (Scene.Map.currentpositionSelector) {
 			Scene.Map.currentpositionSelector.updateDetectionGrid(fieldLeft, fieldRight, fieldTop, fieldBot);
 		}
-		// eslint-disable-next-line
 	}, [Scene.Map.currentpositionSelector, fieldLeft, fieldRight, fieldTop, fieldBot]);
 
 	useEffect(() => {
@@ -158,7 +155,6 @@ function MapEditorDetection({
 			Scene.Map.currentpositionSelector.detectionCurrentData!.heightSquare = newBoxHeightSquares;
 			Scene.Map.currentpositionSelector.detectionCurrentData!.heightPixel = newBoxHeightPixels;
 		}
-		// eslint-disable-next-line
 	}, [
 		Scene.Map.currentpositionSelector,
 		newBoxLengthSquares,

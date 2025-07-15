@@ -104,15 +104,15 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeTextures = async () => {
-		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Assets/cursor.png');
-		Scene.Map.materialObjectSquareCursor = await Manager.GL.loadTexture('./Assets/object-square-cursor.png');
-		Scene.Map.materialObjectSquare = await Manager.GL.loadTexture('./Assets/object-square.png');
-		Scene.Map.materialDetectionBox = await Manager.GL.loadTexture('./Assets/detection-box.png');
-		Scene.Map.materialDetectionArrow = await Manager.GL.loadTexture('./Assets/detection-arrow.png');
-		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
-		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
-		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');
-		Picture2D.PICTURE_DIRECTION = await Picture2D.loadImage('./Assets/direction.png');
+		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Pictures/cursor.png');
+		Scene.Map.materialObjectSquareCursor = await Manager.GL.loadTexture('./Pictures/object-square-cursor.png');
+		Scene.Map.materialObjectSquare = await Manager.GL.loadTexture('./Pictures/object-square.png');
+		Scene.Map.materialDetectionBox = await Manager.GL.loadTexture('./Pictures/detection-box.png');
+		Scene.Map.materialDetectionArrow = await Manager.GL.loadTexture('./Pictures/detection-arrow.png');
+		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Pictures/tileset-cursor.png');
+		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Pictures/cursor-layers-on.svg');
+		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Pictures/start-position.png');
+		Picture2D.PICTURE_DIRECTION = await Picture2D.loadImage('./Pictures/direction.png');
 	};
 
 	const initializeGL = async () => {
@@ -148,7 +148,6 @@ function PanelLoading({ setLoaded }: Props) {
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		// eslint-disable-next-line
 	}, []);
 
 	if (!displayLoader) {

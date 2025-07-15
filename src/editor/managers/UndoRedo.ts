@@ -10,10 +10,11 @@
 */
 
 import { MapElement, Model, Scene } from '../Editor';
-import { ELEMENT_MAP_KIND, JSONType, Paths, Utils } from '../common';
+import { ELEMENT_MAP_KIND, JSONType, Paths } from '../common';
 import { createFile, getFiles, readFile, removeFile, renameFile } from '../common/Platform';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
@@ -61,7 +62,7 @@ class UndoRedo {
 		const states: UndoRedoState[] = [];
 		const content = await readFile(this.getPathStatesAt(index));
 		if (content !== null) {
-			Utils.readList(states, JSON.parse(content), UndoRedoState);
+			Serializable.readList(states, JSON.parse(content), UndoRedoState);
 		}
 		return states;
 	}

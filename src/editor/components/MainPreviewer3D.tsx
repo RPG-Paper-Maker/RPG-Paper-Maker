@@ -151,7 +151,6 @@ function MainPreviewer3D({ id }: Props) {
 
 	useEffect(() => {
 		update().catch(console.error);
-		// eslint-disable-next-line
 	}, [
 		currentTilesetFloorTexture,
 		currentTilesetSpriteTexture,
@@ -178,7 +177,6 @@ function MainPreviewer3D({ id }: Props) {
 			window.removeEventListener('resize', resize);
 			Scene.Previewer3D.mainPreviewerScene = null;
 		};
-		// eslint-disable-next-line
 	}, []);
 
 	return <div className='fillWidth' ref={refCanvas} id={id} />;

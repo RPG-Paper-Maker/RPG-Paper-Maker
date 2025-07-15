@@ -79,7 +79,6 @@ function InputNumber({
 
 	useEffect(() => {
 		setDisplayedValue(transformValueToText(value));
-		// eslint-disable-next-line
 	}, [value]);
 
 	return (

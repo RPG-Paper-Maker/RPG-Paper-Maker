@@ -65,7 +65,6 @@ function DialogChangeLanguage({ isOpen, setIsOpen }: Props) {
 		if (isOpen) {
 			initialize();
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

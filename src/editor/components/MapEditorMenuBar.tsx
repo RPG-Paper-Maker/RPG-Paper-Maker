@@ -21,14 +21,14 @@ import { PiSelectionAllFill } from 'react-icons/pi';
 import { TbHandMove } from 'react-icons/tb';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as DoubleSpriteIcon } from '../../assets/icons/double-sprite.svg';
-import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
-import { ReactComponent as FixSpriteIcon } from '../../assets/icons/fix-sprite.svg';
-import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
-import { ReactComponent as LayersOffIcon } from '../../assets/icons/layers-off.svg';
-import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
-import { ReactComponent as QuadraSpriteIcon } from '../../assets/icons/quadra-sprite.svg';
-import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
+import DoubleSpriteIcon from '../../assets/icons/double-sprite.svg?react';
+import FaceSpriteIcon from '../../assets/icons/face-sprite.svg?react';
+import FixSpriteIcon from '../../assets/icons/fix-sprite.svg?react';
+import FloorIcon from '../../assets/icons/floor.svg?react';
+import LayersOffIcon from '../../assets/icons/layers-off.svg?react';
+import PixelIcon from '../../assets/icons/pixel.svg?react';
+import QuadraSpriteIcon from '../../assets/icons/quadra-sprite.svg?react';
+import SquareIcon from '../../assets/icons/square.svg?react';
 import { Scene } from '../Editor';
 import {
 	ACTION_KIND,
@@ -379,7 +379,6 @@ function MapEditorMenuBar() {
 			dispatch(setCurrentLayerKind(Project.current!.settings.mapEditorCurrentLayerIndex));
 			setMobileIndex(Project.current!.settings.mapEditorMobileActionIndex);
 		}
-		// eslint-disable-next-line
 	}, [openLoading]);
 
 	useEffect(() => {
