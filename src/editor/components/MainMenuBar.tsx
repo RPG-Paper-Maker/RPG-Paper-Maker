@@ -27,7 +27,7 @@ import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs
 import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
-import { LuFolders, LuSaveAll } from 'react-icons/lu';
+import { LuFolders, LuMountain, LuSaveAll } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic, MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
@@ -81,6 +81,7 @@ import {
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
+	triggerMountains,
 	triggerNewProject,
 	triggerObjects3D,
 	triggerOpenDialogProject,
@@ -140,6 +141,7 @@ function MainMenuBar() {
 	const [isDialogAutotilesOpen, setIsDialogAutotilesOpen] = useState(false);
 	const [isDialogWallsOpen, setIsDialogWallsOpen] = useState(false);
 	const [isDialogObjects3DOpen, setIsDialogObjects3DOpen] = useState(false);
+	const [isDialogMountainsOpen, setIsDialogMountainsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -504,6 +506,10 @@ function MainMenuBar() {
 		setIsDialogObjects3DOpen(true);
 	};
 
+	const handleMountains = async () => {
+		setIsDialogMountainsOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -777,6 +783,12 @@ function MainMenuBar() {
 					onClick: handleObjects3D,
 					disabled: !isProjectOpened,
 				},
+				{
+					title: `${t('mountains.tool')}...`,
+					icon: <LuMountain />,
+					onClick: handleMountains,
+					disabled: !isProjectOpened,
+				},
 			],
 		},
 		{
@@ -869,6 +881,9 @@ function MainMenuBar() {
 		} else if (triggers.objects3D) {
 			dispatch(triggerObjects3D(false));
 			handleObjects3D().catch(console.error);
+		} else if (triggers.mountains) {
+			dispatch(triggerMountains(false));
+			handleMountains().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -986,6 +1001,9 @@ function MainMenuBar() {
 				<DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={setIsDialogWallsOpen} />
 			)}
 			{isDialogObjects3DOpen && <DialogObjects3DPreview manager isOpen setIsOpen={setIsDialogObjects3DOpen} />}
+			{isDialogMountainsOpen && (
+				<DialogCollisions kind={PICTURE_KIND.MOUNTAINS} isOpen setIsOpen={setIsDialogMountainsOpen} />
+			)}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog
 				title={t('warning')}

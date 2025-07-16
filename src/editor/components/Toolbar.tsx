@@ -35,6 +35,7 @@ import {
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
+	triggerMountains,
 	triggerNewProject,
 	triggerObjects3D,
 	triggerOpenDialogProject,
@@ -143,6 +144,10 @@ function Toolbar() {
 		dispatch(triggerObjects3D(true));
 	};
 
+	const handleMountains = () => {
+		dispatch(triggerMountains(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -232,7 +237,7 @@ function Toolbar() {
 					<MenuItem icon={<BiCube />} onClick={handleObjects3D} disabled={!isProjectOpened}>
 						{t('threed.objects.tool')}
 					</MenuItem>
-					<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>
+					<MenuItem icon={<LuMountain />} onClick={handleMountains} disabled={!isProjectOpened}>
 						{t('mountains.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>

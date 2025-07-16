@@ -17,6 +17,7 @@ import { Rectangle } from '../core/Rectangle';
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
 	path: string;
+	loadingTextures: [string, boolean][];
 };
 
 type Props = {
@@ -31,12 +32,23 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		path: '',
+		loadingTextures: [],
 	})[0];
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
 	const initialize = async () => {
-		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		currentState.loadingTextures.push([texture, base64]);
+		if (currentState.loadingTextures.length === 1) {
+			while (currentState.loadingTextures.length > 0) {
+				await draw(currentState.loadingTextures[0][0], currentState.loadingTextures[0][1]);
+				currentState.loadingTextures.shift();
+			}
+		}
+	};
+
+	const draw = async (t: string, b: boolean) => {
+		const path = b ? (await LocalFile.readFile(t)) ?? '' : t;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		if (refCanvas.current) {
@@ -88,7 +100,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 
 	useEffect(() => {
 		initialize().catch(console.error);
-	}, [texture, sourceRectangle]);
+	}, [texture, base64, sourceRectangle]);
 
 	return <canvas ref={refCanvas} className={noPointer ? undefined : 'pointer'} width={'0'} height={'0'} />;
 }

@@ -36,6 +36,7 @@ import TexturePreviewer from '../TexturePreviewer';
 import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
+import useStateString from '../../hooks/useStateString';
 
 type Props = {
 	isOpen: boolean;
@@ -60,6 +61,9 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	const [mountains, setMountains] = useState<Node[]>([]);
 	const [selectedMountain, setSelectedMountain] = useState<Mountain | null>(null);
 	const [mountainCollisionKind, setMountainCollisionKind] = useState(MOUNTAIN_COLLISION_KIND.DEFAULT);
+	const [mountainPictureID, setMountainPictureID] = useStateNumber();
+	const [mountainPicturePath, setMountainPicturePath] = useStateString();
+	const [mountainPictureIsBR, setMountainPictureIsBR] = useStateBool();
 	const [objects, setObjects] = useState<Node[]>([]);
 	const [selectedObject, setSelectedObject] = useState<Object3D | null>(null);
 	const [objectCollisionKind, setObjectCollisionKind] = useState(OBJECT_COLLISION_KIND.NONE);
@@ -72,6 +76,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 				return 'walls';
 			case PICTURE_KIND.OBJECTS_3D:
 				return 'threed.objects';
+			case PICTURE_KIND.MOUNTAINS:
+				return 'mountains';
 			default:
 				return 'collisions.manager';
 		}
@@ -85,6 +91,10 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		[selectedAutotile]
 	);
 	const isWallDisabled = useMemo(() => selectedWall === null || selectedWall.id === -1, [selectedWall]);
+	const isMountainDisabled = useMemo(
+		() => selectedMountain === null || selectedMountain.id === -1,
+		[selectedMountain]
+	);
 
 	const initialize = () => {
 		if (kind === undefined) {
@@ -156,11 +166,19 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		Project.current!.specialElements.walls = Node.createListFromNodes(walls);
 	};
 
-	const handleSelectMountain = async (node: Node | null) => {
+	const handleSelectMountain = (node: Node | null) => {
 		const mountain = (node?.content as Mountain) ?? null;
 		setSelectedMountain(mountain);
 		if (mountain) {
 			setMountainCollisionKind(mountain.collisionKind);
+			if (kind === PICTURE_KIND.MOUNTAINS) {
+				const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, mountain.pictureID);
+				setMountainPictureID(mountain.pictureID);
+				if (picture) {
+					setMountainPicturePath(picture.getPath());
+					setMountainPictureIsBR(picture.isBR);
+				}
+			}
 		}
 	};
 
@@ -172,6 +190,18 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		if (selectedMountain) {
 			setMountainCollisionKind(n);
 			selectedMountain.collisionKind = n;
+		}
+	};
+
+	const handleChangeMountainPictureID = async (id: number) => {
+		if (selectedMountain) {
+			selectedMountain.pictureID = id;
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, id);
+			setMountainPictureID(id);
+			if (picture) {
+				setMountainPicturePath(picture.getPath());
+				setMountainPictureIsBR(picture.isBR);
+			}
 		}
 	};
 
@@ -399,7 +429,19 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 							translateOptions
 						/>
 					</Flex>
-					<TexturePreviewer texture={mountainPicture.getPath()} base64={!mountainPicture.isBR} />
+					{kind === PICTURE_KIND.MOUNTAINS && (
+						<Flex spaced centerV>
+							<Flex disabledLabel={isMountainDisabled}>{t('texture')}:</Flex>
+							<AssetSelector
+								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+								kind={PICTURE_KIND.MOUNTAINS}
+								selectedID={mountainPictureID}
+								onChange={handleChangeMountainPictureID}
+								disabled={isMountainDisabled}
+							/>
+						</Flex>
+					)}
+					<TexturePreviewer texture={mountainPicturePath} base64={!mountainPictureIsBR} />
 				</Flex>
 			) : null
 		);
@@ -445,6 +487,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 				return getAutotilesContent();
 			case PICTURE_KIND.WALLS:
 				return getWallsContent();
+			case PICTURE_KIND.MOUNTAINS:
+				return getMountainsContent();
 			default:
 				return (
 					<Tab
