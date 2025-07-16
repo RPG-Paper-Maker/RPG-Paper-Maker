@@ -46,7 +46,7 @@
 	},
 	"scripts": {
 		"start": "vite --host --port 3000",
-		"build": "rm -rf dist && tsc -b && vite build",
+		"build": "npm run clear-packages && npm run update-mods && rm -rf dist && tsc -b && vite build",
 		"lint": "eslint ./src",
 		"electron": "electron ./index.js",
 		"update-mods": "node scripts/update-mods.mjs",
@@ -54,7 +54,10 @@
 		"generate-plugins-manifest": "node scripts/generate-plugins-manifest.mjs",
 		"update-packages": "ncu -u",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
-		"deploy-web": "bash scripts/deploy-web.sh"
+		"update-version": "node scripts/update-version.mjs",
+		"deploy-web-test": "npm run build && bash scripts/deploy-web.sh test",
+		"deploy-web": "bash scripts/deploy-web.sh prod",
+		"countdown-web": "bash scripts/countdown-web.sh"
 	},
 	"browserslist": {
 		"production": [

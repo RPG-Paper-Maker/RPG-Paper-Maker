@@ -62,7 +62,11 @@ async function copyDir(src, dest) {
 		let srcPath = path.join(src, entry.name);
 		let destPath = path.join(dest, entry.name);
 
-		entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
+		if (entry.isDirectory()) {
+			await copyDir(srcPath, destPath);
+		} else {
+			await fs.copyFile(srcPath, destPath);
+		}
 	}
 }
 
@@ -122,7 +126,7 @@ const main = async () => {
 		await copyFileAndPrint(`${webPath}howler.js`, './public/Scripts/Libs/howler.js');
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
 		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/System/Common/Platform.js');
-		console.log('Download completed!');
+		console.log('✅ Download completed!');
 	} catch (error) {
 		console.error('Error during download:', error);
 	}
