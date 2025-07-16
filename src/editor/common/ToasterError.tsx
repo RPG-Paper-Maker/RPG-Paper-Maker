@@ -8,7 +8,7 @@ import { TOASTER_OPTIONS } from './ToasterUtils';
 const originalConsoleError = console.error;
 
 const notifyError = (text: string | ReactNode) => {
-	toast.error(text, TOASTER_OPTIONS);
+	toast.error(text, { ...TOASTER_OPTIONS, autoClose: false });
 };
 
 const copyToClipboard = async (text: string): Promise<void> => {
@@ -42,34 +42,25 @@ console.error = (...args) => {
 	});
 
 	notifyError(
-		<div>
+		<div
+			style={{
+				maxWidth: '250px',
+				overflow: 'auto',
+			}}
+		>
 			<strong>
-				<div style={{ display: 'flex' }}>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 					Error:
 					<Button onClick={() => copyToClipboard(message)}>
 						<FaRegCopy />
 					</Button>
 				</div>
 			</strong>
-			<pre
-				style={{
-					maxWidth: '250px',
-					overflow: 'auto',
-				}}
-			>
-				{message}
-			</pre>
+			<pre>{message}</pre>
 			{stack && (
 				<details>
 					<summary>Stack Trace</summary>
-					<pre
-						style={{
-							maxWidth: '250px',
-							overflow: 'auto',
-						}}
-					>
-						{stack}
-					</pre>
+					<pre>{stack}</pre>
 				</details>
 			)}
 		</div>
@@ -85,9 +76,14 @@ window.onerror = function (message, source, lineno, colno, error) {
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
 
 	notifyError(
-		<div>
+		<div
+			style={{
+				maxWidth: '250px',
+				overflow: 'auto',
+			}}
+		>
 			<strong>
-				<div style={{ display: 'flex' }}>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 					Error:
 					<Button onClick={() => copyToClipboard(message as string)}>
 						<FaRegCopy />
@@ -97,14 +93,7 @@ window.onerror = function (message, source, lineno, colno, error) {
 			<pre>{message as string}</pre>
 			<details>
 				<summary>Stack Trace</summary>
-				<pre
-					style={{
-						maxWidth: '250px',
-						overflow: 'auto',
-					}}
-				>
-					{stack}
-				</pre>
+				<pre>{stack}</pre>
 			</details>
 		</div>
 	);
@@ -119,9 +108,14 @@ window.addEventListener('unhandledrejection', (event) => {
 	const stack = reason?.stack || '';
 
 	notifyError(
-		<div>
+		<div
+			style={{
+				maxWidth: '250px',
+				overflow: 'auto',
+			}}
+		>
 			<strong>
-				<div style={{ display: 'flex' }}>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 					Error:
 					<Button onClick={() => copyToClipboard(message)}>
 						<FaRegCopy />
@@ -132,14 +126,7 @@ window.addEventListener('unhandledrejection', (event) => {
 			{stack && (
 				<details>
 					<summary>Stack Trace</summary>
-					<pre
-						style={{
-							maxWidth: '250px',
-							overflow: 'auto',
-						}}
-					>
-						{stack}
-					</pre>
+					<pre>{stack}</pre>
 				</details>
 			)}
 		</div>
