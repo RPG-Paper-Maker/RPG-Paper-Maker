@@ -53,7 +53,8 @@
 		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",
 		"generate-plugins-manifest": "node scripts/generate-plugins-manifest.mjs",
 		"update-packages": "ncu -u",
-		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install"
+		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
+		"deploy-web": "bash scripts/deploy-web.sh"
 	},
 	"browserslist": {
 		"production": [

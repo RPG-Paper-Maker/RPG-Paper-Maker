@@ -20,8 +20,6 @@
     "noEmit": true,
     "downlevelIteration": true,
     "jsx": "react-jsx",
-    "incremental": false,
-    "composite": false
   },
   "include": [
     "src",
