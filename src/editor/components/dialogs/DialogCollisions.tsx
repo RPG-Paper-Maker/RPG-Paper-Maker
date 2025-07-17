@@ -11,6 +11,7 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import {
 	CUSTOM_SHAPE_KIND,
 	MOUNTAIN_COLLISION_KIND,
@@ -23,7 +24,9 @@ import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
+import useStateString from '../../hooks/useStateString';
 import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, Tileset } from '../../models';
+import { setNeedsReloadMap } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
@@ -36,7 +39,6 @@ import TexturePreviewer from '../TexturePreviewer';
 import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import useStateString from '../../hooks/useStateString';
 
 type Props = {
 	isOpen: boolean;
@@ -67,6 +69,8 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	const [objects, setObjects] = useState<Node[]>([]);
 	const [selectedObject, setSelectedObject] = useState<Object3D | null>(null);
 	const [objectCollisionKind, setObjectCollisionKind] = useState(OBJECT_COLLISION_KIND.NONE);
+
+	const dispatch = useDispatch();
 
 	const title = useMemo(() => {
 		switch (kind) {
@@ -240,6 +244,9 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 			selectedObject !== null
 		) {
 			await Project.current!.specialElements.save();
+		}
+		if (kind !== undefined) {
+			dispatch(setNeedsReloadMap());
 		}
 		setIsOpen(false);
 	};

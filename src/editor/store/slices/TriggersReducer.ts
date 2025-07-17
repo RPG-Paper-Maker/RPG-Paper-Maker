@@ -31,6 +31,8 @@ const TriggersSlice = createSlice({
 			systems: false,
 			variables: false,
 			collisions: false,
+			keyboard: false,
+			languages: false,
 			plugins: false,
 			pictures: false,
 			videos: false,
@@ -81,6 +83,12 @@ const TriggersSlice = createSlice({
 		},
 		triggerCollisions(state, action: PayloadAction<boolean>) {
 			state.mainBar.collisions = action.payload;
+		},
+		triggerKeyboard(state, action: PayloadAction<boolean>) {
+			state.mainBar.keyboard = action.payload;
+		},
+		triggerLanguages(state, action: PayloadAction<boolean>) {
+			state.mainBar.languages = action.payload;
 		},
 		triggerPlugins(state, action: PayloadAction<boolean>) {
 			state.mainBar.plugins = action.payload;
@@ -150,6 +158,8 @@ export const {
 	triggerSystems,
 	triggerVariables,
 	triggerCollisions,
+	triggerKeyboard,
+	triggerLanguages,
 	triggerPlugins,
 	triggerPictures,
 	triggerSongs,

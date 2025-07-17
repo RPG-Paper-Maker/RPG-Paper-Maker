@@ -101,6 +101,47 @@ class Languages extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_LANGS);
 	}
 
+	public getTranslationsMapping = () => {
+		return {
+			'load.game': this.loadAGame,
+			'load.game.description': this.loadAGameDescription,
+			'slot.name': this.slot,
+			empty: this.empty,
+			'save.game': this.saveAGame,
+			'save.game.description': this.saveAGameDescription,
+			'keyboard.assignments': this.keyboardAssignment,
+			'keyboard.assignments.description': this.keyboardAssignmentDescription,
+			'keyboard.assignments.selected.description': this.keyboardAssignmentSelectedDescription,
+			language: this.language,
+			'language.description': this.languageDescription,
+			'language.selected.description': this.languageSelectedDescription,
+			'confirm.question': this.confirm,
+			ok: this.ok,
+			yes: this.yes,
+			no: this.no,
+			add: this.add,
+			remove: this.remove,
+			shop: this.shop,
+			buy: this.buy,
+			sell: this.sell,
+			owned: this.owned,
+			'select.an.ally': this.selectAnAlly,
+			victory: this.victory,
+			defeat: this.defeat,
+			'level.up': this.levelUp,
+			precision: this.precision,
+			critical: this.critical,
+			damage: this.damage,
+			heal: this.heal,
+			skill: this.skill,
+			'perform.skill': this.performSkill,
+			loading: this.loading,
+			'equip.question': this.equipQuestion,
+			'press.any.keys': this.pressAnyKeys,
+			target: this.target,
+		};
+	};
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Languages.getBindings(additionnalBinding));
 	}

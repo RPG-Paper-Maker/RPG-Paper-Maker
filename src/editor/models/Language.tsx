@@ -9,17 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, JSONType, LANGUAGE_KIND } from '../common';
+import { BINDING, JSONType } from '../common';
+import DialogLanguage from '../components/dialogs/models/DialogLanguage';
 import { BindingType } from '../core/Serializable';
-import { Base } from './Base';
+import { Base, DIALOG_OPTIONS } from './Base';
 
 class Language extends Base {
-	public kind!: LANGUAGE_KIND;
+	public kind!: number;
 
 	public static bindings: BindingType[] = [['kind', 'kind', undefined, BINDING.NUMBER]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Language.getBindings(additionnalBinding));
+		this.kind = 0;
+	}
+
+	getDialog(options: DIALOG_OPTIONS) {
+		return <DialogLanguage {...options} />;
 	}
 
 	copy(language: Language, additionnalBinding: BindingType[] = []): void {

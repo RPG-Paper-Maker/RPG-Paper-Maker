@@ -17,7 +17,7 @@ import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
-import { showWarning } from '../../store';
+import { setNeedsReloadMap, showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
@@ -178,6 +178,9 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 			if (selectedObject3D) {
 				onAccept?.(selectedObject3D);
 			}
+			if (manager) {
+				dispatch(setNeedsReloadMap());
+			}
 			setIsOpen(false);
 		}
 	};
@@ -185,6 +188,9 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 	const handleReject = async () => {
 		onReject?.();
 		await Project.current!.specialElements.load();
+		if (manager) {
+			await Project.current!.pictures.load();
+		}
 		setIsOpen(false);
 	};
 

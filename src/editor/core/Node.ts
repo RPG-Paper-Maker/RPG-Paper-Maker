@@ -82,6 +82,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	SpecialElement: () => Model.SpecialElement,
 	Mountain: () => Model.Mountain,
 	Object: () => Model.Object3D,
+	Language: () => Model.Language,
 };
 
 class Node extends Serializable {

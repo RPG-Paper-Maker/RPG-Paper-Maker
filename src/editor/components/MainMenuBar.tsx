@@ -27,7 +27,7 @@ import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs
 import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
-import { LuFolders, LuMountain, LuSaveAll } from 'react-icons/lu';
+import { LuFolders, LuLanguages, LuMountain, LuSaveAll } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic, MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
@@ -81,6 +81,7 @@ import {
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
+	triggerLanguages,
 	triggerMountains,
 	triggerNewProject,
 	triggerObjects3D,
@@ -106,6 +107,7 @@ import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
+import DialogLanguages from './dialogs/DialogLanguages';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPictures from './dialogs/DialogPictures';
@@ -132,6 +134,7 @@ function MainMenuBar() {
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
 	const [isDialogCollisionsOpen, setIsDialogCollisionsOpen] = useState(false);
+	const [isDialogLanguagesOpen, setIsDialogLanguagesOpen] = useState(false);
 	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
 	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
@@ -470,6 +473,10 @@ function MainMenuBar() {
 		setIsDialogCollisionsOpen(true);
 	};
 
+	const handleLanguagesManager = async () => {
+		setIsDialogLanguagesOpen(true);
+	};
+
 	const handlePluginsManager = async () => {
 		setIsDialogPluginsOpen(true);
 	};
@@ -730,6 +737,12 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
+					title: `${t('languages.manager')}...`,
+					icon: <LuLanguages />,
+					onClick: handleLanguagesManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('plugins.manager')}...`,
 					icon: <FaPlug />,
 					onClick: handlePluginsManager,
@@ -857,6 +870,9 @@ function MainMenuBar() {
 		} else if (triggers.plugins) {
 			dispatch(triggerPlugins(false));
 			handlePluginsManager().catch(console.error);
+		} else if (triggers.languages) {
+			dispatch(triggerLanguages(false));
+			handleLanguagesManager().catch(console.error);
 		} else if (triggers.pictures) {
 			dispatch(triggerPictures(false));
 			handlePicturesManager().catch(console.error);
@@ -988,6 +1004,7 @@ function MainMenuBar() {
 			{isDialogSystemsOpen && <DialogSystems isOpen setIsOpen={setIsDialogSystemsOpen} />}
 			{isDialogVariablesOpen && <DialogVariables isOpen setIsOpen={setIsDialogVariablesOpen} />}
 			{isDialogCollisionsOpen && <DialogCollisions isOpen setIsOpen={setIsDialogCollisionsOpen} />}
+			{isDialogLanguagesOpen && <DialogLanguages setIsOpen={setIsDialogLanguagesOpen} />}
 			{isDialogPluginsOpen && <DialogPlugins isOpen setIsOpen={setIsDialogPluginsOpen} />}
 			{isDialogPicturesOpen && <DialogPictures isOpen setIsOpen={setIsDialogPicturesOpen} />}
 			{isDialogVideosOpen && <DialogVideos manager isOpen setIsOpen={setIsDialogVideosOpen} />}

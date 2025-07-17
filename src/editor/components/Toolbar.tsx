@@ -35,6 +35,7 @@ import {
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
+	triggerLanguages,
 	triggerMountains,
 	triggerNewProject,
 	triggerObjects3D,
@@ -106,6 +107,10 @@ function Toolbar() {
 
 	const handleCollisionsManager = () => {
 		dispatch(triggerCollisions(true));
+	};
+
+	const handleLanguagesManager = () => {
+		dispatch(triggerLanguages(true));
 	};
 
 	const handlePluginsManager = () => {
@@ -198,7 +203,7 @@ function Toolbar() {
 					<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
 						{t('keyboard.controls.tool')}
 					</MenuItem>
-					<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
+					<MenuItem icon={<LuLanguages />} onClick={handleLanguagesManager} disabled={!isProjectOpened}>
 						{t('languages.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaPlug />} onClick={handlePluginsManager} disabled={!isProjectOpened}>
