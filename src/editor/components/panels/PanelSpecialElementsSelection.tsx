@@ -307,10 +307,15 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 					<div className='content'>
 						<TextureSquareSelector
 							texture={picture.getPath()}
-							divideWidth={(element as Model.Autotile).isAnimated ? 8 : 2}
+							divideWidth={
+								(element as Model.Autotile).isAnimated
+									? 2 * Project.current!.systems.autotilesFrames
+									: 2
+							}
 							divideHeight={3}
 							canChangeSize={false}
 							base64={!picture.isBR}
+							cutTexture
 						/>
 					</div>
 				)}

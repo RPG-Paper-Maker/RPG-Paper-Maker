@@ -49,6 +49,7 @@ type Props = {
 	adjustPositionSize?: boolean;
 	doNotUpdateTexture?: boolean;
 	base64?: boolean;
+	cutTexture?: boolean;
 };
 
 function TextureSquareSelector({
@@ -65,6 +66,7 @@ function TextureSquareSelector({
 	adjustPositionSize,
 	doNotUpdateTexture = false,
 	base64 = false,
+	cutTexture = false,
 }: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 
@@ -231,16 +233,38 @@ function TextureSquareSelector({
 	const drawTexture = useCallback(
 		(ctx: CanvasRenderingContext2D) => {
 			if (currentState.picture) {
-				ctx.drawImage(
-					currentState.picture,
-					0,
-					0,
-					(currentState.picture.width * 2) / divideWidth,
-					(currentState.picture.height * 2) / divideHeight
-				);
+				if (cutTexture) {
+					const cols = Math.floor(currentState.picture.width / divideWidth);
+					const rows = Math.floor(currentState.picture.height / divideHeight);
+					for (let i = 0; i < cols; i++) {
+						for (let j = 0; j < rows; j++) {
+							const x = i * (currentState.picture.width / cols) * Project.SQUARE_SIZE;
+							const y = j * (currentState.picture.height / rows) * Project.SQUARE_SIZE;
+							ctx.drawImage(
+								currentState.picture,
+								x,
+								y,
+								Project.SQUARE_SIZE,
+								Project.SQUARE_SIZE,
+								i * 2 * Project.SQUARE_SIZE,
+								j * 2 * Project.SQUARE_SIZE,
+								Project.SQUARE_SIZE * 2,
+								Project.SQUARE_SIZE * 2
+							);
+						}
+					}
+				} else {
+					ctx.drawImage(
+						currentState.picture,
+						0,
+						0,
+						(currentState.picture.width * 2) / divideWidth,
+						(currentState.picture.height * 2) / divideHeight
+					);
+				}
 			}
 		},
-		[currentState, divideWidth, divideHeight]
+		[currentState, divideWidth, divideHeight, cutTexture]
 	);
 
 	const drawSelection = (ctx: CanvasRenderingContext2D, rect: Rectangle, opacity = 1) => {
