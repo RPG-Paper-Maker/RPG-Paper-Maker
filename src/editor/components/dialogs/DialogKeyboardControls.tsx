@@ -38,11 +38,13 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 
 	const handleAccept = async () => {
 		await Project.current!.keyboard.save();
+		await EngineSettings.current!.save();
 		setIsOpen(false);
 	};
 
 	const handleReject = async () => {
 		await Project.current!.keyboard.load();
+		await EngineSettings.current!.load();
 		setIsOpen(false);
 	};
 

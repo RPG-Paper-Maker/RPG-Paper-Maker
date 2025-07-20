@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import * as THREE from 'three';
-import { KEY } from '../common';
+import { EngineSettings } from '../data';
 import { MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import { CustomGeometry } from './CustomGeometry';
@@ -78,27 +78,29 @@ class Cursor {
 				this.map.detectionFieldRight === undefined ? this.map.model.length - 1 : this.map.detectionFieldRight;
 			const maxZ =
 				this.map.detectionFieldBot === undefined ? this.map.model.width - 1 : this.map.detectionFieldBot;
-			for (const key of Inputs.keys) {
-				let xPlus = 0;
-				let zPlus = 0;
-				switch (key.toUpperCase()) {
-					case KEY.W: // UP
-						xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
-						zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
-						break;
-					case KEY.S: // DOWN
-						xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
-						zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
-						break;
-					case KEY.A: // LEFT
-						xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
-						zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
-						break;
-					case KEY.D: // RIGHT
-						xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
-						zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
-						break;
-				}
+			let xPlus = 0;
+			let zPlus = 0;
+			if (EngineSettings.current!.getKeyboardCursorUp().isPressed(Inputs.keys)) {
+				xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
+				zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
+				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+			}
+			if (EngineSettings.current!.getKeyboardCursorDown().isPressed(Inputs.keys)) {
+				xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
+				zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
+				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+			}
+			if (EngineSettings.current!.getKeyboardCursorLeft().isPressed(Inputs.keys)) {
+				xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
+				zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
+				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+			}
+			if (EngineSettings.current!.getKeyboardCursorRight().isPressed(Inputs.keys)) {
+				xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
+				zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
 				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
 				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
 			}

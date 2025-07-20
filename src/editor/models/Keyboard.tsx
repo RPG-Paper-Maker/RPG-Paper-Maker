@@ -46,6 +46,22 @@ class Keyboard extends Localization {
 		return keyboard;
 	}
 
+	isPressed(keys: string[]): boolean {
+		for (const list of this.shortcuts) {
+			let test = true;
+			for (const key of list) {
+				if (!keys.includes(key)) {
+					test = false;
+					break;
+				}
+			}
+			if (test) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(Keyboard.getBindings(additionnalBinding));
 		this.abbreviation = '';

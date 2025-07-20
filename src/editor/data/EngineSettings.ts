@@ -9,12 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import i18next from 'i18next';
 import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { BindingType, Serializable } from '../core/Serializable';
 import { Keyboard, ProjectPreview } from '../models';
-
-const { t } = i18next;
 
 class EngineSettings extends Serializable {
 	public static current: EngineSettings;
@@ -46,6 +43,22 @@ class EngineSettings extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
+	}
+
+	getKeyboardCursorUp(): Keyboard {
+		return this.keyboardControls[0];
+	}
+
+	getKeyboardCursorDown(): Keyboard {
+		return this.keyboardControls[1];
+	}
+
+	getKeyboardCursorLeft(): Keyboard {
+		return this.keyboardControls[2];
+	}
+
+	getKeyboardCursorRight(): Keyboard {
+		return this.keyboardControls[3];
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
