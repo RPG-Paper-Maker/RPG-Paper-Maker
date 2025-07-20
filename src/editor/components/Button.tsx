@@ -10,6 +10,7 @@
 */
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { RxCross2 } from 'react-icons/rx';
 import { BUTTON_TYPE, Utils } from '../common';
 import '../styles/Button.css';
 
@@ -29,6 +30,7 @@ type Props = {
 	onClick?: () => void;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
+	onClose?: () => void;
 };
 
 function Button({
@@ -47,6 +49,7 @@ function Button({
 	onClick,
 	onMouseEnter,
 	onMouseLeave,
+	onClose,
 }: Props) {
 	const [activeState, setActiveState] = useState(active);
 	const ref = useRef<HTMLButtonElement>(null);
@@ -106,6 +109,7 @@ function Button({
 		>
 			{icon}
 			{children}
+			{onClose && <RxCross2 onClick={onClose} />}
 		</button>
 	);
 }

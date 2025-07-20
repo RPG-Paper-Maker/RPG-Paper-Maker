@@ -12,6 +12,7 @@
 import { ReactNode } from 'react';
 import { BINDING, ITERATOR, JSONType } from '../common';
 import DialogLocalization from '../components/dialogs/models/DialogLocalization';
+import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
@@ -35,7 +36,7 @@ class Localization extends Base {
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(Localization.getBindings(additionnalBinding));
 		this.names = new Map();
-		this.names.set('1', '');
+		this.names.set('' + Project.current!.languages.list[0].id, '');
 	}
 
 	initializeCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
@@ -52,12 +53,12 @@ class Localization extends Base {
 	}
 
 	getName(): string {
-		return this.names.get('1') ?? '';
+		return this.names.get('' + Project.current!.languages.list[0].id) ?? '';
 	}
 
 	updateMainName(name: string) {
 		this.name = name;
-		this.names.set('1', name);
+		this.names.set('' + Project.current!.languages.list[0].id, name);
 	}
 
 	getDialog(options: DIALOG_OPTIONS): ReactNode {

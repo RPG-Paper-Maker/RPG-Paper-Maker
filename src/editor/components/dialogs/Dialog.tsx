@@ -15,6 +15,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { useDispatch } from 'react-redux';
 import { Utils } from '../../common/Utils';
 import { Inputs } from '../../managers';
+import { setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
 import '../../styles/Footer.css';
@@ -260,8 +261,11 @@ function Dialog({
 	}, [isOpen]);
 
 	useEffect(() => {
+		Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
+		dispatch(setDialogsOpen(!Inputs.isMapFocused));
 		return () => {
 			Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
+			dispatch(setDialogsOpen(!Inputs.isMapFocused));
 		};
 	}, []);
 

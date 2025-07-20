@@ -26,6 +26,7 @@ const ProjectsSlice = createSlice({
 		menuIndex: 1,
 		copiedItems: null as CopiedItemsType | null,
 		warning: '',
+		dialogsOpen: false,
 	},
 	reducers: {
 		setCurrentProject(state, action: PayloadAction<Model.ProjectPreview | null>) {
@@ -56,6 +57,9 @@ const ProjectsSlice = createSlice({
 		showWarning(state, action: PayloadAction<string>) {
 			state.warning = action.payload;
 		},
+		setDialogsOpen(state, action: PayloadAction<boolean>) {
+			state.dialogsOpen = action.payload;
+		},
 	},
 });
 
@@ -69,5 +73,6 @@ export const {
 	setProjectMenuIndex,
 	setCopiedItems,
 	showWarning,
+	setDialogsOpen,
 } = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

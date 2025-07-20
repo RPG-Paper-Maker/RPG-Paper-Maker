@@ -9,9 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { BindingType, Serializable } from '../core/Serializable';
-import { ProjectPreview } from '../models';
+import { Keyboard, ProjectPreview } from '../models';
+
+const { t } = i18next;
 
 class EngineSettings extends Serializable {
 	public static current: EngineSettings;
@@ -19,15 +22,26 @@ class EngineSettings extends Serializable {
 	public recentProjects!: ProjectPreview[];
 	public currentLanguage!: string;
 	public showTipsGridHeight!: boolean;
+	public keyboardControls!: Keyboard[];
 
 	public static readonly bindings: BindingType[] = [
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
 		['currentLanguage', 'cl', undefined, BINDING.STRING],
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
+		['keyboardControls', 'kc', [], BINDING.LIST, Keyboard],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...EngineSettings.bindings, ...additionnalBinding];
+	}
+
+	applyDefault() {
+		this.keyboardControls = [
+			Keyboard.createKeyboard(1, 'move.cursor.up', 'CursorUp', [['ArrowUp'], ['w']]),
+			Keyboard.createKeyboard(2, 'move.cursor.down', 'CursorDown', [['ArrowDown'], ['s']]),
+			Keyboard.createKeyboard(3, 'move.cursor.left', 'CursorLeft', [['ArrowLeft'], ['a']]),
+			Keyboard.createKeyboard(4, 'move.cursor.right', 'CursorRight', [['ArrowRight'], ['d']]),
+		];
 	}
 
 	getPath(): string {
@@ -36,6 +50,9 @@ class EngineSettings extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, EngineSettings.getBindings(additionnalBinding));
+		for (const keyboard of this.keyboardControls) {
+			keyboard.isEngine = true;
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

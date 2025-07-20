@@ -6,6 +6,43 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 		<meta name="theme-color" content="#000000" />
 		<title>RPG Paper Maker</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			#three-d {
+				margin: 0;
+				padding: 0;
+				overflow: auto;
+				position: absolute;
+			}
+			#video-container {
+				margin: 0;
+				padding: 0;
+				overflow: auto;
+				position: absolute;
+			}
+			#hud {
+				position: absolute;
+				margin: 0;
+				padding: 0;
+			}
+			#rendering {
+				display: none;
+				overflow: hidden;
+				background-color: green;
+			}
+			.hidden {
+				display: none;
+			}
+			canvas {
+				font-smooth: never;
+				-webkit-font-smoothing: none;
+				image-rendering: pixelated;
+			}
+		</style>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>

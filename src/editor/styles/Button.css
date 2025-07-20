@@ -22,6 +22,10 @@ button {
 	gap: 5px;
 	font-size: 12px;
 	height: 20px;
+
+	&:has(svg:hover) {
+		color: var(--orange-color);
+	}
 }
 
 button.primary {

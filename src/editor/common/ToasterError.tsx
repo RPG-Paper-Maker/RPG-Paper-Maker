@@ -1,8 +1,9 @@
-// errorLogger.js
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
+import { TiDelete } from 'react-icons/ti';
 import { toast } from 'react-toastify';
-import Button from '../components/Button';
+import { LocalFile } from '../core/LocalFile';
+import '../styles/ToasterError.css';
 import { TOASTER_OPTIONS } from './ToasterUtils';
 
 const originalConsoleError = console.error;
@@ -40,32 +41,7 @@ console.error = (...args) => {
 			message += String(arg) + '\n';
 		}
 	});
-
-	notifyError(
-		<div
-			style={{
-				maxWidth: '250px',
-				overflow: 'auto',
-			}}
-		>
-			<strong>
-				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-					Error:
-					<Button onClick={() => copyToClipboard(message)}>
-						<FaRegCopy />
-					</Button>
-				</div>
-			</strong>
-			<pre>{message}</pre>
-			{stack && (
-				<details>
-					<summary>Stack Trace</summary>
-					<pre>{stack}</pre>
-				</details>
-			)}
-		</div>
-	);
-
+	notifyError(<ToasterError message={message} stack={stack} />);
 	originalConsoleError(...args);
 };
 
@@ -74,29 +50,7 @@ window.onerror = function (message, source, lineno, colno, error) {
 		return;
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
-
-	notifyError(
-		<div
-			style={{
-				maxWidth: '250px',
-				overflow: 'auto',
-			}}
-		>
-			<strong>
-				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-					Error:
-					<Button onClick={() => copyToClipboard(message as string)}>
-						<FaRegCopy />
-					</Button>
-				</div>
-			</strong>
-			<pre>{message as string}</pre>
-			<details>
-				<summary>Stack Trace</summary>
-				<pre>{stack}</pre>
-			</details>
-		</div>
-	);
+	notifyError(<ToasterError message={message as string} stack={stack} />);
 };
 
 window.addEventListener('unhandledrejection', (event) => {
@@ -106,31 +60,7 @@ window.addEventListener('unhandledrejection', (event) => {
 	const reason = event.reason;
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
-
-	notifyError(
-		<div
-			style={{
-				maxWidth: '250px',
-				overflow: 'auto',
-			}}
-		>
-			<strong>
-				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-					Error:
-					<Button onClick={() => copyToClipboard(message)}>
-						<FaRegCopy />
-					</Button>
-				</div>
-			</strong>
-			<pre>{message}</pre>
-			{stack && (
-				<details>
-					<summary>Stack Trace</summary>
-					<pre>{stack}</pre>
-				</details>
-			)}
-		</div>
-	);
+	notifyError(<ToasterError message={message} stack={stack} />);
 });
 
 const notifyWarning = (text: string | ReactNode) => {
@@ -157,3 +87,62 @@ console.warn = (...args) => {
 	notifyWarning(`Warning: ${message}`);
 	originalConsoleWarn(...args);
 };
+
+type Props = {
+	message: string;
+	stack: string;
+};
+
+function ToasterError({ message, stack }: Props) {
+	const refDialog = useRef<HTMLDivElement>(null);
+
+	const handleClickClearCache = () => {
+		refDialog.current!.classList.add('open');
+	};
+
+	const handleClickClearCacheConfirm = async () => {
+		refDialog.current!.classList.add('loading');
+		const all = await LocalFile.allStorage();
+		for (const path of all) {
+			await LocalFile.brutRemove(path);
+		}
+		refDialog.current!.classList.add('done');
+	};
+
+	return (
+		<>
+			<div
+				style={{
+					maxWidth: '250px',
+					overflow: 'auto',
+				}}
+			>
+				<strong>
+					<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+						Error:
+						<button onClick={() => copyToClipboard(message)}>
+							<FaRegCopy />
+						</button>
+						<button onClick={handleClickClearCache} style={{ backgroundColor: '#de3a3c' }}>
+							<TiDelete /> Clear all cache
+						</button>
+					</div>
+				</strong>
+				<pre>{message}</pre>
+				{stack && (
+					<details>
+						<summary>Stack Trace</summary>
+						<pre>{stack}</pre>
+					</details>
+				)}
+			</div>
+			<div className={'toasterErrorDialogWarning'} ref={refDialog}>
+				This action will delete all your projects, and every settings you changed. Are you sure that you want to
+				continue?
+				<button onClick={handleClickClearCacheConfirm}>OK</button>
+			</div>
+		</>
+	);
+}
+
+export default ToasterError;

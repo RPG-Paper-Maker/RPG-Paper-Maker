@@ -12,17 +12,17 @@
 import { lazy, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
+import { Constants } from './common';
 import Flex from './components/Flex';
-const MainMenuBar = lazy(() => import('./components/MainMenuBar'));
-const PanelLoading = lazy(() => import('./components/panels/PanelLoading'));
-const PanelMain = lazy(() => import('./components/panels/PanelMain'));
+import UpdateCountdown from './components/UpdateCountdown';
 import i18n from './i18n/i18n';
 import { Inputs } from './managers/Inputs';
 import { store } from './store';
 import './styles/Editor.css';
 import './styles/Mobile.css';
-import { Constants } from './common';
-import UpdateCountdown from './components/UpdateCountdown';
+const MainMenuBar = lazy(() => import('./components/MainMenuBar'));
+const PanelLoading = lazy(() => import('./components/panels/PanelLoading'));
+const PanelMain = lazy(() => import('./components/panels/PanelMain'));
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);

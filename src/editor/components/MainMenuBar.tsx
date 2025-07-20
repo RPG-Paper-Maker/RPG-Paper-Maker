@@ -24,7 +24,7 @@ import {
 } from 'react-icons/ai';
 import { BiCube, BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug } from 'react-icons/fa';
+import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug, FaRegKeyboard } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuLanguages, LuMountain, LuSaveAll } from 'react-icons/lu';
@@ -81,6 +81,7 @@ import {
 	triggerData,
 	triggerFonts,
 	triggerImportProject,
+	triggerKeyboard,
 	triggerLanguages,
 	triggerMountains,
 	triggerNewProject,
@@ -107,6 +108,7 @@ import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
+import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
@@ -134,6 +136,7 @@ function MainMenuBar() {
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
 	const [isDialogCollisionsOpen, setIsDialogCollisionsOpen] = useState(false);
+	const [isDialogKeyboardOpen, setIsDialogKeyboardOpen] = useState(false);
 	const [isDialogLanguagesOpen, setIsDialogLanguagesOpen] = useState(false);
 	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
@@ -170,18 +173,14 @@ function MainMenuBar() {
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
 	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
+	const dialogsOpen = useSelector((state: RootState) => state.projects.dialogsOpen);
 	useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
 
 	const isProjectOpened = currentProject !== null;
-
 	const isInMap = isProjectOpened && currentTreeMapTag !== null;
-
 	const canUndo = isInMap && undoRedoIndex > -1;
-
 	const canRedo = isInMap && undoRedoIndex < undoRedoLength - 1;
-
 	const canSave = isInMap && !currentTreeMapTag.saved;
-
 	const canSaveAll = isProjectOpened && !Project.current?.treeMaps.isAllMapsSaved();
 
 	const updateProjectMenuIndex = async (index: number) => {
@@ -473,6 +472,10 @@ function MainMenuBar() {
 		setIsDialogCollisionsOpen(true);
 	};
 
+	const handleKeyboardManager = async () => {
+		setIsDialogKeyboardOpen(true);
+	};
+
 	const handleLanguagesManager = async () => {
 		setIsDialogLanguagesOpen(true);
 	};
@@ -737,6 +740,12 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
+					title: `${t('keyboard.controls')}...`,
+					icon: <FaRegKeyboard />,
+					onClick: handleKeyboardManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('languages.manager')}...`,
 					icon: <LuLanguages />,
 					onClick: handleLanguagesManager,
@@ -870,6 +879,9 @@ function MainMenuBar() {
 		} else if (triggers.plugins) {
 			dispatch(triggerPlugins(false));
 			handlePluginsManager().catch(console.error);
+		} else if (triggers.keyboard) {
+			dispatch(triggerKeyboard(false));
+			handleKeyboardManager().catch(console.error);
 		} else if (triggers.languages) {
 			dispatch(triggerLanguages(false));
 			handleLanguagesManager().catch(console.error);
@@ -966,7 +978,7 @@ function MainMenuBar() {
 					</div>
 				)}
 				<div className='mobileHidden noTitleDrag'>
-					<MenuCustom items={items} horizontal />
+					<MenuCustom items={items} horizontal allowKeyboard={!dialogsOpen} />
 				</div>
 				<Flex one />
 				{hamburgerStates.length > 0 && (
@@ -1004,6 +1016,7 @@ function MainMenuBar() {
 			{isDialogSystemsOpen && <DialogSystems isOpen setIsOpen={setIsDialogSystemsOpen} />}
 			{isDialogVariablesOpen && <DialogVariables isOpen setIsOpen={setIsDialogVariablesOpen} />}
 			{isDialogCollisionsOpen && <DialogCollisions isOpen setIsOpen={setIsDialogCollisionsOpen} />}
+			{isDialogKeyboardOpen && <DialogKeyboardControls setIsOpen={setIsDialogKeyboardOpen} />}
 			{isDialogLanguagesOpen && <DialogLanguages setIsOpen={setIsDialogLanguagesOpen} />}
 			{isDialogPluginsOpen && <DialogPlugins isOpen setIsOpen={setIsDialogPluginsOpen} />}
 			{isDialogPicturesOpen && <DialogPictures isOpen setIsOpen={setIsDialogPicturesOpen} />}

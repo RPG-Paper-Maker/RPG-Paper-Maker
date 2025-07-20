@@ -81,6 +81,7 @@ function PanelLoading({ setLoaded }: Props) {
 		EngineSettings.current = new EngineSettings();
 		if (!(await checkFileExists(EngineSettings.current.getPath()))) {
 			EngineSettings.current.read({});
+			EngineSettings.current.applyDefault();
 			await EngineSettings.current.save();
 		}
 		await EngineSettings.current.load();
