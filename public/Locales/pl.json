@@ -2073,5 +2073,6 @@
 	"warning.local.plugins.update": "Twój projekt został zaktualizowany. Możesz potrzebować zaktualizować następujące lokalne wtyczki: {{plugins}}. Preferuj wtyczki online, które są aktualizowane automatycznie przy każdej aktualizacji!",
 	"plugin.successfully.updated": "Wtyczka {{name}} została pomyślnie zaktualizowana z {{oldVersion}} do {{newVersion}}",
 	"how.convert.project.2.0": "Jak przekonwertować mój projekt 2.0?",
-	"id.already.exists.list": "Ten identyfikator już istnieje na tej liście."
+	"id.already.exists.list": "Ten identyfikator już istnieje na tej liście.",
+	"web.update.countdown.message": "RPG Paper Maker zostanie zaktualizowany {{date}} CET. Pozostały czas do konserwacji: {{timeLeft}}."
 }

@@ -2073,5 +2073,6 @@
 	"warning.local.plugins.update": "プロジェクトが更新されました。以下のローカルプラグインを更新する必要があるかもしれません：{{plugins}}。常に自動更新されるオンラインプラグインの使用を推奨します！",
 	"plugin.successfully.updated": "プラグイン {{name}} は {{oldVersion}} から {{newVersion}} に正常に更新されました",
 	"how.convert.project.2.0": "2.0 プロジェクトを変換するには？",
-	"id.already.exists.list": "このIDはすでにこのリストに存在します。"
+	"id.already.exists.list": "このIDはすでにこのリストに存在します。",
+	"web.update.countdown.message": "RPG Paper Maker は {{date}} CET に更新されます。メンテナンスまでの残り時間：{{timeLeft}}。"
 }

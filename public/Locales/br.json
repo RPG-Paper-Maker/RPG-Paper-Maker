@@ -2073,5 +2073,6 @@
 	"warning.local.plugins.update": "Seu projeto foi atualizado. Talvez você precise atualizar os seguintes plugins locais: {{plugins}}. Prefira plugins online, que são atualizados automaticamente a cada nova versão!",
 	"plugin.successfully.updated": "Plugin {{name}} atualizado com sucesso de {{oldVersion}} para {{newVersion}}",
 	"how.convert.project.2.0": "Como converter meu projeto 2.0?",
-	"id.already.exists.list": "Este ID já existe nesta lista."
+	"id.already.exists.list": "Este ID já existe nesta lista.",
+	"web.update.countdown.message": "RPG Paper Maker será atualizado em {{date}} CET. Tempo restante antes da manutenção: {{timeLeft}}."
 }

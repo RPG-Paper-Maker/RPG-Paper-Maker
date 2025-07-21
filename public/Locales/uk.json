@@ -2073,5 +2073,6 @@
 	"warning.local.plugins.update": "Ваш проєкт було оновлено. Можливо, вам потрібно оновити наступні локальні плагіни: {{plugins}}. Віддавайте перевагу онлайн-плагінам, які оновлюються автоматично при кожному оновленні!",
 	"plugin.successfully.updated": "Плагін {{name}} успішно оновлено з {{oldVersion}} до {{newVersion}}",
 	"how.convert.project.2.0": "Як конвертувати мій проєкт 2.0?",
-	"id.already.exists.list": "Цей ідентифікатор вже існує в цьому списку."
+	"id.already.exists.list": "Цей ідентифікатор вже існує в цьому списку.",
+	"web.update.countdown.message": "RPG Paper Maker буде оновлено {{date}} за CET. Час до початку обслуговування: {{timeLeft}}."
 }
