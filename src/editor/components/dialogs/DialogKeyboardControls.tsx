@@ -9,13 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data';
 import { Model } from '../../Editor';
+import Dropdown from '../Dropdown';
 import Flex from '../Flex';
+import Form, { Label, Value } from '../Form';
 import Groupbox from '../Groupbox';
 import Tree, { TREES_MIN_HEIGHT } from '../Tree';
 import Dialog from './Dialog';
@@ -28,15 +30,26 @@ type Props = {
 function DialogKeyboardControls({ setIsOpen }: Props) {
 	const { t } = useTranslation();
 
-	const [engineControls, setEngineControls] = useState<Node[]>([]);
-	//const [gameControls, setGameControls] = useState<Node[]>([]);
+	const [engineControls] = useState<Node[]>(Node.createList(EngineSettings.current!.keyboardControls, false));
+	const [gameControls] = useState<Node[]>(Node.createList(Project.current!.keyboard.list, false));
+	const [keyAction, setKeyAction] = useState(Project.current!.keyboard.keyAction);
+	const [keyCancel, setKeyCancel] = useState(Project.current!.keyboard.keyCancel);
+	const [keyUp, setKeyUp] = useState(Project.current!.keyboard.keyUp);
+	const [keyDown, setKeyDown] = useState(Project.current!.keyboard.keyDown);
+	const [keyLeft, setKeyLeft] = useState(Project.current!.keyboard.keyLeft);
+	const [keyRight, setKeyRight] = useState(Project.current!.keyboard.keyRight);
 
-	const initialize = async () => {
-		setEngineControls(Node.createList(EngineSettings.current!.keyboardControls, false));
-		//setGameControls(Node.createList(Project.current!.keyboard.list, false));
+	const handleUpdateGameControls = () => {
+		Project.current!.keyboard.list = Node.createListFromNodes(gameControls);
 	};
 
 	const handleAccept = async () => {
+		Project.current!.keyboard.keyAction = keyAction;
+		Project.current!.keyboard.keyCancel = keyCancel;
+		Project.current!.keyboard.keyUp = keyUp;
+		Project.current!.keyboard.keyDown = keyDown;
+		Project.current!.keyboard.keyLeft = keyLeft;
+		Project.current!.keyboard.keyRight = keyRight;
 		await Project.current!.keyboard.save();
 		await EngineSettings.current!.save();
 		setIsOpen(false);
@@ -47,10 +60,6 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 		await EngineSettings.current!.load();
 		setIsOpen(false);
 	};
-
-	useLayoutEffect(() => {
-		initialize().catch(console.error);
-	}, []);
 
 	return (
 		<Dialog
@@ -73,6 +82,77 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 						cannotDelete
 						cannotDragDrop
 					/>
+				</Groupbox>
+				<Groupbox title={t('game.controls')}>
+					<Flex column spacedLarge>
+						<Tree
+							constructorType={Model.Keyboard}
+							list={gameControls}
+							height={TREES_MIN_HEIGHT}
+							onListUpdated={handleUpdateGameControls}
+							noScrollOnForce
+							scrollable
+							applyDefault
+						/>
+						<Groupbox title={t('menu.controls')}>
+							<Form>
+								<Label>{t('action')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyAction}
+										onChange={setKeyAction}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+								<Label>{t('cancel')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyCancel}
+										onChange={setKeyCancel}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+								<Label>{t('up')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyUp}
+										onChange={setKeyUp}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+								<Label>{t('down')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyDown}
+										onChange={setKeyDown}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+								<Label>{t('left')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyLeft}
+										onChange={setKeyLeft}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+								<Label>{t('right')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={keyRight}
+										onChange={setKeyRight}
+										options={Project.current!.keyboard.list}
+										displayIDs
+									/>
+								</Value>
+							</Form>
+						</Groupbox>
+					</Flex>
 				</Groupbox>
 			</Flex>
 		</Dialog>

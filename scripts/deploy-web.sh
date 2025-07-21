@@ -6,7 +6,7 @@ ENV="$1"
 if [ "$ENV" == "prod" ]; then
   FOLDER_NAME="play"
 else
-  FOLDER_NAME="play-test-temp"
+  FOLDER_NAME="play-test"
 fi
 SERVER="$2"
 BUILD_DIR=dist

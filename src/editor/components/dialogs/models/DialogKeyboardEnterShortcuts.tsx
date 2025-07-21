@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrayUtils, BUTTON_TYPE } from '../../../common';
+import { Keyboard } from '../../../models';
 import Button from '../../Button';
 import Flex from '../../Flex';
 import Dialog from '../Dialog';
@@ -85,10 +86,10 @@ function DialogKeyboardEnterShortcuts({ setIsOpen, initialShortcuts, onAccept }:
 				<Flex spaced centerV wrap>
 					{shortcuts.map((shortcut, index) => (
 						<Button key={index} onClose={() => handleCloseShortcut(index)}>
-							{shortcut.join(' + ').toUpperCase()}
+							{Keyboard.toStringShortcut(shortcut)}
 						</Button>
 					))}
-					{currentEntering.length > 0 && <Button>{currentEntering.join(' + ').toUpperCase()}</Button>}
+					{currentEntering.length > 0 && <Button>{Keyboard.toStringShortcut(currentEntering)}</Button>}
 					...{currentEntering.length === 0 && `[${t('waiting.for.shortcut').toUpperCase()}]`}
 				</Flex>
 				<Button

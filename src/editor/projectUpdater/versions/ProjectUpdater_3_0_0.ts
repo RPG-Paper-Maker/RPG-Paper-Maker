@@ -352,6 +352,188 @@ class ProjectUpdater_3_0_0 {
 				await writeJSON(Paths.join(projectPath, 'troops.json'), jsonTroops);
 			}
 		}
+
+		// Update keyboard
+		const qtToKeyString = (qtKey: number): string => {
+			switch (qtKey) {
+				case 16777219:
+					return 'Backspace';
+				case 16777217:
+					return 'Tab';
+				case 16777220:
+					return 'Enter';
+				case 16777221:
+					return 'Enter';
+				case 16777248:
+					return 'Shift';
+				case 16777249:
+					return 'Control';
+				case 16777251:
+					return 'Alt';
+				case 16777224:
+					return 'Pause';
+				case 16777252:
+					return 'CapsLock';
+				case 16777216:
+					return 'Escape';
+				case 16777238:
+					return 'PageUp';
+				case 16777239:
+					return 'PageDown';
+				case 16777233:
+					return 'End';
+				case 16777250:
+					return 'Home';
+				case 16777234:
+					return 'ArrowLeft';
+				case 16777235:
+					return 'ArrowUp';
+				case 16777236:
+					return 'ArrowRight';
+				case 16777237:
+					return 'ArrowDown';
+				case 16777222:
+					return 'Insert';
+				case 16777223:
+					return 'Delete';
+				case 16777264:
+					return 'F1';
+				case 16777265:
+					return 'F2';
+				case 16777266:
+					return 'F3';
+				case 16777267:
+					return 'F4';
+				case 16777268:
+					return 'F5';
+				case 16777269:
+					return 'F6';
+				case 16777270:
+					return 'F7';
+				case 16777271:
+					return 'F8';
+				case 16777272:
+					return 'F9';
+				case 16777273:
+					return 'F10';
+				case 16777274:
+					return 'F11';
+				case 16777275:
+					return 'F12';
+				case 16777253:
+					return 'NumLock';
+				case 96:
+					return '`';
+				case 44:
+					return ',';
+				case 45:
+					return '-';
+				case 61:
+					return '=';
+				case 46:
+					return '.';
+				case 47:
+					return '/';
+				case 92:
+					return '\\';
+				case 91:
+					return '[';
+				case 93:
+					return ']';
+				case 34:
+					return '"';
+				case 59:
+					return ';';
+				case 39:
+					return "'";
+				case 32:
+					return ' ';
+				// Digits
+				case 48:
+					return '0';
+				case 49:
+					return '1';
+				case 50:
+					return '2';
+				case 51:
+					return '3';
+				case 52:
+					return '4';
+				case 53:
+					return '5';
+				case 54:
+					return '6';
+				case 55:
+					return '7';
+				case 56:
+					return '8';
+				case 57:
+					return '9';
+				// Letters
+				case 65:
+					return 'a';
+				case 66:
+					return 'b';
+				case 67:
+					return 'c';
+				case 68:
+					return 'd';
+				case 69:
+					return 'e';
+				case 70:
+					return 'f';
+				case 71:
+					return 'g';
+				case 72:
+					return 'h';
+				case 73:
+					return 'i';
+				case 74:
+					return 'j';
+				case 75:
+					return 'k';
+				case 76:
+					return 'l';
+				case 77:
+					return 'm';
+				case 78:
+					return 'n';
+				case 79:
+					return 'o';
+				case 80:
+					return 'p';
+				case 81:
+					return 'q';
+				case 82:
+					return 'r';
+				case 83:
+					return 's';
+				case 84:
+					return 't';
+				case 85:
+					return 'u';
+				case 86:
+					return 'v';
+				case 87:
+					return 'w';
+				case 88:
+					return 'x';
+				case 89:
+					return 'y';
+				case 90:
+					return 'z';
+				default:
+					return `Unknown(${qtKey})`; // fallback
+			}
+		};
+		const jsonKeyboard = await readJSON(Paths.join(projectPath, 'keyboard.json'));
+		if (jsonKeyboard) {
+			const list = jsonKeyboard.list as JSONType[];
+			for (const keyboard of list) {
+				keyboard.sc = (keyboard.sc as number[][]).map((sc) => sc.map((key) => qtToKeyString(key)));
+			}
+			await writeJSON(Paths.join(projectPath, 'keboard.json'), jsonKeyboard);
+		}
 	}
 }
 

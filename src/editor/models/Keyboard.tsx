@@ -72,19 +72,46 @@ class Keyboard extends Localization {
 		return <DialogKeyboard {...options} />;
 	}
 
-	static toStringShortcuts(shortcuts: string[][]): string {
-		return shortcuts
-			.map((shortcut) => shortcut.join(' + '))
-			.join(' | ')
+	static toStringShortcut(shortcut: string[]): string {
+		return shortcut
+			.map((sc) => {
+				switch (sc) {
+					case 'ArrowUp':
+						return '↑';
+					case 'ArrowDown':
+						return '↓';
+					case 'ArrowLeft':
+						return '←';
+					case 'ArrowRight':
+						return '→';
+					case 'Control':
+						return 'Ctrl';
+					default:
+						return sc;
+				}
+			})
+			.join(' + ')
 			.toUpperCase();
+	}
+
+	static toStringShortcuts(shortcuts: string[][]): string {
+		return shortcuts.map((shortcut) => this.toStringShortcut(shortcut)).join(' | ');
+	}
+
+	toStringAbbreviation(): string {
+		return `${Base.STRING_START}${this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.abbreviation}`;
 	}
 
 	toStrings(): string[] {
 		return [
-			`${Base.STRING_START}${this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.abbreviation}`,
+			this.toStringAbbreviation(),
 			this.isEngine ? t(this.getName()) : this.getName(),
 			Keyboard.toStringShortcuts(this.shortcuts),
 		];
+	}
+
+	toStringNameID(_b?: boolean): string {
+		return this.toStringAbbreviation();
 	}
 
 	copy(keyboard: Keyboard): void {

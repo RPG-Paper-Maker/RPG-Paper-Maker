@@ -64,6 +64,7 @@ type Props = {
 	setForcedCurrentSelectedItemIndex?: (forced: number | null) => void;
 	minWidth?: number;
 	minHeight?: number;
+	height?: number;
 	byIndex?: boolean;
 	onDrop?: () => Promise<void>;
 	disabled?: boolean;
@@ -116,6 +117,7 @@ function Tree({
 	onDrop,
 	minWidth,
 	minHeight,
+	height,
 	disabled = false,
 	scrollable = false,
 	multipleSelection = false,
@@ -862,7 +864,7 @@ function Tree({
 				<div
 					onDoubleClick={handleDoubleClick}
 					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
-					style={{ minWidth: `${minWidth}px`, minHeight: `${minHeight}px` }}
+					style={{ minWidth: `${minWidth}px`, minHeight: `${minHeight}px`, height: `${height}px` }}
 					ref={listRef}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
