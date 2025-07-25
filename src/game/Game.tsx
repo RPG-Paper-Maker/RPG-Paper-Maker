@@ -23,11 +23,10 @@ function Game({ location, battleTest = false }: Props) {
 		return window.devicePixelRatio || 1;
 	};
 
-	const createHiDPICanvas = (w: number, h: number, ratio?: number) => {
+	const editHiDPICanvas = (canvas: HTMLCanvasElement, w: number, h: number, ratio?: number) => {
 		if (!ratio) {
 			ratio = getPixelRatio();
 		}
-		const canvas = document.createElement('canvas');
 		canvas.width = w * ratio;
 		canvas.height = h * ratio;
 		canvas.style.width = w + 'px';
@@ -39,13 +38,16 @@ function Game({ location, battleTest = false }: Props) {
 			ctx.lineJoin = 'round';
 			ctx.lineWidth = 4;
 		}
-		return canvas;
 	};
 
 	useEffect(() => {
 		const script = document.createElement('script');
-		const canvas = createHiDPICanvas(window.innerWidth, window.innerHeight);
 		const style = document.createElement('style');
+		editHiDPICanvas(document.getElementById('hud') as HTMLCanvasElement, window.innerWidth, window.innerHeight);
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = Paths.join(`file:///${location}`, Paths.STYLES, Paths.FILE_FONTS_CSS);
+		document.head.appendChild(link);
 
 		const initialize = async () => {
 			await LocalFile.config();
@@ -59,14 +61,11 @@ function Game({ location, battleTest = false }: Props) {
 			global.rpgPaperMakerProjectLocation = location;
 			global.battleTest = battleTest ? 'battleTroop' : '';
 			document.body.appendChild(script);
-			canvas.id = 'hud';
-			document.body.appendChild(canvas);
 		};
 		initialize().catch(console.error);
 
 		return () => {
 			document.body.removeChild(script);
-			document.body.removeChild(canvas);
 			document.body.removeChild(style);
 		};
 	}, []);
@@ -74,8 +73,9 @@ function Game({ location, battleTest = false }: Props) {
 	return (
 		<>
 			<div id='three-d'></div>
-			<video id='video-container' className='hidden' height='480px'></video>
-			<canvas id='rendering' width='4096px' height='4096px'></canvas>
+			<canvas id='hud' />
+			<video id='video-container' className='hidden' height='480px' />
+			<canvas id='rendering' width='4096px' height='4096px' />
 		</>
 	);
 }

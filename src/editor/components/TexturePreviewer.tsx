@@ -10,6 +10,7 @@
 */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Constants } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Rectangle } from '../core/Rectangle';
@@ -48,7 +49,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 	};
 
 	const draw = async (t: string, b: boolean) => {
-		const path = b ? (await LocalFile.readFile(t)) ?? '' : t;
+		const path = b && !Constants.IS_DESKTOP ? (await LocalFile.readFile(t)) ?? '' : t;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		if (refCanvas.current) {

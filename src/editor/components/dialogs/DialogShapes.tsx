@@ -100,7 +100,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 	};
 
 	const handleRefresh = async () => {
-		const files = getAllFilesFromFolder(Model.Shape.getFolder(selectedKind!, true, ''));
+		const files = await getAllFilesFromFolder(Model.Shape.getFolder(selectedKind!, true, ''));
 		const customNames = await getFiles(Model.Shape.getFolder(selectedKind!, false, ''));
 		setShapesAvailable([
 			...Node.createList(

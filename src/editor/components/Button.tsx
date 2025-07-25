@@ -109,7 +109,7 @@ function Button({
 		>
 			{icon}
 			{children}
-			{onClose && <RxCross2 onClick={onClose} />}
+			{onClose && <RxCross2 className='close' onClick={onClose} />}
 		</button>
 	);
 }

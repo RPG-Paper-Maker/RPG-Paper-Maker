@@ -52,7 +52,6 @@ function PanelLoading({ setLoaded }: Props) {
 		if (!Constants.IS_DESKTOP) {
 			const cacheVersion = await localforage.getItem('CACHE_VERSION');
 			if (!cacheVersion || cacheVersion !== LocalFile.CACHE_VERSION) {
-				// TODO
 				const all = await LocalFile.allStorage();
 				for (const path of all) {
 					await LocalFile.brutRemove(path);

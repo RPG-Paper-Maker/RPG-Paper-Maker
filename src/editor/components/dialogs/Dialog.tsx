@@ -11,14 +11,16 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { RxCross2 } from 'react-icons/rx';
+import { VscChromeClose } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
+import { BUTTON_TYPE } from '../../common';
 import { Utils } from '../../common/Utils';
 import { Inputs } from '../../managers';
 import { setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
 import '../../styles/Footer.css';
+import Button from '../Button';
 import Flex from '../Flex';
 import Loader from '../Loader';
 
@@ -295,13 +297,21 @@ function Dialog({
 				}}
 			>
 				{isDisabled && <div className='dialogDisable' />}
-				<div
-					className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
-					onMouseDown={handleMouseDownTitle}
-				>
-					<Flex one>{title}</Flex>
-					{onClose && <RxCross2 className='dialogClose' onClick={handleClose} />}
-				</div>
+				<Flex>
+					<div
+						className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
+						onMouseDown={handleMouseDownTitle}
+					>
+						<Flex one>{title}</Flex>
+					</div>
+					{onClose && (
+						<Flex>
+							<Button buttonType={BUTTON_TYPE.RED} square backgroundOnHoverOnly onClick={handleClose}>
+								<VscChromeClose />
+							</Button>
+						</Flex>
+					)}
+				</Flex>
 				<div className='dialogContent'>
 					<Loader isLoading={isLoading} />
 					{children}

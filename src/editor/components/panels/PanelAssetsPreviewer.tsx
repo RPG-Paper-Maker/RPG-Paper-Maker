@@ -12,7 +12,7 @@
 import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, Paths } from '../../common';
+import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, IO, Paths } from '../../common';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
@@ -137,18 +137,26 @@ function PanelAssetsPreviewer({
 		}
 		const files = Array.from(importFileInputRef.current.files || []);
 		importFileInputRef.current.value = '';
-		const filePromises = files.map((file) => {
-			return new Promise<{ base64: string; name: string }>((resolve, reject) => {
-				const reader = new FileReader();
-				reader.readAsDataURL(file);
-				reader.onload = () => resolve({ base64: reader.result as string, name: file.name });
-				reader.onerror = (error) => reject(error);
-			});
-		});
 		try {
-			const base64Files = await Promise.all(filePromises);
-			for (const { name, base64 } of base64Files) {
-				await LocalFile.createFile(Paths.join(basePath, name), base64);
+			if (Constants.IS_DESKTOP) {
+				for (const file of files) {
+					const arrayBuffer = await file.arrayBuffer();
+					const buffer = Buffer.from(arrayBuffer);
+					await IO.createFile(Paths.join(basePath, file.name), buffer);
+				}
+			} else {
+				const filePromises = files.map((file) => {
+					return new Promise<{ base64: string; name: string }>((resolve, reject) => {
+						const reader = new FileReader();
+						reader.readAsDataURL(file);
+						reader.onload = () => resolve({ base64: reader.result as string, name: file.name });
+						reader.onerror = (error) => reject(error);
+					});
+				});
+				const base64Files = await Promise.all(filePromises);
+				for (const { name, base64 } of base64Files) {
+					await LocalFile.createFile(Paths.join(basePath, name), base64);
+				}
 			}
 			onRefresh?.();
 		} catch (error) {

@@ -13,6 +13,8 @@ import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
+	Constants,
+	IO,
 	JSONType,
 	notifySuccess,
 	Paths,
@@ -22,16 +24,16 @@ import {
 	Utils,
 } from '../common';
 import {
-	createFile,
 	createFolder,
 	MIME_TYPES,
 	readJSON,
 	readOnlineFile,
-	readOnlineFileUint8Array,
+	readOnlineFileArrayBuffer,
 	removeFolder,
 	writeJSON,
 } from '../common/Platform';
 import DialogPlugin from '../components/dialogs/models/DialogPlugin';
+import { LocalFile } from '../core/LocalFile';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
@@ -102,16 +104,19 @@ class Plugin extends Checkable {
 			for (const file of folder.files) {
 				const ext = file.split('.').pop()?.toLowerCase();
 				let content = '';
+				let binaryData: ArrayBuffer | null = null;
 				const mimeType = MIME_TYPES[ext || ''];
 				if (mimeType) {
-					const binaryData = await readOnlineFileUint8Array(Plugin.getGitURL(Paths.join(path, file)));
-					if (binaryData) {
-						content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
+					binaryData = await readOnlineFileArrayBuffer(Plugin.getGitURL(Paths.join(path, file)));
+					if (binaryData && !Constants.IS_DESKTOP) {
+						content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(new Uint8Array(binaryData))}`;
 					}
 				} else {
 					content = (await readOnlineFile(Plugin.getGitURL(Paths.join(path, file)))) ?? '';
 				}
-				await createFile(Paths.join(projectPath, file), content);
+				await (Constants.IS_DESKTOP && mimeType
+					? IO.createFile(Paths.join(projectPath, file), Buffer.from(binaryData ?? new ArrayBuffer()))
+					: LocalFile.createFile(Paths.join(projectPath, file), content));
 			}
 		}
 		if (folder.folders) {

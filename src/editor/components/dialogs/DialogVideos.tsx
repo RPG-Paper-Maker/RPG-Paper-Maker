@@ -13,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
+import { Constants } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
@@ -93,10 +94,9 @@ function DialogVideos({
 		if (video) {
 			setLoading(video.id !== -1);
 			(async () => {
-				const path = video.getPath();
-				const base64 = (await LocalFile.readFile(path)) ?? '';
 				if (playerRef.current && sourceRef.current) {
-					sourceRef.current.src = base64;
+					const path = video.getPath();
+					sourceRef.current.src = Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? '';
 					playerRef.current.load();
 					playerRef.current.onloadeddata = () => {
 						setLoading(false);
@@ -113,7 +113,7 @@ function DialogVideos({
 	};
 
 	const handleRefresh = async () => {
-		const files = getAllFilesFromFolder(Model.Video.getFolder(true, ''));
+		const files = await getAllFilesFromFolder(Model.Video.getFolder(true, ''));
 		const customNames = await getFiles(Model.Video.getFolder(false, ''));
 		setVideosAvailable([
 			...Node.createList(

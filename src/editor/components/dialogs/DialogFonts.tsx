@@ -60,7 +60,7 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 	};
 
 	const handleRefresh = async () => {
-		const files = getAllFilesFromFolder(Model.Font.getFolder(true, ''));
+		const files = await getAllFilesFromFolder(Model.Font.getFolder(true, ''));
 		const customNames = await getFiles(Model.Font.getFolder(false, ''));
 		setFontsAvailable([
 			...Node.createList(

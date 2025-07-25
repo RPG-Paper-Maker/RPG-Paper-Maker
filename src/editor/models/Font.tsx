@@ -9,19 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths } from '../common';
+import { Constants, Paths } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
 class Font extends Asset {
 	static getFolder(isBR: boolean, dlc: string): string {
-		return (
-			(isBR
+		return Paths.join(
+			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
-				: `${Project.current?.getPath()}/`) + Paths.FONTS
+				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+				: Project.current?.getPath(),
+			Paths.FONTS
 		);
 	}
 
@@ -32,7 +33,7 @@ class Font extends Asset {
 	async getFontFace(name: string): Promise<string> {
 		return `@font-face {
 			font-family: "${name}";
-			src: url("${this.isBR ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? ''}");
+			src: url("${this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? ''}");
 		}`;
 	}
 }

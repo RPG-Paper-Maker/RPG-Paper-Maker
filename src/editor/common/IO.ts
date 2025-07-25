@@ -14,7 +14,7 @@ import { ExtendedWindow, JSONType } from './Types';
 
 class IO {
 	static async parseFileJSON(url: string): Promise<JSONType> {
-		const content = await IO.readFile(url);
+		const content = (await IO.readFile(url)) as string | null;
 		try {
 			return content === null ? {} : JSON.parse(content);
 		} catch {
@@ -76,8 +76,8 @@ class IO {
 		return (await this.invoke('get-files', path)) as string[];
 	}
 
-	static async readFile(path: string): Promise<string | null> {
-		return (await this.invoke('read-file', path)) as string | null;
+	static async readFile(path: string, isInPublic = false, asBase64 = false): Promise<string | null> {
+		return (await this.invoke('read-file', path, isInPublic, asBase64)) as string | null;
 	}
 
 	static async createFolder(path: string) {
@@ -96,7 +96,7 @@ class IO {
 		await this.invoke('move-folder', src, dst);
 	}
 
-	static async createFile(path: string, content: string | Blob) {
+	static async createFile(path: string, content: string | Buffer<ArrayBuffer> | Blob) {
 		await this.invoke('create-file', path, content);
 	}
 
@@ -120,12 +120,8 @@ class IO {
 		return (await IO.readFile(Paths.join(window.__dirname, path))) as string;
 	}
 
-	static async downloadBlob(dst: string, blob: Blob) {
-		await IO.createFile(dst, blob);
-	}
-
-	static async openGame(projectName: string) {
-		await this.invoke('open-game', projectName);
+	static async openGame(projectName: string, isBattleTest?: boolean) {
+		await this.invoke('open-game', projectName, isBattleTest);
 	}
 
 	static async minimize() {

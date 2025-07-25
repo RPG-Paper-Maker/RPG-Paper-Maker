@@ -55,5 +55,5 @@
 .mainMenuBar,
 .mainMenuBar .menuItem,
 .mainMenuBar .menuSub .title {
-	background-color: var(--darker-bg-color);
+	background-color: var(--main-bg-color);
 }

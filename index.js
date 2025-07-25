@@ -9,9 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const { app, BrowserWindow, globalShortcut, ipcMain, dialog, screen } = require('electron');
-const path = require('path');
-const fs = require('fs').promises;
+import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen } from 'electron';
+import * as fs from 'node:fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('force-device-scale-factor', 1);
@@ -28,13 +31,12 @@ const createWindow = () => {
 			contextIsolation: false,
 			enableRemoteModule: true,
 			preload: path.join(__dirname, 'preload.js'),
-			zoomFactor: screen.getPrimaryDisplay().scaleFactor,
 		},
-		icon: './build/icon.png',
+		icon: path.join(__dirname, 'dist', 'icon.png'),
 		frame: false,
 	});
 	window.maximize();
-	window.loadFile('./build/index.html');
+	window.loadFile(path.join(__dirname, 'dist', 'index.html'));
 	window.on('maximize', () => {
 		window.webContents.send('is-maximized');
 	});
@@ -120,9 +122,13 @@ ipcMain.handle('get-files', async (event, path) => {
 	return files.filter((file) => !file.isDirectory()).map((folder) => folder.name);
 });
 
-ipcMain.handle('read-file', async (event, p, isInPublic) => {
+ipcMain.handle('read-file', async (event, p, isInPublic = false, asBase64 = false) => {
 	try {
-		return await fs.readFile(isInPublic ? path.join(app.getAppPath(), 'build', p) : p, 'utf8');
+		if (isInPublic) {
+			return await fs.readFile(isInPublic ? path.join(app.getAppPath(), 'dist', p) : p, 'utf8');
+		}
+		const data = await fs.readFile(p, asBase64 ? null : 'utf8');
+		return asBase64 ? data.toString('base64') : data;
 	} catch {
 		return null;
 	}
@@ -177,7 +183,7 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 	await fs.rename(oldFilePath, newFilePath);
 });
 
-ipcMain.handle('open-game', async (event, location) => {
+ipcMain.handle('open-game', async (event, location, battleTest) => {
 	const game = new BrowserWindow({
 		width: 640,
 		height: 480,
@@ -187,9 +193,11 @@ ipcMain.handle('open-game', async (event, location) => {
 			enableRemoteModule: true,
 			preload: path.join(__dirname, 'preload.js'),
 		},
-		icon: './build/icon.png',
+		icon: path.join(__dirname, 'dist', 'icon.png'),
 	});
-	game.loadFile('./build/index.html', { query: { project: location } });
+	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
+		query: { project: location, battleTest: battleTest },
+	});
 	game.removeMenu();
 	const shortcut = 'Shift+CommandOrControl+I';
 	globalShortcut.register(shortcut, () => {
@@ -201,6 +209,21 @@ ipcMain.handle('open-game', async (event, location) => {
 	globalValues.currentGameWindow = game;
 });
 
+ipcMain.handle('change-window-title', function (event, title) {
+	globalValues.currentGameWindow.setTitle(title);
+});
+
+ipcMain.handle('change-window-size', function (event, w, h, f) {
+	if (f) {
+		globalValues.currentGameWindow.setResizable(true);
+		globalValues.currentGameWindow.setFullScreen(true);
+	} else {
+		globalValues.currentGameWindow.setFullScreen(false);
+		globalValues.currentGameWindow.setContentSize(w, h);
+		globalValues.currentGameWindow.center();
+	}
+});
+
 ipcMain.handle('close-game', () => {
 	globalValues.currentGameWindow.close();
 	globalValues.currentGameWindow = null;
@@ -210,11 +233,11 @@ ipcMain.handle('minimize', () => {
 	window.minimize();
 });
 
-ipcMain.handle('maximize', (event, b) => {
+ipcMain.handle('maximize', () => {
 	window.maximize();
 });
 
-ipcMain.handle('unmaximize', (event, b) => {
+ipcMain.handle('unmaximize', () => {
 	window.unmaximize();
 });
 

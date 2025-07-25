@@ -9,10 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { lazy, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { javascript } from '@codemirror/lang-javascript';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import CodeMirror from '@uiw/react-codemirror';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INPUT_TYPE_WIDTH, ITERATOR, JSONType, Paths, PLUGIN_TYPE_KIND } from '../../common';
+import { Constants, INPUT_TYPE_WIDTH, IO, ITERATOR, JSONType, Paths, PLUGIN_TYPE_KIND } from '../../common';
 import {
+	checkFileExists,
 	copyFolder,
 	exportFolder,
 	Platform,
@@ -22,7 +26,6 @@ import {
 	renameFile,
 } from '../../common/Platform';
 import { LocalFile } from '../../core/LocalFile';
-
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
@@ -42,7 +45,6 @@ import TextArea from '../TextArea';
 import Tree, { TREES_LARGE_MIN_WIDTH, TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
-const Editor = lazy(() => import('@monaco-editor/react'));
 
 const TREES_STYLE_HEIGHT = { height: '100px' };
 
@@ -66,6 +68,22 @@ const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: 
 			);
 			nodes.push(folder);
 		}
+	}
+	return nodes;
+};
+
+const folderToTreeMapTag = async (foldersID: ITERATOR, filesID: ITERATOR, path: string): Promise<Node[]> => {
+	const nodes: Node[] = [];
+	const folders = await IO.getFolders(path);
+	const files = await IO.getFiles(path);
+	for (const folder of folders) {
+		const tag = Node.create(Model.TreeMapTag.create(foldersID.i--, folder));
+		tag.expanded = false;
+		tag.children = await folderToTreeMapTag(foldersID, filesID, Paths.join(path, folder));
+		nodes.push(tag);
+	}
+	for (const file of files) {
+		nodes.push(Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file))));
 	}
 	return nodes;
 };
@@ -97,22 +115,15 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const [commands, setCommands] = useState<Node[]>([]);
 	const [triggerUpdateParameters, setTriggerUpdateParameters] = useStateBool();
 	const [sourceCode, setSourceCode] = useStateString();
-	const [isSourceCodeJavascript, setIsSourceCodeJavascript] = useState(false);
 	const [autoUpdate, setAutoUpdate] = useStateBool();
-
-	const folders = useMemo(
-		() => [
-			Node.create(
-				Model.TreeMapTag.create(-1, 'Scripts'),
-				manifestToTreeMapTag(Platform.manifest.Scripts as JSONType, { i: -2 }, { i: 1 }, '/Scripts')
-			),
-		],
-		[]
-	);
+	const [folders, setFolders] = useState<Node[]>([]);
 
 	const initialize = async () => {
 		setIsLoading(true);
-		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		const pathPluginTemp = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP);
+		if (await checkFileExists(pathPluginTemp)) {
+			await removeFolder(pathPluginTemp);
+		}
 		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP)
@@ -143,8 +154,13 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					if (plugin.code === undefined) {
 						const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
 						plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
-						plugin.pictureBase64 =
-							(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
+						if (Constants.IS_DESKTOP) {
+							const base64 = await IO.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE), false, true);
+							plugin.pictureBase64 = base64 ? `data:image/png;base64,${base64}` : '';
+						} else {
+							plugin.pictureBase64 =
+								(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
+						}
 					}
 					setCode(plugin.code);
 					setName(plugin.name);
@@ -187,17 +203,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
-	const handleEditorDidMount = (_editor: unknown, _monaco: unknown) => {
-		/* TODO: Add declaration file for global classes, should not contain exports */
-		/*
-		const dts = `
-		  declare class Constants {
-
-}
-		`;*/
-		//monaco.languages.typescript.javascriptDefaults.addExtraLib(dts, 'filename/constants.d.ts');
-	};
-
 	const unsavePlugin = () => {
 		selectedPlugin!.saved = false;
 		setTriggerUpdate((b) => !b);
@@ -219,15 +224,19 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			reader.onload = async () => {
 				selectedPlugin!.pictureBase64 = reader.result as string;
 				setPictureBase64(selectedPlugin!.pictureBase64);
-				await LocalFile.createFile(
-					Paths.join(
-						Project.current!.getPath(),
-						Paths.PLUGINS_TEMP,
-						selectedPlugin!.name,
-						Paths.FILE_PLUGIN_PICTURE
-					),
-					selectedPlugin!.pictureBase64
+				const path = Paths.join(
+					Project.current!.getPath(),
+					Paths.PLUGINS_TEMP,
+					selectedPlugin!.name,
+					Paths.FILE_PLUGIN_PICTURE
 				);
+				if (Constants.IS_DESKTOP) {
+					const arrayBuffer = await file.arrayBuffer();
+					const buffer = Buffer.from(arrayBuffer);
+					await IO.createFile(path, buffer);
+				} else {
+					await LocalFile.createFile(path, selectedPlugin!.pictureBase64);
+				}
 				unsavePlugin();
 				setIsLoading(false);
 			};
@@ -321,13 +330,15 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		if (node) {
 			const tag = node.content as Model.TreeMapTag;
 			if (tag.path) {
-				setSourceCode(await readPublicFile(tag.path));
-				setIsSourceCodeJavascript(tag.name.endsWith('.js'));
+				setSourceCode(
+					Constants.IS_DESKTOP
+						? ((await IO.readFile(tag.path)) as string) ?? ''
+						: await readPublicFile(tag.path)
+				);
 				return;
 			}
 		}
 		setSourceCode('');
-		setIsSourceCodeJavascript(false);
 	};
 
 	const handleCancel = async () => {
@@ -360,6 +371,24 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	};
 
 	useEffect(() => {
+		if (Constants.IS_DESKTOP) {
+			(async () => {
+				const nodes = [
+					Node.create(
+						Model.TreeMapTag.create(-1, 'Scripts'),
+						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.__dirname, 'Scripts'))
+					),
+				];
+				setFolders(nodes);
+			})();
+		} else {
+			setFolders([
+				Node.create(
+					Model.TreeMapTag.create(-1, 'Scripts'),
+					manifestToTreeMapTag(Platform.manifest.Scripts as JSONType, { i: -2 }, { i: 1 }, '/Scripts')
+				),
+			]);
+		}
 		const handleSaveShortcut = async (event: KeyboardEvent) => {
 			if ((event.ctrlKey || event.metaKey) && event.key === 's') {
 				event.preventDefault();
@@ -443,13 +472,18 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsDetailsCode = () => (
 		<Flex key={1} column spacedLarge fillWidth fillHeight>
-			<Editor
-				defaultLanguage='javascript'
-				value={code}
-				theme='vs-dark'
-				onChange={handleOnChangeCode}
-				onMount={handleEditorDidMount}
-			/>
+			<Flex one zeroWidth>
+				<Flex column one>
+					<Flex one zeroHeight>
+						<CodeMirror
+							value={code}
+							onChange={handleOnChangeCode}
+							theme={vscodeDark}
+							extensions={[javascript({ jsx: true })]}
+						/>
+					</Flex>
+				</Flex>
+			</Flex>
 		</Flex>
 	);
 
@@ -573,13 +607,20 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					cannotEdit
 				/>
 			</Flex>
-			<Flex one>
+			<Flex one scrollable>
 				{sourceCode && (
-					<Editor
-						defaultLanguage={isSourceCodeJavascript ? 'javascript' : 'typescript'}
-						value={sourceCode}
-						theme='vs-dark'
-					/>
+					<Flex one zeroWidth>
+						<Flex column one>
+							<Flex one zeroHeight>
+								<CodeMirror
+									value={sourceCode}
+									theme={vscodeDark}
+									extensions={[javascript({ jsx: true })]}
+									readOnly
+								/>
+							</Flex>
+						</Flex>
+					</Flex>
 				)}
 			</Flex>
 		</Flex>
@@ -605,7 +646,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				titles={Model.Base.mapListIndex(['Plugins', 'Source code'])}
 				contents={[getPluginsContent(), getPluginsSourceCode()]}
 				padding
-				scrollableContent
 				lazyLoadingContent
 				hideScroll
 			/>

@@ -44,12 +44,13 @@ class Picture extends Asset {
 	}
 
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
-		return (
-			(isBR
+		return Paths.join(
+			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
-				: `${Project.current?.getPath()}/`) + this.getLocalFolder(kind)
+				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+				: Project.current?.getPath(),
+			this.getLocalFolder(kind)
 		);
 	}
 
@@ -107,7 +108,7 @@ class Picture extends Asset {
 	}
 
 	async getPathOrBase64(): Promise<string> {
-		return this.isBR && !Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
+		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
 	}
 
 	async loadPicture() {

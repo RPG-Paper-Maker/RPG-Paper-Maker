@@ -21,7 +21,7 @@ import {
 	readFile,
 	readJSON,
 	readOnlineFile,
-	readOnlineFileUint8Array,
+	readOnlineFileArrayBuffer,
 } from '../../../common/Platform';
 
 import { Node } from '../../../core/Node';
@@ -135,11 +135,13 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 					plugin.parameters.forEach((parameter, index) => {
 						parameter.defaultParameter = plugin.defaultParameters[index];
 					});
-					const picture = await readOnlineFileUint8Array(
+					const picture = await readOnlineFileArrayBuffer(
 						Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
 					);
 					if (picture) {
-						plugin.pictureBase64 = `data:image/png;base64,${Utils.uint8ArrayToBase64(picture)}`;
+						plugin.pictureBase64 = `data:image/png;base64,${Utils.uint8ArrayToBase64(
+							new Uint8Array(picture)
+						)}`;
 					}
 					setLoadingPlugin(false);
 				} else {

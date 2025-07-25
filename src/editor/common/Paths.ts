@@ -15,6 +15,7 @@ import { LOCAL_FORAGE } from './Enum';
 class Paths {
 	public static readonly ROOT_DIRECTORY_LOCAL = '.';
 	public static readonly FILES = 'file:///';
+	public static readonly BR = 'BR';
 	public static readonly MAPS = 'Maps';
 	public static readonly LOCALES = 'Locales';
 	public static readonly FILE_LOCALES = 'locales.json';

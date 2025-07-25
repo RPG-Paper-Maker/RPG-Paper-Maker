@@ -13,7 +13,7 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { BUTTON_TYPE, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
+import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
@@ -155,10 +155,9 @@ function DialogSongs({
 			if (!song.isBR) {
 				setSelectedHowl(undefined);
 				(async () => {
-					const base64 = (await LocalFile.readFile(path)) ?? '';
 					setSelectedHowl(
 						new Howl({
-							src: [base64],
+							src: [Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? ''],
 							html5: true,
 						})
 					);
@@ -181,7 +180,7 @@ function DialogSongs({
 	};
 
 	const handleRefresh = async () => {
-		const files = getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
+		const files = await getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
 		const customNames = await getFiles(Model.Song.getFolder(selectedKind!, false, ''));
 		setSongsAvailable([
 			...Node.createList(

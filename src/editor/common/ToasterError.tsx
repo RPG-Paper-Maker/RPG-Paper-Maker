@@ -4,6 +4,7 @@ import { TiDelete } from 'react-icons/ti';
 import { toast } from 'react-toastify';
 import { LocalFile } from '../core/LocalFile';
 import '../styles/ToasterError.css';
+import { Constants } from './Constants';
 import { TOASTER_OPTIONS } from './ToasterUtils';
 
 const originalConsoleError = console.error;
@@ -123,9 +124,11 @@ function ToasterError({ message, stack }: Props) {
 						<button onClick={() => copyToClipboard(message)}>
 							<FaRegCopy />
 						</button>
-						<button onClick={handleClickClearCache} style={{ backgroundColor: '#de3a3c' }}>
-							<TiDelete /> Clear all cache
-						</button>
+						{!Constants.IS_DESKTOP && (
+							<button onClick={handleClickClearCache} style={{ backgroundColor: '#de3a3c' }}>
+								<TiDelete /> Clear all cache
+							</button>
+						)}
 					</div>
 				</strong>
 				<pre>{message}</pre>

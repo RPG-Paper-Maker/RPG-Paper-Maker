@@ -99,9 +99,14 @@ function ProjectPreview({ project }: Props) {
 					{project.location.length > 0 && <div className='textSmallDetail'>{project.location}</div>}
 				</Flex>
 				<Flex centerV>
-					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
-					<BiExport onClick={handleClickExportProject} />
-					<FaTrashAlt onClick={handleClickRemoveProject} />
+					{Constants.IS_DESKTOP ? (
+						<RxCross2 onClick={handleClickCloseProject} />
+					) : (
+						<>
+							<BiExport onClick={handleClickExportProject} />
+							<FaTrashAlt onClick={handleClickRemoveProject} />
+						</>
+					)}
 				</Flex>
 			</div>
 			<Dialog

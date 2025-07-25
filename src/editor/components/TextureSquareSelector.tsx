@@ -148,7 +148,7 @@ function TextureSquareSelector({
 	};
 
 	const initialize = async () => {
-		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		const path = base64 && !Constants.IS_DESKTOP ? (await LocalFile.readFile(texture)) ?? '' : texture;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		currentState.squareWidth =

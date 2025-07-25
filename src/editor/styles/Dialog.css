@@ -45,6 +45,7 @@
 .dialogTitle {
 	display: flex;
 	align-items: center;
+	flex-grow: 1;
 	background-color: var(--main-bg-color);
 	padding: 5px 10px 5px 10px;
 	-webkit-user-select: none;

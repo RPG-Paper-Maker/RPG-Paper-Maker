@@ -10,7 +10,7 @@
 */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Utils } from '../common';
+import { Constants, Utils } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Rectangle } from '../core/Rectangle';
@@ -56,7 +56,7 @@ function TextureWindowSkinSelector({
 	}, [zoom]);
 
 	const initialize = async () => {
-		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		const path = base64 && !Constants.IS_DESKTOP ? (await LocalFile.readFile(texture)) ?? '' : texture;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		if (refCanvas.current) {

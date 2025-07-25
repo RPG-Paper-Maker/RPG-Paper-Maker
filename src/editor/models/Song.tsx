@@ -55,7 +55,7 @@ class Song extends Asset {
 	}
 
 	async getPathOrBase64(): Promise<string> {
-		return this.isBR && !Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
+		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
 	}
 
 	copy(song: Song): void {

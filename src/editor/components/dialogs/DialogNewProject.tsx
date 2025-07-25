@@ -137,6 +137,9 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await createFolder(Paths.join(project.getPath(), Paths.PLUGINS));
 		await createFolder(Paths.join(project.getPath(), Paths.TEST));
 		await project.load();
+		if (Constants.IS_DESKTOP) {
+			project.systems.PATH_BR = Paths.join(window.__dirname, Paths.BR);
+		}
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));
 		project.translateDefaults();
@@ -215,7 +218,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 							onChange={handleChangeProjectName}
 						/>
 						{Constants.IS_DESKTOP && (
-							<Flex column>
+							<Flex column spaced>
 								<Flex spaced>
 									<div>{t('folder.name')}:</div>
 									<InputText value={folderName} onChange={handleChangeFolderName} />

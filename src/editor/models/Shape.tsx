@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { CUSTOM_SHAPE_KIND, Paths } from '../common';
+import { Constants, CUSTOM_SHAPE_KIND, IO, Paths } from '../common';
 import { readPublicFile } from '../common/Platform';
 import { LocalFile } from '../core/LocalFile';
 import { Project } from '../core/Project';
@@ -189,11 +189,15 @@ class Shape extends Asset {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
 			const content = await (this.isBR
 				? readPublicFile(this.getPath())
+				: Constants.IS_DESKTOP
+				? ((await IO.readFile(this.getPath())) as string)
 				: await (await LocalFile.readBase64File(this.getPath())).text());
-			if (content.length === 0) {
-				console.warn(`The shape ${this.toStringNameID()} content is empty.`);
+			if (content) {
+				if (content.length === 0) {
+					console.warn(`The shape ${this.toStringNameID()} content is empty.`);
+				}
+				this.geometryData = Shape.parse(content);
 			}
-			this.geometryData = Shape.parse(content);
 		}
 	}
 

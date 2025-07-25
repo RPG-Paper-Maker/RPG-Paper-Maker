@@ -29,17 +29,11 @@ class Base {
 		this.camera.update();
 	}
 
-	onMouseDown() {
-		// TODO
-	}
+	onMouseDown() {}
 
-	onMouseMove() {
-		// TODO
-	}
+	onMouseMove() {}
 
-	onMouseUp() {
-		// TODO
-	}
+	onMouseUp() {}
 
 	draw3D(GL: Manager.GL) {
 		if (GL.renderer) {

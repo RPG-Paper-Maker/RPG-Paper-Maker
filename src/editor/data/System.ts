@@ -70,7 +70,6 @@ class System extends Serializable {
 	public PATH_DLCS!: string;
 	public heroMapID!: number;
 	public heroMapPosition!: Position;
-	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.OBJECT, Model.Localization],
@@ -202,8 +201,9 @@ class System extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
-		this.json = json;
-		this.PATH_BR = './BR/';
+		if (!Constants.IS_DESKTOP) {
+			this.PATH_BR = './BR/';
+		}
 		this.soundCursor.kind = SONG_KIND.SOUND;
 		this.soundConfirmation.kind = SONG_KIND.SOUND;
 		this.soundCancel.kind = SONG_KIND.SOUND;
@@ -211,7 +211,6 @@ class System extends Serializable {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		Object.assign(json, this.json);
 		super.write(json, System.getBindings(additionnalBinding));
 	}
 }

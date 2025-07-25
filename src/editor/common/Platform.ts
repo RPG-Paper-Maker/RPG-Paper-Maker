@@ -76,7 +76,7 @@ export const getFiles = async (path: string): Promise<string[]> => {
 };
 
 export const readFile = async (path: string): Promise<string | null> => {
-	return await (Constants.IS_DESKTOP ? IO.readFile(path) : LocalFile.readFile(path));
+	return (await (Constants.IS_DESKTOP ? IO.readFile(path) : LocalFile.readFile(path))) as string | null;
 };
 
 export const createFolder = async (path: string) => {
@@ -231,9 +231,9 @@ export const readFileManifest = async () => {
 	Platform.manifest = JSON.parse(await readPublicFile('./fileManifest.json'));
 };
 
-export const getAllFilesFromFolder = (path: string): string[] => {
+export const getAllFilesFromFolder = async (path: string): Promise<string[]> => {
 	if (Constants.IS_DESKTOP) {
-		return [];
+		return await IO.getFiles(path);
 	} else {
 		const folders = path.split('/');
 		folders.shift();
@@ -248,9 +248,9 @@ export const getAllFilesFromFolder = (path: string): string[] => {
 	}
 };
 
-export const openGame = async (location: string, isBattleTest: boolean = false) => {
+export const openGame = async (location: string, isBattleTest?: boolean) => {
 	if (Constants.IS_DESKTOP) {
-		await IO.openGame(location); // TODO battle test
+		await IO.openGame(location, isBattleTest);
 	} else {
 		window.open(
 			`${window.location.pathname}?project=${location}${isBattleTest ? '&battleTest=true' : ''}`,
@@ -266,14 +266,15 @@ export const exportFolder = async (location: string) => {
 	const folder = zip.folder(fileName) as ZipType | null;
 	if (folder) {
 		await getFolderZip(folder, location);
-		const blob = await zip.generateAsync({ type: 'blob' });
 		if (Constants.IS_DESKTOP) {
 			const folderPath = await IO.openFolderDialog();
+			const arrayBuffer = await zip.generateAsync({ type: 'arraybuffer' });
 			if (folderPath) {
-				IO.downloadBlob(folderPath, blob);
+				IO.createFile(Paths.join(folderPath, `${fileName}.zip`), Buffer.from(arrayBuffer));
 			}
 		} else {
-			await LocalFile.downloadBlob(fileName, blob);
+			const blob = await zip.generateAsync({ type: 'blob' });
+			await LocalFile.downloadBlob(`${fileName}.zip`, blob);
 		}
 	}
 };
@@ -294,14 +295,13 @@ export const readOnlineFileBlob = async (path: string): Promise<Blob | null> => 
 	}
 };
 
-export const readOnlineFileUint8Array = async (url: string): Promise<Uint8Array | null> => {
+export const readOnlineFileArrayBuffer = async (url: string): Promise<ArrayBuffer | null> => {
 	try {
 		const response = await fetch(url);
 		if (!response.ok) {
 			return null;
 		}
-		const arrayBuffer = await response.arrayBuffer();
-		return new Uint8Array(arrayBuffer);
+		return await response.arrayBuffer();
 	} catch {
 		return null;
 	}

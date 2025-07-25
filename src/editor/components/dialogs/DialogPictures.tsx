@@ -180,7 +180,7 @@ function DialogPictures({
 	};
 
 	const handleRefresh = async () => {
-		const files = getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
+		const files = await getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
 		const customNames = await getFiles(Model.Picture.getFolder(selectedKind!, false, ''));
 		setPicturesAvailable([
 			...Node.createList(

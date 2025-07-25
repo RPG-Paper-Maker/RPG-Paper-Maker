@@ -23,7 +23,7 @@ button {
 	font-size: 12px;
 	height: 20px;
 
-	&:has(svg:hover) {
+	&:has(svg.close:hover) {
 		color: var(--orange-color);
 	}
 }
@@ -45,11 +45,12 @@ button.primaryText {
 }
 
 button.backgroundOnHoverOnly {
-	background-color: transparent;
+	background-color: var(--main-bg-color);
 }
 
 button.square {
 	border-radius: 0;
+	height: 100%;
 }
 
 button:hover:not(.disabled) {
