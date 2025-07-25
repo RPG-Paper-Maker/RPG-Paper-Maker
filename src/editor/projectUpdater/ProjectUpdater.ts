@@ -10,7 +10,7 @@
 */
 
 import { JSONType, Paths } from '../common';
-import { getFiles, getFolders, readJSON, writeJSON } from '../common/Platform';
+import { copyFolder, getFiles, getFolders, readJSON, writeJSON } from '../common/Platform';
 import { Project } from '../core/Project';
 
 class ProjectUpdater {
@@ -32,6 +32,9 @@ class ProjectUpdater {
 		callback: (current: number, total: number, label?: string, extraPercent?: number) => void
 	): Promise<string | null> {
 		try {
+			const projectPath = Project.current!.getPath();
+			callback(0, 100, `Copying project to ${projectPath}_${version}...`);
+			await copyFolder(projectPath, `${projectPath}_${version}`);
 			let passed = false;
 			let index = 0;
 			for (const newVersion of this.versions) {
@@ -54,7 +57,6 @@ class ProjectUpdater {
 				index++;
 			}
 			callback(1, 1);
-			const projectPath = Project.current!.getPath();
 			const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
 			if (json) {
 				json.pv = Project.VERSION;

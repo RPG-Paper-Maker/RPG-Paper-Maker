@@ -147,16 +147,18 @@ function PanelProject() {
 						<PanelTextures
 							visible
 							extraContent={
-								<Flex one fillHeight>
-									<TreeMaps
-										onSelectedItem={handleSelectedMapItem}
-										forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-										setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
-										mapsTabsTitles={mapsTabsTitles}
-										setMapsTabsTitles={setMapsTabsTitles}
-										mapsTabsContents={mapsTabsContents}
-										setMapsTabsContents={setMapsTabsContents}
-									/>
+								<Flex one column>
+									<Flex one column scrollable zeroHeight>
+										<TreeMaps
+											onSelectedItem={handleSelectedMapItem}
+											forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+											setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+											mapsTabsTitles={mapsTabsTitles}
+											setMapsTabsTitles={setMapsTabsTitles}
+											mapsTabsContents={mapsTabsContents}
+											setMapsTabsContents={setMapsTabsContents}
+										/>
+									</Flex>
 								</Flex>
 							}
 						/>

@@ -121,7 +121,10 @@ function ToasterError({ message, stack }: Props) {
 				<strong>
 					<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 						Error:
-						<button onClick={() => copyToClipboard(message)}>
+						<button
+							onClick={() => copyToClipboard(message + (stack ? `\n${stack}` : ''))}
+							style={{ backgroundColor: '#4a90e2' }}
+						>
 							<FaRegCopy />
 						</button>
 						{!Constants.IS_DESKTOP && (

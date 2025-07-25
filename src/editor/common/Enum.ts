@@ -342,6 +342,7 @@ export enum CONTEXT_MENU_ITEM_KIND {
 
 export enum EXTENSION_KIND {
 	RPMG = 'rpmg',
+	RPM = 'rpm', // 2.0 old version
 }
 
 export enum BUTTON_TYPE {

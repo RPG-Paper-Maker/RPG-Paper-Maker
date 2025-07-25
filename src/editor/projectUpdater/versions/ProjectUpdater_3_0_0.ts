@@ -9,10 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ArrayUtils, JSONType, Paths } from '../../common';
+import { ArrayUtils, Constants, JSONType, Paths } from '../../common';
 import {
+	copyFolder,
 	createFile,
 	createFolder,
+	getFiles,
 	getFolders,
 	moveFile,
 	moveFolder,
@@ -30,9 +32,32 @@ class ProjectUpdater_3_0_0 {
 	static async update(callback: (percent: number) => void) {
 		const projectPath = Project.current!.getPath();
 
+		// If desktop
+		let folders: string[];
+		if (Constants.IS_DESKTOP) {
+			folders = await getFolders(projectPath);
+			const files = await getFiles(projectPath);
+			for (const file of files) {
+				await removeFile(Paths.join(projectPath, file));
+			}
+			for (const folder of folders) {
+				if (folder !== 'resources') {
+					await removeFolder(Paths.join(projectPath, folder));
+				}
+			}
+			folders = await getFolders(Paths.join(projectPath, 'resources', 'app', 'Content'));
+			for (const folder of folders) {
+				await copyFolder(
+					Paths.join(projectPath, 'resources', 'app', 'Content', folder),
+					Paths.join(projectPath, folder)
+				);
+			}
+			await removeFolder(Paths.join(projectPath, 'resources'));
+		}
+
 		// Remove maps temp files
 		await removeFolder(Paths.join(projectPath, 'Datas', 'Maps', 'temp'));
-		const folders = await getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
+		folders = await getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
 		for (const name of folders) {
 			const mapPath = Paths.join(projectPath, 'Datas', 'Maps', name);
 			await removeFolder(Paths.join(mapPath, 'temp'));
@@ -334,17 +359,14 @@ class ProjectUpdater_3_0_0 {
 		// Troop monster, add monsterID
 		const jsonTroops = await readJSON(Paths.join(projectPath, 'troops.json'));
 		if (jsonTroops) {
-			const troops = jsonTroops.list as JSONType[];
+			const troops = jsonTroops.troops as JSONType[];
 			if (troops) {
 				for (const troop of troops) {
 					const monsters = troop.l as JSONType[];
 					if (monsters) {
 						let i = 1;
 						for (const monster of monsters) {
-							const id = monster.id ?? 0;
-							if (id !== 1) {
-								monster.mid = id;
-							}
+							monster.mid = monster.id ?? 0;
 							monster.id = i++;
 						}
 					}
@@ -532,7 +554,7 @@ class ProjectUpdater_3_0_0 {
 			for (const keyboard of list) {
 				keyboard.sc = (keyboard.sc as number[][]).map((sc) => sc.map((key) => qtToKeyString(key)));
 			}
-			await writeJSON(Paths.join(projectPath, 'keboard.json'), jsonKeyboard);
+			await writeJSON(Paths.join(projectPath, 'keyboard.json'), jsonKeyboard);
 		}
 	}
 }

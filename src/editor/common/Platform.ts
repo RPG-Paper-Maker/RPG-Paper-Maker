@@ -151,6 +151,14 @@ export const renameFile = async (path: string, fileNameBefore: string, fileNameA
 	}
 };
 
+export const openWebsite = async (url: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.openWebsite(url);
+	} else {
+		window.open(url, '_blank');
+	}
+};
+
 export const loadZip = async (
 	file: File,
 	basePath: string,

@@ -17,6 +17,7 @@ import { FaHandsHelping } from 'react-icons/fa';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
+import { openWebsite } from '../../common/Platform';
 import { Manager } from '../../Editor';
 import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
 import Button from '../Button';
@@ -43,11 +44,11 @@ function PanelNoProject() {
 	};
 
 	const handleDLCs = () => {
-		window.open('https://rpg-paper-maker.com/shop/', '_blank');
+		openWebsite('https://rpg-paper-maker.com/shop/');
 	};
 
 	const handleContribute = () => {
-		window.open('https://rpg-paper-maker.com/contribute/', '_blank');
+		openWebsite('https://rpg-paper-maker.com/contribute/');
 	};
 
 	const renderProjectsList = () => {
@@ -75,16 +76,17 @@ function PanelNoProject() {
 						<AiOutlineFileAdd />
 						{`${t('new.project')}...`}
 					</Button>
-					{Constants.IS_DESKTOP && (
+					{Constants.IS_DESKTOP ? (
 						<Button big onClick={handleOpenDialogProject}>
 							<AiOutlineFolderOpen />
 							{`${t('open.project')}...`}
 						</Button>
+					) : (
+						<Button big onClick={handleImportProject}>
+							<BiImport />
+							{`${t('import.project')}...`}
+						</Button>
 					)}
-					<Button big onClick={handleImportProject}>
-						<BiImport />
-						{`${Constants.IS_DESKTOP ? t('import.web.project') : t('import.project')}...`}
-					</Button>
 					<Button big onClick={handleDLCs}>
 						<MdOutlineAddchart />
 						{t('dlcs')}
@@ -93,13 +95,17 @@ function PanelNoProject() {
 						<FaHandsHelping />
 						{t('contribute')}
 					</Button>
-					<a
-						href={'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0'}
-						target='_blank'
-						rel='noreferrer'
-					>
-						{t('how.convert.project.2.0')}
-					</a>
+					{!Constants.IS_DESKTOP && (
+						<a
+							href={
+								'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0'
+							}
+							target='_blank'
+							rel='noreferrer'
+						>
+							{t('how.convert.project.2.0')}
+						</a>
+					)}
 				</Flex>
 			</Flex>
 		</Flex>

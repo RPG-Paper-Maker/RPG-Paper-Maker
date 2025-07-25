@@ -47,7 +47,7 @@ class IO {
 	static async openFileDialog(options: {
 		defaultPath?: string;
 		multiple?: string;
-		extensions?: string[];
+		extensions?: string[] | string[][];
 	}): Promise<string[] | undefined> {
 		return (await this.invoke('open-file-dialog', options)) as string[] | undefined;
 	}
@@ -93,7 +93,7 @@ class IO {
 	}
 
 	static async moveFolder(src: string, dst: string) {
-		await this.invoke('move-folder', src, dst);
+		await this.invoke('rename-file', src, dst);
 	}
 
 	static async createFile(path: string, content: string | Buffer<ArrayBuffer> | Blob) {
@@ -109,7 +109,7 @@ class IO {
 	}
 
 	static async moveFile(src: string, dst: string) {
-		await this.invoke('move-file', src, dst);
+		await this.invoke('rename-file', src, dst);
 	}
 
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
@@ -138,6 +138,10 @@ class IO {
 
 	static async close() {
 		await this.invoke('close');
+	}
+
+	static async openWebsite(url: string) {
+		await this.invoke('open-website', url);
 	}
 }
 

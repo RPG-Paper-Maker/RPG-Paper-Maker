@@ -209,7 +209,7 @@ function MainMenuBar() {
 		if (Constants.IS_DESKTOP) {
 			const filesPath = await IO.openFileDialog({
 				defaultPath: Paths.getRPMGamesFolder(),
-				extensions: [EXTENSION_KIND.RPMG],
+				extensions: [[EXTENSION_KIND.RPMG, EXTENSION_KIND.RPM]],
 			});
 			if (filesPath) {
 				const filePath = Paths.normalize(filesPath[0]);
@@ -599,30 +599,34 @@ function MainMenuBar() {
 						onClick: () => handleOpenProject(project),
 					})),
 				},
-				{
-					title: (
-						<>
-							{`${Constants.IS_DESKTOP ? t('import.web.project') : t('import.project')}...`}
-							<input
-								ref={importFileInputRef}
-								type='file'
-								hidden
-								onChange={handleImportFileChange}
-								accept='.zip'
-							/>
-						</>
-					),
-					icon: <BiImport />,
-					onClick: handleImport,
-					shortcut: [SPECIAL_KEY.CTRL, KEY.I],
-				},
-				{
-					title: `${Constants.IS_DESKTOP ? t('export.web.project') : t('export.project')}...`,
-					icon: <BiExport />,
-					disabled: !isProjectOpened,
-					onClick: handleExport,
-					shortcut: [SPECIAL_KEY.CTRL, KEY.E],
-				},
+				...(Constants.IS_DESKTOP
+					? []
+					: [
+							{
+								title: (
+									<>
+										{`${t('import.project')}...`}
+										<input
+											ref={importFileInputRef}
+											type='file'
+											hidden
+											onChange={handleImportFileChange}
+											accept='.zip'
+										/>
+									</>
+								),
+								icon: <BiImport />,
+								onClick: handleImport,
+								shortcut: [SPECIAL_KEY.CTRL, KEY.I],
+							},
+							{
+								title: `${t('export.project')}...`,
+								icon: <BiExport />,
+								disabled: !isProjectOpened,
+								onClick: handleExport,
+								shortcut: [SPECIAL_KEY.CTRL, KEY.E],
+							},
+					  ]),
 				{
 					title: t('save'),
 					icon: <BiSave />,

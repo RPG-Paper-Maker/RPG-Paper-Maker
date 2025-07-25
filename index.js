@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -65,13 +65,19 @@ ipcMain.handle('get-system-information', () => {
 ipcMain.handle('open-file-dialog', async (event, options) => {
 	const result = await dialog.showOpenDialog(window, {
 		filters: options.extensions.map((extension) => {
-			let name = '';
+			let name;
 			switch (extension) {
 				case 'rpmg':
 					name = 'RPG Paper Maker game file';
 					break;
+				case 'rpm':
+					name = 'RPG Paper Maker 2.0 game file';
+					break;
+				default:
+					name = 'Files';
+					break;
 			}
-			return { name, extensions: [extension] };
+			return { name, extensions: name === 'Files' ? extension : [extension] };
 		}),
 		properties: ['openFile'],
 	});
@@ -243,4 +249,8 @@ ipcMain.handle('unmaximize', () => {
 
 ipcMain.handle('close', () => {
 	window.close();
+});
+
+ipcMain.handle('open-website', (event, url) => {
+	shell.openExternal(url);
 });
