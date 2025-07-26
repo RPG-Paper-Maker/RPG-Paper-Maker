@@ -279,20 +279,22 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	) => (
 		<Flex fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
-				<Flex one fillHeight>
-					<Tree
-						constructorType={constructorType}
-						list={list}
-						minWidth={TREES_LARGE_MIN_WIDTH}
-						onSelectedItem={onSelectedItem}
-						onListUpdated={kind === undefined ? undefined : onListUpdated}
-						noScrollOnForce
-						scrollable
-						cannotAdd={kind === undefined}
-						cannotDelete={kind === undefined}
-						cannotDragDrop={kind === undefined}
-						cannotEdit={kind === undefined}
-					/>
+				<Flex one column fillHeight>
+					<Flex one column scrollable zeroHeight>
+						<Tree
+							constructorType={constructorType}
+							list={list}
+							minWidth={TREES_LARGE_MIN_WIDTH}
+							onSelectedItem={onSelectedItem}
+							onListUpdated={kind === undefined ? undefined : onListUpdated}
+							noScrollOnForce
+							scrollable
+							cannotAdd={kind === undefined}
+							cannotDelete={kind === undefined}
+							cannotDragDrop={kind === undefined}
+							cannotEdit={kind === undefined}
+						/>
+					</Flex>
 				</Flex>
 			</Groupbox>
 			<Flex one fillWidth>

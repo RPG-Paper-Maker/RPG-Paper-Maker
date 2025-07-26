@@ -156,12 +156,13 @@ class Shape extends Asset {
 	}
 
 	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
-		return (
-			(isBR
+		return Paths.join(
+			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
-				: `${Project.current?.getPath()}/`) + this.getLocalFolder(kind)
+				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+				: Project.current?.getPath(),
+			this.getLocalFolder(kind)
 		);
 	}
 

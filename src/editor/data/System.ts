@@ -202,7 +202,7 @@ class System extends Serializable {
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
 		if (!Constants.IS_DESKTOP) {
-			this.PATH_BR = './BR/';
+			this.PATH_BR = './BR';
 		}
 		this.soundCursor.kind = SONG_KIND.SOUND;
 		this.soundConfirmation.kind = SONG_KIND.SOUND;

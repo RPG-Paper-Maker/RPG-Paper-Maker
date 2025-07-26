@@ -388,6 +388,7 @@ function DialogPictures({
 				{kind === undefined && (
 					<Flex>
 						<Tree
+							constructorType={Model.TreeMapTag}
 							list={folders}
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleChangeFolder}
@@ -395,7 +396,6 @@ function DialogPictures({
 							cannotEdit
 							cannotDragDrop
 							cannotDelete
-							doNotShowID
 						/>
 					</Flex>
 				)}

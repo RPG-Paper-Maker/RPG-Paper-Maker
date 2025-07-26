@@ -243,14 +243,18 @@ export const getAllFilesFromFolder = async (path: string): Promise<string[]> => 
 	if (Constants.IS_DESKTOP) {
 		return await IO.getFiles(path);
 	} else {
+		console.log(path);
 		const folders = path.split('/');
 		folders.shift();
 		if (folders.length > 0 && folders[0] === '') {
 			folders.shift();
 		}
+		console.log(folders, Platform.manifest);
 		let currentFolder = Platform.manifest;
 		for (const folder of folders) {
+			console.log(folder);
 			currentFolder = currentFolder[folder] as Record<string, unknown>;
+			console.log(currentFolder);
 		}
 		return (currentFolder?.files as string[]) ?? [];
 	}

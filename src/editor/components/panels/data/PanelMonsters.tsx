@@ -48,19 +48,21 @@ const PanelMonsters = forwardRef((props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('monsters')}>
-				<Flex one fillHeight>
-					<Tree
-						constructorType={Model.Monster}
-						list={monsters}
-						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectMonster}
-						onListUpdated={handleListUpdated}
-						noScrollOnForce
-						scrollable
-						showEditName
-						isLocalization
-						applyDefault
-					/>
+				<Flex one column fillHeight>
+					<Flex one column scrollable zeroHeight>
+						<Tree
+							constructorType={Model.Monster}
+							list={monsters}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleSelectMonster}
+							onListUpdated={handleListUpdated}
+							noScrollOnForce
+							scrollable
+							showEditName
+							isLocalization
+							applyDefault
+						/>
+					</Flex>
 				</Flex>
 			</Groupbox>
 			<Flex one column>

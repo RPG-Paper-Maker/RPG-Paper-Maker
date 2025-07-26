@@ -411,19 +411,22 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsContent = () => (
 		<Flex key={0} spacedLarge fillWidth fillHeight>
-			<Flex fillHeight>
-				<Tree
-					constructorType={Model.Plugin}
-					list={plugins}
-					minWidth={TREES_MIN_WIDTH}
-					onSelectedItem={handleSelectPlugin}
-					onListUpdated={handleListUpdated}
-					onDeleteItem={handleDeletePlugin}
-					triggerUpdate={triggerUpdate}
-					noScrollOnForce
-					scrollable
-					applyDefault
-				/>
+			<Flex one column fillHeight>
+				<Flex one column scrollable zeroHeight>
+					<Tree
+						constructorType={Model.Plugin}
+						list={plugins}
+						minWidth={TREES_MIN_WIDTH}
+						onSelectedItem={handleSelectPlugin}
+						onListUpdated={handleListUpdated}
+						onDeleteItem={handleDeletePlugin}
+						triggerUpdate={triggerUpdate}
+						noScrollOnForce
+						scrollable
+						applyDefault
+						canBeEmpty
+					/>
+				</Flex>
 			</Flex>
 			<Flex one>
 				{selectedPlugin && selectedPlugin.id !== -1 ? (
@@ -594,18 +597,22 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const getPluginsSourceCode = () => (
 		<Flex key={1} spacedLarge fillWidth fillHeight>
 			<Flex fillHeight>
-				<Tree
-					constructorType={Model.TreeMapTag}
-					list={folders}
-					minWidth={TREES_LARGE_MIN_WIDTH}
-					onSelectedItem={handleSelectSourceCode}
-					noScrollOnForce
-					scrollable
-					cannotAdd
-					cannotDelete
-					cannotDragDrop
-					cannotEdit
-				/>
+				<Flex one column>
+					<Flex one column scrollable zeroHeight>
+						<Tree
+							constructorType={Model.TreeMapTag}
+							list={folders}
+							minWidth={TREES_LARGE_MIN_WIDTH}
+							onSelectedItem={handleSelectSourceCode}
+							noScrollOnForce
+							scrollable
+							cannotAdd
+							cannotDelete
+							cannotDragDrop
+							cannotEdit
+						/>
+					</Flex>
+				</Flex>
 			</Flex>
 			<Flex one scrollable>
 				{sourceCode && (

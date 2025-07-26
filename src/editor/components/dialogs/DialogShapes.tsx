@@ -207,6 +207,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 				{kind === undefined && (
 					<Flex>
 						<Tree
+							constructorType={Model.TreeMapTag}
 							list={folders}
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleChangeFolder}
@@ -214,7 +215,6 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 							cannotEdit
 							cannotDragDrop
 							cannotDelete
-							doNotShowID
 						/>
 					</Flex>
 				)}

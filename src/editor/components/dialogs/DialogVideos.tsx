@@ -245,13 +245,13 @@ function DialogVideos({
 				{manager && (
 					<Flex>
 						<Tree
+							constructorType={Model.TreeMapTag}
 							list={folders}
 							minWidth={TREES_MIN_WIDTH}
 							cannotAdd
 							cannotEdit
 							cannotDragDrop
 							cannotDelete
-							doNotShowID
 						/>
 					</Flex>
 				)}

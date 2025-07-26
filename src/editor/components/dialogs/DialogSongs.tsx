@@ -398,6 +398,7 @@ function DialogSongs({
 				{kind === undefined && (
 					<Flex>
 						<Tree
+							constructorType={Model.TreeMapTag}
 							list={folders}
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleChangeFolder}
@@ -405,7 +406,6 @@ function DialogSongs({
 							cannotEdit
 							cannotDragDrop
 							cannotDelete
-							doNotShowID
 						/>
 					</Flex>
 				)}

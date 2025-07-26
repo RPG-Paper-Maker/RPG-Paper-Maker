@@ -103,19 +103,17 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 						</Flex>
 						<Flex one column spaced>
 							<div>{t('loots')}:</div>
-							<Flex one fillHeight>
-								<Tree
-									constructorType={MonsterLoot}
-									list={loots}
-									onListUpdated={handleUpdateLoots}
-									minHeight={TREES_MIN_HEIGHT}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-									byIndex
-								/>
-							</Flex>
+							<Tree
+								constructorType={MonsterLoot}
+								list={loots}
+								onListUpdated={handleUpdateLoots}
+								height={TREES_MIN_HEIGHT}
+								disabled={disabled}
+								noScrollOnForce
+								scrollable
+								canBeEmpty
+								byIndex
+							/>
 						</Flex>
 					</Flex>
 				</Groupbox>
@@ -124,7 +122,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 						constructorType={MonsterAction}
 						list={actions}
 						onListUpdated={handleUpdateActions}
-						minHeight={TREES_MIN_HEIGHT}
+						height={TREES_MIN_HEIGHT}
 						disabled={disabled}
 						noScrollOnForce
 						scrollable

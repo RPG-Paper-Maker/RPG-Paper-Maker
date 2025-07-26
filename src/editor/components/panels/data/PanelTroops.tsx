@@ -126,19 +126,21 @@ const PanelTroops = forwardRef((props, ref) => {
 		<>
 			<Flex spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('troops')}>
-					<Flex one fillHeight>
-						<Tree
-							constructorType={Model.Troop}
-							list={troops}
-							minWidth={TREES_MIN_WIDTH}
-							onSelectedItem={handleSelectTroop}
-							onListUpdated={handleListUpdated}
-							noScrollOnForce
-							scrollable
-							showEditName
-							isLocalization
-							applyDefault
-						/>
+					<Flex one column fillHeight>
+						<Flex one column scrollable zeroHeight>
+							<Tree
+								constructorType={Model.Troop}
+								list={troops}
+								minWidth={TREES_MIN_WIDTH}
+								onSelectedItem={handleSelectTroop}
+								onListUpdated={handleListUpdated}
+								noScrollOnForce
+								scrollable
+								showEditName
+								isLocalization
+								applyDefault
+							/>
+						</Flex>
 					</Flex>
 				</Groupbox>
 				<Flex one column>
@@ -151,15 +153,19 @@ const PanelTroops = forwardRef((props, ref) => {
 									</Button>
 									<Flex one>
 										<Groupbox title={t('monsters.list')} fillWidth disabled={isTroopDisabled}>
-											<Tree
-												constructorType={Model.TroopMonster}
-												list={monsters}
-												onListUpdated={handleMonstersListUpdated}
-												noScrollOnForce
-												scrollable
-												applyDefault
-												disabled={isTroopDisabled}
-											/>
+											<Flex one column fillHeight>
+												<Flex one column scrollable zeroHeight>
+													<Tree
+														constructorType={Model.TroopMonster}
+														list={monsters}
+														onListUpdated={handleMonstersListUpdated}
+														noScrollOnForce
+														scrollable
+														applyDefault
+														disabled={isTroopDisabled}
+													/>
+												</Flex>
+											</Flex>
 										</Groupbox>
 									</Flex>
 								</Flex>
@@ -177,7 +183,7 @@ const PanelTroops = forwardRef((props, ref) => {
 											list={reactions}
 											onListUpdated={handleReactionsListUpdated}
 											onSelectedItem={handleSelectReaction}
-											minHeight={TREES_LARGE_MIN_HEIGHT}
+											height={TREES_LARGE_MIN_HEIGHT}
 											minWidth={TREES_MIN_WIDTH}
 											disabled={isTroopDisabled}
 											noScrollOnForce

@@ -148,19 +148,21 @@ const PanelStatus = forwardRef((props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('status')}>
-				<Flex one fillHeight>
-					<Tree
-						constructorType={Status}
-						list={status}
-						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectStatus}
-						onListUpdated={handleListUpdated}
-						noScrollOnForce
-						scrollable
-						showEditName
-						isLocalization
-						applyDefault
-					/>
+				<Flex one column fillHeight>
+					<Flex one column scrollable zeroHeight>
+						<Tree
+							constructorType={Status}
+							list={status}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleSelectStatus}
+							onListUpdated={handleListUpdated}
+							noScrollOnForce
+							scrollable
+							showEditName
+							isLocalization
+							applyDefault
+						/>
+					</Flex>
 				</Flex>
 			</Groupbox>
 			<Flex one column>
@@ -245,7 +247,7 @@ const PanelStatus = forwardRef((props, ref) => {
 									<Tree
 										constructorType={StatusReleaseTurn}
 										list={releaseStartTurn}
-										minHeight={TREES_MIN_HEIGHT}
+										height={TREES_MIN_HEIGHT}
 										onListUpdated={handleReleaseStartTurnListUpdated}
 										disabled={isStatusDisabled || !isReleaseStartTurn}
 										noScrollOnForce
@@ -312,33 +314,37 @@ const PanelStatus = forwardRef((props, ref) => {
 							</Flex>
 							<Flex one>
 								<Groupbox title={t('effects')} fillWidth>
-									<Flex one fillHeight>
-										<Tree
-											constructorType={Effect}
-											list={effects}
-											onListUpdated={handleUpdateEffects}
-											disabled={isStatusDisabled}
-											noScrollOnForce
-											scrollable
-											canBeEmpty
-											byIndex
-										/>
+									<Flex one column fillHeight>
+										<Flex one column scrollable zeroHeight>
+											<Tree
+												constructorType={Effect}
+												list={effects}
+												onListUpdated={handleUpdateEffects}
+												disabled={isStatusDisabled}
+												noScrollOnForce
+												scrollable
+												canBeEmpty
+												byIndex
+											/>
+										</Flex>
 									</Flex>
 								</Groupbox>
 							</Flex>
 							<Flex one>
 								<Groupbox title={t('characteristics')} fillWidth>
-									<Flex one fillHeight>
-										<Tree
-											constructorType={Characteristic}
-											list={characteristics}
-											onListUpdated={handleUpdateCharacteristics}
-											disabled={isStatusDisabled}
-											noScrollOnForce
-											scrollable
-											canBeEmpty
-											byIndex
-										/>
+									<Flex one column fillHeight>
+										<Flex one column scrollable zeroHeight>
+											<Tree
+												constructorType={Characteristic}
+												list={characteristics}
+												onListUpdated={handleUpdateCharacteristics}
+												disabled={isStatusDisabled}
+												noScrollOnForce
+												scrollable
+												canBeEmpty
+												byIndex
+											/>
+										</Flex>
 									</Flex>
 								</Groupbox>
 							</Flex>

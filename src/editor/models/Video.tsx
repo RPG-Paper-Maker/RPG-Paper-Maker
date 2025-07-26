@@ -15,12 +15,13 @@ import { Asset } from './Asset';
 
 class Video extends Asset {
 	static getFolder(isBR: boolean, dlc: string): string {
-		return (
-			(isBR
+		return Paths.join(
+			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
-				: `${Project.current?.getPath()}/`) + this.getLocalFolder()
+				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+				: Project.current?.getPath(),
+			this.getLocalFolder()
 		);
 	}
 

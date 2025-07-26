@@ -13,6 +13,7 @@ import { useLayoutEffect, useState } from 'react';
 import { ArrayUtils, EVENT_COMMAND_KIND } from '../common';
 import { Node } from '../core/Node';
 import { Model } from '../Editor';
+import Flex from './Flex';
 import Tree from './Tree';
 
 type Props = {
@@ -122,18 +123,22 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 	}, [list]);
 
 	return updatedList ? (
-		<Tree
-			list={updatedList}
-			constructorType={Model.MapObjectCommand}
-			onAccept={handleAcceptCommand}
-			onListUpdated={onListUpdated}
-			disabled={disabled}
-			multipleLevels
-			canBeEmpty
-			scrollable
-			multipleSelection
-			noScrollOnForce
-		/>
+		<Flex one column>
+			<Flex one column scrollable zeroHeight>
+				<Tree
+					list={updatedList}
+					constructorType={Model.MapObjectCommand}
+					onAccept={handleAcceptCommand}
+					onListUpdated={onListUpdated}
+					disabled={disabled}
+					multipleLevels
+					canBeEmpty
+					scrollable
+					multipleSelection
+					noScrollOnForce
+				/>
+			</Flex>
+		</Flex>
 	) : null;
 }
 
