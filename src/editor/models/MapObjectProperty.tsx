@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class MapObjectProperty extends Base {
+	public static type = 'MapObjectProperty';
 	public initialValue!: DynamicValue;
 
 	public static bindings: BindingType[] = [

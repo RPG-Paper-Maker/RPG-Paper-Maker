@@ -14,7 +14,7 @@ import { ArrayUtils, BINDING, JSONType, Paths } from '../common';
 import { BindingType, Serializable } from './Serializable';
 
 class LocalFile extends Serializable {
-	public static readonly CACHE_VERSION = '0.0.1';
+	public static readonly CACHE_VERSION = '0.0.2';
 	public static readonly JSON_FOLDER_NAMES = 'fon';
 	public static readonly JSON_FILE_NAMES = 'fin';
 	public static readonly JSON_CONTENT = 'c';

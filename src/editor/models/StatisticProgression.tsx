@@ -19,6 +19,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { ProgressionTable } from './ProgressionTable';
 
 class StatisticProgression extends Base {
+	public static type = 'StatisticProgression';
 	public static selectedClassStatisticsProgression: StatisticProgression[];
 	public maxValue!: DynamicValue;
 	public isFix!: boolean;

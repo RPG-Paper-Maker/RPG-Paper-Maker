@@ -23,7 +23,6 @@ import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import DialogMapProperties from './dialogs/models/DialogMapProperties';
 import DialogName from './dialogs/models/DialogName';
-import Flex from './Flex';
 import Tree from './Tree';
 
 type Props = {
@@ -339,24 +338,20 @@ function TreeMaps({
 
 	return (
 		<>
-			<Flex one column>
-				<Flex one column scrollable zeroHeight>
-					<Tree
-						list={Project.current!.treeMaps.tree}
-						constructorType={Model.TreeMapTag}
-						contextMenuItems={getContextMenuItems()}
-						defaultSelectedID={-1}
-						onSelectedItem={handleSelectedItem}
-						forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
-						setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
-						onDrop={handleDrop}
-						minWidth={minWidth}
-						cannotAdd
-						applyDefault
-						scrollable
-					/>
-				</Flex>
-			</Flex>
+			<Tree
+				list={Project.current!.treeMaps.tree}
+				constructorType={Model.TreeMapTag}
+				contextMenuItems={getContextMenuItems()}
+				defaultSelectedID={-1}
+				onSelectedItem={handleSelectedItem}
+				forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
+				setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
+				onDrop={handleDrop}
+				minWidth={minWidth}
+				cannotAdd
+				applyDefault
+				scrollable
+			/>
 			<DialogMapProperties
 				isOpen={isOpenMapProperties}
 				setIsOpen={setIsOpenMapProperties}

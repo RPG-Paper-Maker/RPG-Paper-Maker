@@ -15,6 +15,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Language extends Base {
+	public static type = 'Language';
 	public kind!: number;
 
 	public static bindings: BindingType[] = [['kind', 'kind', undefined, BINDING.NUMBER]];

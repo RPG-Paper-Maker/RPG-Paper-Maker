@@ -20,6 +20,7 @@ import { Localization } from './Localization';
 import { PlaySong } from './PlaySong';
 
 class CommonSkillItem extends Icon {
+	public static type = 'CommonSkillItem';
 	public type!: number;
 	public consumable!: boolean;
 	public oneHand!: boolean;

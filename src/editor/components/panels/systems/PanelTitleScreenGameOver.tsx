@@ -150,15 +150,13 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('menu.commands')} fillWidth>
-								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.TitleCommand}
-										list={titleCommands}
-										noScrollOnForce
-										scrollable
-										doNotShowID
-									/>
-								</Flex>
+								<Tree
+									constructorType={Model.TitleCommand}
+									list={titleCommands}
+									noScrollOnForce
+									scrollable
+									doNotShowID
+								/>
 							</Groupbox>
 						</Flex>
 						<Flex one>
@@ -226,15 +224,13 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('menu.commands')} fillWidth>
-								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.GameOverCommand}
-										list={gameOverCommands}
-										noScrollOnForce
-										scrollable
-										doNotShowID
-									/>
-								</Flex>
+								<Tree
+									constructorType={Model.GameOverCommand}
+									list={gameOverCommands}
+									noScrollOnForce
+									scrollable
+									doNotShowID
+								/>
 							</Groupbox>
 						</Flex>
 					</Flex>

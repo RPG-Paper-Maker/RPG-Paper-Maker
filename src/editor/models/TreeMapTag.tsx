@@ -20,6 +20,7 @@ import { Model } from '../Editor';
 import { Base } from './Base';
 
 class TreeMapTag extends Base {
+	public static type = 'TreeMapTag';
 	public saved!: boolean;
 	public cameraDistance?: number;
 	public cameraHorizontalAngle?: number;

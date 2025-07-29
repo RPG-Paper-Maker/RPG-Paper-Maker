@@ -13,7 +13,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { initializeAcceptRef } from '../../common';
 import PanelSelectMapPosition from '../panels/PanelSelectMapPosition';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
@@ -70,6 +70,7 @@ function DialogSelectMapPosition({
 				initialWidth='70%'
 				initialHeight='70%'
 				onClose={handleReject}
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<PanelSelectMapPosition
 					ref={panelSelectMapPositionRef}

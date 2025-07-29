@@ -18,6 +18,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class MonsterLoot extends Base {
+	public static type = 'MonsterLoot';
 	public kind!: ITEM_KIND;
 	public lootID!: DynamicValue;
 	public number!: DynamicValue;

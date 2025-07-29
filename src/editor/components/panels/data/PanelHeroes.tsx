@@ -49,22 +49,18 @@ const PanelHeroes = forwardRef((props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('heroes')}>
-				<Flex one column fillHeight>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={Model.Hero}
-							list={heroes}
-							minWidth={TREES_MIN_WIDTH}
-							onSelectedItem={handleSelectHero}
-							onListUpdated={handleListUpdated}
-							noScrollOnForce
-							scrollable
-							showEditName
-							isLocalization
-							applyDefault
-						/>
-					</Flex>
-				</Flex>
+				<Tree
+					constructorType={Model.Hero}
+					list={heroes}
+					minWidth={TREES_MIN_WIDTH}
+					onSelectedItem={handleSelectHero}
+					onListUpdated={handleListUpdated}
+					noScrollOnForce
+					scrollable
+					showEditName
+					isLocalization
+					applyDefault
+				/>
 			</Groupbox>
 			<Flex one column>
 				<Flex one column scrollable zeroHeight>

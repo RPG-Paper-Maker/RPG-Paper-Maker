@@ -92,22 +92,18 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t(getLabel())}>
-				<Flex one column fillHeight>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={Model.CommonSkillItem}
-							list={elements}
-							minWidth={TREES_MIN_WIDTH}
-							onSelectedItem={handleSelectElement}
-							onListUpdated={handleListUpdated}
-							noScrollOnForce
-							scrollable
-							showEditName
-							isLocalization
-							applyDefault
-						/>
-					</Flex>
-				</Flex>
+				<Tree
+					constructorType={Model.CommonSkillItem}
+					list={elements}
+					minWidth={TREES_MIN_WIDTH}
+					onSelectedItem={handleSelectElement}
+					onListUpdated={handleListUpdated}
+					noScrollOnForce
+					scrollable
+					showEditName
+					isLocalization
+					applyDefault
+				/>
 			</Groupbox>
 			<Flex one>
 				<PanelCommonSkillItemContent selectedElement={selectedElement} kind={kind} disabled={isDisabled} />

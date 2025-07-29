@@ -308,23 +308,19 @@ const PanelAnimations = forwardRef((props, ref) => {
 		<>
 			<Flex spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('animations')} disabled={isPlaying}>
-					<Flex one column fillHeight>
-						<Flex one column scrollable zeroHeight>
-							<Tree
-								constructorType={Animation}
-								list={animations}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleSelectAnimation}
-								onListUpdated={handleListUpdated}
-								disabled={isPlaying}
-								noScrollOnForce
-								scrollable
-								showEditName
-								isLocalization
-								applyDefault
-							/>
-						</Flex>
-					</Flex>
+					<Tree
+						constructorType={Animation}
+						list={animations}
+						minWidth={TREES_MIN_WIDTH}
+						onSelectedItem={handleSelectAnimation}
+						onListUpdated={handleListUpdated}
+						disabled={isPlaying}
+						noScrollOnForce
+						scrollable
+						showEditName
+						isLocalization
+						applyDefault
+					/>
 				</Groupbox>
 				<Flex one column spacedLarge>
 					<Flex spaced centerV>

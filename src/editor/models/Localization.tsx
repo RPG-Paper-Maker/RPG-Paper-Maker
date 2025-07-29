@@ -18,6 +18,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 
 class Localization extends Base {
+	public static type = 'Localization';
 	public names: Map<string, string> = new Map();
 
 	public static readonly bindings: BindingType[] = [['names', 'names', undefined, BINDING.MAP]];

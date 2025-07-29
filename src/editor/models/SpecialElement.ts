@@ -14,6 +14,7 @@ import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class SpecialElement extends Base {
+	public static type = 'SpecialElement';
 	public static readonly JSON_PICTURE_ID = 'pic';
 	public static readonly DEFAULT_PICTURE_ID = -1;
 

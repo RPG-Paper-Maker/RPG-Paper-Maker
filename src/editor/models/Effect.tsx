@@ -30,6 +30,7 @@ import { MapObjectCommand } from './MapObjectCommand';
 const { t } = i18next;
 
 class Effect extends Base {
+	public static type = 'Effect';
 	public kind!: EFFECT_KIND;
 	public damageKind!: DAMAGES_KIND;
 	public damageStatisticID!: DynamicValue;

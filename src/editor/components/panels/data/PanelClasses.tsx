@@ -48,22 +48,18 @@ const PanelClasses = forwardRef((props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('classes')}>
-				<Flex one column fillHeight>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={Model.Class}
-							list={classes}
-							minWidth={TREES_MIN_WIDTH}
-							onSelectedItem={handleSelectClass}
-							onListUpdated={handleListUpdated}
-							noScrollOnForce
-							scrollable
-							showEditName
-							isLocalization
-							applyDefault
-						/>
-					</Flex>
-				</Flex>
+				<Tree
+					constructorType={Model.Class}
+					list={classes}
+					minWidth={TREES_MIN_WIDTH}
+					onSelectedItem={handleSelectClass}
+					onListUpdated={handleListUpdated}
+					noScrollOnForce
+					scrollable
+					showEditName
+					isLocalization
+					applyDefault
+				/>
 			</Groupbox>
 			<Flex one>
 				<PanelClassContent selectedClass={selectedClass} disabled={isClassDisabled} />

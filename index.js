@@ -16,8 +16,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.commandLine.appendSwitch('high-dpi-support', 1);
-app.commandLine.appendSwitch('force-device-scale-factor', 1);
+if (!app.isPackaged) {
+	// Needed only for development, packed app will have the correct DPI settings
+	app.commandLine.appendSwitch('high-dpi-support', 1);
+	app.commandLine.appendSwitch('force-device-scale-factor', 1);
+}
 
 let globalValues = {};
 let window;

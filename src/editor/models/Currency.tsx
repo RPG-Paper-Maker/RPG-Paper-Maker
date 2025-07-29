@@ -18,6 +18,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Icon } from './Icon';
 
 class Currency extends Icon {
+	public static type = 'Currency';
 	public displayInMenu!: DynamicValue;
 
 	public static bindings: BindingType[] = [

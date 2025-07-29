@@ -18,6 +18,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class InitialPartyMember extends Base {
+	public static type = 'InitialPartyMember';
 	public level!: DynamicValue;
 	public teamKind!: GROUP_KIND;
 	public isHero!: boolean;

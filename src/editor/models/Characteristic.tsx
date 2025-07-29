@@ -21,6 +21,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 const { t } = i18next;
 
 class Characteristic extends Base {
+	public static type = 'Base';
 	public kind!: CHARACTERISTIC_KIND;
 	public isIncreaseDecrease!: boolean;
 	public increaseDecreaseKind!: INCREASE_DECREASE_KIND;

@@ -20,6 +20,7 @@ import { ElementEfficiency } from './ElementEfficiency';
 import { Icon } from './Icon';
 
 class Element extends Icon {
+	public static type = 'Element';
 	public efficiencies!: Map<number, DynamicValue>;
 
 	public static bindings: BindingType[] = [['efficiencies', 'e', undefined, BINDING.MAP_KEY_VALUE, DynamicValue]];

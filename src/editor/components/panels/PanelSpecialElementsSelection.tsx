@@ -16,6 +16,7 @@ import { Manager, Model, Scene } from '../../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core/Project';
 import { Rectangle } from '../../core/Rectangle';
+import useStateNumber from '../../hooks/useStateNumber';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -44,7 +45,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const [minToDisplay, setMinToDisplay] = useState(0);
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
 	const [positionScroll] = useState({ current: 0 });
-	const [objects3DURLs, setObjects3DURLs] = useState<Map<number, string>>(new Map());
+	const [objects3DURLs] = useState<Map<number, string>>(new Map());
+	const [, setTriggerUpdate] = useStateNumber();
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +134,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 						Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
 						const dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
 						objects3DURLs.set(elementID, dataURL);
-						setObjects3DURLs(new Map(objects3DURLs));
+						setTriggerUpdate(elementID);
 					}
 				}
 			}
@@ -228,7 +230,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
 				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
 			}
-			updateCanvas();
+			if (firstScroll) {
+				updateCanvas();
+			}
 		}
 	};
 
@@ -266,7 +270,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				content.removeEventListener('scroll', handleScroll);
 			};
 		}
-	}, [minToDisplay, maxToDisplay]);
+	}, [minToDisplay, maxToDisplay, firstScroll]);
 
 	useEffect(() => {
 		const content = contentRef.current;

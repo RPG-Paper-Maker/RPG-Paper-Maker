@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class CameraProperty extends Base {
+	public static type = 'CameraProperty';
 	public distance!: DynamicValue;
 	public horizontalAngle!: DynamicValue;
 	public verticalAngle!: DynamicValue;

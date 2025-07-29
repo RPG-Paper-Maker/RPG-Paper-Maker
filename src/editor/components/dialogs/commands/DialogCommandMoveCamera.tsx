@@ -246,10 +246,11 @@ function DialogCommandMoveCamera({ commandKind, isOpen, setIsOpen, list, onAccep
 						</Form>
 					</Flex>
 				</Groupbox>
-				<Groupbox title={t('rotation')}>
+				<Groupbox title={t('distance')}>
 					<Flex spaced centerV>
 						<div>{t('distance')}:</div>
-						<DynamicValueSelector value={distance} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />°
+						<DynamicValueSelector value={distance} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+						px
 					</Flex>
 				</Groupbox>
 				<PanelWaitTime ref={panelWaitTimeRef} />

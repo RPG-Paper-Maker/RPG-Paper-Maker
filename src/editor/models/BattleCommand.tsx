@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class BattleCommand extends Base {
+	public static type = 'BattleCommand';
 	public skillID!: number;
 
 	public static bindings: BindingType[] = [['skillID', 's', undefined, BINDING.NUMBER]];

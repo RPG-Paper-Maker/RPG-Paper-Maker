@@ -18,6 +18,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class HeroStatisticDisplay extends Base {
+	public static type = 'HeroStatisticDisplay';
 	public statisticID!: DynamicValue;
 
 	public static bindings: BindingType[] = [

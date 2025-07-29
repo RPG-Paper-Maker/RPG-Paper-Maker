@@ -19,6 +19,7 @@ import { Localization } from './Localization';
 const { t } = i18next;
 
 class Keyboard extends Localization {
+	public static type = 'Keyboard';
 	public abbreviation!: string;
 	public shortcuts!: string[][];
 	public isEngine = false;

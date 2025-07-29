@@ -480,7 +480,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 					title={`${t('commands')}...`}
 					isOpen={isOpen}
 					onClose={handleReject}
-					initialWidth='600px'
+					initialWidth='700px'
 					initialHeight='550px'
 					zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 				>

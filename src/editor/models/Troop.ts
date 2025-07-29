@@ -16,6 +16,7 @@ import { TroopMonster } from './TroopMonster';
 import { TroopReaction } from './TroopReaction';
 
 class Troop extends Base {
+	public static type = 'Troop';
 	public list!: TroopMonster[];
 	public reactions!: TroopReaction[];
 

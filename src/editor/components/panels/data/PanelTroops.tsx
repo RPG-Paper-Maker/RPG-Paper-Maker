@@ -126,22 +126,18 @@ const PanelTroops = forwardRef((props, ref) => {
 		<>
 			<Flex spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('troops')}>
-					<Flex one column fillHeight>
-						<Flex one column scrollable zeroHeight>
-							<Tree
-								constructorType={Model.Troop}
-								list={troops}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleSelectTroop}
-								onListUpdated={handleListUpdated}
-								noScrollOnForce
-								scrollable
-								showEditName
-								isLocalization
-								applyDefault
-							/>
-						</Flex>
-					</Flex>
+					<Tree
+						constructorType={Model.Troop}
+						list={troops}
+						minWidth={TREES_MIN_WIDTH}
+						onSelectedItem={handleSelectTroop}
+						onListUpdated={handleListUpdated}
+						noScrollOnForce
+						scrollable
+						showEditName
+						isLocalization
+						applyDefault
+					/>
 				</Groupbox>
 				<Flex one column>
 					<Flex one column scrollable zeroHeight>
@@ -153,19 +149,15 @@ const PanelTroops = forwardRef((props, ref) => {
 									</Button>
 									<Flex one>
 										<Groupbox title={t('monsters.list')} fillWidth disabled={isTroopDisabled}>
-											<Flex one column fillHeight>
-												<Flex one column scrollable zeroHeight>
-													<Tree
-														constructorType={Model.TroopMonster}
-														list={monsters}
-														onListUpdated={handleMonstersListUpdated}
-														noScrollOnForce
-														scrollable
-														applyDefault
-														disabled={isTroopDisabled}
-													/>
-												</Flex>
-											</Flex>
+											<Tree
+												constructorType={Model.TroopMonster}
+												list={monsters}
+												onListUpdated={handleMonstersListUpdated}
+												noScrollOnForce
+												scrollable
+												applyDefault
+												disabled={isTroopDisabled}
+											/>
 										</Groupbox>
 									</Flex>
 								</Flex>

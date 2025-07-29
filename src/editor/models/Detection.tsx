@@ -18,6 +18,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { Object3D } from './Object3D';
 
 class Detection extends Base {
+	public static type = 'Detection';
 	public fieldLeft!: number;
 	public fieldRight!: number;
 	public fieldTop!: number;

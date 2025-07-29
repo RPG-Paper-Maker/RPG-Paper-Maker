@@ -258,6 +258,13 @@ function MainMenuBar() {
 				}
 			} else {
 				await Project.current.load();
+				if (Constants.IS_DESKTOP) {
+					const newBRPath = Paths.join(window.__dirname, Paths.BR);
+					if (newBRPath !== Project.current.systems.PATH_BR) {
+						Project.current.systems.PATH_BR = newBRPath;
+						Project.current.systems.save();
+					}
+				}
 				const newName = Project.current.systems.projectName.getName();
 				if (project.name !== newName) {
 					project.name = newName;
@@ -648,11 +655,15 @@ function MainMenuBar() {
 					onClick: handleCloseProject,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.Q],
 				},
-				{
-					title: t('clear.all.cache'),
-					icon: <AiOutlineClear />,
-					onClick: handleClearAllCache,
-				},
+				...(Constants.IS_DESKTOP
+					? []
+					: [
+							{
+								title: t('clear.all.cache'),
+								icon: <AiOutlineClear />,
+								onClick: handleClearAllCache,
+							},
+					  ]),
 			],
 		},
 		{

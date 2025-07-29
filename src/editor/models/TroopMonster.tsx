@@ -18,6 +18,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class TroopMonster extends Base {
+	public static type = 'TroopMonster';
 	public static currentMonsters: TroopMonster[] = [];
 
 	public monsterID!: number;

@@ -21,6 +21,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 
 class CustomStructure extends Base {
+	public static type = 'CustomStructure';
 	public elements!: CustomStructure[];
 	public isList!: boolean;
 	public isProperty!: boolean;

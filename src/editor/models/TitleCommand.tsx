@@ -17,6 +17,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 
 class TitleCommand extends Localization {
+	public static type = 'TitleCommand';
 	public kind!: TITLE_COMMAND_KIND;
 	public script!: string;
 

@@ -18,6 +18,7 @@ import { MonsterLoot } from './MonsterLoot';
 import { ProgressionTable } from './ProgressionTable';
 
 class Monster extends Hero {
+	public static type = 'Monster';
 	experience!: ProgressionTable;
 	currencies!: Map<number, ProgressionTable>;
 	loots!: MonsterLoot[];

@@ -18,6 +18,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class BattleMap extends Base {
+	public static type = 'BattleMap';
 	public idMap!: number;
 	public position!: Position;
 

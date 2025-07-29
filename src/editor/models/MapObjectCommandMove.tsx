@@ -20,6 +20,7 @@ import { MapObjectCommand, MapObjectCommandType } from './MapObjectCommand';
 
 const { t } = i18next;
 class MapObjectCommandMove extends Base {
+	public static type = 'MapObjectCommandMove';
 	public command!: MapObjectCommandType[];
 
 	static createMove(kind: COMMAND_MOVE_KIND) {

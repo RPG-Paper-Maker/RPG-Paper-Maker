@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Frequency extends Base {
+	public static type = 'Frequency';
 	public value!: DynamicValue;
 
 	public static bindings: BindingType[] = [

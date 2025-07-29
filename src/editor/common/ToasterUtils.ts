@@ -2,7 +2,7 @@ import { Bounce, toast, ToastOptions } from 'react-toastify';
 
 export const TOASTER_OPTIONS: ToastOptions<unknown> = {
 	position: 'bottom-right',
-	autoClose: 5000,
+	autoClose: false,
 	hideProgressBar: true,
 	closeOnClick: false,
 	pauseOnHover: true,
@@ -13,5 +13,5 @@ export const TOASTER_OPTIONS: ToastOptions<unknown> = {
 };
 
 export const notifySuccess = (text: string) => {
-	toast.success(text, TOASTER_OPTIONS);
+	toast.success(text, { ...TOASTER_OPTIONS, autoClose: 5000 });
 };

@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class CreateParameter extends Base {
+	public static type = 'CreateParameter';
 	public defaultValue!: DynamicValue;
 
 	public static bindings: BindingType[] = [['defaultValue', 'd', undefined, BINDING.DYNAMIC_VALUE, DynamicValue]];

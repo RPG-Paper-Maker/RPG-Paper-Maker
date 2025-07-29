@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class StatusReleaseTurn extends Base {
+	public static type = 'StatusReleaseTurn';
 	public operationTurnKind!: OPERATION_KIND;
 	public turn!: DynamicValue;
 	public chance!: DynamicValue;

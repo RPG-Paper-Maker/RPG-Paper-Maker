@@ -60,53 +60,45 @@ const PanelMainMenu = forwardRef((props, ref) => {
 			<Flex one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('items.types')} fillWidth>
-						<Flex one fillHeight>
-							<Tree
-								constructorType={Model.Localization}
-								list={itemsTypes}
-								onListUpdated={updateItemsTypes}
-								noScrollOnForce
-								scrollable
-							/>
-						</Flex>
+						<Tree
+							constructorType={Model.Localization}
+							list={itemsTypes}
+							onListUpdated={updateItemsTypes}
+							noScrollOnForce
+							scrollable
+						/>
 					</Groupbox>
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('inventory.filters')} fillWidth>
-						<Flex one fillHeight>
-							<Tree
-								constructorType={Model.InventoryFilter}
-								list={inventoryFilters}
-								noScrollOnForce
-								scrollable
-							/>
-						</Flex>
+						<Tree
+							constructorType={Model.InventoryFilter}
+							list={inventoryFilters}
+							noScrollOnForce
+							scrollable
+						/>
 					</Groupbox>
 				</Flex>
 			</Flex>
 			<Flex one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('main.menu.commands')} fillWidth>
-						<Flex one fillHeight>
-							<Tree
-								constructorType={Model.MainMenuCommand}
-								list={mainMenuCommands}
-								noScrollOnForce
-								scrollable
-							/>
-						</Flex>
+						<Tree
+							constructorType={Model.MainMenuCommand}
+							list={mainMenuCommands}
+							noScrollOnForce
+							scrollable
+						/>
 					</Groupbox>
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('heroes.statistics.to.display')} fillWidth>
-						<Flex one fillHeight>
-							<Tree
-								constructorType={Model.HeroStatisticDisplay}
-								list={heroesStatisticsDisplay}
-								noScrollOnForce
-								scrollable
-							/>
-						</Flex>
+						<Tree
+							constructorType={Model.HeroStatisticDisplay}
+							list={heroesStatisticsDisplay}
+							noScrollOnForce
+							scrollable
+						/>
 					</Groupbox>
 				</Flex>
 			</Flex>

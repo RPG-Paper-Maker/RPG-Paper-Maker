@@ -107,6 +107,13 @@ const downloadOrCopyRepo = async (source, destination, localSource, branch) => {
 	}
 };
 
+const createEmptyBRFolder = async (path) => {
+	// Because git won't create empty dirs...
+	await fs.mkdir(`${path}/Videos`);
+	await fs.mkdir(`${path}/Shapes/MTL`);
+	await fs.mkdir(`${path}/Shapes/Collisions`);
+};
+
 const main = async () => {
 	try {
 		if (await exists(modsPath)) {
@@ -120,6 +127,7 @@ const main = async () => {
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
 		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies, '3.0.0');
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
+		createEmptyBRFolder('./public/BR');
 		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
 		const webPath = `${destinationPaths.dependencies}/Game/web/`;
 		await copyFileAndPrint(`${webPath}Globals.js`, './public/Scripts/System/Globals.js');

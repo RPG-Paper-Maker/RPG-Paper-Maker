@@ -17,6 +17,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { PluginDefaultParameter } from './PluginDefaultParameter';
 
 class PluginCommand extends Base {
+	public static type = 'PluginCommand';
 	public description!: string;
 	public parameters!: PluginDefaultParameter[];
 

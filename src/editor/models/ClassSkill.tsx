@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class ClassSkill extends Base {
+	public static type = 'ClassSkill';
 	public static selectedClassSkills: ClassSkill[];
 	public level!: number;
 

@@ -15,6 +15,7 @@ import { Class } from './Class';
 import { Localization } from './Localization';
 
 class Hero extends Localization {
+	public static type = 'Hero';
 	public class!: number;
 	public idBattler!: number;
 	public idFaceset!: number;

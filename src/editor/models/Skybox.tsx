@@ -19,6 +19,7 @@ import { Manager } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Skybox extends Base {
+	public static type = 'Skybox';
 	public front!: number;
 	public back!: number;
 	public top!: number;

@@ -78,6 +78,7 @@ export type MapObjectCommandType = number | string | boolean | JSONType;
 const { t } = i18next;
 
 class MapObjectCommand extends Base {
+	public static type = 'MapObjectCommand';
 	public static COLOR_ORANGE = '#ffa538';
 	public static COLOR_BLUE = '#569ae8';
 	public static COLOR_GREEN = '#35c452';
@@ -1785,20 +1786,7 @@ class MapObjectCommand extends Base {
 				mapID = this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 		}
-		let objectID = '';
-		switch (this.command[iterator.i + 1]) {
-			case -1:
-				objectID = t('this.object');
-				iterator.i += 2;
-				break;
-			case 0:
-				objectID = t('hero');
-				iterator.i += 2;
-				break;
-			default:
-				objectID = this.toStringDynamicValue(iterator, properties, parameters);
-				break;
-		}
+		const objectID = this.toStringDynamicObject(iterator, properties, parameters);
 		const stateID = this.toStringDynamicValue(
 			iterator,
 			properties,

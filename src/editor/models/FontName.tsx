@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class FontName extends Base {
+	public static type = 'FontName';
 	public isBasic!: boolean;
 	public font!: DynamicValue;
 	public customFontID!: number;

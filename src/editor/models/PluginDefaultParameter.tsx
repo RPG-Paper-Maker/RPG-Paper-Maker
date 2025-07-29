@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class PluginDefaultParameter extends Base {
+	public static type = 'PluginDefaultParameter';
 	public description!: string;
 	public defaultValue!: DynamicValue;
 

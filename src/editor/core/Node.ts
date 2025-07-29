@@ -17,7 +17,7 @@ import { BindingType, Serializable } from './Serializable';
 
 export type CopiedItemsType = {
 	values: Node[];
-	constructorClass: typeof Serializable;
+	constructorClass: typeof Model.Base;
 	pathProject: string;
 };
 
@@ -83,6 +83,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Mountain: () => Model.Mountain,
 	Object: () => Model.Object3D,
 	Language: () => Model.Language,
+	Keyboard: () => Model.Keyboard,
 };
 
 class Node extends Serializable {
@@ -253,11 +254,12 @@ class Node extends Serializable {
 		}
 	}
 
+	static getCurrentCopyPath(): string {
+		return Paths.join(Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
+	}
+
 	static async loadToPaste(): Promise<CopiedItemsType | null> {
-		const pathCurrentCopy = Paths.join(
-			Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE,
-			Paths.FILE_CURRENT_COPY
-		);
+		const pathCurrentCopy = this.getCurrentCopyPath();
 		const content = await readFile(pathCurrentCopy);
 		if (content && content.length > 0) {
 			const json = JSON.parse(content);
@@ -277,16 +279,16 @@ class Node extends Serializable {
 	}
 
 	static async saveToCopy(nodes: Node[]): Promise<CopiedItemsType> {
-		const pathCurrentCopy = Paths.join(LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
+		const pathCurrentCopy = this.getCurrentCopyPath();
 		const pathProject = Project.current!.getPath();
 		const json = nodes.map((node) => {
 			const nodeJson = {};
 			node.write(nodeJson);
 			return nodeJson;
 		});
-		const constructorClass = nodes[0].content.constructor as typeof Serializable;
+		const constructorClass = nodes[0].content.constructor as typeof Model.Base;
 		const content = {
-			type: `${constructorClass.name}`,
+			type: constructorClass.type,
 			pathProject,
 			json,
 		};

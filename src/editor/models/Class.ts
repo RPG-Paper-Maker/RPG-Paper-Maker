@@ -17,6 +17,7 @@ import { Localization } from './Localization';
 import { StatisticProgression } from './StatisticProgression';
 
 class Class extends Localization {
+	public static type = 'Class';
 	public initialLevel!: number;
 	public finalLevel!: number;
 	public experienceBase!: number;

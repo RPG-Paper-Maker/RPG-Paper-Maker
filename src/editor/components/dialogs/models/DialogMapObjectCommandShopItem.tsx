@@ -25,7 +25,7 @@ import Groupbox from '../../Groupbox';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Tree from '../../Tree';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -101,6 +101,7 @@ function DialogMapObjectCommandShopItem({ isOpen, setIsOpen, model, onAccept, on
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialHeight='70%'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge fillHeight>
 				<Groupbox title={t('item')}>

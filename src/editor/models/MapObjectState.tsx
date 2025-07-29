@@ -20,6 +20,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommand } from './MapObjectCommand';
 
 class MapObjectState extends Base {
+	public static type = 'MapObjectState';
 	public graphicsKind!: ELEMENT_MAP_KIND;
 	public graphicsID!: number;
 	public graphicsIndexX!: number;

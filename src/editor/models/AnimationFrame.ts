@@ -17,6 +17,7 @@ import { AnimationFrameElement } from './AnimationFrameElement';
 import { Base } from './Base';
 
 class AnimationFrame extends Base {
+	public static type = 'AnimationFrame';
 	public elements!: AnimationFrameElement[];
 	public effects!: AnimationFrameEffect[];
 

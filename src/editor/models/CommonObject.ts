@@ -21,6 +21,7 @@ import { MapObjectReaction } from './MapObjectReaction';
 import { MapObjectState } from './MapObjectState';
 
 class CommonObject extends Base {
+	public static type = 'CommonObject';
 	public states!: MapObjectState[];
 	public properties!: MapObjectProperty[];
 	public events!: MapObjectEvent[];

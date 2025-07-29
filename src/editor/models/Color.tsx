@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Color extends Base {
+	public static type = 'Color';
 	public red!: number;
 	public green!: number;
 	public blue!: number;

@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class WindowSkin extends Base {
+	public static type = 'WindowSkin';
 	public pictureID!: number;
 	public borderTopLeft!: Rectangle;
 	public borderTopRight!: Rectangle;

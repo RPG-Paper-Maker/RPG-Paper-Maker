@@ -48,8 +48,8 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeLocalFiles = async () => {
-		await LocalFile.config();
 		if (!Constants.IS_DESKTOP) {
+			await LocalFile.config();
 			const cacheVersion = await localforage.getItem('CACHE_VERSION');
 			if (!cacheVersion || cacheVersion !== LocalFile.CACHE_VERSION) {
 				const all = await LocalFile.allStorage();

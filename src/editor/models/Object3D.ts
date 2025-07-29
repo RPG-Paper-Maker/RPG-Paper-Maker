@@ -16,6 +16,7 @@ import { BindingType } from '../core/Serializable';
 import { SpecialElement } from './SpecialElement';
 
 class Object3D extends SpecialElement {
+	public static type = 'Object3D';
 	public shapeKind!: SHAPE_KIND;
 	public objID!: number;
 	public mtlID!: number;

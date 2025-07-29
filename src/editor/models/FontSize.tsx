@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class FontSize extends Base {
+	public static type = 'FontSize';
 	public size!: DynamicValue;
 
 	public static bindings: BindingType[] = [

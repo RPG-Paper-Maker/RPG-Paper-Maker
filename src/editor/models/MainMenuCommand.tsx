@@ -17,6 +17,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 
 class MainMenuCommand extends Localization {
+	public static type = 'MainMenuCommand';
 	public kind!: MAIN_MENU_COMMAND_KIND;
 	public script!: string;
 

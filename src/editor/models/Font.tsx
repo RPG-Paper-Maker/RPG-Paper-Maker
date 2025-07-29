@@ -27,7 +27,7 @@ class Font extends Asset {
 	}
 
 	getPath(): string {
-		return this.id === -1 || !this.name ? '' : Font.getFolder(this.isBR, this.dlc) + '/' + this.name;
+		return this.id === -1 || !this.name ? '' : Paths.join(Font.getFolder(this.isBR, this.dlc), this.name);
 	}
 
 	async getFontFace(name: string): Promise<string> {

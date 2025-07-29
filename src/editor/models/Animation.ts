@@ -15,6 +15,7 @@ import { AnimationFrame } from './AnimationFrame';
 import { Base } from './Base';
 
 class Animation extends Base {
+	public static type = 'Animation';
 	public pictureID!: number;
 	public positionKind!: ANIMATION_POSITION_KIND;
 	public frames!: AnimationFrame[];

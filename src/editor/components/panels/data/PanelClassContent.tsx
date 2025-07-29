@@ -314,58 +314,46 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('statistics.progression')} disabled={disabled} fillWidth>
-						<Flex one column fillHeight>
-							<Flex one column scrollable zeroHeight>
-								<Tree
-									constructorType={StatisticProgression}
-									list={statisticsProgression}
-									onListUpdated={handleUpdateStatisticProgression}
-									minHeight={TREES_MIN_HEIGHT}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-								/>
-							</Flex>
-						</Flex>
+						<Tree
+							constructorType={StatisticProgression}
+							list={statisticsProgression}
+							onListUpdated={handleUpdateStatisticProgression}
+							minHeight={TREES_MIN_HEIGHT}
+							disabled={disabled}
+							noScrollOnForce
+							scrollable
+							canBeEmpty
+						/>
 					</Groupbox>
 				</Flex>
 			</Flex>
 			<Flex one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('characteristics')} disabled={disabled} fillWidth>
-						<Flex one column fillHeight>
-							<Flex one column scrollable zeroHeight>
-								<Tree
-									constructorType={Characteristic}
-									list={characteristics}
-									onListUpdated={handleUpdateCharacteristics}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-									byIndex
-								/>
-							</Flex>
-						</Flex>
+						<Tree
+							constructorType={Characteristic}
+							list={characteristics}
+							onListUpdated={handleUpdateCharacteristics}
+							disabled={disabled}
+							noScrollOnForce
+							scrollable
+							canBeEmpty
+							byIndex
+						/>
 					</Groupbox>
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('skills.to.learn')} disabled={disabled} fillWidth>
-						<Flex one column fillHeight>
-							<Flex one column scrollable zeroHeight>
-								<Tree
-									constructorType={ClassSkill}
-									list={skills}
-									onListUpdated={handleUpdateSkills}
-									minHeight={TREES_MIN_HEIGHT}
-									disabled={disabled}
-									noScrollOnForce
-									scrollable
-									canBeEmpty
-								/>
-							</Flex>
-						</Flex>
+						<Tree
+							constructorType={ClassSkill}
+							list={skills}
+							onListUpdated={handleUpdateSkills}
+							minHeight={TREES_MIN_HEIGHT}
+							disabled={disabled}
+							noScrollOnForce
+							scrollable
+							canBeEmpty
+						/>
 					</Groupbox>
 				</Flex>
 			</Flex>

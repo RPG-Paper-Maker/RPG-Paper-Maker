@@ -17,6 +17,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 
 class GameOverCommand extends Localization {
+	public static type = 'GameOverCommand';
 	public kind!: GAME_OVER_COMMAND_KIND;
 	public script!: string;
 

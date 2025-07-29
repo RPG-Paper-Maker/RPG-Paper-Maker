@@ -15,6 +15,7 @@ import { MapObjectReaction } from './MapObjectReaction';
 import { TroopReactionConditions } from './TroopReactionConditions';
 
 class TroopReaction extends MapObjectReaction {
+	public static type = 'TroopReaction';
 	public conditions!: TroopReactionConditions;
 	public frequency!: TROOP_REACTION_FREQUENCY_KIND;
 

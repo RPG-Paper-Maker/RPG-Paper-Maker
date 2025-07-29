@@ -38,6 +38,7 @@ export type DIALOG_OPTIONS = {
 };
 
 class Base extends Serializable {
+	public static type = 'Base';
 	public static STRING_START = '> ';
 	public static GRAPHICS_OPTIONS = [
 		Base.create(ELEMENT_MAP_KIND.NONE, 'none'),

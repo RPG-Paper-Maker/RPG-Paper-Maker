@@ -22,6 +22,7 @@ import { MapObjectParameter } from './MapObjectParameter';
 import { MapObjectReaction } from './MapObjectReaction';
 
 class MapObjectEvent extends Base {
+	public static type = 'MapObjectEvent';
 	public parameters!: MapObjectParameter[];
 	public reactions!: Map<string, MapObjectReaction>;
 	public isSystem!: boolean;

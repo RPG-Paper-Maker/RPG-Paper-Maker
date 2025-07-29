@@ -14,6 +14,7 @@ import { BindingType } from '../core/Serializable';
 import { SpecialElement } from './SpecialElement';
 
 class Autotile extends SpecialElement {
+	public static type = 'Autotile';
 	public isAnimated!: boolean;
 
 	public static readonly bindings: BindingType[] = [['isAnimated', 'isAnimated', false, BINDING.BOOLEAN]];

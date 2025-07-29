@@ -17,6 +17,7 @@ import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Speed extends Base {
+	public static type = 'Speed';
 	public value!: DynamicValue;
 
 	public static bindings: BindingType[] = [

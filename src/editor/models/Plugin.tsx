@@ -24,6 +24,7 @@ import {
 	Utils,
 } from '../common';
 import {
+	createFile,
 	createFolder,
 	MIME_TYPES,
 	readJSON,
@@ -33,7 +34,6 @@ import {
 	writeJSON,
 } from '../common/Platform';
 import DialogPlugin from '../components/dialogs/models/DialogPlugin';
-import { LocalFile } from '../core/LocalFile';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
@@ -43,6 +43,7 @@ import { PluginDefaultParameter } from './PluginDefaultParameter';
 import { PluginParameter } from './PluginParameter';
 
 class Plugin extends Checkable {
+	public static type = 'Plugin';
 	public static readonly BASE_GIT_URL =
 		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins';
 	public type!: PLUGIN_TYPE_KIND;
@@ -116,7 +117,7 @@ class Plugin extends Checkable {
 				}
 				await (Constants.IS_DESKTOP && mimeType
 					? IO.createFile(Paths.join(projectPath, file), Buffer.from(binaryData ?? new ArrayBuffer()))
-					: LocalFile.createFile(Paths.join(projectPath, file), content));
+					: createFile(Paths.join(projectPath, file), content));
 			}
 		}
 		if (folder.folders) {

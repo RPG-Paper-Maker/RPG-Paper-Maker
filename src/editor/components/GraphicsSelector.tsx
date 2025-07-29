@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
-import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
@@ -68,8 +67,7 @@ function GraphicsSelector({
 		const pic = isTileset
 			? Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, Scene.Map.current!.model.getTileset().pictureID)
 			: picture;
-		const path = pic.getPath();
-		const img = await Picture2D.loadImage(pic.isBR ? path : (await LocalFile.readFile(path)) ?? '');
+		const img = await Picture2D.loadImage(await pic.getPathOrBase64());
 		const ctx = getContext();
 		if (ctx) {
 			clear(ctx);

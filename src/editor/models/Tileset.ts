@@ -15,6 +15,7 @@ import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class Tileset extends Base {
+	public static type = 'Tileset';
 	public pictureID!: number;
 	public battleMap!: DynamicValue;
 

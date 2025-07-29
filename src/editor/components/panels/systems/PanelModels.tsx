@@ -119,11 +119,11 @@ const PanelModels = forwardRef((props, ref) => {
 						setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectModel}
-						defaultSelectedID={-1}
 						noScrollOnForce
 						scrollable
 						showEditName
 						applyDefault
+						noFirstSelection
 					/>
 				</Flex>
 			</Groupbox>

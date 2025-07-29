@@ -19,6 +19,7 @@ import { Checkable } from './Checkable';
 import { Localization } from './Localization';
 
 class WeaponArmorKind extends Localization {
+	public static type = 'WeaponArmorKind';
 	public equipments!: boolean[];
 
 	public static bindings: BindingType[] = [['equipments', 'equipment', undefined, BINDING.LIST_BOOLEAN]];

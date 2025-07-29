@@ -188,10 +188,10 @@ class Shape extends Asset {
 
 	async loadShape() {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
-			const content = await (this.isBR
-				? readPublicFile(this.getPath())
-				: Constants.IS_DESKTOP
+			const content = await (Constants.IS_DESKTOP
 				? ((await IO.readFile(this.getPath())) as string)
+				: this.isBR
+				? readPublicFile(this.getPath())
 				: await (await LocalFile.readBase64File(this.getPath())).text());
 			if (content) {
 				if (content.length === 0) {
@@ -203,7 +203,7 @@ class Shape extends Asset {
 	}
 
 	getPath(): string {
-		return this.id === -1 ? '' : `${Shape.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
+		return this.id === -1 ? '' : Paths.join(Shape.getFolder(this.kind, this.isBR, this.dlc), this.name);
 	}
 
 	copy(shape: Shape): void {

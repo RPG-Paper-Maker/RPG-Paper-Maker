@@ -175,13 +175,11 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		setSelectedMountain(mountain);
 		if (mountain) {
 			setMountainCollisionKind(mountain.collisionKind);
-			if (kind === PICTURE_KIND.MOUNTAINS) {
-				const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, mountain.pictureID);
-				setMountainPictureID(mountain.pictureID);
-				if (picture) {
-					setMountainPicturePath(picture.getPath());
-					setMountainPictureIsBR(picture.isBR);
-				}
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, mountain.pictureID);
+			setMountainPictureID(mountain.pictureID);
+			if (picture) {
+				setMountainPicturePath(picture.getPath());
+				setMountainPictureIsBR(picture.isBR);
 			}
 		}
 	};
@@ -279,23 +277,19 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	) => (
 		<Flex fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
-				<Flex one column fillHeight>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={constructorType}
-							list={list}
-							minWidth={TREES_LARGE_MIN_WIDTH}
-							onSelectedItem={onSelectedItem}
-							onListUpdated={kind === undefined ? undefined : onListUpdated}
-							noScrollOnForce
-							scrollable
-							cannotAdd={kind === undefined}
-							cannotDelete={kind === undefined}
-							cannotDragDrop={kind === undefined}
-							cannotEdit={kind === undefined}
-						/>
-					</Flex>
-				</Flex>
+				<Tree
+					constructorType={constructorType}
+					list={list}
+					minWidth={TREES_LARGE_MIN_WIDTH}
+					onSelectedItem={onSelectedItem}
+					onListUpdated={kind === undefined ? undefined : onListUpdated}
+					noScrollOnForce
+					scrollable
+					cannotAdd={kind === undefined}
+					cannotDelete={kind === undefined}
+					cannotDragDrop={kind === undefined}
+					cannotEdit={kind === undefined}
+				/>
 			</Groupbox>
 			<Flex one fillWidth>
 				{children}

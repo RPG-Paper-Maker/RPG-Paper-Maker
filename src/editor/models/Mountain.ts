@@ -14,6 +14,7 @@ import { BindingType } from '../core/Serializable';
 import { SpecialElement } from './SpecialElement';
 
 class Mountain extends SpecialElement {
+	public static type = 'Mountain';
 	public collisionKind!: MOUNTAIN_COLLISION_KIND;
 
 	public static readonly bindings: BindingType[] = [

@@ -411,22 +411,20 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsContent = () => (
 		<Flex key={0} spacedLarge fillWidth fillHeight>
-			<Flex one column fillHeight>
-				<Flex one column scrollable zeroHeight>
-					<Tree
-						constructorType={Model.Plugin}
-						list={plugins}
-						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectPlugin}
-						onListUpdated={handleListUpdated}
-						onDeleteItem={handleDeletePlugin}
-						triggerUpdate={triggerUpdate}
-						noScrollOnForce
-						scrollable
-						applyDefault
-						canBeEmpty
-					/>
-				</Flex>
+			<Flex>
+				<Tree
+					constructorType={Model.Plugin}
+					list={plugins}
+					width={TREES_MIN_WIDTH}
+					onSelectedItem={handleSelectPlugin}
+					onListUpdated={handleListUpdated}
+					onDeleteItem={handleDeletePlugin}
+					triggerUpdate={triggerUpdate}
+					noScrollOnForce
+					scrollable
+					applyDefault
+					canBeEmpty
+				/>
 			</Flex>
 			<Flex one>
 				{selectedPlugin && selectedPlugin.id !== -1 ? (
@@ -498,7 +496,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					<Value>
 						<Flex column spacedLarge>
 							{pictureBase64 && (
-								<Flex centerH>
+								<Flex zeroWidth>
 									<img src={pictureBase64} style={{ width: 'fit-content' }} alt='plugin' />
 								</Flex>
 							)}
@@ -596,23 +594,19 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsSourceCode = () => (
 		<Flex key={1} spacedLarge fillWidth fillHeight>
-			<Flex fillHeight>
-				<Flex one column>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={Model.TreeMapTag}
-							list={folders}
-							minWidth={TREES_LARGE_MIN_WIDTH}
-							onSelectedItem={handleSelectSourceCode}
-							noScrollOnForce
-							scrollable
-							cannotAdd
-							cannotDelete
-							cannotDragDrop
-							cannotEdit
-						/>
-					</Flex>
-				</Flex>
+			<Flex>
+				<Tree
+					constructorType={Model.TreeMapTag}
+					list={folders}
+					width={TREES_LARGE_MIN_WIDTH}
+					onSelectedItem={handleSelectSourceCode}
+					noScrollOnForce
+					scrollable
+					cannotAdd
+					cannotDelete
+					cannotDragDrop
+					cannotEdit
+				/>
 			</Flex>
 			<Flex one scrollable>
 				{sourceCode && (

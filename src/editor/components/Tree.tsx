@@ -63,6 +63,7 @@ type Props = {
 	forcedCurrentSelectedItemIndex?: number | null;
 	setForcedCurrentSelectedItemIndex?: (forced: number | null) => void;
 	minWidth?: number;
+	width?: number;
 	minHeight?: number;
 	height?: number;
 	byIndex?: boolean;
@@ -116,6 +117,7 @@ function Tree({
 	byIndex = false,
 	onDrop,
 	minWidth,
+	width,
 	minHeight,
 	height,
 	disabled = false,
@@ -334,7 +336,7 @@ function Tree({
 					firstCloned = cloned;
 				}
 				cloned.parent = currentSelectedItemNode.parent;
-				ArrayUtils.insertAt(currentList, index++, cloned);
+				ArrayUtils.insertAt(currentList, ++index, cloned);
 				if (!doNotGenerateIDOnPaste) {
 					generateNewIDsToAllNodes(cloned);
 				}
@@ -858,13 +860,18 @@ function Tree({
 			</div>
 		);
 
-	return (
+	const content = (
 		<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}
 					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
-					style={{ minWidth: `${minWidth}px`, minHeight: `${minHeight}px`, height: `${height}px` }}
+					style={{
+						minWidth: `${minWidth}px`,
+						minHeight: `${minHeight}px`,
+						width: `${width}px`,
+						height: `${height}px`,
+					}}
 					ref={listRef}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
@@ -894,6 +901,16 @@ function Tree({
 			</Flex>
 			{getDialog()}
 		</ContextMenu>
+	);
+
+	return scrollable && !height ? (
+		<Flex one column fillHeight>
+			<Flex one column scrollable zeroHeight>
+				{content}
+			</Flex>
+		</Flex>
+	) : (
+		content
 	);
 }
 

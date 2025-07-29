@@ -18,6 +18,7 @@ import { Icon } from './Icon';
 import { StatusReleaseTurn } from './StatusReleaseTurn';
 
 class Status extends Icon {
+	public static type = 'Status';
 	public animationID!: DynamicValue;
 	public restrictionKind!: STATUS_RESTRICTIONS_KIND;
 	public priority!: DynamicValue;

@@ -17,6 +17,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 
 class Statistic extends Localization {
+	public static type = 'Statistic';
 	public abbreviation!: string;
 	public isFix!: boolean;
 	public pictureBarID!: number;

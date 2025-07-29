@@ -57,7 +57,7 @@ const PanelPluginDetails = forwardRef(
 				<Flex one column scrollable>
 					<Flex one column spacedLarge scrollable>
 						{plugin.pictureBase64 && (
-							<Flex centerH>
+							<Flex zeroWidth>
 								<img src={plugin.pictureBase64} style={{ width: 'fit-content' }} alt='plugin' />
 							</Flex>
 						)}

@@ -112,8 +112,9 @@ function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, o
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			initialWidth='600px'
 		>
-			<Flex column spaced>
+			<Flex column spaced fillWidth>
 				<Form>
 					<Label>{t('red')}</Label>
 					<Value>

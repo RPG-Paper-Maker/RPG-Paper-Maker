@@ -18,6 +18,7 @@ import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 
 class InventoryFilter extends Localization {
+	public static type = 'InventoryFilter';
 	public kind!: INVENTORY_FILTER_KIND;
 	public itemTypeID!: DynamicValue;
 	public script!: string;

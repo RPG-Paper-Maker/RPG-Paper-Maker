@@ -67,22 +67,18 @@ const PanelTilesets = forwardRef((props, ref) => {
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('tilesets')}>
-				<Flex one column fillHeight>
-					<Flex one column scrollable zeroHeight>
-						<Tree
-							constructorType={Tileset}
-							list={tilesets}
-							minWidth={TREES_MIN_WIDTH}
-							onSelectedItem={handleSelectTileset}
-							onListUpdated={handleListUpdated}
-							noScrollOnForce
-							scrollable
-							showEditName
-							isLocalization
-							applyDefault
-						/>
-					</Flex>
-				</Flex>
+				<Tree
+					constructorType={Tileset}
+					list={tilesets}
+					minWidth={TREES_MIN_WIDTH}
+					onSelectedItem={handleSelectTileset}
+					onListUpdated={handleListUpdated}
+					noScrollOnForce
+					scrollable
+					showEditName
+					isLocalization
+					applyDefault
+				/>
 			</Groupbox>
 			<Flex one column spacedLarge>
 				<Flex spacedLarge>

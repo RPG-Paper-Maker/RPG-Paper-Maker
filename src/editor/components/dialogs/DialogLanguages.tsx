@@ -57,18 +57,14 @@ function DialogLanguages({ setIsOpen }: Props) {
 
 	const getLanguagesContent = () => {
 		return (
-			<Flex one column>
-				<Flex one column scrollable zeroHeight>
-					<Tree
-						constructorType={Model.Language}
-						list={languages}
-						onListUpdated={handleListUpdated}
-						noScrollOnForce
-						scrollable
-						applyDefault
-					/>
-				</Flex>
-			</Flex>
+			<Tree
+				constructorType={Model.Language}
+				list={languages}
+				onListUpdated={handleListUpdated}
+				noScrollOnForce
+				scrollable
+				applyDefault
+			/>
 		);
 	};
 

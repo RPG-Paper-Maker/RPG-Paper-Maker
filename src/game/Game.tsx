@@ -10,7 +10,7 @@
 */
 
 import { useEffect } from 'react';
-import { ExtendedWindow, Paths } from '../editor/common';
+import { Constants, ExtendedWindow, Paths, Utils } from '../editor/common';
 import { LocalFile } from '../editor/core/LocalFile';
 
 type Props = {
@@ -43,17 +43,23 @@ function Game({ location, battleTest = false }: Props) {
 	useEffect(() => {
 		const script = document.createElement('script');
 		const style = document.createElement('style');
-		editHiDPICanvas(document.getElementById('hud') as HTMLCanvasElement, window.innerWidth, window.innerHeight);
 		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.href = Paths.join(`file:///${location}`, Paths.STYLES, Paths.FILE_FONTS_CSS);
-		document.head.appendChild(link);
+		editHiDPICanvas(document.getElementById('hud') as HTMLCanvasElement, window.innerWidth, window.innerHeight);
+		Constants.IS_DESKTOP = Utils.isDesktop();
+
+		if (Constants.IS_DESKTOP) {
+			link.rel = 'stylesheet';
+			link.href = Paths.join(`file:///${location}`, Paths.STYLES, Paths.FILE_FONTS_CSS);
+			document.head.appendChild(link);
+		}
 
 		const initialize = async () => {
-			await LocalFile.config();
-			style.innerHTML =
-				(await LocalFile.readFile(Paths.join(location, Paths.STYLES, Paths.FILE_FONTS_CSS))) ?? '';
-			document.head.appendChild(style);
+			if (!Constants.IS_DESKTOP) {
+				await LocalFile.config();
+				style.innerHTML =
+					(await LocalFile.readFile(Paths.join(location, Paths.STYLES, Paths.FILE_FONTS_CSS))) ?? '';
+				document.head.appendChild(style);
+			}
 			script.src = './Scripts/System/main.js';
 			script.type = 'module';
 			script.async = true;
@@ -67,6 +73,7 @@ function Game({ location, battleTest = false }: Props) {
 		return () => {
 			document.body.removeChild(script);
 			document.body.removeChild(style);
+			document.head.removeChild(link);
 		};
 	}, []);
 

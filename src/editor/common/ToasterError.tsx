@@ -10,7 +10,7 @@ import { TOASTER_OPTIONS } from './ToasterUtils';
 const originalConsoleError = console.error;
 
 const notifyError = (text: string | ReactNode) => {
-	toast.error(text, { ...TOASTER_OPTIONS, autoClose: false });
+	toast.error(text, TOASTER_OPTIONS);
 };
 
 const copyToClipboard = async (text: string): Promise<void> => {
@@ -23,7 +23,7 @@ const copyToClipboard = async (text: string): Promise<void> => {
 };
 
 let errorCount = 0;
-const MAX_ERROR_COUNT = 10; // Limit the number of error notifications
+const MAX_ERROR_COUNT = 5; // Limit the number of error notifications
 
 console.error = (...args) => {
 	if (errorCount++ >= MAX_ERROR_COUNT) {
@@ -31,17 +31,21 @@ console.error = (...args) => {
 	}
 	let message = '';
 	let stack = '';
-
-	args.forEach((arg) => {
-		if (arg instanceof Error) {
-			message += arg.message + '\n';
-			stack += arg.stack + '\n';
-		} else if (typeof arg === 'object') {
-			message += JSON.stringify(arg) + '\n';
-		} else {
-			message += String(arg) + '\n';
-		}
-	});
+	if (errorCount === MAX_ERROR_COUNT) {
+		message = 'Too many errors, stopping further notifications.';
+		stack = '';
+	} else {
+		args.forEach((arg) => {
+			if (arg instanceof Error) {
+				message += arg.message + '\n';
+				stack += arg.stack + '\n';
+			} else if (typeof arg === 'object') {
+				message += JSON.stringify(arg) + '\n';
+			} else {
+				message += String(arg) + '\n';
+			}
+		});
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	originalConsoleError(...args);
 };
@@ -69,22 +73,31 @@ const notifyWarning = (text: string | ReactNode) => {
 };
 
 const originalConsoleWarn = console.warn;
+let warningCount = 0;
+const MAX_WARNING_COUNT = 10; // Limit the number of warning notifications
 
 console.warn = (...args) => {
+	if (warningCount++ >= MAX_WARNING_COUNT) {
+		return;
+	}
 	let message = '';
-	args.forEach((arg) => {
-		if (arg instanceof Error) {
-			message += arg.message + '\n';
-		} else if (typeof arg === 'object') {
-			try {
-				message += JSON.stringify(arg, null, 2) + '\n';
-			} catch {
-				message += '[object]\n';
+	if (warningCount === MAX_WARNING_COUNT) {
+		message = 'Too many warning, stopping further notifications.';
+	} else {
+		args.forEach((arg) => {
+			if (arg instanceof Error) {
+				message += arg.message + '\n';
+			} else if (typeof arg === 'object') {
+				try {
+					message += JSON.stringify(arg, null, 2) + '\n';
+				} catch {
+					message += '[object]\n';
+				}
+			} else {
+				message += String(arg) + '\n';
 			}
-		} else {
-			message += String(arg) + '\n';
-		}
-	});
+		});
+	}
 	notifyWarning(`Warning: ${message}`);
 	originalConsoleWarn(...args);
 };

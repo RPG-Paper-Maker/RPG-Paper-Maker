@@ -21,6 +21,7 @@ import { PlaySong } from './PlaySong';
 const { t } = i18next;
 
 class AnimationFrameEffect extends Base {
+	public static type = 'AnimationFrameEffect';
 	public isSE!: boolean;
 	public se!: PlaySong;
 	public condition!: ANIMATION_EFFECT_CONDITION_KIND;

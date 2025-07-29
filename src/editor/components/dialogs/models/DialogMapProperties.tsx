@@ -181,11 +181,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 			<Flex one fillWidth>
 				<Groupbox title={t('random.battles')} fillWidth>
 					<Flex column spaced fillHeight>
-						<Flex one column fillHeight>
-							<Flex one column scrollable zeroHeight>
-								<Tree constructorType={RandomBattle} list={randomBattles} />
-							</Flex>
-						</Flex>
+						<Tree constructorType={RandomBattle} list={randomBattles} />
 						<Form>
 							<Label>{t('number.of.steps.after.next.battle')}</Label>
 							<Value>

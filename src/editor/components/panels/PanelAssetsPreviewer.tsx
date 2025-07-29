@@ -13,6 +13,7 @@ import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
 import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, IO, Paths } from '../../common';
+import { removeFile } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
@@ -115,7 +116,7 @@ function PanelAssetsPreviewer({
 	const canDeleteRight = (node: Node | null) => !!node && !(node.content as Model.Asset).isBR;
 
 	const handleDeleteRight = (node: Node) => {
-		LocalFile.removeFile(node.content.getPath());
+		removeFile(node.content.getPath());
 	};
 
 	const handleChangeActivated = (b: boolean) => {
@@ -123,8 +124,13 @@ function PanelAssetsPreviewer({
 		dynamicValueID!.isActivated = b;
 	};
 
-	const handleClickExport = () => {
-		LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
+	const handleClickExport = async () => {
+		if (Constants.IS_DESKTOP) {
+			const path = await IO.openFolderDialog();
+			IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
+		} else {
+			LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
+		}
 	};
 
 	const handleClickPlus = async () => {

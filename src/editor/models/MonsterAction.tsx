@@ -28,6 +28,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 const { t } = i18next;
 
 class MonsterAction extends Base {
+	public static type = 'MonsterAction';
 	public static selectedMonsterActions: MonsterAction[] = [];
 
 	public actionKind!: MONSTER_ACTION_KIND;
