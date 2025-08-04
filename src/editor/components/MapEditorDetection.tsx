@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import PixelIcon from '../../assets/icons/pixel.svg?react';
 import SquareIcon from '../../assets/icons/square.svg?react';
+import { Project } from '../core/Project';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import Flex from './Flex';
@@ -149,11 +150,14 @@ function MapEditorDetection({
 	useEffect(() => {
 		if (Scene.Map.currentpositionSelector) {
 			Scene.Map.currentpositionSelector.detectionCurrentData!.widthSquare = newBoxLengthSquares;
-			Scene.Map.currentpositionSelector.detectionCurrentData!.widthPixel = newBoxLengthPixels;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.widthPixel =
+				(newBoxLengthPixels / Project.SQUARE_SIZE) * 100;
 			Scene.Map.currentpositionSelector.detectionCurrentData!.depthSquare = newBoxWidthSquares;
-			Scene.Map.currentpositionSelector.detectionCurrentData!.depthPixel = newBoxWidthPixels;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.depthPixel =
+				(newBoxWidthPixels / Project.SQUARE_SIZE) * 100;
 			Scene.Map.currentpositionSelector.detectionCurrentData!.heightSquare = newBoxHeightSquares;
-			Scene.Map.currentpositionSelector.detectionCurrentData!.heightPixel = newBoxHeightPixels;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.heightPixel =
+				(newBoxHeightPixels / Project.SQUARE_SIZE) * 100;
 		}
 	}, [
 		Scene.Map.currentpositionSelector,

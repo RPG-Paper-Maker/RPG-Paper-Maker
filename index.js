@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { spawn } from 'child_process';
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
 import path from 'path';
@@ -16,19 +17,19 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-if (!app.isPackaged) {
-	// Needed only for development, packed app will have the correct DPI settings
-	app.commandLine.appendSwitch('high-dpi-support', 1);
+const IS_GAME = process.argv[2] !== undefined;
+
+app.commandLine.appendSwitch('high-dpi-support', 1);
+if (!app.isPackaged || IS_GAME) {
 	app.commandLine.appendSwitch('force-device-scale-factor', 1);
 }
 
-let globalValues = {};
 let window;
 
 const createWindow = () => {
 	window = new BrowserWindow({
-		width: screen.getPrimaryDisplay().size.width - 100,
-		height: screen.getPrimaryDisplay().size.height - 100,
+		width: IS_GAME ? 640 : screen.getPrimaryDisplay().size.width - 100,
+		height: IS_GAME ? 480 : screen.getPrimaryDisplay().size.height - 100,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -36,21 +37,33 @@ const createWindow = () => {
 			preload: path.join(__dirname, 'preload.js'),
 		},
 		icon: path.join(__dirname, 'dist', 'icon.png'),
-		frame: false,
+		frame: IS_GAME,
 	});
-	window.maximize();
-	window.loadFile(path.join(__dirname, 'dist', 'index.html'));
-	window.on('maximize', () => {
-		window.webContents.send('is-maximized');
-	});
-	window.on('unmaximize', () => {
-		window.webContents.send('is-unmaximized');
-	});
+	window.removeMenu();
+	if (!IS_GAME) {
+		window.maximize();
+	}
+	window.loadFile(
+		path.join(__dirname, 'dist', 'index.html'),
+		IS_GAME
+			? {
+					query: { project: process.argv[2], battleTest: process.argv[3] ?? false },
+			  }
+			: undefined
+	);
+	if (!IS_GAME) {
+		window.on('maximize', () => {
+			window.webContents.send('is-maximized');
+		});
+		window.on('unmaximize', () => {
+			window.webContents.send('is-unmaximized');
+		});
+	}
 };
 
 app.whenReady()
 	.then(() =>
-		globalShortcut.register('Shift+CommandOrControl+D', () => {
+		globalShortcut.register('Alt+CommandOrControl+I', () => {
 			window.openDevTools({ mode: 'undocked' });
 		})
 	)
@@ -193,49 +206,32 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
-	const game = new BrowserWindow({
-		width: 640,
-		height: 480,
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-			enableRemoteModule: true,
-			preload: path.join(__dirname, 'preload.js'),
-		},
-		icon: path.join(__dirname, 'dist', 'icon.png'),
+	const electronPath = process.execPath;
+	const args = ['./index.js', location, battleTest];
+	spawn(electronPath, args, {
+		stdio: 'inherit',
+		detached: true,
 	});
-	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
-		query: { project: location, battleTest: battleTest },
-	});
-	game.removeMenu();
-	const shortcut = 'Shift+CommandOrControl+I';
-	globalShortcut.register(shortcut, () => {
-		game.openDevTools({ mode: 'undocked' });
-	});
-	game.on('closed', () => {
-		globalShortcut.unregister(shortcut);
-	});
-	globalValues.currentGameWindow = game;
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
-	globalValues.currentGameWindow.setTitle(title);
+	window.setTitle(title);
 });
 
 ipcMain.handle('change-window-size', function (event, w, h, f) {
 	if (f) {
-		globalValues.currentGameWindow.setResizable(true);
-		globalValues.currentGameWindow.setFullScreen(true);
+		window.setResizable(true);
+		window.setFullScreen(true);
 	} else {
-		globalValues.currentGameWindow.setFullScreen(false);
-		globalValues.currentGameWindow.setContentSize(w, h);
-		globalValues.currentGameWindow.center();
+		window.setFullScreen(false);
+		window.setContentSize(w, h);
+		window.center();
 	}
 });
 
 ipcMain.handle('close-game', () => {
-	globalValues.currentGameWindow.close();
-	globalValues.currentGameWindow = null;
+	window.close();
+	window = null;
 });
 
 ipcMain.handle('minimize', () => {

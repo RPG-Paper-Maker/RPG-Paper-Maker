@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Constants } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
@@ -18,7 +18,7 @@ import { Rectangle } from '../core/Rectangle';
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
 	path: string;
-	loadingTextures: [string, boolean][];
+	loadingTextures: [string, boolean, Rectangle | undefined][];
 };
 
 type Props = {
@@ -39,28 +39,50 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
 	const initialize = async () => {
-		currentState.loadingTextures.push([texture, base64]);
+		currentState.loadingTextures.push([texture, base64, sourceRectangle]);
 		if (currentState.loadingTextures.length === 1) {
 			while (currentState.loadingTextures.length > 0) {
-				await draw(currentState.loadingTextures[0][0], currentState.loadingTextures[0][1]);
+				await draw(
+					currentState.loadingTextures[0][0],
+					currentState.loadingTextures[0][1],
+					currentState.loadingTextures[0][2]
+				);
 				currentState.loadingTextures.shift();
 			}
 		}
 	};
 
-	const draw = async (t: string, b: boolean) => {
+	const draw = async (t: string, b: boolean, r?: Rectangle) => {
 		const path = b && !Constants.IS_DESKTOP ? (await LocalFile.readFile(t)) ?? '' : t;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		if (refCanvas.current) {
-			const w = (sourceRectangle ? sourceRectangle : currentState.picture).width * scale;
-			const h = (sourceRectangle ? sourceRectangle : currentState.picture).height * scale;
+			const w = (r ? r : currentState.picture).width * scale;
+			const h = (r ? r : currentState.picture).height * scale;
 			refCanvas.current.width = w;
 			refCanvas.current.height = h;
 			refCanvas.current.style.width = `${w}px`;
 			refCanvas.current.style.height = `${h}px`;
 		}
-		update();
+		const ctx = getContext();
+		if (ctx && currentState.picture) {
+			clear(ctx);
+			ctx.lineWidth = 1;
+			ctx.imageSmoothingEnabled = false;
+			if (currentState.picture) {
+				ctx.drawImage(
+					currentState.picture,
+					r ? r.x : 0,
+					r ? r.y : 0,
+					(r ? r : currentState.picture).width,
+					(r ? r : currentState.picture).height,
+					0,
+					0,
+					(r ? r : currentState.picture).width * scale,
+					(r ? r : currentState.picture).height * scale
+				);
+			}
+		}
 	};
 
 	const getContext = () => {
@@ -76,28 +98,6 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 			ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 		}
 	};
-
-	const update = useCallback(() => {
-		const ctx = getContext();
-		if (ctx && currentState.picture) {
-			clear(ctx);
-			ctx.lineWidth = 1;
-			ctx.imageSmoothingEnabled = false;
-			if (currentState.picture) {
-				ctx.drawImage(
-					currentState.picture,
-					sourceRectangle ? sourceRectangle.x : 0,
-					sourceRectangle ? sourceRectangle.y : 0,
-					(sourceRectangle ? sourceRectangle : currentState.picture).width,
-					(sourceRectangle ? sourceRectangle : currentState.picture).height,
-					0,
-					0,
-					(sourceRectangle ? sourceRectangle : currentState.picture).width * scale,
-					(sourceRectangle ? sourceRectangle : currentState.picture).height * scale
-				);
-			}
-		}
-	}, [currentState, sourceRectangle, scale]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

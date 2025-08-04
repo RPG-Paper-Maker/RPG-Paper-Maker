@@ -11,7 +11,7 @@
 
 import { JSX, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core/Project';
 import { Scene } from '../../Editor';
 import { RootState } from '../../store';
@@ -77,7 +77,15 @@ function PanelTextures({ visible, extraContent }: Props) {
 						PICTURE_KIND.TILESETS,
 						Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)?.pictureID ?? 1
 					);
-					return <TextureSquareSelector texture={picture.getPath()} base64={!picture.isBR} />;
+					const divide = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
+					return (
+						<TextureSquareSelector
+							texture={picture.getPath()}
+							base64={!picture.isBR}
+							divideWidth={divide}
+							divideHeight={divide}
+						/>
+					);
 				}
 			}
 		} else {

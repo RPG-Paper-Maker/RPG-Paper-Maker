@@ -262,7 +262,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										).toLowerCase()})`}</Label>
 										<Value>
 											<PlaySongSelector
-												songKind={SONG_KIND.MUSIC}
+												songKind={SONG_KIND.SOUND}
 												ref={playSoundSelectorRef}
 												disabled={disabled}
 											/>

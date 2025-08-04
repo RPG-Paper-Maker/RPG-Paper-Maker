@@ -166,7 +166,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 							kind={PICTURE_KIND.BATTLERS}
 							disabled={disabled}
 						/>
-						{facesetTexture && (
+						{battlerTexture && (
 							<Flex centerH>
 								<TexturePreviewer
 									texture={battlerTexture}

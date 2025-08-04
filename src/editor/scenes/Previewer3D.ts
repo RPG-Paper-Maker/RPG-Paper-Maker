@@ -67,9 +67,7 @@ class Previewer3D extends Base {
 	}
 
 	async loadMaterial() {
-		if (this.material === null) {
-			this.material = Scene.Map.current?.materialTileset ?? null;
-		}
+		this.material = Scene.Map.current?.materialTileset ?? null;
 	}
 
 	async loadFloor(texture: Rectangle) {

@@ -40,6 +40,7 @@ function MainPreviewer3D({ id }: Props) {
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
 	const mapEditorLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
+	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -150,7 +151,11 @@ function MainPreviewer3D({ id }: Props) {
 	});
 
 	useEffect(() => {
-		update().catch(console.error);
+		if (currentMapID === undefined) {
+			Scene.Previewer3D.mainPreviewerScene?.clear();
+		} else {
+			update().catch(console.error);
+		}
 	}, [
 		currentTilesetFloorTexture,
 		currentTilesetSpriteTexture,
@@ -168,6 +173,7 @@ function MainPreviewer3D({ id }: Props) {
 		currentActionKind,
 		selectedMapElement,
 		mapEditorLoaded,
+		needsReloadMap,
 	]);
 
 	useEffect(() => {

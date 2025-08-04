@@ -119,7 +119,7 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('target')}>
 					<RadioGroup selected={selectionTargetType} onChange={setSelectionTargetType}>
 						<Form>

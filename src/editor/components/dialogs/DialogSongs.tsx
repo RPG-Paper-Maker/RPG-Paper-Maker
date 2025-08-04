@@ -386,7 +386,7 @@ function DialogSongs({
 
 	return (
 		<Dialog
-			title={`${title ?? t(kind === undefined ? 'songs.manager' : 'select.song')}...`}
+			title={`${title ?? t('songs.manager')}`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='70%'

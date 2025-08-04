@@ -103,9 +103,11 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 		const pow = 2.4 + experienceInflation / 100;
 		for (let i = 1; i < finalLevel; i++) {
 			const line = new Array(2);
-			line[0] = '' + (initialLevel + i - 1);
-			line[1] = experienceTable[i - 1]
-				? '' + experienceTable[i - 1]
+			const lv = initialLevel + i - 1;
+			const expTable = experienceTable.find((kv) => kv.k === lv);
+			line[0] = '' + lv;
+			line[1] = expTable
+				? '' + expTable.v
 				: '' + Math.floor(experienceBase * (Math.pow(i + 4, pow) / Math.pow(5, pow)));
 			expList[i - 1] = line;
 		}

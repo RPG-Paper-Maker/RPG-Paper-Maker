@@ -119,7 +119,7 @@ const PanelObjectEvent = forwardRef(({ event, isNew }: Props, ref) => {
 	}));
 
 	return (
-		<Flex column spacedLarge>
+		<Flex column spacedLarge fillWidth fillHeight>
 			<RadioGroup selected={selectionType} onChange={handleChangeSelection}>
 				<Form>
 					<Label>

@@ -188,8 +188,6 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 						onCurrentIndexChanged={handleCurrentIndexChanged}
 						forcedCurrentIndex={forcedCurrentIndex}
 						setForcedCurrentIndex={setForcedCurrentIndex}
-						hideScroll
-						noScrollToSelectedElement
 					/>
 				</Flex>
 				{heroes.length > 0 && (

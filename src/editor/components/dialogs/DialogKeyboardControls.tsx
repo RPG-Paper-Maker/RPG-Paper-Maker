@@ -74,7 +74,7 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 					<Tree
 						constructorType={Model.Keyboard}
 						list={engineControls}
-						minHeight={TREES_MIN_HEIGHT}
+						height={TREES_MIN_HEIGHT}
 						noScrollOnForce
 						scrollable
 						applyDefault

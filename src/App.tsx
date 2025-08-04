@@ -18,7 +18,8 @@ const LazyEditor = lazy(() => import('./editor/Editor'));
 function App() {
 	const queryParameters = new URLSearchParams(window.location.search);
 	const projectLocation = queryParameters.get('project');
-	const battleTest = !!queryParameters.get('battleTest');
+	const battleTest = queryParameters.get('battleTest') === 'true';
+
 	return (
 		<>
 			{projectLocation ? <LazyGame location={projectLocation} battleTest={battleTest} /> : <LazyEditor />}

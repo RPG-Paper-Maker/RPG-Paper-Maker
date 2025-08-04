@@ -815,7 +815,19 @@ class Map extends Base {
 		if (this.detectionBoxes && this.detectionBoxesMesh && this.detectionCurrentData) {
 			const newBoxes = preview ? new globalThis.Map(this.detectionBoxes) : this.detectionBoxes;
 			if (!this.detectionCurrentData.isZeroSize() && this.isPositionDetectionInField(position)) {
-				newBoxes.set(position.toKey(), MapElement.Object3DBox.create(this.detectionCurrentData!.clone()));
+				let newPosition: Position;
+				if (!Map.currentpositionSelector!.detectionSquare) {
+					newPosition = position.clone();
+					newPosition.centerX += 50;
+					newPosition.x += Math.floor(newPosition.centerX / 100);
+					newPosition.centerX = Mathf.mod(newPosition.centerX, 100);
+					newPosition.centerZ += 50;
+					newPosition.z += Math.floor(newPosition.centerZ / 100);
+					newPosition.centerZ = Mathf.mod(newPosition.centerZ, 100);
+				} else {
+					newPosition = position;
+				}
+				newBoxes.set(newPosition.toKey(), MapElement.Object3DBox.create(this.detectionCurrentData!.clone()));
 			}
 			this.updateDetectionBoxes(newBoxes);
 		}
@@ -1159,9 +1171,9 @@ class Map extends Base {
 					? Project.SQUARE_SIZE / 2
 					: 0
 			);
-		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.width - 1) {
+		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.length - 1) {
 			this.selectedMesh.position.setX(
-				this.model.width * Project.SQUARE_SIZE -
+				this.model.length * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
 						: 1)
@@ -1183,9 +1195,9 @@ class Map extends Base {
 					? Project.SQUARE_SIZE / 2
 					: 0
 			);
-		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.length - 1) {
+		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.width - 1) {
 			this.selectedMesh.position.setZ(
-				this.model.length * Project.SQUARE_SIZE -
+				this.model.width * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
 						: 1)

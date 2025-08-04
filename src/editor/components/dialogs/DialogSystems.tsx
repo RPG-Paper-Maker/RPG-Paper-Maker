@@ -54,6 +54,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		panelCommonReactionsRef.current?.accept();
 		panelModelsRef.current?.accept();
 		await Project.current!.systems.save();
+		Project.SQUARE_SIZE = Project.current!.systems.SQUARE_SIZE;
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
 		await Project.current!.commonEvents.save();

@@ -68,6 +68,7 @@
 	display: flex;
 	flex-grow: 1;
 	padding: 20px 20px 10px 20px;
+	overflow-x: auto;
 }
 
 .dialogFooter {

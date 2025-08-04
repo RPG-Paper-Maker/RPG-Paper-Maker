@@ -87,7 +87,7 @@ class RandomBattle extends Base {
 
 	toStrings(): string[] {
 		return [
-			this.troopID.toString(Project.current!.troops.list),
+			Base.STRING_START + this.troopID.toString(Project.current!.troops.list),
 			this.terrains.map((terrain) => terrain.value.toString()).join(','),
 			this.priority.toString(),
 			this.getProbability(),

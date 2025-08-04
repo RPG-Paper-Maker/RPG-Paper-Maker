@@ -42,6 +42,7 @@ class Base {
 				const domRect = GL.renderer.domElement.getBoundingClientRect();
 				GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
 				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
+				GL.renderer.clear();
 				GL.renderer.render(this.scene, this.camera.getThreeCamera());
 			}
 		}
