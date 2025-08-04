@@ -1,4 +1,9 @@
 {
-	"lastVersion": "3.7.1",
-	"versions": ["3.0.0", "proto.3.7.0", "proto.3.7.1"]
+    "lastVersion": "proto.3.7.2",
+    "versions": [
+        "3.0.0",
+        "proto.3.7.0",
+        "proto.3.7.1",
+        "proto.3.7.2"
+    ]
 }
