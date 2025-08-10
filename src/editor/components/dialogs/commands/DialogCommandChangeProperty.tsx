@@ -95,7 +95,7 @@ function DialogCommandChangeProperty({ commandKind, isOpen, setIsOpen, list, onA
 						<div>{t('new.value')}:</div>
 						<DynamicValueSelector
 							value={newValue}
-							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY_PARAM_PROP}
 						/>
 					</Flex>
 				</Groupbox>

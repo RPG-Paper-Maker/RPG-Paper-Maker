@@ -39,13 +39,15 @@ function PanelMain() {
 	};
 
 	useEffect(() => {
-		const handleFocus = async () => {
-			dispatch(setCopiedItems(await Node.loadToPaste()));
-		};
-		handleFocus().catch(console.error);
-		window.addEventListener('focus', handleFocus);
-		return () => window.removeEventListener('focus', handleFocus);
-	}, [dispatch]);
+		if (currentProject) {
+			const handleFocus = async () => {
+				dispatch(setCopiedItems(await Node.loadToPaste()));
+			};
+			handleFocus().catch(console.error);
+			window.addEventListener('focus', handleFocus);
+			return () => window.removeEventListener('focus', handleFocus);
+		}
+	}, [currentProject]);
 
 	return (
 		<>

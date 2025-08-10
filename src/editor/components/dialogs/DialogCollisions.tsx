@@ -289,6 +289,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					cannotDelete={kind === undefined}
 					cannotDragDrop={kind === undefined}
 					cannotEdit={kind === undefined}
+					applyDefault
 				/>
 			</Groupbox>
 			<Flex one fillWidth>
@@ -429,6 +430,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 							selectedID={mountainCollisionKind}
 							onChange={handleChangeMountainCollisionKind}
 							options={Base.MOUNTAIN_COLLISION_OPTIONS}
+							disabled={isMountainDisabled}
 							translateOptions
 						/>
 					</Flex>
@@ -444,9 +446,12 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 							/>
 						</Flex>
 					)}
-					<TexturePreviewer texture={mountainPicturePath} base64={!mountainPictureIsBR} />
+					{!isMountainDisabled && (
+						<TexturePreviewer texture={mountainPicturePath} base64={!mountainPictureIsBR} />
+					)}
 				</Flex>
-			) : null
+			) : null,
+			Model.Mountain
 		);
 
 	const getObjectsContent = () =>

@@ -349,7 +349,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
-	const handleSave = async () => {
+	const save = async () => {
 		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
 		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
@@ -359,12 +359,18 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		Project.current!.scripts.plugins.forEach((plugin) => {
 			plugin.saved = true;
 		});
+	};
+
+	const handleSave = async () => {
+		setIsLoading(true);
+		await save();
 		setTriggerUpdate((b) => !b);
+		setIsLoading(false);
 	};
 
 	const handleSaveAndClose = async () => {
 		setIsLoading(true);
-		await handleSave();
+		await save();
 		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
 		setIsLoading(false);
 		setIsOpen(false);

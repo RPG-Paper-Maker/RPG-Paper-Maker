@@ -73,7 +73,7 @@ class Mountains {
 		// Draw original image
 		Scene.Map.ctxRendering!.clearRect(0, 0, Scene.Map.canvasRendering!.width, Scene.Map.canvasRendering!.height);
 		Scene.Map.canvasRendering!.width = 4 * Project.SQUARE_SIZE;
-		Scene.Map.canvasRendering!.height = 5 * Project.SQUARE_SIZE;
+		Scene.Map.canvasRendering!.height = 7 * Project.SQUARE_SIZE;
 		Scene.Map.ctxRendering!.drawImage(image, 0, 0);
 
 		// Add left/right autos
@@ -164,6 +164,23 @@ class Mountains {
 				sDiv,
 				sDiv
 			);
+
+			// Repeated mid (for corners)
+			for (let i = 0, l = 3; i < l; i++) {
+				for (let j = 0, m = 4; j < m; j++) {
+					Scene.Map.ctxRendering!.drawImage(
+						image,
+						Project.SQUARE_SIZE,
+						i * Project.SQUARE_SIZE,
+						Project.SQUARE_SIZE,
+						Project.SQUARE_SIZE,
+						j * Project.SQUARE_SIZE,
+						(4 + i) * Project.SQUARE_SIZE,
+						Project.SQUARE_SIZE,
+						Project.SQUARE_SIZE
+					);
+				}
+			}
 		} catch {
 			console.error(
 				'Error: Wrong mountain (with ID:' +

@@ -80,8 +80,8 @@ function Game({ location, battleTest = false }: Props) {
 	return (
 		<>
 			<div id='three-d'></div>
-			<canvas id='hud' />
 			<video id='video-container' className='hidden' height='480px' />
+			<canvas id='hud' />
 			<canvas id='rendering' width='4096px' height='4096px' />
 		</>
 	);

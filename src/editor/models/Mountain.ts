@@ -25,6 +25,10 @@ class Mountain extends SpecialElement {
 		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(Mountain.getBindings(additionnalBinding));
+	}
+
 	copy(mountain: Mountain, additionnalBinding: BindingType[] = []): void {
 		super.copy(mountain, Mountain.getBindings(additionnalBinding));
 	}

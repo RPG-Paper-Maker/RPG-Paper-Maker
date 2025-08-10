@@ -89,6 +89,8 @@ class GL {
 		opts.texture.magFilter = THREE.NearestFilter;
 		opts.texture.minFilter = THREE.NearestFilter;
 		opts.texture.flipY = opts.flipY ? true : false;
+		opts.texture.wrapS = THREE.RepeatWrapping;
+		opts.texture.wrapT = THREE.RepeatWrapping;
 		const repeat = Utils.defaultValue(opts.repeat, 1.0);
 		const opacity = Utils.defaultValue(opts.opacity, 1.0);
 		const shadows = Utils.defaultValue(opts.shadows, true);
@@ -116,6 +118,7 @@ class GL {
 			alphaTest: 0.5,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
 			opacity,
+			shininess: 0,
 		});
 		material.userData.uniforms = uniforms;
 		material.forceSinglePass = true;

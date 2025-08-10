@@ -46,15 +46,17 @@ console.error = (...args) => {
 			}
 		});
 	}
-	notifyError(<ToasterError message={message} stack={stack} />);
 	originalConsoleError(...args);
+	notifyError(<ToasterError message={message} stack={stack} />);
 };
 
+const originalWindowError = window.onerror;
 window.onerror = function (message, source, lineno, colno, error) {
 	if (errorCount++ >= MAX_ERROR_COUNT) {
 		return;
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
+	originalWindowError?.(message, source, lineno, colno, error);
 	notifyError(<ToasterError message={message as string} stack={stack} />);
 };
 

@@ -244,6 +244,17 @@ function MainMenuBar() {
 			if (version !== Project.VERSION) {
 				if (!version) {
 					version = '2.0.11';
+					if (Constants.IS_DESKTOP) {
+						const fileVersion = await IO.readFile(Paths.join(project.location, 'game.rpm'));
+						if (fileVersion !== '2.0.11') {
+							setWarningVersionMessage(t('warning.project.2.0.11.version', { version: fileVersion }));
+							setIsDialogWarningProjectVersionOpen(true);
+							Project.current = null;
+							dispatch(setOpenLoading(false));
+							dispatch(setLoading(false));
+							return;
+						}
+					}
 				}
 				if (version.startsWith('proto')) {
 					setWarningVersionMessage(t('warning.project.version'));
@@ -1010,17 +1021,21 @@ function MainMenuBar() {
 					</div>
 				)}
 				{Constants.IS_DESKTOP && (
-					<Flex fillHeight className='noTitleDrag'>
-						<Button square backgroundOnHoverOnly onClick={handleMinimize}>
-							<VscChromeMinimize />
-						</Button>
-						<Button square backgroundOnHoverOnly onClick={handleMaximize}>
-							{isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
-						</Button>
-						<Button buttonType={BUTTON_TYPE.RED} square backgroundOnHoverOnly onClick={handleClose}>
-							<VscChromeClose />
-						</Button>
-					</Flex>
+					<>
+						<div className='textSmallDetail'>{document.title}</div>
+						<Flex one />
+						<Flex fillHeight className='noTitleDrag'>
+							<Button square backgroundOnHoverOnly onClick={handleMinimize}>
+								<VscChromeMinimize />
+							</Button>
+							<Button square backgroundOnHoverOnly onClick={handleMaximize}>
+								{isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+							</Button>
+							<Button buttonType={BUTTON_TYPE.RED} square backgroundOnHoverOnly onClick={handleClose}>
+								<VscChromeClose />
+							</Button>
+						</Flex>
+					</>
 				)}
 			</div>
 			<Toolbar />

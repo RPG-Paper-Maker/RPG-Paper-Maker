@@ -2074,5 +2074,6 @@
 	"plugin.successfully.updated": "Plugin {{name}} successfully updated from {{oldVersion}} to {{newVersion}}",
 	"how.convert.project.2.0": "How to convert my 2.0 project?",
 	"id.already.exists.list": "This ID already exists in this list.",
-	"web.update.countdown.message": "RPG Paper Maker will be updated the {{date}} CET. Time left before maintenance: {{timeLeft}}."
+	"web.update.countdown.message": "RPG Paper Maker will be updated the {{date}} CET. Time left before maintenance: {{timeLeft}}.",
+	"warning.project.2.0.11.version": "Your project version is {{version}}. Please download RPG Paper Maker 2.0.11 to update your project to 2.0.11 before trying to convert again here."
 }

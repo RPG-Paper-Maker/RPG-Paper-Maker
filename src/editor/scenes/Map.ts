@@ -151,6 +151,7 @@ class Map extends Base {
 	public movingObject: Model.CommonObject | null = null;
 	public movingObjectInitialPosition: Position | null = null;
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
+	public skyboxMesh: THREE.Mesh | null = null;
 
 	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false, isBattle = false) {
 		super(tag, isDetection);
@@ -458,9 +459,9 @@ class Map extends Base {
 	}
 
 	async updateBackgroundSkybox() {
-		const size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
+		const size = 3;
 		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-		const skyboxMesh = new THREE.Mesh(
+		this.skyboxMesh = new THREE.Mesh(
 			skyboxGeometry,
 			await (
 				Model.Base.getByIDOrFirst(
@@ -469,7 +470,7 @@ class Map extends Base {
 				) as Model.Skybox
 			).createTextures()
 		);
-		this.scene.add(skyboxMesh);
+		this.scene.add(this.skyboxMesh);
 	}
 
 	updateDetectionGrid(left: number, right: number, top: number, bot: number) {
@@ -1954,6 +1955,16 @@ class Map extends Base {
 		if (this.needsUpdateRaycasting) {
 			this.updateRaycasting();
 			this.needsUpdateRaycasting = false;
+		}
+
+		// Skybox
+		if (this.skyboxMesh) {
+			this.skyboxMesh.position.copy(this.camera.getThreeCamera().position);
+			const distance = Math.max(
+				1000,
+				this.camera.getThreeCamera().position.distanceTo(this.camera.targetPosition)
+			);
+			this.skyboxMesh.scale.set(distance, distance, distance);
 		}
 
 		// Cursors

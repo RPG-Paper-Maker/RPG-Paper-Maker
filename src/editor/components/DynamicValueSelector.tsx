@@ -164,6 +164,7 @@ function DynamicValueSelector({
 				];
 				break;
 			case DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY_PARAM_PROP:
 				list = [
 					DYNAMIC_VALUE_KIND.NONE,
 					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
@@ -272,6 +273,7 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.VARIABLE_PARAM_PROP:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY_PARAM_PROP:
 				if (Project.current!.currentMapObjectParameters.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
 				}

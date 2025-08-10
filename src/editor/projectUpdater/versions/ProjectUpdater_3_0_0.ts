@@ -548,6 +548,7 @@ class ProjectUpdater_3_0_0 {
 					return `Unknown(${qtKey})`; // fallback
 			}
 		};
+		await moveFile(Paths.join(projectPath, 'keyBoard.json'), Paths.join(projectPath, 'keyboard.json'));
 		const jsonKeyboard = await readJSON(Paths.join(projectPath, 'keyboard.json'));
 		if (jsonKeyboard) {
 			const list = jsonKeyboard.list as JSONType[];

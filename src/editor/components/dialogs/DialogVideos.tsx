@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { Constants } from '../../common';
+import { BUTTON_TYPE, Constants } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
@@ -223,9 +223,24 @@ function DialogVideos({
 		if (selectedVideo) {
 			return (
 				<Flex spaced centerH>
-					<Button icon={<FaStop />} onClick={handleClickStop} disabled={!isVideoPlayable} />
-					<Button icon={<FaPause />} onClick={handleClickPause} disabled={!isVideoPlayable} />
-					<Button icon={<FaPlay />} onClick={handleClickPlay} disabled={!isVideoPlayable} />
+					<Button
+						buttonType={BUTTON_TYPE.RED}
+						icon={<FaStop />}
+						onClick={handleClickStop}
+						disabled={!isVideoPlayable}
+					/>
+					<Button
+						buttonType={BUTTON_TYPE.PRIMARY_TEXT}
+						icon={<FaPause />}
+						onClick={handleClickPause}
+						disabled={!isVideoPlayable}
+					/>
+					<Button
+						buttonType={BUTTON_TYPE.PRIMARY}
+						icon={<FaPlay />}
+						onClick={handleClickPlay}
+						disabled={!isVideoPlayable}
+					/>
 				</Flex>
 			);
 		}

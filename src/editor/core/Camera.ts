@@ -17,7 +17,7 @@ import { Project } from './Project';
 
 class Camera {
 	public static MIN_ZOOM = 20;
-	public static MAX_ZOOM = 10000;
+	public static MAX_ZOOM = 45000;
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
 	public targetPosition: THREE.Vector3;

@@ -376,7 +376,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list
 						</Groupbox>
 					</Flex>
 					<Flex column spaced>
-						<Groupbox title={t('text')}>
+						<Groupbox title={t('faceset')}>
 							<Form>
 								<Label>
 									<Checkbox isChecked={isFacesetPosition} onChange={setIsFacesetPosition}>
@@ -418,7 +418,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list
 								</Value>
 							</Form>
 						</Groupbox>
-						<Groupbox title={t('faceset')}>
+						<Groupbox title={t('text')}>
 							<Form>
 								<Label>
 									<Checkbox isChecked={isOutline} onChange={setIsOutline}>

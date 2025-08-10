@@ -45,7 +45,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const [minToDisplay, setMinToDisplay] = useState(0);
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
 	const [positionScroll] = useState({ current: 0 });
-	const [objects3DURLs] = useState<Map<number, string>>(new Map());
+	const [urls] = useState<Map<number, string>>(new Map());
 	const [, setTriggerUpdate] = useStateNumber();
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -108,32 +108,40 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	};
 
-	const initializeCanvas = async () => {
+	const initialize = async () => {
 		const content = contentRef.current;
 		if (content) {
-			Manager.GL.staticRender.shadowMap.enabled = true;
-			Manager.GL.staticRender.setSize(300, 300);
-			await updateCanvas();
+			if (displayCanvas) {
+				Manager.GL.staticRender.shadowMap.enabled = true;
+				Manager.GL.staticRender.setSize(300, 300);
+			}
+			await update();
 		}
 	};
 
-	const updateCanvas = async () => {
+	const update = async () => {
 		const content = contentRef.current;
 		if (content) {
 			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
-				const elementID = list[i + positionScroll.current]?.id;
+				const element = list[i + positionScroll.current];
+				const elementID = displayCanvas ? element?.id : element.pictureID;
 				if (elementID !== undefined) {
-					if (objects3DURLs.get(elementID) === undefined) {
-						objects3DURLs.set(elementID, '');
-						const scene = new Scene.Previewer3D(getCanvasID(elementID));
-						scene.isCut = true;
-						scene.camera.perspectiveCamera.aspect = 1;
-						scene.camera.perspectiveCamera.updateProjectionMatrix();
-						await scene.loadObject3D(elementID);
-						await scene.load();
-						Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
-						const dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
-						objects3DURLs.set(elementID, dataURL);
+					if (urls.get(elementID) === undefined) {
+						urls.set(elementID, '');
+						let dataURL = '';
+						if (displayCanvas) {
+							const scene = new Scene.Previewer3D(getCanvasID(elementID));
+							scene.isCut = true;
+							scene.camera.perspectiveCamera.aspect = 1;
+							scene.camera.perspectiveCamera.updateProjectionMatrix();
+							await scene.loadObject3D(elementID);
+							await scene.load();
+							Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
+							dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
+						} else {
+							dataURL = await Project.current!.pictures.getByID(kind, elementID).getPathOrBase64();
+						}
+						urls.set(elementID, dataURL);
 						setTriggerUpdate(elementID);
 					}
 				}
@@ -231,7 +239,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
 			}
 			if (firstScroll) {
-				updateCanvas();
+				update();
 			}
 		}
 	};
@@ -257,8 +265,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	});
 
 	useEffect(() => {
-		if (firstScroll && displayCanvas) {
-			initializeCanvas().catch(console.error);
+		if (firstScroll) {
+			initialize().catch(console.error);
 		}
 	}, [firstScroll]);
 
@@ -281,13 +289,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	}, [minToDisplay, previousMinToDisplay]);
 
-	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
-		if (displayCanvas) {
-			const url = objects3DURLs.get(id);
-			return url ? <img src={url} alt={'icon'} /> : null;
-		} else {
-			return <img src={picture.getPath()} alt={'icon'} />;
-		}
+	const getPictureOrCanvas = (element: Model.SpecialElement) => {
+		const url = urls.get(displayCanvas ? element.id : element.pictureID);
+		return url ? <img src={url} alt={'icon'} /> : null;
 	};
 
 	const listElements = filteredList.map((element) => {
@@ -301,7 +305,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				onClick={() => handleClick(element.id)}
 			>
 				<div className='title'>
-					<div className='pictureContainer'>{getPictureOrCanvas(element.id, picture)}</div>
+					<div className='pictureContainer'>{getPictureOrCanvas(element)}</div>
 					<Flex one className='textEllipsis'>
 						{element.toStringNameID()}
 					</Flex>

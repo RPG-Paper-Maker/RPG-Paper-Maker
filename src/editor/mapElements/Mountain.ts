@@ -31,6 +31,9 @@ class Mountain extends Base {
 	public static Y_MID_OFFSET = 1;
 	public static Y_BOT_OFFSET = 2;
 	public static Y_MIX_OFFSET = 3;
+	public static Y_MID_TOP_OFFSET = 4;
+	public static Y_MID_MID_OFFSET = 5;
+	public static Y_MID_BOT_OFFSET = 6;
 
 	public mountainID!: number;
 	public widthSquares!: number;
@@ -501,7 +504,8 @@ class Mountain extends Base {
 		// Textures coordinates
 		let x = (xKind * Project.SQUARE_SIZE) / width;
 		let y =
-			(yKind * Project.SQUARE_SIZE + (yKind === Mountain.Y_BOT_OFFSET ? Project.SQUARE_SIZE - faceHeight : 0)) /
+			((isCorner ? yKind + 4 : yKind) * Project.SQUARE_SIZE +
+				(yKind === Mountain.Y_BOT_OFFSET ? Project.SQUARE_SIZE - faceHeight : 0)) /
 			height;
 		let h = faceHeight / height;
 		const coefX = MapElement.Base.COEF_TEX / width;
@@ -518,19 +522,25 @@ class Mountain extends Base {
 		let texD: THREE.Vector2;
 		if (isCorner) {
 			texA = new THREE.Vector2(
-				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width + coefX,
+				(Mountain.X_MID_OFFSET * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width +
+					coefX,
 				y
 			);
 			texB = new THREE.Vector2(
-				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width - coefX,
+				((Mountain.X_MID_OFFSET + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) /
+					width -
+					coefX,
 				y
 			);
 			texC = new THREE.Vector2(
-				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width - coefX,
+				((Mountain.X_MID_OFFSET + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) /
+					width -
+					coefX,
 				y + h
 			);
 			texD = new THREE.Vector2(
-				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width + coefX,
+				(Mountain.X_MID_OFFSET * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width +
+					coefX,
 				y + h
 			);
 		} else {
@@ -607,7 +617,7 @@ class Mountain extends Base {
 		const wp = this.getWidthTotalPixels();
 		const hp = this.getHeightTotalPixels();
 		const width = 4 * Project.SQUARE_SIZE;
-		const height = 5 * Project.SQUARE_SIZE;
+		const height = 7 * Project.SQUARE_SIZE;
 		const faceHeight = Math.sqrt(wp * wp + hp * hp);
 		const w = Project.SQUARE_SIZE / width;
 		const localPosition = position.toVector3(false);
