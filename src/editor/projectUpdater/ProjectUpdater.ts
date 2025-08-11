@@ -16,6 +16,13 @@ import { Project } from '../core/Project';
 class ProjectUpdater {
 	static versions = ['3.0.0'];
 
+	static isIncompatibleVersion(version: string) {
+		return this.checkVersion(version, this.versions[this.versions.length - 1]);
+	}
+
+	/*
+		Returns true if newVersion > currentVersion
+	*/
 	static checkVersion(currentVersion: string, newVersion: string): boolean {
 		const parseVersion = (version: string) => version.split('.').map(Number);
 		const [currMajor, currMinor, currPatch] = parseVersion(currentVersion);
@@ -35,26 +42,26 @@ class ProjectUpdater {
 			const projectPath = Project.current!.getPath();
 			callback(0, 100, `Copying project to ${projectPath}_${version}...`);
 			await copyFolder(projectPath, `${projectPath}_${version}`);
-			let passed = false;
-			let index = 0;
-			for (const newVersion of this.versions) {
-				if (passed || this.checkVersion(version, newVersion)) {
-					passed = true;
-					const className = `ProjectUpdater_${newVersion.replaceAll('.', '_')}`;
-					const module = await import(`./versions/${className}.ts`);
-					const updaterClass = module[className];
-					if (updaterClass && typeof updaterClass.update === 'function') {
-						const label = `Updating to version ${newVersion}...`;
-						const currentIndex = index;
-						callback(currentIndex, this.versions.length, label);
-						await updaterClass.update((percent: number) => {
-							callback(currentIndex, this.versions.length, label, percent);
-						});
-					} else {
-						throw new Error(`Update method not found in ${className}`);
-					}
+			const versions = [];
+			for (let i = this.versions.length - 1; i >= 0; i--) {
+				const newVersion = this.versions[i];
+				if (this.checkVersion(version, newVersion)) {
+					versions.unshift(newVersion);
 				}
-				index++;
+			}
+			for (const [index, newVersion] of versions.entries()) {
+				const className = `ProjectUpdater_${newVersion.replaceAll('.', '_')}`;
+				const module = await import(`./versions/${className}.ts`);
+				const updaterClass = module[className];
+				if (updaterClass && typeof updaterClass.update === 'function') {
+					const label = `Updating to version ${newVersion}...`;
+					callback(index, versions.length, label);
+					await updaterClass.update((percent: number) => {
+						callback(index, versions.length, label, percent);
+					});
+				} else {
+					throw new Error(`Update method not found in ${className}`);
+				}
 			}
 			callback(1, 1);
 			const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));

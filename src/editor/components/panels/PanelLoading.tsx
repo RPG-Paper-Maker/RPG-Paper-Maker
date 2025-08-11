@@ -100,7 +100,7 @@ function PanelLoading({ setLoaded }: Props) {
 			}
 			await EngineSettings.current.save();
 		}
-		i18n.changeLanguage(EngineSettings.current.currentLanguage);
+		await i18n.changeLanguage(EngineSettings.current.currentLanguage);
 	};
 
 	const initializeTextures = async () => {

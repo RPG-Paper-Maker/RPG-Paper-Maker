@@ -52,13 +52,13 @@ function DialogChangeLanguage({ isOpen, setIsOpen }: Props) {
 	};
 
 	const handleReject = async () => {
-		i18n.changeLanguage(initialShort);
+		await i18n.changeLanguage(initialShort);
 		setIsOpen(false);
 	};
 
-	const handleChangeLanguage = (id: number) => {
+	const handleChangeLanguage = async (id: number) => {
 		setSelectedID(id);
-		i18n.changeLanguage(LANGUAGES_SHORTS[id]);
+		await i18n.changeLanguage(LANGUAGES_SHORTS[id]);
 	};
 
 	useEffect(() => {

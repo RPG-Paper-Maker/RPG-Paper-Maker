@@ -51,7 +51,7 @@
 		"start": "vite --host --port 3000",
 		"build": "npm run update-mods && rm -rf dist && vite build",
 		"build-quick": "vite build",
-		"lint": "eslint ./src",
+		"eslint": "eslint ./src",
 		"electron": "electron ./index.js",
 		"build-electron": "npm run build-quick && npm run electron",
 		"update-mods": "node scripts/update-mods.mjs",

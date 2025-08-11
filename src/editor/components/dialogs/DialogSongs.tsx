@@ -108,13 +108,13 @@ function DialogSongs({
 		[kind]
 	);
 
-	const initialize = () => {
+	const initialize = async () => {
 		setIsInitiating(true);
 		setNewDynamicSongID(dynamicSongID?.clone());
 		setIsSelectedLeftList(true);
 		setSongs(Node.createList(Project.current!.songs.getList(selectedKind!)));
 		if (songID !== undefined) {
-			updateSong(Project.current!.songs.getByID(selectedKind!, songID));
+			await updateSong(Project.current!.songs.getByID(selectedKind!, songID));
 		}
 		start.updateToDefaultNumber(0, true);
 		end.updateToDefaultNumber(0, true);
@@ -137,7 +137,7 @@ function DialogSongs({
 		setPlayingHowl(undefined);
 		setIsPaused(true);
 		setIsStopped(true);
-		handleRefresh();
+		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -154,14 +154,12 @@ function DialogSongs({
 			const { Howl } = await import('howler');
 			if (!song.isBR) {
 				setSelectedHowl(undefined);
-				(async () => {
-					setSelectedHowl(
-						new Howl({
-							src: [Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? ''],
-							html5: true,
-						})
-					);
-				})();
+				setSelectedHowl(
+					new Howl({
+						src: [Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? ''],
+						html5: true,
+					})
+				);
 			} else {
 				setSelectedHowl(
 					new Howl({
@@ -175,8 +173,8 @@ function DialogSongs({
 		}
 	};
 
-	const handleChangeSelectedSong = (node: Node | null) => {
-		updateSong((node?.content ?? null) as Model.Song | null);
+	const handleChangeSelectedSong = async (node: Node | null) => {
+		await updateSong((node?.content ?? null) as Model.Song | null);
 	};
 
 	const handleRefresh = async () => {
@@ -300,7 +298,7 @@ function DialogSongs({
 
 	useLayoutEffect(() => {
 		if (isOpen && selectedKind !== undefined) {
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen, selectedKind]);
 

@@ -119,7 +119,7 @@ function DialogPictures({
 		[kind]
 	);
 
-	const initialize = () => {
+	const initialize = async () => {
 		setIsInitiating(true);
 		setNewDynamicPictureID(dynamicPictureID?.clone());
 		setIsSelectedLeftList(true);
@@ -141,7 +141,7 @@ function DialogPictures({
 		}
 		setSelectedRect(rect);
 		setSelectedRectTileset(rectT);
-		handleRefresh();
+		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -279,7 +279,7 @@ function DialogPictures({
 	useLayoutEffect(() => {
 		if (isOpen && selectedKind !== undefined) {
 			reset();
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen, selectedKind]);
 

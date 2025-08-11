@@ -43,12 +43,12 @@ function PanelNoProject() {
 		dispatch(triggerImportProject(true));
 	};
 
-	const handleDLCs = () => {
-		openWebsite('https://rpg-paper-maker.com/shop/');
+	const handleDLCs = async () => {
+		await openWebsite('https://rpg-paper-maker.com/shop/');
 	};
 
-	const handleContribute = () => {
-		openWebsite('https://rpg-paper-maker.com/contribute/');
+	const handleContribute = async () => {
+		await openWebsite('https://rpg-paper-maker.com/contribute/');
 	};
 
 	const renderProjectsList = () => {

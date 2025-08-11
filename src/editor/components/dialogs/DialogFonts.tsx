@@ -42,11 +42,11 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 
 	const folders = useMemo(() => [Node.create(Model.TreeMapTag.create(-1, 'Fonts'))], []);
 
-	const initialize = () => {
+	const initialize = async () => {
 		setIsInitiating(true);
 		setIsSelectedLeftList(true);
 		setFonts(Node.createList(Project.current!.fonts.list));
-		handleRefresh();
+		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -114,7 +114,7 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 
 	useEffect(() => {
 		if (isOpen) {
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen]);
 

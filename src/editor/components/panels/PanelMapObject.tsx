@@ -452,7 +452,7 @@ const PanelMapObject = forwardRef(
 			initialize();
 			if (saveOnDestruction) {
 				return () => {
-					accept();
+					accept().catch(console.error);
 				};
 			}
 		}, []);

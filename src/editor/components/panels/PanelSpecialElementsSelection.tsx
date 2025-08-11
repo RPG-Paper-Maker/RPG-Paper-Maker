@@ -124,7 +124,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		if (content) {
 			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
 				const element = list[i + positionScroll.current];
-				const elementID = displayCanvas ? element?.id : element.pictureID;
+				const elementID = displayCanvas ? element?.id : element?.pictureID;
 				if (elementID !== undefined) {
 					if (urls.get(elementID) === undefined) {
 						urls.set(elementID, '');
@@ -218,7 +218,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		await Project.current!.settings!.save();
 	};
 
-	const handleScroll = () => {
+	const handleScroll = async () => {
 		const content = contentRef.current;
 		if (content) {
 			const scrollTop = content.scrollTop;
@@ -239,7 +239,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
 			}
 			if (firstScroll) {
-				update();
+				await update();
 			}
 		}
 	};

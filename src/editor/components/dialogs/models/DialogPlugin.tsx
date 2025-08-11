@@ -239,7 +239,12 @@ const inject = Manager.Plugins.inject;
 					plugin.checked = true;
 					const pluginManifest = allPluginsJSON[plugin.category].find((p) => p.name === plugin.name);
 					if (pluginManifest) {
-						Model.Plugin.copyOnlineFolder('', plugin.name, pluginManifest as PluginsManifestType, true);
+						await Model.Plugin.copyOnlineFolder(
+							'',
+							plugin.name,
+							pluginManifest as PluginsManifestType,
+							true
+						);
 					}
 					setIsLoading(false);
 					break;

@@ -278,7 +278,7 @@ export const exportFolder = async (location: string) => {
 			const folderPath = await IO.openFolderDialog();
 			const arrayBuffer = await zip.generateAsync({ type: 'arraybuffer' });
 			if (folderPath) {
-				IO.createFile(Paths.join(folderPath, `${fileName}.zip`), Buffer.from(arrayBuffer));
+				await IO.createFile(Paths.join(folderPath, `${fileName}.zip`), Buffer.from(arrayBuffer));
 			}
 		} else {
 			const blob = await zip.generateAsync({ type: 'blob' });

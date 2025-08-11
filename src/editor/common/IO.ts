@@ -32,11 +32,11 @@ class IO {
 		return await (window as ExtendedWindow).ipcRenderer.invoke(channel, ...args);
 	}
 
-	static async onMaximized(callback: (...args: unknown[]) => void) {
+	static onMaximized(callback: (...args: unknown[]) => void) {
 		this.on('is-maximized', callback);
 	}
 
-	static async onUnmaximized(callback: (...args: unknown[]) => void) {
+	static onUnmaximized(callback: (...args: unknown[]) => void) {
 		this.on('is-unmaximized', callback);
 	}
 

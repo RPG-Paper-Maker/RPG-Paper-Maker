@@ -188,7 +188,7 @@ class System extends Serializable {
 	}
 
 	async saveStyleCSS() {
-		createFile(
+		await createFile(
 			Paths.join(Project.current!.getPath(), Paths.STYLES, Paths.FILE_FONTS_CSS),
 			await this.getStyleCSS()
 		);

@@ -145,39 +145,37 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		});
 	};
 
-	const handleSelectPlugin = (node: Node | null) => {
+	const handleSelectPlugin = async (node: Node | null) => {
 		if (node) {
 			const plugin = node.content as Model.Plugin;
 			if (plugin.id !== -1) {
 				setIsLoading(true);
-				(async () => {
-					if (plugin.code === undefined) {
-						const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
-						plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
-						if (Constants.IS_DESKTOP) {
-							const base64 = await IO.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE), false, true);
-							plugin.pictureBase64 = base64 ? `data:image/png;base64,${base64}` : '';
-						} else {
-							plugin.pictureBase64 =
-								(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
-						}
+				if (plugin.code === undefined) {
+					const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
+					plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+					if (Constants.IS_DESKTOP) {
+						const base64 = await IO.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE), false, true);
+						plugin.pictureBase64 = base64 ? `data:image/png;base64,${base64}` : '';
+					} else {
+						plugin.pictureBase64 =
+							(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
 					}
-					setCode(plugin.code);
-					setName(plugin.name);
-					setAuthor(plugin.author);
-					setDescription(plugin.description);
-					setVersion(plugin.version);
-					setWebsite(plugin.website);
-					setTutorial(plugin.tutorial);
-					setCategory(plugin.category);
-					setDefaultParameters(Node.createList(plugin.defaultParameters));
-					updateParametersDefaults(plugin);
-					setCommands(Node.createList(plugin.commands));
-					setAutoUpdate(plugin.autoUpdate);
-					setPictureBase64(plugin.pictureBase64);
-					setSelectedPlugin(plugin);
-					setIsLoading(false);
-				})();
+				}
+				setCode(plugin.code);
+				setName(plugin.name);
+				setAuthor(plugin.author);
+				setDescription(plugin.description);
+				setVersion(plugin.version);
+				setWebsite(plugin.website);
+				setTutorial(plugin.tutorial);
+				setCategory(plugin.category);
+				setDefaultParameters(Node.createList(plugin.defaultParameters));
+				updateParametersDefaults(plugin);
+				setCommands(Node.createList(plugin.commands));
+				setAutoUpdate(plugin.autoUpdate);
+				setPictureBase64(plugin.pictureBase64);
+				setSelectedPlugin(plugin);
+				setIsLoading(false);
 			} else {
 				setCode(plugin.code ?? '');
 				setSelectedPlugin(plugin);
@@ -386,7 +384,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					),
 				];
 				setFolders(nodes);
-			})();
+			})().catch(console.error);
 		} else {
 			setFolders([
 				Node.create(

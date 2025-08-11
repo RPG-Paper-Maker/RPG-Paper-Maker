@@ -260,30 +260,38 @@ function MainMenuBar() {
 					setWarningVersionMessage(t('warning.project.version'));
 					setIsDialogWarningProjectVersionOpen(true);
 					Project.current = null;
+					dispatch(setOpenLoading(false));
+					dispatch(setLoading(false));
+					return;
 				} else if (!ProjectUpdater.checkVersion(version, Project.VERSION)) {
 					setWarningVersionMessage(`${t('version.pb.1')} ${version} ${t('version.pb.2')} ${Project.VERSION}`);
 					setIsDialogWarningProjectVersionOpen(true);
 					Project.current = null;
-				} else {
+					dispatch(setOpenLoading(false));
+					dispatch(setLoading(false));
+					return;
+				} else if (ProjectUpdater.isIncompatibleVersion(version)) {
 					setCurrentVersion(version);
+					dispatch(setOpenLoading(false));
+					dispatch(setLoading(false));
+					return;
 				}
-			} else {
-				await Project.current.load();
-				if (Constants.IS_DESKTOP) {
-					const newBRPath = Paths.join(window.__dirname, Paths.BR);
-					if (newBRPath !== Project.current.systems.PATH_BR) {
-						Project.current.systems.PATH_BR = newBRPath;
-						Project.current.systems.save();
-					}
-				}
-				const newName = Project.current.systems.projectName.getName();
-				if (project.name !== newName) {
-					project.name = newName;
-					await addProject(project);
-				}
-				await Project.current.systems.saveStyleCSS();
-				dispatch(setCurrentProject(project));
 			}
+			await Project.current.load();
+			if (Constants.IS_DESKTOP) {
+				const newBRPath = Paths.join(window.__dirname, Paths.BR);
+				if (newBRPath !== Project.current.systems.PATH_BR) {
+					Project.current.systems.PATH_BR = newBRPath;
+					await Project.current.systems.save();
+				}
+			}
+			const newName = Project.current.systems.projectName.getName();
+			if (project.name !== newName) {
+				project.name = newName;
+				await addProject(project);
+			}
+			await Project.current.systems.saveStyleCSS();
+			dispatch(setCurrentProject(project));
 		} else {
 			setIsDialogWarningProjectLocationExist(true);
 		}
@@ -325,7 +333,7 @@ function MainMenuBar() {
 	const handleSave = async () => {
 		if (currentTreeMapTag) {
 			await currentTreeMapTag.saveFiles();
-			Project.current?.treeMaps.save();
+			await Project.current?.treeMaps.save();
 			dispatch(triggerTreeMap());
 		}
 	};
@@ -548,7 +556,7 @@ function MainMenuBar() {
 		if (canSaveAll) {
 			setIsDialogSavePlayOpen(true);
 		} else {
-			play();
+			await play();
 		}
 	};
 
@@ -558,7 +566,7 @@ function MainMenuBar() {
 
 	const handleRejectSavePlay = async () => {
 		setIsDialogSavePlayOpen(false);
-		play();
+		await play();
 	};
 
 	const handleAcceptSavePlay = async () => {
@@ -566,7 +574,7 @@ function MainMenuBar() {
 		await handleSaveAll();
 		setIsLoading(false);
 		setIsDialogSavePlayOpen(false);
-		play();
+		await play();
 	};
 
 	const handleMinimize = async () => {
@@ -966,9 +974,9 @@ function MainMenuBar() {
 		return (
 			<Menu>
 				{list.map((item: MenuItemType, index: number) => {
-					const handleClick = () => {
+					const handleClick = async () => {
 						if (item.onClick) {
-							item.onClick();
+							await item.onClick();
 							setIsHamburgerOpen(false);
 							setHamburgerStates([]);
 						} else {

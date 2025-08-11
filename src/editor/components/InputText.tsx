@@ -47,15 +47,15 @@ function InputText({
 		while (queue.length > 0) {
 			const value = queue[0];
 			queue.shift();
-			await onChange(value);
+			onChange(value);
 		}
 		setIsProcessing(false);
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (isAsyncChange) {
 			queue.push(e.target.value);
-			processQueue();
+			await processQueue();
 		} else {
 			onChange(e.target.value);
 		}

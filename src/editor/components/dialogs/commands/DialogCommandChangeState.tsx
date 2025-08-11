@@ -44,11 +44,11 @@ function DialogCommandChangeState({ commandKind, isOpen, setIsOpen, list, onAcce
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
 	const [, setTrigger] = useStateBool();
 
-	const initialize = () => {
+	const initialize = async () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
 			mapID.updateCommand(list, iterator);
-			handleChangeMap(false);
+			await handleChangeMap(false);
 			objectID.updateCommand(list, iterator);
 			stateID.updateCommand(list, iterator);
 			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
@@ -110,7 +110,7 @@ function DialogCommandChangeState({ commandKind, isOpen, setIsOpen, list, onAcce
 
 	useLayoutEffect(() => {
 		if (isOpen) {
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen]);
 

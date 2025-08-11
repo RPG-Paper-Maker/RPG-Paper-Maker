@@ -27,7 +27,8 @@ i18next
 		interpolation: {
 			escapeValue: false,
 		},
-	});
+	})
+	.catch(console.error);
 
 export const loadLocales = async () => {
 	const content = JSON.parse(await readPublicFile(Paths.join(Paths.LOCALES, Paths.FILE_LOCALES))) as JSONType;

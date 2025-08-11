@@ -63,7 +63,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 	};
 
 	useLayoutEffect(() => {
-		update();
+		update().catch(console.error);
 	}, [selectedMonster]);
 
 	const getCurrenciesContents = () =>

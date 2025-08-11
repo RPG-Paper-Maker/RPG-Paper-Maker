@@ -249,12 +249,12 @@ function Tree({
 		}
 	};
 
-	const handleDoubleClick = () => {
+	const handleDoubleClick = async () => {
 		if (!hasCustomItems && (!cannotAddEditRemoveRoot || currentSelectedItemNode !== list[0])) {
 			if (isEmpty) {
-				handleNewItem();
+				await handleNewItem();
 			} else {
-				handleEditItem();
+				await handleEditItem();
 			}
 		}
 		onDoubleClick?.(currentSelectedItemNode);

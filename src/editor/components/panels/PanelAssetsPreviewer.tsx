@@ -115,8 +115,8 @@ function PanelAssetsPreviewer({
 
 	const canDeleteRight = (node: Node | null) => !!node && !(node.content as Model.Asset).isBR;
 
-	const handleDeleteRight = (node: Node) => {
-		removeFile(node.content.getPath());
+	const handleDeleteRight = async (node: Node) => {
+		await removeFile(node.content.getPath());
 	};
 
 	const handleChangeActivated = (b: boolean) => {
@@ -127,9 +127,9 @@ function PanelAssetsPreviewer({
 	const handleClickExport = async () => {
 		if (Constants.IS_DESKTOP) {
 			const path = await IO.openFolderDialog();
-			IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
+			await IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
 		} else {
-			LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
+			await LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
 		}
 	};
 

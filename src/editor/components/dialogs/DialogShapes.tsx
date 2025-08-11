@@ -75,14 +75,14 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 		}
 	}, [selectedKind]);
 
-	const initialize = () => {
+	const initialize = async () => {
 		setIsInitiating(true);
 		setIsSelectedLeftList(true);
 		setShapes(Node.createList(Project.current!.shapes.getList(selectedKind!), false));
 		if (shapeID !== undefined) {
 			setSelectedShape(Project.current!.shapes.getByID(selectedKind!, shapeID));
 		}
-		handleRefresh();
+		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -167,7 +167,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 
 	useLayoutEffect(() => {
 		if (isOpen && selectedKind !== undefined) {
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen, selectedKind]);
 

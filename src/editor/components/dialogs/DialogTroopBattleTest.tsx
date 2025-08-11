@@ -120,11 +120,11 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 
 	const handleAccept = async () => {
 		setPreviousJSON(await readJSON(Project.current!.troops.getPath()));
-		Project.current!.troops.save();
+		await Project.current!.troops.save();
 		model!.battleMapID = battleMapID;
 		const json = {};
 		model!.write(json);
-		writeJSON(Paths.join(Project.current!.getPath(), Paths.TEST, Paths.FILE_TEST), json);
+		await writeJSON(Paths.join(Project.current!.getPath(), Paths.TEST, Paths.FILE_TEST), json);
 		await openGame(Project.current!.location, true);
 	};
 

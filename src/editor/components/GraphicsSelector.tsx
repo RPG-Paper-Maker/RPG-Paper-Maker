@@ -130,8 +130,8 @@ function GraphicsSelector({
 		}
 	};
 
-	const handleAcceptPictures = (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
-		updatePicture(picture, rect, isTileset);
+	const handleAcceptPictures = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+		await updatePicture(picture, rect, isTileset);
 		if (graphicsKind === ELEMENT_MAP_KIND.NONE) {
 			onChangeGraphicsKind(ELEMENT_MAP_KIND.SPRITE_FACE);
 		}
@@ -160,7 +160,7 @@ function GraphicsSelector({
 				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, graphicsID),
 				isTileset && rectTileset ? rectTileset.clone() : new Rectangle(graphicsIndexX, graphicsIndexY, 1, 1),
 				isTileset
-			);
+			).catch(console.error);
 		} else {
 			const ctx = getContext();
 			if (ctx) {

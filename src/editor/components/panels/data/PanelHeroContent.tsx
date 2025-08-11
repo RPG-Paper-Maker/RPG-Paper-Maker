@@ -110,7 +110,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 	};
 
 	useLayoutEffect(() => {
-		update();
+		update().catch(console.error);
 	}, [selectedHero]);
 
 	return (

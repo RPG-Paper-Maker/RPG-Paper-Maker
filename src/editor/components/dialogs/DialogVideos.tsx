@@ -71,16 +71,16 @@ function DialogVideos({
 		[selectedVideo, loading]
 	);
 
-	const initialize = () => {
+	const initialize = async () => {
 		setIsInitiating(true);
 		setNewDynamicVideoID(dynamicVideoID?.clone());
 		setIsSelectedLeftList(true);
 		setVideos(Node.createList(Project.current!.videos.list));
 		if (videoID !== undefined) {
 			const video = Project.current!.videos.getByID(videoID);
-			updateVideo(video);
+			await updateVideo(video);
 		}
-		handleRefresh();
+		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -89,27 +89,25 @@ function DialogVideos({
 		setVideosAvailable([]);
 	};
 
-	const updateVideo = (video: Model.Video | null) => {
+	const updateVideo = async (video: Model.Video | null) => {
 		setSelectedVideo(video);
 		if (video) {
 			setLoading(video.id !== -1);
-			(async () => {
-				if (playerRef.current && sourceRef.current) {
-					const path = video.getPath();
-					sourceRef.current.src = Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? '';
-					playerRef.current.load();
-					playerRef.current.onloadeddata = () => {
-						setLoading(false);
-					};
-				}
-			})();
+			if (playerRef.current && sourceRef.current) {
+				const path = video.getPath();
+				sourceRef.current.src = Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? '';
+				playerRef.current.load();
+				playerRef.current.onloadeddata = () => {
+					setLoading(false);
+				};
+			}
 		} else {
 			setLoading(false);
 		}
 	};
 
-	const handleChangeSelectedVideo = (node: Node | null) => {
-		updateVideo((node?.content ?? null) as Model.Video | null);
+	const handleChangeSelectedVideo = async (node: Node | null) => {
+		await updateVideo((node?.content ?? null) as Model.Video | null);
 	};
 
 	const handleRefresh = async () => {
@@ -160,9 +158,9 @@ function DialogVideos({
 		}
 	};
 
-	const handleClickPlay = () => {
+	const handleClickPlay = async () => {
 		if (playerRef.current && isVideoPlayable) {
-			playerRef.current.play();
+			await playerRef.current.play();
 		}
 	};
 
@@ -200,7 +198,7 @@ function DialogVideos({
 
 	useEffect(() => {
 		if (isOpen) {
-			initialize();
+			initialize().catch(console.error);
 		}
 	}, [isOpen]);
 

@@ -367,9 +367,11 @@ class Map extends Base {
 			await this.loadTileset();
 		}
 		if (kind !== PICTURE_KIND.SKYBOXES) {
-			this.forEachMapPortions((mapPortion) => {
-				mapPortion.loadTexturesAndUpdateGeometries();
-			});
+			for (const mapPortion of this.mapPortions) {
+				if (mapPortion) {
+					await mapPortion.loadTexturesAndUpdateGeometries();
+				}
+			}
 		}
 	}
 
