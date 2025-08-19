@@ -45,7 +45,7 @@ function TextureIconPreviewer({ id, indexX, indexY }: Props) {
 		<TexturePreviewer
 			texture={texture}
 			sourceRectangle={sourceRectangle}
-			scale={1}
+			scale={2}
 			base64={!picture.isBR}
 			noPointer
 		/>

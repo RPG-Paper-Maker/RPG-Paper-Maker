@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2022",
     "lib": [
       "dom",
       "dom.iterable",
@@ -17,7 +17,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "downlevelIteration": true,
     "jsx": "react-jsx",
   },

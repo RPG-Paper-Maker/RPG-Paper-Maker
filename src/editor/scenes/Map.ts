@@ -145,6 +145,7 @@ class Map extends Base {
 	public needsMouseDown = false;
 	public needsSaveSystems = false;
 	public needsUpdateComponent = false;
+	public needsUpdateCursor = false;
 	public mouseUp = false;
 	public isTransforming = false;
 	public isDraggingTransforming = false;
@@ -1661,18 +1662,16 @@ class Map extends Base {
 		}
 	}
 
-	onKeyDown() {
-		// TODO
-	}
+	onKeyDown() {}
 
 	onKeyDownImmediate() {
 		if (this.rectangleStartPosition === null && this.movingObject === null) {
-			this.cursor.onKeyDownImmediate();
-			this.requestPaintHUD = true;
+			this.needsUpdateCursor = true;
 		}
 	}
 
 	onKeyUp() {
+		this.cursor.onKeyUp();
 		if (this.canEdit && this.tag) {
 			this.tag.cursorPosition = this.cursor.position;
 			Project.current!.treeMaps.save().catch(console.error);
@@ -1951,86 +1950,96 @@ class Map extends Base {
 		}
 	}
 
-	update() {
-		this.camera.update(this);
+	update(force = false): boolean {
+		if (force || super.update()) {
+			if (this.needsUpdateCursor) {
+				this.cursor.onKeyDownImmediate();
+				this.requestPaintHUD = true;
+				this.needsUpdateCursor = false;
+			}
 
-		if (this.needsUpdateRaycasting) {
-			this.updateRaycasting();
-			this.needsUpdateRaycasting = false;
-		}
+			this.camera.update(this);
 
-		// Skybox
-		if (this.skyboxMesh) {
-			this.skyboxMesh.position.copy(this.camera.getThreeCamera().position);
-			const distance = Math.max(
-				1000,
-				this.camera.getThreeCamera().position.distanceTo(this.camera.targetPosition)
-			);
-			this.skyboxMesh.scale.set(distance, distance, distance);
-		}
+			if (this.needsUpdateRaycasting) {
+				this.updateRaycasting();
+				this.needsUpdateRaycasting = false;
+			}
 
-		// Cursors
-		this.cursor.update();
-		if (this.canEdit) {
-			if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-				if (
-					this.lastPosition !== null &&
-					this.lastPosition.isInMap(this.model, false, true) &&
-					this.cursorWall.needsUpdate(this.lastPosition)
-				) {
-					this.cursorWall.update(this.lastPosition);
+			// Skybox
+			if (this.skyboxMesh) {
+				this.skyboxMesh.position.copy(this.camera.getThreeCamera().position);
+				const distance = Math.max(
+					1000,
+					this.camera.getThreeCamera().position.distanceTo(this.camera.targetPosition)
+				);
+				this.skyboxMesh.scale.set(distance, distance, distance);
+			}
+
+			// Cursors
+			this.cursor.update();
+			if (this.canEdit) {
+				if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+					if (
+						this.lastPosition !== null &&
+						this.lastPosition.isInMap(this.model, false, true) &&
+						this.cursorWall.needsUpdate(this.lastPosition)
+					) {
+						this.cursorWall.update(this.lastPosition);
+					}
+				} else {
+					this.cursorWall.remove();
 				}
-			} else {
-				this.cursorWall.remove();
 			}
-		}
 
-		// Update portions
-		if (this.canEdit && !this.isDetection) {
-			for (const mapPortion of this.portionsToUpdate) {
-				mapPortion.updateGeometries();
+			// Update portions
+			if (this.canEdit && !this.isDetection) {
+				for (const mapPortion of this.portionsToUpdate) {
+					mapPortion.updateGeometries();
+				}
+				this.portionsToUpdate.clear();
+				if (this.portionsSaving.size === 0 && this.portionsToSave.size > 0) {
+					this.portionsSaving = new Set([...this.portionsToSave]);
+					this.savePortionsTemp().catch(console.error);
+					this.portionsToSave.clear();
+				}
 			}
-			this.portionsToUpdate.clear();
-			if (this.portionsSaving.size === 0 && this.portionsToSave.size > 0) {
-				this.portionsSaving = new Set([...this.portionsToSave]);
-				this.savePortionsTemp().catch(console.error);
-				this.portionsToSave.clear();
+
+			// Update face sprites
+			const vector = new THREE.Vector3();
+			this.camera.getThreeCamera().getWorldDirection(vector);
+			const angle = Math.atan2(vector.x, vector.z) + Math.PI;
+			this.forEachMapPortions((mapPortion) => {
+				mapPortion.updateFaceSprites(angle);
+			});
+			if (this.canEdit) {
+				if (this.selectedMesh.geometry instanceof CustomGeometryFace) {
+					this.selectedMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.selectedMesh.scale);
+				}
+				if (this.hoveredMesh.geometry instanceof CustomGeometryFace) {
+					this.hoveredMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.hoveredMesh.scale);
+				}
 			}
-		}
 
-		// Update face sprites
-		const vector = new THREE.Vector3();
-		this.camera.getThreeCamera().getWorldDirection(vector);
-		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
-		this.forEachMapPortions((mapPortion) => {
-			mapPortion.updateFaceSprites(angle);
-		});
-		if (this.canEdit) {
-			if (this.selectedMesh.geometry instanceof CustomGeometryFace) {
-				this.selectedMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.selectedMesh.scale);
+			// Update autotiles animated
+			if (this.autotileFrame.update()) {
+				this.autotilesOffset.setY(
+					(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
+						Constants.MAX_PICTURE_SIZE
+				);
 			}
-			if (this.hoveredMesh.geometry instanceof CustomGeometryFace) {
-				this.hoveredMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.hoveredMesh.scale);
+
+			// Update portions
+			if (this.updateCurrentPortion()) {
+				this.loadPortions(true).catch(console.error);
+				this.loading = true;
 			}
-		}
 
-		// Update autotiles animated
-		if (this.autotileFrame.update()) {
-			this.autotilesOffset.setY(
-				(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
-					Constants.MAX_PICTURE_SIZE
-			);
+			Map.elapsedTime = new Date().getTime() - Map.lastUpdateTime;
+			Map.averageElapsedTime = (Map.averageElapsedTime + Map.elapsedTime) / 2;
+			Map.lastUpdateTime = new Date().getTime();
+			return true;
 		}
-
-		// Update portions
-		if (this.updateCurrentPortion()) {
-			this.loadPortions(true).catch(console.error);
-			this.loading = true;
-		}
-
-		Map.elapsedTime = new Date().getTime() - Map.lastUpdateTime;
-		Map.averageElapsedTime = (Map.averageElapsedTime + Map.elapsedTime) / 2;
-		Map.lastUpdateTime = new Date().getTime();
+		return false;
 	}
 
 	draw3D(GL = Manager.GL.mainContext) {
@@ -2055,9 +2064,7 @@ class Map extends Base {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
 			ArrayUtils.insertFirst(
 				lines,
-				`[${
-					this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString()
-				}]`
+				this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString()
 			);
 			Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;
@@ -2095,11 +2102,11 @@ class Map extends Base {
 	clearHUD() {
 		Map.ctxHUD!.clearRect(0, 0, Map.canvasHUD!.width, Map.canvasHUD!.height);
 		Map.ctxHUD!.imageSmoothingEnabled = false;
-		Map.ctxHUD!.font = '12px sans-serif';
+		Map.ctxHUD!.font = 'bold 12px sans-serif';
 		Map.ctxHUD!.fillStyle = 'white';
 		Map.ctxHUD!.strokeStyle = '#29273d';
 		Map.ctxHUD!.lineJoin = 'round';
-		Map.ctxHUD!.lineWidth = 4;
+		Map.ctxHUD!.lineWidth = 3;
 	}
 }
 

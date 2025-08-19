@@ -514,6 +514,7 @@ const PanelMapObject = forwardRef(
 											onListUpdated={handleUpdateStates}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
+											cannotUpdateListSize
 										/>
 									</Flex>
 								</Flex>
@@ -524,6 +525,7 @@ const PanelMapObject = forwardRef(
 											list={properties}
 											constructorType={Model.MapObjectProperty}
 											onListUpdated={handleUpdateProperties}
+											cannotUpdateListSize
 										/>
 									</Flex>
 								</Flex>
@@ -541,6 +543,7 @@ const PanelMapObject = forwardRef(
 										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
 										doNotGenerateIDOnPaste
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Flex>

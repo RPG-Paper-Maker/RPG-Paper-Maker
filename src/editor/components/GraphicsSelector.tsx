@@ -55,6 +55,7 @@ function GraphicsSelector({
 	const [isOpenDialogObjects3D, setIsOpenDialogObjects3D] = useState(false);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
+	const refBorder = useRef<HTMLDivElement>(null);
 
 	const isCharacter =
 		graphicsKind === ELEMENT_MAP_KIND.NONE ||
@@ -101,14 +102,20 @@ function GraphicsSelector({
 		const columns = 4;
 		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : image.width / columns;
 		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : image.height / rows;
-		const width = Math.min(srcWidth, 100);
-		const height = Math.min(srcHeight, 100);
+		let width = refBorder.current?.offsetWidth ?? 0;
+		let height = refBorder.current?.offsetHeight ?? 0;
+		const ratioWidth = width / srcWidth;
+		const ratioHeight = height / srcHeight;
+		width = ratioWidth < ratioHeight ? width : srcWidth * ratioHeight;
+		height = ratioWidth > ratioHeight ? height : srcHeight * ratioWidth;
 		if (refCanvas.current) {
 			refCanvas.current.width = width;
 			refCanvas.current.height = height;
 			refCanvas.current.style.width = `${width}px`;
 			refCanvas.current.style.height = `${height}px`;
 		}
+		ctx.imageSmoothingEnabled = false;
+		ctx.imageSmoothingQuality = 'high';
 		ctx.drawImage(
 			image,
 			rect.x * (isTileset ? Project.SQUARE_SIZE : srcWidth),
@@ -184,8 +191,8 @@ function GraphicsSelector({
 			<Flex column spaced>
 				{t('graphics')}:
 				<div className='graphicsSelector' onDoubleClick={handleDoubleClick}>
-					<div className='border' />
-					{isCharacter && <canvas ref={refCanvas} className='pointer'></canvas>}
+					<div ref={refBorder} className='border' />
+					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !isOpenDialogObjects3D && !hidden && (
 						<PreviewerObject3D sceneID={sceneID} objectID={graphicsID} />
 					)}

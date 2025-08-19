@@ -519,6 +519,12 @@ function AnimationPreviewer({
 					draw();
 				}
 			};
+			const handleDoubleClick = async () => {
+				if (disabled || isPlaying) {
+					return;
+				}
+				await handleEditElement();
+			};
 			const handleMouseUp = (e: MouseEvent) => {
 				if (disabled || isPlaying) {
 					return;
@@ -536,6 +542,7 @@ function AnimationPreviewer({
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mouseleave', handleMouseLeave);
 			canvas.addEventListener('mousedown', handleMouseDown);
+			canvas.addEventListener('dblclick', handleDoubleClick);
 			canvas.addEventListener('mouseup', handleMouseUp);
 			const scrollArea = getScrollArea();
 			scrollArea.addEventListener('scroll', handleScroll);
@@ -546,6 +553,7 @@ function AnimationPreviewer({
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mouseleave', handleMouseLeave);
 				canvas.removeEventListener('mousedown', handleMouseDown);
+				canvas.removeEventListener('dblclick', handleDoubleClick);
 				canvas.removeEventListener('mouseup', handleMouseUp);
 				scrollArea.removeEventListener('scroll', handleScroll);
 			};
@@ -587,7 +595,7 @@ function AnimationPreviewer({
 		return [
 			{
 				title: `${t(selectedElement === null ? 'new' : 'edit')}...`,
-				shortcut: [KEY.ENTER],
+				shortcut: [KEY.ENTER, KEY.SPACE],
 				onClick: selectedElement === null ? handleNewElement : handleEditElement,
 			},
 			{

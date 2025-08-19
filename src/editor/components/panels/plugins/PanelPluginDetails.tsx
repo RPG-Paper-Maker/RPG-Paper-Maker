@@ -121,6 +121,7 @@ const PanelPluginDetails = forwardRef(
 										cannotDragDrop
 										byIndex
 										doNotShowID
+										doNotOpenDialog
 									/>
 								</Flex>
 							</Groupbox>

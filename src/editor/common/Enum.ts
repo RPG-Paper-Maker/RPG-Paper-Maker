@@ -138,6 +138,12 @@ export enum KEY {
 	UP = 'UP',
 	DOWN = 'DOWN',
 	DELETE = 'DELETE',
+	SPACE = ' ',
+	ARROW_UP = 'ArrowUp',
+	ARROW_DOWN = 'ArrowDown',
+	ARROW_LEFT = 'ArrowLeft',
+	ARROW_RIGHT = 'ArrowRight',
+	CONTROL = 'Control',
 }
 
 export enum BINDING {
@@ -336,6 +342,7 @@ export enum DYNAMIC_VALUE_OPTIONS_TYPE {
 export enum CONTEXT_MENU_ITEM_KIND {
 	NEW,
 	EDIT,
+	UPDATE_LIST_SIZE,
 	COPY,
 	PASTE,
 	DELETE,

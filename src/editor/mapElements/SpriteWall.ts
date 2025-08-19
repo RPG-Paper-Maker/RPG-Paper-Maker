@@ -174,7 +174,7 @@ class SpriteWall extends Base {
 	}
 
 	toString(): string {
-		return `${t('wall').toUpperCase()} | ID: ${Utils.formatNumberID(this.wallID)}`;
+		return `${t('wall')} ID: ${Utils.formatNumberID(this.wallID)}`;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {

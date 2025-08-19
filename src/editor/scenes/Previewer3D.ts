@@ -27,7 +27,6 @@ class Previewer3D extends Base {
 	public static listScenes: Map<string, Scene.Previewer3D> = new Map(); // id canvas => scene
 
 	public id: string;
-	public canvas!: HTMLElement;
 	public parentCanvas!: HTMLElement;
 	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
@@ -272,11 +271,15 @@ class Previewer3D extends Base {
 	}
 
 	update() {
-		super.update();
-		this.currentRotation += 0.01;
-		for (const mesh of this.meshes) {
-			mesh.rotation.y = this.currentRotation;
+		if (super.update()) {
+			this.camera.update();
+			this.currentRotation += 0.01;
+			for (const mesh of this.meshes) {
+				mesh.rotation.y = this.currentRotation;
+			}
+			return true;
 		}
+		return false;
 	}
 
 	draw3D(GL: Manager.GL) {

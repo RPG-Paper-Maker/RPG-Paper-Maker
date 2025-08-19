@@ -18,11 +18,13 @@ import { Position } from './Position';
 import { Project } from './Project';
 
 class Cursor {
+	public static FRAME_MOVE_START = 300;
 	public position: Position;
 	public map: Scene.Map;
 	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
 	public frame = new Frame(200);
-	public frameMove = new Frame(20);
+	public frameMove = new Frame(Cursor.FRAME_MOVE_START);
+	public firstMove = true;
 
 	constructor(position: Position, map: Scene.Map) {
 		this.position = position;
@@ -70,7 +72,11 @@ class Cursor {
 	}
 
 	onKeyDownImmediate() {
-		if (this.frameMove.update()) {
+		const isNewFrameMove = this.frameMove.update() && !this.firstMove;
+		if (this.firstMove || isNewFrameMove) {
+			if (isNewFrameMove) {
+				this.frameMove.duration = 15;
+			}
 			const angle = this.map.camera.horizontalAngle;
 			const minX = this.map.detectionFieldLeft === undefined ? 0 : -this.map.detectionFieldLeft;
 			const minZ = this.map.detectionFieldTop === undefined ? 0 : -this.map.detectionFieldTop;
@@ -105,6 +111,19 @@ class Cursor {
 				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
 			}
 			this.syncWithCameraTargetPosition();
+		}
+		this.firstMove = false;
+	}
+
+	onKeyUp() {
+		if (
+			!EngineSettings.current!.getKeyboardCursorUp().isPressed(Inputs.keys) &&
+			!EngineSettings.current!.getKeyboardCursorDown().isPressed(Inputs.keys) &&
+			!EngineSettings.current!.getKeyboardCursorLeft().isPressed(Inputs.keys) &&
+			!EngineSettings.current!.getKeyboardCursorRight().isPressed(Inputs.keys)
+		) {
+			this.frameMove.duration = Cursor.FRAME_MOVE_START;
+			this.firstMove = true;
 		}
 	}
 

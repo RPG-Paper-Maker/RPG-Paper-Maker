@@ -130,7 +130,7 @@ function DialogTroopReactionConditions({ isOpen, setIsOpen, conditions }: Props)
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 						disabled={!isNumberOfTurn}
 					/>
-					<Flex disabledLabel={!isNumberOfTurn}>-</Flex>
+					<Flex disabledLabel={!isNumberOfTurn}>x</Flex>
 				</Flex>
 				<Flex spaced centerV>
 					<Checkbox isChecked={isHeroesMonsters} onChange={setIsHeroesMonsters}>

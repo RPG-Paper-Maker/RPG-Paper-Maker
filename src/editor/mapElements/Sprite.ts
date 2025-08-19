@@ -115,19 +115,19 @@ class Sprite extends Base {
 		let type = '';
 		switch (this.kind) {
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
-				type = t('face.sprite').toUpperCase();
+				type = t('face.sprite');
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
-				type = t('fix.sprite').toUpperCase();
+				type = t('fix.sprite');
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-				type = t('double.sprite').toUpperCase();
+				type = t('double.sprite');
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				type = t('quadra.sprite').toUpperCase();
+				type = t('quadra.sprite');
 				break;
 		}
-		return `${type} | ${this.texture.toString()}`;
+		return `${type} ${this.texture.toString()}`;
 	}
 
 	getVectors(

@@ -301,6 +301,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 			scrollable
 			applyDefault
 			byIndex
+			cannotUpdateListSize
 		/>
 	);
 
@@ -320,6 +321,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 						showEditName
 						isLocalization
 						applyDefault
+						doNotOpenDialog
 					/>
 				</Groupbox>
 				<Flex one column spacedLarge>

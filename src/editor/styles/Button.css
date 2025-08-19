@@ -26,6 +26,11 @@ button {
 	&:has(svg.close:hover) {
 		color: var(--orange-color);
 	}
+
+	svg {
+		width: 14px;
+		height: 14px;
+	}
 }
 
 button.primary {

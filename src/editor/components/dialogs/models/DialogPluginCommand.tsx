@@ -93,6 +93,7 @@ function DialogPluginCommand({ isOpen, setIsOpen, model, onAccept, onReject }: P
 								list={parameters}
 								noScrollOnForce
 								byIndex
+								cannotUpdateListSize
 							/>
 						</Flex>
 					</Groupbox>

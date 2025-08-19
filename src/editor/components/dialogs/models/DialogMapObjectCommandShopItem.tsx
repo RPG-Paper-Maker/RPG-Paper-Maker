@@ -155,6 +155,7 @@ function DialogMapObjectCommandShopItem({ isOpen, setIsOpen, model, onAccept, on
 										defaultNewModel={defaultCost}
 										list={specificPrice}
 										disabled={selectionPrice !== 1}
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Flex>

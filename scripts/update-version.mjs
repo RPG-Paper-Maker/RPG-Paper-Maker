@@ -1,6 +1,5 @@
-// update-version.mjs
-import { readFileSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
+import { readFileSync, writeFileSync } from 'fs';
 
 const version = process.argv[2];
 

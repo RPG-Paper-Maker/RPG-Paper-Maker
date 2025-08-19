@@ -169,6 +169,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 				padding
 				lazyLoadingContent
 				noScrollToSelectedElement
+				hideScroll
 			/>
 		</Dialog>
 	);

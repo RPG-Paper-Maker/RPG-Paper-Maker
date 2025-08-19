@@ -49,7 +49,7 @@ export enum Z_INDEX_LEVEL {
 	LAYER_TOP = 9999,
 }
 
-const RESIZING_SPACE = 5;
+const RESIZING_SPACE = 10;
 
 function Dialog({
 	children,
@@ -198,12 +198,7 @@ function Dialog({
 		const container = dialogRef.current;
 		const dialogs = document.getElementsByClassName('dialog');
 		e.stopPropagation();
-		if (dialogs.length <= 1 && !isClickedIn && !isLoading && container && !container.contains(e.target as Node)) {
-			setIsMoved(false);
-			if (onClose) {
-				onClose();
-			}
-		} else {
+		if (dialogs.length > 1 || isClickedIn || isLoading || !container || container.contains(e.target as Node)) {
 			setIsClickedIn(false);
 		}
 	};

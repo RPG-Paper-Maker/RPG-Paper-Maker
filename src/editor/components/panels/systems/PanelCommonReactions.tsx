@@ -96,6 +96,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 						scrollable
 						showEditName
 						applyDefault
+						doNotOpenDialog
 					/>
 				</Flex>
 			</Groupbox>
@@ -112,6 +113,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 								noScrollOnForce
 								scrollable
 								canBeEmpty
+								cannotUpdateListSize
 							/>
 						</Flex>
 					</Groupbox>

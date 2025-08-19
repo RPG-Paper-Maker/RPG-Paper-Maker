@@ -59,6 +59,7 @@ const PanelClasses = forwardRef((props, ref) => {
 					showEditName
 					isLocalization
 					applyDefault
+					doNotOpenDialog
 				/>
 			</Groupbox>
 			<Flex one>

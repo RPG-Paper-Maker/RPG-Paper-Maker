@@ -16,6 +16,7 @@ type Props = {
 	children?: ReactNode | ReactNode[];
 	column?: boolean;
 	one?: boolean;
+	two?: boolean;
 	spaced?: boolean;
 	spacedLarge?: boolean;
 	paddingSmall?: boolean;
@@ -41,6 +42,7 @@ function Flex({
 	children,
 	column = false,
 	one = false,
+	two = false,
 	spaced = false,
 	spacedLarge = false,
 	paddingSmall = false,
@@ -67,6 +69,7 @@ function Flex({
 				{
 					flexColumn: column,
 					flexOne: one,
+					flexTwo: two,
 					gapSmall: spaced,
 					gapMedium: spacedLarge,
 					paddingSmall,

@@ -35,7 +35,13 @@ class Asset extends Base {
 	}
 
 	getIcon() {
-		return <img src={`./Pictures/bullet-${this.isBR ? 'br' : 'custom'}.png`} alt='bullet' width='16px' />;
+		return (
+			<img
+				src={`./Pictures/bullet-${this.isBR ? 'br' : 'custom'}.png`}
+				alt='bullet'
+				style={{ width: '16px', height: '16px', imageRendering: 'auto' }}
+			/>
+		);
 	}
 
 	copy(asset: Asset, additionnalBinding: BindingType[] = []): void {

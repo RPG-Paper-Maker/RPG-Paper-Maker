@@ -51,7 +51,7 @@ class Floor extends Land {
 	}
 
 	toString(): string {
-		return `${t('floor').toUpperCase()} | ${this.texture.toString(true)}`;
+		return `${t('floor')} ${this.texture.toString(true)}`;
 	}
 
 	updateGeometry(

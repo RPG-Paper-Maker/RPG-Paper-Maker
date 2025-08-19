@@ -14,12 +14,17 @@
 		padding: 7px 10px 7px 10px;
 	}
 
-	.menuItem:not(.separator) {
+	.menuItem:not(.separator):has(.tooltip) {
+		padding: 0;
+	}
+
+	.tooltip:not(.separator) {
 		padding: 5px 10px 5px 10px;
 	}
 
 	svg {
-		height: 14px;
+		width: 16px;
+		height: 16px;
 	}
 }
 

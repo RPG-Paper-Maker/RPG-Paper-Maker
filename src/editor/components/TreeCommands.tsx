@@ -133,6 +133,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 			scrollable
 			multipleSelection
 			noScrollOnForce
+			cannotUpdateListSize
 		/>
 	) : null;
 }

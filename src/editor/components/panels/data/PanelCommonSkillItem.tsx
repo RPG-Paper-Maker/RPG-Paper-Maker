@@ -103,6 +103,7 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 					showEditName
 					isLocalization
 					applyDefault
+					doNotOpenDialog
 				/>
 			</Groupbox>
 			<Flex one>

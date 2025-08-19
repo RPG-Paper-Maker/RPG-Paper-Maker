@@ -105,7 +105,7 @@ abstract class Object3D extends Base {
 	}
 
 	toString(): string {
-		return `${t('threed.object').toUpperCase()} | ID: ${Utils.formatNumberID(this.id)}`;
+		return `${t('threed.object')} ID: ${Utils.formatNumberID(this.id)}`;
 	}
 
 	abstract isCentered(): boolean;

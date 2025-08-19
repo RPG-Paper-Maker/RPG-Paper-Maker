@@ -78,6 +78,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 					showEditName
 					isLocalization
 					applyDefault
+					doNotOpenDialog
 				/>
 			</Groupbox>
 			<Flex one column spacedLarge>

@@ -107,7 +107,7 @@ class Mountain extends Base {
 	}
 
 	toString(): string {
-		return `${t('mountain').toUpperCase()} | ID: ${Utils.formatNumberID(this.mountainID)}`;
+		return `${t('mountain')} ID: ${Utils.formatNumberID(this.mountainID)}`;
 	}
 
 	getTotalSquaresWidth(): number {

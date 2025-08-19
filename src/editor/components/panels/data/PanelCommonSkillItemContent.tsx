@@ -329,6 +329,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Groupbox>
@@ -346,6 +347,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Groupbox>
@@ -366,6 +368,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Groupbox>
@@ -384,6 +387,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Groupbox>

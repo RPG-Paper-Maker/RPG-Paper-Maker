@@ -33,8 +33,6 @@ import Tree from '../../Tree';
 import DialogEnterNameOptions from '../../dialogs/DialogEnterNameOptions';
 import DialogCommandSetDialogBoxOptions from '../../dialogs/commands/DialogCommandSetDialogBoxOptions';
 
-const TREES_STYLE_HEIGHT = { height: '200px' };
-
 const PanelSystem = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
@@ -423,94 +421,126 @@ const PanelSystem = forwardRef((props, ref) => {
 					</Groupbox>
 				</Flex>
 				<Flex column spaced fillWidth>
-					<Flex spaced>
+					<Flex one spaced>
 						<Flex one>
 							<Groupbox title={t('font.sizes')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.FontSize} list={fontSizes} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.FontSize}
+										list={fontSizes}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('font.names')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.FontName} list={fontNames} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.FontName}
+										list={fontNames}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('colors')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Color} list={colors} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree constructorType={Model.Color} list={colors} noScrollOnForce scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex spaced>
+					<Flex one spaced>
 						<Flex one>
 							<Groupbox title={t('window.skins')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.WindowSkin} list={windowSkins} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.WindowSkin}
+										list={windowSkins}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('currencies')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Currency} list={currencies} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.Currency}
+										list={currencies}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('speeds')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Speed} list={speeds} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree constructorType={Model.Speed} list={speeds} noScrollOnForce scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex spaced>
+					<Flex one spaced>
 						<Flex one>
 							<Groupbox title={t('detections')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Detection} list={detections} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.Detection}
+										list={detections}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('camera.properties')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
+								<Flex one fillHeight>
 									<Tree
 										constructorType={Model.CameraProperty}
 										list={cameraProperties}
 										noScrollOnForce
+										scrollable
 									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('frequencies')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Frequency} list={frequencies} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree
+										constructorType={Model.Frequency}
+										list={frequencies}
+										noScrollOnForce
+										scrollable
+									/>
 								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex spaced>
+					<Flex one spaced>
 						<Flex one>
 							<Groupbox title={t('skyboxes')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree constructorType={Model.Skybox} list={skyboxes} noScrollOnForce />
+								<Flex one fillHeight>
+									<Tree constructorType={Model.Skybox} list={skyboxes} noScrollOnForce scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('initial.party.members')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
+								<Flex one fillHeight>
 									<Tree
 										constructorType={Model.InitialPartyMember}
 										list={initialPartyMembers}
 										noScrollOnForce
+										scrollable
 									/>
 								</Flex>
 							</Groupbox>

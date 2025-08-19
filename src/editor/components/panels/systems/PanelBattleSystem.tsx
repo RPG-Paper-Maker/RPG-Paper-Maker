@@ -206,71 +206,95 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				</Groupbox>
 				<Groupbox title={t('battle.maps')}>
 					<Flex one style={TREES_STYLE_HEIGHT}>
-						<Tree constructorType={Model.BattleMap} list={battleMaps} noScrollOnForce />
+						<Tree
+							constructorType={Model.BattleMap}
+							list={battleMaps}
+							noScrollOnForce
+							scrollable
+							cannotUpdateListSize
+						/>
 					</Flex>
 				</Groupbox>
 				<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
 					{t('camera.move.in.battle')}
 				</Checkbox>
 			</Flex>
-			<Flex column spaced fillWidth>
-				<Flex spaced>
+			<Flex column spaced fillWidth fillHeight>
+				<Flex one spaced>
 					<Flex one>
 						<Groupbox title={t('elements')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
+							<Flex one fillHeight>
 								<Tree
 									constructorType={Model.Element}
 									list={elements}
 									onListUpdated={updateElements}
 									noScrollOnForce
+									scrollable
 								/>
 							</Flex>
 						</Groupbox>
 					</Flex>
 					<Flex one>
 						<Groupbox title={t('common.statistics')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
+							<Flex one fillHeight>
 								<Tree
 									constructorType={Model.Statistic}
 									list={statistics}
 									onListUpdated={updateStatistics}
 									noScrollOnForce
+									scrollable
 								/>
 							</Flex>
 						</Groupbox>
 					</Flex>
 					<Flex one>
 						<Groupbox title={t('weapons.kind')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree constructorType={Model.WeaponArmorKind} list={weaponsKind} noScrollOnForce />
+							<Flex one fillHeight>
+								<Tree
+									constructorType={Model.WeaponArmorKind}
+									list={weaponsKind}
+									noScrollOnForce
+									scrollable
+								/>
 							</Flex>
 						</Groupbox>
 					</Flex>
 				</Flex>
-				<Flex spaced>
+				<Flex one spaced>
 					<Flex one>
 						<Groupbox title={t('common.battle.commands')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree constructorType={Model.BattleCommand} list={battleCommands} noScrollOnForce />
+							<Flex one fillHeight>
+								<Tree
+									constructorType={Model.BattleCommand}
+									list={battleCommands}
+									noScrollOnForce
+									scrollable
+								/>
 							</Flex>
 						</Groupbox>
 					</Flex>
 					<Flex one>
 						<Groupbox title={t('common.equipments')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
+							<Flex one fillHeight>
 								<Tree
 									constructorType={Model.Localization}
 									list={equipments}
 									onListUpdated={updateEquipments}
 									noScrollOnForce
+									scrollable
 								/>
 							</Flex>
 						</Groupbox>
 					</Flex>
 					<Flex one>
 						<Groupbox title={t('armors.kind')} fillWidth>
-							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree constructorType={Model.WeaponArmorKind} list={armorsKind} noScrollOnForce />
+							<Flex one fillHeight>
+								<Tree
+									constructorType={Model.WeaponArmorKind}
+									list={armorsKind}
+									noScrollOnForce
+									scrollable
+								/>
 							</Flex>
 						</Groupbox>
 					</Flex>

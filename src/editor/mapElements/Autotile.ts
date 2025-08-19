@@ -66,9 +66,7 @@ class Autotile extends Land {
 	}
 
 	toString(): string {
-		return `${t('autotile').toUpperCase()} | ID: ${Utils.formatNumberID(this.autotileID)} | ${this.texture.toString(
-			true
-		)}`;
+		return `${t('autotile')} ID: ${Utils.formatNumberID(this.autotileID)} ${this.texture.toString(true)}`;
 	}
 
 	update(map: Scene.Map, position: Position) {

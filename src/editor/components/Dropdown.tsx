@@ -168,11 +168,20 @@ function Dropdown({
 		};
 
 		if (isOpen) {
+			/* TODO
+			const handleKeyDown = (e: KeyboardEvent) => {
+				switch (e.key) {
+					case KEY.ARROW_DOWN:
+						break;
+				}
+			};*/
 			const dialogs = document.getElementsByClassName('dialog');
 			const currentDialog = dialogs.length === 0 ? document : dialogs[dialogs.length - 1];
 			currentDialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
+			//window.addEventListener('keydown', handleKeyDown);
 			return () => {
 				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
+				//window.removeEventListener('keydown', handleKeyDown);
 			};
 		}
 	}, [isOpen]);

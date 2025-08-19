@@ -236,6 +236,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 					values={total ? experienceTotalValues : experienceToNextLevelValues}
 					onChange={total ? undefined : handleChangeTableExperienceToNextLevel}
 					highlightedElements={total ? undefined : hightlightedElements}
+					widths={['60px', undefined]}
 				/>
 			);
 		}
@@ -244,7 +245,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 
 	return (
 		<Flex one column spacedLarge fillWidth fillHeight>
-			<Flex one spacedLarge>
+			<Flex two spacedLarge>
 				<Flex one>
 					<Groupbox title={t('experience')} disabled={disabled} fillWidth>
 						<Flex one column spacedLarge fillHeight>
@@ -325,6 +326,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							noScrollOnForce
 							scrollable
 							canBeEmpty
+							cannotUpdateListSize
 						/>
 					</Groupbox>
 				</Flex>
@@ -341,6 +343,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							scrollable
 							canBeEmpty
 							byIndex
+							cannotUpdateListSize
 						/>
 					</Groupbox>
 				</Flex>
@@ -355,6 +358,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							noScrollOnForce
 							scrollable
 							canBeEmpty
+							cannotUpdateListSize
 						/>
 					</Groupbox>
 				</Flex>

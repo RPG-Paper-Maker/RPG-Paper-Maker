@@ -96,7 +96,7 @@ function DialogCommandStartShopMenu({ commandKind, isOpen, setIsOpen, list, onAc
 		>
 			<Flex one column spacedLarge fillHeight>
 				<Flex one zeroHeight>
-					<Tree constructorType={Model.MapObjectCommandShopItem} list={shopItems} />
+					<Tree constructorType={Model.MapObjectCommandShopItem} list={shopItems} cannotUpdateListSize />
 				</Flex>
 				<Form>
 					{!isRestock && (

@@ -270,13 +270,13 @@ function MapEditor() {
 				{
 					title: `${t('edit')}...`,
 					onClick: handleEditMapObject,
-					shortcut: [KEY.ENTER],
+					shortcut: [KEY.ENTER, KEY.SPACE],
 					disabled: isNew,
 				},
 				{
 					title: `${t('new')}...`,
 					onClick: handleNewMapObject,
-					shortcut: [KEY.ENTER],
+					shortcut: [KEY.ENTER, KEY.SPACE],
 					disabled: !isNew,
 				},
 				{

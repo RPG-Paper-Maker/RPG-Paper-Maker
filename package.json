@@ -52,7 +52,7 @@
 		"build": "npm run update-mods && rm -rf dist && vite build",
 		"build-quick": "vite build",
 		"eslint": "eslint ./src",
-		"electron": "electron ./index.js",
+		"electron": "electron ./main.js",
 		"build-electron": "npm run build-quick && npm run electron",
 		"update-mods": "node scripts/update-mods.mjs",
 		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",

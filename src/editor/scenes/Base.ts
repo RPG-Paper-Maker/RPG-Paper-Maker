@@ -14,22 +14,31 @@ import { Manager, Model } from '../Editor';
 import { Camera } from '../core/Camera';
 
 class Base {
+	public static maxFPS: number = 60;
+
 	public scene: THREE.Scene;
 	public camera: Camera;
 	public loading = true;
 	public initialized = false;
 	public canvas?: HTMLElement | null;
+	public clock = new THREE.Clock();
+	public delta = 0;
 
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.scene = new THREE.Scene();
 		this.camera = new Camera(tag, isDetection);
 	}
 
-	update() {
-		this.camera.update();
+	update(): boolean {
+		this.delta += this.clock.getDelta();
+		if (this.delta > 1 / Base.maxFPS) {
+			this.delta = this.delta % (1 / Base.maxFPS);
+			return true;
+		}
+		return false;
 	}
 
-	onMouseDown() {}
+	onKeyDownImmediate() {}
 
 	onMouseMove() {}
 

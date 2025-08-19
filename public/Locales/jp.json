@@ -2074,5 +2074,16 @@
 	"plugin.successfully.updated": "プラグイン {{name}} は {{oldVersion}} から {{newVersion}} に正常に更新されました",
 	"how.convert.project.2.0": "2.0 プロジェクトを変換するには？",
 	"id.already.exists.list": "このIDはすでにこのリストに存在します。",
-	"web.update.countdown.message": "RPG Paper Maker は {{date}} CET に更新されます。メンテナンスまでの残り時間：{{timeLeft}}。"
+	"web.update.countdown.message": "RPG Paper Maker は {{date}} CET に更新されます。メンテナンスまでの残り時間：{{timeLeft}}。",
+	"warning.project.2.0.11.version": "あなたのプロジェクトのバージョンは {{version}} です。プロジェクトを 2.0.11 に更新するために RPG Paper Maker 2.0.11 をダウンロードしてから、ここで再度変換してください。",
+	"tooltip.square": "マスごとに描く",
+	"tooltip.pixel": "ピクセル単位で描く",
+	"pencil": "鉛筆",
+	"bucket": "バケツ",
+	"no.layers": "レイヤーなし",
+	"activate.layers": "レイヤーを有効化",
+	"tooltip.maximum.value": "到達可能な最大値（消費アイテムで最大値が増加する場合、最終値よりも大きくなることがあります）。",
+	"tooltip.random.variation": "レベルアップごとに数値を変化させるために、ゲームにランダム性を追加します。変動が大きいほど、ランダム性も高くなります。ただし、最終値は常に同じです。",
+	"update.list.size": "リストサイズを更新",
+	"warning.update.list.size": "リストのサイズを縮小します。最後の要素が削除されます。確認しますか？"
 }

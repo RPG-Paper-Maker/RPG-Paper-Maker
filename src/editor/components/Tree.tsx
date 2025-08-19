@@ -30,6 +30,7 @@ import { Localization } from '../models';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogUpdateListSize from './dialogs/DialogUpdateListSize';
 import Flex from './Flex';
 import InputLocalization from './InputLocalization';
 import InputText from './InputText';
@@ -42,6 +43,7 @@ type Props = {
 	cannotAdd?: boolean;
 	cannotEdit?: boolean;
 	cannotDragDrop?: boolean;
+	cannotUpdateListSize?: boolean;
 	cannotDelete?: boolean;
 	canDelete?: (node: Node | null) => boolean;
 	canBeEmpty?: boolean;
@@ -94,6 +96,7 @@ function Tree({
 	cannotAdd = false,
 	cannotEdit = false,
 	cannotDragDrop = false,
+	cannotUpdateListSize = false,
 	cannotDelete = false,
 	canDelete,
 	canBeEmpty = false,
@@ -165,6 +168,7 @@ function Tree({
 	const [currentName, setCurrentName] = useStateString();
 	const [needScroll, setNeedScroll] = useState(false);
 	const [isFocused, setIsFocused] = useState(false);
+	const [isDialogUpdateListSizeOpen, setIsDialogUpdateListSizeOpen] = useState(false);
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -181,6 +185,9 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
 		];
+		if (!cannotUpdateListSize && !cannotAdd) {
+			ArrayUtils.insertAt(contextMenuItems, 2, CONTEXT_MENU_ITEM_KIND.UPDATE_LIST_SIZE);
+		}
 		hasCustomItems = false;
 	}
 
@@ -270,7 +277,7 @@ function Tree({
 		}
 		model.id = Node.getNewID(list);
 		setNewModel(model);
-		if (doNotOpenDialog) {
+		if (doNotOpenDialog || constructorType === Model.Base || constructorType === Model.Localization) {
 			handleAcceptDialog(model);
 		} else {
 			setIsOpenDialog(true);
@@ -279,6 +286,36 @@ function Tree({
 
 	const handleEditItem = async () => {
 		setIsOpenDialog(true);
+	};
+
+	const handleUpdateListSize = async () => {
+		setIsDialogUpdateListSizeOpen(true);
+	};
+
+	const handleAcceptUpdateListSize = (newSize: number) => {
+		let node: Node | null = null;
+		if (newSize < list.length) {
+			while (list.length > newSize) {
+				node = list[list.length - 1];
+				ArrayUtils.removeElement(list, node);
+				onDeleteItem?.(node);
+			}
+		} else {
+			while (list.length < newSize) {
+				const model = new constructorType();
+				model.applyDefault();
+				model.id = Node.getNewID(list);
+				node = Node.create(model);
+				list.push(node);
+				onCreateItem?.(node);
+				onAccept?.(node, true);
+			}
+		}
+		if (node) {
+			setCurrentSelectedItemNode(node);
+			onSelectedItem?.(node, false);
+			onListUpdated?.();
+		}
 	};
 
 	const getCorrectSelectedNodes = () => {
@@ -772,16 +809,22 @@ function Tree({
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
 					return {
 						title: `${t('edit')}...`,
-						shortcut: [KEY.ENTER],
+						shortcut: [KEY.ENTER, KEY.SPACE],
 						onClick: handleEditItem,
 						disabled: disableAll || isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
 						title: `${t('new')}...`,
-						shortcut: [KEY.ENTER],
+						shortcut: [KEY.ENTER, KEY.SPACE],
 						onClick: handleNewItem,
 						disabled: disableAll || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
+					};
+				case CONTEXT_MENU_ITEM_KIND.UPDATE_LIST_SIZE:
+					return {
+						title: `${t('update.list.size')}...`,
+						onClick: handleUpdateListSize,
+						disabled: disableAll || cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
@@ -833,7 +876,13 @@ function Tree({
 	};
 
 	const getDialog = () => {
-		if (currentSelectedItemNode && !cannotEdit && constructorType !== Model.Checkable && isOpenDialog) {
+		if (
+			currentSelectedItemNode &&
+			!cannotEdit &&
+			constructorType &&
+			constructorType !== Model.Checkable &&
+			isOpenDialog
+		) {
 			const options = {
 				isNew: newModel !== null,
 				isOpen: isOpenDialog,
@@ -900,6 +949,14 @@ function Tree({
 				)}
 			</Flex>
 			{getDialog()}
+			{isDialogUpdateListSizeOpen && (
+				<DialogUpdateListSize
+					setIsOpen={setIsDialogUpdateListSizeOpen}
+					initialSize={list.length}
+					canBeEmpty={canBeEmpty}
+					onAccept={handleAcceptUpdateListSize}
+				/>
+			)}
 		</ContextMenu>
 	);
 

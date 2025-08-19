@@ -23,6 +23,7 @@ import Graph from '../Graph';
 import Slider from '../Slider';
 import Tab from '../Tab';
 import Table from '../Table';
+import TooltipInformation from '../TooltipInformation';
 
 type Props = {
 	progression?: ProgressionTable;
@@ -131,6 +132,7 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 				onChange={handleChangeTableValues}
 				highlightedElements={hightlightedElements}
 				disabled={disabled}
+				widths={['60px', undefined]}
 			/>
 		</Flex>
 	);
@@ -176,7 +178,12 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 				</Value>
 				{randomVariation && (
 					<>
-						<Label disabled={disabled}>{t('random.variation')}</Label>
+						<Label disabled={disabled}>
+							<Flex spaced centerV>
+								{t('random.variation')}
+								<TooltipInformation text={t('tooltip.random.variation')} />
+							</Flex>
+						</Label>
 						<Value>
 							{randomVariation && (
 								<DynamicValueSelector

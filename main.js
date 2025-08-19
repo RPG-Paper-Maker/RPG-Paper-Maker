@@ -207,7 +207,7 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
 	const electronPath = process.execPath;
-	const args = ['./index.js', location, battleTest];
+	const args = ['./main.js', location, battleTest];
 	spawn(electronPath, args, {
 		stdio: 'inherit',
 		detached: true,

@@ -124,6 +124,7 @@ const PanelModels = forwardRef((props, ref) => {
 						showEditName
 						applyDefault
 						noFirstSelection
+						doNotOpenDialog
 					/>
 				</Flex>
 			</Groupbox>

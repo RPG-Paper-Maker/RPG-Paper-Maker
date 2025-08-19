@@ -19,10 +19,11 @@ type Props = {
 	values: string[][];
 	onChange?: (values: string[][], row: number, column: number) => void;
 	highlightedElements?: Record<number, number[]>;
+	widths?: (string | undefined)[];
 	disabled?: boolean;
 };
 
-function Table({ values, onChange, highlightedElements, disabled = false }: Props) {
+function Table({ values, onChange, highlightedElements, widths, disabled = false }: Props) {
 	const refTable = useRef<HTMLTableElement>(null);
 
 	const [editingElement, setEditingElement] = useState<{ row: number; column: number } | null>(null);
@@ -73,7 +74,11 @@ function Table({ values, onChange, highlightedElements, disabled = false }: Prop
 				{values.map((lines, indexRow) => (
 					<tr key={indexRow}>
 						{lines.map((element, indexColumn) => (
-							<td onClick={(e) => handleClick(e, indexRow, indexColumn)} key={indexColumn}>
+							<td
+								onClick={(e) => handleClick(e, indexRow, indexColumn)}
+								key={indexColumn}
+								style={{ width: widths ? widths[indexColumn] : undefined }}
+							>
 								{isEditing(indexRow, indexColumn) ? (
 									<InputText
 										focusFirst={focusFirst}

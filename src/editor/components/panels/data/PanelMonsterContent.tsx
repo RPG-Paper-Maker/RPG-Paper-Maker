@@ -113,6 +113,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 								scrollable
 								canBeEmpty
 								byIndex
+								cannotUpdateListSize
 							/>
 						</Flex>
 					</Flex>
@@ -128,6 +129,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 						scrollable
 						canBeEmpty
 						byIndex
+						cannotUpdateListSize
 					/>
 				</Groupbox>
 			</Flex>

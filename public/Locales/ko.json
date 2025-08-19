@@ -2074,5 +2074,16 @@
 	"plugin.successfully.updated": "플러그인 {{name}}이(가) {{oldVersion}}에서 {{newVersion}}으로 성공적으로 업데이트되었습니다",
 	"how.convert.project.2.0": "2.0 프로젝트를 변환하는 방법은?",
 	"id.already.exists.list": "이 ID는 이미 이 목록에 존재합니다.",
-	"web.update.countdown.message": "RPG Paper Maker는 {{date}} CET에 업데이트됩니다. 점검까지 남은 시간: {{timeLeft}}."
+	"web.update.countdown.message": "RPG Paper Maker는 {{date}} CET에 업데이트됩니다. 점검까지 남은 시간: {{timeLeft}}.",
+	"warning.project.2.0.11.version": "프로젝트 버전은 {{version}}입니다. 다시 변환하기 전에 RPG Paper Maker 2.0.11을 다운로드하여 프로젝트를 2.0.11로 업데이트하세요.",
+	"tooltip.square": "칸 단위로 그리기",
+	"tooltip.pixel": "픽셀 단위로 정밀하게 그리기",
+	"pencil": "연필",
+	"bucket": "채우기",
+	"no.layers": "레이어 없음",
+	"activate.layers": "레이어 활성화",
+	"tooltip.maximum.value": "도달할 수 있는 최대값 (소모 아이템으로 최대값이 증가할 수 있어 최종값보다 클 수 있음).",
+	"tooltip.random.variation": "레벨 업할 때마다 값이 변하도록 게임에 무작위성을 추가합니다. 변동이 클수록 무작위성도 커집니다. 최종값은 항상 동일합니다.",
+	"update.list.size": "리스트 크기 업데이트",
+	"warning.update.list.size": "리스트 크기를 줄이게 됩니다. 마지막 요소들이 제거됩니다. 확인하시겠습니까?"
 }

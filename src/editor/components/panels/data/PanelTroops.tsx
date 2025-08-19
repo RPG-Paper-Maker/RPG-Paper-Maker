@@ -137,6 +137,7 @@ const PanelTroops = forwardRef((props, ref) => {
 						showEditName
 						isLocalization
 						applyDefault
+						doNotOpenDialog
 					/>
 				</Groupbox>
 				<Flex one column>
@@ -157,6 +158,7 @@ const PanelTroops = forwardRef((props, ref) => {
 												scrollable
 												applyDefault
 												disabled={isTroopDisabled}
+												cannotUpdateListSize
 											/>
 										</Groupbox>
 									</Flex>
@@ -182,6 +184,8 @@ const PanelTroops = forwardRef((props, ref) => {
 											scrollable
 											applyDefault
 											showEditName
+											cannotUpdateListSize
+											doNotOpenDialog
 										/>
 									</Flex>
 									<Flex one column spaced>

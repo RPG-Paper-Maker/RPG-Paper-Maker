@@ -78,6 +78,11 @@ a {
 	flex-basis: 0;
 }
 
+.flexTwo {
+	flex-grow: 2;
+	flex-basis: 0;
+}
+
 .flexCenterV {
 	align-items: center;
 }
@@ -340,4 +345,8 @@ a {
 .horizontalSeparator {
 	width: 100%;
 	border-bottom: 1px solid var(--grey-light-color);
+}
+
+.rc-color-picker-panel {
+	background-color: var(--darkest-containers-bg-color) !important;
 }

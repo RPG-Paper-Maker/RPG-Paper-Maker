@@ -129,6 +129,7 @@ function DialogRandomBattle({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 										constructorType={Model.DynamicNumber}
 										list={terrains}
 										disabled={selectionTerrain !== SELECTION_TERRAIN_TYPE.TERRAIN}
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Flex>

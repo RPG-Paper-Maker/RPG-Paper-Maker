@@ -2074,5 +2074,16 @@
 	"plugin.successfully.updated": "Plugin {{name}} erfolgreich von {{oldVersion}} auf {{newVersion}} aktualisiert",
 	"how.convert.project.2.0": "Wie konvertiere ich mein 2.0-Projekt?",
 	"id.already.exists.list": "Diese ID existiert bereits in dieser Liste.",
-	"web.update.countdown.message": "RPG Paper Maker wird am {{date}} CET aktualisiert. Verbleibende Zeit bis zur Wartung: {{timeLeft}}."
+	"web.update.countdown.message": "RPG Paper Maker wird am {{date}} CET aktualisiert. Verbleibende Zeit bis zur Wartung: {{timeLeft}}.",
+	"warning.project.2.0.11.version": "Ihre Projektversion ist {{version}}. Bitte laden Sie RPG Paper Maker 2.0.11 herunter, um Ihr Projekt auf 2.0.11 zu aktualisieren, bevor Sie hier erneut konvertieren.",
+	"tooltip.square": "Quadrat für Quadrat zeichnen",
+	"tooltip.pixel": "Pixelgenau zeichnen",
+	"pencil": "Bleistift",
+	"bucket": "Fülleimer",
+	"no.layers": "Keine Ebenen",
+	"activate.layers": "Ebenen aktivieren",
+	"tooltip.maximum.value": "Der maximal mögliche Wert, den es erreichen kann (kann höher sein als der Endwert, wenn verbrauchbare Gegenstände den Maximalwert erhöhen).",
+	"tooltip.random.variation": "Fügt im Spiel etwas Zufälligkeit hinzu, um den Wert nach jedem Levelaufstieg zu ändern. Je höher die Variation, desto größer der Zufall. Der Endwert ändert sich jedoch nicht und bleibt immer gleich.",
+	"update.list.size": "Listengröße aktualisieren",
+	"warning.update.list.size": "Sie werden die Listengröße verringern. Die letzten Elemente werden entfernt. Bestätigen Sie?"
 }

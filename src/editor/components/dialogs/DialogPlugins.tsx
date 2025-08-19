@@ -428,6 +428,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					scrollable
 					applyDefault
 					canBeEmpty
+					cannotUpdateListSize
 				/>
 			</Flex>
 			<Flex one>
@@ -562,6 +563,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 							noScrollOnForce
 							byIndex
 							doNotShowID
+							cannotUpdateListSize
 						/>
 					</Flex>
 				</Groupbox>
@@ -572,6 +574,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 							list={commands}
 							onListUpdated={handleCommandsUpdated}
 							noScrollOnForce
+							cannotUpdateListSize
 						/>
 					</Flex>
 				</Groupbox>

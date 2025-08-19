@@ -122,6 +122,7 @@ function TreeCustomStructure({ list, onListUpdated, disabled }: Props) {
 			multipleSelection
 			cannotAddEditRemoveRoot
 			cannotDragDrop
+			cannotUpdateListSize
 		/>
 	) : null;
 }

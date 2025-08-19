@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import { BINDING, JSONType, Utils } from '../common';
+import { BINDING, JSONType, KEY, Utils } from '../common';
 import DialogKeyboard from '../components/dialogs/models/DialogKeyboard';
 import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
@@ -77,16 +77,18 @@ class Keyboard extends Localization {
 		return shortcut
 			.map((sc) => {
 				switch (sc) {
-					case 'ArrowUp':
+					case KEY.ARROW_UP:
 						return '↑';
-					case 'ArrowDown':
+					case KEY.ARROW_DOWN:
 						return '↓';
-					case 'ArrowLeft':
+					case KEY.ARROW_LEFT:
 						return '←';
-					case 'ArrowRight':
+					case KEY.ARROW_RIGHT:
 						return '→';
-					case 'Control':
+					case KEY.CONTROL:
 						return 'Ctrl';
+					case KEY.SPACE:
+						return 'Space';
 					default:
 						return sc;
 				}

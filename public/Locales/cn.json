@@ -2074,5 +2074,16 @@
 	"plugin.successfully.updated": "插件 {{name}} 已成功從 {{oldVersion}} 更新至 {{newVersion}}",
 	"how.convert.project.2.0": "如何轉換我的 2.0 專案？",
 	"id.already.exists.list": "此 ID 已存在於此列表中。",
-	"web.update.countdown.message": "RPG Paper Maker 將於 {{date}} CET 更新。距離維護開始剩餘時間：{{timeLeft}}。"
+	"web.update.countdown.message": "RPG Paper Maker 將於 {{date}} CET 更新。距離維護開始剩餘時間：{{timeLeft}}。",
+	"warning.project.2.0.11.version": "您的專案版本是 {{version}}。請下載 RPG Paper Maker 2.0.11，將專案更新至 2.0.11，再嘗試在此轉換。",
+	"tooltip.square": "逐格繪製",
+	"tooltip.pixel": "像素精準繪製",
+	"pencil": "鉛筆",
+	"bucket": "填充",
+	"no.layers": "無圖層",
+	"activate.layers": "啟用圖層",
+	"tooltip.maximum.value": "能達到的最大可能值（可以高於最終值，若消耗品增加了最大值）。",
+	"tooltip.random.variation": "在遊戲中加入隨機性，每次升級後改變數值。變異越大，隨機性越高。這不會改變最終值，最終值始終相同。",
+	"update.list.size": "更新列表大小",
+	"warning.update.list.size": "您將縮小列表大小。最後的元素將被移除，是否確認？"
 }

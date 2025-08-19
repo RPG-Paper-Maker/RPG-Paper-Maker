@@ -203,6 +203,7 @@ function PanelAssetsPreviewer({
 								showEditName
 								cannotAdd={!!itemsAvailable}
 								cannotEdit={!!itemsAvailable}
+								cannotUpdateListSize
 							/>
 						)}
 					</Flex>

@@ -11,8 +11,10 @@
 
 import { ReactElement } from 'react';
 import { Utils } from '../common';
+import { Keyboard } from '../models';
 import '../styles/MenuItem.css';
 import Flex from './Flex';
+import Tooltip from './Tooltip';
 
 type Props = {
 	children?: ReactElement | ReactElement[] | string | string[];
@@ -23,6 +25,7 @@ type Props = {
 	index?: number;
 	disabled?: boolean;
 	shortcut?: string[];
+	tooltip?: string;
 	setActiveIndex?: (v: number) => void;
 	onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 	setTriggerCloseAll?: (v: boolean) => void;
@@ -37,6 +40,7 @@ function MenuItem({
 	index = 0,
 	disabled = false,
 	shortcut = [],
+	tooltip,
 	setActiveIndex,
 	onClick,
 	setTriggerCloseAll,
@@ -55,8 +59,19 @@ function MenuItem({
 		}
 	};
 
-	const getShortcut = () => shortcut.join('+');
-
+	const content = (
+		<>
+			{icon}
+			{shortcut.length > 0 ? (
+				<>
+					<Flex one>{children}</Flex>
+					<div className='shortcut'>{Keyboard.toStringShortcut(shortcut)}</div>
+				</>
+			) : (
+				children
+			)}
+		</>
+	);
 	return (
 		<div
 			onClick={handleClick}
@@ -69,15 +84,7 @@ function MenuItem({
 				'menuItem'
 			)}
 		>
-			{icon}
-			{shortcut.length > 0 ? (
-				<>
-					<Flex one>{children}</Flex>
-					<div className='shortcut'>{getShortcut()}</div>
-				</>
-			) : (
-				children
-			)}
+			{tooltip ? <Tooltip text={tooltip}>{content}</Tooltip> : content}
 		</div>
 	);
 }

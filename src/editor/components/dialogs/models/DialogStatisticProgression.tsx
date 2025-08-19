@@ -26,6 +26,7 @@ import Groupbox from '../../Groupbox';
 import PanelProgression from '../../panels/PanelProgression';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -131,7 +132,12 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 								displayIDs
 							/>
 						</Value>
-						<Label>{t('maximum.value')}</Label>
+						<Label>
+							<Flex spaced centerV>
+								{t('maximum.value')}
+								<TooltipInformation text={t('tooltip.maximum.value')} />
+							</Flex>
+						</Label>
 						<Value>
 							<DynamicValueSelector
 								value={maximumValue}

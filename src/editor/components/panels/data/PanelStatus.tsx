@@ -159,6 +159,7 @@ const PanelStatus = forwardRef((props, ref) => {
 					showEditName
 					isLocalization
 					applyDefault
+					doNotOpenDialog
 				/>
 			</Groupbox>
 			<Flex one column>
@@ -250,6 +251,7 @@ const PanelStatus = forwardRef((props, ref) => {
 										scrollable
 										applyDefault
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Flex>
 							</Groupbox>
@@ -319,6 +321,7 @@ const PanelStatus = forwardRef((props, ref) => {
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Groupbox>
 							</Flex>
@@ -333,6 +336,7 @@ const PanelStatus = forwardRef((props, ref) => {
 										scrollable
 										canBeEmpty
 										byIndex
+										cannotUpdateListSize
 									/>
 								</Groupbox>
 							</Flex>

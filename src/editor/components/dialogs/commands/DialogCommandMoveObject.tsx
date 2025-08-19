@@ -250,6 +250,7 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 										forcedCurrentSelectedItemIndex={forcedCurrentSelectedItemIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIndex}
 										onSelectedItem={handleSelectedItem}
+										cannotUpdateListSize
 										byIndex
 									/>
 								</Flex>

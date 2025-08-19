@@ -77,7 +77,7 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 		await Scene.Map.currentBattle.loadBattlers();
 		Scene.Map.currentBattle.camera.perspectiveCamera.aspect = WIDTH / HEIGHT;
 		Scene.Map.currentBattle.camera.perspectiveCamera.updateProjectionMatrix();
-		Scene.Map.currentBattle.update();
+		Scene.Map.currentBattle.update(true);
 		render();
 		setFirstLoading(false);
 	};

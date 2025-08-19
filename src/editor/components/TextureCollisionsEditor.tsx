@@ -737,6 +737,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			};
 			const handleMouseDown = (e: MouseEvent) => {
 				if (currentState.hoveredPoint) {
+					currentState.selectedPoint = currentState.hoveredPoint;
 					let collision = currentState.pictureModel!.collisions.get(currentState.hoveredPoint);
 					if (!collision) {
 						collision = new CollisionSquare();
@@ -756,7 +757,6 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 							if (collision.rect === null) {
 								collision.rect = new Rectangle(0, 0, 100, 100);
 							} else {
-								currentState.selectedPoint = currentState.hoveredPoint;
 								if (e.button === 0) {
 									currentState.originalRect = collision.rect.clone();
 									currentState.isResizing = true;
@@ -801,6 +801,11 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					draw();
 				}
 			};
+			const handleDoubleClick = async () => {
+				if (selectedCollisionType === COLLISION_TYPE.PRATICABLE) {
+					await handleEditPraticable();
+				}
+			};
 			const handleMouseUp = () => {
 				currentState.isResizing = false;
 			};
@@ -812,11 +817,13 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			};
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mousedown', handleMouseDown);
+			canvas.addEventListener('dblclick', handleDoubleClick);
 			window.addEventListener('mouseup', handleMouseUp);
 			window.addEventListener('wheel', handleWheel, { passive: false });
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mousedown', handleMouseDown);
+				canvas.removeEventListener('dblclick', handleDoubleClick);
 				window.removeEventListener('mouseup', handleMouseUp);
 				window.removeEventListener('wheel', handleWheel, { passive: false } as AddEventListenerOptions);
 			};
@@ -828,7 +835,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			? [
 					{
 						title: `${t('edit')}...`,
-						shortcut: [KEY.ENTER],
+						shortcut: [KEY.ENTER, KEY.SPACE],
 						onClick: handleEditPraticable,
 					},
 					{

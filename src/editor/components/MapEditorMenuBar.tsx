@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BiCube, BiSolidPencil } from 'react-icons/bi';
-import { FaFlagCheckered, FaLayerGroup, FaMountain } from 'react-icons/fa';
+import { FaFlagCheckered, FaLayerGroup } from 'react-icons/fa';
 import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
 import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic } from 'react-icons/md';
@@ -402,6 +402,17 @@ function MapEditorMenuBar() {
 		}
 	};
 
+	const getLandsText = () => {
+		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
+			case MENU_INDEX_LANDS_MAP_EDITOR.FLOOR:
+				return 'floor';
+			case MENU_INDEX_LANDS_MAP_EDITOR.AUTOTILE:
+				return 'autotile';
+			default:
+				return '';
+		}
+	};
+
 	const getSpritesIcon = () => {
 		switch (Project.current!.settings.mapEditorSpritesMenuIndex) {
 			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE:
@@ -419,11 +430,28 @@ function MapEditorMenuBar() {
 		}
 	};
 
+	const getSpritesText = () => {
+		switch (Project.current!.settings.mapEditorSpritesMenuIndex) {
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE:
+				return 'face.sprite';
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FIX:
+				return 'fix.sprite';
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_DOUBLE:
+				return 'double.sprite';
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_QUADRA:
+				return 'quadra.sprite';
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_WALL:
+				return 'wall';
+			default:
+				return '';
+		}
+	};
+
 	return (
 		<Flex wrap>
 			<Flex one>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
-					<MenuSub active icon={getLandsIcon()} onClick={handleLands}>
+					<MenuSub active icon={getLandsIcon()} title={t(getLandsText())} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
 							{t('floor')}
 						</MenuItem>
@@ -431,7 +459,7 @@ function MapEditorMenuBar() {
 							{t('autotile')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={getSpritesIcon()} onClick={handleSprites}>
+					<MenuSub icon={getSpritesIcon()} title={t(getSpritesText())} onClick={handleSprites}>
 						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFaceSprites}>
 							{t('face.sprite')}
 						</MenuItem>
@@ -448,22 +476,26 @@ function MapEditorMenuBar() {
 							{t('wall')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<LuMountain />} onClick={handleMountains}>
-						<MenuItem icon={<FaMountain />} onClick={handleMountains}>
+					<MenuSub icon={<LuMountain />} title={t('mountain')} onClick={handleMountains}>
+						<MenuItem icon={<LuMountain />} onClick={handleMountains}>
 							{t('mountain')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<BiCube />} onClick={handleObjects3D}>
+					<MenuSub icon={<BiCube />} title={t('threed.object')} onClick={handleObjects3D}>
 						<MenuItem icon={<BiCube />} onClick={handleObjects3D}>
 							{t('threed.object')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<GiEmptyChessboard />} onClick={handleObjects}>
+					<MenuSub
+						icon={<GiEmptyChessboard />}
+						title={`${t('object')}: ${t('default')}`}
+						onClick={handleObjects}
+					>
 						<MenuItem icon={<GiEmptyChessboard />} onClick={handleObjectsDefault}>
 							{t('object')}: {t('default')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<FaFlagCheckered />} onClick={handleStartPosition}>
+					<MenuSub icon={<FaFlagCheckered />} title={t('start.position')} onClick={handleStartPosition}>
 						<MenuItem icon={<FaFlagCheckered />} onClick={handleStartPosition}>
 							{t('start.position')}
 						</MenuItem>
@@ -485,30 +517,57 @@ function MapEditorMenuBar() {
 					activeIndex={elementPositionIndex}
 					setActiveIndex={setElementPositionIndex}
 				>
-					<MenuItem icon={<SquareIcon />} onClick={handleSquare} />
-					<MenuItem icon={<PixelIcon />} onClick={handlePixel} disabled={isPixelDisabled()} />
+					<MenuItem icon={<SquareIcon />} tooltip={t('tooltip.square')} onClick={handleSquare} />
+					<MenuItem
+						icon={<PixelIcon />}
+						tooltip={t('tooltip.pixel')}
+						onClick={handlePixel}
+						disabled={isPixelDisabled()}
+					/>
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
-					<MenuItem icon={<LuMove3D />} onClick={handleActionTranslate} disabled={isTranslateDisabled()} />
+					<MenuItem
+						icon={<LuMove3D />}
+						tooltip={t('translation')}
+						onClick={handleActionTranslate}
+						disabled={isTranslateDisabled()}
+					/>
 					<MenuItem
 						icon={<LuRotate3D />}
+						tooltip={t('rotation')}
 						onClick={handleActionRotate}
 						disabled={Scene.Map.isRotateDisabled()}
 					/>
-					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled={Scene.Map.isScaleDisabled()} />
-					<MenuItem icon={<BiSolidPencil />} onClick={handleActionPencil} />
+					<MenuItem
+						icon={<LuScale3D />}
+						tooltip={t('scaling')}
+						onClick={handleActionScale}
+						disabled={Scene.Map.isScaleDisabled()}
+					/>
+					<MenuItem icon={<BiSolidPencil />} tooltip={t('pencil')} onClick={handleActionPencil} />
 					<MenuItem
 						icon={<PiSelectionAllFill />}
+						tooltip={t('rectangle')}
 						onClick={handleActionRectangle}
 						disabled={isRectangleDisabled()}
 					/>
-					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled={isPinDisabled()} />
+					<MenuItem
+						icon={<VscPaintcan />}
+						tooltip={t('bucket')}
+						onClick={handleActionPin}
+						disabled={isPinDisabled()}
+					/>
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
-					<MenuItem icon={<LayersOffIcon />} onClick={handleLayersOff} />
-					<MenuItem icon={<FaLayerGroup />} onClick={handleLayersOn} disabled={isLayersOnDisabled()} />
+					<MenuItem icon={<LayersOffIcon />} tooltip={t('no.layers')} onClick={handleLayersOff} />
+					<MenuItem
+						icon={<FaLayerGroup />}
+						tooltip={t('activate.layers')}
+						onClick={handleLayersOn}
+						disabled={isLayersOnDisabled()}
+					/>
 				</Menu>
 			</Flex>
 		</Flex>

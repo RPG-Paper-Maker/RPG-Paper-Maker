@@ -101,6 +101,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 				padding
 				scrollableContent
 				lazyLoadingContent
+				hideScroll
 			/>
 		</Dialog>
 	);
