@@ -11,6 +11,7 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { INPUT_TYPE_WIDTH } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Data, Model } from '../../Editor';
@@ -101,8 +102,9 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			initialWidth='700px'
 		>
-			<Flex spacedLarge style={{ height: '510px' }}>
+			<Flex spacedLarge style={{ height: '510px' }} fillWidth>
 				<Groupbox title={t('variables')}>
 					<Tree
 						constructorType={Model.VariablesPage}
@@ -124,6 +126,7 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 					cannotAdd
 					cannotDragDrop
 					showEditName
+					inputNameWidth={INPUT_TYPE_WIDTH.FILL}
 				/>
 			</Flex>
 		</Dialog>

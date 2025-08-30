@@ -10,7 +10,7 @@
 */
 
 import { ReactElement, useEffect } from 'react';
-import { KEY, MenuItemType, SPECIAL_KEY } from '../common';
+import { MenuItemType, SPECIAL_KEY } from '../common';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
@@ -62,18 +62,19 @@ function MenuCustom({
 
 	const checkItemKeyDownShortcut = async (
 		itemList: MenuItemType[],
-		statesSpecialKeys: Map<SPECIAL_KEY, boolean>,
-		key: KEY | SPECIAL_KEY,
-		specialKeys: SPECIAL_KEY[],
+		statesSpecialKeys: Map<string, boolean>,
+		key: string,
+		specialKeys: string[],
 		event: KeyboardEvent
 	) => {
 		for (const item of itemList) {
 			const { shortcut, disabled, onClick, children } = item;
 			if (shortcut && onClick) {
+				const shortcutUpper = shortcut.map((s) => s.toUpperCase());
 				// Check all special keys
 				let valid = true;
 				for (const specialKey of specialKeys) {
-					if (!statesSpecialKeys.get(specialKey) !== (shortcut.indexOf(specialKey) === -1)) {
+					if (!statesSpecialKeys.get(specialKey) !== (shortcutUpper.indexOf(specialKey) === -1)) {
 						if (children) {
 							if (await checkItemKeyDownShortcut(children, statesSpecialKeys, key, specialKeys, event)) {
 								return true;
@@ -87,7 +88,7 @@ function MenuCustom({
 					continue;
 				}
 				// Check key if not a specialKey
-				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcut.indexOf(key) !== -1) {
+				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcutUpper.indexOf(key) !== -1) {
 					event.preventDefault();
 					if (disabled) {
 						continue;
@@ -107,31 +108,17 @@ function MenuCustom({
 		return false;
 	};
 
-	const translateKey = (key: string) => {
-		switch (key) {
-			case 'CONTROL':
-				return SPECIAL_KEY.CTRL;
-			case 'ARROWUP':
-				return KEY.UP;
-			case 'ARROWDOWN':
-				return KEY.DOWN;
-			default:
-				return key;
-		}
-	};
-
 	const handleKeyDown = async (event: KeyboardEvent) => {
 		if (allowKeyboard) {
-			const statesSpecialKeys: Map<SPECIAL_KEY, boolean> = new Map();
-			statesSpecialKeys.set(SPECIAL_KEY.CTRL, event.ctrlKey);
-			statesSpecialKeys.set(SPECIAL_KEY.ALT, event.altKey);
-			statesSpecialKeys.set(SPECIAL_KEY.SHIFT, event.shiftKey);
-			const key = translateKey(event.key.toUpperCase());
-			const specialKeys = Object.values(SPECIAL_KEY);
+			const statesSpecialKeys: Map<string, boolean> = new Map();
+			statesSpecialKeys.set(SPECIAL_KEY.CTRL.toUpperCase(), event.ctrlKey);
+			statesSpecialKeys.set(SPECIAL_KEY.ALT.toUpperCase(), event.altKey);
+			statesSpecialKeys.set(SPECIAL_KEY.SHIFT.toUpperCase(), event.shiftKey);
+			const specialKeys = Object.values(SPECIAL_KEY).map((k) => k.toUpperCase());
 			return !(await checkItemKeyDownShortcut(
 				items,
 				statesSpecialKeys,
-				key as KEY | SPECIAL_KEY,
+				event.key.toUpperCase(),
 				specialKeys,
 				event
 			));

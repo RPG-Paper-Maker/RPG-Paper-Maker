@@ -118,7 +118,7 @@ class Keyboard extends Localization {
 	}
 
 	copy(keyboard: Keyboard): void {
-		super.copy(keyboard);
+		super.copy(keyboard, Keyboard.getBindings([]));
 		this.isEngine = keyboard.isEngine;
 	}
 

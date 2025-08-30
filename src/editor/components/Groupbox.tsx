@@ -9,23 +9,59 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import { Utils } from '../common';
 import '../styles/Groupbox.css';
+import Flex from './Flex';
 
 type Props = {
 	children?: ReactNode;
 	title?: string;
 	fillWidth?: boolean;
 	disabled?: boolean;
+	canExpand?: boolean;
+	initialClose?: boolean;
 };
 
-function Groupbox({ children, title = '', fillWidth = false, disabled = false }: Props) {
-	return (
+function Groupbox({
+	children,
+	title = '',
+	fillWidth = false,
+	disabled = false,
+	canExpand = false,
+	initialClose = false,
+}: Props) {
+	const [isOpen, setIsOpen] = useState(!initialClose);
+
+	const handleMouseDownSwitchExpand = () => {
+		if (!canExpand || disabled) {
+			return;
+		}
+		setIsOpen((v) => !v);
+	};
+
+	return isOpen ? (
 		<fieldset className={Utils.getClassName({ fillWidth, disabled })}>
-			<legend>{title}</legend>
-			{children}
+			<legend>
+				<Flex
+					spaced
+					centerV
+					className={canExpand && !disabled ? 'pointer' : undefined}
+					onMouseDown={handleMouseDownSwitchExpand}
+				>
+					{canExpand && <HiChevronDown className='iconMedium' />}
+					{title}
+				</Flex>
+			</legend>
+			{isOpen && children}
 		</fieldset>
+	) : (
+		<Flex spaced centerV fillWidth className='pointer' onMouseDown={handleMouseDownSwitchExpand}>
+			<HiChevronRight className='iconMedium' />
+			{title}
+			<div className='horizontalSeparator' />
+		</Flex>
 	);
 }
 

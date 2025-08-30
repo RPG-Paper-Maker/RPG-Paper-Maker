@@ -347,6 +347,15 @@ a {
 	border-bottom: 1px solid var(--grey-light-color);
 }
 
+.backgroundDarkestContainers {
+	background-color: var(--darkest-containers-bg-color);
+}
+
 .rc-color-picker-panel {
 	background-color: var(--darkest-containers-bg-color) !important;
+}
+
+svg.iconMedium {
+	width: 18px;
+	height: 18px;
 }

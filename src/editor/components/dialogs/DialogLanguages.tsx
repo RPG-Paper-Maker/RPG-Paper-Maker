@@ -88,7 +88,7 @@ function DialogLanguages({ setIsOpen }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='500px'
-			initialHeight='600px'
+			initialHeight='calc(100% - 50px)'
 		>
 			<Tab
 				titles={Model.Base.mapListIndex([t('languages'), t('extra.words')])}

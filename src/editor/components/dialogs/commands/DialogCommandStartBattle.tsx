@@ -126,8 +126,9 @@ function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAcce
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			initialHeight='calc(100% - 50px)'
 		>
-			<Flex one column spacedLarge className='scrollable' style={{ height: '450px' }}>
+			<Flex one column spacedLarge className='scrollable'>
 				<Groupbox title={t('troop.id')}>
 					<RadioGroup selected={selectionTroopType} onChange={setSelectionTroopType}>
 						<Flex column spacedLarge>

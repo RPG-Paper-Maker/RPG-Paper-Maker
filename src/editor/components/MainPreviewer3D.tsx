@@ -185,7 +185,7 @@ function MainPreviewer3D({ id }: Props) {
 		};
 	}, []);
 
-	return <div className='fillWidth' ref={refCanvas} id={id} />;
+	return <div style={{ width: '50%' }} ref={refCanvas} id={id} />;
 }
 
 export default MainPreviewer3D;

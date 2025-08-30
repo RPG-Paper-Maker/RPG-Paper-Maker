@@ -378,8 +378,8 @@ function DialogPictures({
 			title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='70%'
-			initialHeight='70%'
+			initialWidth='80%'
+			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			isLoading={isLoading}

@@ -31,7 +31,7 @@ class Previewer3D extends Base {
 	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public meshes: THREE.Mesh[] = [];
-	public currentRotation: number = 0;
+	public currentRotation: number = (45 * Math.PI) / 180;
 	public isCut = false;
 
 	constructor(id: string) {
@@ -211,15 +211,13 @@ class Previewer3D extends Base {
 		if (!geometry.isEmpty() && material) {
 			geometry.updateAttributes();
 			const mesh = new THREE.Mesh(geometry, material);
-			this.meshes.push(mesh);
-			this.scene.add(mesh);
-			if (this.isCut) {
-				mesh.rotation.y = (45 * Math.PI) / 180;
-			}
+			mesh.rotation.y = this.currentRotation;
 			mesh.geometry.center();
 			if (position) {
 				mesh.position.set(position.x, position.y, position.z);
 			}
+			this.meshes.push(mesh);
+			this.scene.add(mesh);
 			this.updateCamera();
 		}
 	}
@@ -259,7 +257,7 @@ class Previewer3D extends Base {
 				d = max.z - min.z;
 			}
 		}
-		this.camera.distance = Math.max(Math.max(w, h), d) + resize * resize + (w + h + d) / 3;
+		this.camera.distance = Math.max(Math.max(w, h), d) + resize + (w + h + d) / 3;
 		if (this.isCut) {
 			const s = resize * ((resize * resize * 2) / this.camera.distance);
 			for (const mesh of this.meshes) {
@@ -271,13 +269,12 @@ class Previewer3D extends Base {
 	}
 
 	update() {
+		this.camera.update();
 		if (super.update()) {
-			this.camera.update();
 			this.currentRotation += 0.01;
 			for (const mesh of this.meshes) {
 				mesh.rotation.y = this.currentRotation;
 			}
-			return true;
 		}
 		return false;
 	}

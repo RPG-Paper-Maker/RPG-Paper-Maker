@@ -61,12 +61,6 @@ class CollisionSquare extends Serializable {
 	copy(collision: CollisionSquare): void {
 		super.copy(collision);
 		this.rect = collision.rect?.clone() ?? null;
-		this.left = collision.left;
-		this.right = collision.right;
-		this.top = collision.top;
-		this.bot = collision.bot;
-		this.terrain = collision.terrain;
-		this.climbing = collision.climbing;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -12,7 +12,7 @@
 import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, IO, Paths } from '../../common';
+import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, IO, Paths } from '../../common';
 import { removeFile } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
@@ -23,7 +23,7 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DynamicValueSelector from '../DynamicValueSelector';
 import Flex from '../Flex';
-import Tree, { TREES_MIN_WIDTH } from '../Tree';
+import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 
 type Props = {
 	constructorType?: typeof Model.Base;
@@ -39,6 +39,8 @@ type Props = {
 	onChangeSelectedItem: (node: Node | null) => void;
 	onRefresh?: () => void;
 	onListUpdated?: () => void;
+	onDoubleClickLeftList?: () => void;
+	onKeyboardDownList?: (event: KeyboardEvent) => void;
 	content?: ReactNode;
 	options?: ReactNode;
 	active?: boolean;
@@ -60,6 +62,7 @@ function PanelAssetsPreviewer({
 	onChangeSelectedItem,
 	onRefresh,
 	onListUpdated,
+	onDoubleClickLeftList,
 	content,
 	options,
 	active = false,
@@ -194,12 +197,14 @@ function PanelAssetsPreviewer({
 							<Tree
 								constructorType={constructorType}
 								list={list}
-								minWidth={TREES_MIN_WIDTH}
+								minWidth={TREES_LARGE_MIN_WIDTH}
+								inputNameWidth={INPUT_TYPE_WIDTH.FILL}
 								onSelectedItem={handleChangeSelectedItemLeft}
 								onListUpdated={onListUpdated}
 								defaultSelectedID={assetID}
 								forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDLeft}
 								setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDLeft}
+								onDoubleClick={onDoubleClickLeftList}
 								showEditName
 								cannotAdd={!!itemsAvailable}
 								cannotEdit={!!itemsAvailable}
@@ -225,7 +230,8 @@ function PanelAssetsPreviewer({
 										list={itemsAvailable}
 										onSelectedItem={handleChangeSelectedItemRight}
 										onDoubleClick={handleClickMoveLeft}
-										minWidth={TREES_MIN_WIDTH}
+										minWidth={TREES_LARGE_MIN_WIDTH}
+										inputNameWidth={INPUT_TYPE_WIDTH.FILL}
 										forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDRight}
 										setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDRight}
 										defaultSelectedID={-1}
@@ -239,16 +245,25 @@ function PanelAssetsPreviewer({
 									/>
 								</Flex>
 								<Flex spaced>
-									<Button onClick={onRefresh}>{t('refresh')}</Button>
-									<Button
-										onClick={handleClickExport}
-										disabled={!selectedItem || selectedItem.id <= 0}
-									>
-										{t('export')}...
-									</Button>
-									<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={handleClickPlus}>
-										+
-									</Button>
+									<Flex one>
+										<Button fillWidth onClick={onRefresh}>
+											{t('refresh')}
+										</Button>
+									</Flex>
+									<Flex one>
+										<Button
+											fillWidth
+											onClick={handleClickExport}
+											disabled={!selectedItem || selectedItem.id <= 0}
+										>
+											{t('export')}...
+										</Button>
+									</Flex>
+									<Flex one>
+										<Button fillWidth buttonType={BUTTON_TYPE.PRIMARY} onClick={handleClickPlus}>
+											+
+										</Button>
+									</Flex>
 									<input
 										ref={importFileInputRef}
 										type='file'

@@ -612,7 +612,7 @@ const PanelMapObject = forwardRef(
 							<Flex
 								className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}
 							>
-								<Groupbox title={t('options')}>
+								<Groupbox title={t('options')} fillWidth canExpand initialClose>
 									<Flex spacedLarge>
 										<Flex column>
 											<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>

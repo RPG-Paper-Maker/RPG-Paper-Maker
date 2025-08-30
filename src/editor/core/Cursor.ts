@@ -72,6 +72,9 @@ class Cursor {
 	}
 
 	onKeyDownImmediate() {
+		if (Inputs.isCTRL || Inputs.isALT || Inputs.isSHIFT) {
+			return;
+		}
 		const isNewFrameMove = this.frameMove.update() && !this.firstMove;
 		if (this.firstMove || isNewFrameMove) {
 			if (isNewFrameMove) {

@@ -9,11 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
+import {
+	BUTTON_TYPE,
+	Constants,
+	DYNAMIC_VALUE_KIND,
+	DYNAMIC_VALUE_OPTIONS_TYPE,
+	KEY,
+	SONG_KIND,
+	Utils,
+} from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
@@ -133,7 +141,6 @@ function DialogSongs({
 			setIsStart(false);
 			setIsEnd(false);
 		}
-		setSelectedHowl(undefined);
 		setPlayingHowl(undefined);
 		setIsPaused(true);
 		setIsStopped(true);
@@ -218,19 +225,21 @@ function DialogSongs({
 	};
 
 	const handlePlay = () => {
-		if (playingHowl) {
-			if (!isPaused) {
-				playingHowl.stop();
-				if (isStart && start.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL) {
-					selectedHowl!.seek(start.value as number);
+		if (selectedHowl) {
+			if (playingHowl) {
+				if (!isPaused) {
+					playingHowl.stop();
+					if (isStart && start.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL) {
+						selectedHowl.seek(start.value as number);
+					}
 				}
 			}
+			setPlayingHowl(selectedHowl);
+			selectedHowl.volume((volume.kind === DYNAMIC_VALUE_KIND.NUMBER ? (volume.value as number) : 100) / 100);
+			selectedHowl.play();
+			setIsPaused(false);
+			setIsStopped(false);
 		}
-		setPlayingHowl(selectedHowl);
-		selectedHowl!.volume((volume.kind === DYNAMIC_VALUE_KIND.NUMBER ? (volume.value as number) : 100) / 100);
-		selectedHowl!.play();
-		setIsPaused(false);
-		setIsStopped(false);
 	};
 
 	const handleChangeFolder = (node: Node | null) => {
@@ -301,6 +310,18 @@ function DialogSongs({
 			initialize().catch(console.error);
 		}
 	}, [isOpen, selectedKind]);
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === KEY.ENTER || event.key === KEY.SPACE) {
+				handlePlay();
+			}
+		};
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [selectedHowl, playingHowl, isPaused, volume, isStart, start]);
 
 	const getPreviewerContent = () => {
 		if (selectedSong) {
@@ -387,8 +408,8 @@ function DialogSongs({
 			title={`${title ?? t('songs.manager')}`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='70%'
-			initialHeight='70%'
+			initialWidth='80%'
+			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
@@ -421,6 +442,7 @@ function DialogSongs({
 						onChangeSelectedItem={handleChangeSelectedSong}
 						onRefresh={handleRefresh}
 						onListUpdated={handleListUpdated}
+						onDoubleClickLeftList={handlePlay}
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
 						active={active}

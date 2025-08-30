@@ -106,9 +106,9 @@ function PanelTextures({ visible, extraContent }: Props) {
 					{extraContent}
 				</Splitter>
 			</Flex>
-			<div ref={refPreviewer} className='flex mobileHidden'>
+			<Flex ref={refPreviewer} centerH className='mobileHidden backgroundDarkestContainers'>
 				<MainPreviewer3D id='texture-previewer' />
-			</div>
+			</Flex>
 		</div>
 	);
 }

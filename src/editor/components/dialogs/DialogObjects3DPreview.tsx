@@ -365,8 +365,8 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 			title={`${t('threed.objects')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='70%'
-			initialHeight='70%'
+			initialWidth='80%'
+			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 		>
 			<PanelAssetsPreviewer

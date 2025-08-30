@@ -60,7 +60,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='60%'
-			initialHeight='90%'
+			initialHeight='calc(100% - 50px)'
 		>
 			<PanelMapObject object={object} ref={panelMapObjectRef} />
 		</Dialog>

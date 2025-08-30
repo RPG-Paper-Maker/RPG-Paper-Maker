@@ -116,8 +116,10 @@ function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, 
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			initialWidth='600px'
+			initialHeight='250px'
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth fillHeight>
 				<Flex spaced centerV>
 					<div>
 						{t(
@@ -132,7 +134,7 @@ function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, 
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 					/>
 				</Flex>
-				<Groupbox title={t('opertation')}>
+				<Groupbox title={t('operation')}>
 					<RadioGroup selected={selectionOperationType} onChange={setSelectionOperationType}>
 						<Flex spaced>
 							<RadioButton value={SELECTION_OPERATION_TYPE.START}>{t('start')}</RadioButton>

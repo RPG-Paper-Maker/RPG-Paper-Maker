@@ -13,7 +13,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsChevronDown } from 'react-icons/bs';
 import { Model } from '../Editor';
-import { Utils } from '../common';
+import { KEY, Utils } from '../common';
 import '../styles/Dropdown.css';
 import Flex from './Flex';
 
@@ -70,10 +70,12 @@ function Dropdown({
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
+	const [preSelectedID, setPreSelectedID] = useState(options[0]?.id ?? -1);
 
 	const dropdownContainerRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const selectedDropdownRef = useRef<HTMLInputElement>(null);
+	const preSelectedElementRef = useRef<HTMLDivElement>(null);
 
 	const canDisplayDropdown = () => isOpen && !needForceHide() && options.length > 0;
 
@@ -167,24 +169,36 @@ function Dropdown({
 			}
 		};
 
-		if (isOpen) {
-			/* TODO
+		if (isOpen && options.length > 0) {
 			const handleKeyDown = (e: KeyboardEvent) => {
+				const index = options.findIndex((option) => option.id === preSelectedID);
 				switch (e.key) {
 					case KEY.ARROW_DOWN:
+						setPreSelectedID((id) => (index === options.length - 1 ? id : options[index + 1].id));
+						break;
+					case KEY.ARROW_UP:
+						setPreSelectedID((id) => (index <= 0 ? id : options[index - 1].id));
+						break;
+					case KEY.ENTER:
+						handleClickOption(options[index]);
+						setIsOpen(false);
 						break;
 				}
-			};*/
+			};
 			const dialogs = document.getElementsByClassName('dialog');
 			const currentDialog = dialogs.length === 0 ? document : dialogs[dialogs.length - 1];
 			currentDialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
-			//window.addEventListener('keydown', handleKeyDown);
+			window.addEventListener('keydown', handleKeyDown);
 			return () => {
 				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
-				//window.removeEventListener('keydown', handleKeyDown);
+				window.removeEventListener('keydown', handleKeyDown);
 			};
 		}
-	}, [isOpen]);
+	}, [isOpen, preSelectedID]);
+
+	useEffect(() => {
+		preSelectedElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+	}, [preSelectedID]);
 
 	useEffect(() => {
 		if (disabled) {
@@ -205,10 +219,12 @@ function Dropdown({
 	const getDropdownItems = () =>
 		options.map((option) => (
 			<Flex
+				ref={option.id === preSelectedID ? preSelectedElementRef : null}
 				spaced
 				className={Utils.getClassName(
 					{
 						selected: selectedID === option.id,
+						preSelected: preSelectedID === option.id,
 						disabled: disabledIds.includes(option.id),
 						whiteSpaceNowrap: !fillWidth,
 					},

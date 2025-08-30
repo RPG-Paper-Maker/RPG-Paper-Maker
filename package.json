@@ -5,6 +5,7 @@
 	"version": "0.1.0",
 	"author": "Marie Laporte",
 	"private": true,
+	"main": "main.js",
 	"dependencies": {
 		"@codemirror/lang-javascript": "^6.2.4",
 		"@rc-component/color-picker": "^3.0.1",

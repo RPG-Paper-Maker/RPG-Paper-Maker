@@ -77,7 +77,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'
-			initialHeight='700px'
+			initialHeight='calc(100% - 50px)'
 		>
 			<Tab
 				titles={Model.Base.mapListIndex([

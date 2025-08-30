@@ -11,6 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { INPUT_TYPE_WIDTH, Mathf } from '../common';
+import { Inputs } from '../managers';
 import '../styles/Input.css';
 
 type Props = {
@@ -53,6 +54,7 @@ function InputNumber({
 	})();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		Inputs.isMapFocused = false;
 		const v = transformValue(Number(e.target.value));
 		setDisplayedValue(e.target.value);
 		if (v < min) {
@@ -65,6 +67,8 @@ function InputNumber({
 	};
 
 	const handleBlur = () => {
+		Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
+		Inputs.keys = [];
 		let v = value;
 		if (value < min) {
 			v = min;

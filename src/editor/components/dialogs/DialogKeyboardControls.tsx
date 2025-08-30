@@ -68,6 +68,7 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='500px'
+			initialHeight='calc(100% - 50px)'
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('engine.controls')}>
@@ -83,77 +84,81 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 						cannotDragDrop
 					/>
 				</Groupbox>
-				<Groupbox title={t('game.controls')}>
-					<Flex column spacedLarge>
-						<Tree
-							constructorType={Model.Keyboard}
-							list={gameControls}
-							height={TREES_MIN_HEIGHT}
-							onListUpdated={handleUpdateGameControls}
-							noScrollOnForce
-							scrollable
-							applyDefault
-						/>
-						<Groupbox title={t('menu.controls')}>
-							<Form>
-								<Label>{t('action')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyAction}
-										onChange={setKeyAction}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-								<Label>{t('cancel')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyCancel}
-										onChange={setKeyCancel}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-								<Label>{t('up')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyUp}
-										onChange={setKeyUp}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-								<Label>{t('down')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyDown}
-										onChange={setKeyDown}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-								<Label>{t('left')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyLeft}
-										onChange={setKeyLeft}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-								<Label>{t('right')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={keyRight}
-										onChange={setKeyRight}
-										options={Project.current!.keyboard.list}
-										displayIDs
-									/>
-								</Value>
-							</Form>
-						</Groupbox>
-					</Flex>
-				</Groupbox>
+				<Flex one>
+					<Groupbox title={t('game.controls')} fillWidth>
+						<Flex one column spacedLarge fillHeight>
+							<Flex one fillHeight>
+								<Tree
+									constructorType={Model.Keyboard}
+									list={gameControls}
+									onListUpdated={handleUpdateGameControls}
+									minHeight={TREES_MIN_HEIGHT}
+									noScrollOnForce
+									scrollable
+									applyDefault
+								/>
+							</Flex>
+							<Groupbox title={t('menu.controls')} canExpand initialClose>
+								<Form>
+									<Label>{t('action')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyAction}
+											onChange={setKeyAction}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+									<Label>{t('cancel')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyCancel}
+											onChange={setKeyCancel}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+									<Label>{t('up')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyUp}
+											onChange={setKeyUp}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+									<Label>{t('down')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyDown}
+											onChange={setKeyDown}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+									<Label>{t('left')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyLeft}
+											onChange={setKeyLeft}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+									<Label>{t('right')}</Label>
+									<Value>
+										<Dropdown
+											selectedID={keyRight}
+											onChange={setKeyRight}
+											options={Project.current!.keyboard.list}
+											displayIDs
+										/>
+									</Value>
+								</Form>
+							</Groupbox>
+						</Flex>
+					</Groupbox>
+				</Flex>
 			</Flex>
 		</Dialog>
 	);

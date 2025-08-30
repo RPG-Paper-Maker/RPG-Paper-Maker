@@ -573,45 +573,6 @@ class Mountain extends Base {
 		return count;
 	}
 
-	drawFakeTopFloor(
-		localPosition: THREE.Vector3,
-		position: Position,
-		yTop: number,
-		geometry: CustomGeometry,
-		width: number,
-		height: number,
-		count: number
-	) {
-		const vecA = new THREE.Vector3(localPosition.x, yTop, localPosition.z);
-		const vecB = new THREE.Vector3(localPosition.x + Project.SQUARE_SIZE, yTop, localPosition.z);
-		const vecC = new THREE.Vector3(
-			localPosition.x + Project.SQUARE_SIZE,
-			yTop,
-			localPosition.z + Project.SQUARE_SIZE
-		);
-		const vecD = new THREE.Vector3(localPosition.x, yTop, localPosition.z + Project.SQUARE_SIZE);
-		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
-		geometry.pushQuadIndices(count, position);
-		count += 4;
-		const coefX = Base.COEF_TEX / width;
-		const coefY = Base.COEF_TEX / height;
-		let texX = 0;
-		let texY = (4 * Project.SQUARE_SIZE) / height;
-		let texW = Project.SQUARE_SIZE / width;
-		let texH = Project.SQUARE_SIZE / height;
-		texX += coefX;
-		texY += coefY;
-		texW -= coefX * 2;
-		texH -= coefY * 2;
-		const texA = new THREE.Vector2();
-		const texB = new THREE.Vector2();
-		const texC = new THREE.Vector2();
-		const texD = new THREE.Vector2();
-		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, texX, texY, texW, texH);
-		geometry.pushQuadUVs(texA, texB, texC, texD);
-		return count;
-	}
-
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		// General configurations
 		const wp = this.getWidthTotalPixels();
@@ -745,9 +706,6 @@ class Mountain extends Base {
 				count
 			);
 		}
-		// Fake transparent top floor for intersect raycasting purposes
-		count = this.drawFakeTopFloor(localPosition, position, yTop, geometry, width, height, count);
-
 		return count;
 	}
 

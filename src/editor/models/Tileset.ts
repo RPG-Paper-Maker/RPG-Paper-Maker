@@ -33,7 +33,7 @@ class Tileset extends Base {
 	}
 
 	copy(tileset: Tileset): void {
-		super.copy(tileset);
+		super.copy(tileset, Tileset.getBindings([]));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

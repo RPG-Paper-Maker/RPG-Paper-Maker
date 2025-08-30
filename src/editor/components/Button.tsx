@@ -27,6 +27,7 @@ type Props = {
 	backgroundOnHoverOnly?: boolean;
 	square?: boolean;
 	small?: boolean;
+	fillWidth?: boolean;
 	onClick?: () => void;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
@@ -46,6 +47,7 @@ function Button({
 	backgroundOnHoverOnly = false,
 	square = false,
 	small = false,
+	fillWidth = false,
 	onClick,
 	onMouseEnter,
 	onMouseLeave,
@@ -100,7 +102,7 @@ function Button({
 		<button
 			ref={ref}
 			className={Utils.getClassName(
-				{ disabled, unactive, big, backgroundOnHoverOnly, square, small },
+				{ disabled, unactive, big, backgroundOnHoverOnly, square, small, fillWidth },
 				buttonType
 			)}
 			onClick={handleClick}

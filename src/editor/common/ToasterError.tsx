@@ -26,6 +26,7 @@ let errorCount = 0;
 const MAX_ERROR_COUNT = 5; // Limit the number of error notifications
 
 console.error = (...args) => {
+	originalConsoleError(...args);
 	if (errorCount++ >= MAX_ERROR_COUNT) {
 		return;
 	}
@@ -40,27 +41,32 @@ console.error = (...args) => {
 				message += arg.message + '\n';
 				stack += arg.stack + '\n';
 			} else if (typeof arg === 'object') {
-				message += JSON.stringify(arg) + '\n';
+				try {
+					message += JSON.stringify(arg) + '\n';
+				} catch {
+					message += '[object]\n';
+				}
 			} else {
 				message += String(arg) + '\n';
 			}
 		});
 	}
-	originalConsoleError(...args);
 	notifyError(<ToasterError message={message} stack={stack} />);
 };
 
 const originalWindowError = window.onerror;
 window.onerror = function (message, source, lineno, colno, error) {
+	originalWindowError?.(message, source, lineno, colno, error);
+	originalConsoleError(message, error);
 	if (errorCount++ >= MAX_ERROR_COUNT) {
 		return;
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
-	originalWindowError?.(message, source, lineno, colno, error);
 	notifyError(<ToasterError message={message as string} stack={stack} />);
 };
 
 window.addEventListener('unhandledrejection', (event) => {
+	originalConsoleError(event.reason);
 	if (errorCount++ >= MAX_ERROR_COUNT) {
 		return;
 	}
@@ -79,6 +85,7 @@ let warningCount = 0;
 const MAX_WARNING_COUNT = 10; // Limit the number of warning notifications
 
 console.warn = (...args) => {
+	originalConsoleWarn(...args);
 	if (warningCount++ >= MAX_WARNING_COUNT) {
 		return;
 	}
@@ -101,7 +108,6 @@ console.warn = (...args) => {
 		});
 	}
 	notifyWarning(`Warning: ${message}`);
-	originalConsoleWarn(...args);
 };
 
 type Props = {

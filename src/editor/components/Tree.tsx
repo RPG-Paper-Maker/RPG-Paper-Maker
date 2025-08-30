@@ -81,6 +81,7 @@ type Props = {
 	hideCheck?: boolean;
 	triggerUpdate?: boolean;
 	doNotOpenDialog?: boolean;
+	inputNameWidth?: INPUT_TYPE_WIDTH;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -133,6 +134,7 @@ function Tree({
 	cannotAddEditRemoveRoot = false,
 	hideCheck = false,
 	doNotOpenDialog = false,
+	inputNameWidth = INPUT_TYPE_WIDTH.SMALL,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -215,7 +217,7 @@ function Tree({
 
 	const scrollToSelectedElement = (force = false) => {
 		if (selectedElementRef.current && (force || !noScrollOnForce)) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
 		}
 	};
 
@@ -935,13 +937,13 @@ function Tree({
 							<InputLocalization
 								localization={currentSelectedItemNode?.content as Localization}
 								onUpdate={() => setForceUpdate((value) => !value)}
-								widthType={INPUT_TYPE_WIDTH.SMALL}
+								widthType={inputNameWidth}
 							/>
 						) : (
 							<InputText
 								value={currentName}
 								onChange={handleChangeName}
-								widthType={INPUT_TYPE_WIDTH.SMALL}
+								widthType={inputNameWidth}
 								disabled={isEditNameDisabled()}
 							/>
 						)}

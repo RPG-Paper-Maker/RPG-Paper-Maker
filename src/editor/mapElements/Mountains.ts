@@ -233,7 +233,7 @@ class Mountains {
 	}
 
 	createMesh(): boolean {
-		if (this.geometry.isEmpty()) {
+		if (this.geometry.isEmpty() || !this.material) {
 			return false;
 		}
 		this.geometry.updateAttributes();

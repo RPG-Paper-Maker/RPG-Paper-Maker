@@ -249,8 +249,8 @@ function DialogVideos({
 			title={`${t(manager ? 'videos.manager' : 'select.video')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='70%'
-			initialHeight='70%'
+			initialWidth='80%'
+			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
