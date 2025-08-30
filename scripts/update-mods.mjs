@@ -130,10 +130,8 @@ const main = async () => {
 		createEmptyBRFolder('./public/BR');
 		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
 		const webPath = `${destinationPaths.dependencies}/Game/web/`;
-		await copyFileAndPrint(`${webPath}Globals.js`, './public/Scripts/System/Globals.js');
-		await copyFileAndPrint(`${webPath}howler.js`, './public/Scripts/Libs/howler.js');
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
-		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/System/Common/Platform.js');
+		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/Common/Platform.js');
 		console.log('✅ Download completed!');
 	} catch (error) {
 		console.error('Error during download:', error);

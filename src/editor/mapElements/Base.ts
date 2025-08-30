@@ -100,7 +100,7 @@ abstract class Base extends Serializable {
 		vecD: THREE.Vector3,
 		center: THREE.Vector3,
 		angle: number,
-		axis: THREE.Vector3
+		axis: THREE.Vector3,
 	) {
 		CustomGeometry.rotateVertex(vecA, center, angle, axis);
 		CustomGeometry.rotateVertex(vecB, center, angle, axis);
@@ -114,7 +114,7 @@ abstract class Base extends Serializable {
 		vecC: THREE.Vector3,
 		vecD: THREE.Vector3,
 		center: THREE.Vector3,
-		euler: THREE.Euler
+		euler: THREE.Euler,
 	) {
 		CustomGeometry.rotateVertexEuler(vecA, center, euler);
 		CustomGeometry.rotateVertexEuler(vecB, center, euler);

@@ -60,7 +60,7 @@ function Game({ location, battleTest = false }: Props) {
 					(await LocalFile.readFile(Paths.join(location, Paths.STYLES, Paths.FILE_FONTS_CSS))) ?? '';
 				document.head.appendChild(style);
 			}
-			script.src = './Scripts/System/main.js';
+			script.src = './Scripts/main.js';
 			script.type = 'module';
 			script.async = true;
 			const global = window as ExtendedWindow;
