@@ -167,6 +167,7 @@ class Effect extends Base {
 			'tctf',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, ''),
 			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
 		],
 	];
 
@@ -208,7 +209,7 @@ class Effect extends Base {
 				}
 				if (this.isDamageElement) {
 					options.push(
-						`${t('element.id')}: ${this.damageElementID.toString(Project.current!.battleSystem.elements)}`
+						`${t('element.id')}: ${this.damageElementID.toString(Project.current!.battleSystem.elements)}`,
 					);
 				}
 				if (this.isDamageVariance) {
@@ -233,12 +234,12 @@ class Effect extends Base {
 			}
 			case EFFECT_KIND.STATUS:
 				text += `${t(this.isAddStatus ? 'add' : 'remove')} ${t('status.id')} ${this.statusID.toString(
-					Project.current!.status.list
+					Project.current!.status.list,
 				)} ${t('with.precision').toLowerCase()} ${this.statusPrecisionFormula.toString()}%`;
 				break;
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				text += `${t(this.isAddStatus ? 'add' : 'remove')} ${t('skill.id')} ${this.addSkillID.toString(
-					Project.current!.skills.list
+					Project.current!.skills.list,
 				)}`;
 				break;
 			case EFFECT_KIND.PERFORM_SKILL:
@@ -248,7 +249,7 @@ class Effect extends Base {
 				if (this.commonReaction) {
 					const iterator = Utils.generateIterator();
 					text += `${t('call.a.common.reaction')}: ${this.commonReaction.toStringCallACommonReaction(
-						iterator
+						iterator,
 					)}`;
 				}
 				break;

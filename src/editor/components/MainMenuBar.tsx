@@ -219,14 +219,14 @@ function MainMenuBar() {
 				await handleOpenProject(
 					Model.ProjectPreview.create(
 						await Data.System.getProjectName(folderPath),
-						Paths.normalize(folderPath)
-					)
+						Paths.normalize(folderPath),
+					),
 				);
 			}
 		}
 	};
 
-	const handleOpenProject = async (project: Model.ProjectPreview) => {
+	const handleOpenProject = async (project: Model.ProjectPreview, addExtraVersion?: string) => {
 		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
 		if (await checkFileExists(project.location)) {
@@ -237,6 +237,14 @@ function MainMenuBar() {
 				if (name !== undefined) {
 					project.name = name as string;
 				}
+			}
+			if (!Constants.IS_DESKTOP && addExtraVersion) {
+				await addProject(
+					Model.ProjectPreview.create(
+						`${project.name}_${addExtraVersion}`,
+						`${project.location}_${addExtraVersion}`,
+					),
+				);
 			}
 			await addProject(project);
 			json = await readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
@@ -316,13 +324,13 @@ function MainMenuBar() {
 		if (warning) {
 			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
 		} else {
-			await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location));
+			await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location), currentVersion);
 		}
 	};
 
 	const handleCloseWarningLocalPluginsMessage = async () => {
 		setWarningLocalPluginsMessage('');
-		await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location));
+		await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location), currentVersion);
 	};
 
 	const handleRejectUpdateProjectVersion = () => {
@@ -652,7 +660,7 @@ function MainMenuBar() {
 								onClick: handleExport,
 								shortcut: [SPECIAL_KEY.CTRL, KEY.E],
 							},
-					  ]),
+						]),
 				{
 					title: t('save'),
 					icon: <BiSave />,
@@ -682,7 +690,7 @@ function MainMenuBar() {
 								icon: <AiOutlineClear />,
 								onClick: handleClearAllCache,
 							},
-					  ]),
+						]),
 			],
 		},
 		{

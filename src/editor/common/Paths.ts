@@ -78,7 +78,7 @@ class Paths {
 	public static readonly FILE_TROOPS = 'troops.json';
 	public static readonly FILE_BATTLE_SYSTEM = 'battleSystem.json';
 	public static readonly FILE_TITLE_SCREEN_GAME_OVER = 'titlescreenGameover.json';
-	public static readonly FILE_KEYBOARD = 'keyBoard.json';
+	public static readonly FILE_KEYBOARD = 'keyboard.json';
 	public static readonly FILE_SYSTEM = 'system.json';
 	public static readonly FILE_CLASSES = 'classes.json';
 	public static readonly FILE_TILESETS = 'tilesets.json';

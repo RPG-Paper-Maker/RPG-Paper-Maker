@@ -18,7 +18,7 @@ import { Position } from './Position';
 import { Project } from './Project';
 
 class Cursor {
-	public static FRAME_MOVE_START = 300;
+	public static FRAME_MOVE_START = 200;
 	public position: Position;
 	public map: Scene.Map;
 	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
@@ -78,7 +78,7 @@ class Cursor {
 		const isNewFrameMove = this.frameMove.update() && !this.firstMove;
 		if (this.firstMove || isNewFrameMove) {
 			if (isNewFrameMove) {
-				this.frameMove.duration = 15;
+				this.frameMove.duration = 20;
 			}
 			const angle = this.map.camera.horizontalAngle;
 			const minX = this.map.detectionFieldLeft === undefined ? 0 : -this.map.detectionFieldLeft;
@@ -146,7 +146,7 @@ class Cursor {
 		if (this.frame.update()) {
 			this.mesh.material.userData.uniforms.offset.value = new THREE.Vector2(
 				this.frame.value / this.frame.frames,
-				0
+				0,
 			);
 		}
 	}

@@ -35,7 +35,7 @@ class TroopMonster extends Base {
 		[
 			'specificPosition',
 			'specificPosition',
-			DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, 'new Core.Vector3(0,0,0)'),
+			DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, 'new THREE.Vector3(0,0,0)'),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
@@ -59,7 +59,7 @@ class TroopMonster extends Base {
 	}
 
 	getName(): string {
-		return this.id === -1 ? '' : Project.current!.monsters.getByID(this.monsterID)?.getName() ?? '';
+		return this.id === -1 ? '' : (Project.current!.monsters.getByID(this.monsterID)?.getName() ?? '');
 	}
 
 	toString(): string | ReactNode {

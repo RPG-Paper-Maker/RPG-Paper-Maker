@@ -49,7 +49,7 @@ class ProjectUpdater_3_0_0 {
 			for (const folder of folders) {
 				await copyFolder(
 					Paths.join(projectPath, 'resources', 'app', 'Content', folder),
-					Paths.join(projectPath, folder)
+					Paths.join(projectPath, folder),
 				);
 			}
 			await removeFolder(Paths.join(projectPath, 'resources'));
@@ -314,7 +314,7 @@ class ProjectUpdater_3_0_0 {
 		const onlinePluginNames = manifest?.flat()?.map((plugin) => plugin.name) ?? [];
 		const jsonScripts = await readJSON(Paths.join(projectPath, 'scripts.json'));
 		if (jsonScripts) {
-			const jsonPlugins = jsonScripts.plugins as JSONType[];
+			const jsonPlugins = (jsonScripts.plugins as JSONType[]) ?? [];
 			for (const plugin of jsonPlugins) {
 				const detailsPath = Paths.join(projectPath, 'Plugins', plugin.name as string, 'details.json');
 				const pluginDetails = await readJSON(detailsPath);
@@ -345,7 +345,7 @@ class ProjectUpdater_3_0_0 {
 					const classObj = obj.v as JSONType;
 					if (classObj.stats) {
 						classObj.stats = Array.from(
-							new Map((classObj.stats as JSONType[]).map((stat) => [stat.id, stat])).values()
+							new Map((classObj.stats as JSONType[]).map((stat) => [stat.id, stat])).values(),
 						);
 						if ((classObj.stats as JSONType[]).length === 0) {
 							delete classObj.stats;

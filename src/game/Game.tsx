@@ -53,6 +53,11 @@ function Game({ location, battleTest = false }: Props) {
 			document.head.appendChild(link);
 		}
 
+		const howlerScript = document.createElement('script');
+		howlerScript.src = './Scripts/Libs/howler.min.js';
+		howlerScript.async = false;
+		document.body.appendChild(howlerScript);
+
 		const initialize = async () => {
 			if (!Constants.IS_DESKTOP) {
 				await LocalFile.config();

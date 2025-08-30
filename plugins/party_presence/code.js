@@ -30,14 +30,14 @@ inject(
 		for (let i = 0; i < l; i++) {
 			// Battlers
 			center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset.getValue());
-			if (!(center instanceof Core.Vector3)) {
+			if (!(center instanceof THREE.Vector3)) {
 				Platform.showErrorMessage('Heroes battlers center offset incorrect return: ' + center);
 			}
 			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue(), {
 				additionalName: 'i',
 				additionalValue: i,
 			});
-			if (!(offset instanceof Core.Vector3)) {
+			if (!(offset instanceof THREE.Vector3)) {
 				Platform.showErrorMessage('Heroes battlers offset incorrect return: ' + center);
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
@@ -54,5 +54,5 @@ inject(
 	},
 	false,
 	true,
-	false
+	false,
 );

@@ -47,7 +47,7 @@ class BattleSystem extends Serializable {
 			'heroesBattlersCenterOffset',
 			DynamicValue.create(
 				DYNAMIC_VALUE_KIND.FORMULA,
-				'new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+				'new THREE.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)',
 			),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
@@ -57,7 +57,7 @@ class BattleSystem extends Serializable {
 			'heroesBattlersOffset',
 			DynamicValue.create(
 				DYNAMIC_VALUE_KIND.FORMULA,
-				'new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
+				'new THREE.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)',
 			),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
@@ -67,7 +67,7 @@ class BattleSystem extends Serializable {
 			'troopsBattlersCenterOffset',
 			DynamicValue.create(
 				DYNAMIC_VALUE_KIND.FORMULA,
-				'new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+				'new THREE.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)',
 			),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
@@ -77,7 +77,7 @@ class BattleSystem extends Serializable {
 			'troopsBattlersOffset',
 			DynamicValue.create(
 				DYNAMIC_VALUE_KIND.FORMULA,
-				'new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
+				'new THREE.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)',
 			),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
@@ -113,7 +113,7 @@ class BattleSystem extends Serializable {
 				(weaponArmor) =>
 					(Model.Base.getByID(kindList, weaponArmor.type) as Model.WeaponArmorKind)?.equipments[
 						equipmentID.value as number
-					]
+					],
 			);
 		}
 		return baseList;
