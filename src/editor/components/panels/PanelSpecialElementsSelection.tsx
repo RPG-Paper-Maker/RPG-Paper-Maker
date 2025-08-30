@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
-import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core/Project';
 import { Rectangle } from '../../core/Rectangle';
 import useStateNumber from '../../hooks/useStateNumber';
@@ -312,15 +312,17 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 					{getChevron(selected)}
 				</div>
 				{canExpand && selected && (
-					<div className='content'>
+					<div className='content scrollable'>
 						<TextureSquareSelector
 							texture={picture.getPath()}
 							divideWidth={
 								(element as Model.Autotile).isAnimated
-									? 2 * Project.current!.systems.autotilesFrames
-									: 2
+									? ((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) *
+									  2 *
+									  Project.current!.systems.autotilesFrames
+									: ((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) * 2
 							}
-							divideHeight={3}
+							divideHeight={((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) * 3}
 							canChangeSize={false}
 							base64={!picture.isBR}
 							cutTexture

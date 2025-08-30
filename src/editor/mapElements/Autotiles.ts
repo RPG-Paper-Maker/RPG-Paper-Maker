@@ -156,7 +156,7 @@ class Autotiles {
 		isAnimated: boolean
 	): Promise<[TextureBundle | null, THREE.Texture, number]> {
 		const frames = isAnimated ? Project.current!.systems.autotilesFrames : 1;
-		const image = await Picture2D.loadImage(picture.getPath());
+		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 		const width = Math.floor(image.width / 2 / Project.SQUARE_SIZE) / frames;
 		const height = Math.floor(image.height / 3 / Project.SQUARE_SIZE);
 		const size = width * height;

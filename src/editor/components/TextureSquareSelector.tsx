@@ -234,22 +234,27 @@ function TextureSquareSelector({
 		(ctx: CanvasRenderingContext2D) => {
 			if (currentState.picture) {
 				if (cutTexture) {
-					const cols = Math.floor(currentState.picture.width / divideWidth);
-					const rows = Math.floor(currentState.picture.height / divideHeight);
+					const multiple = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
+					const cols = Math.floor(
+						currentState.picture.width / Project.SQUARE_SIZE / (divideWidth / multiple)
+					);
+					const rows = Math.floor(
+						currentState.picture.height / Project.SQUARE_SIZE / (divideHeight / multiple)
+					);
 					for (let i = 0; i < cols; i++) {
 						for (let j = 0; j < rows; j++) {
-							const x = i * (currentState.picture.width / cols) * Project.SQUARE_SIZE;
-							const y = j * (currentState.picture.height / rows) * Project.SQUARE_SIZE;
+							const x = i * (currentState.picture.width / cols);
+							const y = j * (currentState.picture.height / rows);
 							ctx.drawImage(
 								currentState.picture,
 								x,
 								y,
 								Project.SQUARE_SIZE,
 								Project.SQUARE_SIZE,
-								i * 2 * Project.SQUARE_SIZE,
-								j * 2 * Project.SQUARE_SIZE,
-								Project.SQUARE_SIZE * 2,
-								Project.SQUARE_SIZE * 2
+								i * Constants.BASE_SQUARE_SIZE,
+								j * Constants.BASE_SQUARE_SIZE,
+								Constants.BASE_SQUARE_SIZE,
+								Constants.BASE_SQUARE_SIZE
 							);
 						}
 					}
