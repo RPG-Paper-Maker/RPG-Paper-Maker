@@ -46,7 +46,8 @@
 		"typescript-eslint": "^8.39.0",
 		"vite": "^7.0.6",
 		"vite-plugin-checker": "^0.10.2",
-		"vite-plugin-svgr": "^4.3.0"
+		"vite-plugin-svgr": "^4.3.0",
+		"prettier": "^3.6.2"
 	},
 	"scripts": {
 		"start": "vite --host --port 3000",
