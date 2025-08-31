@@ -260,7 +260,7 @@ function DialogMonsterAction({ isOpen, setIsOpen, model, onAccept, onReject }: P
 					</Flex>
 				</Flex>
 				<Groupbox title={t('conditions')}>
-					<Flex column spaced>
+					<Flex column spacedLarge>
 						<Flex spaced centerV>
 							<Checkbox isChecked={isConditionTurn} onChange={setIsConditionTurn}>
 								{t('turn.value.is')}

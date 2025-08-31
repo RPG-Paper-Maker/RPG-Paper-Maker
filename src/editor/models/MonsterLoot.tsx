@@ -10,7 +10,7 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, ITEM_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, ITEM_KIND, JSONType } from '../common';
 import DialogMonsterLoot from '../components/dialogs/models/DialogMonsterLoot';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
@@ -45,6 +45,12 @@ class MonsterLoot extends Base {
 
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(MonsterLoot.getBindings(additionnalBinding));
+		this.kind = ITEM_KIND.ITEM;
+		this.lootID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
+		this.number = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1);
+		this.probability = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 100);
+		this.initial = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1);
+		this.final = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 100);
 	}
 
 	getDatabase(): Base[] {

@@ -33,7 +33,6 @@ const createWindow = () => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
-			enableRemoteModule: true,
 			preload: path.join(__dirname, 'preload.js'),
 		},
 		icon: path.join(__dirname, 'dist', 'icon.png'),
@@ -48,8 +47,8 @@ const createWindow = () => {
 		IS_GAME
 			? {
 					query: { project: process.argv[2], battleTest: process.argv[3] ?? false },
-			  }
-			: undefined
+				}
+			: undefined,
 	);
 	if (!IS_GAME) {
 		window.on('maximize', () => {
@@ -65,7 +64,7 @@ app.whenReady()
 	.then(() =>
 		globalShortcut.register('Alt+CommandOrControl+I', () => {
 			window.openDevTools({ mode: 'undocked' });
-		})
+		}),
 	)
 	.then(createWindow);
 

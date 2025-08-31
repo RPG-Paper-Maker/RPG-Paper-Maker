@@ -25,9 +25,16 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
+import RadioButton from '../../RadioButton';
+import RadioGroup from '../../RadioGroup';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+
+enum SELECTION_ACTION_KIND {
+	SKILL,
+	ITEM,
+}
 
 enum SELECTION_TARGET_KIND {
 	RANDOM,
@@ -125,24 +132,32 @@ function DialogCommandForceAndAction({ commandKind, isOpen, setIsOpen, list, onA
 			<Flex column spacedLarge>
 				<PanelSelectionHero ref={panelSelectionHeroRef} isEnemy />
 				<Groupbox title={t('action')}>
-					<Form>
-						<Label>{t('use.skill.id')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={skillID}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-								databaseOptions={Project.current!.skills.list}
-							/>
-						</Value>
-						<Label>{t('use.item.id')}</Label>
-						<Value>
-							<DynamicValueSelector
-								value={itemID}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-								databaseOptions={Project.current!.items.list}
-							/>
-						</Value>
-					</Form>
+					<RadioGroup selected={action} onChange={setAction}>
+						<Form>
+							<Label>
+								<RadioButton value={SELECTION_ACTION_KIND.SKILL}>{t('use.skill.id')}</RadioButton>
+							</Label>
+							<Value>
+								<DynamicValueSelector
+									value={skillID}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+									databaseOptions={Project.current!.skills.list}
+									disabled={action !== MONSTER_ACTION_KIND.USE_SKILL}
+								/>
+							</Value>
+							<Label>
+								<RadioButton value={SELECTION_ACTION_KIND.ITEM}>{t('use.item.id')}</RadioButton>
+							</Label>
+							<Value>
+								<DynamicValueSelector
+									value={itemID}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+									databaseOptions={Project.current!.items.list}
+									disabled={action !== MONSTER_ACTION_KIND.USE_ITEM}
+								/>
+							</Value>
+						</Form>
+					</RadioGroup>
 				</Groupbox>
 				<Groupbox title={t('target')}>
 					<Flex column spaced>
