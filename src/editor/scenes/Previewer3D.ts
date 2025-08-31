@@ -60,6 +60,7 @@ class Previewer3D extends Base {
 	}
 
 	async load() {
+		this.scene.background = new THREE.Color(0x221f2e);
 		this.initializeSunLight();
 		this.loading = false;
 		this.initialized = true;
@@ -100,7 +101,7 @@ class Previewer3D extends Base {
 			autotiles.updateGeometry(
 				Scene.Map.current!,
 				new Position(),
-				MapElement.Autotile.create(autotileID, MapElement.Autotiles.PREVIEW_TILE, texture)
+				MapElement.Autotile.create(autotileID, MapElement.Autotiles.PREVIEW_TILE, texture),
 			);
 			this.addToScene(autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material);
 		}
@@ -203,7 +204,7 @@ class Previewer3D extends Base {
 		geometry: CustomGeometry | CustomGeometryFace,
 		material: THREE.MeshPhongMaterial | null = this.material,
 		needsClear = true,
-		position: THREE.Vector3 | null = null
+		position: THREE.Vector3 | null = null,
 	) {
 		if (needsClear) {
 			this.clear();
