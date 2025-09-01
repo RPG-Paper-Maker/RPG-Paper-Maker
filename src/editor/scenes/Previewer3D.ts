@@ -60,7 +60,6 @@ class Previewer3D extends Base {
 	}
 
 	async load() {
-		this.scene.background = new THREE.Color(0x221f2e);
 		this.initializeSunLight();
 		this.loading = false;
 		this.initialized = true;
@@ -282,6 +281,7 @@ class Previewer3D extends Base {
 
 	draw3D(GL: Manager.GL) {
 		if (!this.isCut) {
+			GL.renderer.setClearAlpha(0);
 			super.draw3D(GL);
 		}
 	}
