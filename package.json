@@ -59,7 +59,7 @@
 		"update-mods": "node scripts/update-mods.mjs",
 		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",
 		"generate-plugins-manifest": "node scripts/generate-plugins-manifest.mjs",
-		"update-packages": "ncu -u",
+		"update-packages": "ncu -u && rm -rf node_modules && npm install",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"update-version": "node scripts/update-version.mjs",
 		"deploy-web-test": "npm run build && bash scripts/deploy-web.sh test",

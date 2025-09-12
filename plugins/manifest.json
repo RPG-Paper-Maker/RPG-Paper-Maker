@@ -222,6 +222,178 @@
             ]
         },
         {
+            "name": "DiscordRichPresence",
+            "files": [
+                "code.js",
+                "details.json",
+                "package-lock.json",
+                "package.json",
+                "pic.png",
+                "README.md"
+            ],
+            "folders": [
+                {
+                    "name": "node_modules",
+                    "files": [
+                        ".package-lock.json"
+                    ],
+                    "folders": [
+                        {
+                            "name": "discord-rpc",
+                            "files": [
+                                ".eslintrc.js",
+                                "browser.js",
+                                "package.json",
+                                "README.md"
+                            ],
+                            "folders": [
+                                {
+                                    "name": ".github",
+                                    "files": [
+                                        "FUNDING.yml"
+                                    ],
+                                    "folders": [
+                                        {
+                                            "name": "workflows",
+                                            "files": [
+                                                "docs.yml"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "docs-out",
+                                    "files": [
+                                        "master.json"
+                                    ]
+                                },
+                                {
+                                    "name": "src",
+                                    "files": [
+                                        "client.js",
+                                        "constants.js",
+                                        "index.js",
+                                        "util.js"
+                                    ],
+                                    "folders": [
+                                        {
+                                            "name": "transports",
+                                            "files": [
+                                                "index.js",
+                                                "ipc.js",
+                                                "websocket.js"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "node-fetch",
+                            "files": [
+                                "browser.js",
+                                "LICENSE.md",
+                                "package.json",
+                                "README.md"
+                            ],
+                            "folders": [
+                                {
+                                    "name": "lib",
+                                    "files": [
+                                        "index.es.js",
+                                        "index.js",
+                                        "index.mjs"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "tr46",
+                            "files": [
+                                ".npmignore",
+                                "index.js",
+                                "package.json"
+                            ],
+                            "folders": [
+                                {
+                                    "name": "lib",
+                                    "files": [
+                                        ".gitkeep",
+                                        "mappingTable.json"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "webidl-conversions",
+                            "folders": [
+                                {
+                                    "name": "lib",
+                                    "files": [
+                                        "index.js"
+                                    ]
+                                }
+                            ],
+                            "files": [
+                                "LICENSE.md",
+                                "package.json",
+                                "README.md"
+                            ]
+                        },
+                        {
+                            "name": "whatwg-url",
+                            "folders": [
+                                {
+                                    "name": "lib",
+                                    "files": [
+                                        "public-api.js",
+                                        "URL-impl.js",
+                                        "url-state-machine.js",
+                                        "URL.js",
+                                        "utils.js"
+                                    ]
+                                }
+                            ],
+                            "files": [
+                                "LICENSE.txt",
+                                "package.json",
+                                "README.md"
+                            ]
+                        },
+                        {
+                            "name": "ws",
+                            "files": [
+                                "browser.js",
+                                "index.js",
+                                "LICENSE",
+                                "package.json",
+                                "README.md"
+                            ],
+                            "folders": [
+                                {
+                                    "name": "lib",
+                                    "files": [
+                                        "buffer-util.js",
+                                        "constants.js",
+                                        "event-target.js",
+                                        "extension.js",
+                                        "limiter.js",
+                                        "permessage-deflate.js",
+                                        "receiver.js",
+                                        "sender.js",
+                                        "stream.js",
+                                        "validation.js",
+                                        "websocket-server.js",
+                                        "websocket.js"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Game Jolt API",
             "files": [
                 "code.js",
