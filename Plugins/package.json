@@ -3,9 +3,7 @@
 		"JollyFlipAnimation",
 		"party_presence"
 	],
-	"menus": [
-
-	],
+	"menus": [],
 	"map": [
 		"Fog",
 		"GLTF Loader",
@@ -32,6 +30,7 @@
 		"Custom Cursor",
 		"Game Jolt API",
 		"More sound options",
-		"More mouse options"
+		"More mouse options",
+		"DiscordRichPresence"
 	]
 }
