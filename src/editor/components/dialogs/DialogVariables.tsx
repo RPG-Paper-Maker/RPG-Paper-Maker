@@ -125,6 +125,7 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 					onSelectedItem={setSelectedVariable}
 					cannotAdd
 					cannotDragDrop
+					cannotDelete
 					showEditName
 					inputNameWidth={INPUT_TYPE_WIDTH.FILL}
 				/>

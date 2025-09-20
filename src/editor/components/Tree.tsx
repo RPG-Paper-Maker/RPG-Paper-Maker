@@ -159,7 +159,7 @@ function Tree({
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(
 		() =>
 			(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
-			(cannotAdd ? null : Node.create(createDefault(-1)))
+			(cannotAdd ? null : Node.create(createDefault(-1))),
 	);
 	const [additionalSelectedNodes, setAdditionalSelectedNodes] = useState<Node[]>([]);
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(defaultNotExpandedItemsList);
@@ -596,7 +596,7 @@ function Tree({
 			const node =
 				forcedCurrentSelectedItemIndex === -1
 					? null
-					: list[forcedCurrentSelectedItemIndex] ?? Node.create(createDefault(-1));
+					: (list[forcedCurrentSelectedItemIndex] ?? Node.create(createDefault(-1)));
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name ?? '');
 			setForcedCurrentSelectedItemIndex(null);
@@ -701,7 +701,7 @@ function Tree({
 		level = 0,
 		addEmpty = false,
 		emptyID = -1,
-		parentSelected = false
+		parentSelected = false,
 	): number => {
 		const canAddEmptyNode =
 			!cannotAdd && ((multipleLevels && addEmpty) || (level === 0 && !cannotAddEditRemoveRoot));
@@ -755,7 +755,7 @@ function Tree({
 						doNotShowID={doNotShowID}
 						hideCheck={hideCheck}
 					/>
-				</div>
+				</div>,
 			);
 			if (!node.willBeDeleted && !ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
 				emptyID = getTreeItems(
@@ -765,7 +765,7 @@ function Tree({
 					level + 1,
 					node.content.canHaveChildren(),
 					emptyID,
-					multipleLevels && selected
+					multipleLevels && selected,
 				);
 			}
 		}
@@ -787,7 +787,7 @@ function Tree({
 						onDrop={!disabled ? handleDrop : undefined}
 						hideCheck={hideCheck}
 					/>
-				</div>
+				</div>,
 			);
 		}
 		return emptyID;
@@ -912,22 +912,24 @@ function Tree({
 		);
 
 	const content = (
-		<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
+		<>
 			<Flex column spacedLarge fillWidth fillHeight>
-				<div
-					onDoubleClick={handleDoubleClick}
-					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
-					style={{
-						minWidth: `${minWidth}px`,
-						minHeight: `${minHeight}px`,
-						width: `${width}px`,
-						height: `${height}px`,
-					}}
-					ref={listRef}
-				>
-					<Flex spaced>{getHeaders()}</Flex>
-					{getItems()}
-				</div>
+				<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
+					<div
+						onDoubleClick={handleDoubleClick}
+						className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
+						style={{
+							minWidth: `${minWidth}px`,
+							minHeight: `${minHeight}px`,
+							width: `${width}px`,
+							height: `${height}px`,
+						}}
+						ref={listRef}
+					>
+						<Flex spaced>{getHeaders()}</Flex>
+						{getItems()}
+					</div>
+				</ContextMenu>
 				{showEditName && (
 					<Flex spaced>
 						<div className={Utils.getClassName({ disabledLabel: disabled || isEditNameDisabled() })}>
@@ -959,7 +961,7 @@ function Tree({
 					onAccept={handleAcceptUpdateListSize}
 				/>
 			)}
-		</ContextMenu>
+		</>
 	);
 
 	return scrollable && !height ? (
