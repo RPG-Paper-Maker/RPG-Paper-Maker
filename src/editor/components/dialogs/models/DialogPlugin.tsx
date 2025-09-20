@@ -13,7 +13,16 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineWifiOff } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, PluginsManifestType, Utils } from '../../../common';
+import {
+	Constants,
+	INPUT_TYPE_WIDTH,
+	IO,
+	JSONType,
+	Paths,
+	PLUGIN_TYPE_KIND,
+	PluginsManifestType,
+	Utils,
+} from '../../../common';
 import {
 	createFile,
 	createFolder,
@@ -63,6 +72,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 	const [type, setType] = useStateNumber();
 	const [name, setName] = useStateString();
 	const [importFile, setImportFile] = useState<File>();
+	const [importFolder, setImportFolder] = useState<string>();
 	const [plugins, setPlugins] = useState<Node[]>([]);
 	const [loadingPlugins, setLoadingPlugins] = useState(true);
 	const [allPluginsJSON, setAllPluginsJSON] = useState<JSONType[][]>([]);
@@ -74,13 +84,14 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 
 	const pluginOnlineDisabled = useMemo(
 		() => connexionIssue || loadingPlugin || loadingPlugins || type !== PLUGIN_TYPE_KIND.ONLINE,
-		[connexionIssue, loadingPlugin, loadingPlugins, type]
+		[connexionIssue, loadingPlugin, loadingPlugins, type],
 	);
 
 	const initialize = () => {
 		setType(PLUGIN_TYPE_KIND.EMPTY);
 		setName('');
 		setImportFile(undefined);
+		setImportFolder(undefined);
 		setSelectedPlugin(null);
 		setConnexionIssue(false);
 		setLoadingPlugins(true);
@@ -91,8 +102,12 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 		setName(Utils.sanitizeFilename(name));
 	};
 
-	const handleClickImport = () => {
-		importFileInputRef.current?.click();
+	const handleClickImport = async () => {
+		if (Constants.IS_DESKTOP) {
+			setImportFolder(await IO.openFolderDialog());
+		} else {
+			importFileInputRef.current?.click();
+		}
 	};
 
 	const handleImportFileChange = async () => {
@@ -127,7 +142,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				setSelectedPlugin(null);
 				setLoadingPlugin(true);
 				const file = await readOnlineFile(
-					Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS))
+					Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS)),
 				);
 				if (file) {
 					const json: JSONType = JSON.parse(file);
@@ -136,11 +151,11 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 						parameter.defaultParameter = plugin.defaultParameters[index];
 					});
 					const picture = await readOnlineFileArrayBuffer(
-						Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
+						Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE)),
 					);
 					if (picture) {
 						plugin.pictureBase64 = `data:image/png;base64,${Utils.uint8ArrayToBase64(
-							new Uint8Array(picture)
+							new Uint8Array(picture),
 						)}`;
 					}
 					setLoadingPlugin(false);
@@ -160,8 +175,8 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 			setPlugins(
 				Node.createList(
 					allPluginsJSON[index].map((json, index) => Model.Plugin.create(index, json.name as string)),
-					false
-				)
+					false,
+				),
 			);
 		}
 	};
@@ -199,18 +214,29 @@ const inject = Manager.Plugins.inject;
 				break;
 			}
 			case PLUGIN_TYPE_KIND.LOCAL: {
-				if (!importFile) {
+				if ((Constants.IS_DESKTOP && !importFolder) || (!Constants.IS_DESKTOP && !importFile)) {
 					dispatch(showWarning(t('you.need.select.plugin.import')));
 					return;
 				}
-				const folderName = importFile.name.substring(0, importFile.name.length - 4);
+				let folderName = '';
+				if (Constants.IS_DESKTOP) {
+					const folders = importFolder!.replaceAll('\\', '/').split('/');
+					folderName = folders[folders.length - 1];
+				} else {
+					folderName = importFile!.name.substring(0, importFile!.name.length - 4);
+				}
 				if (Project.current!.scripts.plugins.some((plugin) => plugin.name === folderName)) {
 					dispatch(showWarning(t('plugin.name.already.exists')));
 					return;
 				}
 				setIsLoading(true);
 				const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, folderName);
-				await loadZip(importFile, path);
+				if (Constants.IS_DESKTOP) {
+					await IO.createFolder(path);
+					await IO.copyFolder(importFolder!, path);
+				} else {
+					await loadZip(importFile!, path);
+				}
 				plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 				plugin.type = type;
 				const json = await readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
@@ -233,7 +259,7 @@ const inject = Manager.Plugins.inject;
 					plugin.type = type;
 					plugin.code =
 						(await readOnlineFile(
-							Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE))
+							Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE)),
 						)) ?? '';
 					plugin.pictureBase64 = selectedPlugin.pictureBase64;
 					plugin.checked = true;
@@ -243,7 +269,7 @@ const inject = Manager.Plugins.inject;
 							'',
 							plugin.name,
 							pluginManifest as PluginsManifestType,
-							true
+							true,
 						);
 					}
 					setIsLoading(false);
@@ -309,7 +335,7 @@ const inject = Manager.Plugins.inject;
 									...
 								</Button>
 								<Flex disabledLabel={type !== PLUGIN_TYPE_KIND.LOCAL} className='textSmallDetail'>
-									{importFile ? importFile.name : t('no.plugin.selected')}
+									{importFile?.name ?? importFolder ?? t('no.plugin.selected')}
 								</Flex>
 								<input
 									ref={importFileInputRef}
