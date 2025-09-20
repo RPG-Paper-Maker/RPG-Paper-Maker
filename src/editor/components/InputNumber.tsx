@@ -39,6 +39,7 @@ function InputNumber({
 		decimals ? Mathf.forceDecimalsText(v) : Mathf.forceInteger(v).toString();
 
 	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
+	const [isTyping, setIsTyping] = useState(false);
 
 	const width = (() => {
 		switch (widthType) {
@@ -54,6 +55,7 @@ function InputNumber({
 	})();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setIsTyping(true);
 		Inputs.isMapFocused = false;
 		const v = transformValue(Number(e.target.value));
 		setDisplayedValue(e.target.value);
@@ -67,6 +69,7 @@ function InputNumber({
 	};
 
 	const handleBlur = () => {
+		setIsTyping(false);
 		Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
 		Inputs.keys = [];
 		let v = value;
@@ -82,8 +85,10 @@ function InputNumber({
 	};
 
 	useEffect(() => {
-		setDisplayedValue(transformValueToText(value));
-	}, [value]);
+		if (!isTyping) {
+			setDisplayedValue(transformValueToText(value));
+		}
+	}, [value, isTyping]);
 
 	return (
 		<input
