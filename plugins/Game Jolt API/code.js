@@ -49,7 +49,7 @@ function storeDataInSuccessVariable(data) {
 Manager.Plugins.registerCommand(
 	pluginName,
 	'Trophies - Fetch',
-	async (getTrophies, trophy_id, returnDataStoreVariableID, consoleLog) => {
+	async (getTrophies, trophy_id, returnDatatoreVariableID, consoleLog) => {
 		let trophiesURL = `${baseURL}/trophies/?game_id=${gameID}&username=${username}&user_token=${userID}`;
 
 		if (trophy_id !== -1) {
@@ -74,8 +74,8 @@ Manager.Plugins.registerCommand(
 			const data = await response.json();
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
-				if (returnDataStoreVariableID !== -1) {
-					Core.Game.current.variables[returnDataStoreVariableID] = JSON.stringify(data.response);
+				if (returnDatatoreVariableID !== -1) {
+					Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
 				}
 				if (consoleLog) {
 					console.log(data.response);
@@ -86,7 +86,7 @@ Manager.Plugins.registerCommand(
 		} catch (error) {
 			console.error(`There was an error: ${error}`);
 		}
-	}
+	},
 );
 
 // Add Achieved - Sets a trophy as achieved for a particular user.
@@ -146,7 +146,7 @@ Manager.Plugins.registerCommand(
 		dayVariableID,
 		hourVariableID,
 		minuteVariableID,
-		secondVariableID
+		secondVariableID,
 	) => {
 		let timeURL = `${baseURL}/time/?game_id=${gameID}`;
 
@@ -192,7 +192,7 @@ Manager.Plugins.registerCommand(
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	},
 );
 
 ////////////////////////////////////////////////// Scores //////////////////////////////////////////////////
@@ -229,7 +229,7 @@ Manager.Plugins.registerCommand(pluginName, 'Scores - Add', async (score, sort, 
 Manager.Plugins.registerCommand(
 	pluginName,
 	'Scores - Fetch',
-	async (limit, table_id, getGlobalScores, better_than, worse_than, returnDataStoreVariableID, consoleLog) => {
+	async (limit, table_id, getGlobalScores, better_than, worse_than, returnDatatoreVariableID, consoleLog) => {
 		let scoresURL = `${baseURL}/scores/?game_id=${gameID}&limit=${limit}`;
 
 		if (!getGlobalScores) {
@@ -271,13 +271,13 @@ Manager.Plugins.registerCommand(
 				Core.Game.current.variables[successVariableID] = data.response.success;
 			}
 
-			if (returnDataStoreVariableID !== -1) {
-				Core.Game.current.variables[returnDataStoreVariableID] = JSON.stringify(data.response);
+			if (returnDatatoreVariableID !== -1) {
+				Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
 			}
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	},
 );
 
 // Get Rank - Returns the rank of a particular score on a score table.
@@ -308,7 +308,7 @@ Manager.Plugins.registerCommand(pluginName, 'Scores - Get Rank', async (sort, ta
 });
 
 // Tables - Returns a list of high score tables for a game.
-Manager.Plugins.registerCommand(pluginName, 'Scores - Tables', async (returnDataStoreVariableID, consoleLog) => {
+Manager.Plugins.registerCommand(pluginName, 'Scores - Tables', async (returnDatatoreVariableID, consoleLog) => {
 	let scoresURL = `${baseURL}/scores/tables/?game_id=${gameID}`;
 
 	const md5 = getMD5Hash(scoresURL + privateAPIkey);
@@ -319,8 +319,8 @@ Manager.Plugins.registerCommand(pluginName, 'Scores - Tables', async (returnData
 		const data = await response.json();
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
-			if (returnDataStoreVariableID !== -1) {
-				Core.Game.current.variables[returnDataStoreVariableID] = JSON.stringify(data.response);
+			if (returnDatatoreVariableID !== -1) {
+				Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
 			}
 			if (consoleLog) {
 				console.log(data.response);
@@ -454,17 +454,17 @@ Manager.Plugins.registerCommand(pluginName, 'Friends - Friends', async (friendsV
 
 // Fetch - Returns data from the data store.
 Manager.Plugins.registerCommand(pluginName, 'Data Store - Fetch', async (key, passUserInformation, dataVariable) => {
-	let dataStoreURL = `${baseURL}/data-store/?game_id=${gameID}&key=${key}`;
+	let DatatoreURL = `${baseURL}/data-store/?game_id=${gameID}&key=${key}`;
 
 	if (passUserInformation) {
-		dataStoreURL += `&username=${username}&user_token=${userID}`;
+		DatatoreURL += `&username=${username}&user_token=${userID}`;
 	}
 
-	const md5 = getMD5Hash(dataStoreURL + privateAPIkey);
-	dataStoreURL += `&signature=${md5}`;
+	const md5 = getMD5Hash(DatatoreURL + privateAPIkey);
+	DatatoreURL += `&signature=${md5}`;
 
 	try {
-		const response = await fetch(dataStoreURL);
+		const response = await fetch(DatatoreURL);
 		const data = await response.json();
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
@@ -484,21 +484,21 @@ Manager.Plugins.registerCommand(
 	pluginName,
 	'Data Store - Get Keys',
 	async (pattern, passUserInformation, keyVariable) => {
-		let dataStoreURL = `${baseURL}/data-store/get-keys/?game_id=${gameID}`;
+		let DatatoreURL = `${baseURL}/data-store/get-keys/?game_id=${gameID}`;
 
 		if (pattern) {
-			dataStoreURL += `&pattern=${pattern}`;
+			DatatoreURL += `&pattern=${pattern}`;
 		}
 
 		if (passUserInformation) {
-			dataStoreURL += `&username=${username}&user_token=${userID}`;
+			DatatoreURL += `&username=${username}&user_token=${userID}`;
 		}
 
-		const md5 = getMD5Hash(dataStoreURL + privateAPIkey);
-		dataStoreURL += `&signature=${md5}`;
+		const md5 = getMD5Hash(DatatoreURL + privateAPIkey);
+		DatatoreURL += `&signature=${md5}`;
 
 		try {
-			const response = await fetch(dataStoreURL);
+			const response = await fetch(DatatoreURL);
 			const data = await response.json();
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
@@ -511,22 +511,22 @@ Manager.Plugins.registerCommand(
 		} catch (error) {
 			console.error(`There was an error: ${error}`);
 		}
-	}
+	},
 );
 
 // Remove - Removes data from the data store.
 Manager.Plugins.registerCommand(pluginName, 'Data Store - Remove', async (key, passUserInformation) => {
-	let dataStoreURL = `${baseURL}/data-store/remove/?game_id=${gameID}&key=${key}`;
+	let DatatoreURL = `${baseURL}/data-store/remove/?game_id=${gameID}&key=${key}`;
 
 	if (passUserInformation) {
-		dataStoreURL += `&username=${username}&user_token=${userID}`;
+		DatatoreURL += `&username=${username}&user_token=${userID}`;
 	}
 
-	const md5 = getMD5Hash(dataStoreURL + privateAPIkey);
-	dataStoreURL += `&signature=${md5}`;
+	const md5 = getMD5Hash(DatatoreURL + privateAPIkey);
+	DatatoreURL += `&signature=${md5}`;
 
 	try {
-		const response = await fetch(dataStoreURL);
+		const response = await fetch(DatatoreURL);
 		const data = await response.json();
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
@@ -540,17 +540,17 @@ Manager.Plugins.registerCommand(pluginName, 'Data Store - Remove', async (key, p
 
 // Set - Sets data in the data store.
 Manager.Plugins.registerCommand(pluginName, 'Data Store - Set', async (key, data, passUserInformation) => {
-	let dataStoreURL = `${baseURL}/data-store/set/?game_id=${gameID}&key=${key}&data=${data}`;
+	let DatatoreURL = `${baseURL}/data-store/set/?game_id=${gameID}&key=${key}&data=${data}`;
 
 	if (passUserInformation) {
-		dataStoreURL += `&username=${username}&user_token=${userID}`;
+		DatatoreURL += `&username=${username}&user_token=${userID}`;
 	}
 
-	const md5 = getMD5Hash(dataStoreURL + privateAPIkey);
-	dataStoreURL += `&signature=${md5}`;
+	const md5 = getMD5Hash(DatatoreURL + privateAPIkey);
+	DatatoreURL += `&signature=${md5}`;
 
 	try {
-		const response = await fetch(dataStoreURL);
+		const response = await fetch(DatatoreURL);
 		const data = await response.json();
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
@@ -567,17 +567,17 @@ Manager.Plugins.registerCommand(
 	pluginName,
 	'Data Store - Update',
 	async (key, operation, value, passUserInformation, dataVariable) => {
-		let dataStoreURL = `${baseURL}/data-store/update/?game_id=${gameID}&key=${key}&operation=${operation}&value=${value}`;
+		let DatatoreURL = `${baseURL}/data-store/update/?game_id=${gameID}&key=${key}&operation=${operation}&value=${value}`;
 
 		if (passUserInformation) {
-			dataStoreURL += `&username=${username}&user_token=${userID}`;
+			DatatoreURL += `&username=${username}&user_token=${userID}`;
 		}
 
-		const md5 = getMD5Hash(dataStoreURL + privateAPIkey);
-		dataStoreURL += `&signature=${md5}`;
+		const md5 = getMD5Hash(DatatoreURL + privateAPIkey);
+		DatatoreURL += `&signature=${md5}`;
 
 		try {
-			const response = await fetch(dataStoreURL);
+			const response = await fetch(DatatoreURL);
 			const data = await response.json();
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
@@ -590,5 +590,5 @@ Manager.Plugins.registerCommand(
 		} catch (error) {
 			console.error(`There was an error: ${error}`);
 		}
-	}
+	},
 );

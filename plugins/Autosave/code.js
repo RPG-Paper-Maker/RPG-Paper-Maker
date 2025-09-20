@@ -10,20 +10,23 @@ function allowSaves() {
 }
 
 // Autosave in intervals
-setInterval(async function () {
-	if (allowSaves()) {
-		if (
-			Manager.Plugins.getParameter(pluginName, 'Autosave Method') === 'Interval' ||
-			Manager.Plugins.getParameter(pluginName, 'Autosave Method') === 'All'
-		) {
-			// Don't save when the title screen is open.
-			if (!(Manager.Stack.top instanceof Scene.TitleScreen)) {
-				// Save the game to the specified slot.
-				await Core.Game.current.save(saveSlot);
+setInterval(
+	async function () {
+		if (allowSaves()) {
+			if (
+				Manager.Plugins.getParameter(pluginName, 'Autosave Method') === 'Interval' ||
+				Manager.Plugins.getParameter(pluginName, 'Autosave Method') === 'All'
+			) {
+				// Don't save when the title screen is open.
+				if (!(Manager.Stack.top instanceof Scene.TitleScreen)) {
+					// Save the game to the specified slot.
+					await Core.Game.current.save(saveSlot);
+				}
 			}
 		}
-	}
-}, Manager.Plugins.getParameter(pluginName, 'Interval') * 1000);
+	},
+	Manager.Plugins.getParameter(pluginName, 'Interval') * 1000,
+);
 
 // Autosave when teleporting
 inject(EventCommand.TeleportObject, 'drawHUD', async function () {
@@ -65,20 +68,20 @@ inject(
 	'action',
 	async function (isKey, options) {
 		if (saveSlot == this.windowChoicesSlots.currentSelectedIndex + 1 && !canOverwrite) {
-			Datas.Systems.soundImpossible.playSound();
+			Data.Systems.soundImpossible.playSound();
 		} else {
 			// If action, save in the selected slot
 			if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-				Datas.Systems.soundConfirmation.playSound();
+				Data.Systems.soundConfirmation.playSound();
 				Manager.Stack.push(
 					new Scene.Confirm(() => {
 						this.save();
-					})
+					}),
 				);
 			}
 		}
 	},
 	false,
 	true,
-	false
+	false,
 );

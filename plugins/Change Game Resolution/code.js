@@ -30,8 +30,8 @@ function setWindowSize(width, height, fullscreen) {
 	fs.writeFileSync(systemJSONFilePath, JSON.stringify(data, null, 2));
 
 	// Update the window size
-	Datas.Systems.updateWindowSize(width, height, fullscreen);
-	Datas.Systems.updateWindowSize(width, height, fullscreen);
+	Data.Systems.updateWindowSize(width, height, fullscreen);
+	Data.Systems.updateWindowSize(width, height, fullscreen);
 }
 
 /**

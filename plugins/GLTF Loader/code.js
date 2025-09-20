@@ -6,7 +6,7 @@ let GLTFLoader = null;
 		await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/GLTFLoader.js'),
 		{
 			addReturn: false,
-		}
+		},
 	);
 	loader = new GLTFLoader();
 	loader.setPath(Manager.Plugins.getParameter(pluginName, 'Models directory path'));
@@ -144,7 +144,7 @@ Manager.Plugins.registerCommand(pluginName, 'Load model', (id, filename) => {
 					if (result.object.isHero) mixerList[0] = mixerList[id];
 					callNext();
 				},
-				Core.ReactionInterpreter.currentObject
+				Core.ReactionInterpreter.currentObject,
 			);
 		} catch (e) {
 			Common.Platform.showErrorMessage("Error: couldn't load " + filename);
@@ -165,7 +165,7 @@ Manager.Plugins.registerCommand(pluginName, 'Reset bounding box', (id) => {
 					result.object.boundingBoxSettings.b[0] = [0, size.y * 0.5, 0, size.x, size.y, size.z, 0, 0, 0];
 					result.object.updateBB(result.object.position);
 				},
-				Core.ReactionInterpreter.currentObject
+				Core.ReactionInterpreter.currentObject,
 			);
 		}
 		callNext();
@@ -178,16 +178,16 @@ Manager.Plugins.registerCommand(pluginName, 'Set bounding box', (id, x, y, z) =>
 	queue.push(function () {
 		const model = getModel(id);
 		if (!!model) {
-			x = Math.abs(x * Datas.Systems.SQUARE_SIZE);
-			y = Math.abs(y * Datas.Systems.SQUARE_SIZE);
-			z = Math.abs(z * Datas.Systems.SQUARE_SIZE);
+			x = Math.abs(x * Data.Systems.SQUARE_SIZE);
+			y = Math.abs(y * Data.Systems.SQUARE_SIZE);
+			z = Math.abs(z * Data.Systems.SQUARE_SIZE);
 			Core.MapObject.search(
 				id,
 				(result) => {
 					result.object.boundingBoxSettings.b[0] = [0, y * 0.5, 0, x, y, z, 0, 0, 0];
 					result.object.updateBB(result.object.position);
 				},
-				Core.ReactionInterpreter.currentObject
+				Core.ReactionInterpreter.currentObject,
 			);
 		}
 		callNext();
@@ -219,12 +219,12 @@ Manager.Plugins.registerCommand(pluginName, 'Set offset', (id, x, y, z) => {
 	if (id == -1) id = Core.ReactionInterpreter.currentObject.id;
 	queue.push(function () {
 		const model = getModel(id);
-		const s = Datas.Systems.SQUARE_SIZE;
+		const s = Data.Systems.SQUARE_SIZE;
 		if (!!model)
 			model.position.set(
 				x * s,
 				y * s + new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3()).y * 0.5,
-				z * s
+				z * s,
 			);
 		callNext();
 	});
@@ -274,7 +274,7 @@ Manager.Plugins.registerCommand(pluginName, 'Look at', (objID, tgtID) => {
 			(result) => {
 				if (!!result) obj = result.object;
 			},
-			Core.ReactionInterpreter.currentObject
+			Core.ReactionInterpreter.currentObject,
 		);
 		var target = null;
 		Core.MapObject.search(
@@ -282,7 +282,7 @@ Manager.Plugins.registerCommand(pluginName, 'Look at', (objID, tgtID) => {
 			(result) => {
 				if (!!result) target = result.object;
 			},
-			Core.ReactionInterpreter.currentObject
+			Core.ReactionInterpreter.currentObject,
 		);
 		if (!obj || !target) return;
 		const model = getModel(objID);

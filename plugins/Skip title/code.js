@@ -6,7 +6,7 @@ var currentGame = null;
 var settingsName = 'Enable Settings on Systems tab!';
 
 Scene.TitleScreen.prototype.load = async function () {
-	const l = Datas.TitlescreenGameover.titleCommands;
+	const l = Data.TitlescreenGameover.titleCommands;
 	for (var i = 0; i < l.length; i++)
 		if (l[i].kind === Common.Enum.TitleCommandKind.Settings) settingsName = l[i].name();
 	Core.Game.current = null;
@@ -15,13 +15,13 @@ Scene.TitleScreen.prototype.load = async function () {
 	Manager.GL.screenTone.set(0, 0, 0, 1);
 	Manager.Stack.displayedPictures = [];
 	this.pictureBackground = await Core.Picture2D.loadImage();
-	System.TitleCommand.startNewGame();
+	Model.TitleCommand.startNewGame();
 };
 
 Scene.LoadGame.prototype.cancel = function (isKey, options = {}) {
 	if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
 		Core.Game.current = currentGame;
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
 		Manager.Stack.pop();
 	}
@@ -33,7 +33,7 @@ Manager.Plugins.registerCommand(pluginName, 'Save slot', (slot) => {
 
 Manager.Plugins.registerCommand(pluginName, 'Load slot', async (slot) => {
 	if (await Common.IO.fileExists(Common.Paths.SAVES + '/' + slot + '.json')) {
-		Datas.Systems.soundConfirmation.playSound();
+		Data.Systems.soundConfirmation.playSound();
 		Manager.Stack.replace(new Scene.Base());
 		const game = new Core.Game(slot);
 		await game.load();
@@ -41,7 +41,7 @@ Manager.Plugins.registerCommand(pluginName, 'Load slot', async (slot) => {
 		Core.Game.current.loadPositions();
 		Core.Game.current.hero.initializeProperties();
 		Manager.Stack.replace(new Scene.Map(Core.Game.current.currentMapID));
-	} else Datas.Systems.soundImpossible.playSound();
+	} else Data.Systems.soundImpossible.playSound();
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Delete slot', async (slot) => {
@@ -96,5 +96,5 @@ Manager.Plugins.registerCommand(pluginName, 'Open settings menu', () => {
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Quit game', () => {
-	System.TitleCommand.exit();
+	Model.TitleCommand.exit();
 });

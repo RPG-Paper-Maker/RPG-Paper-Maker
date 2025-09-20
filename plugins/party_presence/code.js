@@ -4,7 +4,7 @@ const Game = Core.Game;
 const Core = Core;
 const Interpreter = Common.Interpreter;
 const Platform = Common.Platform;
-const Datas = Datas;
+const Data = Data;
 const Position = Core.Position;
 const CharacterKind = Common.Enum.CharacterKind;
 const Battler = Core.Battler;
@@ -29,11 +29,11 @@ inject(
 		let position, player, battler, center, offset;
 		for (let i = 0; i < l; i++) {
 			// Battlers
-			center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset.getValue());
+			center = Interpreter.evaluate(Data.BattleSystems.heroesBattlersCenterOffset.getValue());
 			if (!(center instanceof THREE.Vector3)) {
 				Platform.showErrorMessage('Heroes battlers center offset incorrect return: ' + center);
 			}
-			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue(), {
+			offset = Interpreter.evaluate(Data.BattleSystems.heroesBattlersOffset.getValue(), {
 				additionalName: 'i',
 				additionalValue: i,
 			});

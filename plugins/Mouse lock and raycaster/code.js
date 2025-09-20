@@ -30,7 +30,7 @@ function raycast(v, d) {
 						exitFor = true;
 					}
 				},
-				Core.ReactionInterpreter.currentObject
+				Core.ReactionInterpreter.currentObject,
 			);
 			if (exitFor) break;
 		}
@@ -45,9 +45,9 @@ document.addEventListener('mousedown', (e) => {
 	) {
 		if (e.button === 0) Common.Inputs.mouseLeftPressed = true;
 		else if (e.button === 2) Common.Inputs.mouseRightPressed = true;
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
-		const b = System.DynamicValue.createNumber(e.button);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
+		const b = Model.DynamicValue.createNumber(e.button);
 		Core.Game.current.hero.receiveEvent(null, false, onDownID, [null, x, y, b], Core.Game.current.heroStates);
 	}
 });
@@ -60,9 +60,9 @@ document.addEventListener('mouseup', (e) => {
 	) {
 		if (e.button === 0) Common.Inputs.mouseLeftPressed = false;
 		else if (e.button === 2) Common.Inputs.mouseRightPressed = false;
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
-		const b = System.DynamicValue.createNumber(e.button);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
+		const b = Model.DynamicValue.createNumber(e.button);
 		Core.Game.current.hero.receiveEvent(null, false, onUpID, [null, x, y, b], Core.Game.current.heroStates);
 	}
 });
@@ -73,8 +73,8 @@ document.addEventListener('mousemove', (e) => {
 		!Scene.Map.current.loading &&
 		!Core.ReactionInterpreter.blockingHero
 	) {
-		const x = System.DynamicValue.createNumber(e.movementX);
-		const y = System.DynamicValue.createNumber(e.movementY);
+		const x = Model.DynamicValue.createNumber(e.movementX);
+		const y = Model.DynamicValue.createNumber(e.movementY);
 		Core.Game.current.hero.receiveEvent(null, false, onMoveID, [null, x, y], Core.Game.current.heroStates);
 	}
 });
@@ -91,8 +91,8 @@ document.addEventListener('wheel', (e) => {
 				null,
 				false,
 				onWheelID,
-				[null, System.DynamicValue.createSwitch(true)],
-				Core.Game.current.heroStates
+				[null, Model.DynamicValue.createSwitch(true)],
+				Core.Game.current.heroStates,
 			);
 		else if (e.deltaY < 0)
 			// scroll up
@@ -100,8 +100,8 @@ document.addEventListener('wheel', (e) => {
 				null,
 				false,
 				onWheelID,
-				[null, System.DynamicValue.createSwitch(false)],
-				Core.Game.current.heroStates
+				[null, Model.DynamicValue.createSwitch(false)],
+				Core.Game.current.heroStates,
 			);
 	}
 });
@@ -135,7 +135,7 @@ Manager.Plugins.registerCommand(pluginName, 'Get object screen position', (id, v
 					Core.Game.current.variables[vy] = (-(v.y - 1) * h) / 2;
 				}
 			},
-			Core.ReactionInterpreter.currentObject
+			Core.ReactionInterpreter.currentObject,
 		);
 	}
 });
@@ -150,7 +150,7 @@ Manager.Plugins.registerCommand(pluginName, 'Unlock pointer', () => {
 
 Manager.Plugins.registerCommand(pluginName, 'Raycast', (Ax, Ay, Az, Bx, By, Bz, variableID) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const s = Datas.Systems.SQUARE_SIZE;
+		const s = Data.Systems.SQUARE_SIZE;
 		va.set((Ax + 0.5) * s, (Ay + 0.5) * s, (Az + 0.5) * s);
 		vb.set((Bx + 0.5) * s, (By + 0.5) * s, (Bz + 0.5) * s);
 		const dist = va.distanceTo(vb);

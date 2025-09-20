@@ -158,7 +158,7 @@
 			"name": "Update distance based values"
 		}
 	],
-	"description": "This plugin implements more sound options, including audio panning! Now you can handle multiple background songs at once (if you want to cross fade two songs as you cross a given map area for example) and more!\n\nWARNING! To enable this plugin, you must first update the file howler.js (v2.2.1) located in your game folder:\nresources/app/Content/Datas/Scripts/Libs/howler.js\n\nTested with current version of howler.js (v2.2.4), available at\nhttps://github.com/goldfire/howler.js/blob/master/dist/howler.js\n",
+	"description": "This plugin implements more sound options, including audio panning! Now you can handle multiple background songs at once (if you want to cross fade two songs as you cross a given map area for example) and more!\n\nWARNING! To enable this plugin, you must first update the file howler.js (v2.2.1) located in your game folder:\nresources/app/Content/Data/Scripts/Libs/howler.js\n\nTested with current version of howler.js (v2.2.4), available at\nhttps://github.com/goldfire/howler.js/blob/master/dist/howler.js\n",
 	"name": "More sound options",
 	"version": "1.2.0",
 	"website": "https://github.com/yaleksander/RPM-Plugin-More-sound-options"

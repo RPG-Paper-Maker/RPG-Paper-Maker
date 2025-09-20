@@ -5,8 +5,8 @@ const dummy = new THREE.Object3D();
 // had to change a core function to be able to loop upon reaching an edge
 Core.MapObject.prototype.getFuturPosition = function (orientation, distance, angle) {
 	var position = new THREE.Vector3(this.previousPosition.x, this.previousPosition.y, this.previousPosition.z);
-	const w = Scene.Map.current.mapProperties.length * Datas.Systems.SQUARE_SIZE;
-	const h = Scene.Map.current.mapProperties.width * Datas.Systems.SQUARE_SIZE;
+	const w = Scene.Map.current.mapProperties.length * Data.Systems.SQUARE_SIZE;
+	const h = Scene.Map.current.mapProperties.width * Data.Systems.SQUARE_SIZE;
 	const lx = Scene.Map.current.mapLoopPlugin_loopX;
 	const lz = Scene.Map.current.mapLoopPlugin_loopZ;
 
@@ -95,7 +95,7 @@ function updateInstances(
 	mesh,
 	pos = new THREE.Vector3(0, 0, 0),
 	rot = new THREE.Euler(0, 0, 0, 'XYZ'),
-	scale = new THREE.Vector3(1, 1, 1)
+	scale = new THREE.Vector3(1, 1, 1),
 ) {
 	const m = Scene.Map.current;
 	if (
@@ -105,8 +105,8 @@ function updateInstances(
 		isSpecialMesh(mesh)
 	)
 		return;
-	const x = Datas.Systems.SQUARE_SIZE * m.mapProperties.length;
-	const z = Datas.Systems.SQUARE_SIZE * m.mapProperties.width;
+	const x = Data.Systems.SQUARE_SIZE * m.mapProperties.length;
+	const z = Data.Systems.SQUARE_SIZE * m.mapProperties.width;
 	pos.add(mesh.position);
 	rot.set(rot.x + mesh.rotation.x, rot.y + mesh.rotation.y, rot.z + mesh.rotation.z, 'XYZ');
 	scale.multiply(mesh.scale);

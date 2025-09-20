@@ -12,43 +12,43 @@ const raycaster = new THREE.Raycaster();
 
 document.addEventListener('click', (e) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
-		const b = System.DynamicValue.createNumber(e.button);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
+		const b = Model.DynamicValue.createNumber(e.button);
 		Manager.Events.sendEventDetection(null, -1, false, onClickID, [null, x, y, b]);
 	}
 });
 
 document.addEventListener('dblclick', (e) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
 		Manager.Events.sendEventDetection(null, -1, false, onDClickID, [null, x, y]);
 	}
 });
 
 document.addEventListener('mousedown', (e) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
-		const b = System.DynamicValue.createNumber(e.button);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
+		const b = Model.DynamicValue.createNumber(e.button);
 		Manager.Events.sendEventDetection(null, -1, false, onDownID, [null, x, y, b]);
 	}
 });
 
 document.addEventListener('mouseup', (e) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
-		const b = System.DynamicValue.createNumber(e.button);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
+		const b = Model.DynamicValue.createNumber(e.button);
 		Manager.Events.sendEventDetection(null, -1, false, onUpID, [null, x, y, b]);
 	}
 });
 
 document.addEventListener('mousemove', (e) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
-		const x = System.DynamicValue.createNumber(e.clientX);
-		const y = System.DynamicValue.createNumber(e.clientY);
+		const x = Model.DynamicValue.createNumber(e.clientX);
+		const y = Model.DynamicValue.createNumber(e.clientY);
 		Manager.Events.sendEventDetection(null, -1, false, onMoveID, [null, x, y]);
 	}
 });
@@ -59,13 +59,13 @@ document.addEventListener('wheel', (e) => {
 			// scroll down
 			Manager.Events.sendEventDetection(null, -1, false, onWheelID, [
 				null,
-				System.DynamicValue.createSwitch(true),
+				Model.DynamicValue.createSwitch(true),
 			]);
 		else if (e.deltaY < 0)
 			// scroll up
 			Manager.Events.sendEventDetection(null, -1, false, onWheelID, [
 				null,
-				System.DynamicValue.createSwitch(false),
+				Model.DynamicValue.createSwitch(false),
 			]);
 	}
 });
@@ -91,7 +91,7 @@ Manager.Plugins.registerCommand(pluginName, 'Get object on cursor', (variable, x
 						}
 					}
 				},
-				Core.ReactionInterpreter.currentObject
+				Core.ReactionInterpreter.currentObject,
 			);
 			if (exitFor) break;
 		}

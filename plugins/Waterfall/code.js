@@ -9,7 +9,7 @@ let ParticleSystem = null;
 		await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/ParticleSystem.js'),
 		{
 			addReturn: false,
-		}
+		},
 	);
 	Particle = result.Particle;
 	ParticleSystem = result.ParticleSystem;
@@ -92,7 +92,7 @@ function updateParticles(particleSystem, delta) {
 		const r = particleSystem.radius;
 		const h = particleSystem.height;
 		const s = particleSystem.shape;
-		const particlePerSecond = (50 * r) / Datas.Systems.SQUARE_SIZE;
+		const particlePerSecond = (50 * r) / Data.Systems.SQUARE_SIZE;
 		const t = 1 / particlePerSecond;
 		nextEmissionTime = emissionTime + t / 2 + (t / 2) * Math.random();
 		const rand = Math.random();
@@ -135,14 +135,14 @@ function createWaterfall(
 	bottomLight,
 	foamColor,
 	addFoam,
-	opacity
+	opacity,
 ) {
 	if (shadersLoaded && Scene.Map.current === lastMap) {
 		Core.MapObject.search(
 			id,
 			(result) => {
-				const r = (diameter * Datas.Systems.SQUARE_SIZE) / 2;
-				const h = height * Datas.Systems.SQUARE_SIZE;
+				const r = (diameter * Data.Systems.SQUARE_SIZE) / 2;
+				const h = height * Data.Systems.SQUARE_SIZE;
 				const u = {
 					time: { value: 0 },
 					speed: { value: speed },
@@ -191,7 +191,7 @@ function createWaterfall(
 				Scene.Map.current.scene.add(result.object.mesh);
 				result.object.waterfallPlugin_hasWaterfall = true;
 			},
-			Core.ReactionInterpreter.currentObject
+			Core.ReactionInterpreter.currentObject,
 		);
 	} else
 		setTimeout(
@@ -208,7 +208,7 @@ function createWaterfall(
 			bottomLight,
 			foamColor,
 			addFoam,
-			opacity
+			opacity,
 		);
 }
 
@@ -229,9 +229,9 @@ Manager.Plugins.registerCommand(
 			bottomLight,
 			foamColor,
 			addFoam,
-			opacity
+			opacity,
 		);
-	}
+	},
 );
 
 Manager.Plugins.registerCommand(pluginName, 'Set opacity', (id, opacity) => {
@@ -244,6 +244,6 @@ Manager.Plugins.registerCommand(pluginName, 'Set opacity', (id, opacity) => {
 				result.object.mesh.children[0].material.transparent = true;
 			}
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 });

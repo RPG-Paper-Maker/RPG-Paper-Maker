@@ -92,50 +92,50 @@ setInterval(function () {
 				) {
 					if (Core.Game.current.variables[deadzone] === 0) Core.Game.current.variables[deadzone] = 0.15;
 					const d = Math.min(Math.max(Core.Game.current.variables[deadzone], 0.05), 0.95);
-					const id = System.DynamicValue.createNumber(i + 1);
+					const id = Model.DynamicValue.createNumber(i + 1);
 					if (Math.sqrt(lh * lh + lv * lv) > d) {
-						const x = System.DynamicValue.createNumber(lh);
-						const y = System.DynamicValue.createNumber(lv);
+						const x = Model.DynamicValue.createNumber(lh);
+						const y = Model.DynamicValue.createNumber(lv);
 						Core.Game.current.hero.receiveEvent(
 							null,
 							false,
 							leftStickEventID,
 							[null, id, x, y],
-							Core.Game.current.heroStates
+							Core.Game.current.heroStates,
 						);
 						leftStickNeutral = false;
 					} else {
-						const x = System.DynamicValue.createNumber(0);
-						const y = System.DynamicValue.createNumber(0);
+						const x = Model.DynamicValue.createNumber(0);
+						const y = Model.DynamicValue.createNumber(0);
 						Core.Game.current.hero.receiveEvent(
 							null,
 							false,
 							leftStickEventID,
 							[null, id, x, y],
-							Core.Game.current.heroStates
+							Core.Game.current.heroStates,
 						);
 						leftStickNeutral = true;
 					}
 					if (Math.sqrt(rh * rh + rv * rv) > d) {
-						const x = System.DynamicValue.createNumber(rh);
-						const y = System.DynamicValue.createNumber(rv);
+						const x = Model.DynamicValue.createNumber(rh);
+						const y = Model.DynamicValue.createNumber(rv);
 						Core.Game.current.hero.receiveEvent(
 							null,
 							false,
 							rightStickEventID,
 							[null, id, x, y],
-							Core.Game.current.heroStates
+							Core.Game.current.heroStates,
 						);
 						rightStickNeutral = false;
 					} else {
-						const x = System.DynamicValue.createNumber(0);
-						const y = System.DynamicValue.createNumber(0);
+						const x = Model.DynamicValue.createNumber(0);
+						const y = Model.DynamicValue.createNumber(0);
 						Core.Game.current.hero.receiveEvent(
 							null,
 							false,
 							rightStickEventID,
 							[null, id, x, y],
-							Core.Game.current.heroStates
+							Core.Game.current.heroStates,
 						);
 						rightStickNeutral = true;
 					}
@@ -174,33 +174,33 @@ setInterval(function () {
 }, 16);
 
 window.addEventListener('gamepadconnected', (e) => {
-	const c = Datas.Keyboards.controls;
+	const c = Data.Keyboards.controls;
 	const a = Object.getOwnPropertyNames(c);
 	for (var i = 0; i < a.length; i++)
 		for (var j = 0; j < c[a[i]].sc.length; j++)
 			for (var k = 0; k < c[a[i]].sc[j].length; k++) if (typeof c[a[i]].sc[j][k] === 'string') return;
-	if (Datas.Keyboards.controls['Action']) Datas.Keyboards.controls['Action'].sc.push(['A']);
-	if (Datas.Keyboards.controls['Cancel']) Datas.Keyboards.controls['Cancel'].sc.push(['B']);
-	if (Datas.Keyboards.controls['MainMenu']) {
-		Datas.Keyboards.controls['MainMenu'].sc.push(['B']);
-		Datas.Keyboards.controls['MainMenu'].sc.push(['Start']);
+	if (Data.Keyboards.controls['Action']) Data.Keyboards.controls['Action'].sc.push(['A']);
+	if (Data.Keyboards.controls['Cancel']) Data.Keyboards.controls['Cancel'].sc.push(['B']);
+	if (Data.Keyboards.controls['MainMenu']) {
+		Data.Keyboards.controls['MainMenu'].sc.push(['B']);
+		Data.Keyboards.controls['MainMenu'].sc.push(['Start']);
 	}
-	if (Datas.Keyboards.controls['LeftCamera']) {
-		Datas.Keyboards.controls['LeftCamera'].sc.push(['RB']);
-		Datas.Keyboards.controls['LeftCamera'].sc.push(['RT']);
+	if (Data.Keyboards.controls['LeftCamera']) {
+		Data.Keyboards.controls['LeftCamera'].sc.push(['RB']);
+		Data.Keyboards.controls['LeftCamera'].sc.push(['RT']);
 	}
-	if (Datas.Keyboards.controls['RightCamera']) {
-		Datas.Keyboards.controls['RightCamera'].sc.push(['LB']);
-		Datas.Keyboards.controls['RightCamera'].sc.push(['LT']);
+	if (Data.Keyboards.controls['RightCamera']) {
+		Data.Keyboards.controls['RightCamera'].sc.push(['LB']);
+		Data.Keyboards.controls['RightCamera'].sc.push(['LT']);
 	}
-	if (Datas.Keyboards.controls['UpMenu']) Datas.Keyboards.controls['UpMenu'].sc.push(['Up']);
-	if (Datas.Keyboards.controls['UpHero']) Datas.Keyboards.controls['UpHero'].sc.push(['Up']);
-	if (Datas.Keyboards.controls['DownMenu']) Datas.Keyboards.controls['DownMenu'].sc.push(['Down']);
-	if (Datas.Keyboards.controls['DownHero']) Datas.Keyboards.controls['DownHero'].sc.push(['Down']);
-	if (Datas.Keyboards.controls['LeftMenu']) Datas.Keyboards.controls['LeftMenu'].sc.push(['Left']);
-	if (Datas.Keyboards.controls['LeftHero']) Datas.Keyboards.controls['LeftHero'].sc.push(['Left']);
-	if (Datas.Keyboards.controls['RightMenu']) Datas.Keyboards.controls['RightMenu'].sc.push(['Right']);
-	if (Datas.Keyboards.controls['RightHero']) Datas.Keyboards.controls['RightHero'].sc.push(['Right']);
-	for (var i = 0; i < a.length; i++) Datas.Settings.kb[c[a[i]].id] = c[a[i]].sc;
-	Datas.Settings.write();
+	if (Data.Keyboards.controls['UpMenu']) Data.Keyboards.controls['UpMenu'].sc.push(['Up']);
+	if (Data.Keyboards.controls['UpHero']) Data.Keyboards.controls['UpHero'].sc.push(['Up']);
+	if (Data.Keyboards.controls['DownMenu']) Data.Keyboards.controls['DownMenu'].sc.push(['Down']);
+	if (Data.Keyboards.controls['DownHero']) Data.Keyboards.controls['DownHero'].sc.push(['Down']);
+	if (Data.Keyboards.controls['LeftMenu']) Data.Keyboards.controls['LeftMenu'].sc.push(['Left']);
+	if (Data.Keyboards.controls['LeftHero']) Data.Keyboards.controls['LeftHero'].sc.push(['Left']);
+	if (Data.Keyboards.controls['RightMenu']) Data.Keyboards.controls['RightMenu'].sc.push(['Right']);
+	if (Data.Keyboards.controls['RightHero']) Data.Keyboards.controls['RightHero'].sc.push(['Right']);
+	for (var i = 0; i < a.length; i++) Data.Settings.kb[c[a[i]].id] = c[a[i]].sc;
+	Data.Settings.write();
 });

@@ -16,7 +16,7 @@ function updateWindow(id, x, y, width, height, wholeText, count) {
 			width,
 			height,
 			wholeText,
-			++count
+			++count,
 		);
 	else
 		for (var i = 0; i < Manager.Stack.displayedPictures.length; i++)
@@ -50,7 +50,7 @@ Manager.Plugins.registerCommand(pluginName, 'Show Text', (id, text, x, y, width,
 Core.WindowBox.prototype.draw = function (
 	isChoice = false,
 	windowDimension = this.windowDimension,
-	contentDimension = this.contentDimension
+	contentDimension = this.contentDimension,
 ) {
 	if (this.content)
 		this.content.drawBehind(contentDimension[0], contentDimension[1], contentDimension[2], contentDimension[3]);
@@ -58,7 +58,7 @@ Core.WindowBox.prototype.draw = function (
 	// Single line alteration from source code
 	!!this.customWindowSkin
 		? this.customWindowSkin.drawBox(windowDimension, this.selected, this.bordersVisible)
-		: Datas.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
+		: Data.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
 
 	if (this.content) {
 		if (!isChoice && this.limitContent) {
@@ -68,7 +68,7 @@ Core.WindowBox.prototype.draw = function (
 				contentDimension[0],
 				contentDimension[1] - Common.ScreenResolution.getScreenY(this.padding[3] / 2),
 				contentDimension[2],
-				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3])
+				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3]),
 			);
 			Common.Platform.ctx.clip();
 		}
@@ -89,7 +89,7 @@ function spawnWindow(id, x, y, width, height, text) {
 		}),
 	];
 	value[1].content.update();
-	value[1].customWindowSkin = Datas.Systems.getCurrentWindowSkin();
+	value[1].customWindowSkin = Data.Systems.getCurrentWindowSkin();
 	const p = Manager.Stack.displayedPictures;
 	var ok = false;
 	for (var i = 0; i < p.length; i++) {

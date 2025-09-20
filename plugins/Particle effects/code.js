@@ -261,7 +261,7 @@ function evaluate(expr, t, r) {
 		case Token.RAND6:
 			return r[5];
 		case Token.SQR:
-			return Datas.Systems.SQUARE_SIZE;
+			return Data.Systems.SQUARE_SIZE;
 		case Token.NUM:
 			return expr.value;
 		default:
@@ -339,7 +339,7 @@ setInterval(function () {
 							dummy.position.set(
 								evaluate(e.px, p.time, p.rand) + p.origin.x,
 								evaluate(e.py, p.time, p.rand) + p.origin.y,
-								evaluate(e.pz, p.time, p.rand) + p.origin.z
+								evaluate(e.pz, p.time, p.rand) + p.origin.z,
 							);
 							dummy.scale.set(1, 1, 1).multiplyScalar(evaluate(e.size, p.time, p.rand));
 							dummy.lookAt(Scene.Map.current.camera.getThreeCamera().position);
@@ -374,7 +374,7 @@ function endParticles(object, smooth) {
 				function () {
 					Scene.Map.current.scene.remove(e.mesh);
 				},
-				smooth ? e.lifespan * 1000 : 1
+				smooth ? e.lifespan * 1000 : 1,
 			);
 			break;
 		}
@@ -483,9 +483,9 @@ Manager.Plugins.registerCommand(
 					}
 				});
 			},
-			Core.ReactionInterpreter.currentObject
+			Core.ReactionInterpreter.currentObject,
 		);
-	}
+	},
 );
 
 Manager.Plugins.registerCommand(pluginName, 'End particle effect', (object, smooth) => {

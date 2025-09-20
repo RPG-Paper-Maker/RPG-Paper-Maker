@@ -3,7 +3,7 @@ const pluginName = 'Multiple window boxes';
 Core.WindowBox.prototype.draw = function (
 	isChoice = false,
 	windowDimension = this.windowDimension,
-	contentDimension = this.contentDimension
+	contentDimension = this.contentDimension,
 ) {
 	if (this.content)
 		this.content.drawBehind(contentDimension[0], contentDimension[1], contentDimension[2], contentDimension[3]);
@@ -11,7 +11,7 @@ Core.WindowBox.prototype.draw = function (
 	// Single line alteration from source code
 	!!this.customWindowSkin
 		? this.customWindowSkin.drawBox(windowDimension, this.selected, this.bordersVisible)
-		: Datas.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
+		: Data.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
 
 	if (this.content) {
 		if (!isChoice && this.limitContent) {
@@ -21,7 +21,7 @@ Core.WindowBox.prototype.draw = function (
 				contentDimension[0],
 				contentDimension[1] - Common.ScreenResolution.getScreenY(this.padding[3] / 2),
 				contentDimension[2],
-				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3])
+				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3]),
 			);
 			Common.Platform.ctx.clip();
 		}
@@ -41,7 +41,7 @@ Manager.Plugins.registerCommand(pluginName, 'Spawn window', (id, x, y, width, he
 		if (i === -1) break;
 		text = text.slice(0, i + 1) + '\n' + text.slice(i + 3);
 	}
-	const pad = Datas.Systems.dbOptions;
+	const pad = Data.Systems.dbOptions;
 	const value = [
 		id,
 		new Core.WindowBox(x, y, width, height, {
@@ -50,7 +50,7 @@ Manager.Plugins.registerCommand(pluginName, 'Spawn window', (id, x, y, width, he
 		}),
 	];
 	value[1].content.update();
-	value[1].customWindowSkin = Datas.Systems.getCurrentWindowSkin();
+	value[1].customWindowSkin = Data.Systems.getCurrentWindowSkin();
 	const p = Manager.Stack.displayedPictures;
 	var ok = false;
 	for (i = 0; i < p.length; i++) {

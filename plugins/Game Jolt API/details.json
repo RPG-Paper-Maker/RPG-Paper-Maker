@@ -20,7 +20,7 @@
 					"defaultValue": { "k": 12, "min": -1, "v": -1 },
 					"description": "ID of variable to store data return by Game Jolt. The data will get store as a JSON object.",
 					"id": -1,
-					"name": "returnDataStoreVariableID"
+					"name": "returnDatatoreVariableID"
 				},
 				{
 					"defaultValue": { "k": 10, "v": false },
@@ -180,7 +180,7 @@
 					"defaultValue": { "k": 12, "min": -1, "v": -1 },
 					"description": "ID of variable to store return data from server. The return data will be a JSON array stored as string in the variable.",
 					"id": -1,
-					"name": "returnDataStoreVariableID"
+					"name": "returnDatatoreVariableID"
 				},
 				{
 					"defaultValue": { "k": 10, "v": false },
@@ -223,7 +223,7 @@
 					"defaultValue": { "k": 12, "min": -1, "v": -1 },
 					"description": "ID of variable to store return data from server. The return data will be a JSON array stored as string in the variable.",
 					"id": -1,
-					"name": "returnDataStoreVariableID"
+					"name": "returnDatatoreVariableID"
 				},
 				{
 					"defaultValue": { "k": 10, "v": false },

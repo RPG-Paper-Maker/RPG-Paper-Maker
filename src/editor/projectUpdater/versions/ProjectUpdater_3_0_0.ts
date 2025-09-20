@@ -226,12 +226,23 @@ class ProjectUpdater_3_0_0 {
 
 		// Move turn a picture
 		await ProjectUpdater.updateAllCommands((json: JSONType) => {
+			const command = json.command as MapObjectCommandType[];
 			if (json.kind === 36) {
-				const command = json.command as MapObjectCommandType[];
 				const b = command[command.length - 1];
 				ArrayUtils.removeAt(command, command.length - 1);
 				ArrayUtils.insertAt(command, command.length - 2, b);
 			}
+			command.map((value) =>
+				typeof value === 'string'
+					? value
+							.replaceAll(
+								/Core\.ReactionInterpreter\.currentParameters\[(\d+)\]/g,
+								'Core.ReactionInterpreter.currentParameters.get($1)',
+							)
+							.replaceAll('Datas.', 'Data.')
+							.replaceAll('System.', 'Model.')
+					: value,
+			);
 		});
 
 		// Move turn a picture

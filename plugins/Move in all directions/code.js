@@ -17,31 +17,31 @@ function moveMapObj(id, dir, camera) {
 				const dist =
 					Math.min(
 						1,
-						result.object.speed.getValue() * Core.MapObject.SPEED_NORMAL * Manager.Stack.averageElapsedTime
-					) * Datas.Systems.SQUARE_SIZE;
+						result.object.speed.getValue() * Core.MapObject.SPEED_NORMAL * Manager.Stack.averageElapsedTime,
+					) * Data.Systems.SQUARE_SIZE;
 				result.object.move(
 					Common.Enum.Orientation.South,
 					dist * Math.cos((dir * Math.PI) / 180),
 					270 + (camera ? angle : -90),
-					camera
+					camera,
 				);
 				result.object.move(
 					Common.Enum.Orientation.South,
 					dist * Math.sin((dir * Math.PI) / 180),
 					180 + (camera ? angle : -90),
-					camera
+					camera,
 				);
 				if (!result.object.currentStateInstance.directionFix) {
 					if (camera)
 						result.object.lookAt(
-							mod(Math.round(180 - dir / 90) + Scene.Map.current.camera.getMapOrientation() - 3, 4)
+							mod(Math.round(180 - dir / 90) + Scene.Map.current.camera.getMapOrientation() - 3, 4),
 						);
 					else result.object.lookAt(mod(Math.round(180 - dir / 90) - 1, 4));
 				}
 				Scene.Map.current.mapProperties.checkRandomBattle();
 			}
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 }
 

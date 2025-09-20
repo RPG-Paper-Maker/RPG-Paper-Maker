@@ -311,7 +311,7 @@
 	],
 	"defaultParameters": [
 		{
-			"defaultValue": { "k": 8, "v": "./Content/Datas/Scripts/Plugins/GLTF Loader/models/" },
+			"defaultValue": { "k": 8, "v": "./Content/Data/Scripts/Plugins/GLTF Loader/models/" },
 			"description": "Directory where the game will look for your 3D models (starting from <your game directory>/resources/app/)",
 			"id": -1,
 			"name": "Models directory path"
@@ -321,7 +321,7 @@
 	"name": "GLTF Loader",
 	"parameters": [
 		{
-			"defaultValue": { "k": 8, "v": "./Content/Datas/Scripts/Plugins/GLTF Loader/models/" },
+			"defaultValue": { "k": 8, "v": "./Content/Data/Scripts/Plugins/GLTF Loader/models/" },
 			"description": "Directory where the game will look for your 3D models (starting from <your game directory>/resources/app/)",
 			"id": -1,
 			"name": "Models directory path"

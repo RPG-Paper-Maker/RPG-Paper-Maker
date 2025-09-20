@@ -230,7 +230,7 @@
 									0,
 									7,
 									8,
-									"Core.ReactionInterpreter.currentParameters[1].getValue() <= (Common.ScreenResolution.CANVAS_WIDTH - Common.ScreenResolution.getScreenX(64)) / 2"
+									"Core.ReactionInterpreter.currentParameters.get(1).getValue() <= (Common.ScreenResolution.CANVAS_WIDTH - Common.ScreenResolution.getScreenX(64)) / 2"
 								],
 								"kind": 8
 							},
@@ -241,7 +241,7 @@
 									0,
 									7,
 									8,
-									"Core.ReactionInterpreter.currentParameters[1].getValue() >= (Common.ScreenResolution.CANVAS_WIDTH + Common.ScreenResolution.getScreenX(64)) / 2"
+									"Core.ReactionInterpreter.currentParameters.get(1).getValue() >= (Common.ScreenResolution.CANVAS_WIDTH + Common.ScreenResolution.getScreenX(64)) / 2"
 								],
 								"kind": 8
 							},
@@ -252,7 +252,7 @@
 									0,
 									7,
 									8,
-									"Core.ReactionInterpreter.currentParameters[2].getValue() <= (Common.ScreenResolution.CANVAS_HEIGHT - Common.ScreenResolution.getScreenY(64)) / 2"
+									"Core.ReactionInterpreter.currentParameters.get(2).getValue() <= (Common.ScreenResolution.CANVAS_HEIGHT - Common.ScreenResolution.getScreenY(64)) / 2"
 								],
 								"kind": 8
 							},
@@ -263,7 +263,7 @@
 									0,
 									7,
 									8,
-									"Core.ReactionInterpreter.currentParameters[2].getValue() >= (Common.ScreenResolution.CANVAS_HEIGHT + Common.ScreenResolution.getScreenY(64)) / 2"
+									"Core.ReactionInterpreter.currentParameters.get(2).getValue() >= (Common.ScreenResolution.CANVAS_HEIGHT + Common.ScreenResolution.getScreenY(64)) / 2"
 								],
 								"kind": 8
 							},

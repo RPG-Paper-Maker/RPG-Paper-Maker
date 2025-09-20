@@ -72,24 +72,24 @@ inject(
 	},
 	false,
 	false,
-	true
+	true,
 );
 
 // Injecting battler into context for the AnimationFrameElements. Unfortunately, the only way I know to inject such info is by setting as a member variable here.
 // I know I could simply overwrite the functions, but then it would end up being incompatible with other plugins based upon order loaded, which we don't want.
 inject(
-	System.Animation,
+	Model.Animation,
 	'draw',
 	function (picture, frame, battler) {
 		if (this.frames[frame]) this.frames[frame].currentBattler = battler;
 	},
 	false,
 	false,
-	false
+	false,
 ); // inject before running actual function to inject battler into context
 
 inject(
-	System.AnimationFrame,
+	Model.AnimationFrame,
 	'draw',
 	function (picture, position, rows, cols) {
 		for (const element of this.elements) {
@@ -98,5 +98,5 @@ inject(
 	},
 	false,
 	false,
-	false
+	false,
 ); // inject before running actual function to inject battler into context

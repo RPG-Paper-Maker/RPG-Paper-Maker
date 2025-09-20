@@ -74,7 +74,7 @@ function moveHorizontal(obj, v0, time) {
 	const orig = obj.position.clone();
 	const m = Scene.Map.current;
 	const mp = m.mapProperties;
-	const s = Datas.Systems.SQUARE_SIZE;
+	const s = Data.Systems.SQUARE_SIZE;
 
 	// add map loop compatibility
 	var blocked = false;
@@ -133,19 +133,19 @@ Manager.Plugins.registerCommand(pluginName, 'Jump', (id, propFlag, x, z, peak, t
 				.normalize()
 				.applyAxisAngle(
 					down,
-					(camera ? (Scene.Map.current.camera.horizontalAngle * Math.PI) / 180 : -Math.PI / 2) + Math.PI / 2
+					(camera ? (Scene.Map.current.camera.horizontalAngle * Math.PI) / 180 : -Math.PI / 2) + Math.PI / 2,
 				);
 			v0.multiplyScalar(
 				iniSpd *
 					result.object.speed.getValue() *
 					Core.MapObject.SPEED_NORMAL *
-					Datas.Systems.SQUARE_SIZE *
-					Manager.Stack.averageElapsedTime
+					Data.Systems.SQUARE_SIZE *
+					Manager.Stack.averageElapsedTime,
 			);
 			setTimeout(moveVertical, 1, result.object, prop, propFlag, peak / time, peak / (time * time));
 			setTimeout(moveHorizontal, timeout, result.object, v0, Core.Game.current.playTime.time + time * timeout);
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 });
 
@@ -159,7 +159,7 @@ Manager.Plugins.registerCommand(pluginName, 'Fall', (id, propFlag, gravity) => {
 				setTimeout(moveVertical, 1, result.object, prop, propFlag, 0, gravity);
 			}
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 });
 
@@ -171,18 +171,18 @@ Manager.Plugins.registerCommand(pluginName, 'Maneuver', (id, x, z, spd, camera) 
 				.normalize()
 				.applyAxisAngle(
 					down,
-					(camera ? (Scene.Map.current.camera.horizontalAngle * Math.PI) / 180 : -Math.PI / 2) + Math.PI / 2
+					(camera ? (Scene.Map.current.camera.horizontalAngle * Math.PI) / 180 : -Math.PI / 2) + Math.PI / 2,
 				);
 			v.multiplyScalar(
 				spd *
 					result.object.speed.getValue() *
 					Core.MapObject.SPEED_NORMAL *
-					Datas.Systems.SQUARE_SIZE *
-					Manager.Stack.averageElapsedTime
+					Data.Systems.SQUARE_SIZE *
+					Manager.Stack.averageElapsedTime,
 			);
 			setTimeout(moveHorizontal, 1, result.object, v, 0);
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 });
 
@@ -193,9 +193,9 @@ Manager.Plugins.registerCommand(pluginName, 'Check ground', (id, prop) => {
 			Core.ReactionInterpreter.currentObject.properties[prop] = checkCollisions(
 				result.object,
 				down,
-				result.object.position.clone().add(down)
+				result.object.position.clone().add(down),
 			);
 		},
-		Core.ReactionInterpreter.currentObject
+		Core.ReactionInterpreter.currentObject,
 	);
 });

@@ -14,7 +14,7 @@ function callNext() {
 
 Manager.Plugins.registerCommand(pluginName, 'Load track', (id, audio) => {
 	queue.push(function () {
-		const howl = new Howl({ src: System.Song.getFolder(audio.kind, audio.isBR, audio.dlc) + '/' + audio.name });
+		const howl = new Howl({ src: Model.Song.getFolder(audio.kind, audio.isBR, audio.dlc) + '/' + audio.name });
 		while (audioList.length <= id) audioList.push(null);
 		if (audioList[id] !== null) {
 			if (howl._src === audioList[id]._src) {
@@ -79,7 +79,7 @@ Manager.Plugins.registerCommand(pluginName, 'Fade', (id, from, to, duration) => 
 		audioList[id].fade(
 			Math.max(0.0, Math.min(1.0, from / 100)),
 			Math.max(0.0, Math.min(1.0, to / 100)),
-			duration * 1000
+			duration * 1000,
 		);
 		callNext();
 	});
@@ -119,8 +119,8 @@ Manager.Plugins.registerCommand(pluginName, 'Set pan', (id, value) => {
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Update distance based values', (minDist, maxDist, propVol, propPan) => {
-	const min = Datas.Systems.SQUARE_SIZE * minDist;
-	const max = Datas.Systems.SQUARE_SIZE * maxDist;
+	const min = Data.Systems.SQUARE_SIZE * minDist;
+	const max = Data.Systems.SQUARE_SIZE * maxDist;
 	const hero = Core.Game.current.hero.position;
 	const obj = Core.ReactionInterpreter.currentObject;
 	const dist = obj.position.distanceTo(hero);
