@@ -153,6 +153,7 @@ class Map extends Base {
 	public movingObjectInitialPosition: Position | null = null;
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 	public skyboxMesh: THREE.Mesh | null = null;
+	public showCoordinates = true;
 
 	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false, isBattle = false) {
 		super(tag, isDetection);
@@ -164,7 +165,7 @@ class Map extends Base {
 		this.cursor = new Cursor(tag?.cursorPosition || new Position(), this);
 		this.cursorObject = new Cursor(
 			new Position(0, tag?.cursorPosition?.y ?? 0, tag?.cursorPosition?.yPixels ?? 0, 0),
-			this
+			this,
 		);
 		this.cursorDetection = new Cursor(new Position(), this);
 		if (this.isDetection) {
@@ -255,7 +256,7 @@ class Map extends Base {
 			const extremeSize = Project.SQUARE_SIZE * 1000;
 			this.meshPlane = new THREE.Mesh(
 				new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
-				material
+				material,
 			);
 			this.meshPlane.visible = false;
 			this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
@@ -309,7 +310,7 @@ class Map extends Base {
 		const isStartInMap = this.id === Project.current!.systems.heroMapID;
 		this.cursorStartPosition = new Cursor(
 			isStartInMap ? Project.current!.systems.heroMapPosition : new Position(),
-			this
+			this,
 		);
 		this.cursorStartPosition.initialize(Map.materialStartPosition, 1, isStartInMap);
 		this.cursorStartPosition.updateMeshPosition();
@@ -338,7 +339,7 @@ class Map extends Base {
 	async loadTileset() {
 		const picture = Project.current!.pictures.getByID(
 			PICTURE_KIND.TILESETS,
-			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
+			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1,
 		);
 		this.materialTileset = await Manager.GL.loadTexture(await picture.getPathOrBase64());
 		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
@@ -447,14 +448,14 @@ class Map extends Base {
 		this.scene.background = (
 			Model.Base.getByIDOrFirst(
 				Project.current!.systems.colors,
-				this.model.skyColorID.getFixNumberValue()
+				this.model.skyColorID.getFixNumberValue(),
 			) as Model.Color
 		).getTHREEColor();
 	}
 
 	updateBackgroundImage() {
 		const texture = Manager.GL.textureLoader.load(
-			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath()
+			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath(),
 		);
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
@@ -469,9 +470,9 @@ class Map extends Base {
 			await (
 				Model.Base.getByIDOrFirst(
 					Project.current!.systems.skyboxes,
-					this.model.skyboxID.getFixNumberValue()
+					this.model.skyboxID.getFixNumberValue(),
 				) as Model.Skybox
-			).createTextures()
+			).createTextures(),
 		);
 		this.scene.add(this.skyboxMesh);
 	}
@@ -553,7 +554,7 @@ class Map extends Base {
 							this.currentPortion.z + k,
 							i,
 							j,
-							k
+							k,
 						);
 					}
 				}
@@ -617,7 +618,7 @@ class Map extends Base {
 		x: number,
 		y: number,
 		z: number,
-		move: boolean = false
+		move: boolean = false,
 	) {
 		const lx = Math.ceil(this.model.length / Constants.PORTION_SIZE);
 		const lz = Math.ceil(this.model.width / Constants.PORTION_SIZE);
@@ -706,7 +707,7 @@ class Map extends Base {
 			Math.floor(position.y / Constants.PORTION_SIZE) -
 				Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
 			Math.floor(position.z / Constants.PORTION_SIZE) -
-				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
+				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE),
 		);
 	}
 
@@ -714,7 +715,7 @@ class Map extends Base {
 		return new Portion(
 			globalPortion.x - Math.floor(this.cursor.position.x / Constants.PORTION_SIZE),
 			globalPortion.y - Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
-			globalPortion.z - Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
+			globalPortion.z - Math.floor(this.cursor.position.z / Constants.PORTION_SIZE),
 		);
 	}
 
@@ -776,7 +777,7 @@ class Map extends Base {
 						preview,
 						removePreview,
 						allowBorders,
-						updateAutotiles
+						updateAutotiles,
 					);
 				}
 				break;
@@ -873,12 +874,12 @@ class Map extends Base {
 			this.cursor.position.x + x,
 			this.cursor.position.y,
 			this.cursor.position.yPixels,
-			this.cursor.position.z + z
+			this.cursor.position.z + z,
 		);
 		if (this.isPositionDetectionInField(position)) {
 			this.detectionBoxes!.set(
 				position.toKey(),
-				MapElement.Object3DBox.create(this.detectionCurrentData!.clone())
+				MapElement.Object3DBox.create(this.detectionCurrentData!.clone()),
 			);
 		}
 	}
@@ -896,10 +897,10 @@ class Map extends Base {
 				add
 					? MapElement.SpriteWall.create(
 							Project.current!.settings.mapEditorCurrentWallID,
-							SPRITE_WALL_TYPE.MIDDLE
-					  )
+							SPRITE_WALL_TYPE.MIDDLE,
+						)
 					: null,
-				preview
+				preview,
 			);
 		}
 		for (const position of positions) {
@@ -949,6 +950,20 @@ class Map extends Base {
 		return null;
 	}
 
+	enableView(b: boolean) {
+		this.grid.line.visible = !b;
+		this.cursorStartPosition.mesh.visible = !b;
+		this.cursorObject.mesh.visible = !b;
+		this.forEachMapPortions((mapPortion) => {
+			if (mapPortion.objectsMesh) {
+				mapPortion.objectsMesh.visible = !b;
+			}
+		});
+		this.cursor.mesh.visible = !b;
+		this.showCoordinates = !b;
+		this.requestPaintHUD = true;
+	}
+
 	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {
 		const up = this.camera.getUp();
 		this.forEachMapPortions((mapPortion) => {
@@ -975,7 +990,7 @@ class Map extends Base {
 						} else {
 							mapPortionBefore?.updateAutotile(
 								p,
-								MapElement.Autotile.create(autotileID, 0, textureAfter, up)
+								MapElement.Autotile.create(autotileID, 0, textureAfter, up),
 							);
 						}
 					}
@@ -1009,7 +1024,7 @@ class Map extends Base {
 											landHere,
 											autotileBefore,
 											textureBefore,
-											kindBefore
+											kindBefore,
 										)
 									) {
 										if (kindAfter === ELEMENT_MAP_KIND.NONE && landHere) {
@@ -1022,12 +1037,12 @@ class Map extends Base {
 											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
 												mapPortionHere?.updateFloor(
 													adjacentPosition,
-													MapElement.Floor.create(textureAfterReduced, up)
+													MapElement.Floor.create(textureAfterReduced, up),
 												);
 											} else {
 												mapPortionHere?.updateAutotile(
 													adjacentPosition,
-													MapElement.Autotile.create(autotileID, 0, textureAfter, up)
+													MapElement.Autotile.create(autotileID, 0, textureAfter, up),
 												);
 											}
 										}
@@ -1052,11 +1067,11 @@ class Map extends Base {
 		) {
 			this.cursor.position.x = Math.min(
 				this.detectionFieldRight,
-				Math.max(-this.detectionFieldLeft, this.cursor.position.x)
+				Math.max(-this.detectionFieldLeft, this.cursor.position.x),
 			);
 			this.cursor.position.z = Math.min(
 				this.detectionFieldBot,
-				Math.max(-this.detectionFieldTop, this.cursor.position.z)
+				Math.max(-this.detectionFieldTop, this.cursor.position.z),
 			);
 		}
 		const totalY = this.cursor.position.getTotalY();
@@ -1130,7 +1145,7 @@ class Map extends Base {
 				this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
 					this.selectedMesh.position,
 					this.selectedMesh.rotation,
-					this.selectedMesh.scale
+					this.selectedMesh.scale,
 				);
 				this.needsUpdateSelectedPosition.layer = this.selectedPosition.layer;
 			}
@@ -1153,17 +1168,17 @@ class Map extends Base {
 			this.selectedMesh.position.setX(
 				this.selectedMesh.position.x -
 					(this.selectedMesh.position.x % Project.SQUARE_SIZE) +
-					this.selectedElement.getAdditionalX()
+					this.selectedElement.getAdditionalX(),
 			);
 			this.selectedMesh.position.setY(
 				this.selectedMesh.position.y -
 					(this.selectedMesh.position.y % Project.SQUARE_SIZE) +
-					this.selectedElement.getAdditionalY()
+					this.selectedElement.getAdditionalY(),
 			);
 			this.selectedMesh.position.setZ(
 				this.selectedMesh.position.z -
 					(this.selectedMesh.position.z % Project.SQUARE_SIZE) +
-					this.selectedElement.getAdditionalZ()
+					this.selectedElement.getAdditionalZ(),
 			);
 			this.selectedMesh.scale.setX(Math.max(1, this.selectedMesh.scale.x - (this.selectedMesh.scale.x % 1)));
 			this.selectedMesh.scale.setY(Math.max(1, this.selectedMesh.scale.y - (this.selectedMesh.scale.y % 1)));
@@ -1173,14 +1188,14 @@ class Map extends Base {
 			this.selectedMesh.position.setX(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 					? Project.SQUARE_SIZE / 2
-					: 0
+					: 0,
 			);
 		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.length - 1) {
 			this.selectedMesh.position.setX(
 				this.model.length * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
-						: 1)
+						: 1),
 			);
 		}
 		if (this.selectedMesh.position.y < -this.model.depth * Project.SQUARE_SIZE) {
@@ -1190,21 +1205,21 @@ class Map extends Base {
 				(this.model.height - 1) * Project.SQUARE_SIZE +
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? 0
-						: Project.SQUARE_SIZE - 1)
+						: Project.SQUARE_SIZE - 1),
 			);
 		}
 		if (this.selectedMesh.position.z < 0) {
 			this.selectedMesh.position.setZ(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 					? Project.SQUARE_SIZE / 2
-					: 0
+					: 0,
 			);
 		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.width - 1) {
 			this.selectedMesh.position.setZ(
 				this.model.width * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
-						: 1)
+						: 1),
 			);
 		}
 		if (this.transformControls.axis === null || this.transformControls.axis.includes('X')) {
@@ -1284,7 +1299,7 @@ class Map extends Base {
 			Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
 		const pointer = new THREE.Vector2(
 			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
-			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1
+			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1,
 		);
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RAYCASTING_LAYER.LANDS;
@@ -1319,7 +1334,7 @@ class Map extends Base {
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
 			this.meshPlane!.position.setY(
-				this.lockedY * Project.SQUARE_SIZE + Math.floor((this.lockedYPixels * Project.SQUARE_SIZE) / 100)
+				this.lockedY * Project.SQUARE_SIZE + Math.floor((this.lockedYPixels * Project.SQUARE_SIZE) / 100),
 			);
 			this.meshPlane!.updateMatrixWorld();
 		}
@@ -1342,7 +1357,7 @@ class Map extends Base {
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
 				obj.point.z > 0
 					? Math.floor(obj.point.z / Project.SQUARE_SIZE)
-					: Math.ceil((obj.point.z - 1) / Project.SQUARE_SIZE)
+					: Math.ceil((obj.point.z - 1) / Project.SQUARE_SIZE),
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -1362,7 +1377,7 @@ class Map extends Base {
 						if (Map.isRemoving() || isLayerOn) {
 							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
 								newPosition,
-								Map.currentSelectedMapElementKind
+								Map.currentSelectedMapElementKind,
 							);
 							if (element && element.isPreview) {
 								continue;
@@ -1371,7 +1386,7 @@ class Map extends Base {
 						if (layer === RAYCASTING_LAYER.LANDS) {
 							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
 								newPosition,
-								ELEMENT_MAP_KIND.FLOOR
+								ELEMENT_MAP_KIND.FLOOR,
 							);
 							if (element && element.isPreview) {
 								continue;
@@ -1432,7 +1447,7 @@ class Map extends Base {
 			const newLayerRayPosition = new Portion(
 				Math.floor((obj.point.x + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
 				Math.floor((obj.point.y + Constants.PRECISION_POSITION) / Project.SQUARE_SIZE),
-				Math.floor((obj.point.z + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE)
+				Math.floor((obj.point.z + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
 			);
 			if (
 				this.canEdit &&
@@ -1489,7 +1504,7 @@ class Map extends Base {
 								this.rectangleStartPosition.addPositionRectOutline(positions, position);
 								for (const rectanglePosition of positions) {
 									const land = this.getMapPortionByPosition(rectanglePosition)?.model.lands.get(
-										rectanglePosition.toKey()
+										rectanglePosition.toKey(),
 									);
 									if (land instanceof MapElement.Autotile) {
 										land.update(this, rectanglePosition);
@@ -1723,7 +1738,7 @@ class Map extends Base {
 											Project.current!.settings.mapEditorCurrentAutotileID,
 											Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
 												? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
-												: Project.current!.settings.mapEditorCurrentAutotileTexture
+												: Project.current!.settings.mapEditorCurrentAutotileTexture,
 										);
 										break;
 								}
@@ -1860,8 +1875,8 @@ class Map extends Base {
 						this.movingObject,
 						ELEMENT_MAP_KIND.OBJECT,
 						null,
-						ELEMENT_MAP_KIND.OBJECT
-					)
+						ELEMENT_MAP_KIND.OBJECT,
+					),
 				);
 				this.undoRedoStates.push(
 					UndoRedoState.create(
@@ -1869,8 +1884,8 @@ class Map extends Base {
 						this.previewDeletedMovingObject,
 						ELEMENT_MAP_KIND.OBJECT,
 						this.movingObject,
-						ELEMENT_MAP_KIND.OBJECT
-					)
+						ELEMENT_MAP_KIND.OBJECT,
+					),
 				);
 				await this.model.save(true);
 			}
@@ -1896,8 +1911,8 @@ class Map extends Base {
 							previous,
 							previous === null ? kind : previous.kind,
 							element,
-							element?.kind || kind
-						)
+							element?.kind || kind,
+						),
 					);
 				}
 				mapPortion.lastPreviewRemove = [];
@@ -1970,7 +1985,7 @@ class Map extends Base {
 				this.skyboxMesh.position.copy(this.camera.getThreeCamera().position);
 				const distance = Math.max(
 					1000,
-					this.camera.getThreeCamera().position.distanceTo(this.camera.targetPosition)
+					this.camera.getThreeCamera().position.distanceTo(this.camera.targetPosition),
 				);
 				this.skyboxMesh.scale.set(distance, distance, distance);
 			}
@@ -2024,7 +2039,7 @@ class Map extends Base {
 			if (this.autotileFrame.update()) {
 				this.autotilesOffset.setY(
 					(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
-						Constants.MAX_PICTURE_SIZE
+						Constants.MAX_PICTURE_SIZE,
 				);
 			}
 
@@ -2064,7 +2079,7 @@ class Map extends Base {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
 			ArrayUtils.insertFirst(
 				lines,
-				this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString()
+				this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString(),
 			);
 			Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;
@@ -2085,9 +2100,11 @@ class Map extends Base {
 	drawHUD() {
 		if (this.requestPaintHUD) {
 			this.clearHUD();
-			this.drawCursorCoords();
-			this.drawPointedCoords();
-			this.drawLayersOnCursor();
+			if (this.showCoordinates) {
+				this.drawCursorCoords();
+				this.drawPointedCoords();
+				this.drawLayersOnCursor();
+			}
 			this.requestPaintHUD = false;
 		}
 	}

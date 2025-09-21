@@ -71,11 +71,12 @@ function PanelTextures({ visible, extraContent }: Props) {
 					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
 				case ELEMENT_MAP_KIND.OBJECT:
 				case ELEMENT_MAP_KIND.START_POSITION:
+				case ELEMENT_MAP_KIND.VIEW:
 					return null;
 				default: {
 					const picture = Project.current!.pictures.getByID(
 						PICTURE_KIND.TILESETS,
-						Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)?.pictureID ?? 1
+						Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)?.pictureID ?? 1,
 					);
 					const divide = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
 					return (

@@ -72,7 +72,8 @@ function MapEditor() {
 			case ACTION_KIND.PENCIL:
 				name +=
 					currentMapElementKind === ELEMENT_MAP_KIND.OBJECT ||
-					currentMapElementKind === ELEMENT_MAP_KIND.START_POSITION
+					currentMapElementKind === ELEMENT_MAP_KIND.START_POSITION ||
+					currentMapElementKind === ELEMENT_MAP_KIND.VIEW
 						? 'pointer'
 						: 'pencil';
 				break;

@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BiCube, BiSolidPencil } from 'react-icons/bi';
-import { FaFlagCheckered, FaLayerGroup } from 'react-icons/fa';
+import { FaEye, FaFlagCheckered, FaLayerGroup } from 'react-icons/fa';
 import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
 import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic } from 'react-icons/md';
@@ -69,6 +69,7 @@ function MapEditorMenuBar() {
 	const dispatch = useDispatch();
 
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
+	const mapEditorLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
 
 	const isPixelDisabled = () =>
 		[
@@ -78,6 +79,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Scene.Map.currentSelectedMapElementKind) ||
 		[ACTION_KIND.RECTANGLE, ACTION_KIND.PIN].includes(actionIndex);
 
@@ -88,10 +90,16 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const isRectangleDisabled = () =>
-		[ELEMENT_MAP_KIND.SPRITE_WALL, ELEMENT_MAP_KIND.OBJECT].includes(Scene.Map.currentSelectedMapElementKind);
+		[
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
+		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const isPinDisabled = () =>
 		[
@@ -104,6 +112,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT3D,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const isLayersOnDisabled = () =>
@@ -113,12 +122,14 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT3D,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
 		Project.current!.settings.mapEditorMenuIndex = menuIndex;
+		Scene.Map.current!.enableView(kind === ELEMENT_MAP_KIND.VIEW);
 		if (isPixelDisabled()) {
 			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
 			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
@@ -250,6 +261,11 @@ function MapEditorMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const handleView = async () => {
+		handleGeneric(ELEMENT_MAP_KIND.VIEW, MENU_INDEX_MAP_EDITOR.VIEW);
+		await Project.current!.settings.save();
+	};
+
 	const handleMobilePlus = () => {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	};
@@ -343,7 +359,7 @@ function MapEditorMenuBar() {
 
 	// When first opening the project with all data loaded
 	useEffect(() => {
-		if (!openLoading) {
+		if (!openLoading && mapEditorLoaded && Scene.Map.current) {
 			setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 			setSpritesIndex(Project.current!.settings.mapEditorSpritesMenuIndex);
 			setObjectsIndex(Project.current!.settings.mapEditorObjectsMenuIndex);
@@ -369,6 +385,9 @@ function MapEditorMenuBar() {
 				case MENU_INDEX_MAP_EDITOR.START_POSITION:
 					handleStartPosition().catch(console.error);
 					break;
+				case MENU_INDEX_MAP_EDITOR.VIEW:
+					handleView().catch(console.error);
+					break;
 			}
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
 			Project.current!.settings.mapEditorCurrentActionIndex = actionIndexBefore;
@@ -379,7 +398,7 @@ function MapEditorMenuBar() {
 			dispatch(setCurrentLayerKind(Project.current!.settings.mapEditorCurrentLayerIndex));
 			setMobileIndex(Project.current!.settings.mapEditorMobileActionIndex);
 		}
-	}, [openLoading]);
+	}, [openLoading, mapEditorLoaded]);
 
 	useEffect(() => {
 		if (Scene.Map.current) {
@@ -495,11 +514,12 @@ function MapEditorMenuBar() {
 							{t('object')}: {t('default')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<FaFlagCheckered />} title={t('start.position')} onClick={handleStartPosition}>
-						<MenuItem icon={<FaFlagCheckered />} onClick={handleStartPosition}>
-							{t('start.position')}
-						</MenuItem>
-					</MenuSub>
+					<MenuItem icon={<FaFlagCheckered />} onClick={handleStartPosition}>
+						{t('start.position')}
+					</MenuItem>
+					<MenuItem icon={<FaEye />} onClick={handleView}>
+						{t('view')}
+					</MenuItem>
 				</Menu>
 				{Constants.IS_MOBILE && (
 					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={updateMobileIndex}>
