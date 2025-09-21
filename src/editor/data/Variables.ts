@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class Variables extends Serializable {
 	public pages!: Model.VariablesPage[];
@@ -54,6 +57,13 @@ class Variables extends Serializable {
 			list.push(...page.list);
 		}
 		return list;
+	}
+
+	translateDefaults(): void {
+		for (const [index, page] of this.pages.entries()) {
+			page.name = `${t('page')} ${index + 1}`;
+		}
+		this.getVariableByID(1)!.name = t('lucas_instance_id');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

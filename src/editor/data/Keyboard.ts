@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class Keyboard extends Serializable {
 	public list!: Model.Keyboard[];
@@ -43,6 +46,22 @@ class Keyboard extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_KEYBOARD);
+	}
+
+	translateDefaults(): void {
+		this.list[0].updateMainName(t('move.hero.up'));
+		this.list[1].updateMainName(t('move.hero.down'));
+		this.list[2].updateMainName(t('move.hero.left'));
+		this.list[3].updateMainName(t('move.hero.right'));
+		this.list[4].updateMainName(t('move.menu.up'));
+		this.list[5].updateMainName(t('move.menu.down'));
+		this.list[6].updateMainName(t('move.menu.left'));
+		this.list[7].updateMainName(t('move.menu.right'));
+		this.list[8].updateMainName(t('move.camera.left'));
+		this.list[9].updateMainName(t('move.camera.right'));
+		this.list[10].updateMainName(t('action'));
+		this.list[11].updateMainName(t('cancel'));
+		this.list[12].updateMainName(t('open.close.main.menu'));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

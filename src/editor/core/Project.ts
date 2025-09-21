@@ -67,8 +67,26 @@ class Project {
 	}
 
 	translateDefaults() {
-		this.treeMaps.translateDefaults();
+		this.animations.translateDefaults();
+		this.armors.translateDefaults();
+		this.battleSystem.translateDefaults();
+		this.classes.translateDefaults();
 		this.commonEvents.translateDefaults();
+		this.heroes.translateDefaults();
+		this.items.translateDefaults();
+		this.keyboard.translateDefaults();
+		this.languages.translateDefaults();
+		this.monsters.translateDefaults();
+		this.skills.translateDefaults();
+		this.specialElements.translateDefaults();
+		this.status.translateDefaults();
+		this.systems.translateDefaults();
+		this.tilesets.translateDefaults();
+		this.titleScreenGameOver.translateDefaults();
+		this.treeMaps.translateDefaults();
+		this.troops.translateDefaults();
+		this.variables.translateDefaults();
+		this.weapons.translateDefaults();
 	}
 
 	async load() {
@@ -103,11 +121,34 @@ class Project {
 	}
 
 	async save() {
-		await this.treeMaps.save();
-		await this.settings.save();
-		await this.commonEvents.save();
+		await this.languages.save();
 		await this.variables.save();
+		await this.fonts.save();
+		await this.pictures.save();
+		await this.shapes.save();
+		await this.songs.save();
+		await this.videos.save();
+		await this.settings.save();
 		await this.systems.save();
+		await this.treeMaps.save();
+		await this.specialElements.save();
+		await this.commonEvents.save();
+		await this.keyboard.save();
+		await this.tilesets.save();
+		await this.status.save();
+		await this.animations.save();
+		await this.items.save();
+		await this.weapons.save();
+		await this.armors.save();
+		await this.skills.save();
+		await this.classes.save();
+		await this.heroes.save();
+		await this.monsters.save();
+		await this.troops.save();
+		await this.battleSystem.save();
+		await this.titleScreenGameOver.save();
+		await this.scripts.save();
+		await this.settings.save();
 		await this.fonts.save();
 	}
 }

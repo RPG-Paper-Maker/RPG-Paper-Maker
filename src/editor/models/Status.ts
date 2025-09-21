@@ -109,6 +109,14 @@ class Status extends Icon {
 		super.applyDefault(Status.getBindings(additionnalBinding));
 	}
 
+	setNameMessages(name: string, messageAlly = '', messageEnemy = '', messageHealed = '', messageStill = ''): void {
+		this.updateMainName(name);
+		this.messageAllyAffected.value = messageAlly;
+		this.messageEnemyAffected.value = messageEnemy;
+		this.messageStatusHealed.value = messageHealed;
+		this.messageStatusStillAffected.value = messageStill;
+	}
+
 	copy(status: Status): void {
 		super.copy(status, Status.getBindings([]));
 	}

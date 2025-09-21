@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { BINDING, JSONType, Paths, SONG_KIND } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
 import { Checkable, GameOverCommand, PlaySong, TitleCommand } from '../models';
+
+const { t } = i18next;
 
 class TitleScreenGameOver extends Serializable {
 	public isTitleBackgroundImage!: boolean;
@@ -47,6 +50,16 @@ class TitleScreenGameOver extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_TITLE_SCREEN_GAME_OVER);
+	}
+
+	translateDefaults(): void {
+		this.titleCommands[0].updateMainName(t('new.game'));
+		this.titleCommands[1].updateMainName(t('load.game'));
+		this.titleCommands[2].updateMainName(t('settings'));
+		this.titleCommands[3].updateMainName(t('exit'));
+		this.gameOverCommands[0].updateMainName(t('continue'));
+		this.gameOverCommands[1].updateMainName(t('title.screen'));
+		this.gameOverCommands[2].updateMainName(t('exit'));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class Languages extends Serializable {
 	public list!: Model.Language[];
@@ -101,7 +104,7 @@ class Languages extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_LANGS);
 	}
 
-	public getTranslationsMapping = () => {
+	getTranslationsMapping = () => {
 		return {
 			'load.game': this.loadAGame,
 			'load.game.description': this.loadAGameDescription,
@@ -141,6 +144,45 @@ class Languages extends Serializable {
 			target: this.target,
 		};
 	};
+
+	translateDefaults(): void {
+		this.loadAGame.updateMainName(t('load.game'));
+		this.loadAGameDescription.updateMainName(t('load.game.description'));
+		this.slot.updateMainName(t('slot.name'));
+		this.empty.updateMainName(t('empty'));
+		this.saveAGame.updateMainName(t('save.game'));
+		this.saveAGameDescription.updateMainName(t('save.game.description'));
+		this.keyboardAssignment.updateMainName(t('keyboard.assignments'));
+		this.keyboardAssignmentDescription.updateMainName(t('keyboard.assignments.description'));
+		this.keyboardAssignmentSelectedDescription.updateMainName(t('keyboard.assignments.selected.description'));
+		this.language.updateMainName(t('language'));
+		this.languageDescription.updateMainName(t('language.description'));
+		this.languageSelectedDescription.updateMainName(t('language.selected.description'));
+		this.confirm.updateMainName(t('confirm.question'));
+		this.ok.updateMainName(t('ok'));
+		this.yes.updateMainName(t('yes'));
+		this.no.updateMainName(t('no'));
+		this.add.updateMainName(t('add'));
+		this.remove.updateMainName(t('remove'));
+		this.shop.updateMainName(t('shop'));
+		this.buy.updateMainName(t('buy'));
+		this.sell.updateMainName(t('sell'));
+		this.owned.updateMainName(t('owned'));
+		this.selectAnAlly.updateMainName(t('select.an.ally'));
+		this.victory.updateMainName(t('victory'));
+		this.defeat.updateMainName(t('defeat'));
+		this.levelUp.updateMainName(t('level.up'));
+		this.precision.updateMainName(t('precision'));
+		this.critical.updateMainName(t('critical'));
+		this.damage.updateMainName(t('damage'));
+		this.heal.updateMainName(t('heal'));
+		this.skill.updateMainName(t('skill'));
+		this.performSkill.updateMainName(t('perform.skill'));
+		this.loading.updateMainName(t('extra.loading'));
+		this.equipQuestion.updateMainName(t('equip.question'));
+		this.pressAnyKeys.updateMainName(t('press.any.keys'));
+		this.target.updateMainName(t('target'));
+	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Languages.getBindings(additionnalBinding));

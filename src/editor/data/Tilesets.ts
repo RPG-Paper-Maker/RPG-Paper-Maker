@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class Tilesets extends Serializable {
 	public list!: Model.Tileset[];
@@ -29,6 +32,20 @@ class Tilesets extends Serializable {
 
 	getTilesetByID(id: number): Model.Tileset {
 		return this.list.find((tileset) => tileset.id === id)!;
+	}
+
+	translateDefaults(): void {
+		this.list[0].name = t('plains.woods');
+		this.list[1].name = t('haunted.plains.woods');
+		this.list[2].name = t('snow.plains.woods');
+		this.list[3].name = t('beach.desert');
+		this.list[4].name = t('town');
+		this.list[5].name = t('desert.town');
+		this.list[6].name = t('snow.town');
+		this.list[7].name = t('inside');
+		this.list[8].name = t('shop');
+		this.list[9].name = t('sewers');
+		this.list[10].name = t('dungeon.mines');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND } from '../common';
 import { createFile, readJSON } from '../common/Platform';
@@ -16,6 +17,8 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class System extends Serializable {
 	public projectName!: Model.Localization;
@@ -190,13 +193,63 @@ class System extends Serializable {
 	async saveStyleCSS() {
 		await createFile(
 			Paths.join(Project.current!.getPath(), Paths.STYLES, Paths.FILE_FONTS_CSS),
-			await this.getStyleCSS()
+			await this.getStyleCSS(),
 		);
 	}
 
 	async save(temp?: boolean) {
 		await super.save(temp);
 		await this.saveStyleCSS();
+	}
+
+	translateDefaults(): void {
+		this.colors[0].name = t('black');
+		this.colors[1].name = t('white');
+		this.colors[2].name = t('blue.sky');
+		this.currencies[0].updateMainName(t('g'));
+		this.currencies[1].updateMainName(t('xcoin'));
+		this.itemsTypes[0].updateMainName(t('ingredient'));
+		this.itemsTypes[1].updateMainName(t('key.item'));
+		this.inventoryFilters[0].updateMainName(t('all'));
+		this.inventoryFilters[1].updateMainName(t('consumables'));
+		this.inventoryFilters[2].updateMainName(t('ingredients'));
+		this.inventoryFilters[3].updateMainName(t('key.items'));
+		this.inventoryFilters[4].updateMainName(t('weapons'));
+		this.inventoryFilters[5].updateMainName(t('armors'));
+		this.mainMenuCommands[0].updateMainName(t('inventory'));
+		this.mainMenuCommands[1].updateMainName(t('skills'));
+		this.mainMenuCommands[2].updateMainName(t('equip'));
+		this.mainMenuCommands[3].updateMainName(t('states'));
+		this.mainMenuCommands[4].updateMainName(t('order'));
+		this.mainMenuCommands[5].updateMainName(t('save'));
+		this.mainMenuCommands[6].updateMainName(t('quit'));
+		this.heroesStatisticsDisplay[0].name = t('hp');
+		this.heroesStatisticsDisplay[1].name = t('mp');
+		this.heroesStatisticsDisplay[2].name = t('tp');
+		this.windowSkins[0].name = t('blue');
+		this.windowSkins[1].name = t('green');
+		this.windowSkins[2].name = t('red');
+		this.windowSkins[3].name = t('black');
+		this.cameraProperties[0].name = t('outside');
+		this.cameraProperties[1].name = t('battle');
+		this.detections[0].name = t('front');
+		this.detections[1].name = t('self');
+		this.speeds[0].name = t('normal');
+		this.speeds[1].name = t('low');
+		this.speeds[2].name = t('very.low');
+		this.speeds[3].name = t('fast');
+		this.speeds[4].name = t('very.fast');
+		this.frequencies[0].name = t('instantaneous');
+		this.frequencies[1].name = t('each.second');
+		this.fontSizes[0].name = t('normal');
+		this.fontSizes[1].name = t('small');
+		this.fontSizes[2].name = t('very.small');
+		this.fontSizes[3].name = t('big');
+		this.fontSizes[4].name = t('very.big');
+		this.fontNames[0].name = t('default');
+		this.skyboxes[0].name = t('day');
+		this.skyboxes[1].name = t('evening');
+		this.skyboxes[2].name = t('night');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

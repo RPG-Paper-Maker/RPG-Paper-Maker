@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class CommonEvents extends Serializable {
 	public eventsSystem!: Model.CommonEvent[];
@@ -41,8 +44,14 @@ class CommonEvents extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_COMMON_EVENTS);
 	}
 
-	translateDefaults() {
-		//this.eventsSystem
+	translateDefaults(): void {
+		for (const [index, state] of this.states.entries()) {
+			state.name = `${t('state')} ${index + 1}`;
+		}
+		this.defaultObject.name = t('default');
+		this.heroObject.name = t('hero');
+		this.commonReactions[0].name = t('increase');
+		this.commonReactions[1].name = t('steel');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

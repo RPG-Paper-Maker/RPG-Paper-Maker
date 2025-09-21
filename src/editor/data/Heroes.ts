@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class Heroes extends Serializable {
 	public list!: Model.Hero[];
@@ -29,6 +32,17 @@ class Heroes extends Serializable {
 
 	getByID(id: number): Model.Hero {
 		return this.list.find((hero) => hero.id === id)!;
+	}
+
+	translateDefaults(): void {
+		this.list[0].updateMainName(t('lucas'));
+		this.list[1].updateMainName(t('kate'));
+		this.list[2].updateMainName(t('bibi'));
+		this.list[3].updateMainName(t('shana'));
+		this.list[4].updateMainName(t('charles'));
+		this.list[5].updateMainName(t('fortune'));
+		this.list[6].updateMainName(t('caitlyn'));
+		this.list[7].updateMainName(t('lily'));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

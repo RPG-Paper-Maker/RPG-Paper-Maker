@@ -87,6 +87,11 @@ class CommonSkillItem extends Icon {
 		this.battleMessage = Localization.create(-1, '');
 	}
 
+	setNameDescription(name: string, description: string): void {
+		this.updateMainName(name);
+		this.description.updateMainName(description);
+	}
+
 	copy(skillItem: CommonSkillItem): void {
 		super.copy(skillItem, CommonSkillItem.getBindings([]));
 	}

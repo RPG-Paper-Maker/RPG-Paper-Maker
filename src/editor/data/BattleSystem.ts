@@ -9,11 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, DYNAMIC_VALUE_KIND, JSONType, Paths } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+
+const { t } = i18next;
 
 class BattleSystem extends Serializable {
 	public levelStatisticID!: number;
@@ -121,6 +124,62 @@ class BattleSystem extends Serializable {
 
 	getStatisticByID(id: number): Model.Statistic {
 		return this.statistics.find((stat) => stat.id === id)!;
+	}
+
+	translateDefaults(): void {
+		this.elements[0].updateMainName(t('fire'));
+		this.elements[1].updateMainName(t('earth'));
+		this.elements[2].updateMainName(t('thunder'));
+		this.elements[3].updateMainName(t('water'));
+		this.elements[4].updateMainName(t('ice'));
+		this.elements[5].updateMainName(t('wind'));
+		this.elements[6].updateMainName(t('darkness'));
+		this.elements[7].updateMainName(t('light'));
+		this.battleCommands[0].name = t('attack');
+		this.battleCommands[1].name = t('skill');
+		this.battleCommands[2].name = t('item');
+		this.battleCommands[3].name = t('escape');
+		this.battleCommands[4].name = t('end.turn');
+		this.statistics[0].updateMainName(t('lv'));
+		this.statistics[1].updateMainName(t('exp'));
+		this.statistics[2].updateMainName(t('hp'));
+		this.statistics[3].updateMainName(t('mp'));
+		this.statistics[4].updateMainName(t('tp'));
+		this.statistics[5].updateMainName(t('attack'));
+		this.statistics[6].updateMainName(t('magic'));
+		this.statistics[7].updateMainName(t('strength'));
+		this.statistics[8].updateMainName(t('intelligence'));
+		this.statistics[9].updateMainName(t('p.defense'));
+		this.statistics[10].updateMainName(t('m.defense'));
+		this.statistics[11].updateMainName(t('agility'));
+		this.equipments[0].updateMainName(t('left.hand'));
+		this.equipments[1].updateMainName(t('right.hand'));
+		this.equipments[2].updateMainName(t('head'));
+		this.equipments[3].updateMainName(t('chest'));
+		this.equipments[4].updateMainName(t('arms'));
+		this.equipments[5].updateMainName(t('legs'));
+		this.equipments[6].updateMainName(t('accessory'));
+		this.weaponsKind[0].updateMainName(t('sword'));
+		this.weaponsKind[1].updateMainName(t('axe'));
+		this.weaponsKind[2].updateMainName(t('spear'));
+		this.weaponsKind[3].updateMainName(t('knife'));
+		this.weaponsKind[4].updateMainName(t('staff'));
+		this.weaponsKind[5].updateMainName(t('rod'));
+		this.weaponsKind[6].updateMainName(t('firearm'));
+		this.weaponsKind[7].updateMainName(t('bow'));
+		this.armorsKind[0].updateMainName(t('helmet'));
+		this.armorsKind[1].updateMainName(t('headgear'));
+		this.armorsKind[2].updateMainName(t('mail'));
+		this.armorsKind[3].updateMainName(t('vest'));
+		this.armorsKind[4].updateMainName(t('vambraces'));
+		this.armorsKind[5].updateMainName(t('gloves'));
+		this.armorsKind[6].updateMainName(t('greaves'));
+		this.armorsKind[7].updateMainName(t('trousers'));
+		this.armorsKind[8].updateMainName(t('ring'));
+		this.armorsKind[9].updateMainName(t('necklace'));
+		this.armorsKind[10].updateMainName(t('bracelet'));
+		this.armorsKind[11].updateMainName(t('earring'));
+		this.battleMaps[0].name = t('default');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
