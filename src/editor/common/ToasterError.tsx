@@ -136,6 +136,7 @@ function ToasterError({ message, stack }: Props) {
 			<div
 				style={{
 					maxWidth: '250px',
+					maxHeight: '200px',
 					overflow: 'auto',
 				}}
 			>
