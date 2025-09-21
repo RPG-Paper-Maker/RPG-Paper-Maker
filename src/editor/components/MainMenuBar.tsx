@@ -634,10 +634,13 @@ function MainMenuBar() {
 					title: `${t('open.project')}...`,
 					icon: <AiOutlineFolderOpen />,
 					onClick: handleOpenDialogProject,
-					children: projects.map((project) => ({
-						title: project.name,
-						onClick: () => handleOpenProject(project),
-					})),
+					children:
+						projects.length === 0
+							? undefined
+							: projects.map((project) => ({
+									title: project.name,
+									onClick: () => handleOpenProject(project),
+								})),
 				},
 				...(Constants.IS_DESKTOP
 					? [
