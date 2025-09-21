@@ -143,6 +143,10 @@ class IO {
 	static async openWebsite(url: string) {
 		await this.invoke('open-website', url);
 	}
+
+	static async openFolder(path: string) {
+		await this.invoke('open-folder', path);
+	}
 }
 
 export { IO };

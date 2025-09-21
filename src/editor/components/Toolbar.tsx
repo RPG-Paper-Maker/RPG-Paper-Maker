@@ -41,6 +41,7 @@ import {
 	triggerNewProject,
 	triggerObjects3D,
 	triggerOpenDialogProject,
+	triggerOpenProjectFolder,
 	triggerPictures,
 	triggerPlay,
 	triggerPlugins,
@@ -92,6 +93,10 @@ function Toolbar() {
 
 	const handleSaveAll = () => {
 		dispatch(triggerSaveAll(true));
+	};
+
+	const handleOpenProjectFolder = () => {
+		dispatch(triggerOpenProjectFolder(false));
 	};
 
 	const handleDataManager = () => {
@@ -186,7 +191,11 @@ function Toolbar() {
 						{t('all')}
 					</MenuItem>
 					{Constants.IS_DESKTOP ? (
-						<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
+						<MenuItem
+							icon={<AiOutlineFolder />}
+							onClick={handleOpenProjectFolder}
+							disabled={!isProjectOpened}
+						>
 							{t('folder')}
 						</MenuItem>
 					) : (

@@ -252,3 +252,7 @@ ipcMain.handle('close', () => {
 ipcMain.handle('open-website', (event, url) => {
 	shell.openExternal(url);
 });
+
+ipcMain.handle('open-folder', (event, path) => {
+	shell.openPath(path);
+});

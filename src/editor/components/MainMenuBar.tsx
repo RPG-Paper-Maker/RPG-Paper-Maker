@@ -16,6 +16,7 @@ import {
 	AiOutlineArrowUp,
 	AiOutlineClear,
 	AiOutlineFileAdd,
+	AiOutlineFolder,
 	AiOutlineFolderOpen,
 	AiOutlineFontSize,
 	AiOutlinePicture,
@@ -88,6 +89,7 @@ import {
 	triggerObjects3D,
 	triggerOpenDialogProject,
 	triggerOpenProject,
+	triggerOpenProjectFolder,
 	triggerPictures,
 	triggerPlay,
 	triggerPlugins,
@@ -311,6 +313,10 @@ function MainMenuBar() {
 		EngineSettings.current.recentProjects = [];
 		await EngineSettings.current.save();
 		dispatch(setProjects([]));
+	};
+
+	const handleOpenProjectFolder = async () => {
+		await IO.openFolder(Project.current!.location);
 	};
 
 	const handleCloseWarningProjectLocationExist = () => {
@@ -649,6 +655,12 @@ function MainMenuBar() {
 								icon: <AiOutlineClear />,
 								onClick: handleCleanRecentProjects,
 							},
+							{
+								title: `${t('open.project.folder')}...`,
+								icon: <AiOutlineFolder />,
+								onClick: handleOpenProjectFolder,
+								disabled: !isProjectOpened,
+							},
 						]
 					: [
 							{
@@ -915,6 +927,9 @@ function MainMenuBar() {
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(null));
 			handleOpenProject(triggers.openProject).catch(console.error);
+		} else if (triggers.openProjectFolder) {
+			dispatch(triggerOpenProjectFolder(false));
+			handleOpenProjectFolder().catch(console.error);
 		} else if (triggers.save) {
 			dispatch(triggerSave(false));
 			handleSave().catch(console.error);
