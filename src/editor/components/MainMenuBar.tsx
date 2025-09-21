@@ -319,6 +319,10 @@ function MainMenuBar() {
 		await IO.openFolder(Project.current!.location);
 	};
 
+	const handleOpenBRFolder = async () => {
+		await IO.openFolder(Project.current!.systems.PATH_BR);
+	};
+
 	const handleCloseWarningProjectLocationExist = () => {
 		setIsDialogWarningProjectLocationExist(false);
 	};
@@ -659,6 +663,12 @@ function MainMenuBar() {
 								title: `${t('open.project.folder')}...`,
 								icon: <AiOutlineFolder />,
 								onClick: handleOpenProjectFolder,
+								disabled: !isProjectOpened,
+							},
+							{
+								title: `${t('open.br.folder')}...`,
+								icon: <AiOutlineFolder />,
+								onClick: handleOpenBRFolder,
 								disabled: !isProjectOpened,
 							},
 						]
