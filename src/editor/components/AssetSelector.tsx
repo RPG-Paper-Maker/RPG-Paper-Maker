@@ -101,7 +101,7 @@ function AssetSelector({
 		onChange?.(picture.id, rect.x / rect.width, rect.y / rect.height);
 		setList([
 			Node.create(
-				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : picture
+				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : picture,
 			),
 		]);
 	};
@@ -115,7 +115,7 @@ function AssetSelector({
 		onChange?.(song.id, 0, 0);
 		setList([
 			Node.create(
-				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : song
+				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : song,
 			),
 		]);
 	};
@@ -124,7 +124,7 @@ function AssetSelector({
 		onChange?.(video.id, 0, 0);
 		setList([
 			Node.create(
-				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : video
+				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : video,
 			),
 		]);
 	};

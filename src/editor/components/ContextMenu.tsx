@@ -13,6 +13,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MenuItemType, Utils } from '../common';
 import { RootState } from '../store';
+import Flex from './Flex';
 import MenuCustom from './MenuCustom';
 
 type Props = {
@@ -105,9 +106,12 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled =
 	}, [isOpeningNewDialog]);
 
 	return (
-		<div
+		<Flex
+			one
+			column
+			fillWidth
+			fillHeight
 			ref={refComplete}
-			className='flex flexOne fillWidth fillHeight'
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
@@ -116,7 +120,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled =
 			<div ref={refMenu} className={Utils.getClassName({ hidden: !isOpen }, 'fixed hightZIndex')}>
 				<MenuCustom horizontal={false} items={items} allowKeyboard={isFocused} />
 			</div>
-		</div>
+		</Flex>
 	);
 }
 

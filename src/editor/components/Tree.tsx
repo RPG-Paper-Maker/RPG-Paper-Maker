@@ -914,22 +914,22 @@ function Tree({
 	const content = (
 		<>
 			<Flex column spacedLarge fillWidth fillHeight>
-				<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-					<div
-						onDoubleClick={handleDoubleClick}
-						className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
-						style={{
-							minWidth: `${minWidth}px`,
-							minHeight: `${minHeight}px`,
-							width: `${width}px`,
-							height: `${height}px`,
-						}}
-						ref={listRef}
-					>
-						<Flex spaced>{getHeaders()}</Flex>
+				<div
+					onDoubleClick={handleDoubleClick}
+					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
+					style={{
+						minWidth: `${minWidth}px`,
+						minHeight: `${minHeight}px`,
+						width: `${width}px`,
+						height: `${height}px`,
+					}}
+					ref={listRef}
+				>
+					<Flex spaced>{getHeaders()}</Flex>
+					<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 						{getItems()}
-					</div>
-				</ContextMenu>
+					</ContextMenu>
+				</div>
 				{showEditName && (
 					<Flex spaced>
 						<div className={Utils.getClassName({ disabledLabel: disabled || isEditNameDisabled() })}>

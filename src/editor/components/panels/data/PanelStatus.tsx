@@ -297,7 +297,7 @@ const PanelStatus = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one column spacedLarge>
-							<Flex spaced>
+							<Flex spaced centerV>
 								<Flex one />
 								<Flex disabledLabel={isStatusDisabled}>{t('icon')}:</Flex>
 								<AssetSelector

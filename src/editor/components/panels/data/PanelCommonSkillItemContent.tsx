@@ -258,7 +258,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 								{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
 									<>
 										<Label disabled={disabled}>{`${t('sound.effect')} (${t(
-											'main.menu'
+											'main.menu',
 										).toLowerCase()})`}</Label>
 										<Value>
 											<PlaySongSelector
