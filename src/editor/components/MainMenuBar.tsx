@@ -307,6 +307,12 @@ function MainMenuBar() {
 		dispatch(setLoading(false));
 	};
 
+	const handleCleanRecentProjects = async () => {
+		EngineSettings.current.recentProjects = [];
+		await EngineSettings.current.save();
+		dispatch(setProjects([]));
+	};
+
 	const handleCloseWarningProjectLocationExist = () => {
 		setIsDialogWarningProjectLocationExist(false);
 	};
@@ -634,7 +640,13 @@ function MainMenuBar() {
 					})),
 				},
 				...(Constants.IS_DESKTOP
-					? []
+					? [
+							{
+								title: `${t('clean.recent.projects')}...`,
+								icon: <AiOutlineClear />,
+								onClick: handleCleanRecentProjects,
+							},
+						]
 					: [
 							{
 								title: (
