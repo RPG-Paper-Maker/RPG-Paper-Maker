@@ -27,9 +27,9 @@ class Song extends Asset {
 			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
-				: Project.current?.getPath(),
-			this.getLocalFolder(kind)
+					? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+					: Project.current?.getPath(),
+			this.getLocalFolder(kind),
 		);
 	}
 
@@ -51,12 +51,17 @@ class Song extends Asset {
 		super.applyDefault(Song.getBindings([]));
 	}
 
-	getPath(): string {
-		return this.id === -1 || !this.name ? '' : Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+	getPath(local = false): string {
+		return this.id === -1 || !this.name
+			? ''
+			: Paths.join(
+					local ? Song.getLocalFolder(this.kind) : Song.getFolder(this.kind, this.isBR, this.dlc),
+					this.name,
+				);
 	}
 
 	async getPathOrBase64(): Promise<string> {
-		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
+		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : ((await LocalFile.readFile(this.getPath())) ?? '');
 	}
 
 	copy(song: Song): void {

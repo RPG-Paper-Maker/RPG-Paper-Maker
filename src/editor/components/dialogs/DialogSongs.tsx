@@ -93,7 +93,7 @@ function DialogSongs({
 
 	const displayOptionsStartEnd = useMemo(
 		() => selectedKind === SONG_KIND.MUSIC || selectedKind === SONG_KIND.BACKGROUND_SOUND,
-		[selectedKind]
+		[selectedKind],
 	);
 	const folders = useMemo(
 		() =>
@@ -108,12 +108,12 @@ function DialogSongs({
 									Model.TreeMapTag.create(SONG_KIND.SOUND, 'Sounds'),
 									Model.TreeMapTag.create(SONG_KIND.MUSIC_EFFECT, 'MusicEffects'),
 								],
-								false
-							)
+								false,
+							),
 						),
-				  ]
+					]
 				: [],
-		[kind]
+		[kind],
 	);
 
 	const initialize = async () => {
@@ -163,16 +163,16 @@ function DialogSongs({
 				setSelectedHowl(undefined);
 				setSelectedHowl(
 					new Howl({
-						src: [Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? ''],
+						src: [Constants.IS_DESKTOP ? path : ((await LocalFile.readFile(path)) ?? '')],
 						html5: true,
-					})
+					}),
 				);
 			} else {
 				setSelectedHowl(
 					new Howl({
 						src: [path],
 						html5: true,
-					})
+					}),
 				);
 			}
 		} else {
@@ -196,7 +196,7 @@ function DialogSongs({
 					song.isBR = true;
 					return song;
 				}),
-				false
+				false,
 			),
 			...Node.createList(
 				customNames.map((name, index) => {
@@ -208,7 +208,7 @@ function DialogSongs({
 					song.dlc = '';
 					return song;
 				}),
-				false
+				false,
 			),
 		]);
 	};
@@ -248,7 +248,7 @@ function DialogSongs({
 
 	const handleListUpdated = () => {
 		if (kind === undefined && selectedKind) {
-			Project.current!.songs.list[selectedKind] = Node.createListFromNodes(songs);
+			Project.current!.songs.list.set(selectedKind, Node.createListFromNodes(songs));
 		}
 	};
 
@@ -261,7 +261,10 @@ function DialogSongs({
 			if (selectedSong === null || !isSelectedLeftList) {
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
-				Project.current!.songs.list[selectedKind!] = songs.map((node) => node.content as Model.Song);
+				Project.current!.songs.list.set(
+					selectedKind!,
+					songs.map((node) => node.content as Model.Song),
+				);
 				await Project.current!.songs.save();
 				if (active) {
 					if (!newDynamicSongID!.isActivated) {

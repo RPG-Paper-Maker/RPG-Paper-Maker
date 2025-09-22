@@ -31,6 +31,10 @@ class Fonts extends Serializable {
 		return this.list.find((font) => font.id === id)!;
 	}
 
+	copy(fonts: Fonts): void {
+		this.list = fonts.list.map((font) => font.clone());
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Fonts.getBindings(additionnalBinding));
 	}

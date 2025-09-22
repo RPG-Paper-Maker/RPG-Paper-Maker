@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Mutex } from 'async-mutex';
 import localforage from 'localforage';
 import { ArrayUtils, BINDING, JSONType, Paths } from '../common';
 import { BindingType, Serializable } from './Serializable';
@@ -19,6 +20,7 @@ class LocalFile extends Serializable {
 	public static readonly JSON_FILE_NAMES = 'fin';
 	public static readonly JSON_CONTENT = 'c';
 	public static readonly JSON_IS_DIR = 'id';
+	public static folderLocks = new Map<string, Mutex>();
 
 	public folderNames: string[] = [];
 	public fileNames: string[] = [];
@@ -39,6 +41,13 @@ class LocalFile extends Serializable {
 	constructor(isDir = false) {
 		super();
 		this.isDir = isDir;
+	}
+
+	static getLock(folder: string) {
+		if (!this.folderLocks.has(folder)) {
+			this.folderLocks.set(folder, new Mutex());
+		}
+		return this.folderLocks.get(folder)!;
 	}
 
 	static async checkFileExists(path: string): Promise<boolean> {
@@ -80,13 +89,19 @@ class LocalFile extends Serializable {
 		if (dirs.length > 1) {
 			const newDirName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: JSONType | null = await localforage.getItem(parentPath);
-			if (parentJson && newDirName) {
-				const parent = new LocalFile(false);
-				parent.read(parentJson);
-				parent.folderNames.push(newDirName);
-				parent.write(parentJson);
-				await localforage.setItem(parentPath, parentJson);
+			// Acquire lock for this folder
+			const release = await this.getLock(parentPath).acquire();
+			try {
+				const parentJson: JSONType | null = await localforage.getItem(parentPath);
+				if (parentJson && newDirName) {
+					const parent = new LocalFile(false);
+					parent.read(parentJson);
+					parent.folderNames.push(newDirName);
+					parent.write(parentJson);
+					await localforage.setItem(parentPath, parentJson);
+				}
+			} finally {
+				release(); // release lock
 			}
 		}
 		// Create folder
@@ -99,19 +114,24 @@ class LocalFile extends Serializable {
 
 	static async createFile(path: string, content = '') {
 		const dirs = path.split('/');
-		// Edit parent files names
 		if (dirs.length > 1) {
-			const newFileName = dirs.pop();
+			const newFileName = dirs.pop()!;
 			const parentPath = dirs.join('/');
-			const parentJson: JSONType | null = await localforage.getItem(parentPath);
-			if (parentJson && newFileName) {
-				const parent = new LocalFile(false);
-				parent.read(parentJson);
-				if (!ArrayUtils.contains(parent.fileNames, newFileName)) {
-					parent.fileNames.push(newFileName);
-					parent.write(parentJson);
-					await localforage.setItem(parentPath, parentJson);
+			// Acquire lock for this folder
+			const release = await this.getLock(parentPath).acquire();
+			try {
+				const parentJson: JSONType | null = await localforage.getItem(parentPath);
+				if (parentJson && newFileName) {
+					const parent = new LocalFile(false);
+					parent.read(parentJson);
+					if (!ArrayUtils.contains(parent.fileNames, newFileName)) {
+						parent.fileNames.push(newFileName);
+						parent.write(parentJson);
+						await localforage.setItem(parentPath, parentJson);
+					}
 				}
+			} finally {
+				release(); // release lock
 			}
 		}
 		// Create file
@@ -129,15 +149,21 @@ class LocalFile extends Serializable {
 		if (editParent && dirs.length > 1) {
 			const folderName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: JSONType | null = await localforage.getItem(parentPath);
-			if (parentJson && folderName) {
-				const parent = new LocalFile(false);
-				parent.read(parentJson);
-				const removed = ArrayUtils.removeElement(parent.folderNames, folderName);
-				if (removed) {
-					parent.write(parentJson);
-					await localforage.setItem(parentPath, parentJson);
+			// Acquire lock for this folder
+			const release = await this.getLock(parentPath).acquire();
+			try {
+				const parentJson: JSONType | null = await localforage.getItem(parentPath);
+				if (parentJson && folderName) {
+					const parent = new LocalFile(false);
+					parent.read(parentJson);
+					const removed = ArrayUtils.removeElement(parent.folderNames, folderName);
+					if (removed) {
+						parent.write(parentJson);
+						await localforage.setItem(parentPath, parentJson);
+					}
 				}
+			} finally {
+				release(); // release lock
 			}
 		}
 		// Remove children folders and files
@@ -163,15 +189,21 @@ class LocalFile extends Serializable {
 		if (editParent && dirs.length > 1) {
 			const fileName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: JSONType | null = await localforage.getItem(parentPath);
-			if (parentJson && fileName) {
-				const parent = new LocalFile(false);
-				parent.read(parentJson);
-				const removed = ArrayUtils.removeElement(parent.fileNames, fileName);
-				if (removed) {
-					parent.write(parentJson);
-					await localforage.setItem(parentPath, parentJson);
+			// Acquire lock for this folder
+			const release = await this.getLock(parentPath).acquire();
+			try {
+				const parentJson: JSONType | null = await localforage.getItem(parentPath);
+				if (parentJson && fileName) {
+					const parent = new LocalFile(false);
+					parent.read(parentJson);
+					const removed = ArrayUtils.removeElement(parent.fileNames, fileName);
+					if (removed) {
+						parent.write(parentJson);
+						await localforage.setItem(parentPath, parentJson);
+					}
 				}
+			} finally {
+				release(); // release lock
 			}
 		}
 		// Remove file
@@ -219,32 +251,37 @@ class LocalFile extends Serializable {
 		const pathBefore = Paths.join(path, fileNameBefore);
 		const json = await localforage.getItem(pathBefore);
 		if (json) {
-			const parentJson: JSONType | null = await localforage.getItem(path);
-			if (parentJson) {
-				const parent = new LocalFile(true);
-				parent.read(parentJson);
-				let index = parent.fileNames.findIndex((file) => file === fileNameBefore);
-				if (index !== -1) {
-					ArrayUtils.removeAt(parent.fileNames, index);
-					parent.fileNames.push(fileNameAfter);
-					const newJson = {};
-					parent.write(newJson);
-					await localforage.setItem(path, newJson);
-				} else {
-					index = parent.folderNames.findIndex((file) => file === fileNameBefore);
+			const release = await this.getLock(path).acquire();
+			try {
+				const parentJson: JSONType | null = await localforage.getItem(path);
+				if (parentJson) {
+					const parent = new LocalFile(true);
+					parent.read(parentJson);
+					let index = parent.fileNames.findIndex((file) => file === fileNameBefore);
 					if (index !== -1) {
-						ArrayUtils.removeAt(parent.folderNames, index);
-						parent.folderNames.push(fileNameAfter);
+						ArrayUtils.removeAt(parent.fileNames, index);
+						parent.fileNames.push(fileNameAfter);
 						const newJson = {};
 						parent.write(newJson);
 						await localforage.setItem(path, newJson);
 					} else {
-						throw new Error('Could not rename file correctly.');
+						index = parent.folderNames.findIndex((file) => file === fileNameBefore);
+						if (index !== -1) {
+							ArrayUtils.removeAt(parent.folderNames, index);
+							parent.folderNames.push(fileNameAfter);
+							const newJson = {};
+							parent.write(newJson);
+							await localforage.setItem(path, newJson);
+						} else {
+							throw new Error('Could not rename file correctly.');
+						}
 					}
+					const pathAfter = Paths.join(path, fileNameAfter);
+					await localforage.setItem(pathAfter, json);
+					await localforage.removeItem(pathBefore);
 				}
-				const pathAfter = Paths.join(path, fileNameAfter);
-				await localforage.setItem(pathAfter, json);
-				await localforage.removeItem(pathBefore);
+			} finally {
+				release(); // release lock
 			}
 		}
 	}
@@ -283,35 +320,22 @@ class LocalFile extends Serializable {
 		URL.revokeObjectURL(url);
 	}
 
-	static async readPublicFile(path: string): Promise<string> {
-		return (await LocalFile.readPublicFileGeneral(path)).responseText;
+	static async readPublicFile(path: string, isBlob = false): Promise<string> {
+		if (isBlob) {
+			const blob = await this.readPublicFileBlob(path);
+			return await new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onloadend = () => resolve(reader.result as string);
+				reader.onerror = reject;
+				reader.readAsDataURL(blob);
+			});
+		} else {
+			return await (await fetch(path)).text();
+		}
 	}
 
 	static async readPublicFileBlob(path: string): Promise<Blob> {
-		return (await LocalFile.readPublicFileGeneral(path, 'blob')).response;
-	}
-
-	static async readPublicFileGeneral(
-		path: string,
-		responseType?: XMLHttpRequestResponseType
-	): Promise<XMLHttpRequest> {
-		return await new Promise((resolve) => {
-			const xhr = new XMLHttpRequest();
-			if (responseType) {
-				xhr.responseType = responseType;
-			}
-			xhr.onreadystatechange = () => {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200 || xhr.status === 0) {
-						resolve(xhr);
-					}
-				}
-			};
-			xhr.open('GET', `${Paths.join(Paths.ROOT_DIRECTORY_LOCAL, path)}?cache_bust=${new Date().getTime()}`, true);
-			xhr.setRequestHeader('Cache-Control', 'no-cache');
-			xhr.setRequestHeader('Pragma', 'no-cache');
-			xhr.send(null);
-		});
+		return await (await fetch(path)).blob();
 	}
 
 	static async allStorage(): Promise<string[]> {

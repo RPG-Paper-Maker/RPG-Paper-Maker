@@ -2,6 +2,7 @@ export * from './Dialog';
 export * from './DialogChangeLanguage';
 export * from './DialogCollisions';
 export * from './DialogData';
+export * from './DialogDeploy';
 export * from './DialogEnterNameOptions';
 export * from './DialogFonts';
 export * from './DialogNewProject';

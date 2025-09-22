@@ -93,8 +93,8 @@ function DialogPictures({
 										Model.TreeMapTag.create(PICTURE_KIND.WINDOW_SKINS, 'WindowSkins'),
 										Model.TreeMapTag.create(PICTURE_KIND.GAME_OVERS, 'GameOver'),
 									],
-									false
-								)
+									false,
+								),
 							),
 							Node.create(
 								Model.TreeMapTag.create(-3, 'Textures2D'),
@@ -110,13 +110,13 @@ function DialogPictures({
 										Model.TreeMapTag.create(PICTURE_KIND.SKYBOXES, 'SkyBoxes'),
 										Model.TreeMapTag.create(PICTURE_KIND.PARTICLES, 'Particles'),
 									],
-									false
-								)
+									false,
+								),
 							),
 						]),
-				  ]
+					]
 				: [],
-		[kind]
+		[kind],
 	);
 
 	const initialize = async () => {
@@ -193,7 +193,7 @@ function DialogPictures({
 					picture.dlc = '';
 					return picture;
 				}),
-				false
+				false,
 			),
 			...Node.createList(
 				customNames.map((name, index) => {
@@ -205,7 +205,7 @@ function DialogPictures({
 					picture.dlc = '';
 					return picture;
 				}),
-				false
+				false,
 			),
 		]);
 	};
@@ -216,7 +216,7 @@ function DialogPictures({
 
 	const handleListUpdated = () => {
 		if (kind === undefined && selectedKind) {
-			Project.current!.pictures.list[selectedKind] = Node.createListFromNodes(pictures);
+			Project.current!.pictures.list.set(selectedKind, Node.createListFromNodes(pictures));
 		}
 	};
 
@@ -234,7 +234,7 @@ function DialogPictures({
 			} else {
 				setIsLoading(true);
 				await Scene.Map.current?.reloadTextures(kind);
-				Project.current!.pictures.list[kind] = Node.createListFromNodes(pictures);
+				Project.current!.pictures.list.set(kind, Node.createListFromNodes(pictures));
 				await Project.current!.pictures.save();
 				const isTileset = selectedPicture.id === 0;
 				onAccept?.(
@@ -242,7 +242,7 @@ function DialogPictures({
 					isTileset
 						? selectedRectTileset.clone()
 						: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
-					isTileset
+					isTileset,
 				);
 				if (active) {
 					if (!newDynamicPictureID!.isActivated) {
@@ -295,7 +295,7 @@ function DialogPictures({
 						<TextureSquareSelector
 							texture={Project.current!.pictures.getByID(
 								PICTURE_KIND.TILESETS,
-								Scene.Map.current!.model.getTileset().pictureID
+								Scene.Map.current!.model.getTileset().pictureID,
 							).getPath()}
 							defaultRectangle={selectedRectTileset}
 							onUpdateRectangle={setSelectedRectTileset}

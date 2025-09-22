@@ -80,7 +80,7 @@ class Shape extends Asset {
 				const temp3D = new THREE.Vector3(
 					parseFloat(result[1]) * Project.SQUARE_SIZE,
 					parseFloat(result[2]) * Project.SQUARE_SIZE,
-					parseFloat(result[3]) * Project.SQUARE_SIZE
+					parseFloat(result[3]) * Project.SQUARE_SIZE,
 				);
 				v.push(temp3D);
 				if (firstVertex) {
@@ -147,7 +147,7 @@ class Shape extends Asset {
 			center: new THREE.Vector3(
 				(maxVertex.x - minVertex.x) / 2 + minVertex.x,
 				(maxVertex.y - minVertex.y) / 2 + minVertex.y,
-				(maxVertex.z - minVertex.z) / 2 + minVertex.z
+				(maxVertex.z - minVertex.z) / 2 + minVertex.z,
 			),
 			w: maxVertex.x - minVertex.x,
 			h: maxVertex.y - minVertex.y,
@@ -160,9 +160,9 @@ class Shape extends Asset {
 			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
-				: Project.current?.getPath(),
-			this.getLocalFolder(kind)
+					? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+					: Project.current?.getPath(),
+			this.getLocalFolder(kind),
 		);
 	}
 
@@ -191,8 +191,8 @@ class Shape extends Asset {
 			const content = await (Constants.IS_DESKTOP
 				? ((await IO.readFile(this.getPath())) as string)
 				: this.isBR
-				? readPublicFile(this.getPath())
-				: await (await LocalFile.readBase64File(this.getPath())).text());
+					? readPublicFile(this.getPath())
+					: await (await LocalFile.readBase64File(this.getPath())).text());
 			if (content) {
 				if (content.length === 0) {
 					console.warn(`The shape ${this.toStringNameID()} content is empty.`);
@@ -202,8 +202,13 @@ class Shape extends Asset {
 		}
 	}
 
-	getPath(): string {
-		return this.id === -1 ? '' : Paths.join(Shape.getFolder(this.kind, this.isBR, this.dlc), this.name);
+	getPath(local = false): string {
+		return this.id === -1
+			? ''
+			: Paths.join(
+					local ? Shape.getLocalFolder(this.kind) : Shape.getFolder(this.kind, this.isBR, this.dlc),
+					this.name,
+				);
 	}
 
 	copy(shape: Shape): void {

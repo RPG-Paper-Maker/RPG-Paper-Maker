@@ -15,25 +15,35 @@ import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class Songs extends Serializable {
-	public list!: Model.Song[][];
+	public list!: Map<number, Model.Song[]>;
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SONGS);
 	}
 
 	getList(kind: SONG_KIND): Model.Song[] {
-		return this.list[kind];
+		return this.list.get(kind)!;
 	}
 
 	getByID(kind: SONG_KIND, id: number): Model.Song {
-		return this.list[kind].find((song) => song.id === id)!;
+		return this.list.get(kind)!.find((song) => song.id === id)!;
+	}
+
+	copy(songs: Songs): void {
+		this.list = new Map();
+		for (const [kind, list] of songs.list.entries()) {
+			this.list.set(
+				kind,
+				list.map((song) => song.clone()),
+			);
+		}
 	}
 
 	read(json: JSONType) {
-		this.list = [];
+		this.list = new Map();
 		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Song[] = [];
-			this.list[k as number] = list;
+			this.list.set(k as number, list);
 			for (const jsonSong of v as JSONType[]) {
 				const song = new Model.Song(k as SONG_KIND);
 				song.read(jsonSong);

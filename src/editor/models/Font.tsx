@@ -20,20 +20,26 @@ class Font extends Asset {
 			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
-				: Project.current?.getPath(),
-			Paths.FONTS
+					? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+					: Project.current?.getPath(),
+			this.getLocalFolder(),
 		);
 	}
 
-	getPath(): string {
-		return this.id === -1 || !this.name ? '' : Paths.join(Font.getFolder(this.isBR, this.dlc), this.name);
+	static getLocalFolder(): string {
+		return Paths.FONTS;
 	}
 
-	async getFontFace(name: string): Promise<string> {
+	getPath(local = false): string {
+		return this.id === -1 || !this.name
+			? ''
+			: Paths.join(local ? Font.getLocalFolder() : Font.getFolder(this.isBR, this.dlc), this.name);
+	}
+
+	async getFontFace(name: string, deployed: boolean): Promise<string> {
 		return `@font-face {
 			font-family: "${name}";
-			src: url("${this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? ''}");
+			src: url("${deployed ? `../${this.getPath(true)}` : this.isBR || Constants.IS_DESKTOP ? this.getPath() : ((await LocalFile.readFile(this.getPath())) ?? '')}");
 		}`;
 	}
 }

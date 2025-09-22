@@ -28,7 +28,7 @@ import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs
 import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug, FaRegKeyboard } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
-import { LuFolders, LuLanguages, LuMountain, LuSaveAll } from 'react-icons/lu';
+import { LuFolders, LuLanguages, LuMountain, LuRocket, LuSaveAll } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic, MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
@@ -109,6 +109,7 @@ import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
+import DialogDeploy from './dialogs/DialogDeploy';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
@@ -134,6 +135,7 @@ function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [isDialogDeployOpen, setIsDialogDeployOpen] = useState(false);
 	const [isDialogDataOpen, setIsDialogDataOpen] = useState(false);
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
@@ -367,6 +369,10 @@ function MainMenuBar() {
 			await Project.current?.treeMaps.saveAllTags();
 			dispatch(triggerTreeMap());
 		}
+	};
+
+	const handleDeploy = async () => {
+		setIsDialogDeployOpen(true);
 	};
 
 	const handleImport = async () => {
@@ -711,6 +717,12 @@ function MainMenuBar() {
 					disabled: !canSaveAll,
 					onClick: handleSaveAll,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.S],
+				},
+				{
+					title: `${t('deploy')}...`,
+					icon: <LuRocket />,
+					onClick: handleDeploy,
+					disabled: !isProjectOpened,
 				},
 				{
 					title: t('close'),
@@ -1098,6 +1110,7 @@ function MainMenuBar() {
 			{isDialogNewProjectOpen && (
 				<DialogNewProject isOpen setIsOpen={setIsDialogNewProjectOpen} onAccept={handleAcceptNewProject} />
 			)}
+			{isDialogDeployOpen && <DialogDeploy setIsOpen={setIsDialogDeployOpen} />}
 			{isDialogDataOpen && <DialogData isOpen setIsOpen={setIsDialogDataOpen} />}
 			{isDialogSystemsOpen && <DialogSystems isOpen setIsOpen={setIsDialogSystemsOpen} />}
 			{isDialogVariablesOpen && <DialogVariables isOpen setIsOpen={setIsDialogVariablesOpen} />}

@@ -59,6 +59,8 @@ class Paths {
 	public static readonly SAVES = 'Saves';
 	public static readonly TEST = 'Test';
 	public static readonly DEFAULT = 'Default';
+	public static readonly DEPLOY = 'Deploy';
+	public static readonly BUILD = 'build';
 	public static readonly TEMP = 'temp';
 	public static readonly INDEX = 'index';
 	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
@@ -143,8 +145,8 @@ class Paths {
 		return path.replaceAll('\\', '/');
 	}
 
-	static getFileName(path: string): string | undefined {
-		return path.split('/').pop();
+	static getFileName(path: string): string {
+		return this.normalize(path).split('/').pop() ?? '';
 	}
 
 	static getRPMGamesFolder(): string {

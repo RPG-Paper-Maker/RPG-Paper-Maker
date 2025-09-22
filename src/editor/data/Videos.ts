@@ -31,6 +31,10 @@ class Videos extends Serializable {
 		return this.list.find((video) => video.id === id)!;
 	}
 
+	copy(videos: Videos): void {
+		this.list = videos.list.map((song) => song.clone());
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Videos.getBindings(additionnalBinding));
 	}

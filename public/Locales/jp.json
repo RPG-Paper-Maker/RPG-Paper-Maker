@@ -23,7 +23,6 @@
 	"save.tool": "保存",
 	"save.all": "すべてのマップの変更を保存",
 	"save.all.tool": "すべて保存",
-	"export.standalone": "実行形式でエクスポート",
 	"close.project": "プロジェクトを閉じる",
 	"quit": "終了する",
 	"undo": "元に戻す",

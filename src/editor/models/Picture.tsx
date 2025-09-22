@@ -48,9 +48,9 @@ class Picture extends Asset {
 			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
-				: Project.current?.getPath(),
-			this.getLocalFolder(kind)
+					? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+					: Project.current?.getPath(),
+			this.getLocalFolder(kind),
 		);
 	}
 
@@ -103,12 +103,17 @@ class Picture extends Asset {
 		return 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0);
 	}
 
-	getPath(): string {
-		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+	getPath(local = false): string {
+		return this.id === -1 || !this.name
+			? ''
+			: Paths.join(
+					local ? Picture.getLocalFolder(this.kind) : Picture.getFolder(this.kind, this.isBR, this.dlc),
+					this.name,
+				);
 	}
 
 	async getPathOrBase64(): Promise<string> {
-		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
+		return this.isBR || Constants.IS_DESKTOP ? this.getPath() : ((await LocalFile.readFile(this.getPath())) ?? '');
 	}
 
 	async loadPicture() {
@@ -119,7 +124,7 @@ class Picture extends Asset {
 		super.copy(picture, Picture.getBindings(additionnalBinding));
 		this.kind = picture.kind;
 		this.collisions = new Map<string, CollisionSquare>(
-			[...picture.collisions.entries()].map(([point, collision]) => [point, collision.clone()])
+			[...picture.collisions.entries()].map(([point, collision]) => [point, collision.clone()]),
 		);
 	}
 

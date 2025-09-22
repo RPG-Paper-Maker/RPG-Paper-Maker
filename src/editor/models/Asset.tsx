@@ -26,6 +26,10 @@ class Asset extends Base {
 		return [...Asset.bindings, ...additionnalBinding];
 	}
 
+	getPath(_local?: boolean): string {
+		return '';
+	}
+
 	applyDefault(additionnalBinding: BindingType[]): void {
 		super.applyDefault(Asset.getBindings(additionnalBinding));
 	}

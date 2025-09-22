@@ -43,6 +43,8 @@ class Settings extends Serializable {
 	public mapEditorDefaultScaleY!: number;
 	public mapEditorDefaultScaleZ!: number;
 	public showAvailableContent!: boolean;
+	public lastMajorVersion!: number;
+	public lastMinorVersion!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -73,6 +75,8 @@ class Settings extends Serializable {
 		['mapEditorDefaultScaleY', 'medsy', 1, BINDING.NUMBER],
 		['mapEditorDefaultScaleZ', 'medsz', 1, BINDING.NUMBER],
 		['showAvailableContent', 'sac', true, BINDING.BOOLEAN],
+		['lastMajorVersion', 'lmv', 1, BINDING.NUMBER],
+		['lastMinorVersion', 'lmiv', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

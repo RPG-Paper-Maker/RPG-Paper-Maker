@@ -213,6 +213,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Map.currentSelectedMapElementKind);
 	}
 
@@ -224,6 +225,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
+			ELEMENT_MAP_KIND.VIEW,
 		].includes(Map.currentSelectedMapElementKind);
 	}
 

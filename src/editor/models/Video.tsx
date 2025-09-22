@@ -19,9 +19,9 @@ class Video extends Asset {
 			isBR
 				? Project.current?.systems?.PATH_BR
 				: dlc
-				? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
-				: Project.current?.getPath(),
-			this.getLocalFolder()
+					? Paths.join(Project.current?.systems?.PATH_DLCS, dlc)
+					: Project.current?.getPath(),
+			this.getLocalFolder(),
 		);
 	}
 
@@ -29,8 +29,10 @@ class Video extends Asset {
 		return Paths.VIDEOS;
 	}
 
-	getPath(): string {
-		return this.id === -1 ? '' : `${Video.getFolder(this.isBR, this.dlc)}/${this.name}`;
+	getPath(local = false): string {
+		return this.id === -1
+			? ''
+			: Paths.join(local ? Video.getLocalFolder() : Video.getFolder(this.isBR, this.dlc), this.name);
 	}
 }
 

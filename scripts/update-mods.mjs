@@ -129,9 +129,16 @@ const main = async () => {
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
 		createEmptyBRFolder('./public/BR');
 		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
-		const webPath = `${destinationPaths.dependencies}/Game/web/`;
+		const webPath = `${destinationPaths.dependencies}/web/`;
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
 		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/Common/Platform.js');
+		const deployPath = './public/Deploy';
+		if (await exists(deployPath)) {
+			await fs.rm(deployPath, { recursive: true });
+		}
+		await fs.mkdir(deployPath);
+		await copyFileAndPrint(`${destinationPaths.scripts}/index.html`, `${deployPath}/index.html`);
+		await fs.rm(modsPath, { recursive: true });
 		console.log('✅ Download completed!');
 	} catch (error) {
 		console.error('Error during download:', error);

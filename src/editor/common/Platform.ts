@@ -162,7 +162,7 @@ export const openWebsite = async (url: string) => {
 export const loadZip = async (
 	file: File,
 	basePath: string,
-	callback?: (current: number, total: number, label: string) => void
+	callback?: (current: number, total: number, label: string) => void,
 ) => {
 	const JSZip = (await import('jszip')).default;
 	const zip = new JSZip();
@@ -226,13 +226,30 @@ export const writeJSON = async (path: string, json: JSONType) => {
 	await createFile(path, JSON.stringify(json));
 };
 
-export const readPublicFile = async (path: string): Promise<string> => {
-	return await (Constants.IS_DESKTOP ? IO.readPublicFile(path) : LocalFile.readPublicFile(path));
+export const readPublicFile = async (path: string, isBlob = false): Promise<string> => {
+	return await (Constants.IS_DESKTOP ? IO.readPublicFile(path) : LocalFile.readPublicFile(path, isBlob));
 };
 
-export const copyPublicFile = async (publicPath: string, dst: string) => {
-	const content = await readPublicFile(publicPath);
+export const copyPublicFile = async (publicPath: string, dst: string, isBlob = false) => {
+	const content = await readPublicFile(publicPath, isBlob);
 	await createFile(dst, content);
+};
+
+export const copyPublicFolder = async (publicFolders: string[], dst: string) => {
+	await createFolder(dst);
+	let currentFolder = Platform.manifest;
+	for (const folder of publicFolders) {
+		currentFolder = currentFolder[folder] as Record<string, unknown>;
+	}
+	for (const name in currentFolder) {
+		if (name === 'files') {
+			for (const fileName of currentFolder[name] as string[]) {
+				await copyPublicFile(Paths.join(publicFolders.join('/'), fileName), Paths.join(dst, fileName));
+			}
+		} else {
+			await copyPublicFolder([...publicFolders, name], Paths.join(dst, name));
+		}
+	}
 };
 
 export const readFileManifest = async () => {
@@ -262,7 +279,7 @@ export const openGame = async (location: string, isBattleTest?: boolean) => {
 	} else {
 		window.open(
 			`${window.location.pathname}?project=${location}${isBattleTest ? '&battleTest=true' : ''}`,
-			'_blank'
+			'_blank',
 		);
 	}
 };

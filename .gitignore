@@ -6,4 +6,5 @@
 /desktop/node_modules
 /public/BR
 /public/Scripts
+/public/Deploy
 tsconfig.tsbuildinfo

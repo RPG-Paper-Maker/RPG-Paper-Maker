@@ -58,12 +58,12 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.MTL, 'MTL'),
 									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.COLLISIONS, 'Collisions'),
 								],
-								false
-							)
+								false,
+							),
 						),
-				  ]
+					]
 				: [],
-		[kind]
+		[kind],
 	);
 	const importTypes = useMemo(() => {
 		switch (selectedKind) {
@@ -111,7 +111,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 					shape.isBR = true;
 					return shape;
 				}),
-				false
+				false,
 			),
 			...Node.createList(
 				customNames.map((name, index) => {
@@ -123,7 +123,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 					shape.dlc = '';
 					return shape;
 				}),
-				false
+				false,
 			),
 		]);
 	};
@@ -134,7 +134,10 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 
 	const handleListUpdated = () => {
 		if (selectedKind) {
-			Project.current!.shapes.list[selectedKind] = shapes.map((node) => node.content as Model.Shape);
+			Project.current!.shapes.list.set(
+				selectedKind,
+				shapes.map((node) => node.content as Model.Shape),
+			);
 		}
 	};
 

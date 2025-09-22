@@ -218,13 +218,9 @@ const inject = Manager.Plugins.inject;
 					dispatch(showWarning(t('you.need.select.plugin.import')));
 					return;
 				}
-				let folderName = '';
-				if (Constants.IS_DESKTOP) {
-					const folders = importFolder!.replaceAll('\\', '/').split('/');
-					folderName = folders[folders.length - 1];
-				} else {
-					folderName = importFile!.name.substring(0, importFile!.name.length - 4);
-				}
+				const folderName = Constants.IS_DESKTOP
+					? Paths.getFileName(importFolder!)
+					: importFile!.name.substring(0, importFile!.name.length - 4);
 				if (Project.current!.scripts.plugins.some((plugin) => plugin.name === folderName)) {
 					dispatch(showWarning(t('plugin.name.already.exists')));
 					return;
