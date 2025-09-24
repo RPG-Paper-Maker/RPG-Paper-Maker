@@ -164,7 +164,9 @@ ipcMain.handle('create-folder', async (event, path) => {
 });
 
 ipcMain.handle('remove-folder', async (event, path) => {
-	await fs.rm(path, { recursive: true });
+	try {
+		await fs.rm(path, { recursive: true });
+	} catch {}
 });
 
 const copyFolder = async (src, dst) => {

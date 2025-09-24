@@ -19,7 +19,6 @@ import {
 	checkFileExists,
 	copyFolder,
 	exportFolder,
-	Platform,
 	readFile,
 	readPublicFile,
 	removeFolder,
@@ -54,8 +53,8 @@ const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: 
 		if (key === 'files') {
 			nodes.push(
 				...(manifest[key] as string[]).map((file) =>
-					Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file)))
-				)
+					Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file))),
+				),
 			);
 		} else {
 			const folder = Node.create(Model.TreeMapTag.create(foldersID.i--, key));
@@ -64,7 +63,7 @@ const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: 
 				manifest[key] as JSONType,
 				foldersID,
 				filesID,
-				Paths.join(path, key)
+				Paths.join(path, key),
 			);
 			nodes.push(folder);
 		}
@@ -126,7 +125,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
-			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP)
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
 		);
 		setPlugins(Node.createList(Project.current!.scripts.plugins, false));
 		setIsLoading(false);
@@ -189,7 +188,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const handleDeletePlugin = async (node: Node) => {
 		await removeFolder(
-			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, (node.content as Model.Plugin).name)
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, (node.content as Model.Plugin).name),
 		);
 	};
 
@@ -226,7 +225,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					Project.current!.getPath(),
 					Paths.PLUGINS_TEMP,
 					selectedPlugin!.name,
-					Paths.FILE_PLUGIN_PICTURE
+					Paths.FILE_PLUGIN_PICTURE,
 				);
 				if (Constants.IS_DESKTOP) {
 					const arrayBuffer = await file.arrayBuffer();
@@ -293,7 +292,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const handleDefaultParametersUpdated = () => {
 		selectedPlugin!.defaultParameters = Node.createListFromNodes(defaultParameters);
 		selectedPlugin!.parameters = selectedPlugin!.defaultParameters.map(
-			(parameter) => parameter.clone() as Model.PluginParameter
+			(parameter) => parameter.clone() as Model.PluginParameter,
 		);
 		setTriggerUpdateParameters((b) => !b);
 		updateParametersDefaults(selectedPlugin!);
@@ -330,8 +329,8 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			if (tag.path) {
 				setSourceCode(
 					Constants.IS_DESKTOP
-						? ((await IO.readFile(tag.path)) as string) ?? ''
-						: await readPublicFile(tag.path)
+						? (((await IO.readFile(tag.path)) as string) ?? '')
+						: await readPublicFile(tag.path),
 				);
 				return;
 			}
@@ -351,7 +350,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
 		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
-			Paths.join(Project.current!.getPath(), Paths.PLUGINS)
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
 		);
 		await Project.current!.scripts.save();
 		Project.current!.scripts.plugins.forEach((plugin) => {
@@ -380,7 +379,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				const nodes = [
 					Node.create(
 						Model.TreeMapTag.create(-1, 'Scripts'),
-						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.__dirname, 'Scripts'))
+						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.__dirname, 'Scripts')),
 					),
 				];
 				setFolders(nodes);
@@ -389,7 +388,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			setFolders([
 				Node.create(
 					Model.TreeMapTag.create(-1, 'Scripts'),
-					manifestToTreeMapTag(Platform.manifest.Scripts as JSONType, { i: -2 }, { i: 1 }, '/Scripts')
+					manifestToTreeMapTag(LocalFile.manifest.Scripts as JSONType, { i: -2 }, { i: 1 }, '/Scripts'),
 				),
 			]);
 		}

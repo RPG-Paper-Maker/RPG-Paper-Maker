@@ -231,45 +231,22 @@ export const readPublicFile = async (path: string, isBlob = false): Promise<stri
 };
 
 export const copyPublicFile = async (publicPath: string, dst: string, isBlob = false) => {
-	const content = await readPublicFile(publicPath, isBlob);
-	await createFile(dst, content);
+	return await (Constants.IS_DESKTOP
+		? IO.copyFile(Paths.join(window.__dirname, publicPath), dst)
+		: LocalFile.copyPublicFile(publicPath, dst, isBlob));
 };
 
 export const copyPublicFolder = async (publicFolders: string[], dst: string) => {
-	await createFolder(dst);
-	let currentFolder = Platform.manifest;
-	for (const folder of publicFolders) {
-		currentFolder = currentFolder[folder] as Record<string, unknown>;
-	}
-	for (const name in currentFolder) {
-		if (name === 'files') {
-			for (const fileName of currentFolder[name] as string[]) {
-				await copyPublicFile(Paths.join(publicFolders.join('/'), fileName), Paths.join(dst, fileName));
-			}
-		} else {
-			await copyPublicFolder([...publicFolders, name], Paths.join(dst, name));
-		}
-	}
-};
-
-export const readFileManifest = async () => {
-	Platform.manifest = JSON.parse(await readPublicFile('./fileManifest.json'));
+	return await (Constants.IS_DESKTOP
+		? IO.copyPublicFolder(Paths.join(...publicFolders), dst)
+		: LocalFile.copyPublicFolder(publicFolders, dst));
 };
 
 export const getAllFilesFromFolder = async (path: string): Promise<string[]> => {
 	if (Constants.IS_DESKTOP) {
 		return await IO.getFiles(path);
 	} else {
-		const folders = path.split('/');
-		folders.shift();
-		if (folders.length > 0 && folders[0] === '') {
-			folders.shift();
-		}
-		let currentFolder = Platform.manifest;
-		for (const folder of folders) {
-			currentFolder = currentFolder[folder] as Record<string, unknown>;
-		}
-		return (currentFolder?.files as string[]) ?? [];
+		return await LocalFile.getAllFilesFromFolder(path);
 	}
 };
 
@@ -331,7 +308,3 @@ export const readOnlineFileArrayBuffer = async (url: string): Promise<ArrayBuffe
 		return null;
 	}
 };
-
-export class Platform {
-	public static manifest: Record<string, unknown>;
-}

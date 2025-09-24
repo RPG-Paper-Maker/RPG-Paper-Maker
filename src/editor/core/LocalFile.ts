@@ -21,6 +21,7 @@ class LocalFile extends Serializable {
 	public static readonly JSON_CONTENT = 'c';
 	public static readonly JSON_IS_DIR = 'id';
 	public static folderLocks = new Map<string, Mutex>();
+	public static manifest: Record<string, unknown>;
 
 	public folderNames: string[] = [];
 	public fileNames: string[] = [];
@@ -336,6 +337,45 @@ class LocalFile extends Serializable {
 
 	static async readPublicFileBlob(path: string): Promise<Blob> {
 		return await (await fetch(path)).blob();
+	}
+
+	static async copyPublicFile(publicPath: string, dst: string, isBlob = false) {
+		const content = await this.readPublicFile(publicPath, isBlob);
+		await this.createFile(dst, content);
+	}
+
+	static async copyPublicFolder(publicFolders: string[], dst: string) {
+		await this.createFolder(dst);
+		let currentFolder = LocalFile.manifest;
+		for (const folder of publicFolders) {
+			currentFolder = currentFolder[folder] as Record<string, unknown>;
+		}
+		for (const name in currentFolder) {
+			if (name === 'files') {
+				for (const fileName of currentFolder[name] as string[]) {
+					await this.copyPublicFile(Paths.join(publicFolders.join('/'), fileName), Paths.join(dst, fileName));
+				}
+			} else {
+				await this.copyPublicFolder([...publicFolders, name], Paths.join(dst, name));
+			}
+		}
+	}
+
+	static async getAllFilesFromFolder(path: string): Promise<string[]> {
+		const folders = path.split('/');
+		folders.shift();
+		if (folders.length > 0 && folders[0] === '') {
+			folders.shift();
+		}
+		let currentFolder = this.manifest;
+		for (const folder of folders) {
+			currentFolder = currentFolder[folder] as Record<string, unknown>;
+		}
+		return (currentFolder?.files as string[]) ?? [];
+	}
+
+	static async readFileManifest() {
+		this.manifest = JSON.parse(await this.readPublicFile('./fileManifest.json'));
 	}
 
 	static async allStorage(): Promise<string[]> {

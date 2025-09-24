@@ -13,7 +13,7 @@ import localforage from 'localforage';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
-import { checkFileExists, createFolder, readFileManifest, readPublicFile } from '../../common/Platform';
+import { checkFileExists, createFolder, readPublicFile } from '../../common/Platform';
 import { LocalFile } from '../../core/LocalFile';
 import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
@@ -58,7 +58,7 @@ function PanelLoading({ setLoaded }: Props) {
 				}
 				await localforage.setItem('CACHE_VERSION', LocalFile.CACHE_VERSION);
 			}
-			await readFileManifest();
+			await LocalFile.readFileManifest();
 		}
 	};
 

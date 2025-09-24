@@ -120,6 +120,10 @@ class IO {
 		return (await IO.readFile(Paths.join(window.__dirname, path))) as string;
 	}
 
+	static async copyPublicFolder(path: string, dst: string): Promise<void> {
+		await IO.copyFolder(Paths.join(window.__dirname, path), dst);
+	}
+
 	static async openGame(projectName: string, isBattleTest?: boolean) {
 		await this.invoke('open-game', projectName, isBattleTest);
 	}

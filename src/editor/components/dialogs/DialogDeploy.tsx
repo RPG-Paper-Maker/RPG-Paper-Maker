@@ -21,9 +21,12 @@ import {
 	createFile,
 	createFolder,
 	exportFolder,
+	getFolders,
+	removeFile,
 	removeFolder,
 	writeJSON,
 } from '../../common/Platform';
+import { LocalFile } from '../../core/LocalFile';
 import { Project } from '../../core/Project';
 import { Serializable } from '../../core/Serializable';
 import { Asset } from '../../models';
@@ -75,10 +78,8 @@ function DialogDeploy({ setIsOpen }: Props) {
 		await copyAllProject(path);
 		dispatch(setLoadingBar({ percent: 20, label: 'Copying BR...' }));
 		await copyBRDLC(path);
-		if (exportType === EXPORT_TYPE.WEB) {
-			dispatch(setLoadingBar({ percent: 80, label: 'Copying BR...' }));
-			await createWeb(path);
-		}
+		dispatch(setLoadingBar({ percent: 80, label: 'Removing useless content...' }));
+		await removeUselessContent(path);
 		dispatch(setLoadingBar({ percent: 100, label: 'Finished!' }));
 		if (Constants.IS_DESKTOP) {
 			await IO.openFolder(path);
@@ -99,6 +100,21 @@ function DialogDeploy({ setIsOpen }: Props) {
 			Paths.join(path, Paths.BUILD, Paths.STYLES, Paths.FILE_FONTS_CSS),
 			await Project.current!.systems.getStyleCSS(true),
 		);
+	};
+
+	const removeUselessContent = async (path: string) => {
+		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_TREE_MAPS));
+		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_GAME_RPMG));
+		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_FONTS));
+		await removeFolder(Paths.join(path, Paths.BUILD, Paths.TEST));
+		await removeFolder(Paths.join(path, Paths.BUILD, Paths.SAVES));
+		await createFolder(Paths.join(path, Paths.BUILD, Paths.SAVES));
+		await removeFolder(Paths.join(path, Paths.BUILD, Paths.MAPS, Paths.TEMP));
+		const maps = await getFolders(Paths.join(path, Paths.BUILD, Paths.MAPS));
+		for (const mapFolder of maps) {
+			await removeFolder(Paths.join(path, Paths.BUILD, Paths.MAPS, mapFolder, Paths.TEMP));
+			await removeFolder(Paths.join(path, Paths.BUILD, Paths.MAPS, mapFolder, Paths.TEMP_UNDO_REDO));
+		}
 	};
 
 	const copyBRDLC = async (path: string) => {
@@ -142,7 +158,13 @@ function DialogDeploy({ setIsOpen }: Props) {
 			for (const asset of list) {
 				if ((asset.isBR || !!asset.dlc) && asset.id >= 1) {
 					promises.push(
-						copyPublicFile(asset.getPath(), Paths.join(path, Paths.BUILD, asset.getPath(true)), isBlob),
+						Constants.IS_DESKTOP
+							? IO.copyFile(asset.getPath(), Paths.join(path, Paths.BUILD, asset.getPath(true)))
+							: LocalFile.copyPublicFile(
+									asset.getPath(),
+									Paths.join(path, Paths.BUILD, asset.getPath(true)),
+									isBlob,
+								),
 					);
 					asset.isBR = false;
 					asset.dlc = '';
@@ -153,8 +175,6 @@ function DialogDeploy({ setIsOpen }: Props) {
 		data.write(json);
 		promises.push(writeJSON(Paths.join(path, Paths.BUILD, fileName), json));
 	};
-
-	const createWeb = async (path: string) => {};
 
 	const handleClickChangeLocation = async () => {
 		const newLocation = await IO.openFolderDialog(location);

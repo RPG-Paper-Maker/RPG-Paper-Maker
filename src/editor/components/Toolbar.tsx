@@ -96,7 +96,7 @@ function Toolbar() {
 	};
 
 	const handleOpenProjectFolder = () => {
-		dispatch(triggerOpenProjectFolder(false));
+		dispatch(triggerOpenProjectFolder(true));
 	};
 
 	const handleDataManager = () => {
