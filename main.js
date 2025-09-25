@@ -156,7 +156,7 @@ ipcMain.handle('read-file', async (event, p, isInPublic = false, asBase64 = fals
 });
 
 const createFolder = async (path) => {
-	await fs.mkdir(path);
+	await fs.mkdir(path, { recursive: true });
 };
 
 ipcMain.handle('create-folder', async (event, path) => {
@@ -164,9 +164,9 @@ ipcMain.handle('create-folder', async (event, path) => {
 });
 
 ipcMain.handle('remove-folder', async (event, path) => {
-	try {
+	if (await exists(path)) {
 		await fs.rm(path, { recursive: true });
-	} catch {}
+	}
 });
 
 const copyFolder = async (src, dst) => {
@@ -257,4 +257,34 @@ ipcMain.handle('open-website', (event, url) => {
 
 ipcMain.handle('open-folder', (event, path) => {
 	shell.openPath(path);
+});
+
+ipcMain.handle('get-os', async () => {
+	return process.platform;
+});
+
+ipcMain.handle('get-engine-folder', async () => {
+	return path.dirname(process.execPath);
+});
+
+async function copyDir(srcDir, destDir, excludePath) {
+	await fs.mkdir(destDir, { recursive: true });
+	const entries = await fs.readdir(srcDir, { withFileTypes: true });
+
+	for (const entry of entries) {
+		const srcPath = path.join(srcDir, entry.name);
+		const destPath = path.join(destDir, entry.name);
+
+		if (srcPath.replaceAll('\\', '/').startsWith(excludePath)) continue;
+
+		if (entry.isDirectory()) {
+			await copyDir(srcPath, destPath, excludePath);
+		} else {
+			await fs.copyFile(srcPath, destPath);
+		}
+	}
+}
+
+ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
+	await copyDir(src, dst, excludePath);
 });

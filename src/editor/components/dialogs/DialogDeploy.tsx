@@ -12,7 +12,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Constants, INPUT_TYPE_WIDTH, IO, Paths } from '../../common';
+import { Constants, INPUT_TYPE_WIDTH, IO, OS_KIND, Paths } from '../../common';
 import {
 	checkFileExists,
 	copyFolder,
@@ -75,11 +75,21 @@ function DialogDeploy({ setIsOpen }: Props) {
 		dispatch(setLoading(true));
 		dispatch(setLoadingBar({ percent: 0, label: 'Copy project...' }));
 		const path = getPathProject();
-		await copyAllProject(path);
+		const os = Constants.IS_DESKTOP ? await IO.getOS() : OS_KIND.WEB;
+		await createFolder(path);
+		const localAppPath =
+			exportType === EXPORT_TYPE.APPLICATION
+				? os === OS_KIND.DARWIN
+					? Paths.join('Game.app', 'Contents', Paths.RESOURCES_DARWIN, Paths.APP)
+					: Paths.join(Paths.RESOURCES, Paths.APP)
+				: null;
+		const appPath = localAppPath === null ? path : Paths.join(path, localAppPath);
+		await copyDependencies(path, appPath, localAppPath);
+		await copyAllProject(appPath);
 		dispatch(setLoadingBar({ percent: 20, label: 'Copying BR...' }));
-		await copyBRDLC(path);
+		await copyBRDLC(appPath);
 		dispatch(setLoadingBar({ percent: 80, label: 'Removing useless content...' }));
-		await removeUselessContent(path);
+		await removeUselessContent(appPath);
 		dispatch(setLoadingBar({ percent: 100, label: 'Finished!' }));
 		if (Constants.IS_DESKTOP) {
 			await IO.openFolder(path);
@@ -91,15 +101,35 @@ function DialogDeploy({ setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
+	const copyDependencies = async (path: string, appPath: string, localAppPath: string | null) => {
+		if (exportType === EXPORT_TYPE.APPLICATION) {
+			const enginePath = await IO.getEngineFolder();
+			await IO.copyAndExclude(enginePath, path, Paths.join(enginePath, localAppPath!));
+			await IO.createFolder(appPath);
+			await copyPublicDeploy(appPath, 'main.js');
+			await copyPublicDeploy(appPath, 'preload.js');
+			await copyPublicDeploy(appPath, 'package.json');
+		}
+		await copyPublicDeploy(appPath, 'index.html');
+	};
+
+	const copyPublicDeploy = async (appPath: string, fileName: string) => {
+		await copyPublicFile(Paths.join(Paths.DEPLOY, fileName), Paths.join(appPath, fileName));
+	};
+
 	const copyAllProject = async (path: string) => {
-		await createFolder(path);
 		await copyFolder(Project.current!.getPath(), Paths.join(path, Paths.BUILD));
-		await copyPublicFile(Paths.join(Paths.DEPLOY, 'index.html'), Paths.join(path, 'index.html'));
 		await copyPublicFolder([Paths.SCRIPTS], Paths.join(path, Paths.BUILD, Paths.SCRIPTS));
 		await createFile(
 			Paths.join(path, Paths.BUILD, Paths.STYLES, Paths.FILE_FONTS_CSS),
 			await Project.current!.systems.getStyleCSS(true),
 		);
+		if (exportType === EXPORT_TYPE.APPLICATION) {
+			await copyPublicFile(
+				Paths.join(Paths.DEPLOY, 'Platform.js'),
+				Paths.join(path, Paths.BUILD, Paths.SCRIPTS, 'Common', 'Platform.js'),
+			);
+		}
 	};
 
 	const removeUselessContent = async (path: string) => {
@@ -208,9 +238,6 @@ function DialogDeploy({ setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
-	// TODO
-	// modifier font.css
-
 	return (
 		<>
 			<Dialog
@@ -232,10 +259,12 @@ function DialogDeploy({ setIsOpen }: Props) {
 							<Flex column spacedLarge>
 								{Constants.IS_DESKTOP && (
 									<Flex spaced>
-										<RadioButton value={EXPORT_TYPE.APPLICATION}>
-											{t('desploy.desktop')}
-										</RadioButton>
-										<Checkbox isChecked={protectData} onChange={setProtectData}>
+										<RadioButton value={EXPORT_TYPE.APPLICATION}>{t('deploy.desktop')}</RadioButton>
+										<Checkbox
+											isChecked={protectData}
+											onChange={setProtectData}
+											disabled={exportType !== EXPORT_TYPE.APPLICATION}
+										>
 											{t('protect.data')}
 										</Checkbox>
 									</Flex>

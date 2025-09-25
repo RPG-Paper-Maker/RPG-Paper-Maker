@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { OS_KIND } from './Enum';
 import { Paths } from './Paths';
 import { ExtendedWindow, JSONType } from './Types';
 
@@ -128,28 +129,40 @@ class IO {
 		await this.invoke('open-game', projectName, isBattleTest);
 	}
 
-	static async minimize() {
+	static async minimize(): Promise<void> {
 		await this.invoke('minimize');
 	}
 
-	static async maximize() {
+	static async maximize(): Promise<void> {
 		await this.invoke('maximize');
 	}
 
-	static async unmaximize() {
+	static async unmaximize(): Promise<void> {
 		await this.invoke('unmaximize');
 	}
 
-	static async close() {
+	static async close(): Promise<void> {
 		await this.invoke('close');
 	}
 
-	static async openWebsite(url: string) {
+	static async openWebsite(url: string): Promise<void> {
 		await this.invoke('open-website', url);
 	}
 
-	static async openFolder(path: string) {
+	static async openFolder(path: string): Promise<void> {
 		await this.invoke('open-folder', path);
+	}
+
+	static async getOS(): Promise<OS_KIND> {
+		return (await this.invoke('get-os')) as OS_KIND;
+	}
+
+	static async getEngineFolder(): Promise<string> {
+		return (await this.invoke('get-engine-folder')) as string;
+	}
+
+	static async copyAndExclude(src: string, dst: string, exclude: string): Promise<void> {
+		(await this.invoke('copy-and-exclude', src, dst, exclude)) as string;
 	}
 }
 

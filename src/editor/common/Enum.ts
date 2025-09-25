@@ -699,3 +699,10 @@ export enum COMMON_SKILL_ITEM_KIND {
 	ARMOR,
 	SKILL,
 }
+
+export enum OS_KIND {
+	WIN32 = 'win32',
+	LINUX = 'linux',
+	DARWIN = 'darwin',
+	WEB = 'web',
+}

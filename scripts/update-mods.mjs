@@ -138,6 +138,13 @@ const main = async () => {
 		}
 		await fs.mkdir(deployPath);
 		await copyFileAndPrint(`${destinationPaths.scripts}/index.html`, `${deployPath}/index.html`);
+		await copyFileAndPrint(`${destinationPaths.scripts}/main.js`, `${deployPath}/main.js`);
+		await copyFileAndPrint(`${destinationPaths.scripts}/preload.js`, `${deployPath}/preload.js`);
+		await copyFileAndPrint(`${destinationPaths.scripts}/package.json`, `${deployPath}/package.json`);
+		await copyFileAndPrint(
+			`${destinationPaths.scriptsBuild}/Scripts/Common/Platform.js`,
+			`${deployPath}/Platform.js`,
+		);
 		await fs.rm(modsPath, { recursive: true });
 		console.log('✅ Download completed!');
 	} catch (error) {
