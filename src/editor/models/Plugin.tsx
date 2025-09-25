@@ -26,7 +26,6 @@ import {
 import {
 	createFile,
 	createFolder,
-	MIME_TYPES,
 	readJSON,
 	readOnlineFile,
 	readOnlineFileArrayBuffer,
@@ -106,7 +105,7 @@ class Plugin extends Checkable {
 				const ext = file.split('.').pop()?.toLowerCase();
 				let content = '';
 				let binaryData: ArrayBuffer | null = null;
-				const mimeType = MIME_TYPES[ext || ''];
+				const mimeType = IO.MIME_TYPES[ext || ''];
 				if (mimeType) {
 					binaryData = await readOnlineFileArrayBuffer(Plugin.getGitURL(Paths.join(path, file)));
 					if (binaryData && !Constants.IS_DESKTOP) {
@@ -153,7 +152,7 @@ class Plugin extends Checkable {
 				Project.current!.getPath(),
 				temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS,
 				this.name,
-				Paths.FILE_PLUGIN_DETAILS
+				Paths.FILE_PLUGIN_DETAILS,
 			);
 			const jsonOld = await readJSON(pathDetails);
 			const newVersion = json.version ?? '1.0.0';
@@ -163,22 +162,22 @@ class Plugin extends Checkable {
 				const newParameters = [] as JSONType[];
 				for (const parameter of json.parameters ?? []) {
 					const currentParameter = (jsonOld?.parameters as JSONType[])?.find(
-						(p) => p.name === parameter.name
+						(p) => p.name === parameter.name,
 					);
 					newParameters.push(currentParameter ?? parameter);
 				}
 				json.parameters = newParameters;
 				await removeFolder(
-					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name)
+					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name),
 				);
 				const pluginManifest = manifest[json.category ?? PLUGIN_CATEGORY_KIND.BATTLE].find(
-					(p) => p.name === this.name
+					(p) => p.name === this.name,
 				);
 				if (pluginManifest) {
 					await Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType, temp);
 					await writeJSON(pathDetails, json);
 					notifySuccess(
-						i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion })
+						i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion }),
 					);
 				}
 			}

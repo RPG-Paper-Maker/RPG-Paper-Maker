@@ -154,7 +154,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 					if (Constants.IS_DESKTOP) {
 						const base64 = await IO.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE), false, true);
-						plugin.pictureBase64 = base64 ? `data:image/png;base64,${base64}` : '';
+						plugin.pictureBase64 = base64 ?? '';
 					} else {
 						plugin.pictureBase64 =
 							(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';

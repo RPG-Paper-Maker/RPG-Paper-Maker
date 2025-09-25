@@ -14,6 +14,58 @@ import { Paths } from './Paths';
 import { ExtendedWindow, JSONType } from './Types';
 
 class IO {
+	static MIME_TYPES: Record<string, string> = {
+		// Images
+		png: 'image/png',
+		jpg: 'image/jpeg',
+		jpeg: 'image/jpeg',
+		gif: 'image/gif',
+		webp: 'image/webp',
+		svg: 'image/svg+xml',
+
+		// Audio
+		mp3: 'audio/mpeg',
+		wav: 'audio/wav',
+		ogg: 'audio/ogg',
+
+		// Video
+		mp4: 'video/mp4',
+		webm: 'video/webm',
+		ogv: 'video/ogg',
+
+		// Fonts
+		ttf: 'font/ttf',
+		otf: 'font/otf',
+		woff: 'font/woff',
+		woff2: 'font/woff2',
+
+		// Documents
+		pdf: 'application/pdf',
+
+		// Archives
+		zip: 'application/zip',
+		rar: 'application/vnd.rar',
+		'7z': 'application/x-7z-compressed',
+
+		// OBJ
+		obj: 'model/obj',
+		mtl: 'text/plain',
+	};
+
+	static getMimeType(fileNameOrPath: string) {
+		const ext = fileNameOrPath.split('.').pop()?.toLowerCase();
+		return IO.MIME_TYPES[ext || ''];
+	}
+
+	static getBase64URI(fileNameOrPath: string, base64: string): string | null {
+		const mimeType = this.getMimeType(fileNameOrPath);
+		if (mimeType) {
+			return `data:${mimeType};base64,${base64}`;
+		} else {
+			return null;
+		}
+	}
+
 	static async parseFileJSON(url: string): Promise<JSONType> {
 		const content = (await IO.readFile(url)) as string | null;
 		try {

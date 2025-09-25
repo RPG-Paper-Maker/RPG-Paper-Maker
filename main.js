@@ -24,6 +24,49 @@ if (!app.isPackaged || IS_GAME) {
 	app.commandLine.appendSwitch('force-device-scale-factor', 1);
 }
 
+const MIME_TYPES = {
+	// Images
+	png: 'image/png',
+	jpg: 'image/jpeg',
+	jpeg: 'image/jpeg',
+	gif: 'image/gif',
+	webp: 'image/webp',
+	svg: 'image/svg+xml',
+
+	// Audio
+	mp3: 'audio/mpeg',
+	wav: 'audio/wav',
+	ogg: 'audio/ogg',
+
+	// Video
+	mp4: 'video/mp4',
+	webm: 'video/webm',
+	ogv: 'video/ogg',
+
+	// Fonts
+	ttf: 'font/ttf',
+	otf: 'font/otf',
+	woff: 'font/woff',
+	woff2: 'font/woff2',
+
+	// Documents
+	pdf: 'application/pdf',
+
+	// Archives
+	zip: 'application/zip',
+	rar: 'application/vnd.rar',
+	'7z': 'application/x-7z-compressed',
+
+	// OBJ
+	obj: 'model/obj',
+	mtl: 'text/plain',
+};
+
+const getMimeType = (filePath) => {
+	const ext = path.extname(filePath).toLowerCase();
+	return MIME_TYPES[ext] || 'application/octet-stream';
+};
+
 let window;
 
 const createWindow = () => {
@@ -149,7 +192,12 @@ ipcMain.handle('read-file', async (event, p, isInPublic = false, asBase64 = fals
 			return await fs.readFile(isInPublic ? path.join(app.getAppPath(), 'dist', p) : p, 'utf8');
 		}
 		const data = await fs.readFile(p, asBase64 ? null : 'utf8');
-		return asBase64 ? data.toString('base64') : data;
+		if (asBase64) {
+			const mimeType = getMimeType(p);
+			return `data:${mimeType};base64,${data.toString('base64')}`;
+		} else {
+			return data;
+		}
 	} catch {
 		return null;
 	}

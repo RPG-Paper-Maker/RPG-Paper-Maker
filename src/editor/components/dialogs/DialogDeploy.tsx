@@ -73,7 +73,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 
 	const deploy = async () => {
 		dispatch(setLoading(true));
-		dispatch(setLoadingBar({ percent: 0, label: 'Copy project...' }));
+		dispatch(setLoadingBar({ percent: 0, label: 'Copy dependencies...' }));
 		const path = getPathProject();
 		const os = Constants.IS_DESKTOP ? await IO.getOS() : OS_KIND.WEB;
 		await createFolder(path);
@@ -85,8 +85,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 				: null;
 		const appPath = localAppPath === null ? path : Paths.join(path, localAppPath);
 		await copyDependencies(path, appPath, localAppPath);
+		dispatch(setLoadingBar({ percent: 20, label: 'Copy project...' }));
 		await copyAllProject(appPath);
-		dispatch(setLoadingBar({ percent: 20, label: 'Copying BR...' }));
+		dispatch(setLoadingBar({ percent: 40, label: 'Copying BR...' }));
 		await copyBRDLC(appPath);
 		dispatch(setLoadingBar({ percent: 80, label: 'Removing useless content...' }));
 		await removeUselessContent(appPath);
@@ -130,6 +131,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 				Paths.join(path, Paths.BUILD, Paths.SCRIPTS, 'Common', 'Platform.js'),
 			);
 		}
+		if (protectData) {
+			await IO.createFile(Paths.join(path, '.protect'), '');
+		}
 	};
 
 	const removeUselessContent = async (path: string) => {
@@ -145,59 +149,61 @@ function DialogDeploy({ setIsOpen }: Props) {
 			await removeFolder(Paths.join(path, Paths.BUILD, Paths.MAPS, mapFolder, Paths.TEMP));
 			await removeFolder(Paths.join(path, Paths.BUILD, Paths.MAPS, mapFolder, Paths.TEMP_UNDO_REDO));
 		}
+		if (protectData) {
+			await removeFolder(Paths.join(path, Paths.BUILD, Paths.PICTURES));
+			await removeFolder(Paths.join(path, Paths.BUILD, Paths.SONGS));
+			await removeFolder(Paths.join(path, Paths.BUILD, Paths.SHAPES));
+		}
 	};
 
 	const copyBRDLC = async (path: string) => {
 		const promises: Promise<void>[] = [];
 		const pictures = Project.current!.pictures.clone();
-		copyBRDLCKind(path, pictures.list, promises, pictures, Paths.FILE_PICTURES, true);
+		await copyBRDLCKind(path, pictures.list, promises, pictures, Paths.FILE_PICTURES, true);
 		const songs = Project.current!.songs.clone();
-		copyBRDLCKind(path, songs.list, promises, songs, Paths.FILE_SONGS, true);
+		await copyBRDLCKind(path, songs.list, promises, songs, Paths.FILE_SONGS, true);
 		const shapes = Project.current!.shapes.clone();
-		copyBRDLCKind(path, shapes.list, promises, shapes, Paths.FILE_SHAPES, false);
+		await copyBRDLCKind(path, shapes.list, promises, shapes, Paths.FILE_SHAPES, false);
 		const videos = Project.current!.videos.clone();
-		copyBRDLCKind(path, new Map([[0, videos.list]]), promises, videos, Paths.FILE_VIDEOS, true);
+		await copyBRDLCKind(path, new Map([[0, videos.list]]), promises, videos, Paths.FILE_VIDEOS, true, false);
 		const fonts = Project.current!.fonts.clone();
-		copyBRDLCKind(path, new Map([[0, fonts.list]]), promises, fonts, Paths.FILE_FONTS, true);
-		const start = 20;
-		const end = 80;
-		const step = (end - start) / promises.length;
-		let completed = 0;
-		promises.forEach((p) =>
-			p
-				.then((result) => {
-					completed++;
-					const percent = Math.floor(start + completed * step);
-					dispatch(setLoadingBar({ percent, label: `Copying BR... (${completed}/${promises.length})` }));
-					return result;
-				})
-				.catch(console.error),
-		);
+		await copyBRDLCKind(path, new Map([[0, fonts.list]]), promises, fonts, Paths.FILE_FONTS, true, false);
 		await Promise.all(promises);
 	};
 
-	const copyBRDLCKind = (
+	const copyBRDLCKind = async (
 		path: string,
 		assets: Map<number, Asset[]>,
 		promises: Promise<void>[],
 		data: Serializable,
 		fileName: string,
 		isBlob: boolean,
+		shouldProtect = true,
 	) => {
 		for (const list of assets.values()) {
 			for (const asset of list) {
-				if ((asset.isBR || !!asset.dlc) && asset.id >= 1) {
-					promises.push(
-						Constants.IS_DESKTOP
-							? IO.copyFile(asset.getPath(), Paths.join(path, Paths.BUILD, asset.getPath(true)))
-							: LocalFile.copyPublicFile(
-									asset.getPath(),
-									Paths.join(path, Paths.BUILD, asset.getPath(true)),
-									isBlob,
-								),
-					);
-					asset.isBR = false;
-					asset.dlc = '';
+				if (protectData && shouldProtect) {
+					asset.base64 = (await IO.readFile(asset.getPath(), false, true)) ?? '';
+				} else {
+					if ((asset.isBR || !!asset.dlc) && asset.id >= 1) {
+						promises.push(
+							Constants.IS_DESKTOP
+								? IO.copyFile(asset.getPath(), Paths.join(path, Paths.BUILD, asset.getPath(true)))
+								: LocalFile.copyPublicFile(
+										asset.getPath(),
+										Paths.join(path, Paths.BUILD, asset.getPath(true)),
+										isBlob,
+									)
+										.then(() => {
+											dispatch(
+												setLoadingBar({ percent: 30, label: `Copying BR (${asset.getPath()}` }),
+											);
+										})
+										.catch(console.error),
+						);
+						asset.isBR = false;
+						asset.dlc = '';
+					}
 				}
 			}
 		}
@@ -258,15 +264,18 @@ function DialogDeploy({ setIsOpen }: Props) {
 						<RadioGroup selected={exportType} onChange={setExportType}>
 							<Flex column spacedLarge>
 								{Constants.IS_DESKTOP && (
-									<Flex spaced>
+									<Flex column spacedLarge>
 										<RadioButton value={EXPORT_TYPE.APPLICATION}>{t('deploy.desktop')}</RadioButton>
-										<Checkbox
-											isChecked={protectData}
-											onChange={setProtectData}
-											disabled={exportType !== EXPORT_TYPE.APPLICATION}
-										>
-											{t('protect.data')}
-										</Checkbox>
+										<Flex>
+											<Flex fillSmallSpace />{' '}
+											<Checkbox
+												isChecked={protectData}
+												onChange={setProtectData}
+												disabled={exportType !== EXPORT_TYPE.APPLICATION}
+											>
+												{t('protect.data')}
+											</Checkbox>
+										</Flex>
 									</Flex>
 								)}
 								<RadioButton value={EXPORT_TYPE.WEB}>{t('deploy.web')}</RadioButton>

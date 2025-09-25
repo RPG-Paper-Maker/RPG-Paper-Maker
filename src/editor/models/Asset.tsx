@@ -16,10 +16,12 @@ import { Base } from './Base';
 class Asset extends Base {
 	public isBR!: boolean;
 	public dlc!: string;
+	public base64!: string;
 
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', undefined, BINDING.BOOLEAN],
 		['dlc', 'd', '', BINDING.STRING],
+		['base64', 'base64', '', BINDING.STRING],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
