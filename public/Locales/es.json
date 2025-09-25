@@ -2084,5 +2084,6 @@
 	"tooltip.maximum.value": "El valor máximo posible que puede alcanzar (puede ser mayor que el valor final si los objetos consumibles aumentan el valor máximo).",
 	"tooltip.random.variation": "Añade algo de aleatoriedad en el juego para cambiar el valor después de cada subida de nivel. Cuanto mayor sea la variación, mayor será la aleatoriedad. No cambia el valor final, que siempre será el mismo.",
 	"update.list.size": "Actualizar tamaño de la lista",
-	"warning.update.list.size": "Reducirás el tamaño de la lista. Se eliminarán los últimos elementos, ¿confirmas?"
+	"warning.update.list.size": "Reducirás el tamaño de la lista. Se eliminarán los últimos elementos, ¿confirmas?",
+	"deploy": "Implementar"
 }

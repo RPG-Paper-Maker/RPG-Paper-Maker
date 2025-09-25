@@ -2084,5 +2084,6 @@
 	"tooltip.maximum.value": "能達到的最大可能值（可以高於最終值，若消耗品增加了最大值）。",
 	"tooltip.random.variation": "在遊戲中加入隨機性，每次升級後改變數值。變異越大，隨機性越高。這不會改變最終值，最終值始終相同。",
 	"update.list.size": "更新列表大小",
-	"warning.update.list.size": "您將縮小列表大小。最後的元素將被移除，是否確認？"
+	"warning.update.list.size": "您將縮小列表大小。最後的元素將被移除，是否確認？",
+	"deploy": "部署"
 }
