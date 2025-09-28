@@ -20,12 +20,18 @@ class EngineSettings extends Serializable {
 	public currentLanguage!: string;
 	public showTipsGridHeight!: boolean;
 	public keyboardControls!: Keyboard[];
+	public backupsActivated!: boolean;
+	public backupsInterval!: number;
+	public backupsMax!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
 		['currentLanguage', 'cl', undefined, BINDING.STRING],
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 		['keyboardControls', 'kc', [], BINDING.LIST, Keyboard],
+		['backupsActivated', 'ba', [], BINDING.BOOLEAN],
+		['backupsInterval', 'bi', [], BINDING.NUMBER],
+		['backupsMax', 'bm', [], BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

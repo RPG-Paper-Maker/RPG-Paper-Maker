@@ -111,6 +111,7 @@ import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
+import DialogDebugOptions from './dialogs/DialogDebugOptions';
 import DialogDeploy from './dialogs/DialogDeploy';
 import DialogDLCs from './dialogs/DialogDLCs';
 import DialogFonts from './dialogs/DialogFonts';
@@ -158,6 +159,7 @@ function MainMenuBar() {
 	const [isDialogObjects3DOpen, setIsDialogObjects3DOpen] = useState(false);
 	const [isDialogMountainsOpen, setIsDialogMountainsOpen] = useState(false);
 	const [dialogLocationFolderKind, setDialogLocationFolderKind] = useState<LOCATION_TYPE | null>(null);
+	const [isDialogDebugOptionsOpen, setIsDialogDebugOptionsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -599,6 +601,10 @@ function MainMenuBar() {
 		setDialogLocationFolderKind(LOCATION_TYPE.DLCS);
 	};
 
+	const handleDebugOptions = async () => {
+		setIsDialogDebugOptionsOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -955,6 +961,11 @@ function MainMenuBar() {
 						]
 					: []),
 				{
+					title: `${t('debug.options')}...`,
+					onClick: handleDebugOptions,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('change.language')}...`,
 					onClick: handleChangeLanguage,
 				},
@@ -1187,6 +1198,7 @@ function MainMenuBar() {
 			{dialogLocationFolderKind !== null && (
 				<DialogPathLocation setIsOpen={setDialogLocationFolderKind} locationType={dialogLocationFolderKind} />
 			)}
+			{isDialogDebugOptionsOpen && <DialogDebugOptions setIsOpen={setIsDialogDebugOptionsOpen} />}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog
 				title={t('warning')}

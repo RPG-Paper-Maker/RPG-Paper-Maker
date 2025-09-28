@@ -73,6 +73,8 @@ class System extends Serializable {
 	public PATH_DLCS!: string;
 	public heroMapID!: number;
 	public heroMapPosition!: Position;
+	public showBB!: boolean;
+	public showFPS!: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.OBJECT, Model.Localization],
@@ -163,6 +165,8 @@ class System extends Serializable {
 		['PATH_DLCS', 'pathDLCS', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', undefined, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', undefined, BINDING.POSITION, undefined, undefined, Position],
+		['showBB', 'bb', false, BINDING.BOOLEAN],
+		['showFPS', 'fps', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
