@@ -83,7 +83,7 @@ class MapPortion {
 		preview: boolean = false,
 		removePreview = true,
 		allowBorders = false,
-		updateAutotiles = true
+		updateAutotiles = true,
 	) {
 		if (removePreview) {
 			this.map.forEachMapPortions((mapPortion) => {
@@ -96,14 +96,14 @@ class MapPortion {
 					position,
 					MapElement.Floor.create(
 						Project.current!.settings.mapEditorCurrentTilesetFloorTexture,
-						this.map.camera.getUp()
+						this.map.camera.getUp(),
 					),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview,
 					false,
 					false,
 					false,
-					updateAutotiles
+					updateAutotiles,
 				);
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
@@ -113,14 +113,14 @@ class MapPortion {
 						Project.current!.settings.mapEditorCurrentAutotileID,
 						MapElement.Autotiles.PREVIEW_TILE,
 						Project.current!.settings.mapEditorCurrentAutotileTexture,
-						this.map.camera.getUp()
+						this.map.camera.getUp(),
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
 					preview,
 					false,
 					false,
 					false,
-					updateAutotiles
+					updateAutotiles,
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
@@ -135,30 +135,30 @@ class MapPortion {
 						this.map.camera.getFront(Manager.GL.raycaster.ray.direction, position.angleY),
 						this.map.layerRayPosition ? this.map.layerRayPosition.x - position.x : 0,
 						this.map.layerRayPosition ? this.map.layerRayPosition.y - position.y : 0,
-						this.map.layerRayPosition ? this.map.layerRayPosition.z - position.z : 0
+						this.map.layerRayPosition ? this.map.layerRayPosition.z - position.z : 0,
 					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview,
 					false,
 					false,
-					allowBorders
+					allowBorders,
 				);
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN: {
 				const y = Project.current!.settings.mapEditorCurrentMountainHeightSquares;
 				const yPixels = Position3D.getPercentOfPixels(
-					Project.current!.settings.mapEditorCurrentMountainHeightPixels
+					Project.current!.settings.mapEditorCurrentMountainHeightPixels,
 				);
 				const newMountain = MapElement.Mountain.create(
 					Project.current!.settings.mapEditorCurrentMountainID,
 					Project.current!.settings.mapEditorCurrentMountainWidthSquares,
 					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels),
 					y,
-					yPixels
+					yPixels,
 				);
 				const previousMountain = this.model.getMapElement(
 					position,
-					ELEMENT_MAP_KIND.MOUNTAIN
+					ELEMENT_MAP_KIND.MOUNTAIN,
 				) as MapElement.Mountain | null;
 				if (previousMountain && !previousMountain.equals(newMountain)) {
 					const previousFloorPosition = position.clone();
@@ -174,11 +174,11 @@ class MapPortion {
 					MapElement.Floor.create(
 						new Rectangle(
 							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.x,
-							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y
-						)
+							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y,
+						),
 					),
 					ELEMENT_MAP_KIND.FLOOR,
-					preview
+					preview,
 				);
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
@@ -188,11 +188,11 @@ class MapPortion {
 					position,
 					MapElement.Object3D.create(
 						Project.current!.specialElements.getObject3DByID(
-							Project.current!.settings.mapEditorCurrentObject3DID
-						)
+							Project.current!.settings.mapEditorCurrentObject3DID,
+						),
 					),
 					Scene.Map.currentSelectedMapElementKind,
-					preview
+					preview,
 				);
 				break;
 		}
@@ -207,7 +207,7 @@ class MapPortion {
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN) {
 			const previous = this.model.getMapElement(
 				position,
-				ELEMENT_MAP_KIND.MOUNTAIN
+				ELEMENT_MAP_KIND.MOUNTAIN,
 			) as MapElement.Mountain | null;
 			if (previous) {
 				const mountain = previous as MapElement.Mountain;
@@ -221,7 +221,7 @@ class MapPortion {
 					false,
 					false,
 					false,
-					updateAutotiles
+					updateAutotiles,
 				);
 			}
 		}
@@ -233,7 +233,7 @@ class MapPortion {
 			false,
 			false,
 			false,
-			updateAutotiles
+			updateAutotiles,
 		);
 	}
 
@@ -245,7 +245,7 @@ class MapPortion {
 		removingPreview = false,
 		undoRedo = false,
 		allowBorders = false,
-		updateAutotiles = true
+		updateAutotiles = true,
 	) {
 		if (element !== null) {
 			kind = element.kind;
@@ -258,7 +258,7 @@ class MapPortion {
 					preview,
 					removingPreview,
 					undoRedo,
-					updateAutotiles
+					updateAutotiles,
 				);
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
@@ -268,7 +268,7 @@ class MapPortion {
 					preview,
 					removingPreview,
 					undoRedo,
-					updateAutotiles
+					updateAutotiles,
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
@@ -282,7 +282,7 @@ class MapPortion {
 					preview,
 					removingPreview,
 					undoRedo,
-					allowBorders
+					allowBorders,
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
@@ -305,7 +305,7 @@ class MapPortion {
 		preview = false,
 		removingPreview = false,
 		undoRedo = false,
-		updateAutotiles = true
+		updateAutotiles = true,
 	) {
 		if (floor === null || undoRedo) {
 			this.setMapElement(
@@ -315,7 +315,7 @@ class MapPortion {
 				this.model.lands,
 				preview,
 				removingPreview,
-				undoRedo
+				undoRedo,
 			);
 		} else {
 			switch (Project.current!.settings.mapEditorCurrentActionIndex) {
@@ -329,13 +329,13 @@ class MapPortion {
 								newPosition,
 								MapElement.Floor.create(
 									new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1),
-									floor.up
+									floor.up,
 								),
 								ELEMENT_MAP_KIND.FLOOR,
 								this.model.lands,
 								preview,
 								removingPreview,
-								undoRedo
+								undoRedo,
 							);
 						}
 					}
@@ -351,13 +351,13 @@ class MapPortion {
 						position,
 						MapElement.Floor.create(
 							new Rectangle(floor.texture.x + x, floor.texture.y + y, 1, 1),
-							floor.up
+							floor.up,
 						),
 						ELEMENT_MAP_KIND.FLOOR,
 						this.model.lands,
 						preview,
 						removingPreview,
-						undoRedo
+						undoRedo,
 					);
 					break;
 				}
@@ -369,7 +369,7 @@ class MapPortion {
 						this.model.lands,
 						preview,
 						removingPreview,
-						undoRedo
+						undoRedo,
 					);
 					break;
 				default:
@@ -387,7 +387,7 @@ class MapPortion {
 		preview = false,
 		removingPreview = false,
 		undoRedo = false,
-		updateAutotiles = true
+		updateAutotiles = true,
 	) {
 		this.setMapElement(
 			position,
@@ -396,7 +396,7 @@ class MapPortion {
 			this.model.lands,
 			preview,
 			removingPreview,
-			undoRedo
+			undoRedo,
 		);
 		if (updateAutotiles) {
 			MapElement.Autotiles.updateAround(this.map, position);
@@ -410,7 +410,7 @@ class MapPortion {
 		preview = false,
 		removingPreview = false,
 		undoRedo = false,
-		allowBorders = false
+		allowBorders = false,
 	) {
 		this.setMapElement(
 			position,
@@ -420,7 +420,7 @@ class MapPortion {
 			preview,
 			removingPreview,
 			undoRedo,
-			allowBorders
+			allowBorders,
 		);
 	}
 
@@ -429,7 +429,7 @@ class MapPortion {
 		wall: MapElement.SpriteWall | null,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
 	) {
 		this.setMapElement(
 			position,
@@ -439,7 +439,7 @@ class MapPortion {
 			preview,
 			removingPreview,
 			undoRedo,
-			true
+			true,
 		);
 		MapElement.SpriteWall.updateAround(this.map, position, !preview);
 	}
@@ -449,7 +449,7 @@ class MapPortion {
 		mountain: MapElement.Mountain | null,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
 	) {
 		this.setMapElement(
 			position,
@@ -458,7 +458,7 @@ class MapPortion {
 			this.model.mountains,
 			preview,
 			removingPreview,
-			undoRedo
+			undoRedo,
 		);
 		MapElement.Mountains.updateAround(this.map, position);
 	}
@@ -468,7 +468,7 @@ class MapPortion {
 		object: MapElement.Object3D | null,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
 	) {
 		this.setMapElement(
 			position,
@@ -477,7 +477,7 @@ class MapPortion {
 			this.model.objects3D,
 			preview,
 			removingPreview,
-			undoRedo
+			undoRedo,
 		);
 	}
 
@@ -489,7 +489,7 @@ class MapPortion {
 		preview = false,
 		removingPreview = false,
 		undoRedo = false,
-		allowBorders = false
+		allowBorders = false,
 	): MapElement.Base | null {
 		if (!this.map || (element && !position.isInMap(this.map.model, allowBorders))) {
 			return null;
@@ -525,8 +525,8 @@ class MapPortion {
 							previous,
 							previous === null ? kind : previous.kind,
 							element,
-							kind
-						)
+							kind,
+						),
 					);
 				}
 			}
@@ -549,7 +549,7 @@ class MapPortion {
 					models as Map<string, MapElement.Base>,
 					false,
 					false,
-					false
+					false,
 				);
 			}
 		}
@@ -560,7 +560,7 @@ class MapPortion {
 			const position = this.map.selectedElement.getPositionFromVec3(
 				this.map.selectedMesh.position,
 				this.map.selectedMesh.rotation,
-				this.map.selectedMesh.scale
+				this.map.selectedMesh.scale,
 			);
 			position.layer = this.map.selectedPosition.layer;
 			const models = this.model.getModelsByKind(this.map.selectedElement.kind);
@@ -572,7 +572,7 @@ class MapPortion {
 					models as Map<string, MapElement.Base>,
 					false,
 					false,
-					false
+					false,
 				);
 				this.map.selectedPosition = position;
 			}
@@ -583,7 +583,7 @@ class MapPortion {
 		geometry: CustomGeometry,
 		material: THREE.Material | THREE.Material[],
 		localPosition: THREE.Vector3,
-		position: Position
+		position: Position,
 	) {
 		geometry.updateAttributes();
 		this.map.selectedMesh.geometry = geometry;
@@ -614,8 +614,8 @@ class MapPortion {
 					previous,
 					ELEMENT_MAP_KIND.OBJECT,
 					object?.clone() ?? null,
-					ELEMENT_MAP_KIND.OBJECT
-				)
+					ELEMENT_MAP_KIND.OBJECT,
+				),
 			);
 		}
 	}
@@ -840,7 +840,7 @@ class MapPortion {
 		width: number,
 		height: number,
 		isPointedFloor: boolean,
-		floorCounts: [number[], number[]]
+		floorCounts: [number[], number[]],
 	) {
 		if (this.map.selectedElement === floor) {
 			const selectedGeometry = new CustomGeometry();
@@ -849,7 +849,7 @@ class MapPortion {
 				selectedGeometry,
 				this.map.hoveredMesh.material,
 				this.map.selectedElement.getLocalPosition(position),
-				position
+				position,
 			);
 		} else if (isPointedFloor && this.map.pointedMapElement === floor) {
 			this.map.hoveredMesh.geometry = new CustomGeometry();
@@ -860,7 +860,7 @@ class MapPortion {
 				width,
 				height,
 				0,
-				true
+				true,
 			);
 		} else {
 			const side = floor.up ? 0 : 1;
@@ -940,7 +940,7 @@ class MapPortion {
 						0,
 						true,
 						new THREE.Vector3(),
-						true
+						true,
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (
@@ -959,7 +959,7 @@ class MapPortion {
 						0,
 						true,
 						localPosition,
-						true
+						true,
 					);
 				} else {
 					let mesh = this.spritesFaceMeshes[position.layer];
@@ -983,7 +983,7 @@ class MapPortion {
 						position,
 						faceCount,
 						true,
-						localPosition
+						localPosition,
 					);
 					faceCounts[position.layer] = faceCount;
 				}
@@ -1000,7 +1000,7 @@ class MapPortion {
 						0,
 						true,
 						new THREE.Vector3(),
-						true
+						true,
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (isPointedSprite && this.map.pointedMapElement === sprite) {
@@ -1015,7 +1015,7 @@ class MapPortion {
 						0,
 						true,
 						localPosition,
-						true
+						true,
 					);
 				} else {
 					let mesh = this.spritesFixMeshes[side][position.layer];
@@ -1039,7 +1039,7 @@ class MapPortion {
 						position,
 						staticCount,
 						true,
-						localPosition
+						localPosition,
 					);
 					staticCounts[side][position.layer] = staticCount;
 				}
@@ -1191,15 +1191,15 @@ class MapPortion {
 									0,
 									0,
 									object3D.isCentered() ? 0 : 50,
-									object3D.isCentered() ? 0 : 50
+									object3D.isCentered() ? 0 : 50,
 								),
-								0
+								0,
 							);
 							this.updateSelected(
 								geometry,
 								material,
 								this.map.selectedElement.getLocalPosition(position),
-								position
+								position,
 							);
 						} else {
 							object3D.updateGeometry(geometry, position, 0);
@@ -1305,19 +1305,21 @@ class MapPortion {
 						if (state.graphicsID !== 0) {
 							const picture = Project.current!.pictures.getByID(
 								PICTURE_KIND.CHARACTERS,
-								state.graphicsID
+								state.graphicsID,
 							);
-							const rows = picture.getRows();
-							const squareWidth = width / Project.SQUARE_SIZE / Project.current!.systems.FRAMES;
-							const squareHeight = height / Project.SQUARE_SIZE / rows;
-							characterRect.x = state.graphicsIndexX * squareWidth;
-							characterRect.y = state.graphicsIndexY * squareHeight;
-							characterRect.width = squareWidth;
-							characterRect.height = squareHeight;
+							if (picture) {
+								const rows = picture.getRows();
+								const squareWidth = width / Project.SQUARE_SIZE / Project.current!.systems.FRAMES;
+								const squareHeight = height / Project.SQUARE_SIZE / rows;
+								characterRect.x = state.graphicsIndexX * squareWidth;
+								characterRect.y = state.graphicsIndexY * squareHeight;
+								characterRect.width = squareWidth;
+								characterRect.height = squareHeight;
+							}
 						}
 						const sprite = MapElement.Sprite.create(
 							state.graphicsKind,
-							state.graphicsID === 0 ? state.rectTileset ?? new Rectangle() : characterRect
+							state.graphicsID === 0 ? (state.rectTileset ?? new Rectangle()) : characterRect,
 						);
 						const geometrySprite =
 							state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX
@@ -1332,7 +1334,7 @@ class MapPortion {
 							position,
 							0,
 							false,
-							localPosition
+							localPosition,
 						);
 						geometrySprite.updateAttributes();
 						mesh = new THREE.Mesh(geometrySprite, material);
@@ -1348,7 +1350,7 @@ class MapPortion {
 						if (material) {
 							const geometryObject3D = new CustomGeometry();
 							const object3D = MapElement.Object3D.create(
-								Project.current!.specialElements.getObject3DByID(state.graphicsID)
+								Project.current!.specialElements.getObject3DByID(state.graphicsID),
 							);
 							object3D.updateGeometry(geometryObject3D, position, 0);
 							geometryObject3D.updateAttributes();

@@ -64,8 +64,8 @@ function DialogDLCs({ setIsOpen }: Props) {
 
 	const handleAccept = async () => {
 		setIsLoading(true);
-		await Project.current!.dlcs.save();
 		dispatch(setNeedsReloadMap());
+		await Project.current!.dlcs.save();
 		setIsOpen(false);
 	};
 

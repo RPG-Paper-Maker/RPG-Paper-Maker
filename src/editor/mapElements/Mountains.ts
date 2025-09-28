@@ -67,6 +67,9 @@ class Mountains {
 
 	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
+		if (image.width === 0 || image.height === 0) {
+			return Manager.GL.loadTextureEmpty();
+		}
 		const sourceSize = 3 * Project.SQUARE_SIZE;
 		const sDiv = Math.round(Project.SQUARE_SIZE / 2);
 
@@ -88,7 +91,7 @@ class Mountains {
 					sourceSize,
 					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.SQUARE_SIZE
+					Project.SQUARE_SIZE,
 				);
 				Scene.Map.ctxRendering!.drawImage(
 					image,
@@ -99,7 +102,7 @@ class Mountains {
 					sourceSize + sDiv,
 					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.SQUARE_SIZE
+					Project.SQUARE_SIZE,
 				);
 			}
 
@@ -114,7 +117,7 @@ class Mountains {
 					i * Project.SQUARE_SIZE,
 					sourceSize,
 					Project.SQUARE_SIZE,
-					sDiv
+					sDiv,
 				);
 				Scene.Map.ctxRendering!.drawImage(
 					image,
@@ -125,7 +128,7 @@ class Mountains {
 					i * Project.SQUARE_SIZE,
 					sourceSize + sDiv,
 					Project.SQUARE_SIZE,
-					sDiv
+					sDiv,
 				);
 			}
 
@@ -140,7 +143,7 @@ class Mountains {
 				sourceSize + sDiv,
 				sourceSize,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 			Scene.Map.ctxRendering!.drawImage(
 				image,
@@ -151,7 +154,7 @@ class Mountains {
 				sourceSize,
 				sourceSize + sDiv,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 			Scene.Map.ctxRendering!.drawImage(
 				image,
@@ -162,7 +165,7 @@ class Mountains {
 				sourceSize + sDiv,
 				sourceSize + sDiv,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 
 			// Repeated mid (for corners)
@@ -177,7 +180,7 @@ class Mountains {
 						j * Project.SQUARE_SIZE,
 						(4 + i) * Project.SQUARE_SIZE,
 						Project.SQUARE_SIZE,
-						Project.SQUARE_SIZE
+						Project.SQUARE_SIZE,
 					);
 				}
 			}
@@ -185,7 +188,7 @@ class Mountains {
 			console.error(
 				'Error: Wrong mountain (with ID:' +
 					picture.id +
-					') parsing. Please verify that you have a 3 x 3 picture.'
+					') parsing. Please verify that you have a 3 x 3 picture.',
 			);
 		}
 		const texture = new THREE.Texture();

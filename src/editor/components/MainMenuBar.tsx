@@ -106,6 +106,7 @@ import {
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
+import { LOCATION_TYPE } from './dialogs';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
@@ -117,6 +118,7 @@ import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
+import DialogPathLocation from './dialogs/DialogPathLocation';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogPlugins from './dialogs/DialogPlugins';
 import DialogShapes from './dialogs/DialogShapes';
@@ -155,6 +157,7 @@ function MainMenuBar() {
 	const [isDialogWallsOpen, setIsDialogWallsOpen] = useState(false);
 	const [isDialogObjects3DOpen, setIsDialogObjects3DOpen] = useState(false);
 	const [isDialogMountainsOpen, setIsDialogMountainsOpen] = useState(false);
+	const [dialogLocationFolderKind, setDialogLocationFolderKind] = useState<LOCATION_TYPE | null>(null);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
@@ -588,6 +591,14 @@ function MainMenuBar() {
 		setIsDialogMountainsOpen(true);
 	};
 
+	const handleSetBRPathFolder = async () => {
+		setDialogLocationFolderKind(LOCATION_TYPE.BR);
+	};
+
+	const handleSetDLCsPathFolder = async () => {
+		setDialogLocationFolderKind(LOCATION_TYPE.DLCS);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -929,6 +940,20 @@ function MainMenuBar() {
 		{
 			title: t('options'),
 			children: [
+				...(Constants.IS_DESKTOP
+					? [
+							{
+								title: `${t('set.br.path.folder')}...`,
+								onClick: handleSetBRPathFolder,
+								disabled: !isProjectOpened,
+							},
+							{
+								title: `${t('set.dlc.s.path.folder')}...`,
+								onClick: handleSetDLCsPathFolder,
+								disabled: !isProjectOpened,
+							},
+						]
+					: []),
 				{
 					title: `${t('change.language')}...`,
 					onClick: handleChangeLanguage,
@@ -1158,6 +1183,9 @@ function MainMenuBar() {
 			{isDialogObjects3DOpen && <DialogObjects3DPreview manager isOpen setIsOpen={setIsDialogObjects3DOpen} />}
 			{isDialogMountainsOpen && (
 				<DialogCollisions kind={PICTURE_KIND.MOUNTAINS} isOpen setIsOpen={setIsDialogMountainsOpen} />
+			)}
+			{dialogLocationFolderKind !== null && (
+				<DialogPathLocation setIsOpen={setDialogLocationFolderKind} locationType={dialogLocationFolderKind} />
 			)}
 			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
 			<Dialog

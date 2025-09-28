@@ -8,6 +8,7 @@ export * from './DialogEnterNameOptions';
 export * from './DialogFonts';
 export * from './DialogNewProject';
 export * from './DialogObjects3DPreview';
+export * from './DialogPathLocation';
 export * from './DialogPictures';
 export * from './DialogPlugins';
 export * from './DialogRectangle';

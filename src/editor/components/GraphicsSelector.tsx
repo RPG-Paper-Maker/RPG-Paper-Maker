@@ -68,6 +68,9 @@ function GraphicsSelector({
 		const pic = isTileset
 			? Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, Scene.Map.current!.model.getTileset().pictureID)
 			: picture;
+		if (!pic) {
+			return;
+		}
 		const img = await Picture2D.loadImage(await pic.getPathOrBase64());
 		const ctx = getContext();
 		if (ctx) {
@@ -96,7 +99,7 @@ function GraphicsSelector({
 		picture: Model.Picture,
 		image: HTMLImageElement,
 		rect: Rectangle,
-		isTileset: boolean
+		isTileset: boolean,
 	) => {
 		const rows = picture.getRows();
 		const columns = 4;
@@ -125,7 +128,7 @@ function GraphicsSelector({
 			0,
 			0,
 			width,
-			height
+			height,
 		);
 	};
 
@@ -166,7 +169,7 @@ function GraphicsSelector({
 			updatePicture(
 				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, graphicsID),
 				isTileset && rectTileset ? rectTileset.clone() : new Rectangle(graphicsIndexX, graphicsIndexY, 1, 1),
-				isTileset
+				isTileset,
 			).catch(console.error);
 		} else {
 			const ctx = getContext();
