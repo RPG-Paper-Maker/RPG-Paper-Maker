@@ -29,7 +29,7 @@ import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug, FaRegKeyboard } from 'reac
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuLanguages, LuMountain, LuRocket, LuSaveAll } from 'react-icons/lu';
-import { MdAutoAwesomeMosaic, MdClose, MdOutlineWallpaper } from 'react-icons/md';
+import { MdAutoAwesomeMosaic, MdClose, MdOutlineAddchart, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
 import { TfiVideoClapper } from 'react-icons/tfi';
@@ -80,6 +80,7 @@ import {
 	triggerAutotiles,
 	triggerCollisions,
 	triggerData,
+	triggerDLCs,
 	triggerFonts,
 	triggerImportProject,
 	triggerKeyboard,
@@ -110,6 +111,7 @@ import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
 import DialogDeploy from './dialogs/DialogDeploy';
+import DialogDLCs from './dialogs/DialogDLCs';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
@@ -143,6 +145,7 @@ function MainMenuBar() {
 	const [isDialogKeyboardOpen, setIsDialogKeyboardOpen] = useState(false);
 	const [isDialogLanguagesOpen, setIsDialogLanguagesOpen] = useState(false);
 	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
+	const [isDialogDLCsOpen, setIsDialogDLCsOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
 	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
 	const [isDialogSongsOpen, setIsDialogSongsOpen] = useState(false);
@@ -291,9 +294,14 @@ function MainMenuBar() {
 			}
 			await Project.current.load();
 			if (Constants.IS_DESKTOP) {
-				const newBRPath = Paths.join(window.__dirname, Paths.BR);
-				if (newBRPath !== Project.current.systems.PATH_BR) {
+				if (!(await IO.checkFileExists(Project.current.systems.PATH_BR))) {
+					const newBRPath = Paths.join(window.__dirname, Paths.BR);
 					Project.current.systems.PATH_BR = newBRPath;
+					await Project.current.systems.save();
+				}
+				if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
+					const newDLCsPath = Paths.join(window.__dirname, Paths.DLCS);
+					Project.current.systems.PATH_DLCS = newDLCsPath;
 					await Project.current.systems.save();
 				}
 			}
@@ -538,6 +546,10 @@ function MainMenuBar() {
 
 	const handlePluginsManager = async () => {
 		setIsDialogPluginsOpen(true);
+	};
+
+	const handleDLCsManager = async () => {
+		setIsDialogDLCsOpen(true);
 	};
 
 	const handlePicturesManager = async () => {
@@ -842,6 +854,16 @@ function MainMenuBar() {
 					onClick: handleLanguagesManager,
 					disabled: !isProjectOpened,
 				},
+				...(Constants.IS_DESKTOP
+					? [
+							{
+								title: 'DLCs',
+								icon: <MdOutlineAddchart />,
+								onClick: handleDLCsManager,
+								disabled: !isProjectOpened,
+							},
+						]
+					: []),
 				{
 					title: `${t('plugins.manager')}...`,
 					icon: <FaPlug />,
@@ -973,6 +995,9 @@ function MainMenuBar() {
 		} else if (triggers.plugins) {
 			dispatch(triggerPlugins(false));
 			handlePluginsManager().catch(console.error);
+		} else if (triggers.dlcs) {
+			dispatch(triggerDLCs(false));
+			handleDLCsManager().catch(console.error);
 		} else if (triggers.keyboard) {
 			dispatch(triggerKeyboard(false));
 			handleKeyboardManager().catch(console.error);
@@ -1118,6 +1143,7 @@ function MainMenuBar() {
 			{isDialogKeyboardOpen && <DialogKeyboardControls setIsOpen={setIsDialogKeyboardOpen} />}
 			{isDialogLanguagesOpen && <DialogLanguages setIsOpen={setIsDialogLanguagesOpen} />}
 			{isDialogPluginsOpen && <DialogPlugins isOpen setIsOpen={setIsDialogPluginsOpen} />}
+			{isDialogDLCsOpen && <DialogDLCs setIsOpen={setIsDialogDLCsOpen} />}
 			{isDialogPicturesOpen && <DialogPictures isOpen setIsOpen={setIsDialogPicturesOpen} />}
 			{isDialogVideosOpen && <DialogVideos manager isOpen setIsOpen={setIsDialogVideosOpen} />}
 			{isDialogSongsOpen && <DialogSongs isOpen setIsOpen={setIsDialogSongsOpen} />}

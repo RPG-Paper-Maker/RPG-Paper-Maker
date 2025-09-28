@@ -94,6 +94,16 @@ class Picture extends Asset {
 		return '';
 	}
 
+	static createPicture(kind: PICTURE_KIND, id: number, name: string, isBR: boolean, dlc: string): Picture {
+		const picture = new Picture(kind);
+		picture.applyDefault();
+		picture.id = id;
+		picture.name = name;
+		picture.isBR = isBR;
+		picture.dlc = dlc;
+		return picture;
+	}
+
 	applyDefault(): void {
 		super.applyDefault(Picture.getBindings([]));
 		this.collisions = new Map();

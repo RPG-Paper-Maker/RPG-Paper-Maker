@@ -139,6 +139,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await project.load();
 		if (Constants.IS_DESKTOP) {
 			project.systems.PATH_BR = Paths.join(window.__dirname, Paths.BR);
+			project.systems.PATH_DLCS = Paths.join(window.__dirname, Paths.DLCS);
 		}
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

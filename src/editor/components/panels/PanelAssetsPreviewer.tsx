@@ -9,16 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, IO, Paths } from '../../common';
-import { removeFile } from '../../common/Platform';
+import { checkFileExists, getAllFilesFromFolder, getFiles, removeFile } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
+import { triggerDLCs } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DynamicValueSelector from '../DynamicValueSelector';
@@ -31,13 +33,15 @@ type Props = {
 	dynamicValueID?: DynamicValue;
 	list: Node[];
 	itemsAvailable?: Node[];
+	setItemsAvailable?: (nodes: Node[]) => void;
 	selectedItem: Model.Base | null;
 	isSelectedLeftList?: boolean;
 	setIsSelectedLeftList?: (b: boolean) => void;
 	isInitiating: boolean;
 	setIsInitiating: (b: boolean) => void;
 	onChangeSelectedItem: (node: Node | null) => void;
-	onRefresh?: () => void;
+	getFolder?: (isBR: boolean, dlc?: string) => string;
+	callBackCreateAsset?: (id: number, name: string, isBR?: boolean, dlc?: string) => Model.Asset;
 	onListUpdated?: () => void;
 	onDoubleClickLeftList?: () => void;
 	onKeyboardDownList?: (event: KeyboardEvent) => void;
@@ -54,13 +58,15 @@ function PanelAssetsPreviewer({
 	dynamicValueID,
 	list,
 	itemsAvailable,
+	setItemsAvailable,
 	selectedItem,
 	isSelectedLeftList,
 	setIsSelectedLeftList,
 	isInitiating,
 	setIsInitiating,
 	onChangeSelectedItem,
-	onRefresh,
+	getFolder,
+	callBackCreateAsset,
 	onListUpdated,
 	onDoubleClickLeftList,
 	content,
@@ -78,10 +84,24 @@ function PanelAssetsPreviewer({
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
+	const dispatch = useDispatch();
+
 	const handleChangePicturesShowAvailableContent = async (b: boolean) => {
 		setShowAvailableContent(b);
 		Project.current!.settings.showAvailableContent = b;
 		await Project.current!.settings.save();
+	};
+
+	const handleClickOpenDefaultFolder = async () => {
+		await IO.openFolder(Paths.join(Project.current!.systems.PATH_BR, basePath));
+	};
+
+	const handleClickOpenProjectFolder = async () => {
+		await IO.openFolder(Paths.join(Project.current!.getPath(), basePath));
+	};
+
+	const handleClickImportDLCs = async () => {
+		dispatch(triggerDLCs(true));
 	};
 
 	const handleChangeSelectedItemLeft = (node: Node | null) => {
@@ -136,6 +156,40 @@ function PanelAssetsPreviewer({
 		}
 	};
 
+	const handleRefresh = async () => {
+		if (!getFolder || !callBackCreateAsset || !setItemsAvailable) {
+			return;
+		}
+		const files = await getAllFilesFromFolder(getFolder(true, ''));
+		const customNames = await getFiles(getFolder(false, ''));
+		const dlcNames: [string, string][] = [];
+		for (const dlc of Project.current!.dlcs.list) {
+			const path = getFolder(false, dlc);
+			if (await checkFileExists(path)) {
+				const names = await getFiles(path);
+				for (const name of names) {
+					dlcNames.push([name, dlc]);
+				}
+			}
+		}
+		setItemsAvailable([
+			...Node.createList(
+				files.map((name, index) => callBackCreateAsset(index + 1, name)),
+				false,
+			),
+			...Node.createList(
+				customNames.map((name, index) => callBackCreateAsset(files.length + index + 1, name, false)),
+				false,
+			),
+			...Node.createList(
+				dlcNames.map(([name, dlc], index) =>
+					callBackCreateAsset(files.length + customNames.length + index + 1, name, false, dlc),
+				),
+				false,
+			),
+		]);
+	};
+
 	const handleClickPlus = async () => {
 		importFileInputRef.current?.click();
 	};
@@ -151,7 +205,7 @@ function PanelAssetsPreviewer({
 				for (const file of files) {
 					const arrayBuffer = await file.arrayBuffer();
 					const buffer = Buffer.from(arrayBuffer);
-					await IO.createFile(Paths.join(basePath, file.name), buffer);
+					await IO.createFile(Paths.join(Project.current!.getPath(), basePath, file.name), buffer);
 				}
 			} else {
 				const filePromises = files.map((file) => {
@@ -164,14 +218,20 @@ function PanelAssetsPreviewer({
 				});
 				const base64Files = await Promise.all(filePromises);
 				for (const { name, base64 } of base64Files) {
-					await LocalFile.createFile(Paths.join(basePath, name), base64);
+					await LocalFile.createFile(Paths.join(Project.current!.getPath(), basePath, name), base64);
 				}
 			}
-			onRefresh?.();
+			await handleRefresh();
 		} catch (error) {
 			console.error('Error reading files:', error);
 		}
 	};
+
+	useEffect(() => {
+		if (isInitiating) {
+			handleRefresh().catch(console.error);
+		}
+	}, [isInitiating]);
 
 	return (
 		<Flex column spacedLarge fillWidth fillHeight>
@@ -184,8 +244,9 @@ function PanelAssetsPreviewer({
 					</Flex>
 					{Constants.IS_DESKTOP && (
 						<Flex spaced>
-							<Button disabled>{t('open.default.folder')}...</Button>
-							<Button disabled>{t('open.project.folder')}...</Button>
+							<Button onClick={handleClickOpenDefaultFolder}>{t('open.default.folder')}...</Button>
+							<Button onClick={handleClickOpenProjectFolder}>{t('open.project.folder')}...</Button>
+							<Button onClick={handleClickImportDLCs}>{t('import.dlc.s')}...</Button>
 						</Flex>
 					)}
 				</Flex>
@@ -246,7 +307,7 @@ function PanelAssetsPreviewer({
 								</Flex>
 								<Flex spaced>
 									<Flex one>
-										<Button fillWidth onClick={onRefresh}>
+										<Button fillWidth onClick={handleRefresh}>
 											{t('refresh')}
 										</Button>
 									</Flex>

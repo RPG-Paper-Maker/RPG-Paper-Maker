@@ -47,6 +47,16 @@ class Song extends Asset {
 		return '';
 	}
 
+	static createSong(kind: SONG_KIND, id: number, name: string, isBR: boolean, dlc: string): Song {
+		const song = new Song(kind);
+		song.applyDefault();
+		song.id = id;
+		song.name = name;
+		song.isBR = isBR;
+		song.dlc = dlc;
+		return song;
+	}
+
 	applyDefault(): void {
 		super.applyDefault(Song.getBindings([]));
 	}

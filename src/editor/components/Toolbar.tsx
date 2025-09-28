@@ -33,6 +33,7 @@ import {
 	triggerAutotiles,
 	triggerCollisions,
 	triggerData,
+	triggerDLCs,
 	triggerFonts,
 	triggerImportProject,
 	triggerKeyboard,
@@ -127,6 +128,10 @@ function Toolbar() {
 		dispatch(triggerPlugins(true));
 	};
 
+	const handleDLCsManager = () => {
+		dispatch(triggerDLCs(true));
+	};
+
 	const handlePicturesManager = () => {
 		dispatch(triggerPictures(true));
 	};
@@ -165,10 +170,6 @@ function Toolbar() {
 
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
-	};
-
-	const handleFloor = () => {
-		// TODO
 	};
 
 	return (
@@ -225,8 +226,12 @@ function Toolbar() {
 					</MenuItem>
 					<>
 						{Constants.IS_DESKTOP && (
-							<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
-								{t('dlcs')}
+							<MenuItem
+								icon={<MdOutlineAddchart />}
+								onClick={handleDLCsManager}
+								disabled={!isProjectOpened}
+							>
+								DLCs
 							</MenuItem>
 						)}
 					</>

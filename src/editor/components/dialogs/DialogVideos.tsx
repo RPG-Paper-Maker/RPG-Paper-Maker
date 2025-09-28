@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
-import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
@@ -68,7 +67,7 @@ function DialogVideos({
 	const folders = useMemo(() => (manager ? [Node.create(Model.TreeMapTag.create(-1, 'Videos'))] : []), [manager]);
 	const isVideoPlayable = useMemo(
 		() => !!selectedVideo && selectedVideo.id !== -1 && !loading,
-		[selectedVideo, loading]
+		[selectedVideo, loading],
 	);
 
 	const initialize = async () => {
@@ -80,7 +79,6 @@ function DialogVideos({
 			const video = Project.current!.videos.getByID(videoID);
 			await updateVideo(video);
 		}
-		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -95,7 +93,7 @@ function DialogVideos({
 			setLoading(video.id !== -1);
 			if (playerRef.current && sourceRef.current) {
 				const path = video.getPath();
-				sourceRef.current.src = Constants.IS_DESKTOP ? path : (await LocalFile.readFile(path)) ?? '';
+				sourceRef.current.src = Constants.IS_DESKTOP ? path : ((await LocalFile.readFile(path)) ?? '');
 				playerRef.current.load();
 				playerRef.current.onloadeddata = () => {
 					setLoading(false);
@@ -110,34 +108,10 @@ function DialogVideos({
 		await updateVideo((node?.content ?? null) as Model.Video | null);
 	};
 
-	const handleRefresh = async () => {
-		const files = await getAllFilesFromFolder(Model.Video.getFolder(true, ''));
-		const customNames = await getFiles(Model.Video.getFolder(false, ''));
-		setVideosAvailable([
-			...Node.createList(
-				files.map((name, index) => {
-					const video = new Model.Video();
-					video.id = index + 1;
-					video.name = name;
-					video.isBR = true;
-					video.dlc = '';
-					return video;
-				}),
-				false
-			),
-			...Node.createList(
-				customNames.map((name, index) => {
-					const video = new Model.Video();
-					video.id = files.length + index + 1;
-					video.name = name;
-					video.isBR = false;
-					video.dlc = '';
-					return video;
-				}),
-				false
-			),
-		]);
-	};
+	const getFolder = (isBR = true, dlc = '') => Model.Video.getFolder(isBR, dlc);
+
+	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
+		Model.Video.createVideo(id, name, isBR, dlc);
 
 	const handleListUpdated = () => {
 		if (manager) {
@@ -273,18 +247,20 @@ function DialogVideos({
 					dynamicValueID={newDynamicVideoID}
 					list={videos}
 					itemsAvailable={videosAvailable}
+					setItemsAvailable={setVideosAvailable}
 					selectedItem={selectedVideo}
 					isSelectedLeftList={isSelectedLeftList}
 					setIsSelectedLeftList={setIsSelectedLeftList}
 					isInitiating={isInitiating}
 					setIsInitiating={setIsInitiating}
 					onChangeSelectedItem={handleChangeSelectedVideo}
-					onRefresh={handleRefresh}
+					getFolder={getFolder}
+					callBackCreateAsset={callBackCreateAsset}
 					onListUpdated={handleListUpdated}
 					content={getPreviewerContent()}
 					options={getPreviewerOptionsContent()}
 					active={active}
-					basePath={Model.Video.getFolder(false, '')}
+					basePath={Model.Video.getLocalFolder()}
 					importTypes='video/mp4,video/x-m4v,video/*'
 				/>
 			</Flex>

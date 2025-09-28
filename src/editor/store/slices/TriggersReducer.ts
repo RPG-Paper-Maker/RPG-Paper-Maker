@@ -35,6 +35,7 @@ const TriggersSlice = createSlice({
 			keyboard: false,
 			languages: false,
 			plugins: false,
+			dlcs: false,
 			pictures: false,
 			videos: false,
 			songs: false,
@@ -96,6 +97,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerPlugins(state, action: PayloadAction<boolean>) {
 			state.mainBar.plugins = action.payload;
+		},
+		triggerDLCs(state, action: PayloadAction<boolean>) {
+			state.mainBar.dlcs = action.payload;
 		},
 		triggerPictures(state, action: PayloadAction<boolean>) {
 			state.mainBar.pictures = action.payload;
@@ -166,6 +170,7 @@ export const {
 	triggerKeyboard,
 	triggerLanguages,
 	triggerPlugins,
+	triggerDLCs,
 	triggerPictures,
 	triggerSongs,
 	triggerFonts,

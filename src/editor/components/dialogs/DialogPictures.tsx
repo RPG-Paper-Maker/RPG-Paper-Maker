@@ -13,7 +13,6 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
-import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
@@ -141,7 +140,6 @@ function DialogPictures({
 		}
 		setSelectedRect(rect);
 		setSelectedRectTileset(rectT);
-		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -161,6 +159,11 @@ function DialogPictures({
 		}
 	};
 
+	const getFolder = (isBR = true, dlc = '') => Model.Picture.getFolder(selectedKind!, isBR, dlc);
+
+	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
+		Model.Picture.createPicture(selectedKind!, id, name, isBR, dlc);
+
 	const handleChangeSelectedPicture = (node: Node | null) => {
 		updateSelectedPicture((node?.content ?? null) as Model.Picture | null);
 	};
@@ -177,37 +180,6 @@ function DialogPictures({
 		if (selectedPicture) {
 			selectedPicture.isClimbAnimation = b;
 		}
-	};
-
-	const handleRefresh = async () => {
-		const files = await getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
-		const customNames = await getFiles(Model.Picture.getFolder(selectedKind!, false, ''));
-		setPicturesAvailable([
-			...Node.createList(
-				files.map((name, index) => {
-					const picture = new Model.Picture(selectedKind!);
-					picture.applyDefault();
-					picture.id = index + 1;
-					picture.name = name;
-					picture.isBR = true;
-					picture.dlc = '';
-					return picture;
-				}),
-				false,
-			),
-			...Node.createList(
-				customNames.map((name, index) => {
-					const picture = new Model.Picture(selectedKind!);
-					picture.applyDefault();
-					picture.id = files.length + index + 1;
-					picture.name = name;
-					picture.isBR = false;
-					picture.dlc = '';
-					return picture;
-				}),
-				false,
-			),
-		]);
 	};
 
 	const handleChangeFolder = (node: Node | null) => {
@@ -405,18 +377,20 @@ function DialogPictures({
 						dynamicValueID={newDynamicPictureID}
 						list={pictures}
 						itemsAvailable={picturesAvailable}
+						setItemsAvailable={setPicturesAvailable}
 						selectedItem={selectedPicture}
 						isSelectedLeftList={isSelectedLeftList}
 						setIsSelectedLeftList={setIsSelectedLeftList}
 						isInitiating={isInitiating}
 						setIsInitiating={setIsInitiating}
 						onChangeSelectedItem={handleChangeSelectedPicture}
-						onRefresh={handleRefresh}
+						getFolder={getFolder}
+						callBackCreateAsset={callBackCreateAsset}
 						onListUpdated={handleListUpdated}
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
 						active={active}
-						basePath={Model.Picture.getFolder(selectedKind, false, '')}
+						basePath={Model.Picture.getLocalFolder(selectedKind)}
 						importTypes='image/png, image/jpeg'
 					/>
 				) : (

@@ -43,7 +43,7 @@ class Asset extends Base {
 	getIcon() {
 		return (
 			<img
-				src={`./Pictures/bullet-${this.isBR ? 'br' : 'custom'}.png`}
+				src={`./Pictures/bullet-${this.isBR ? 'br' : this.dlc ? 'dlc' : 'custom'}.png`}
 				alt='bullet'
 				style={{ width: '16px', height: '16px', imageRendering: 'auto' }}
 			/>

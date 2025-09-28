@@ -178,6 +178,16 @@ class Shape extends Asset {
 		return '';
 	}
 
+	static createShape(kind: CUSTOM_SHAPE_KIND, id: number, name: string, isBR: boolean, dlc: string): Shape {
+		const shape = new Shape(kind);
+		shape.applyDefault();
+		shape.id = id;
+		shape.name = name;
+		shape.isBR = isBR;
+		shape.dlc = dlc;
+		return shape;
+	}
+
 	applyDefault(): void {
 		super.applyDefault([]);
 	}

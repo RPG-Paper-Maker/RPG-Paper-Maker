@@ -13,7 +13,6 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { CUSTOM_SHAPE_KIND } from '../../common';
-import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Manager, Model } from '../../Editor';
@@ -82,7 +81,6 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 		if (shapeID !== undefined) {
 			setSelectedShape(Project.current!.shapes.getByID(selectedKind!, shapeID));
 		}
-		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -99,34 +97,10 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 		updateShape((node?.content ?? null) as Model.Shape | null);
 	};
 
-	const handleRefresh = async () => {
-		const files = await getAllFilesFromFolder(Model.Shape.getFolder(selectedKind!, true, ''));
-		const customNames = await getFiles(Model.Shape.getFolder(selectedKind!, false, ''));
-		setShapesAvailable([
-			...Node.createList(
-				files.map((name, index) => {
-					const shape = new Model.Shape(selectedKind!);
-					shape.id = index + 1;
-					shape.name = name;
-					shape.isBR = true;
-					return shape;
-				}),
-				false,
-			),
-			...Node.createList(
-				customNames.map((name, index) => {
-					const shape = new Model.Shape(selectedKind!);
-					shape.applyDefault();
-					shape.id = files.length + index + 1;
-					shape.name = name;
-					shape.isBR = false;
-					shape.dlc = '';
-					return shape;
-				}),
-				false,
-			),
-		]);
-	};
+	const getFolder = (isBR = true, dlc = '') => Model.Shape.getFolder(selectedKind!, isBR, dlc);
+
+	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
+		Model.Shape.createShape(selectedKind!, id, name, isBR, dlc);
 
 	const handleChangeFolder = (node: Node | null) => {
 		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
@@ -226,17 +200,19 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 						assetID={shapeID}
 						list={shapes}
 						itemsAvailable={shapesAvailable}
+						setItemsAvailable={setShapesAvailable}
 						selectedItem={selectedShape}
 						isSelectedLeftList={isSelectedLeftList}
 						setIsSelectedLeftList={setIsSelectedLeftList}
 						isInitiating={isInitiating}
 						setIsInitiating={setIsInitiating}
 						onChangeSelectedItem={handleChangeSelectedShape}
-						onRefresh={handleRefresh}
+						getFolder={getFolder}
+						callBackCreateAsset={callBackCreateAsset}
 						onListUpdated={handleListUpdated}
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
-						basePath={Model.Shape.getFolder(selectedKind, false, '')}
+						basePath={Model.Shape.getLocalFolder(selectedKind)}
 						importTypes={importTypes}
 					/>
 				) : (

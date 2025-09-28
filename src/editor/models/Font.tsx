@@ -30,6 +30,15 @@ class Font extends Asset {
 		return Paths.FONTS;
 	}
 
+	static createFont(id: number, name: string, isBR: boolean, dlc: string): Font {
+		const font = new Font();
+		font.id = id;
+		font.name = name;
+		font.isBR = isBR;
+		font.dlc = dlc;
+		return font;
+	}
+
 	getPath(local = false): string {
 		return this.id === -1 || !this.name
 			? ''

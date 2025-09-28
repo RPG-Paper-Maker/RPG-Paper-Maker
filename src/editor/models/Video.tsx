@@ -29,6 +29,15 @@ class Video extends Asset {
 		return Paths.VIDEOS;
 	}
 
+	static createVideo(id: number, name: string, isBR: boolean, dlc: string): Video {
+		const video = new Video();
+		video.id = id;
+		video.name = name;
+		video.isBR = isBR;
+		video.dlc = dlc;
+		return video;
+	}
+
 	getPath(local = false): string {
 		return this.id === -1
 			? ''

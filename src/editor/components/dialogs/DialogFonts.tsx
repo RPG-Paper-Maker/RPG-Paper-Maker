@@ -12,7 +12,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
@@ -46,7 +45,6 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 		setIsInitiating(true);
 		setIsSelectedLeftList(true);
 		setFonts(Node.createList(Project.current!.fonts.list));
-		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -59,34 +57,10 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 		setSelectedFont((node?.content ?? null) as Model.Font | null);
 	};
 
-	const handleRefresh = async () => {
-		const files = await getAllFilesFromFolder(Model.Font.getFolder(true, ''));
-		const customNames = await getFiles(Model.Font.getFolder(false, ''));
-		setFontsAvailable([
-			...Node.createList(
-				files.map((name, index) => {
-					const font = new Model.Font();
-					font.id = index + 1;
-					font.name = name;
-					font.isBR = true;
-					font.dlc = '';
-					return font;
-				}),
-				false
-			),
-			...Node.createList(
-				customNames.map((name, index) => {
-					const font = new Model.Font();
-					font.id = files.length + index + 1;
-					font.name = name;
-					font.isBR = false;
-					font.dlc = '';
-					return font;
-				}),
-				false
-			),
-		]);
-	};
+	const getFolder = (isBR = true, dlc = '') => Model.Font.getFolder(isBR, dlc);
+
+	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
+		Model.Font.createFont(id, name, isBR, dlc);
 
 	const handleListUpdated = () => {
 		Project.current!.fonts.list = Node.createListFromNodes(fonts);
@@ -144,15 +118,17 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 					assetID={-1}
 					list={fonts}
 					itemsAvailable={fontsAvailable}
+					setItemsAvailable={setFontsAvailable}
 					selectedItem={selectedFont}
 					isSelectedLeftList={isSelectedLeftList}
 					setIsSelectedLeftList={setIsSelectedLeftList}
 					isInitiating={isInitiating}
 					setIsInitiating={setIsInitiating}
 					onChangeSelectedItem={handleChangeSelectedFont}
-					onRefresh={handleRefresh}
+					getFolder={getFolder}
+					callBackCreateAsset={callBackCreateAsset}
 					onListUpdated={handleListUpdated}
-					basePath={Model.Font.getFolder(false, '')}
+					basePath={Model.Font.getLocalFolder()}
 					importTypes='.ttf, .otf, .woff, .woff2'
 				/>
 			</Flex>

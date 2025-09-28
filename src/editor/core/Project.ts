@@ -45,6 +45,7 @@ class Project {
 	public battleSystem = new Data.BattleSystem();
 	public titleScreenGameOver = new Data.TitleScreenGameOver();
 	public scripts = new Data.Scripts();
+	public dlcs = new Data.DLCs();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
@@ -118,6 +119,7 @@ class Project {
 		await this.battleSystem.load();
 		await this.titleScreenGameOver.load();
 		await this.scripts.load();
+		await this.dlcs.load();
 	}
 
 	async save() {
@@ -150,6 +152,7 @@ class Project {
 		await this.scripts.save();
 		await this.settings.save();
 		await this.fonts.save();
+		await this.dlcs.save();
 	}
 }
 

@@ -3,6 +3,7 @@ export * from './Armors';
 export * from './BattleSystem';
 export * from './Classes';
 export * from './CommonEvents';
+export * from './DLCs';
 export * from './EngineSettings';
 export * from './Fonts';
 export * from './Heroes';

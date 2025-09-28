@@ -22,7 +22,6 @@ import {
 	SONG_KIND,
 	Utils,
 } from '../../common';
-import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
@@ -144,7 +143,6 @@ function DialogSongs({
 		setPlayingHowl(undefined);
 		setIsPaused(true);
 		setIsStopped(true);
-		await handleRefresh();
 	};
 
 	const reset = () => {
@@ -184,34 +182,10 @@ function DialogSongs({
 		await updateSong((node?.content ?? null) as Model.Song | null);
 	};
 
-	const handleRefresh = async () => {
-		const files = await getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
-		const customNames = await getFiles(Model.Song.getFolder(selectedKind!, false, ''));
-		setSongsAvailable([
-			...Node.createList(
-				files.map((name, index) => {
-					const song = new Model.Song(selectedKind!);
-					song.id = index + 1;
-					song.name = name;
-					song.isBR = true;
-					return song;
-				}),
-				false,
-			),
-			...Node.createList(
-				customNames.map((name, index) => {
-					const song = new Model.Song(selectedKind!);
-					song.applyDefault();
-					song.id = files.length + index + 1;
-					song.name = name;
-					song.isBR = false;
-					song.dlc = '';
-					return song;
-				}),
-				false,
-			),
-		]);
-	};
+	const getFolder = (isBR = true, dlc = '') => Model.Song.getFolder(selectedKind!, isBR, dlc);
+
+	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
+		Model.Song.createSong(selectedKind!, id, name, isBR, dlc);
 
 	const handleStop = () => {
 		playingHowl!.stop();
@@ -437,19 +411,21 @@ function DialogSongs({
 						dynamicValueID={newDynamicSongID}
 						list={songs}
 						itemsAvailable={songsAvailable}
+						setItemsAvailable={setSongsAvailable}
 						selectedItem={selectedSong}
 						isSelectedLeftList={isSelectedLeftList}
 						setIsSelectedLeftList={setIsSelectedLeftList}
 						isInitiating={isInitiating}
 						setIsInitiating={setIsInitiating}
 						onChangeSelectedItem={handleChangeSelectedSong}
-						onRefresh={handleRefresh}
+						getFolder={getFolder}
+						callBackCreateAsset={callBackCreateAsset}
 						onListUpdated={handleListUpdated}
 						onDoubleClickLeftList={handlePlay}
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
 						active={active}
-						basePath={Model.Song.getFolder(selectedKind, false, '')}
+						basePath={Model.Song.getLocalFolder(selectedKind)}
 						importTypes='audio/mp3, audio/ogg, audio/wav'
 					/>
 				) : (

@@ -160,6 +160,7 @@ class System extends Serializable {
 		['mainMenuCommands', 'mainMenuCommands', [], BINDING.LIST, Model.MainMenuCommand],
 		['heroesStatisticsDisplay', 'heroesStatistics', [], BINDING.LIST, Model.HeroStatisticDisplay],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
+		['PATH_DLCS', 'pathDLCS', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', undefined, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', undefined, BINDING.POSITION, undefined, undefined, Position],
 	];
