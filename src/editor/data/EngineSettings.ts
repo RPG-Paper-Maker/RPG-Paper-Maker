@@ -29,9 +29,9 @@ class EngineSettings extends Serializable {
 		['currentLanguage', 'cl', undefined, BINDING.STRING],
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 		['keyboardControls', 'kc', [], BINDING.LIST, Keyboard],
-		['backupsActivated', 'ba', [], BINDING.BOOLEAN],
-		['backupsInterval', 'bi', [], BINDING.NUMBER],
-		['backupsMax', 'bm', [], BINDING.NUMBER],
+		['backupsActivated', 'ba', true, BINDING.BOOLEAN],
+		['backupsInterval', 'bi', 60, BINDING.NUMBER],
+		['backupsMax', 'bm', 5, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

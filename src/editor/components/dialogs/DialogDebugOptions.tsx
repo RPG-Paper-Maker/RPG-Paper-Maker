@@ -73,6 +73,7 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 		EngineSettings.current!.backupsInterval = backupsInterval;
 		EngineSettings.current!.backupsMax = backupsMax;
 		await EngineSettings.current!.save();
+		Project.current!.resetBackups();
 		setIsOpen(false);
 	};
 

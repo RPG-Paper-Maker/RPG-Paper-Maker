@@ -24,6 +24,7 @@ class Paths {
 	public static readonly VIDEOS = 'Videos';
 	public static readonly FONTS = 'Fonts';
 	public static readonly STYLES = 'Styles';
+	public static readonly BACKUPS = 'Backups';
 	public static readonly RESOURCES = 'resources';
 	public static readonly RESOURCES_DARWIN = 'Resources';
 	public static readonly APP = 'app';

@@ -316,6 +316,7 @@ function MainMenuBar() {
 				await addProject(project);
 			}
 			await Project.current.systems.saveStyleCSS();
+			Project.current.addBackups();
 			dispatch(setCurrentProject(project));
 		} else {
 			setIsDialogWarningProjectLocationExist(true);
@@ -457,6 +458,7 @@ function MainMenuBar() {
 			Scene.Map.current.close();
 			Scene.Map.current = null;
 		}
+		Project.current?.close();
 		Project.current = null;
 		dispatch(setCurrentTreeMapTag(null));
 		dispatch(setCurrentProject(null));

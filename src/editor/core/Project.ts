@@ -10,7 +10,17 @@
 */
 
 import { Data, Model } from '../Editor';
-import { Paths } from '../common';
+import { Paths, Utils } from '../common';
+import {
+	checkFileExists,
+	copyFile,
+	copyFolder,
+	createFolder,
+	getFiles,
+	getFolders,
+	removeFolder,
+	renameFile,
+} from '../common/Platform';
 import { Node } from './Node';
 
 class Project {
@@ -50,6 +60,7 @@ class Project {
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
 	public currentMapObjectParameters: Model.Base[] = [];
+	public intervalBackupID: NodeJS.Timeout | null = null;
 
 	constructor(location: string) {
 		this.location = location;
@@ -88,6 +99,74 @@ class Project {
 		this.troops.translateDefaults();
 		this.variables.translateDefaults();
 		this.weapons.translateDefaults();
+	}
+
+	addBackups() {
+		if (Data.EngineSettings.current!.backupsActivated) {
+			this.updateBackups().catch(console.error);
+			this.intervalBackupID = setInterval(
+				this.updateBackups,
+				Data.EngineSettings.current!.backupsInterval * 60 * 1000,
+			);
+		}
+	}
+
+	async updateBackups() {
+		const path = this.getPath();
+		const backupsPath = Paths.join(path, Paths.BACKUPS);
+		if (!(await checkFileExists(backupsPath))) {
+			await createFolder(backupsPath);
+		}
+		const folders = await getFolders(backupsPath);
+		folders.sort();
+		const now = new Date();
+		const day = Utils.formatNumber(now.getDate(), 2);
+		const month = Utils.formatNumber(now.getMonth() + 1, 2); // months are 0-based
+		const year = now.getFullYear();
+		const hour = Utils.formatNumber(now.getHours(), 2);
+		const minute = Utils.formatNumber(now.getMinutes(), 2);
+		const folderBackup = `${folders.length + 1}-${day}-${month}-${year}-${hour}h${minute}`;
+		const foldersToCopy = await getFolders(path);
+		const filesToCopy = await getFiles(path);
+		await createFolder(Paths.join(backupsPath, folderBackup));
+		for (const f of foldersToCopy) {
+			if (f !== Paths.BACKUPS) {
+				await copyFolder(Paths.join(path, f), Paths.join(backupsPath, folderBackup, f));
+			}
+		}
+		for (const f of filesToCopy) {
+			await copyFile(Paths.join(path, f), Paths.join(backupsPath, folderBackup, f));
+		}
+		if (folders.length >= Data.EngineSettings.current!.backupsMax) {
+			for (let i = 0; i < folders.length + 1 - Data.EngineSettings.current!.backupsMax; i++) {
+				await removeFolder(Paths.join(backupsPath, folders[i]));
+			}
+			folders.push(folderBackup);
+			for (let i = folders.length - Data.EngineSettings.current!.backupsMax; i < folders.length; i++) {
+				const folder = folders[i];
+				await renameFile(
+					backupsPath,
+					folder,
+					i - folders.length + Data.EngineSettings.current!.backupsMax + 1 + folder.substring(1),
+				);
+			}
+		}
+	}
+
+	resetBackups() {
+		this.clearBakcups();
+		this.addBackups();
+	}
+
+	clearBakcups() {
+		if (this.intervalBackupID !== null) {
+			clearInterval(this.intervalBackupID);
+			this.intervalBackupID = null;
+		}
+	}
+
+	close() {
+		this.clearBakcups();
 	}
 
 	async load() {
