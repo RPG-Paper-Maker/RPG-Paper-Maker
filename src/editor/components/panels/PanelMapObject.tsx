@@ -51,7 +51,7 @@ type Props = {
 const PanelMapObject = forwardRef(
 	(
 		{ object, hideNameID = false, hideStateValues = false, saveOnDestruction = false, saveOnUpdate = false }: Props,
-		ref
+		ref,
 	) => {
 		const { t } = useTranslation();
 
@@ -198,7 +198,7 @@ const PanelMapObject = forwardRef(
 								onListUpdated={handleUpdateEvents}
 							/>
 						) : null;
-					})
+					}),
 				);
 			}
 		};
@@ -214,7 +214,7 @@ const PanelMapObject = forwardRef(
 			}
 		};
 
-		const handleCurrentIndexTabChanged = (index: number, model: Model.Base, isClick: boolean) => {
+		const handleCurrentIndexTabChanged = (index: number, model: Model.Base | undefined, isClick: boolean) => {
 			if (isClick) {
 				setForcedCurrentSelectedIndexEvent(index);
 			}
@@ -705,7 +705,7 @@ const PanelMapObject = forwardRef(
 				)}
 			</>
 		);
-	}
+	},
 );
 
 PanelMapObject.displayName = 'PanelMapObject';

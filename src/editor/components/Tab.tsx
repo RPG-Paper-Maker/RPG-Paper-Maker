@@ -10,12 +10,14 @@
 */
 
 import React, { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
 import { Model } from '../Editor';
 import { ArrayUtils, Utils } from '../common';
 import '../styles/Tab.css';
 import Button from './Button';
+import ContextMenu from './ContextMenu';
 import Flex from './Flex';
 
 type Props = {
@@ -26,7 +28,7 @@ type Props = {
 	defaultIndex?: number;
 	closable?: boolean;
 	hideScroll?: boolean;
-	onCurrentIndexChanged?: (index: number, model: Model.Base, isClick: boolean) => void;
+	onCurrentIndexChanged?: (index: number, model: Model.Base | undefined, isClick: boolean) => void;
 	forcedCurrentIndex?: number | null;
 	setForcedCurrentIndex?: (forced: number | null) => void;
 	padding?: boolean;
@@ -55,6 +57,8 @@ function Tab({
 	disabled = false,
 	noScrollToSelectedElement = false,
 }: Props) {
+	const { t } = useTranslation();
+
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
 	const [openedTabs, setOpenedTabs] = useState<number[]>([]);
@@ -95,6 +99,15 @@ function Tab({
 			return;
 		}
 		setNextIndex(index);
+	};
+
+	const handleCloseAll = async () => {
+		setTitles?.([]);
+		setContents?.([]);
+		setCurrentIndex(-1);
+		if (onCurrentIndexChanged) {
+			onCurrentIndexChanged(-1, undefined, true);
+		}
 	};
 
 	const handleClickLeftButton = () => {
@@ -172,7 +185,22 @@ function Tab({
 	return (
 		<div className='tab'>
 			<div className='tabTitles'>
-				<div className={hideScroll ? 'flex' : 'scrollArea'}>{getTitles()}</div>
+				<div className={hideScroll ? 'flex' : 'scrollArea'}>
+					<ContextMenu
+						items={[
+							{
+								title: t('close.all'),
+								disabled: titles.length === 0,
+								onClick: handleCloseAll,
+							},
+						]}
+						isFocused={false}
+						setIsFocused={() => {}}
+						column={false}
+					>
+						{getTitles()}
+					</ContextMenu>
+				</div>
 				{!hideScroll && (
 					<>
 						<Button
@@ -193,7 +221,7 @@ function Tab({
 			<div
 				className={Utils.getClassName(
 					{ padding, scrollable: scrollableContent, zeroHeight: scrollableContent },
-					'tabContent'
+					'tabContent',
 				)}
 				style={minHeightContent ? { minHeight: minHeightContent } : undefined}
 			>

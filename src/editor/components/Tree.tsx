@@ -925,8 +925,8 @@ function Tree({
 					}}
 					ref={listRef}
 				>
-					<Flex spaced>{getHeaders()}</Flex>
 					<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
+						<Flex spaced>{getHeaders()}</Flex>
 						{getItems()}
 					</ContextMenu>
 				</div>

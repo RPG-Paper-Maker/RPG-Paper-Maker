@@ -21,10 +21,11 @@ type Props = {
 	items?: MenuItemType[];
 	isFocused: boolean;
 	setIsFocused: (b: boolean) => void;
+	column?: boolean;
 	disabled?: boolean;
 };
 
-function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled = false }: Props) {
+function ContextMenu({ children, items = [], isFocused, setIsFocused, column = true, disabled = false }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
 	const refComplete = useRef<HTMLDivElement>(null);
@@ -108,7 +109,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, disabled =
 	return (
 		<Flex
 			one
-			column
+			column={column}
 			fillWidth
 			fillHeight
 			ref={refComplete}

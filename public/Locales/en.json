@@ -2088,5 +2088,6 @@
 	"deploy": "Deploy",
 	"auto.updater": "Auto updater",
 	"manual": "Manual",
-	"no.updates": "No updates"
+	"no.updates": "No updates",
+	"close.all": "Close all"
 }

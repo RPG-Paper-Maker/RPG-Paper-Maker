@@ -57,7 +57,7 @@ function PanelProject() {
 
 	const getDefaultTabTitles = () =>
 		Project.current!.treeMaps.tabs.map((id) =>
-			Model.Base.create(id, Node.getNameByID(Project.current!.treeMaps.tree, id))
+			Model.Base.create(id, Node.getNameByID(Project.current!.treeMaps.tree, id)),
 		);
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
@@ -83,7 +83,7 @@ function PanelProject() {
 		}
 	};
 
-	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base, isClick: boolean) => {
+	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base | undefined, isClick: boolean) => {
 		if (!openLoading) {
 			let id = -1;
 			if (index !== -1 && model) {
