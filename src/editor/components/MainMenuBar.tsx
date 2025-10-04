@@ -583,6 +583,18 @@ function MainMenuBar() {
 
 	const handleChangeLanguage = async () => setDialogType(DIALOG_TYPE.CHANGE_LANGUAGE);
 
+	const handleChangeShowHideGrid = async () => {
+		Project.current!.settings.showGrid = !Project.current!.settings.showGrid;
+		await Project.current!.settings.save();
+		Scene.Map.current!.showGrid(Project.current!.settings.showGrid);
+	};
+
+	const handleChangeShowHideSquareInformation = async () => {
+		Project.current!.settings.showSquareInformation = !Project.current!.settings.showSquareInformation;
+		await Project.current!.settings.save();
+		Scene.Map.current!.showSquareCoordinates(Project.current!.settings.showSquareInformation);
+	};
+
 	const play = async () => await openGame(currentProject!.location);
 
 	const handlePlay = async () => {
@@ -951,7 +963,20 @@ function MainMenuBar() {
 		},
 		{
 			title: t('display'),
-			disabled: true,
+			children: [
+				{
+					title: `${t('show.hide.grid')}...`,
+					onClick: handleChangeShowHideGrid,
+					disabled: !isProjectOpened,
+					shortcut: [KEY.G],
+				},
+				{
+					title: `${t('show.hide.square.information')}...`,
+					onClick: handleChangeShowHideSquareInformation,
+					disabled: !isProjectOpened,
+					shortcut: [KEY.I],
+				},
+			],
 		},
 		{
 			title: t('test'),

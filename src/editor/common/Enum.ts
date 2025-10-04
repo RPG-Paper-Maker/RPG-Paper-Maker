@@ -136,6 +136,7 @@ export enum KEY {
 	D = 'd',
 	C = 'c',
 	V = 'v',
+	G = 'g',
 	ENTER = 'Enter',
 	DELETE = 'Delete',
 	SPACE = ' ',

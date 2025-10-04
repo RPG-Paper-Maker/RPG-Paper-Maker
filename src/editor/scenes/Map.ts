@@ -953,7 +953,7 @@ class Map extends Base {
 	}
 
 	enableView(b: boolean) {
-		this.grid.line.visible = !b;
+		this.showGrid(!b && Project.current!.settings.showGrid);
 		this.cursorStartPosition.mesh.visible = !b;
 		this.cursorObject.mesh.visible = !b;
 		this.forEachMapPortions((mapPortion) => {
@@ -962,7 +962,15 @@ class Map extends Base {
 			}
 		});
 		this.cursor.mesh.visible = !b;
-		this.showCoordinates = !b;
+		this.showSquareCoordinates(!b && Project.current!.settings.showSquareInformation);
+	}
+
+	showGrid(b: boolean) {
+		this.grid.line.visible = b;
+	}
+
+	showSquareCoordinates(b: boolean) {
+		this.showCoordinates = b;
 		this.requestPaintHUD = true;
 	}
 

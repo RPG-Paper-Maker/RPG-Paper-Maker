@@ -45,6 +45,8 @@ class Settings extends Serializable {
 	public showAvailableContent!: boolean;
 	public lastMajorVersion!: number;
 	public lastMinorVersion!: number;
+	public showGrid!: boolean;
+	public showSquareInformation!: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -77,6 +79,8 @@ class Settings extends Serializable {
 		['showAvailableContent', 'sac', true, BINDING.BOOLEAN],
 		['lastMajorVersion', 'lmv', 1, BINDING.NUMBER],
 		['lastMinorVersion', 'lmiv', 0, BINDING.NUMBER],
+		['showGrid', 'sg', true, BINDING.BOOLEAN],
+		['showSquareInformation', 'ssi', true, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
