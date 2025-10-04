@@ -23,6 +23,7 @@ class EngineSettings extends Serializable {
 	public backupsActivated!: boolean;
 	public backupsInterval!: number;
 	public backupsMax!: number;
+	public updaterType!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
@@ -32,6 +33,7 @@ class EngineSettings extends Serializable {
 		['backupsActivated', 'ba', true, BINDING.BOOLEAN],
 		['backupsInterval', 'bi', 60, BINDING.NUMBER],
 		['backupsMax', 'bm', 5, BINDING.NUMBER],
+		['updaterType', 'ut', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

@@ -274,6 +274,7 @@ class Base extends Serializable {
 		'force.always.collides',
 		'force.never.collides',
 	]);
+	public static UPDATER_OPTIONS = Base.mapListIndex(['auto', 'manual', 'no.updates']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

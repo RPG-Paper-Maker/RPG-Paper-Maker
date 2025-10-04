@@ -1,0 +1,62 @@
+.white-theme {
+	--main-bg-color: #ffffff;
+	--main-color: #515151;
+	--darker-bg-color: #fafafa;
+	--darkest-bg-color: #dadceb;
+	--darkest-containers-bg-color: #dadceb;
+	--hover-main-bg-color: #f0f0f0;
+	--lighter-bg-color: #dadceb;
+	--lightest-bg-color: #cfd0de;
+	--grey-color: #b0b0b0;
+	--grey-light-color: #cacaca;
+	--primary-color: #429897;
+	--primary-dark-color: #429897;
+	--hover-primary-dark-color: #d9f0f0;
+	--orange-color: #f6b780;
+	--red-color: #de3a3c;
+	--hover-red-color: #ce4144;
+	--patreon-color: #f96753;
+	--hover-patreon-color: #fe7765;
+	--special-elements-size: 30px;
+	--green-color: #78ad51;
+}
+
+.white-theme {
+	.menuSub .title {
+		&.active {
+			color: white;
+		}
+	}
+	.menuItem.active {
+		color: white;
+	}
+	.tree .treeItem.selected {
+		color: white;
+	}
+	.tab .tabItem.selected {
+		color: var(--main-color);
+	}
+	button.primary {
+		background-color: var(--primary-color);
+	}
+	button.default {
+		background-color: white;
+		border: 1px solid var(--lighter-bg-color);
+		color: var(--main-color);
+		&:hover {
+			background-color: var(--darker-bg-color);
+		}
+	}
+	button.square:not(:hover) {
+		color: var(--main-color);
+	}
+	#list-previewer .selected {
+		color: white;
+	}
+	.tips {
+		color: white;
+	}
+	.checkbox .square {
+		border: 1px solid var(--main-color);
+	}
+}

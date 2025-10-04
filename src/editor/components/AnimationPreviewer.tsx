@@ -41,6 +41,7 @@ type CurrentStateProps = {
 	hoveredElement: AnimationFrameElement | null;
 	isMoving: boolean;
 	effects: Map<number, Howl[]>;
+	colorBackground: string;
 };
 
 type Props = {
@@ -94,6 +95,7 @@ function AnimationPreviewer({
 		hoveredElement: null,
 		isMoving: false,
 		effects: new Map(),
+		colorBackground: '',
 	})[0];
 	const { t } = useTranslation();
 
@@ -110,10 +112,10 @@ function AnimationPreviewer({
 	const initialize = async () => {
 		setLoadingState((v) => v + 1);
 		currentState.picture = await Picture2D.loadImage(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? ''
+			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? '',
 		);
 		currentState.battler = await Picture2D.loadImage(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID)?.getPathOrBase64()) ?? ''
+			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID)?.getPathOrBase64()) ?? '',
 		);
 		setLoadingState((v) => v - 1);
 	};
@@ -146,7 +148,7 @@ function AnimationPreviewer({
 				ctx.lineWidth = 1;
 				ctx.imageSmoothingEnabled = false;
 				clear(ctx);
-				ctx.fillStyle = '#221f2e';
+				ctx.fillStyle = currentState.colorBackground;
 				ctx.fillRect(0, 0, WIDTH, HEIGHT);
 				drawLines(ctx);
 				if (!disabled) {
@@ -206,7 +208,7 @@ function AnimationPreviewer({
 				(WIDTH - w * ratio) / 2,
 				(HEIGHT - h * ratio) / 2 + offsetY,
 				w * ratio,
-				h * ratio
+				h * ratio,
 			);
 		}
 	};
@@ -298,7 +300,7 @@ function AnimationPreviewer({
 				ctx.fillText(
 					`[${currentState.selectedElement.x}, ${currentState.selectedElement.y}]`,
 					canvasX + canvasWidth,
-					canvasY
+					canvasY,
 				);
 				ctx.textAlign = 'left';
 			}
@@ -461,10 +463,10 @@ function AnimationPreviewer({
 				currentState.mouseY = e.clientY;
 				const rect = canvas.getBoundingClientRect();
 				const x = (currentState.mouseX < 0 ? Math.ceil : Math.floor)(
-					currentState.mouseX - rect.left - WIDTH / 2
+					currentState.mouseX - rect.left - WIDTH / 2,
 				);
 				const y = (currentState.mouseY < 0 ? Math.ceil : Math.floor)(
-					currentState.mouseY - rect.top - HEIGHT / 2
+					currentState.mouseY - rect.top - HEIGHT / 2,
 				);
 				if (currentState.isMoving && currentState.picture) {
 					currentState.hoveredElement!.x = x;
@@ -590,6 +592,11 @@ function AnimationPreviewer({
 			playAnimation().catch(console.error);
 		}
 	}, [isPlaying]);
+
+	useEffect(() => {
+		const rootStyles = getComputedStyle(document.documentElement);
+		currentState.colorBackground = rootStyles.getPropertyValue('--darkest-containers-bg-color').trim();
+	}, []);
 
 	const getContextMenuItems = () => {
 		return [

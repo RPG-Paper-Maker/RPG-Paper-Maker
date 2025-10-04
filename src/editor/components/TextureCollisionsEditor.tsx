@@ -59,6 +59,7 @@ type CurrentStateProps = {
 	isResizingBot: boolean;
 	originalRect: Rectangle | null;
 	hoveredDirection: HOVERED_DIRECTION_TYPE;
+	colorBackground: string;
 };
 
 type Props = {
@@ -85,6 +86,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		isResizingBot: false,
 		originalRect: null,
 		hoveredDirection: HOVERED_DIRECTION_TYPE.NONE,
+		colorBackground: '',
 	})[0];
 	const [zoom, setZoom] = useState(Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)));
 	const [selectedCollisionType, setSelectedCollisionType] = useState(COLLISION_TYPE.PRATICABLE);
@@ -122,7 +124,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 	}, [pictureKind]);
 	const titles = useMemo(
 		() => Base.mapListIndex(collisionTypes.map((i) => t(COLLISION_OPTIONS[i]))),
-		[collisionTypes, t]
+		[collisionTypes, t],
 	);
 	const cursorOffset = useMemo(() => 2 * zoomFactor, [zoomFactor]);
 
@@ -164,7 +166,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			clear(ctx);
 			ctx.lineWidth = 1;
 			ctx.imageSmoothingEnabled = false;
-			ctx.fillStyle = Constants.COLOR_DARK_BACKGROUND;
+			ctx.fillStyle = currentState.colorBackground;
 			ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 			drawTexture(ctx);
 			switch (selectedCollisionType) {
@@ -206,7 +208,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						i * Project.SQUARE_SIZE * zoomFactor,
 						j * Project.SQUARE_SIZE * zoomFactor,
 						Project.SQUARE_SIZE * zoomFactor,
-						Project.SQUARE_SIZE * zoomFactor
+						Project.SQUARE_SIZE * zoomFactor,
 					);
 				}
 			}
@@ -236,7 +238,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 									(collision.rect.y * Project.SQUARE_SIZE) / 100) *
 									zoomFactor,
 								((collision.rect.width * Project.SQUARE_SIZE) / 100) * zoomFactor,
-								((collision.rect.height * Project.SQUARE_SIZE) / 100) * zoomFactor
+								((collision.rect.height * Project.SQUARE_SIZE) / 100) * zoomFactor,
 							);
 							if (currentState.selectedPoint === key) {
 								ctx.fillStyle = Constants.COLOR_PRIMARY;
@@ -322,13 +324,13 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					characterWidth * zoomFactor,
 					0,
 					(currentState.picture!.width - characterWidth) * zoomFactor,
-					characterHeight * zoomFactor
+					characterHeight * zoomFactor,
 				);
 				ctx.fillRect(
 					0,
 					characterHeight * zoomFactor,
 					currentState.picture!.width * zoomFactor,
-					(currentState.picture!.height - characterHeight) * zoomFactor
+					(currentState.picture!.height - characterHeight) * zoomFactor,
 				);
 				ctx.globalAlpha = 1;
 			}
@@ -355,7 +357,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.width + 0.5,
 					Project.SQUARE_SIZE / 4 + 0.5,
 					i,
-					j
+					j,
 				);
 				drawArrow(
 					ctx,
@@ -366,7 +368,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					Project.SQUARE_SIZE / 4,
 					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.height,
 					i,
-					j
+					j,
 				);
 				drawArrow(
 					ctx,
@@ -377,7 +379,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					-0.5,
 					Project.SQUARE_SIZE / 4 + 0.5,
 					i,
-					j
+					j,
 				);
 				drawArrow(
 					ctx,
@@ -388,7 +390,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.width / 2,
 					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.height / 2,
 					i,
-					j
+					j,
 				);
 			}
 		}
@@ -403,7 +405,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		dx: number,
 		dy: number,
 		i: number,
-		j: number
+		j: number,
 	) => {
 		const x = (i * Project.SQUARE_SIZE + dx) * zoomFactor;
 		const y = (j * Project.SQUARE_SIZE + dy) * zoomFactor;
@@ -411,7 +413,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			ctx.save();
 			ctx.translate(
 				x + (Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
-				y + (Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor
+				y + (Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor,
 			);
 			ctx.rotate((angle * Math.PI) / 180);
 			if (hovered && direction === currentState.hoveredDirection) {
@@ -426,7 +428,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				-(Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
 				-(Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor,
 				Picture2D.PICTURE_DIRECTION.width * zoomFactor,
-				Picture2D.PICTURE_DIRECTION.height * zoomFactor
+				Picture2D.PICTURE_DIRECTION.height * zoomFactor,
 			);
 			ctx.restore();
 		} else {
@@ -470,7 +472,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					ctx,
 					'' + (collision?.terrain ?? 0),
 					(i * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
-					(j * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor
+					(j * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
 				);
 				ctx.globalAlpha = 1;
 			}
@@ -491,7 +493,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					climbing ? 'o' : 'x',
 					(i * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
 					(j * Project.SQUARE_SIZE + Project.SQUARE_SIZE / 2) * zoomFactor,
-					climbing ? Constants.COLOR_GREEN : Constants.COLOR_RED
+					climbing ? Constants.COLOR_GREEN : Constants.COLOR_RED,
 				);
 				ctx.globalAlpha = 1;
 			}
@@ -529,8 +531,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					(collision.rect.x * Project.SQUARE_SIZE) / 100,
 					(collision.rect.y * Project.SQUARE_SIZE) / 100,
 					(collision.rect.width * Project.SQUARE_SIZE) / 100,
-					(collision.rect.height * Project.SQUARE_SIZE) / 100
-				)
+					(collision.rect.height * Project.SQUARE_SIZE) / 100,
+				),
 			);
 		}
 	};
@@ -542,7 +544,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				(editingRectangle.x / Project.SQUARE_SIZE) * 100,
 				(editingRectangle.y / Project.SQUARE_SIZE) * 100,
 				(editingRectangle.width / Project.SQUARE_SIZE) * 100,
-				(editingRectangle.height / Project.SQUARE_SIZE) * 100
+				(editingRectangle.height / Project.SQUARE_SIZE) * 100,
 			);
 			collision.rect.copy(newRect);
 			draw();
@@ -617,7 +619,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						size * zoomFactor,
-						size * zoomFactor
+						size * zoomFactor,
 					);
 					if (center.isInside(currentState.mouseX, currentState.mouseY)) {
 						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.CENTER;
@@ -626,7 +628,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						y * Project.SQUARE_SIZE * zoomFactor,
 						size * zoomFactor,
-						size * zoomFactor
+						size * zoomFactor,
 					);
 					if (top.isInside(currentState.mouseX, currentState.mouseY)) {
 						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.TOP;
@@ -635,7 +637,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size)) * zoomFactor,
 						size * zoomFactor,
-						size * zoomFactor
+						size * zoomFactor,
 					);
 					if (bot.isInside(currentState.mouseX, currentState.mouseY)) {
 						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.BOT;
@@ -644,7 +646,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						x * Project.SQUARE_SIZE * zoomFactor,
 						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						size * zoomFactor,
-						size * zoomFactor
+						size * zoomFactor,
 					);
 					if (left.isInside(currentState.mouseX, currentState.mouseY)) {
 						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.LEFT;
@@ -653,7 +655,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size)) * zoomFactor,
 						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						size * zoomFactor,
-						size * zoomFactor
+						size * zoomFactor,
 					);
 					if (right.isInside(currentState.mouseX, currentState.mouseY)) {
 						currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.RIGHT;
@@ -675,9 +677,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 											? Project.SQUARE_SIZE
 											: ((currentState.originalRect!.x + currentState.originalRect!.width) *
 													Project.SQUARE_SIZE) /
-													100
-									)
-								)
+													100,
+									),
+								),
 							) /
 								Project.SQUARE_SIZE) *
 							100;
@@ -693,9 +695,9 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 											? Project.SQUARE_SIZE
 											: ((currentState.originalRect!.y + currentState.originalRect!.height) *
 													Project.SQUARE_SIZE) /
-													100
-									)
-								)
+													100,
+									),
+								),
 							) /
 								Project.SQUARE_SIZE) *
 							100;
@@ -830,6 +832,11 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		}
 	}, [pictureID, selectedCollisionType, zoom, isAnimated]);
 
+	useEffect(() => {
+		const rootStyles = getComputedStyle(document.documentElement);
+		currentState.colorBackground = rootStyles.getPropertyValue('--darkest-containers-bg-color').trim();
+	}, []);
+
 	const getContextMenuItems = () =>
 		selectedCollisionType === COLLISION_TYPE.PRATICABLE
 			? [
@@ -843,7 +850,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						shortcut: [KEY.DELETE],
 						onClick: handleDeletePraticable,
 					},
-			  ]
+				]
 			: [];
 
 	return (

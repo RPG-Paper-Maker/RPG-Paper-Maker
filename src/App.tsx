@@ -12,6 +12,8 @@
 import { lazy } from 'react';
 import { ToastContainer } from 'react-toastify';
 import './editor/common/ToasterError';
+import { Provider } from 'react-redux';
+import { store } from './editor/store';
 const LazyGame = lazy(() => import('./game/Game'));
 const LazyEditor = lazy(() => import('./editor/Editor'));
 
@@ -22,7 +24,13 @@ function App() {
 
 	return (
 		<>
-			{projectLocation ? <LazyGame location={projectLocation} battleTest={battleTest} /> : <LazyEditor />}
+			{projectLocation ? (
+				<LazyGame location={projectLocation} battleTest={battleTest} />
+			) : (
+				<Provider store={store}>
+					<LazyEditor />
+				</Provider>
+			)}
 			<ToastContainer />
 		</>
 	);

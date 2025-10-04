@@ -106,7 +106,6 @@ import {
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
-import { LOCATION_TYPE } from './dialogs';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
@@ -115,11 +114,12 @@ import DialogDebugOptions from './dialogs/DialogDebugOptions';
 import DialogDeploy from './dialogs/DialogDeploy';
 import DialogDLCs from './dialogs/DialogDLCs';
 import DialogFonts from './dialogs/DialogFonts';
+import DialogGeneralOptions from './dialogs/DialogGeneralOptions';
 import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
-import DialogPathLocation from './dialogs/DialogPathLocation';
+import DialogPathLocation, { LOCATION_TYPE } from './dialogs/DialogPathLocation';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogPlugins from './dialogs/DialogPlugins';
 import DialogShapes from './dialogs/DialogShapes';
@@ -136,31 +136,37 @@ import MenuCustom from './MenuCustom';
 import MenuItem from './MenuItem';
 import Toolbar from './Toolbar';
 
+enum DIALOG_TYPE {
+	NEW_PROJECT,
+	DEPLOY,
+	DATA,
+	SYSTEMS,
+	VARIABLES,
+	COLLISIONS,
+	KEYBOARD,
+	LANGUAGES,
+	PLUGINS,
+	DLCS,
+	PICTURES,
+	VIDEOS,
+	SONGS,
+	SHAPES,
+	FONTS,
+	AUTOTILES,
+	WALLS,
+	OBJECTS_3D,
+	MOUNTAINS,
+	LOCATION_FOLDER_BR,
+	LOCATION_FOLDER_DLC,
+	DEBUG_OPTIONS,
+	GENERAL_OPTIONS,
+	CHANGE_LANGUAGE,
+}
+
 function MainMenuBar() {
 	const { t } = useTranslation();
 
-	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
-	const [isDialogDeployOpen, setIsDialogDeployOpen] = useState(false);
-	const [isDialogDataOpen, setIsDialogDataOpen] = useState(false);
-	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
-	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
-	const [isDialogCollisionsOpen, setIsDialogCollisionsOpen] = useState(false);
-	const [isDialogKeyboardOpen, setIsDialogKeyboardOpen] = useState(false);
-	const [isDialogLanguagesOpen, setIsDialogLanguagesOpen] = useState(false);
-	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
-	const [isDialogDLCsOpen, setIsDialogDLCsOpen] = useState(false);
-	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
-	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
-	const [isDialogSongsOpen, setIsDialogSongsOpen] = useState(false);
-	const [isDialogShapesOpen, setIsDialogShapesOpen] = useState(false);
-	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
-	const [isDialogAutotilesOpen, setIsDialogAutotilesOpen] = useState(false);
-	const [isDialogWallsOpen, setIsDialogWallsOpen] = useState(false);
-	const [isDialogObjects3DOpen, setIsDialogObjects3DOpen] = useState(false);
-	const [isDialogMountainsOpen, setIsDialogMountainsOpen] = useState(false);
-	const [dialogLocationFolderKind, setDialogLocationFolderKind] = useState<LOCATION_TYPE | null>(null);
-	const [isDialogDebugOptionsOpen, setIsDialogDebugOptionsOpen] = useState(false);
-	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
+	const [dialogType, setDialogType] = useState<DIALOG_TYPE | null>(null);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
@@ -209,8 +215,14 @@ function MainMenuBar() {
 		await EngineSettings.current.save();
 	};
 
+	const handleSetIsDialogOpen = (b: boolean) => {
+		if (!b) {
+			setDialogType(null);
+		}
+	};
+
 	const handleNewProject = async () => {
-		setIsDialogNewProjectOpen(true);
+		setDialogType(DIALOG_TYPE.NEW_PROJECT);
 	};
 
 	const handleAcceptNewProject = async (project: Model.ProjectPreview) => {
@@ -386,7 +398,7 @@ function MainMenuBar() {
 	};
 
 	const handleDeploy = async () => {
-		setIsDialogDeployOpen(true);
+		setDialogType(DIALOG_TYPE.DEPLOY);
 	};
 
 	const handleImport = async () => {
@@ -527,89 +539,49 @@ function MainMenuBar() {
 		Scene.Map.current!.zoomOut();
 	};
 
-	const handleDataManager = async () => {
-		setIsDialogDataOpen(true);
-	};
+	const handleDataManager = async () => setDialogType(DIALOG_TYPE.DATA);
 
-	const handleSystemsManager = async () => {
-		setIsDialogSystemsOpen(true);
-	};
+	const handleSystemsManager = async () => setDialogType(DIALOG_TYPE.SYSTEMS);
 
-	const handleVariablesManager = async () => {
-		setIsDialogVariablesOpen(true);
-	};
+	const handleVariablesManager = async () => setDialogType(DIALOG_TYPE.VARIABLES);
 
-	const handleCollisionsManager = async () => {
-		setIsDialogCollisionsOpen(true);
-	};
+	const handleCollisionsManager = async () => setDialogType(DIALOG_TYPE.COLLISIONS);
 
-	const handleKeyboardManager = async () => {
-		setIsDialogKeyboardOpen(true);
-	};
+	const handleKeyboardManager = async () => setDialogType(DIALOG_TYPE.KEYBOARD);
 
-	const handleLanguagesManager = async () => {
-		setIsDialogLanguagesOpen(true);
-	};
+	const handleLanguagesManager = async () => setDialogType(DIALOG_TYPE.LANGUAGES);
 
-	const handlePluginsManager = async () => {
-		setIsDialogPluginsOpen(true);
-	};
+	const handlePluginsManager = async () => setDialogType(DIALOG_TYPE.PLUGINS);
 
-	const handleDLCsManager = async () => {
-		setIsDialogDLCsOpen(true);
-	};
+	const handleDLCsManager = async () => setDialogType(DIALOG_TYPE.DLCS);
 
-	const handlePicturesManager = async () => {
-		setIsDialogPicturesOpen(true);
-	};
+	const handlePicturesManager = async () => setDialogType(DIALOG_TYPE.PICTURES);
 
-	const handleVideosManager = async () => {
-		setIsDialogVideosOpen(true);
-	};
+	const handleVideosManager = async () => setDialogType(DIALOG_TYPE.VIDEOS);
 
-	const handleSongsManager = async () => {
-		setIsDialogSongsOpen(true);
-	};
+	const handleSongsManager = async () => setDialogType(DIALOG_TYPE.SONGS);
 
-	const handleShapesManager = async () => {
-		setIsDialogShapesOpen(true);
-	};
+	const handleShapesManager = async () => setDialogType(DIALOG_TYPE.SHAPES);
 
-	const handleFontsManager = async () => {
-		setIsDialogFontsOpen(true);
-	};
+	const handleFontsManager = async () => setDialogType(DIALOG_TYPE.FONTS);
 
-	const handleAutotiles = async () => {
-		setIsDialogAutotilesOpen(true);
-	};
+	const handleAutotiles = async () => setDialogType(DIALOG_TYPE.AUTOTILES);
 
-	const handleWalls = async () => {
-		setIsDialogWallsOpen(true);
-	};
+	const handleWalls = async () => setDialogType(DIALOG_TYPE.WALLS);
 
-	const handleObjects3D = async () => {
-		setIsDialogObjects3DOpen(true);
-	};
+	const handleObjects3D = async () => setDialogType(DIALOG_TYPE.OBJECTS_3D);
 
-	const handleMountains = async () => {
-		setIsDialogMountainsOpen(true);
-	};
+	const handleMountains = async () => setDialogType(DIALOG_TYPE.MOUNTAINS);
 
-	const handleSetBRPathFolder = async () => {
-		setDialogLocationFolderKind(LOCATION_TYPE.BR);
-	};
+	const handleSetBRPathFolder = async () => setDialogType(DIALOG_TYPE.LOCATION_FOLDER_BR);
 
-	const handleSetDLCsPathFolder = async () => {
-		setDialogLocationFolderKind(LOCATION_TYPE.DLCS);
-	};
+	const handleSetDLCsPathFolder = async () => setDialogType(DIALOG_TYPE.LOCATION_FOLDER_DLC);
 
-	const handleDebugOptions = async () => {
-		setIsDialogDebugOptionsOpen(true);
-	};
+	const handleDebugOptions = async () => setDialogType(DIALOG_TYPE.DEBUG_OPTIONS);
 
-	const handleChangeLanguage = async () => {
-		setIsDialogChangeLanguageOpen(true);
-	};
+	const handleGeneralOptions = async () => setDialogType(DIALOG_TYPE.GENERAL_OPTIONS);
+
+	const handleChangeLanguage = async () => setDialogType(DIALOG_TYPE.CHANGE_LANGUAGE);
 
 	const play = async () => await openGame(currentProject!.location);
 
@@ -968,6 +940,10 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
+					title: `${t('general.options')}...`,
+					onClick: handleGeneralOptions,
+				},
+				{
 					title: `${t('change.language')}...`,
 					onClick: handleChangeLanguage,
 				},
@@ -1116,6 +1092,67 @@ function MainMenuBar() {
 		);
 	};
 
+	const getDialog = () => {
+		switch (dialogType) {
+			case DIALOG_TYPE.NEW_PROJECT:
+				return <DialogNewProject isOpen setIsOpen={handleSetIsDialogOpen} onAccept={handleAcceptNewProject} />;
+			case DIALOG_TYPE.DEPLOY:
+				return <DialogDeploy setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.DATA:
+				return <DialogData isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.SYSTEMS:
+				return <DialogSystems isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.VARIABLES:
+				return <DialogVariables isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.COLLISIONS:
+				return <DialogCollisions isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.KEYBOARD:
+				return <DialogKeyboardControls setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.LANGUAGES:
+				return <DialogLanguages setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.PLUGINS:
+				return <DialogPlugins isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.DLCS:
+				return <DialogDLCs setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.PICTURES:
+				return <DialogPictures isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.VIDEOS:
+				return <DialogVideos manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.SONGS:
+				return <DialogSongs isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.SHAPES:
+				return <DialogShapes isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.FONTS:
+				return <DialogFonts manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.AUTOTILES:
+				return <DialogCollisions kind={PICTURE_KIND.AUTOTILES} isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.WALLS:
+				return <DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.OBJECTS_3D:
+				return <DialogObjects3DPreview manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.MOUNTAINS:
+				return <DialogCollisions kind={PICTURE_KIND.MOUNTAINS} isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.LOCATION_FOLDER_BR:
+			case DIALOG_TYPE.LOCATION_FOLDER_DLC:
+				return (
+					<DialogPathLocation
+						setIsOpen={handleSetIsDialogOpen}
+						locationType={
+							dialogType === DIALOG_TYPE.LOCATION_FOLDER_BR ? LOCATION_TYPE.BR : LOCATION_TYPE.DLCS
+						}
+					/>
+				);
+			case DIALOG_TYPE.DEBUG_OPTIONS:
+				return <DialogDebugOptions setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.GENERAL_OPTIONS:
+				return <DialogGeneralOptions setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.CHANGE_LANGUAGE:
+				return <DialogChangeLanguage isOpen setIsOpen={handleSetIsDialogOpen} />;
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<>
 			<div className='mainMenuBar'>
@@ -1170,96 +1207,79 @@ function MainMenuBar() {
 				)}
 			</div>
 			<Toolbar />
-			{isDialogNewProjectOpen && (
-				<DialogNewProject isOpen setIsOpen={setIsDialogNewProjectOpen} onAccept={handleAcceptNewProject} />
+			{getDialog()}
+			{isDialogWarningProjectVersionOpen && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
+					onClose={handleCloseWarningProjectVersionOpen}
+				>
+					<p>{warningVersionMessage}</p>
+				</Dialog>
 			)}
-			{isDialogDeployOpen && <DialogDeploy setIsOpen={setIsDialogDeployOpen} />}
-			{isDialogDataOpen && <DialogData isOpen setIsOpen={setIsDialogDataOpen} />}
-			{isDialogSystemsOpen && <DialogSystems isOpen setIsOpen={setIsDialogSystemsOpen} />}
-			{isDialogVariablesOpen && <DialogVariables isOpen setIsOpen={setIsDialogVariablesOpen} />}
-			{isDialogCollisionsOpen && <DialogCollisions isOpen setIsOpen={setIsDialogCollisionsOpen} />}
-			{isDialogKeyboardOpen && <DialogKeyboardControls setIsOpen={setIsDialogKeyboardOpen} />}
-			{isDialogLanguagesOpen && <DialogLanguages setIsOpen={setIsDialogLanguagesOpen} />}
-			{isDialogPluginsOpen && <DialogPlugins isOpen setIsOpen={setIsDialogPluginsOpen} />}
-			{isDialogDLCsOpen && <DialogDLCs setIsOpen={setIsDialogDLCsOpen} />}
-			{isDialogPicturesOpen && <DialogPictures isOpen setIsOpen={setIsDialogPicturesOpen} />}
-			{isDialogVideosOpen && <DialogVideos manager isOpen setIsOpen={setIsDialogVideosOpen} />}
-			{isDialogSongsOpen && <DialogSongs isOpen setIsOpen={setIsDialogSongsOpen} />}
-			{isDialogShapesOpen && <DialogShapes isOpen setIsOpen={setIsDialogShapesOpen} />}
-			{isDialogFontsOpen && <DialogFonts manager isOpen setIsOpen={setIsDialogFontsOpen} />}
-			{isDialogAutotilesOpen && (
-				<DialogCollisions kind={PICTURE_KIND.AUTOTILES} isOpen setIsOpen={setIsDialogAutotilesOpen} />
+			{!!currentVersion && (
+				<Dialog
+					isOpen
+					title={t('conversion.needed')}
+					footer={
+						<FooterNoYes onYes={handleAcceptUpdateProjectVersion} onNo={handleRejectUpdateProjectVersion} />
+					}
+					onClose={handleRejectUpdateProjectVersion}
+				>
+					<p>
+						{t('update.project.version', { currentVersion: currentVersion, newVersion: Project.VERSION })}
+					</p>
+				</Dialog>
 			)}
-			{isDialogWallsOpen && (
-				<DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={setIsDialogWallsOpen} />
+			{!!warningImportPath && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterNoYes onNo={handleRejectImport} onYes={handleAcceptImport} />}
+					onClose={handleRejectImport}
+				>
+					<p>{t('warning.project.exist.overwrite', { path: warningImportPath })}</p>
+				</Dialog>
 			)}
-			{isDialogObjects3DOpen && <DialogObjects3DPreview manager isOpen setIsOpen={setIsDialogObjects3DOpen} />}
-			{isDialogMountainsOpen && (
-				<DialogCollisions kind={PICTURE_KIND.MOUNTAINS} isOpen setIsOpen={setIsDialogMountainsOpen} />
+			{isDialogWarningClearAllCacheOpen && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					isLoading={isLoading}
+					footer={<FooterNoYes onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
+					onClose={handleRejectClearAllCache}
+				>
+					<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
+				</Dialog>
 			)}
-			{dialogLocationFolderKind !== null && (
-				<DialogPathLocation setIsOpen={setDialogLocationFolderKind} locationType={dialogLocationFolderKind} />
+			{isDialogWarningSavePlayOpen && (
+				<Dialog
+					title={t('warning')}
+					isOpen={isDialogWarningSavePlayOpen}
+					isLoading={isLoading}
+					footer={
+						<FooterCancelNoYes
+							onCancel={handleCancelSavePlay}
+							onNo={handleRejectSavePlay}
+							onYes={handleAcceptSavePlay}
+						/>
+					}
+					onClose={handleRejectSavePlay}
+				>
+					<div className='textCenter'>{t('you.have.maps.not.saved')}</div>
+				</Dialog>
 			)}
-			{isDialogDebugOptionsOpen && <DialogDebugOptions setIsOpen={setIsDialogDebugOptionsOpen} />}
-			{isDialogChangeLanguageOpen && <DialogChangeLanguage isOpen setIsOpen={setIsDialogChangeLanguageOpen} />}
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningProjectVersionOpen}
-				footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
-				onClose={handleCloseWarningProjectVersionOpen}
-			>
-				<p>{warningVersionMessage}</p>
-			</Dialog>
-			<Dialog
-				title={t('conversion.needed')}
-				isOpen={!!currentVersion}
-				footer={
-					<FooterNoYes onYes={handleAcceptUpdateProjectVersion} onNo={handleRejectUpdateProjectVersion} />
-				}
-				onClose={handleRejectUpdateProjectVersion}
-			>
-				<p>{t('update.project.version', { currentVersion: currentVersion, newVersion: Project.VERSION })}</p>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={!!warningImportPath}
-				footer={<FooterNoYes onNo={handleRejectImport} onYes={handleAcceptImport} />}
-				onClose={handleRejectImport}
-			>
-				<p>{t('warning.project.exist.overwrite', { path: warningImportPath })}</p>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningClearAllCacheOpen}
-				isLoading={isLoading}
-				footer={<FooterNoYes onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
-				onClose={handleRejectClearAllCache}
-			>
-				<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSavePlayOpen}
-				isLoading={isLoading}
-				footer={
-					<FooterCancelNoYes
-						onCancel={handleCancelSavePlay}
-						onNo={handleRejectSavePlay}
-						onYes={handleAcceptSavePlay}
-					/>
-				}
-				onClose={handleRejectSavePlay}
-			>
-				<div className='textCenter'>{t('you.have.maps.not.saved')}</div>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningProjectLocationExist}
-				footer={<FooterOK onOK={handleCloseWarningProjectLocationExist} />}
-				onClose={handleCloseWarningProjectLocationExist}
-			>
-				<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
-			</Dialog>
+			{isDialogWarningProjectLocationExist && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterOK onOK={handleCloseWarningProjectLocationExist} />}
+					onClose={handleCloseWarningProjectLocationExist}
+				>
+					<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
+				</Dialog>
+			)}
 			{warningLocalPluginsMessage && (
 				<Dialog
 					isOpen

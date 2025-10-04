@@ -47,7 +47,11 @@
 		position: absolute;
 		color: var(--darkest-bg-color);
 		font-weight: bold;
-		text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+		text-shadow:
+			-1px -1px 0 var(--main-color),
+			1px -1px 0 var(--main-color),
+			-1px 1px 0 var(--main-color),
+			1px 1px 0 var(--main-color);
 		font-size: 18px;
 	}
 }

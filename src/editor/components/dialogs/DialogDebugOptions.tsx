@@ -97,7 +97,7 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 					<Checkbox isChecked={isShowFPS} onChange={setIsShowFPS}>
 						{t('show.fps')}
 					</Checkbox>
-					<Groupbox title={t('backups')}>
+					<Groupbox title='Backups'>
 						<Flex column spacedLarge>
 							<Checkbox isChecked={isBackupsActivated} onChange={setIsBackupsActivated}>
 								{t('activated')}

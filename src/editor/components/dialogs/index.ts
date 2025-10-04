@@ -6,6 +6,7 @@ export * from './DialogDeploy';
 export * from './DialogDLCs';
 export * from './DialogEnterNameOptions';
 export * from './DialogFonts';
+export * from './DialogGeneralOptions';
 export * from './DialogNewProject';
 export * from './DialogObjects3DPreview';
 export * from './DialogPathLocation';

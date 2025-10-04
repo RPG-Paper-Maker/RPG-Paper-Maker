@@ -17,6 +17,7 @@ import useStateBool from '../hooks/useStateBool';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
+	colorBackground: string;
 };
 
 type Props = {
@@ -42,6 +43,7 @@ function AnimationPreviewerTexture({
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
+		colorBackground: '',
 	})[0];
 	const [loadingState, setLoadingState] = useStateBool();
 
@@ -56,7 +58,7 @@ function AnimationPreviewerTexture({
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? ''
+			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? '',
 		);
 		setLoadingState((v) => !v);
 	};
@@ -79,7 +81,7 @@ function AnimationPreviewerTexture({
 				ctx.lineWidth = 1;
 				ctx.imageSmoothingEnabled = false;
 				clear(ctx);
-				ctx.fillStyle = '#221f2e';
+				ctx.fillStyle = currentState.colorBackground;
 				ctx.fillRect(0, 0, getWidth(), getHeight());
 				const w = currentState.picture.width / columns;
 				const h = currentState.picture.height / rows;
@@ -94,7 +96,7 @@ function AnimationPreviewerTexture({
 							i * w * scale + j * columns * w * scale,
 							0,
 							w * scale,
-							h * scale
+							h * scale,
 						);
 					}
 				}
@@ -155,6 +157,11 @@ function AnimationPreviewerTexture({
 			}
 		}
 	}, [currentState.picture, loadingState, rows, columns, selectedColumn, selectedRow, disabled]);
+
+	useEffect(() => {
+		const rootStyles = getComputedStyle(document.documentElement);
+		currentState.colorBackground = rootStyles.getPropertyValue('--darkest-containers-bg-color').trim();
+	}, []);
 
 	return <canvas ref={refCanvas} className={disabled ? undefined : 'pointer'} />;
 }

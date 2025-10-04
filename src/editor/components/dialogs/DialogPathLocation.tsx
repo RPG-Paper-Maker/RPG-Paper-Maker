@@ -27,7 +27,7 @@ export enum LOCATION_TYPE {
 }
 
 type Props = {
-	setIsOpen: (location: LOCATION_TYPE | null) => void;
+	setIsOpen: (b: boolean) => void;
 	locationType: LOCATION_TYPE;
 };
 
@@ -80,11 +80,11 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 		}
 		dispatch(setNeedsReloadMap());
 		await Project.current!.systems.save();
-		setIsOpen(null);
+		setIsOpen(false);
 	};
 
 	const handleReject = async () => {
-		setIsOpen(null);
+		setIsOpen(false);
 	};
 
 	return (

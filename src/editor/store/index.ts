@@ -48,6 +48,7 @@ import {
 	setProjects,
 	showWarning,
 } from './slices/ProjectsReducer';
+import { setTheme, SettingsReducer } from './slices/SettingsReducer';
 import {
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
@@ -88,6 +89,7 @@ const store = configureStore({
 		mapEditor: MapEditorReducer,
 		projects: ProjectsReducer,
 		triggers: TriggersReducer,
+		settings: SettingsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
@@ -128,6 +130,7 @@ export {
 	setProjects,
 	setSelectedMapElement,
 	setSelectedPosition,
+	setTheme,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 	showWarning,
