@@ -27,6 +27,7 @@ class Constants {
 	public static readonly COLOR_PRIMARY = '#25bbb9';
 	public static readonly COLOR_GREEN = '#78ad51';
 	public static readonly COLOR_RED = '#de3a3c';
+	public static readonly THEMES = ['darkTheme', 'whiteTheme'];
 	public static IS_MOBILE = false;
 	public static IS_DESKTOP = false;
 	public static USER_LOCALE = '';

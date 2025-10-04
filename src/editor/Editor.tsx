@@ -27,6 +27,7 @@ const PanelMain = lazy(() => import('./components/panels/PanelMain'));
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
+
 	const theme = useSelector((state: RootState) => state.settings.theme);
 
 	useEffect(() => {
@@ -45,7 +46,8 @@ function Editor() {
 	}, []);
 
 	useLayoutEffect(() => {
-		document.documentElement.classList.add('white-theme');
+		document.documentElement.className = '';
+		document.documentElement.classList.add(theme);
 	}, [theme]);
 
 	return (

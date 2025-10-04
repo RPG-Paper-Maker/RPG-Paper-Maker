@@ -15,7 +15,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const SettingsSlice = createSlice({
 	name: 'settings',
 	initialState: {
-		theme: 'dark-theme',
+		theme: 'darkTheme',
 	},
 	reducers: {
 		setTheme(state, action: PayloadAction<string>) {

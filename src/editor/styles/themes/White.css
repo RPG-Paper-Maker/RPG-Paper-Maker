@@ -1,4 +1,4 @@
-.white-theme {
+.whiteTheme {
 	--main-bg-color: #ffffff;
 	--main-color: #515151;
 	--darker-bg-color: #fafafa;
@@ -21,7 +21,7 @@
 	--green-color: #78ad51;
 }
 
-.white-theme {
+.whiteTheme {
 	.menuSub .title {
 		&.active {
 			color: white;

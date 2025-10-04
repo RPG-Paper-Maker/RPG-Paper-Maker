@@ -20,7 +20,7 @@ import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Manager, Scene } from '../../Editor';
 import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
-import { setNeedsReloadPageUpdate, setProjects } from '../../store';
+import { setNeedsReloadPageUpdate, setProjects, setTheme } from '../../store';
 import Loader from '../Loader';
 
 type Props = {
@@ -84,6 +84,7 @@ function PanelLoading({ setLoaded }: Props) {
 			await EngineSettings.current.save();
 		}
 		await EngineSettings.current.load();
+		dispatch(setTheme(Constants.THEMES[EngineSettings.current.theme]));
 	};
 
 	const initializeLocales = async () => {
