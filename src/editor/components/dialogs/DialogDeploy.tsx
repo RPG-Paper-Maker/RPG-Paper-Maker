@@ -84,7 +84,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 					: Paths.join(Paths.RESOURCES, Paths.APP)
 				: null;
 		const appPath = localAppPath === null ? path : Paths.join(path, localAppPath);
-		await copyDependencies(path, appPath, localAppPath);
+		await copyDependencies(path, appPath, localAppPath, os);
 		dispatch(setLoadingBar({ percent: 20, label: 'Copy project...' }));
 		await copyAllProject(appPath);
 		dispatch(setLoadingBar({ percent: 40, label: 'Copying BR...' }));
@@ -102,10 +102,22 @@ function DialogDeploy({ setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
-	const copyDependencies = async (path: string, appPath: string, localAppPath: string | null) => {
+	const copyDependencies = async (path: string, appPath: string, localAppPath: string | null, os: OS_KIND) => {
 		if (exportType === EXPORT_TYPE.APPLICATION) {
 			const enginePath = await IO.getEngineFolder();
 			await IO.copyAndExclude(enginePath, path, Paths.join(enginePath, localAppPath!));
+			let extension = '';
+			switch (os) {
+				case OS_KIND.WIN32:
+					extension = '.exe';
+					break;
+				case OS_KIND.DARWIN:
+					extension = '.app';
+					break;
+				default:
+					break;
+			}
+			await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
 			await IO.createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');
 			await copyPublicDeploy(appPath, 'preload.js');
