@@ -90,26 +90,24 @@ function DialogDLCs({ setIsOpen }: Props) {
 	);
 
 	return (
-		<>
-			<Dialog
-				isOpen
-				title={`${t('import.dlc.s')}...`}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-				isLoading={isLoading}
-				initialWidth='300px'
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			>
-				<Flex column spacedLarge fillWidth fillHeight>
-					<Flex>
-						<Flex one />
-						<Button onClick={handleClickImportDLC}>{t('import.dlc.s')}...</Button>
-						<Flex one />
-					</Flex>
-					{getDlcsContent()}
+		<Dialog
+			isOpen
+			title={`${t('import.dlc.s')}...`}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+			isLoading={isLoading}
+			initialWidth='300px'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex column spacedLarge fillWidth fillHeight>
+				<Flex>
+					<Flex one />
+					<Button onClick={handleClickImportDLC}>{t('import.dlc.s')}...</Button>
+					<Flex one />
 				</Flex>
-			</Dialog>
-		</>
+				{getDlcsContent()}
+			</Flex>
+		</Dialog>
 	);
 }
 

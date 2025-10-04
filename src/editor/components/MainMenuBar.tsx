@@ -107,6 +107,7 @@ import {
 import '../styles/MainMenuBar.css';
 import Button from './Button';
 import Dialog from './dialogs/Dialog';
+import DialogAbout from './dialogs/DialogAbout';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogCollisions from './dialogs/DialogCollisions';
 import DialogData from './dialogs/DialogData';
@@ -161,6 +162,7 @@ enum DIALOG_TYPE {
 	DEBUG_OPTIONS,
 	GENERAL_OPTIONS,
 	CHANGE_LANGUAGE,
+	ABOUT,
 }
 
 function MainMenuBar() {
@@ -622,6 +624,10 @@ function MainMenuBar() {
 		await play();
 	};
 
+	const handleAbout = async () => {
+		setDialogType(DIALOG_TYPE.ABOUT);
+	};
+
 	const handleMinimize = async () => {
 		await IO.minimize();
 	};
@@ -992,7 +998,12 @@ function MainMenuBar() {
 		},
 		{
 			title: t('help'),
-			disabled: true,
+			children: [
+				{
+					title: `${t('about')}...`,
+					onClick: handleAbout,
+				},
+			],
 		},
 	];
 
@@ -1173,6 +1184,8 @@ function MainMenuBar() {
 				return <DialogGeneralOptions setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.CHANGE_LANGUAGE:
 				return <DialogChangeLanguage isOpen setIsOpen={handleSetIsDialogOpen} />;
+			case DIALOG_TYPE.ABOUT:
+				return <DialogAbout setIsOpen={handleSetIsDialogOpen} />;
 			default:
 				return null;
 		}

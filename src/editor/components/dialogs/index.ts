@@ -1,4 +1,5 @@
 export * from './Dialog';
+export * from './DialogAbout';
 export * from './DialogChangeLanguage';
 export * from './DialogCollisions';
 export * from './DialogData';
