@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, ELEMENT_MAP_KIND, INPUT_TYPE_WIDTH, IO, Paths, Utils } from '../../common';
@@ -17,8 +17,6 @@ import { copyPublicFile, createFile, createFolder, getFolders, removeFolder } fr
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Model, Scene } from '../../Editor';
-import useStateBool from '../../hooks/useStateBool';
-import useStateString from '../../hooks/useStateString';
 import { RootState, setProjects } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
@@ -39,22 +37,15 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [projectName, setProjectName] = useStateString();
-	const [folderName, setFolderName] = useStateString();
-	const [isAutoGenerate, setIsAutoGenerate] = useStateBool();
-	const [location, setLocation] = useStateString();
+	const [projectName, setProjectName] = useState(t('project.without.name'));
+	const [folderName, setFolderName] = useState(t('project.without.name.folder'));
+	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
+	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
 
 	const dispatch = useDispatch();
-
-	const initialize = () => {
-		setProjectName(t('project.without.name'));
-		setFolderName(t('project.without.name.folder'));
-		setIsAutoGenerate(true);
-		setLocation(Paths.getRPMGamesFolder());
-	};
 
 	const getcompleteLocation = () => Paths.join(location, folderName);
 
@@ -190,14 +181,6 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 	const handleReject = () => {
 		setIsOpen(false);
 	};
-
-	useEffect(() => {
-		if (isOpen) {
-			setIsOpen(false);
-			initialize();
-			setIsOpen(true);
-		}
-	}, [isOpen]);
 
 	return (
 		<>
