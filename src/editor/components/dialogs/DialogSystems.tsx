@@ -45,6 +45,10 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const panelCommonReactionsRef = useRef<initializeAcceptRef>(null);
 	const panelModelsRef = useRef<initializeAcceptRef>(null);
 
+	const handleCurrentIndexChanged = (index: number) => {
+		Project.current!.settings.lastTabIndexSystems = index;
+	};
+
 	const handleAccept = async () => {
 		panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
@@ -58,6 +62,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
 		await Project.current!.commonEvents.save();
+		await Project.current!.settings.save();
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
 	};
@@ -67,6 +72,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		await Project.current!.battleSystem.load();
 		await Project.current!.titleScreenGameOver.load();
 		await Project.current!.commonEvents.load();
+		await Project.current!.settings.save();
 		setIsOpen(false);
 	};
 
@@ -98,6 +104,8 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 					<PanelCommonReactions key={5} ref={panelCommonReactionsRef} />,
 					<PanelModels key={6} ref={panelModelsRef} />,
 				]}
+				defaultIndex={Project.current!.settings.lastTabIndexSystems}
+				onCurrentIndexChanged={handleCurrentIndexChanged}
 				padding
 				scrollableContent
 				lazyLoadingContent

@@ -51,6 +51,10 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelStatusRef = useRef(null);
 	const panelTilesetsRef = useRef(null);
 
+	const handleCurrentIndexChanged = (index: number) => {
+		Project.current!.settings.lastTabIndexData = index;
+	};
+
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
 			await Project.current!.classes.save();
@@ -87,6 +91,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 			await Project.current!.tilesets.save();
 			await Project.current!.pictures.save();
 		}
+		await Project.current!.settings.save();
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
 	};
@@ -127,6 +132,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 			await Project.current!.tilesets.load();
 			await Project.current!.pictures.load();
 		}
+		await Project.current!.settings.save();
 		setIsOpen(false);
 	};
 
@@ -166,6 +172,8 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					<PanelStatus key={9} ref={panelStatusRef} />,
 					<PanelTilesets key={10} ref={panelTilesetsRef} />,
 				]}
+				defaultIndex={Project.current!.settings.lastTabIndexData}
+				onCurrentIndexChanged={handleCurrentIndexChanged}
 				padding
 				lazyLoadingContent
 				noScrollToSelectedElement

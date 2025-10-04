@@ -47,6 +47,8 @@ class Settings extends Serializable {
 	public lastMinorVersion!: number;
 	public showGrid!: boolean;
 	public showSquareInformation!: boolean;
+	public lastTabIndexData!: number;
+	public lastTabIndexSystems!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -81,6 +83,8 @@ class Settings extends Serializable {
 		['lastMinorVersion', 'lmiv', 0, BINDING.NUMBER],
 		['showGrid', 'sg', true, BINDING.BOOLEAN],
 		['showSquareInformation', 'ssi', true, BINDING.BOOLEAN],
+		['lastTabIndexData', 'ltid', 0, BINDING.NUMBER],
+		['lastTabIndexSystems', 'ltis', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
