@@ -134,7 +134,7 @@ function TreeMaps({
 				alert(
 					t('warning.path.doesnt.exist.copy.maps', {
 						path,
-					})
+					}),
 				);
 			} else {
 				for (const node of nodes) {
@@ -183,7 +183,7 @@ function TreeMaps({
 			const [newTitles, newContents] = await deleteFolder(
 				selectedNode.children,
 				[...mapsTabsTitles],
-				[...mapsTabsContents]
+				[...mapsTabsContents],
 			);
 			ArrayUtils.removeElement(selectedNode.parent.children, selectedNode);
 			if (newTitles.length !== mapsTabsTitles.length) {
@@ -198,7 +198,7 @@ function TreeMaps({
 	const deleteFolder = async (
 		nodes: Node[],
 		tabTitles: Model.Base[],
-		tabContents: (ReactNode | null)[]
+		tabContents: (ReactNode | null)[],
 	): Promise<[Model.Base[], (ReactNode | null)[]]> => {
 		for (const node of nodes) {
 			if (node.children.length > 0) {
@@ -286,6 +286,7 @@ function TreeMaps({
 					{
 						title: `${t('edit.name')}...`,
 						onClick: handleEditFolder,
+						shortcut: [KEY.ENTER, KEY.SPACE],
 					},
 					{
 						title: `${t('new.map')}...`,
@@ -319,6 +320,7 @@ function TreeMaps({
 					{
 						title: `${t('edit.map.properties')}...`,
 						onClick: handleEditMap,
+						shortcut: [KEY.ENTER, KEY.SPACE],
 					},
 					{
 						title: t('copy'),
