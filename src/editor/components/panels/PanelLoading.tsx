@@ -27,7 +27,7 @@ type Props = {
 	setLoaded: (v: boolean) => void;
 };
 
-function PanelLoading({ setLoaded }: Props) {
+async function PanelLoading({ setLoaded }: Props) {
 	const [displayLoader, setDisplayLoader] = useState(false);
 
 	const dispatch = useDispatch();
@@ -45,6 +45,10 @@ function PanelLoading({ setLoaded }: Props) {
 		await initializeEngineVersion();
 		await loadProjects();
 		setLoaded(true);
+		if (Constants.IS_DESKTOP) {
+			await IO.maximize();
+			setTimeout(IO.closeSplash, 1000);
+		}
 	};
 
 	const initializeLocalFiles = async () => {

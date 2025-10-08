@@ -17,10 +17,21 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const IS_GAME = process.argv[2] !== undefined;
+const EXEC_KIND = {
+	UPDATER: 0,
+	ENGINE: 1,
+	GAME: 2,
+};
+
+const execKind =
+	process.argv[2] === undefined
+		? EXEC_KIND.UPDATER
+		: process.argv[2] === 'engine'
+			? EXEC_KIND.ENGINE
+			: EXEC_KIND.GAME;
 
 app.commandLine.appendSwitch('high-dpi-support', 1);
-if (!app.isPackaged || IS_GAME) {
+if (!app.isPackaged || EXEC_KIND.GAME) {
 	app.commandLine.appendSwitch('force-device-scale-factor', 1);
 }
 
@@ -68,32 +79,135 @@ const getMimeType = (filePath) => {
 };
 
 let window;
+let splash;
 
-const createWindow = () => {
+const hasInternet = async () => {
+	try {
+		const res = await fetch('https://www.google.com', { method: 'HEAD', timeout: 3000 });
+		return res.ok;
+	} catch {
+		return false;
+	}
+};
+
+const fetchFrom = async (path) => {
+	const response = await fetch(path);
+	if (!response.ok) {
+		dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+			type: 'error',
+			title: 'Could not fetch',
+			message: `Unable to fetch ${path}`,
+		});
+		app.quit();
+		return;
+	}
+	return response;
+};
+
+const runRPMEngine = () => {
+	const electronPath = process.execPath;
+	const args = ['./main.js', 'engine'];
+	spawn(electronPath, args, {
+		stdio: 'inherit',
+		detached: true,
+	});
+	app.quit();
+};
+
+const createWindow = async () => {
+	splash = new BrowserWindow({
+		width: 650,
+		height: 400,
+		frame: false,
+		alwaysOnTop: true,
+		transparent: true,
+		center: true,
+		hasShadow: false,
+		icon: path.join(__dirname, 'dist', 'icon.png'),
+	});
+	splash.loadFile(path.join(__dirname, 'updater', 'splash.html'));
+	if (execKind === EXEC_KIND.UPDATER) {
+		// Check if dist exists
+		const isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
+		if (isEngineDownloaded) {
+			// Check internet
+			if (!hasInternet) {
+				runRPMEngine();
+				return;
+			}
+			// Check if ignore update
+			const data = await fs
+				.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8')
+				.catch(() => null);
+			const updateType = data ? (JSON.parse(data).ut ?? 0) : 0;
+			// If blocking updates, run engine
+			if (updateType === 2) {
+				runRPMEngine();
+				return;
+			}
+			// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
+			if (path.basename(__dirname) === 'RPG Paper Maker temp') {
+				// TODO
+				return;
+			}
+			const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
+			const response = await fetchFrom(
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/versions/versions.json',
+			);
+			const latestUpdaterVersion = JSON.parse(await response.text()).lastUpdaterVersion;
+			if (currentUpdaterVersion !== latestUpdaterVersion) {
+				// TODO
+				//return;
+			}
+			runRPMEngine();
+		} else {
+			// Check if internet
+			if (!hasInternet()) {
+				dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+					type: 'warning',
+					title: 'No Internet',
+					message: 'You are currently offline.',
+					detail: 'It is needed to download RPG Paper Maker completely. Please check your network connection and try again.',
+				});
+				app.quit();
+			}
+		}
+		return;
+	}
 	window = new BrowserWindow({
-		width: IS_GAME ? 640 : screen.getPrimaryDisplay().size.width - 100,
-		height: IS_GAME ? 480 : screen.getPrimaryDisplay().size.height - 100,
+		width:
+			execKind === EXEC_KIND.GAME
+				? 640
+				: execKind === EXEC_KIND.ENGINE
+					? screen.getPrimaryDisplay().size.width - 100
+					: 600,
+		height:
+			execKind === EXEC_KIND.GAME
+				? 480
+				: execKind === EXEC_KIND.ENGINE
+					? screen.getPrimaryDisplay().size.height - 100
+					: 300,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
 			preload: path.join(__dirname, 'preload.js'),
 		},
 		icon: path.join(__dirname, 'dist', 'icon.png'),
-		frame: IS_GAME,
+		frame: execKind !== EXEC_KIND.ENGINE,
 	});
 	window.removeMenu();
-	if (!IS_GAME) {
+	if (execKind === EXEC_KIND.ENGINE) {
 		window.maximize();
 	}
 	window.loadFile(
-		path.join(__dirname, 'dist', 'index.html'),
-		IS_GAME
+		path.join(__dirname, execKind === EXEC_KIND.UPDATER ? 'updater' : 'dist', 'index.html'),
+		execKind === EXEC_KIND.GAME
 			? {
 					query: { project: process.argv[2], battleTest: process.argv[3] ?? false },
 				}
 			: undefined,
 	);
-	if (!IS_GAME) {
+	if (execKind !== EXEC_KIND.GAME) {
 		window.on('maximize', () => {
 			window.webContents.send('is-maximized');
 		});
@@ -110,7 +224,7 @@ app.whenReady().then(() => {
 			window.openDevTools({ mode: 'undocked' });
 		});
 	}
-	createWindow();
+	createWindow().catch(console.error);
 });
 
 ipcMain.handle('get-system-information', () => {
@@ -337,4 +451,8 @@ async function copyDir(srcDir, destDir, excludePath) {
 
 ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 	await copyDir(src, dst, excludePath);
+});
+
+ipcMain.handle('close-splash', async () => {
+	splash.close();
 });

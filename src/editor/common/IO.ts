@@ -216,6 +216,10 @@ class IO {
 	static async copyAndExclude(src: string, dst: string, exclude: string): Promise<void> {
 		(await this.invoke('copy-and-exclude', src, dst, exclude)) as string;
 	}
+
+	static async closeSplash(): Promise<void> {
+		await this.invoke('close-splash');
+	}
 }
 
 export { IO };
