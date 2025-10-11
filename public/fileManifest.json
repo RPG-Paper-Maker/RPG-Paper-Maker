@@ -496,6 +496,15 @@
       "weapons.json"
     ]
   },
+  "Deploy": {
+    "files": [
+      "index.html",
+      "main.js",
+      "package.json",
+      "Platform.js",
+      "preload.js"
+    ]
+  },
   "DLCs": {
     "files": [
       "empty"
