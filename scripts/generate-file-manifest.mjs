@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
+const distDir = './dist';
+const outputFileDistPath = path.join(distDir, 'fileManifest.json');
 const publicDir = './public';
-const outputFilePath = path.join(publicDir, 'fileManifest.json');
+const outputFilePublicPath = path.join(publicDir, 'fileManifest.json');
 
 function generateFileManifest(dir, relativePath = '') {
 	const manifest = {};
@@ -26,6 +28,9 @@ function generateFileManifest(dir, relativePath = '') {
 	return manifest;
 }
 
-const manifest = generateFileManifest(publicDir);
-fs.writeFileSync(outputFilePath, JSON.stringify(manifest, null, 2));
-console.log(`File manifest generated at ${outputFilePath}`);
+let manifest = generateFileManifest(publicDir);
+fs.writeFileSync(outputFilePublicPath, JSON.stringify(manifest, null, 2));
+console.log(`File manifest generated at ${outputFilePublicPath}`);
+manifest = generateFileManifest(distDir);
+fs.writeFileSync(outputFileDistPath, JSON.stringify(manifest, null, 2));
+console.log(`File manifest generated at ${outputFileDistPath}`);

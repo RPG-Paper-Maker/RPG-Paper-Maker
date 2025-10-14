@@ -1,10 +1,13 @@
 /mods
 /node_modules
 /build
-/dist
 /desktop/build
 /desktop/node_modules
 /public/BR
 /public/Scripts
 /public/Deploy
 tsconfig.tsbuildinfo
+/dist/*
+
+!/dist/assets
+!/dist/fileManifest.json
