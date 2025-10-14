@@ -34,21 +34,18 @@ const gitUrls = {
 	scripts: 'https://github.com/RPG-Paper-Maker/Game-Scripts.git',
 	scriptsBuild: 'https://github.com/RPG-Paper-Maker/Game-Scripts-Build.git',
 	br: 'https://github.com/RPG-Paper-Maker/Basic-Ressources.git',
-	dependencies: 'https://github.com/RPG-Paper-Maker/Dependencies.git',
 };
 
 const destinationPaths = {
 	scripts: `${modsPath}/Game-Scripts`,
 	scriptsBuild: `${modsPath}/Game-Scripts-Build`,
 	br: `${modsPath}/Basic-Ressources`,
-	dependencies: `${modsPath}/Dependencies`,
 };
 
 const localPaths = {
 	scripts: '../Game-Scripts',
 	scriptsBuild: '../Game-Scripts-Build',
 	br: '../Basic-Ressources',
-	dependencies: '../Dependencies',
 };
 
 async function copyDir(src, dest) {
@@ -125,11 +122,10 @@ const main = async () => {
 		await downloadOrCopyRepo(gitUrls.scripts, destinationPaths.scripts, localPaths.scripts, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.scriptsBuild, destinationPaths.scriptsBuild, localPaths.scriptsBuild, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
-		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies, '3.0.0');
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
 		createEmptyBRFolder('./public/BR');
 		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
-		const webPath = `${destinationPaths.dependencies}/web/`;
+		const webPath = `webDependencies/`;
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
 		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/Common/Platform.js');
 		const deployPath = './public/Deploy';

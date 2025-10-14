@@ -115,17 +115,19 @@ const runRPMEngine = () => {
 };
 
 const createWindow = async () => {
-	splash = new BrowserWindow({
-		width: 650,
-		height: 400,
-		frame: false,
-		alwaysOnTop: true,
-		transparent: true,
-		center: true,
-		hasShadow: false,
-		icon: path.join(__dirname, 'dist', 'icon.png'),
-	});
-	splash.loadFile(path.join(__dirname, 'updater', 'splash.html'));
+	if (execKind === EXEC_KIND.ENGINE) {
+		splash = new BrowserWindow({
+			width: 650,
+			height: 400,
+			frame: false,
+			alwaysOnTop: true,
+			transparent: true,
+			center: true,
+			hasShadow: false,
+			icon: path.join(__dirname, 'updater', 'icon.png'),
+		});
+		splash.loadFile(path.join(__dirname, 'updater', 'splash.html'));
+	}
 	if (execKind === EXEC_KIND.UPDATER) {
 		// Check if dist exists
 		const isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
@@ -154,12 +156,18 @@ const createWindow = async () => {
 			const response = await fetchFrom(
 				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/versions/versions.json',
 			);
-			const latestUpdaterVersion = JSON.parse(await response.text()).lastUpdaterVersion;
+			const versions = JSON.parse(await response.text());
+			const latestUpdaterVersion = versions.lastUpdaterVersion;
 			if (currentUpdaterVersion !== latestUpdaterVersion) {
 				// TODO
-				//return;
+				return;
 			}
-			runRPMEngine();
+			const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
+			const latestEngineVersion = versions.lastVersion;
+			if (currentEngineVersion !== latestEngineVersion) {
+			} else {
+				runRPMEngine();
+			}
 		} else {
 			// Check if internet
 			if (!hasInternet()) {
@@ -172,7 +180,6 @@ const createWindow = async () => {
 				app.quit();
 			}
 		}
-		return;
 	}
 	window = new BrowserWindow({
 		width:
@@ -186,7 +193,7 @@ const createWindow = async () => {
 				? 480
 				: execKind === EXEC_KIND.ENGINE
 					? screen.getPrimaryDisplay().size.height - 100
-					: 300,
+					: 320,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -215,15 +222,15 @@ const createWindow = async () => {
 			window.webContents.send('is-unmaximized');
 		});
 	}
-};
-
-app.whenReady().then(() => {
 	const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
 	for (const shortcut of shortcuts) {
 		globalShortcut.register(shortcut, () => {
 			window.openDevTools({ mode: 'undocked' });
 		});
 	}
+};
+
+app.whenReady().then(() => {
 	createWindow().catch(console.error);
 });
 
@@ -454,5 +461,15 @@ ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 });
 
 ipcMain.handle('close-splash', async () => {
+	console.log('ok');
 	splash.close();
+});
+
+ipcMain.handle('show-error', async (event, message) => {
+	dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+		type: 'error',
+		title: 'Error',
+		message: message.replace(/(.{50})/g, '$1\n'),
+	});
+	app.quit();
 });
