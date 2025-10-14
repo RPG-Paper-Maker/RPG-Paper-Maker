@@ -11,3 +11,4 @@ tsconfig.tsbuildinfo
 
 !/dist/assets
 !/dist/fileManifest.json
+!/dist/index.html
