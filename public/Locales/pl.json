@@ -1361,7 +1361,6 @@
 	"scaling": "Skalowanie",
 	"view": "Widoczność",
 	"camera.move.in.battle": "Ruch kamery podczas walki",
-	"splash.screen.on.start": "Wyświetl logo programu podczas uruchomienia",
 	"show.fps": "Wyświetl FPS",
 	"clouds": "Rano",
 	"evening": "Wieczór",
@@ -2085,5 +2084,10 @@
 	"tooltip.random.variation": "Dodaje losowość w grze, aby zmieniać wartość po każdym awansie na poziom. Im większa wariacja, tym większa losowość. Nie zmienia to wartości końcowej, która zawsze będzie taka sama.",
 	"update.list.size": "Zaktualizuj rozmiar listy",
 	"warning.update.list.size": "Zmniejszysz rozmiar listy. Ostatnie elementy zostaną usunięte, potwierdzasz?",
-	"deploy": "Wdrażaj"
+	"deploy": "Wdrażaj",
+	"auto.updater": "Automatyczny aktualizator",
+	"manual": "Ręczny",
+	"no.updates": "Brak aktualizacji",
+	"close.all": "Zamknij wszystko",
+	"get.unstable.versions": "Pobierz niestabilne wersje"
 }

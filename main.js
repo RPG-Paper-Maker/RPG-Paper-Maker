@@ -30,8 +30,22 @@ const execKind =
 			? EXEC_KIND.ENGINE
 			: EXEC_KIND.GAME;
 
+const runRPMEngine = () => {
+	const electronPath = process.execPath;
+	const args = ['./main.js', 'engine'];
+	spawn(electronPath, args, {
+		stdio: 'inherit',
+		detached: true,
+	});
+	app.quit();
+};
+
+if (!app.isPackaged && EXEC_KIND.UPDATER) {
+	runRPMEngine();
+}
+
 app.commandLine.appendSwitch('high-dpi-support', 1);
-if (!app.isPackaged || EXEC_KIND.GAME) {
+if (!app.isPackaged || execKind === EXEC_KIND.GAME) {
 	app.commandLine.appendSwitch('force-device-scale-factor', 1);
 }
 
@@ -104,16 +118,6 @@ const fetchFrom = async (path) => {
 	return response;
 };
 
-const runRPMEngine = () => {
-	const electronPath = process.execPath;
-	const args = ['./main.js', 'engine'];
-	spawn(electronPath, args, {
-		stdio: 'inherit',
-		detached: true,
-	});
-	app.quit();
-};
-
 const createWindow = async () => {
 	if (execKind === EXEC_KIND.ENGINE) {
 		splash = new BrowserWindow({
@@ -127,10 +131,12 @@ const createWindow = async () => {
 			icon: path.join(__dirname, 'updater', 'icon.png'),
 		});
 		splash.loadFile(path.join(__dirname, 'updater', 'splash.html'));
+		setTimeout(() => splash.close(), 2000);
 	}
+	let isEngineDownloaded = false;
 	if (execKind === EXEC_KIND.UPDATER) {
 		// Check if dist exists
-		const isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
+		isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
 		if (isEngineDownloaded) {
 			// Check internet
 			if (!hasInternet) {
@@ -141,7 +147,9 @@ const createWindow = async () => {
 			const data = await fs
 				.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8')
 				.catch(() => null);
-			const updateType = data ? (JSON.parse(data).ut ?? 0) : 0;
+			const json = data ? JSON.parse(data) : null;
+			const updateType = json?.ut ?? 0;
+			const getUnstable = json?.guv ?? false;
 			// If blocking updates, run engine
 			if (updateType === 2) {
 				runRPMEngine();
@@ -158,15 +166,32 @@ const createWindow = async () => {
 			);
 			const versions = JSON.parse(await response.text());
 			const latestUpdaterVersion = versions.lastUpdaterVersion;
-			if (currentUpdaterVersion !== latestUpdaterVersion) {
-				// TODO
-				return;
-			}
-			const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
-			const latestEngineVersion = versions.lastVersion;
-			if (currentEngineVersion !== latestEngineVersion) {
+			if (currentUpdaterVersion === latestUpdaterVersion) {
+				const isLastVersionUnstable = versions.unstable;
+				const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
+				const latestEngineVersion =
+					versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
+				if (currentEngineVersion !== latestEngineVersion) {
+					if (updateType === 1) {
+						const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+							type: 'question',
+							buttons: ['Yes', 'No'],
+							defaultId: 0,
+							cancelId: 1,
+							title: 'A new version of RPG Paper Maker is available!',
+							message: 'Would you like to download it now? Everything is automatic and fast!',
+						});
+						if (result.response === 1) {
+							runRPMEngine();
+							return;
+						}
+					}
+				} else {
+					runRPMEngine();
+					return;
+				}
 			} else {
-				runRPMEngine();
+				// Update updater
 			}
 		} else {
 			// Check if internet
@@ -193,7 +218,9 @@ const createWindow = async () => {
 				? 480
 				: execKind === EXEC_KIND.ENGINE
 					? screen.getPrimaryDisplay().size.height - 100
-					: 320,
+					: isEngineDownloaded
+						? 150
+						: 300,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -460,11 +487,6 @@ ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 	await copyDir(src, dst, excludePath);
 });
 
-ipcMain.handle('close-splash', async () => {
-	console.log('ok');
-	splash.close();
-});
-
 ipcMain.handle('show-error', async (event, message) => {
 	dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
 		type: 'error',
@@ -472,4 +494,13 @@ ipcMain.handle('show-error', async (event, message) => {
 		message: message.replace(/(.{50})/g, '$1\n'),
 	});
 	app.quit();
+});
+
+ipcMain.handle('show-dialog-confirm-run-engine', async (event) => {
+	dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+		type: 'none',
+		title: 'All files downloaded successfully.',
+		message: 'RPG Paper Maker will restart now.',
+	});
+	runRPMEngine();
 });

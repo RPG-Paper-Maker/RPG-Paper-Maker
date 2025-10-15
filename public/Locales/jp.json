@@ -1361,7 +1361,6 @@
 	"scaling": "スケーリング",
 	"view": "意見",
 	"camera.move.in.battle": "戦闘中のカメラ移動",
-	"splash.screen.on.start": "起動時のスプラッシュスクリーン",
 	"show.fps": "FPS を表示",
 	"clouds": "雲",
 	"evening": "夜",
@@ -2085,5 +2084,10 @@
 	"tooltip.random.variation": "レベルアップごとに数値を変化させるために、ゲームにランダム性を追加します。変動が大きいほど、ランダム性も高くなります。ただし、最終値は常に同じです。",
 	"update.list.size": "リストサイズを更新",
 	"warning.update.list.size": "リストのサイズを縮小します。最後の要素が削除されます。確認しますか？",
-	"deploy": "デプロイ"
+	"deploy": "デプロイ",
+	"auto.updater": "自動アップデーター",
+	"manual": "手動",
+	"no.updates": "更新はありません",
+	"close.all": "すべて閉じる",
+	"get.unstable.versions": "不安定版を取得"
 }

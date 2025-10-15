@@ -36,7 +36,7 @@
 		"@types/stats": "^0.16.30",
 		"@types/three": "^0.180.0",
 		"@vitejs/plugin-react": "^5.0.4",
-		"electron": "^38.2.1",
+		"electron": "38.2.1",
 		"eslint": "^9.37.0",
 		"eslint-plugin-react": "^7.37.5",
 		"eslint-plugin-react-hooks": "^6.1.1",

@@ -1361,7 +1361,6 @@
 	"scaling": "Skalierung",
 	"view": "Gesehen",
 	"camera.move.in.battle": "Kamerabewegung im Kampf",
-	"splash.screen.on.start": "Startbildschirm beim Start",
 	"show.fps": "FPS anzeigen",
 	"clouds": "Wolken",
 	"evening": "Abend",
@@ -2085,5 +2084,10 @@
 	"tooltip.random.variation": "Fügt im Spiel etwas Zufälligkeit hinzu, um den Wert nach jedem Levelaufstieg zu ändern. Je höher die Variation, desto größer der Zufall. Der Endwert ändert sich jedoch nicht und bleibt immer gleich.",
 	"update.list.size": "Listengröße aktualisieren",
 	"warning.update.list.size": "Sie werden die Listengröße verringern. Die letzten Elemente werden entfernt. Bestätigen Sie?",
-	"deploy": "Bereitstellen"
+	"deploy": "Bereitstellen",
+	"auto.updater": "Automatischer Updater",
+	"manual": "Manuell",
+	"no.updates": "Keine Updates",
+	"close.all": "Alle schließen",
+	"get.unstable.versions": "Instabile Versionen abrufen"
 }

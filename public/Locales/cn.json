@@ -1361,7 +1361,6 @@
 	"scaling": "縮放",
 	"view": "看法",
 	"camera.move.in.battle": "相機在戰鬥中移動",
-	"splash.screen.on.start": "開機啟動畫面",
 	"show.fps": "顯示 FPS",
 	"clouds": "雲",
 	"evening": "晚上",
@@ -2085,5 +2084,10 @@
 	"tooltip.random.variation": "在遊戲中加入隨機性，每次升級後改變數值。變異越大，隨機性越高。這不會改變最終值，最終值始終相同。",
 	"update.list.size": "更新列表大小",
 	"warning.update.list.size": "您將縮小列表大小。最後的元素將被移除，是否確認？",
-	"deploy": "部署"
+	"deploy": "部署",
+	"auto.updater": "自動更新程式",
+	"manual": "手動",
+	"no.updates": "沒有更新",
+	"close.all": "全部關閉",
+	"get.unstable.versions": "取得不穩定版本"
 }

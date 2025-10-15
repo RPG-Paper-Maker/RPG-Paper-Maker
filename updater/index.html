@@ -24,6 +24,9 @@
 			.centerV {
 				align-items: center;
 			}
+			.hidden {
+				visibility: hidden;
+			}
 			fieldset {
 				border: 1px solid #ccc;
 				padding: 10px;
@@ -51,9 +54,7 @@
 				width: 100%;
 				height: 20px;
 				background: #ddd;
-				border-radius: 10px;
 				margin-top: 10px;
-				overflow: hidden;
 				text-align: center;
 			}
 			#progressBar {
@@ -64,9 +65,10 @@
 				text-align: center;
 				color: white;
 				font-size: 12px;
+				border-radius: 20px;
 			}
 			#progressText {
-				width: 100%;
+				width: 90%;
 				position: absolute;
 				color: white;
 				margin-top: 2px;
@@ -81,7 +83,7 @@
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<div class="flex column spaced">
-			<div id="stepInstallComplete" class="flex column spaced">
+			<div id="stepInstallComplete" class="flex column spaced hidden">
 				<p>You can download RPG Paper Maker now. Would you like to continue with those options?</p>
 				<fieldset>
 					<legend title="options">Options</legend>
@@ -99,13 +101,13 @@
 						</label>
 					</div>
 				</fieldset>
-				<button id="continueBtn">Install</button>
+				<button id="continueBtn">Download</button>
 			</div>
 			<div id="progressContainer" hidden>
 				<div id="progressText">0%</div>
 				<div id="progressBar" />
 			</div>
-			<div id="fileLabel"></div>
+			<div id="fileLabel" />
 		</div>
 
 		<script>
@@ -136,22 +138,69 @@
 				versionSelect.disabled = false;
 			});
 
-			// Fetch versions.json
-			fetch(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/versions/versions.json',
-			)
-				.then((res) => res.json())
-				.then((data) => {
-					versionsData = data;
+			(async () => {
+				const res = await fetch(
+					'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/versions/versions.json',
+				);
+				const data = await res.json();
+				const isLastVersionUnstable = data.unstable;
+				const isEngineSettings = await window.ipcRenderer.invoke(
+					'check-file-exists',
+					`${window.__dirname}/../dist/engineSettings.json`,
+				);
+				let getUnstable = false;
+				if (isEngineSettings) {
+					getUnstable =
+						JSON.parse(
+							await window.ipcRenderer.invoke(
+								'read-file',
+								`${window.__dirname}/../dist/engineSettings.json`,
+							),
+						).guv ?? false;
+				}
+				data.lastVersion =
+					data.versions[data.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
+				versionsData = data;
+				const isEngineDownloaded = await window.ipcRenderer.invoke(
+					'check-file-exists',
+					`${window.__dirname}/../dist`,
+				);
+				if (isEngineDownloaded) {
+					await window.ipcRenderer.invoke('change-window-title', `Updating to ${data.lastVersion}...`);
+					if (isEngineSettings) {
+						await window.ipcRenderer.invoke(
+							'rename-file',
+							`${window.__dirname}/../dist/engineSettings.json`,
+							`${window.__dirname}/../engineSettings.json`,
+						);
+					}
+					await window.ipcRenderer.invoke('remove-folder', `${window.__dirname}/../dist`);
+					await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist`);
+					if (isEngineSettings) {
+						await window.ipcRenderer.invoke(
+							'rename-file',
+							`${window.__dirname}/../engineSettings.json`,
+							`${window.__dirname}/../dist/engineSettings.json`,
+						);
+					}
+					await download();
+				} else {
 					latestLabel.textContent = `Download latest version (${data.lastVersion})`;
 					versionSelect.innerHTML = '';
-					data.versions.forEach((v) => {
-						const opt = document.createElement('option');
-						opt.value = v;
-						opt.textContent = v;
-						versionSelect.appendChild(opt);
-					});
-				});
+					data.versions.pop();
+					if (data.versions.length === 0) {
+						radioOlder.disabled = true;
+					} else {
+						data.versions.forEach((v) => {
+							const opt = document.createElement('option');
+							opt.value = v;
+							opt.textContent = v;
+							versionSelect.appendChild(opt);
+						});
+					}
+					stepInstallComplete.classList.remove('hidden');
+				}
+			})();
 
 			// Utility: flatten fileManifest.json
 			function collectFiles(manifest, baseVersionTag) {
@@ -183,6 +232,8 @@
 							} else if (newDestPrefix.startsWith('Deploy')) {
 								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/refs/tags/${baseVersionTag}`;
 								newPrefix = newDestPrefix.slice(7);
+							} else if (newDestPrefix.startsWith('assets')) {
+								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/dist`;
 							} else {
 								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/public`;
 							}
@@ -198,12 +249,16 @@
 				);
 				// Exceptions
 				files.push({
-					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts-Build/refs/tags/${baseVersionTag}/Scripts/System/Common/Platform.js`,
+					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts-Build/refs/tags/${baseVersionTag}/Scripts/Common/Platform.js`,
 					dest: `Deploy/Platform.js`,
 				});
 				files.push({
-					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/web/Platform.js`,
+					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/webDependencies/Platform.js`,
 					dest: `Scripts/Common/Platform.js`,
+				});
+				files.push({
+					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/dist/index.html`,
+					dest: `index.html`,
 				});
 				return files;
 			}
@@ -274,11 +329,10 @@
 								throw new Error(`HTTP ${res.status} - ${res.statusText}`);
 							}
 							const blob = Buffer.from(await res.arrayBuffer());
-							console.log(file.dest);
 							await window.ipcRenderer.invoke(
 								'create-file',
 								`${window.__dirname}/../dist/${file.dest}`,
-								'test',
+								blob,
 							);
 						} catch (err) {
 							if (!isError) {
@@ -303,24 +357,27 @@
 				fileLabel.textContent = 'All files downloaded successfully.';
 			}
 
-			continueBtn.addEventListener('click', async () => {
+			async function download() {
 				const isLatest = radioLatest.checked;
 				const versionTag = isLatest ? versionsData.lastVersion : versionSelect.value;
 
-				await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist`);
-
-				const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${versionTag}/public/fileManifest.json`;
+				const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${versionTag}/dist/fileManifest.json`;
 
 				fileLabel.textContent = 'Fetching file manifest...';
 				const manifest = await fetch(manifestURL).then((r) => r.json());
 				arrayRemoveValue(manifest.Deploy.files, 'Platform.js');
 				arrayRemoveValue(manifest.Scripts.Common.files, 'Platform.js');
+				arrayRemoveValue(manifest.files, 'index.html');
+				arrayRemoveValue(manifest.files, 'engineSettings.json');
 				const files = collectFiles(manifest, versionTag);
 				const folders = collectFolders(manifest);
-				console.log(files, folders);
-
 				await downloadAll(files, folders);
-				console.log('Download complete, ready for next step');
+				await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
+			}
+
+			continueBtn.addEventListener('click', async () => {
+				await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist`);
+				await download();
 			});
 		</script>
 	</body>

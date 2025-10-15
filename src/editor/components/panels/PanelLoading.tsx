@@ -45,9 +45,6 @@ function PanelLoading({ setLoaded }: Props) {
 		await initializeEngineVersion();
 		await loadProjects();
 		setLoaded(true);
-		if (Constants.IS_DESKTOP) {
-			setTimeout(() => IO.closeSplash().catch(console.error), 1000);
-		}
 	};
 
 	const initializeLocalFiles = async () => {

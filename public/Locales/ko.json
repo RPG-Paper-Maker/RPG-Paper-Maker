@@ -1361,7 +1361,6 @@
 	"scaling": "스케일링",
 	"view": "보다",
 	"camera.move.in.battle": "전투 중 카메라 이동",
-	"splash.screen.on.start": "시작 시 스플래시 화면",
 	"show.fps": "FPS 표시",
 	"clouds": "구름",
 	"evening": "저녁",
@@ -2085,5 +2084,10 @@
 	"tooltip.random.variation": "레벨 업할 때마다 값이 변하도록 게임에 무작위성을 추가합니다. 변동이 클수록 무작위성도 커집니다. 최종값은 항상 동일합니다.",
 	"update.list.size": "리스트 크기 업데이트",
 	"warning.update.list.size": "리스트 크기를 줄이게 됩니다. 마지막 요소들이 제거됩니다. 확인하시겠습니까?",
-	"deploy": "배포"
+	"deploy": "배포",
+	"auto.updater": "자동 업데이터",
+	"manual": "수동",
+	"no.updates": "업데이트 없음",
+	"close.all": "모두 닫기",
+	"get.unstable.versions": "불안정한 버전 받기"
 }

@@ -1361,7 +1361,6 @@
 	"scaling": "Scaling",
 	"view": "View",
 	"camera.move.in.battle": "Camera move in battle",
-	"splash.screen.on.start": "Splash screen on start",
 	"show.fps": "Show FPS",
 	"clouds": "Clouds",
 	"evening": "Evening",
@@ -2089,5 +2088,6 @@
 	"auto.updater": "Auto updater",
 	"manual": "Manual",
 	"no.updates": "No updates",
-	"close.all": "Close all"
+	"close.all": "Close all",
+	"get.unstable.versions": "Get unstable versions"
 }

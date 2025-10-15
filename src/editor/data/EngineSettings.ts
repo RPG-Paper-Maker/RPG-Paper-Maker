@@ -25,6 +25,7 @@ class EngineSettings extends Serializable {
 	public backupsMax!: number;
 	public theme!: number;
 	public updaterType!: number;
+	public getUnstableVersions!: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
@@ -36,6 +37,7 @@ class EngineSettings extends Serializable {
 		['backupsMax', 'bm', 5, BINDING.NUMBER],
 		['theme', 't', 0, BINDING.NUMBER],
 		['updaterType', 'ut', 0, BINDING.NUMBER],
+		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

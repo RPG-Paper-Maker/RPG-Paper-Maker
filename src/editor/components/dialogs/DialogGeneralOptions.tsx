@@ -11,16 +11,17 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Constants } from '../../common';
 import { EngineSettings } from '../../data';
 import { Model } from '../../Editor';
+import { RootState, setTheme } from '../../store';
+import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setTheme } from '../../store';
-import { Constants } from '../../common';
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
@@ -31,6 +32,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [updaterType, setUpdaterType] = useState(EngineSettings.current!.updaterType);
+	const [getUnstableVersions, setGetUnstableVersions] = useState(EngineSettings.current!.getUnstableVersions);
 
 	const theme = useSelector((state: RootState) => state.settings.theme);
 
@@ -46,6 +48,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 		setIsLoading(true);
 		EngineSettings.current!.theme = themeID;
 		EngineSettings.current!.updaterType = updaterType;
+		EngineSettings.current!.getUnstableVersions = getUnstableVersions;
 		await EngineSettings.current!.save();
 		setIsOpen(false);
 	};
@@ -75,15 +78,23 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 								translateOptions
 							/>
 						</Value>
-						<Label>{t('auto.updater')}</Label>
-						<Value>
-							<Dropdown
-								selectedID={updaterType}
-								onChange={setUpdaterType}
-								options={Model.Base.UPDATER_OPTIONS}
-								translateOptions
-							/>
-						</Value>
+						{Constants.IS_DESKTOP && (
+							<>
+								<Label>{t('auto.updater')}</Label>
+								<Value>
+									<Dropdown
+										selectedID={updaterType}
+										onChange={setUpdaterType}
+										options={Model.Base.UPDATER_OPTIONS}
+										translateOptions
+									/>
+								</Value>
+								<Label>{t('get.unstable.versions')}</Label>
+								<Value>
+									<Checkbox isChecked={getUnstableVersions} onChange={setGetUnstableVersions} />
+								</Value>
+							</>
+						)}
 					</Form>
 				</Flex>
 			</Dialog>
