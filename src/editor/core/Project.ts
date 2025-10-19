@@ -105,7 +105,7 @@ class Project {
 		if (Data.EngineSettings.current!.backupsActivated) {
 			this.updateBackups().catch(console.error);
 			this.intervalBackupID = setInterval(
-				this.updateBackups,
+				this.updateBackups.bind(this),
 				Data.EngineSettings.current!.backupsInterval * 60 * 1000,
 			);
 		}
