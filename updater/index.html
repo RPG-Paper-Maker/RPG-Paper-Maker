@@ -282,6 +282,28 @@
 				return Array.from(folders).sort((a, b) => a.localeCompare(b));
 			}
 
+			async function downloadFileWithRetry(file, retries = 3) {
+				for (let i = 0; i < retries; i++) {
+					try {
+						const res = await fetch(file.url);
+						if (!res.ok) {
+							throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+						}
+						const blob = Buffer.from(await res.arrayBuffer());
+						await window.ipcRenderer.invoke(
+							'create-file',
+							`${window.__dirname}/../dist/${file.dest}`,
+							blob,
+						);
+						return;
+					} catch (e) {
+						console.warn(`Retry ${i + 1}/${retries} failed for ${file.url}:`, e);
+						if (i === retries - 1) throw e;
+						await new Promise((r) => setTimeout(r, 1000));
+					}
+				}
+			}
+
 			// Download manager
 			async function downloadAll(files, folders) {
 				stepInstallComplete.style.display = 'none';
@@ -324,16 +346,7 @@
 						const file = files[i];
 						fileLabel.textContent = `Downloading ${file.dest}`;
 						try {
-							const res = await fetch(file.url);
-							if (!res.ok) {
-								throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-							}
-							const blob = Buffer.from(await res.arrayBuffer());
-							await window.ipcRenderer.invoke(
-								'create-file',
-								`${window.__dirname}/../dist/${file.dest}`,
-								blob,
-							);
+							await downloadFileWithRetry(file);
 						} catch (err) {
 							if (!isError) {
 								await window.ipcRenderer.invoke('remove-folder', `${window.__dirname}/../dist`);

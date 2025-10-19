@@ -9,11 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { spawn } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
+import os from 'os';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
+import { promisify } from 'util';
+const run = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,9 +39,23 @@ const runRPMEngine = () => {
 	spawn(electronPath, args, {
 		stdio: 'inherit',
 		detached: true,
+		cwd: os.tmpdir(),
 	});
 	app.quit();
 };
+
+async function extractZip(zipPath, destDir) {
+	await fs.mkdir(destDir, { recursive: true });
+
+	if (process.platform === 'win32') {
+		// Windows 10+ has tar built-in
+		const psCommand = `powershell -NoProfile -Command "Expand-Archive -LiteralPath '${zipPath}' -DestinationPath '${destDir}' -Force"`;
+		await run(psCommand);
+	} else {
+		// macOS / Linux have unzip
+		await run(`unzip -o "${zipPath}" -d "${destDir}"`);
+	}
+}
 
 if (!app.isPackaged && EXEC_KIND.UPDATER) {
 	runRPMEngine();
@@ -118,19 +135,64 @@ const fetchFrom = async (path) => {
 	return response;
 };
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const emptyFolder = async (folderPath) => {
+	if (!(await exists(folderPath))) return;
+
+	const entries = await fs.readdir(folderPath);
+	for (const entry of entries) {
+		const entryPath = path.join(folderPath, entry);
+		let attempts = 0;
+		let success = false;
+
+		while (attempts < 3 && !success) {
+			try {
+				await fs.rm(entryPath, { recursive: true, force: true });
+				success = true;
+			} catch (err) {
+				attempts++;
+				console.warn(`Failed to delete ${entryPath} (attempt ${attempts}/3):`, err);
+
+				if (attempts < 3) {
+					await delay(500 * attempts);
+				} else {
+					displayErrorUpdater();
+				}
+			}
+		}
+	}
+};
+
+const displayErrorUpdater = () => {
+	dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+		type: 'error',
+		title: 'Error',
+		message: 'An error occurred while trying to update updater. Please reinstall RPG Paper Maker.',
+		detail: err.stack || err.message,
+	});
+	app.quit();
+};
+
+const createSplash = (title) => {
+	const splashPath = path.join(__dirname, 'updater', 'splash.html');
+	const splashURL = `${pathToFileURL(splashPath).href}${title ? `?title=${encodeURIComponent(title)}` : ''}`;
+	splash = new BrowserWindow({
+		width: 650,
+		height: 400,
+		frame: false,
+		alwaysOnTop: true,
+		transparent: true,
+		center: true,
+		hasShadow: false,
+		icon: path.join(__dirname, 'updater', 'icon.png'),
+	});
+	splash.loadURL(splashURL);
+};
+
 const createWindow = async () => {
 	if (execKind === EXEC_KIND.ENGINE) {
-		splash = new BrowserWindow({
-			width: 650,
-			height: 400,
-			frame: false,
-			alwaysOnTop: true,
-			transparent: true,
-			center: true,
-			hasShadow: false,
-			icon: path.join(__dirname, 'updater', 'icon.png'),
-		});
-		splash.loadFile(path.join(__dirname, 'updater', 'splash.html'));
+		createSplash();
 		setTimeout(() => splash.close(), 2000);
 	}
 	let isEngineDownloaded = false;
@@ -139,7 +201,7 @@ const createWindow = async () => {
 		isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
 		if (isEngineDownloaded) {
 			// Check internet
-			if (!hasInternet) {
+			if (!(await hasInternet())) {
 				runRPMEngine();
 				return;
 			}
@@ -156,9 +218,43 @@ const createWindow = async () => {
 				return;
 			}
 			// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
-			if (path.basename(__dirname) === 'RPG Paper Maker temp') {
-				// TODO
+			const basePath = `${__dirname}/${process.platform === 'darwin' ? '../../../..' : '../..'}`;
+			const execPath = (() => {
+				switch (process.platform) {
+					case 'win32':
+						return 'RPG Paper Maker.exe';
+					case 'linux':
+						return 'RPG Paper Maker';
+					case 'darwin':
+						return 'Contents/MacOS/RPG Paper Maker';
+				}
+			})();
+			if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
+				createSplash('Finishing updater update. Please do not close...');
+				try {
+					await emptyFolder(`${basePath}/../../RPG Paper Maker`);
+				} catch (e) {
+					displayErrorUpdater(e);
+				}
+				await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
+				const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
+				const args = ['./main.js'];
+				const child = spawn(electronPath, args, {
+					detached: true,
+					stdio: 'ignore',
+					cwd: os.tmpdir(),
+				});
+				child.unref();
+				app.quit();
+				setTimeout(() => {
+					process.exit(0);
+				}, 500);
 				return;
+			}
+			if (await exists(`${basePath}/../RPG Paper Maker temp`)) {
+				try {
+					await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
+				} catch {}
 			}
 			const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
 			const response = await fetchFrom(
@@ -192,10 +288,55 @@ const createWindow = async () => {
 				}
 			} else {
 				// Update updater
+				createSplash('Updating the updater. Please do not close...');
+				const updaterZipName = (() => {
+					switch (process.platform) {
+						case 'win32':
+							return 'RPG.Paper.Maker.Windows.zip';
+						case 'darwin':
+							return 'RPG.Paper.Maker.Mac.zip';
+						case 'linux':
+							return 'RPG.Paper.Maker.Linux.zip';
+						default:
+							throw new Error(`Unsupported platform: ${process.platform}`);
+					}
+				})();
+				const res = await fetchFrom(
+					`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
+				);
+				const blob = Buffer.from(await res.arrayBuffer());
+				await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
+				await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
+				await copyFolder(
+					`${__dirname}/dist`,
+					`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
+				);
+				const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
+					switch (process.platform) {
+						case 'win32':
+							return 'RPG Paper Maker.exe';
+						case 'linux':
+							return 'RPG Paper Maker';
+						case 'darwin':
+							return 'Contents/MacOS/RPG Paper Maker';
+					}
+				})()}`;
+				const args = ['./main.js'];
+				const child = spawn(electronPath, args, {
+					detached: true,
+					stdio: 'ignore',
+					cwd: os.tmpdir(),
+				});
+				child.unref();
+				app.quit();
+				setTimeout(() => {
+					process.exit(0);
+				}, 500);
+				return;
 			}
 		} else {
 			// Check if internet
-			if (!hasInternet()) {
+			if (!(await hasInternet())) {
 				dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
 					type: 'warning',
 					title: 'No Internet',
@@ -410,6 +551,7 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 	spawn(electronPath, args, {
 		stdio: 'inherit',
 		detached: true,
+		cwd: os.tmpdir(),
 	});
 });
 
