@@ -10,8 +10,16 @@ Core.WindowBox.prototype.draw = function (
 
 	// Single line alteration from source code
 	!!this.customWindowSkin
-		? this.customWindowSkin.drawBox(windowDimension, this.selected, this.bordersVisible)
-		: Data.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
+		? this.customWindowSkin.drawBox(
+				Core.Rectangle.createFromArray(windowDimension),
+				this.selected,
+				this.bordersVisible,
+			)
+		: Data.Systems.getCurrentWindowSkin().drawBox(
+				Core.Rectangle.createFromArray(windowDimension),
+				this.selected,
+				this.bordersVisible,
+			);
 
 	if (this.content) {
 		if (!isChoice && this.limitContent) {

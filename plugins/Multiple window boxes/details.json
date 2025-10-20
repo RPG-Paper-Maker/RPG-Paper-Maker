@@ -79,6 +79,6 @@
 	],
 	"description": "This plugin allows you to spawn multiple window boxes with custom properties.\n\nThe windows are treated as Pictures and are stored in the same queue as them. To remove a window you spawned with this plugin, use the Remove Picture command. If you display a Picture with the same ID as a custom window, the window will be overwritten, and vice-versa. Use negative IDs for the windows. If you use positive IDs, they'll be drawn on top of other screen elements.",
 	"name": "Multiple window boxes",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"website": "https://github.com/yaleksander/RPM-Plugin-Multiple-window-boxes"
 }
