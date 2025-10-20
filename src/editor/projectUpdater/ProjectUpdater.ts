@@ -14,7 +14,7 @@ import { copyFolder, getFiles, getFolders, readJSON, writeJSON } from '../common
 import { Project } from '../core/Project';
 
 class ProjectUpdater {
-	static versions = ['3.0.0'];
+	static versions = ['3.0.0', '3.0.1'];
 
 	static isIncompatibleVersion(version: string) {
 		return this.checkVersion(version, this.versions[this.versions.length - 1]);
@@ -36,7 +36,7 @@ class ProjectUpdater {
 
 	static async update(
 		version: string,
-		callback: (current: number, total: number, label?: string, extraPercent?: number) => void
+		callback: (current: number, total: number, label?: string, extraPercent?: number) => void,
 	): Promise<string | null> {
 		try {
 			const projectPath = Project.current!.getPath();

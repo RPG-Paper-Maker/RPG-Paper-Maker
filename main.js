@@ -39,7 +39,7 @@ const runRPMEngine = () => {
 	spawn(electronPath, args, {
 		stdio: 'inherit',
 		detached: true,
-		cwd: os.tmpdir(),
+		cwd: app.isPackaged ? os.tmpdir() : undefined,
 	});
 	app.quit();
 };
@@ -551,7 +551,7 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 	spawn(electronPath, args, {
 		stdio: 'inherit',
 		detached: true,
-		cwd: os.tmpdir(),
+		cwd: app.isPackaged ? os.tmpdir() : undefined,
 	});
 });
 
