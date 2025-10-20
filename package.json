@@ -65,7 +65,8 @@
 		"update-version": "node scripts/update-version.mjs",
 		"deploy-web": "bash scripts/deploy-web.sh prod",
 		"countdown-web": "bash scripts/countdown-web.sh",
-		"ssh": "bash scripts/ssh.sh"
+		"ssh": "bash scripts/ssh.sh",
+		"tag-all": "bash scripts/tag-all.sh"
 	},
 	"browserslist": {
 		"production": [

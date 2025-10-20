@@ -16,3 +16,6 @@ git push origin ${tagName}
 cd ../Game-Scripts-Build
 git tag ${tagName}
 git push origin ${tagName}
+cd ../RPG-Paper-Maker
+git tag ${tagName}
+git push origin ${tagName}
