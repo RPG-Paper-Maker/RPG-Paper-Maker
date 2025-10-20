@@ -2,12 +2,7 @@
 
 # Configuration
 SECONDS=0
-ENV="$1"
-if [ "$ENV" == "prod" ]; then
-  FOLDER_NAME="play"
-else
-  FOLDER_NAME="play-test"
-fi
+FOLDER_NAME="play"
 SERVER="$2"
 BUILD_DIR=dist
 REMOTE_DIR=/var/www/html/rpg-paper-maker.com/$FOLDER_NAME

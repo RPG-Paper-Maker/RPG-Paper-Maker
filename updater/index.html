@@ -224,7 +224,7 @@
 								newPrefix = newDestPrefix.slice(3);
 							} else if (newDestPrefix.startsWith('Scripts')) {
 								if (newDestPrefix.includes('/localforage/')) {
-									urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/webDependencies`;
+									urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/web`;
 									newPrefix = 'localforage/' + newDestPrefix.split('/localforage/')[1];
 								} else {
 									urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts-Build/refs/tags/${baseVersionTag}`;
@@ -233,7 +233,7 @@
 								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/refs/tags/${baseVersionTag}`;
 								newPrefix = newDestPrefix.slice(7);
 							} else if (newDestPrefix.startsWith('assets')) {
-								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/dist`;
+								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/dist`;
 							} else {
 								urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/public`;
 							}
@@ -253,11 +253,11 @@
 					dest: `Deploy/Platform.js`,
 				});
 				files.push({
-					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/webDependencies/Platform.js`,
+					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Depenencies/refs/tags/${baseVersionTag}/web/Platform.js`,
 					dest: `Scripts/Common/Platform.js`,
 				});
 				files.push({
-					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/dist/index.html`,
+					url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/dist/index.html`,
 					dest: `index.html`,
 				});
 				return files;
@@ -374,7 +374,7 @@
 				const isLatest = radioLatest.checked;
 				const versionTag = isLatest ? versionsData.lastVersion : versionSelect.value;
 
-				const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${versionTag}/dist/fileManifest.json`;
+				const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${versionTag}/dist/fileManifest.json`;
 
 				fileLabel.textContent = 'Fetching file manifest...';
 				const manifest = await fetch(manifestURL).then((r) => r.json());

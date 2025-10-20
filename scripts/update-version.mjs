@@ -18,7 +18,6 @@ console.log(`✅ Updated ${versionFile} with: ${version}`);
 // Step 2: Update versions/versions.json
 let versionsData = JSON.parse(readFileSync(versionsJsonFile, 'utf-8'));
 
-versionsData.lastVersion = version;
 if (!versionsData.versions.includes(version)) {
 	versionsData.versions.push(version);
 }
