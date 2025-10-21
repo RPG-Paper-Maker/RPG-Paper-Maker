@@ -255,19 +255,29 @@ const PanelSystem = forwardRef((props, ref) => {
 								<div>
 									{t('square.size')} ({t('in.px')}):
 								</div>
-								<InputNumber value={squareSize} onChange={setSquareSize} />
+								<InputNumber value={squareSize} onChange={setSquareSize} min={1} max={999} />
 							</Flex>
 							<Flex column spaced>
 								<div>
 									{t('ray.portions')} ({t('editor')}):
 								</div>
-								<InputNumber value={rayPortionsEngine} onChange={setRayPortionsEngine} />
+								<InputNumber
+									value={rayPortionsEngine}
+									onChange={setRayPortionsEngine}
+									min={1}
+									max={20}
+								/>
 							</Flex>
 							<Flex column spaced>
 								<div>
 									{t('ray.portions')} ({t('ingame')}):
 								</div>
-								<InputNumber value={rayPortionsIngame} onChange={setRayPortionsIngame} />
+								<InputNumber
+									value={rayPortionsIngame}
+									onChange={setRayPortionsIngame}
+									min={1}
+									max={20}
+								/>
 							</Flex>
 							<Flex column spaced>
 								<div>
