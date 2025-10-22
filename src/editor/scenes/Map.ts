@@ -1353,7 +1353,8 @@ class Map extends Base {
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
 		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
-		if (distPlane < dist || this.rectangleStartPosition) {
+		const isPlane = distPlane - 0.1 <= dist || this.rectangleStartPosition !== null; // -0.1 to avoid z-fighting issues
+		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
 		}
@@ -1567,38 +1568,40 @@ class Map extends Base {
 		}
 
 		// For displaying information on left bottom corner
-		switch (Map.currentSelectedMapElementKind) {
-			case ELEMENT_MAP_KIND.FLOOR:
-			case ELEMENT_MAP_KIND.AUTOTILE:
-				layer = RAYCASTING_LAYER.LANDS;
-				break;
-			case ELEMENT_MAP_KIND.SPRITE_FACE:
-			case ELEMENT_MAP_KIND.SPRITE_FIX:
-			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				layer = RAYCASTING_LAYER.SPRITES;
-				break;
-			case ELEMENT_MAP_KIND.SPRITE_WALL:
-				layer = RAYCASTING_LAYER.WALLS;
-				break;
-			case ELEMENT_MAP_KIND.MOUNTAIN:
-				layer = RAYCASTING_LAYER.MOUNTAINS;
-				break;
-			case ELEMENT_MAP_KIND.OBJECT3D:
-				layer = RAYCASTING_LAYER.OBJECTS3D;
-				break;
-			default:
-				layer = RAYCASTING_LAYER.PLANE;
-				break;
+		if (!isPlane) {
+			switch (Map.currentSelectedMapElementKind) {
+				case ELEMENT_MAP_KIND.FLOOR:
+				case ELEMENT_MAP_KIND.AUTOTILE:
+					layer = RAYCASTING_LAYER.LANDS;
+					break;
+				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+					layer = RAYCASTING_LAYER.SPRITES;
+					break;
+				case ELEMENT_MAP_KIND.SPRITE_WALL:
+					layer = RAYCASTING_LAYER.WALLS;
+					break;
+				case ELEMENT_MAP_KIND.MOUNTAIN:
+					layer = RAYCASTING_LAYER.MOUNTAINS;
+					break;
+				case ELEMENT_MAP_KIND.OBJECT3D:
+					layer = RAYCASTING_LAYER.OBJECTS3D;
+					break;
+				default:
+					layer = RAYCASTING_LAYER.PLANE;
+					break;
+			}
+			if (isLayerOn && isSpriteOptionSelected) {
+				Manager.GL.raycaster.layers.enable(layer);
+				Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
+				Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
+			} else {
+				Manager.GL.raycaster.layers.set(layer);
+			}
+			intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		}
-		if (isLayerOn && isSpriteOptionSelected) {
-			Manager.GL.raycaster.layers.enable(layer);
-			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
-			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
-		} else {
-			Manager.GL.raycaster.layers.set(layer);
-		}
-		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
 				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
