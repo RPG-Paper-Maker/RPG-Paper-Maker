@@ -646,3 +646,13 @@ ipcMain.handle('show-dialog-confirm-run-engine', async (event) => {
 	});
 	runRPMEngine();
 });
+
+app.on('window-all-closed', () => {
+	app.quit();
+});
+
+app.on('activate', () => {
+	if (!window) {
+		createWindow();
+	}
+});
