@@ -368,6 +368,7 @@ function MainMenuBar() {
 		const warning = await ProjectUpdater.update(version, updateLoadingBar);
 		dispatch(setLoadingBar(null));
 		if (warning) {
+			dispatch(setLoading(false));
 			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
 		} else {
 			await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location), currentVersion);
