@@ -19,7 +19,7 @@ import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
-import Tree from '../../Tree';
+import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -63,7 +63,7 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 			maxNumberChoicesDisplay.updateToDefaultNumber(5);
 			cancelAutoIndex.updateToDefaultNumber(2);
 			setChoices(
-				Node.createList([Model.Localization.create(1, t('yes')), Model.Localization.create(2, t('no'))], false)
+				Node.createList([Model.Localization.create(1, t('yes')), Model.Localization.create(2, t('no'))], false),
 			);
 		}
 		setForcedCurrentSelectedItemIndex(0);
@@ -100,6 +100,7 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'
+			initialHeight='300px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spaced fillWidth>
@@ -110,8 +111,11 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 							constructorType={Model.Localization}
 							forcedCurrentSelectedItemIndex={forcedCurrentSelectedItemIndex}
 							setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIndex}
+							minHeight={TREES_MIN_HEIGHT}
 							doNotShowID
 							byIndex
+							noScrollOnForce
+							scrollable
 						/>
 					</Groupbox>
 				</Flex>
