@@ -191,12 +191,15 @@
 					if (data.versions.length === 0) {
 						radioOlder.disabled = true;
 					} else {
-						data.versions.forEach((v) => {
-							const opt = document.createElement('option');
-							opt.value = v;
-							opt.textContent = v;
-							versionSelect.appendChild(opt);
-						});
+						data.versions
+							.slice()
+							.reverse()
+							.forEach((v) => {
+								const opt = document.createElement('option');
+								opt.value = v;
+								opt.textContent = v;
+								versionSelect.appendChild(opt);
+							});
 					}
 					stepInstallComplete.classList.remove('hidden');
 				}
