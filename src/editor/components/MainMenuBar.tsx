@@ -312,6 +312,10 @@ function MainMenuBar() {
 				}
 			}
 			await Project.current.load();
+			if (Project.current.settings.projectVersion !== Project.VERSION) {
+				Project.current.settings.projectVersion = Project.VERSION;
+				await Project.current.settings.save();
+			}
 			if (Constants.IS_DESKTOP) {
 				if (!(await IO.checkFileExists(Project.current.systems.PATH_BR))) {
 					const newBRPath = Paths.join(window.__dirname, Paths.BR);
