@@ -11,6 +11,8 @@ REMOTE_DIR=/var/www/html/rpg-paper-maker.com/$FOLDER_NAME
 echo "Uploading maintenance page..."
 scp maintenance/index.html $SERVER:$REMOTE_DIR/index.html
 
+ssh "$SERVER" "echo '' > '$REMOTE_DIR/$DATE_FILE'"
+
 # Step 2: Clean remote dir (except index.html)
 echo "Cleaning old files..."
 ssh $SERVER "find $REMOTE_DIR -mindepth 1 ! -name 'index.html' -exec rm -rf {} +"
