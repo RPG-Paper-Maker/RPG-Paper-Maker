@@ -13,9 +13,10 @@ import { Paths } from '../../common';
 import { Project } from '../../core/Project';
 
 class ProjectUpdater_3_0_1 {
-	static async update(callback: (percent: number) => void) {
+	static async update() {
 		Project.current!.systems.PATH_BR = Paths.join(window.__dirname, 'BR');
 		Project.current!.systems.PATH_DLCS = Paths.join(window.__dirname, 'DLCs');
+		await Project.current!.systems.save();
 	}
 }
 
