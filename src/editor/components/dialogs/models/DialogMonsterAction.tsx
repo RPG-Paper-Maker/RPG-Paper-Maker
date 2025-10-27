@@ -117,7 +117,6 @@ function DialogMonsterAction({ isOpen, setIsOpen, model, onAccept, onReject }: P
 	const handleAccept = async () => {
 		monsterAction.applyDefault();
 		monsterAction.actionKind = actionKind;
-		updateDefault();
 		switch (actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL: {
 				monsterAction.skillID.copy(skillID);
