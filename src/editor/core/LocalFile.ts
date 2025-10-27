@@ -322,8 +322,9 @@ class LocalFile extends Serializable {
 	}
 
 	static async readPublicFile(path: string, isBlob = false): Promise<string> {
+		const url = `${path}?_=${Date.now()}`; // Cache busting
 		if (isBlob) {
-			const blob = await this.readPublicFileBlob(path);
+			const blob = await this.readPublicFileBlob(url);
 			return await new Promise((resolve, reject) => {
 				const reader = new FileReader();
 				reader.onloadend = () => resolve(reader.result as string);
@@ -331,7 +332,7 @@ class LocalFile extends Serializable {
 				reader.readAsDataURL(blob);
 			});
 		} else {
-			return await (await fetch(path)).text();
+			return await (await fetch(url)).text();
 		}
 	}
 
