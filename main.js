@@ -390,11 +390,13 @@ const createWindow = async () => {
 			window.webContents.send('is-unmaximized');
 		});
 	}
-	const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			window.openDevTools({ mode: 'undocked' });
-		});
+	if (execKind !== EXEC_KIND.ENGINE) {
+		const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
+		for (const shortcut of shortcuts) {
+			globalShortcut.register(shortcut, () => {
+				window.openDevTools({ mode: 'undocked' });
+			});
+		}
 	}
 };
 
