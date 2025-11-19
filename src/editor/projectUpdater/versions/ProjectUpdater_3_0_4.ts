@@ -9,19 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DYNAMIC_VALUE_KIND, EFFECT_KIND } from '../../common';
+import { JSONType, Paths } from '../../common';
+import { readJSON, writeJSON } from '../../common/Platform';
 import { Project } from '../../core/Project';
 
 class ProjectUpdater_3_0_4 {
 	static async update() {
-		for (const status of Project.current!.status.list) {
-			for (const effect of status.effects) {
-				if (effect.kind === EFFECT_KIND.DAMAGES && effect.damageFormula.kind === DYNAMIC_VALUE_KIND.FORMULA) {
-					(effect.damageFormula.value as string).replaceAll('u.maxhp', 't.maxhp');
+		const projectPath = Project.current!.getPath();
+		const jsonStatus = await readJSON(Paths.join(projectPath, 'status.json'));
+		if (jsonStatus) {
+			for (const status of jsonStatus.status as JSONType[]) {
+				for (const effect of (status.effects as JSONType[]) ?? []) {
+					console.log(
+						effect,
+						(effect.k ?? 0) === 0,
+						effect.df,
+						(effect.df as JSONType).k === 8 || (effect.df as JSONType).k === 9,
+					);
+					if (
+						(effect.k ?? 0) === 0 &&
+						effect.df &&
+						((effect.df as JSONType).k === 8 || (effect.df as JSONType).k === 9)
+					) {
+						console.log(
+							(effect.df as JSONType).v as string,
+							((effect.df as JSONType).v as string).replaceAll('u.maxhp', 't.maxhp'),
+						);
+						(effect.df as JSONType).v = ((effect.df as JSONType).v as string).replaceAll(
+							'u.maxhp',
+							't.maxhp',
+						);
+					}
 				}
 			}
+			await writeJSON(Paths.join(projectPath, 'status.json'), jsonStatus);
 		}
-		await Project.current!.status.save();
 	}
 }
 
