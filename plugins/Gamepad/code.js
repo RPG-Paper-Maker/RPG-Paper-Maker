@@ -48,15 +48,6 @@ function getKey(id) {
 	return 'Error';
 }
 
-const oldFunc = Common.KeyEvent.getKeyString;
-Common.KeyEvent.getKeyString = function (key) {
-	const str = oldFunc(key);
-	if (str.search(/\? \[ID=/) === 0) {
-		const k = str.substring(6, str.indexOf(']'));
-		if (keysList.includes(k)) return 'GPad.' + k;
-	} else return str;
-};
-
 setInterval(function () {
 	if (!Main.loaded || Manager.Stack.isLoading()) return;
 	const gp = navigator.getGamepads();
