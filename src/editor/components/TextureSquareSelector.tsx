@@ -27,6 +27,7 @@ import {
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
 	path: string;
+	originalPath: string;
 	firstX: number;
 	firstY: number;
 	selectedRect: Rectangle;
@@ -79,7 +80,7 @@ function TextureSquareSelector({
 						defaultRectangle.x * squareWidth,
 						defaultRectangle.y * squareHeight,
 						squareWidth,
-						squareHeight
+						squareHeight,
 					);
 				}
 			}
@@ -107,6 +108,7 @@ function TextureSquareSelector({
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		path: '',
+		originalPath: '',
 		firstX: -1,
 		firstY: -1,
 		selectedRect: new Rectangle(),
@@ -148,8 +150,10 @@ function TextureSquareSelector({
 	};
 
 	const initialize = async () => {
-		const path = base64 && !Constants.IS_DESKTOP ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		const path = base64 && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(texture)) ?? '') : texture;
 		currentState.picture = await Picture2D.loadImage(path);
+		const firstTime = currentState.path === '';
+		currentState.originalPath = texture;
 		currentState.path = path;
 		currentState.squareWidth =
 			squareWidth ??
@@ -160,17 +164,20 @@ function TextureSquareSelector({
 		currentState.firstY = -1;
 		currentState.selectedRect = getDefaultRectangle();
 		if (adjustPositionSize) {
+			currentState.selectedRect.x = Math.min(
+				currentState.selectedRect.x * (firstTime ? currentState.squareWidth : 1),
+				(columns - 1) * currentState.squareWidth,
+			);
 			if (currentState.selectedRect.x % currentState.squareWidth !== 0) {
 				currentState.selectedRect.x += currentState.selectedRect.x % currentState.squareWidth;
 			}
-			currentState.selectedRect.x = Math.min(
-				currentState.selectedRect.x,
-				(columns - 1) * currentState.squareWidth
+			currentState.selectedRect.y = Math.min(
+				currentState.selectedRect.y * (firstTime ? currentState.squareHeight : 1),
+				(rows - 1) * currentState.squareHeight,
 			);
 			if (currentState.selectedRect.y % currentState.squareHeight !== 0) {
 				currentState.selectedRect.y += currentState.selectedRect.y % currentState.squareHeight;
 			}
-			currentState.selectedRect.y = Math.min(currentState.selectedRect.y, (rows - 1) * currentState.squareHeight);
 			currentState.selectedRect.width = currentState.squareWidth;
 			currentState.selectedRect.height = currentState.squareHeight;
 		}
@@ -236,10 +243,10 @@ function TextureSquareSelector({
 				if (cutTexture) {
 					const multiple = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
 					const cols = Math.floor(
-						currentState.picture.width / Project.SQUARE_SIZE / (divideWidth / multiple)
+						currentState.picture.width / Project.SQUARE_SIZE / (divideWidth / multiple),
 					);
 					const rows = Math.floor(
-						currentState.picture.height / Project.SQUARE_SIZE / (divideHeight / multiple)
+						currentState.picture.height / Project.SQUARE_SIZE / (divideHeight / multiple),
 					);
 					for (let i = 0; i < cols; i++) {
 						for (let j = 0; j < rows; j++) {
@@ -254,7 +261,7 @@ function TextureSquareSelector({
 								i * Constants.BASE_SQUARE_SIZE,
 								j * Constants.BASE_SQUARE_SIZE,
 								Constants.BASE_SQUARE_SIZE,
-								Constants.BASE_SQUARE_SIZE
+								Constants.BASE_SQUARE_SIZE,
 							);
 						}
 					}
@@ -264,12 +271,12 @@ function TextureSquareSelector({
 						0,
 						0,
 						(currentState.picture.width * 2) / divideWidth,
-						(currentState.picture.height * 2) / divideHeight
+						(currentState.picture.height * 2) / divideHeight,
 					);
 				}
 			}
 		},
-		[currentState, divideWidth, divideHeight, cutTexture]
+		[currentState, divideWidth, divideHeight, cutTexture],
 	);
 
 	const drawSelection = (ctx: CanvasRenderingContext2D, rect: Rectangle, opacity = 1) => {
@@ -418,7 +425,7 @@ function TextureSquareSelector({
 	}, [texture]);
 
 	useEffect(() => {
-		if (texture === currentState.path) {
+		if (texture === currentState.originalPath) {
 			currentState.squareWidth =
 				columns === -1 || !currentState.picture
 					? 1
@@ -431,7 +438,7 @@ function TextureSquareSelector({
 			currentState.selectedRect.height = currentState.squareHeight;
 			update();
 		}
-	}, [currentState, texture, update, rows, columns]);
+	}, [currentState, texture, rows, columns]);
 
 	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
 }
