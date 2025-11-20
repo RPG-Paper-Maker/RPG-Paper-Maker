@@ -20,21 +20,11 @@ class ProjectUpdater_3_0_4 {
 		if (jsonStatus) {
 			for (const status of jsonStatus.status as JSONType[]) {
 				for (const effect of (status.effects as JSONType[]) ?? []) {
-					console.log(
-						effect,
-						(effect.k ?? 0) === 0,
-						effect.df,
-						(effect.df as JSONType).k === 8 || (effect.df as JSONType).k === 9,
-					);
 					if (
 						(effect.k ?? 0) === 0 &&
 						effect.df &&
 						((effect.df as JSONType).k === 8 || (effect.df as JSONType).k === 9)
 					) {
-						console.log(
-							(effect.df as JSONType).v as string,
-							((effect.df as JSONType).v as string).replaceAll('u.maxhp', 't.maxhp'),
-						);
 						(effect.df as JSONType).v = ((effect.df as JSONType).v as string).replaceAll(
 							'u.maxhp',
 							't.maxhp',
