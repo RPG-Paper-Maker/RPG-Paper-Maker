@@ -143,7 +143,7 @@ class Cursor {
 	}
 
 	update() {
-		if (this.frame.update()) {
+		if (this.mesh && this.frame.update()) {
 			this.mesh.material.userData.uniforms.offset.value = new THREE.Vector2(
 				this.frame.value / this.frame.frames,
 				0,

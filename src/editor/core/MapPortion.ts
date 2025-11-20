@@ -1066,7 +1066,7 @@ class MapPortion {
 			}
 		}
 
-		if (isPointedSprite) {
+		if (isPointedSprite && this.map.hoveredMesh) {
 			const hoveredGeometry = this.map.hoveredMesh.geometry as CustomGeometry;
 			if (!hoveredGeometry.isEmpty()) {
 				hoveredGeometry.updateAttributes();
