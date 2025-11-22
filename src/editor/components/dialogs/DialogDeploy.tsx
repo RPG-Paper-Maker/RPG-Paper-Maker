@@ -117,6 +117,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 				default:
 					break;
 			}
+			if (os === OS_KIND.DARWIN) {
+				console.error(enginePath, path, Paths.join(enginePath, localAppPath!));
+			}
 			await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
 			await IO.createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');
