@@ -96,6 +96,7 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 	const handleChangeShapeKind = (id: number) => {
 		selectedObject3D!.shapeKind = id;
 		selectedObject3D!.objID = -1;
+		handleChangeCollisionKind(OBJECT_COLLISION_KIND.NONE);
 		setTriggerUpdate(true);
 	};
 
