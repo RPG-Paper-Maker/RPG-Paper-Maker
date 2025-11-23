@@ -10,13 +10,18 @@
 */
 
 import { Paths } from '../../common';
+import { readJSON, writeJSON } from '../../common/Platform';
 import { Project } from '../../core/Project';
 
 class ProjectUpdater_3_0_1 {
 	static async update() {
-		Project.current!.systems.PATH_BR = Paths.join(window.__dirname, 'BR');
-		Project.current!.systems.PATH_DLCS = Paths.join(window.__dirname, 'DLCs');
-		await Project.current!.systems.save();
+		const projectPath = Project.current!.getPath();
+		const jsonSystem = await readJSON(Paths.join(projectPath, 'system.json'));
+		if (jsonSystem) {
+			jsonSystem.pathBR = Paths.join(window.__dirname, 'BR');
+			jsonSystem.pathDLCS = Paths.join(window.__dirname, 'DLCs');
+			await writeJSON(Paths.join(projectPath, 'system.json'), jsonSystem);
+		}
 	}
 }
 
