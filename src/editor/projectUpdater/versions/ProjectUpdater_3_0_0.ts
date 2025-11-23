@@ -234,7 +234,7 @@ class ProjectUpdater_3_0_0 {
 				ArrayUtils.removeAt(command, command.length - 1);
 				ArrayUtils.insertAt(command, command.length - 2, b);
 			}
-			command.map((value) =>
+			json.command = command.map((value) =>
 				typeof value === 'string'
 					? value
 							.replaceAll(
