@@ -133,6 +133,9 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 		setIconID(id);
 		setIconIndexX(indexX);
 		setIconIndexY(indexY);
+		selectedElement!.pictureID = id;
+		selectedElement!.pictureIndexX = indexX;
+		selectedElement!.pictureIndexY = indexY;
 	};
 
 	const handleChangeTargetKind = (n: number) => {
