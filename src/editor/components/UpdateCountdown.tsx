@@ -38,10 +38,13 @@ function UpdateCountdown() {
 	const calculateTimeLeft = (targetDateStr: string) => {
 		const [datePart, timePart] = targetDateStr.split(' ');
 		const [day, month, year] = datePart.split('/');
-		const isoString = `${year}-${month}-${day}T${timePart}:00.000+02:00`;
-		const targetDate = new Date(isoString);
-		const now = new Date();
-		let diff = targetDate.getTime() - now.getTime();
+		const [h, m] = timePart.split(':');
+		const localString = `${year}-${month}-${day}T${h}:${m}:00`;
+		const targetTimestamp = new Date(
+			new Date(localString).toLocaleString('en-US', { timeZone: 'Europe/Paris' }),
+		).getTime();
+		const now = Date.now();
+		let diff = targetTimestamp - now;
 		if (diff <= 0) {
 			diff = 0;
 		}
