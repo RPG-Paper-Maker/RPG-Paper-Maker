@@ -606,7 +606,8 @@ ipcMain.handle('get-os', async () => {
 });
 
 ipcMain.handle('get-engine-folder', async () => {
-	return path.dirname(process.execPath);
+	const p = path.dirname(process.execPath);
+	return os.platform() === 'darwin' ? path.join(p, '..', '..', '..') : p;
 });
 
 async function copyDir(srcDir, destDir, excludePath) {
