@@ -125,6 +125,11 @@ const PanelStatus = forwardRef((props, ref) => {
 		setIconID(id);
 		setIconIndexX(indexX);
 		setIconIndexY(indexY);
+		if (selectedstatus) {
+			selectedstatus.pictureID = id;
+			selectedstatus.pictureIndexX = indexX;
+			selectedstatus.pictureIndexY = indexY;
+		}
 	};
 
 	const handleUpdateEffects = () => {
