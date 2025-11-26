@@ -12,7 +12,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaWrench } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import { LocalFile } from '../core/LocalFile';
+import { setNeedsReloadPageUpdate } from '../store';
 import '../styles/UpdateCountdown.css';
 import Flex from './Flex';
 
@@ -21,6 +23,8 @@ function UpdateCountdown() {
 
 	const [targetDate, setTargetDate] = useState('');
 	const [timeLeft, setTimeLeft] = useState('');
+
+	const dispatch = useDispatch();
 
 	const tryGetDate = async () => {
 		const date = await LocalFile.readPublicFile('date');
@@ -31,7 +35,7 @@ function UpdateCountdown() {
 				setTimeLeft(calculateTimeLeft(date));
 			}, 1000);
 		} else {
-			setTimeout(tryGetDate, 1000 * 60 * 30);
+			setTimeout(tryGetDate, 1000 * 60);
 		}
 	};
 
@@ -47,6 +51,9 @@ function UpdateCountdown() {
 		let diff = targetTimestamp - now;
 		if (diff <= 0) {
 			diff = 0;
+		}
+		if (diff === 0) {
+			dispatch(setNeedsReloadPageUpdate());
 		}
 		const totalSeconds = Math.floor(diff / 1000);
 		const hours = Math.floor(totalSeconds / 3600);

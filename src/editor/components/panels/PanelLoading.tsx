@@ -20,7 +20,7 @@ import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Manager, Scene } from '../../Editor';
 import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
-import { setNeedsReloadPageUpdate, setProjects, setTheme } from '../../store';
+import { setProjects, setTheme } from '../../store';
 import Loader from '../Loader';
 
 type Props = {
@@ -124,19 +124,8 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeEngineVersion = async () => {
-		const updateVersion = async () => {
-			const newVersion = await readPublicFile(Paths.FILE_VERSION);
-			if (newVersion && Project.VERSION.length === 0) {
-				Project.VERSION = newVersion;
-			} else if (Project.VERSION !== newVersion) {
-				dispatch(setNeedsReloadPageUpdate());
-			}
-		};
-		await updateVersion();
+		Project.VERSION = await readPublicFile(Paths.FILE_VERSION);
 		document.title = `RPG Paper Maker - ${Project.VERSION}`;
-		if (!Constants.IS_DESKTOP) {
-			setInterval(updateVersion, 10000); // Check version every 10 seconds (for web version)
-		}
 	};
 
 	const loadProjects = async () => {
