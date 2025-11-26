@@ -65,6 +65,13 @@ app.commandLine.appendSwitch('high-dpi-support', 1);
 if (!app.isPackaged || execKind === EXEC_KIND.GAME) {
 	app.commandLine.appendSwitch('force-device-scale-factor', 1);
 }
+if (process.platform === 'darwin') {
+	app.commandLine.appendSwitch('use-angle', 'metal');
+	app.commandLine.appendSwitch('use-gl', 'metal');
+	app.commandLine.appendSwitch('enable-zero-copy');
+	app.commandLine.appendSwitch('enable-gpu-rasterization');
+	app.commandLine.appendSwitch('ignore-gpu-blocklist');
+}
 
 const MIME_TYPES = {
 	// Images
@@ -390,13 +397,12 @@ const createWindow = async () => {
 			window.webContents.send('is-unmaximized');
 		});
 	}
-	if (execKind !== EXEC_KIND.ENGINE) {
-		const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
-		for (const shortcut of shortcuts) {
-			globalShortcut.register(shortcut, () => {
-				window.openDevTools({ mode: 'undocked' });
-			});
-		}
+	const letter = execKind === EXEC_KIND.ENGINE ? 'E' : 'I';
+	const shortcuts = [`CommandOrControl+Alt+${letter}`, `CommandOrControl+Shift+${letter}`];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
+			window.openDevTools({ mode: 'undocked' });
+		});
 	}
 };
 
@@ -618,13 +624,33 @@ async function copyDir(srcDir, destDir, excludePath) {
 		const srcPath = path.join(srcDir, entry.name);
 		const destPath = path.join(destDir, entry.name);
 
-		if (srcPath.replaceAll('\\', '/').startsWith(excludePath)) continue;
-
-		if (entry.isDirectory()) {
-			await copyDir(srcPath, destPath, excludePath);
-		} else {
-			await fs.copyFile(srcPath, destPath);
+		if (srcPath.replaceAll('\\', '/').startsWith(excludePath)) {
+			continue;
 		}
+
+		const stat = entry;
+
+		if (stat.isSocket() || stat.isFIFO() || stat.isBlockDevice() || stat.isCharacterDevice()) {
+			console.warn(`Skipping unsupported file type: ${srcPath}`);
+			continue;
+		}
+
+		if (stat.isSymbolicLink()) {
+			const target = await fs.readlink(srcPath);
+			await fs.symlink(target, destPath);
+			continue;
+		}
+
+		if (stat.isDirectory()) {
+			await copyDir(srcPath, destPath, excludePath);
+			continue;
+		}
+
+		if (stat.isFile()) {
+			await fs.copyFile(srcPath, destPath);
+			continue;
+		}
+		console.warn(`Skipping unknown file type: ${srcPath}`);
 	}
 }
 
