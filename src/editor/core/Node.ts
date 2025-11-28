@@ -255,7 +255,7 @@ class Node extends Serializable {
 	}
 
 	static getCurrentCopyPath(): string {
-		return Paths.join(Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
+		return Paths.join(Constants.IS_DESKTOP ? window.env.appPath : LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
 	}
 
 	static async loadToPaste(): Promise<CopiedItemsType | null> {

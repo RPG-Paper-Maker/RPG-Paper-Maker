@@ -129,8 +129,8 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await createFolder(Paths.join(project.getPath(), Paths.TEST));
 		await project.load();
 		if (Constants.IS_DESKTOP) {
-			project.systems.PATH_BR = Paths.join(window.__dirname, Paths.BR);
-			project.systems.PATH_DLCS = Paths.join(window.__dirname, Paths.DLCS);
+			project.systems.PATH_BR = Paths.join(window.env.appPath, Paths.BR);
+			project.systems.PATH_DLCS = Paths.join(window.env.appPath, Paths.DLCS);
 		}
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

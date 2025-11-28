@@ -146,7 +146,7 @@
 				const isLastVersionUnstable = data.unstable;
 				const isEngineSettings = await window.ipcRenderer.invoke(
 					'check-file-exists',
-					`${window.__dirname}/../dist/engineSettings.json`,
+					`${window.env.appPath}/dist/engineSettings.json`,
 				);
 				let getUnstable = false;
 				if (isEngineSettings) {
@@ -154,7 +154,7 @@
 						JSON.parse(
 							await window.ipcRenderer.invoke(
 								'read-file',
-								`${window.__dirname}/../dist/engineSettings.json`,
+								`${window.env.appPath}/dist/engineSettings.json`,
 							),
 						).guv ?? false;
 				}
@@ -163,24 +163,24 @@
 				versionsData = data;
 				const isEngineDownloaded = await window.ipcRenderer.invoke(
 					'check-file-exists',
-					`${window.__dirname}/../dist`,
+					`${window.env.appPath}/dist`,
 				);
 				if (isEngineDownloaded) {
 					await window.ipcRenderer.invoke('change-window-title', `Updating to ${data.lastVersion}...`);
 					if (isEngineSettings) {
 						await window.ipcRenderer.invoke(
 							'rename-file',
-							`${window.__dirname}/../dist/engineSettings.json`,
-							`${window.__dirname}/../engineSettings.json`,
+							`${window.env.appPath}/dist/engineSettings.json`,
+							`${window.env.appPath}/engineSettings.json`,
 						);
 					}
-					await window.ipcRenderer.invoke('remove-folder', `${window.__dirname}/../dist`);
-					await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist`);
+					await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+					await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
 					if (isEngineSettings) {
 						await window.ipcRenderer.invoke(
 							'rename-file',
-							`${window.__dirname}/../engineSettings.json`,
-							`${window.__dirname}/../dist/engineSettings.json`,
+							`${window.env.appPath}/engineSettings.json`,
+							`${window.env.appPath}/dist/engineSettings.json`,
 						);
 					}
 					await download();
@@ -292,12 +292,8 @@
 						if (!res.ok) {
 							throw new Error(`HTTP ${res.status} - ${res.statusText}`);
 						}
-						const blob = Buffer.from(await res.arrayBuffer());
-						await window.ipcRenderer.invoke(
-							'create-file',
-							`${window.__dirname}/../dist/${file.dest}`,
-							blob,
-						);
+						const blob = new Uint8Array(await res.arrayBuffer());
+						await window.ipcRenderer.invoke('create-file', `${window.env.appPath}/dist/${file.dest}`, blob);
 						return;
 					} catch (e) {
 						console.warn(`Retry ${i + 1}/${retries} failed for ${file.url}:`, e);
@@ -327,10 +323,10 @@
 						const folder = folders[i];
 						fileLabel.textContent = `Creating ${folder}`;
 						try {
-							await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist/${folder}`);
+							await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist/${folder}`);
 						} catch (err) {
 							if (!isError) {
-								await window.ipcRenderer.invoke('remove-folder', `${window.__dirname}/../dist`);
+								await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
 								await window.ipcRenderer.invoke('show-error', `Error creating ${folder}`);
 								isError = true;
 							}
@@ -352,10 +348,10 @@
 							await downloadFileWithRetry(file);
 						} catch (err) {
 							if (!isError) {
-								await window.ipcRenderer.invoke('remove-folder', `${window.__dirname}/../dist`);
+								await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
 								await window.ipcRenderer.invoke(
 									'show-error',
-									`Error downloading ${file.url} to ${window.__dirname}/../dist/${file.dest}`,
+									`Error downloading ${file.url} to ${window.env.appPath}/dist/${file.dest}`,
 								);
 								isError = true;
 							}
@@ -392,7 +388,7 @@
 			}
 
 			continueBtn.addEventListener('click', async () => {
-				await window.ipcRenderer.invoke('create-folder', `${window.__dirname}/../dist`);
+				await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
 				await download();
 			});
 		</script>

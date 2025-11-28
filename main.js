@@ -370,9 +370,11 @@ const createWindow = async () => {
 						? 150
 						: 300,
 		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
+			nodeIntegration: false,
+			contextIsolation: true,
+			sandbox: false,
 			preload: path.join(__dirname, 'preload.js'),
+			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
 		icon: path.join(__dirname, 'dist', 'icon.png'),
 		frame: execKind !== EXEC_KIND.ENGINE,
@@ -488,7 +490,7 @@ ipcMain.handle('get-files', async (event, path) => {
 ipcMain.handle('read-file', async (event, p, isInPublic = false, asBase64 = false) => {
 	try {
 		if (isInPublic) {
-			return await fs.readFile(isInPublic ? path.join(app.getAppPath(), 'dist', p) : p, 'utf8');
+			return await fs.readFile(path.join(app.getAppPath(), 'dist', p), 'utf8');
 		}
 		const data = await fs.readFile(p, asBase64 ? null : 'utf8');
 		if (asBase64) {

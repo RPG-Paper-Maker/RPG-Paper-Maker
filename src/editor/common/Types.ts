@@ -12,17 +12,6 @@
 import { JSX, ReactNode } from 'react';
 import { KEY, SPECIAL_KEY } from './Enum';
 
-export type ExtendedWindow = Window &
-	typeof globalThis & {
-		rpgPaperMakerProjectLocation: string;
-		battleTest: string;
-		documentsFolder: string;
-		ipcRenderer: {
-			invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;
-			on: (channel: string, callback: (event: unknown, ...args: unknown[]) => void) => void;
-		};
-	};
-
 export type KeyValue = {
 	k?: unknown;
 	v?: unknown;

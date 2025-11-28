@@ -115,7 +115,7 @@ class Plugin extends Checkable {
 					content = (await readOnlineFile(Plugin.getGitURL(Paths.join(path, file)))) ?? '';
 				}
 				await (Constants.IS_DESKTOP && mimeType
-					? IO.createFile(Paths.join(projectPath, file), Buffer.from(binaryData ?? new ArrayBuffer()))
+					? IO.createFile(Paths.join(projectPath, file), new Uint8Array(binaryData ?? new ArrayBuffer()))
 					: createFile(Paths.join(projectPath, file), content));
 			}
 		}

@@ -67,7 +67,7 @@ class Utils {
 	}
 
 	static isDesktop(): boolean {
-		return !!window?.process?.versions?.electron;
+		return !!window?.ipcRenderer;
 	}
 
 	static drawStrokedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {

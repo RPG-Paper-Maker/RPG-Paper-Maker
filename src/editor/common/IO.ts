@@ -11,7 +11,7 @@
 
 import { OS_KIND } from './Enum';
 import { Paths } from './Paths';
-import { ExtendedWindow, JSONType } from './Types';
+import { JSONType } from './Types';
 
 class IO {
 	static MIME_TYPES: Record<string, string> = {
@@ -76,13 +76,13 @@ class IO {
 	}
 
 	static on(channel: string, callback: (...args: unknown[]) => void) {
-		(window as ExtendedWindow).ipcRenderer.on(channel, (event, ...attributes) => {
+		window.ipcRenderer.on(channel, (event, ...attributes) => {
 			callback(...attributes);
 		});
 	}
 
 	static async invoke(channel: string, ...args: unknown[]): Promise<unknown> {
-		return await (window as ExtendedWindow).ipcRenderer.invoke(channel, ...args);
+		return await window.ipcRenderer.invoke(channel, ...args);
 	}
 
 	static onMaximized(callback: (...args: unknown[]) => void) {
@@ -149,7 +149,7 @@ class IO {
 		await this.invoke('rename-file', src, dst);
 	}
 
-	static async createFile(path: string, content: string | Buffer<ArrayBuffer> | Blob) {
+	static async createFile(path: string, content: string | Uint8Array | Blob) {
 		await this.invoke('create-file', path, content);
 	}
 
@@ -170,11 +170,11 @@ class IO {
 	}
 
 	static async readPublicFile(path: string): Promise<string> {
-		return (await IO.readFile(Paths.join(window.__dirname, path))) as string;
+		return (await IO.readFile(path, true)) as string;
 	}
 
 	static async copyPublicFolder(path: string, dst: string): Promise<void> {
-		await IO.copyFolder(Paths.join(window.__dirname, path), dst);
+		await IO.copyFolder(Paths.join(window.env.appPath, path), dst);
 	}
 
 	static async openGame(projectName: string, isBattleTest?: boolean) {

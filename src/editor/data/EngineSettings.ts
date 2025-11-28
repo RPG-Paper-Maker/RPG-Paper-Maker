@@ -54,7 +54,7 @@ class EngineSettings extends Serializable {
 	}
 
 	getPath(): string {
-		return Paths.join(Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
+		return Paths.join(Constants.IS_DESKTOP ? window.env.appPath : LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
 	}
 
 	getKeyboardCursorUp(): Keyboard {

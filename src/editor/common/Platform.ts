@@ -193,7 +193,7 @@ export const readPublicFile = async (path: string, isBlob = false): Promise<stri
 
 export const copyPublicFile = async (publicPath: string, dst: string, isBlob = false) => {
 	return await (Constants.IS_DESKTOP
-		? IO.copyFile(Paths.join(window.__dirname, publicPath), dst)
+		? IO.copyFile(Paths.join(window.env.appPath, publicPath), dst)
 		: LocalFile.copyPublicFile(publicPath, dst, isBlob));
 };
 
@@ -233,7 +233,7 @@ export const exportFolder = async (location: string) => {
 			const folderPath = await IO.openFolderDialog();
 			const arrayBuffer = await zip.generateAsync({ type: 'arraybuffer' });
 			if (folderPath) {
-				await IO.createFile(Paths.join(folderPath, `${fileName}.zip`), Buffer.from(arrayBuffer));
+				await IO.createFile(Paths.join(folderPath, `${fileName}.zip`), new Uint8Array(arrayBuffer));
 			}
 		} else {
 			const blob = await zip.generateAsync({ type: 'blob' });

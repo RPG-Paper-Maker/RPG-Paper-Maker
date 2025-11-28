@@ -318,12 +318,12 @@ function MainMenuBar() {
 			}
 			if (Constants.IS_DESKTOP) {
 				if (!(await IO.checkFileExists(Project.current.systems.PATH_BR))) {
-					const newBRPath = Paths.join(window.__dirname, Paths.BR);
+					const newBRPath = Paths.join(window.env.appPath, Paths.BR);
 					Project.current.systems.PATH_BR = newBRPath;
 					await Project.current.systems.save();
 				}
 				if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
-					const newDLCsPath = Paths.join(window.__dirname, Paths.DLCS);
+					const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
 					Project.current.systems.PATH_DLCS = newDLCsPath;
 					await Project.current.systems.save();
 				}

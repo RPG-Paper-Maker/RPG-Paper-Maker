@@ -204,7 +204,7 @@ function PanelAssetsPreviewer({
 			if (Constants.IS_DESKTOP) {
 				for (const file of files) {
 					const arrayBuffer = await file.arrayBuffer();
-					const buffer = Buffer.from(arrayBuffer);
+					const buffer = new Uint8Array(arrayBuffer);
 					await IO.createFile(Paths.join(Project.current!.getPath(), basePath, file.name), buffer);
 				}
 			} else {

@@ -10,7 +10,7 @@
 */
 
 import { useEffect } from 'react';
-import { Constants, ExtendedWindow, Paths, Utils } from '../editor/common';
+import { Constants, Paths, Utils } from '../editor/common';
 import { LocalFile } from '../editor/core/LocalFile';
 
 type Props = {
@@ -68,9 +68,8 @@ function Game({ location, battleTest = false }: Props) {
 			script.src = './Scripts/main.js';
 			script.type = 'module';
 			script.async = true;
-			const global = window as ExtendedWindow;
-			global.rpgPaperMakerProjectLocation = location;
-			global.battleTest = battleTest ? 'battleTroop' : '';
+			window.rpgPaperMakerProjectLocation = location;
+			window.battleTest = battleTest ? 'battleTroop' : '';
 			document.body.appendChild(script);
 		};
 		initialize().catch(console.error);

@@ -229,7 +229,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				);
 				if (Constants.IS_DESKTOP) {
 					const arrayBuffer = await file.arrayBuffer();
-					const buffer = Buffer.from(arrayBuffer);
+					const buffer = new Uint8Array(arrayBuffer);
 					await IO.createFile(path, buffer);
 				} else {
 					await LocalFile.createFile(path, selectedPlugin!.pictureBase64);
@@ -379,7 +379,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				const nodes = [
 					Node.create(
 						Model.TreeMapTag.create(-1, 'Scripts'),
-						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.__dirname, 'Scripts')),
+						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.env.appPath, 'Scripts')),
 					),
 				];
 				setFolders(nodes);
