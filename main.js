@@ -265,7 +265,7 @@ const createWindow = async () => {
 			}
 			const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
 			const response = await fetchFrom(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/versions/versions.json',
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/versions/versions.json',
 			);
 			const versions = JSON.parse(await response.text());
 			const latestUpdaterVersion = versions.lastUpdaterVersion;

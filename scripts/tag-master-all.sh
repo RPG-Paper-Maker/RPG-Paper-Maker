@@ -19,3 +19,11 @@ git push origin ${tagName}
 cd ../RPG-Paper-Maker
 git tag ${tagName}
 git push origin ${tagName}
+
+sleep 60
+
+cd ../RPG-Paper-Maker
+git checkout web-3.0.0-master
+git pull --rebase origin web-3.0.0
+git push origin web-3.0.0-master
+git checkout web-3.0.0
