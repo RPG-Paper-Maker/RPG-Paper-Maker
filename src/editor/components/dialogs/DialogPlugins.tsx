@@ -379,7 +379,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				const nodes = [
 					Node.create(
 						Model.TreeMapTag.create(-1, 'Scripts'),
-						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(window.env.appPath, 'Scripts')),
+						await folderToTreeMapTag({ i: -2 }, { i: 1 }, Paths.join(Paths.DIST, 'Scripts')),
 					),
 				];
 				setFolders(nodes);

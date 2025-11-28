@@ -193,7 +193,7 @@ export const readPublicFile = async (path: string, isBlob = false): Promise<stri
 
 export const copyPublicFile = async (publicPath: string, dst: string, isBlob = false) => {
 	return await (Constants.IS_DESKTOP
-		? IO.copyFile(Paths.join(window.env.appPath, publicPath), dst)
+		? IO.copyFile(Paths.join(Paths.DIST, publicPath), dst)
 		: LocalFile.copyPublicFile(publicPath, dst, isBlob));
 };
 

@@ -18,8 +18,8 @@ class ProjectUpdater_3_0_1 {
 		const projectPath = Project.current!.getPath();
 		const jsonSystem = await readJSON(Paths.join(projectPath, 'system.json'));
 		if (jsonSystem) {
-			jsonSystem.pathBR = Paths.join(window.env.appPath, 'BR');
-			jsonSystem.pathDLCS = Paths.join(window.env.appPath, 'DLCs');
+			jsonSystem.pathBR = Paths.join(Paths.DIST, 'BR');
+			jsonSystem.pathDLCS = Paths.join(Paths.DIST, 'DLCs');
 			await writeJSON(Paths.join(projectPath, 'system.json'), jsonSystem);
 		}
 	}

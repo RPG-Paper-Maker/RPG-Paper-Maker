@@ -109,6 +109,7 @@ class Paths {
 	public static readonly FILE_GAME_RPMG = 'game.rpmg';
 	public static readonly FILE_FONTS_CSS = 'fonts.css';
 	public static readonly FILE_PATREON = 'patreon.json';
+	public static readonly DIST = Paths.join(window.env.appPath, 'dist');
 	public static GLOBAL_DOCUMENTS = '';
 	public static GLOBAL_RPM_GAMES = '';
 

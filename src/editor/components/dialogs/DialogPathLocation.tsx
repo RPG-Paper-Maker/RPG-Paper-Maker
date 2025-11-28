@@ -65,7 +65,7 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 				folderName = Paths.DLCS;
 				break;
 		}
-		setLocation(Paths.join(window.env.appPath, folderName));
+		setLocation(Paths.join(Paths.DIST, folderName));
 	};
 
 	const handleAccept = async () => {

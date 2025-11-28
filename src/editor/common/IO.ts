@@ -174,7 +174,7 @@ class IO {
 	}
 
 	static async copyPublicFolder(path: string, dst: string): Promise<void> {
-		await IO.copyFolder(Paths.join(window.env.appPath, path), dst);
+		await IO.copyFolder(Paths.join(Paths.DIST, path), dst);
 	}
 
 	static async openGame(projectName: string, isBattleTest?: boolean) {
