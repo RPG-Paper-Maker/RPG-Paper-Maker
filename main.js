@@ -67,10 +67,9 @@ if (!app.isPackaged || execKind === EXEC_KIND.GAME) {
 }
 if (process.platform === 'darwin') {
 	app.commandLine.appendSwitch('use-angle', 'metal');
-	app.commandLine.appendSwitch('use-gl', 'metal');
-	app.commandLine.appendSwitch('enable-zero-copy');
-	app.commandLine.appendSwitch('enable-gpu-rasterization');
+	app.commandLine.appendSwitch('use-gl', 'angle');
 	app.commandLine.appendSwitch('ignore-gpu-blocklist');
+	app.commandLine.appendSwitch('enable-features', 'Metal');
 }
 
 const MIME_TYPES = {
@@ -325,7 +324,7 @@ const createWindow = async () => {
 						case 'linux':
 							return 'RPG Paper Maker';
 						case 'darwin':
-							return 'Contents/MacOS/RPG Paper Maker';
+							return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 					}
 				})()}`;
 				const args = ['./main.js'];
