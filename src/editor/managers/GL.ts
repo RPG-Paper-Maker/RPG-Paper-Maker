@@ -40,12 +40,14 @@ class GL {
 					// Nothing to do on progress
 				},
 				() => {
-					const error = 'Could not load ' + path;
 					const t = new THREE.Texture();
 					t.image = new Image();
-					console.error(error);
+					if (path !== '') {
+						const error = 'Could not load ' + path;
+						console.error(error);
+					}
 					resolve(t);
-				}
+				},
 			);
 		});
 		return this.createMaterial({ texture });

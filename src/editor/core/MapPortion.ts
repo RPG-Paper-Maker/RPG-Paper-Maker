@@ -183,18 +183,20 @@ class MapPortion {
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
 			}
-			case ELEMENT_MAP_KIND.OBJECT3D:
-				this.updateMapElement(
-					position,
-					MapElement.Object3D.create(
-						Project.current!.specialElements.getObject3DByID(
-							Project.current!.settings.mapEditorCurrentObject3DID,
-						),
-					),
-					Scene.Map.currentSelectedMapElementKind,
-					preview,
+			case ELEMENT_MAP_KIND.OBJECT3D: {
+				const data = Project.current!.specialElements.getObject3DByID(
+					Project.current!.settings.mapEditorCurrentObject3DID,
 				);
+				if (data) {
+					this.updateMapElement(
+						position,
+						MapElement.Object3D.create(data),
+						Scene.Map.currentSelectedMapElementKind,
+						preview,
+					);
+				}
 				break;
+			}
 		}
 	}
 
@@ -1133,7 +1135,7 @@ class MapPortion {
 		this.mountainsList = new Map();
 		for (const [positionKey, mountain] of this.model.mountains) {
 			const position = Position.fromKey(positionKey);
-			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID).pictureID;
+			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID)?.pictureID;
 			let mountains = this.mountainsList.get(pictureID);
 			if (!mountains) {
 				mountains = new MapElement.Mountains(pictureID, this.map.texturesMountains.get(pictureID)!);

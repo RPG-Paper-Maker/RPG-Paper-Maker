@@ -316,7 +316,7 @@ class Base extends Serializable {
 	}
 
 	static createDefault(additionnalBinding: BindingType[] = []) {
-		const base = new Base();
+		const base = new this();
 		base.applyDefault(additionnalBinding);
 		return base;
 	}

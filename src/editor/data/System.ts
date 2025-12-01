@@ -189,8 +189,10 @@ class System extends Serializable {
 	async getStyleCSS(deployed = false): Promise<string> {
 		const fonts = [] as string[];
 		for (const face of this.fontNames) {
-			const font = Project.current!.fonts.getFontByID(face.customFontID);
-			fonts.push(await font.getFontFace(face.name, deployed));
+			if (!face.isBasic) {
+				const font = Project.current!.fonts.getFontByID(face.customFontID);
+				fonts.push(await font.getFontFace(face.name, deployed));
+			}
 		}
 		return fonts.join('');
 	}

@@ -28,14 +28,14 @@ class Battler {
 			let localPosition: THREE.Vector3;
 			if (isHero) {
 				hero = Project.current!.heroes.getByID(
-					Project.current!.systems.initialPartyMembers[index].heroID.getFixNumberValue()
+					Project.current!.systems.initialPartyMembers[index].heroID.getFixNumberValue(),
 				);
 				localPosition = centerPosition
 					.toVector3()
 					.add(
 						new THREE.Vector3(2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE).add(
-							new THREE.Vector3((index * Project.SQUARE_SIZE) / 2, 0, index * Project.SQUARE_SIZE)
-						)
+							new THREE.Vector3((index * Project.SQUARE_SIZE) / 2, 0, index * Project.SQUARE_SIZE),
+						),
 					);
 			} else {
 				hero = Project.current!.monsters.getByID(this.monsters[index].monsterID);
@@ -44,12 +44,12 @@ class Battler {
 					.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
 					.add(new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE));
 			}
-			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero.idBattler);
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero?.idBattler);
 			let material: THREE.MeshPhongMaterial;
 			if (picture) {
-				const path = await picture.getPathOrBase64();
+				const path = await picture?.getPathOrBase64();
 				material = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
-				if (!isHero) {
+				if (!isHero && material.map) {
 					material.map!.wrapS = THREE.RepeatWrapping;
 					material.map!.repeat.x = -1;
 				}
@@ -63,8 +63,8 @@ class Battler {
 					0,
 					0,
 					Math.floor(width / Project.current!.systems.battlersFrames / Project.SQUARE_SIZE),
-					Math.floor(height / Project.current!.systems.battlersRows / Project.SQUARE_SIZE)
-				)
+					Math.floor(height / Project.current!.systems.battlersRows / Project.SQUARE_SIZE),
+				),
 			);
 			const geometry = sprite.createGeometry(
 				Scene.Map.currentBattle,
@@ -72,7 +72,7 @@ class Battler {
 				height,
 				false,
 				centerPosition,
-				localPosition
+				localPosition,
 			)[0];
 			const mesh = new THREE.Mesh(geometry, material);
 			mesh.castShadow = true;

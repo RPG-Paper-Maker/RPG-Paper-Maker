@@ -42,12 +42,12 @@ class Mountains {
 	}
 
 	static getMountainTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
-		return map.texturesMountains.get(Project.current!.specialElements.getMountainByID(id).pictureID) || null;
+		return map.texturesMountains.get(Project.current!.specialElements.getMountainByID(id)?.pictureID) || null;
 	}
 
 	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const mountain = Project.current!.specialElements.getMountainByID(id);
-		const pictureID = mountain.pictureID;
+		const pictureID = mountain?.pictureID;
 		let textureMountain = map ? map.texturesMountains.get(pictureID) : null;
 		if (!textureMountain) {
 			if (mountain) {

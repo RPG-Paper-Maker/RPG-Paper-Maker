@@ -78,6 +78,9 @@ function PanelTextures({ visible, extraContent }: Props) {
 						PICTURE_KIND.TILESETS,
 						Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)?.pictureID ?? 1,
 					);
+					if (!picture) {
+						return null;
+					}
 					const divide = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
 					return (
 						<TextureSquareSelector

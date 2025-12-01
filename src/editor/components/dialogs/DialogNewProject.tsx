@@ -12,8 +12,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Constants, ELEMENT_MAP_KIND, INPUT_TYPE_WIDTH, IO, Paths, Utils } from '../../common';
+import {
+	Constants,
+	DYNAMIC_VALUE_KIND,
+	ELEMENT_MAP_KIND,
+	INPUT_TYPE_WIDTH,
+	IO,
+	Paths,
+	PICTURE_KIND,
+	Utils,
+} from '../../common';
 import { copyPublicFile, createFile, createFolder, getFolders, removeFolder } from '../../common/Platform';
+import { DynamicValue } from '../../core/DynamicValue';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Model, Scene } from '../../Editor';
@@ -41,6 +51,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 	const [folderName, setFolderName] = useState(t('project.without.name.folder'));
 	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
 	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
+	const [blank, setBlank] = useState(false);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
@@ -140,6 +151,78 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 			project.settings.projectMenuIndex = 2;
 		}
 		project.systems.projectName.updateMainName(projectName);
+		if (blank) {
+			project.classes.list = [Model.Class.createDefault() as Model.Class];
+			project.classes.list[0].id = 1;
+			project.heroes.list = [Model.Hero.createDefault() as Model.Hero];
+			project.heroes.list[0].id = 1;
+			project.items.list = [Model.CommonSkillItem.createDefault() as Model.CommonSkillItem];
+			project.items.list[0].id = 1;
+			project.skills.list.splice(5);
+			project.skills.list[0].animationTargetID = DynamicValue.create(DYNAMIC_VALUE_KIND.NONE);
+			project.weapons.list = [Model.CommonSkillItem.createDefault() as Model.CommonSkillItem];
+			project.weapons.list[0].id = 1;
+			project.armors.list = [Model.CommonSkillItem.createDefault() as Model.CommonSkillItem];
+			project.armors.list[0].id = 1;
+			project.monsters.list = [Model.Monster.createDefault() as Model.Monster];
+			project.monsters.list[0].id = 1;
+			project.troops.list = [Model.Troop.createDefault() as Model.Troop];
+			project.troops.list[0].id = 1;
+			project.tilesets.list = [Model.Tileset.createDefault() as Model.Tileset];
+			project.tilesets.list[0].id = 1;
+			project.animations.list = [Model.Animation.createDefault() as Model.Animation];
+			project.animations.list[0].id = 1;
+			project.status.list.splice(1);
+			project.specialElements.autotiles = [Model.Autotile.createDefault() as Model.Autotile];
+			project.specialElements.walls = [Model.SpecialElement.createDefault() as Model.SpecialElement];
+			project.specialElements.mountains = [Model.Mountain.createDefault() as Model.Mountain];
+			project.specialElements.objects3D = [Model.Object3D.createDefault() as Model.Object3D];
+			for (const [k, v] of project.pictures.list.entries()) {
+				switch (k) {
+					case PICTURE_KIND.WINDOW_SKINS:
+						v.splice(2);
+						break;
+					case PICTURE_KIND.BARS:
+						break;
+					default:
+						v.splice(1);
+						break;
+				}
+			}
+			for (const [, v] of project.shapes.list.entries()) {
+				v.splice(1);
+			}
+			for (const [, v] of project.songs.list.entries()) {
+				v.splice(1);
+			}
+			project.videos.list = [];
+			project.fonts.list = [];
+			project.systems.windowSkins.splice(1);
+			project.systems.fontNames[0].isBasic = true;
+			project.systems.soundCancel.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.systems.soundCursor.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.systems.soundConfirmation.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.systems.soundImpossible.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.systems.skyboxes.splice(1);
+			project.systems.skyboxes[0].back = -1;
+			project.systems.skyboxes[0].front = -1;
+			project.systems.skyboxes[0].bot = -1;
+			project.systems.skyboxes[0].top = -1;
+			project.systems.skyboxes[0].left = -1;
+			project.systems.skyboxes[0].right = -1;
+			project.systems.currencies[0].pictureID = -1;
+			project.systems.currencies[1].pictureID = -1;
+			project.battleSystem.battleMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.battleSystem.battleVictory.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.battleSystem.battleLevelUp.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.battleSystem.elements.splice(1);
+			project.titleScreenGameOver.titleBackgroundImageID = -1;
+			project.titleScreenGameOver.titleMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.titleScreenGameOver.gameOverBackgroundImageID = -1;
+			project.titleScreenGameOver.gameOverMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			project.commonEvents.commonReactions.splice(1);
+			project.commonEvents.heroObject.states[0].graphicsID = -1;
+		}
 		await project.save();
 
 		// Update recent projects
@@ -224,6 +307,9 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 							</Flex>
 						</Flex>
 					)}
+					<Checkbox isChecked={blank} onChange={setBlank}>
+						{t('blank.project')}
+					</Checkbox>
 				</Flex>
 			</Dialog>
 			<Dialog

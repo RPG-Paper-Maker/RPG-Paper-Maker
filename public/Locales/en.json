@@ -2089,5 +2089,6 @@
 	"manual": "Manual",
 	"no.updates": "No updates",
 	"close.all": "Close all",
-	"get.unstable.versions": "Get unstable versions"
+	"get.unstable.versions": "Get unstable versions",
+	"blank.project": "Blank project"
 }

@@ -103,7 +103,12 @@ function DialogFontName({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 								/>
 							</Value>
 							<Label>
-								<RadioButton value={SELECTION_FONT_TYPE.CUSTOM}>{t('font.id')}</RadioButton>
+								<RadioButton
+									value={SELECTION_FONT_TYPE.CUSTOM}
+									disabled={Project.current!.fonts.list.length === 0}
+								>
+									{t('font.id')}
+								</RadioButton>
 							</Label>
 							<Value>
 								<Dropdown
@@ -111,7 +116,10 @@ function DialogFontName({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 									onChange={setCustomFontID}
 									options={Project.current!.fonts.list}
 									fillWidth
-									disabled={selectionFont !== SELECTION_FONT_TYPE.CUSTOM}
+									disabled={
+										selectionFont !== SELECTION_FONT_TYPE.CUSTOM ||
+										Project.current!.fonts.list.length === 0
+									}
 								/>
 							</Value>
 						</Form>

@@ -20,7 +20,7 @@ class Tileset extends Base {
 	public battleMap!: DynamicValue;
 
 	public static bindings: BindingType[] = [
-		['pictureID', 'pic', undefined, BINDING.NUMBER],
+		['pictureID', 'pic', -1, BINDING.NUMBER],
 		['battleMap', 'bm', DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 

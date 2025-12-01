@@ -343,7 +343,9 @@ class Map extends Base {
 			PICTURE_KIND.TILESETS,
 			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1,
 		);
-		this.materialTileset = await Manager.GL.loadTexture(await picture.getPathOrBase64());
+		this.materialTileset = picture
+			? await Manager.GL.loadTexture(await picture.getPathOrBase64())
+			: Manager.GL.loadTextureEmpty();
 		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 	}
 
@@ -474,7 +476,7 @@ class Map extends Base {
 					Project.current!.systems.skyboxes,
 					this.model.skyboxID.getFixNumberValue(),
 				) as Model.Skybox
-			).createTextures(),
+			)?.createTextures(),
 		);
 		this.scene.add(this.skyboxMesh);
 	}

@@ -35,6 +35,7 @@ function PanelLoading({ setLoaded }: Props) {
 	const initialize = async () => {
 		Constants.IS_MOBILE = Utils.isMobile();
 		Constants.IS_DESKTOP = Utils.isDesktop();
+		Paths.DIST = Paths.join(Constants.IS_DESKTOP ? window.env.appPath : window.__dirname, 'dist');
 		await initializeLocalFiles();
 		await initializeSystemInformation();
 		await initializeEngineSettings();

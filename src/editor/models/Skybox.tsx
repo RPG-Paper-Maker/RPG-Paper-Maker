@@ -48,18 +48,19 @@ class Skybox extends Base {
 		const textures = [] as THREE.MeshPhongMaterial[];
 		const sides = [this.left, this.right, this.top, this.bot, this.front, this.back];
 		for (const side of sides) {
-			const texture = Manager.GL.textureLoader.load(
-				await Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side).getPathOrBase64()
-			);
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side);
+			const texture = picture
+				? Manager.GL.textureLoader.load(await picture.getPathOrBase64())
+				: new THREE.Texture();
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.repeat.x = -1;
 			textures.push(
 				Manager.GL.createMaterial({
-					texture: texture,
+					texture,
 					side: THREE.BackSide,
 					shadows: false,
 					flipY: true,
-				})
+				}),
 			);
 		}
 		return textures;
