@@ -68,8 +68,8 @@ class GL {
 
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
 		return {
-			width: material?.map?.image.width || 0,
-			height: material?.map?.image.height || 0,
+			width: (material?.map?.image as HTMLImageElement).width || 0,
+			height: (material?.map?.image as HTMLImageElement).height || 0,
 		};
 	}
 

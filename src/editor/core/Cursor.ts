@@ -39,8 +39,8 @@ class Cursor {
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
-		const width = material.map!.image.width;
-		const height = material.map!.image.height;
+		const width = (material.map!.image as HTMLImageElement).width;
+		const height = (material.map!.image as HTMLImageElement).height;
 		const coefX = MapElement.Base.COEF_TEX / width;
 		const coefY = MapElement.Base.COEF_TEX / height;
 		const tx = coefX;
