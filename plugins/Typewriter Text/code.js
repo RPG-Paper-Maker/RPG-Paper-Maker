@@ -4,19 +4,19 @@ const textSpeed = Manager.Plugins.getParameter(pluginName, 'Text speed variable 
 const textSound = Manager.Plugins.getParameter(pluginName, 'Text sound variable ID');
 
 function updateWindow(id, x, y, width, height, wholeText, count) {
-	Manager.Songs.playSound(Core.Game.current.variables[textSound], 0.05);
+	Manager.Songs.playSound(Core.Game.current.variables.get(textSound), 0.05);
 	spawnWindow(id, x, y, height, width, wholeText.substring(0, count));
 	if (count < wholeText.length)
 		setTimeout(
 			updateWindow,
-			Math.max(Core.Game.current.variables[textSpeed] * 1000, 1),
+			Math.max(Core.Game.current.variables.get(textSpeed) * 1000, 1),
 			id,
 			x,
 			y,
 			width,
 			height,
 			wholeText,
-			++count,
+			++count
 		);
 	else
 		for (var i = 0; i < Manager.Stack.displayedPictures.length; i++)
@@ -25,10 +25,10 @@ function updateWindow(id, x, y, width, height, wholeText, count) {
 }
 
 Manager.Plugins.registerCommand(pluginName, 'Is done typing', (textID, varID) => {
-	Core.Game.current.variables[varID] = false;
+	Core.Game.current.variables.get(varID) = false;
 	for (var i = 0; i < Manager.Stack.displayedPictures.length; i++)
 		if (Manager.Stack.displayedPictures[i][0] === textID)
-			Core.Game.current.variables[varID] =
+			Core.Game.current.variables.get(varID) =
 				!!Manager.Stack.displayedPictures[i][1].typewriterTextPlugin_doneTyping;
 });
 
@@ -50,15 +50,23 @@ Manager.Plugins.registerCommand(pluginName, 'Show Text', (id, text, x, y, width,
 Core.WindowBox.prototype.draw = function (
 	isChoice = false,
 	windowDimension = this.windowDimension,
-	contentDimension = this.contentDimension,
+	contentDimension = this.contentDimension
 ) {
 	if (this.content)
 		this.content.drawBehind(contentDimension[0], contentDimension[1], contentDimension[2], contentDimension[3]);
 
 	// Single line alteration from source code
 	!!this.customWindowSkin
-		? this.customWindowSkin.drawBox(windowDimension, this.selected, this.bordersVisible)
-		: Data.Systems.getCurrentWindowSkin().drawBox(windowDimension, this.selected, this.bordersVisible);
+		? this.customWindowSkin.drawBox(
+				Core.Rectangle.createFromArray(windowDimension),
+				this.selected,
+				this.bordersVisible
+		  )
+		: Data.Systems.getCurrentWindowSkin().drawBox(
+				Core.Rectangle.createFromArray(windowDimension),
+				this.selected,
+				this.bordersVisible
+		  );
 
 	if (this.content) {
 		if (!isChoice && this.limitContent) {
@@ -68,7 +76,7 @@ Core.WindowBox.prototype.draw = function (
 				contentDimension[0],
 				contentDimension[1] - Common.ScreenResolution.getScreenY(this.padding[3] / 2),
 				contentDimension[2],
-				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3]),
+				contentDimension[3] + Common.ScreenResolution.getScreenY(this.padding[3])
 			);
 			Common.Platform.ctx.clip();
 		}
