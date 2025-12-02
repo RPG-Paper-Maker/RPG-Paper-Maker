@@ -2089,5 +2089,6 @@
 	"manual": "Ручной",
 	"no.updates": "Нет обновлений",
 	"close.all": "Закрыть всё",
-	"get.unstable.versions": "Получить нестабильные версии"
+	"get.unstable.versions": "Получить нестабильные версии",
+	"blank.project": "Пустой проект"
 }

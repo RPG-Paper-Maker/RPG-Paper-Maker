@@ -2089,5 +2089,6 @@
 	"manual": "手動",
 	"no.updates": "沒有更新",
 	"close.all": "全部關閉",
-	"get.unstable.versions": "取得不穩定版本"
+	"get.unstable.versions": "取得不穩定版本",
+	"blank.project": "空白專案"
 }

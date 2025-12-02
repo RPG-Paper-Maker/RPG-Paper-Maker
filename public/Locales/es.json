@@ -2089,5 +2089,6 @@
 	"manual": "Manual",
 	"no.updates": "Sin actualizaciones",
 	"close.all": "Cerrar todo",
-	"get.unstable.versions": "Obtener versiones inestables"
+	"get.unstable.versions": "Obtener versiones inestables",
+	"blank.project": "Proyecto en blanco"
 }

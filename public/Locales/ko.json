@@ -2089,5 +2089,6 @@
 	"manual": "수동",
 	"no.updates": "업데이트 없음",
 	"close.all": "모두 닫기",
-	"get.unstable.versions": "불안정한 버전 받기"
+	"get.unstable.versions": "불안정한 버전 받기",
+	"blank.project": "빈 프로젝트"
 }

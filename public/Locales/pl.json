@@ -2089,5 +2089,6 @@
 	"manual": "Ręczny",
 	"no.updates": "Brak aktualizacji",
 	"close.all": "Zamknij wszystko",
-	"get.unstable.versions": "Pobierz niestabilne wersje"
+	"get.unstable.versions": "Pobierz niestabilne wersje",
+	"blank.project": "Pusty projekt"
 }

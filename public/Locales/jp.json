@@ -2089,5 +2089,6 @@
 	"manual": "手動",
 	"no.updates": "更新はありません",
 	"close.all": "すべて閉じる",
-	"get.unstable.versions": "不安定版を取得"
+	"get.unstable.versions": "不安定版を取得",
+	"blank.project": "空のプロジェクト"
 }
