@@ -12,7 +12,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Paths } from '../../common';
-import { readPublicFile } from '../../common/Platform';
+import { openWebsite, readPublicFile } from '../../common/Platform';
 import { Project } from '../../core/Project';
 import Flex from '../Flex';
 import Dialog from './Dialog';
@@ -32,6 +32,8 @@ function DialogAbout({ setIsOpen }: Props) {
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [patreons, setPatreons] = useState<PatreonJSONType>();
+
+	const changelogsLink = 'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/web-3.0.0-master/changelogs';
 
 	const initialize = async () => {
 		setPatreons(JSON.parse(await readPublicFile(Paths.FILE_PATREON)));
@@ -56,7 +58,18 @@ function DialogAbout({ setIsOpen }: Props) {
 			initialWidth='600px'
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
-				<div>RPG Paper Maker {Project.VERSION}</div>
+				<div>
+					RPG Paper Maker {Project.VERSION}, changelogs:{' '}
+					<a
+						href=''
+						onClick={async (e) => {
+							e.preventDefault();
+							await openWebsite(changelogsLink);
+						}}
+					>
+						{changelogsLink}
+					</a>
+				</div>
 				http://rpg-paper-maker.com/
 				<div>{t('thanks.patreon')}:</div>
 				{patreons?.current}
