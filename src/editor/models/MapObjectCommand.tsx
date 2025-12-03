@@ -788,7 +788,7 @@ class MapObjectCommand extends Base {
 		texts: string[],
 		iterator: ITERATOR,
 		properties: Base[] = [],
-		parameters: Base[] = []
+		parameters: Base[] = [],
 	): ReactNode {
 		const style = { fontWeight: 'bold', color };
 		switch (this.kind) {
@@ -811,7 +811,7 @@ class MapObjectCommand extends Base {
 		properties: Base[] = [],
 		parameters: Base[] = [],
 		database: Base[] = [],
-		active = false
+		active = false,
 	): string {
 		const kind = this.command[iterator.i++] as number;
 		const value = this.command[iterator.i++];
@@ -891,7 +891,7 @@ class MapObjectCommand extends Base {
 		const selectionKind = this.command[iterator.i++] as number;
 		if (isBattleMap && selectionKind === 0) {
 			texts.push(
-				this.toStringDynamicValue(iterator, properties, parameters, Project.current!.battleSystem.battleMaps)
+				this.toStringDynamicValue(iterator, properties, parameters, Project.current!.battleSystem.battleMaps),
 			);
 		} else if (
 			(isBattleMap && (selectionKind === 1 || selectionKind === 2)) ||
@@ -924,7 +924,7 @@ class MapObjectCommand extends Base {
 			texts.push(
 				`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
 					.t('coordinates')
-					.toLowerCase()}`
+					.toLowerCase()}`,
 			);
 		} else if (isBattleMap && selectionKind === 3) {
 			texts.push(t('default'));
@@ -942,7 +942,7 @@ class MapObjectCommand extends Base {
 					return `${t('hero.enemy.instance.id')} ${this.toStringDynamicValue(
 						iterator,
 						properties,
-						parameters
+						parameters,
 					)}`;
 				default:
 					return '';
@@ -953,7 +953,7 @@ class MapObjectCommand extends Base {
 					return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
-						parameters
+						parameters,
 					)}`;
 				case 1:
 					return `${t('the.entire').toLowerCase()} ${i18next
@@ -1003,7 +1003,7 @@ class MapObjectCommand extends Base {
 		}
 		return [
 			`[${t('cancel.auto.index').toLowerCase()}=${cancelAutoIndex}, ${t(
-				'max.number.choices.display'
+				'max.number.choices.display',
 			)}=${maxChoices}]`,
 			choices.join(' | '),
 		];
@@ -1021,7 +1021,7 @@ class MapObjectCommand extends Base {
 		iterator: ITERATOR,
 		properties: Base[],
 		parameters: Base[],
-		dataBase: Base[] = []
+		dataBase: Base[] = [],
 	) {
 		const checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
@@ -1037,7 +1037,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.windowSkins
+			Project.current!.systems.windowSkins,
 		);
 		this.toStringSetDialogBoxOptionsSimple(texts, 'X', iterator, properties, parameters);
 		this.toStringSetDialogBoxOptionsSimple(texts, 'Y', iterator, properties, parameters);
@@ -1063,7 +1063,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.colors
+			Project.current!.systems.colors,
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
@@ -1071,7 +1071,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.colors
+			Project.current!.systems.colors,
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
@@ -1079,7 +1079,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.colors
+			Project.current!.systems.colors,
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
@@ -1087,7 +1087,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.fontSizes
+			Project.current!.systems.fontSizes,
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
@@ -1095,7 +1095,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.fontNames
+			Project.current!.systems.fontNames,
 		);
 		return texts;
 	}
@@ -1116,7 +1116,7 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.systems.colors
+				Project.current!.systems.colors,
 			)}`;
 			texts.push(`${operation} ${addingColor}`);
 		}
@@ -1125,7 +1125,7 @@ class MapObjectCommand extends Base {
 			time += `[${t('wait.end')}] `;
 		}
 		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			'seconds'
+			'seconds',
 		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
@@ -1142,7 +1142,7 @@ class MapObjectCommand extends Base {
 			time += `[${t('wait.end')}] `;
 		}
 		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			'seconds'
+			'seconds',
 		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
@@ -1155,15 +1155,15 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.systems.colors
-			)}`
+				Project.current!.systems.colors,
+			)}`,
 		);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			time += `[${t('wait.end')}] `;
 		}
 		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			'seconds'
+			'seconds',
 		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
@@ -1184,7 +1184,7 @@ class MapObjectCommand extends Base {
 							iterator,
 							properties,
 							parameters,
-							Project.current!.systems.colors
+							Project.current!.systems.colors,
 						)}`;
 						break;
 					case 1:
@@ -1193,13 +1193,13 @@ class MapObjectCommand extends Base {
 							properties,
 							parameters,
 							Project.current!.systems.colors,
-							true
+							true,
 						)}`;
 						break;
 				}
 				texts.push(texture);
 				texts.push(
-					`${t('number.per.portion')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+					`${t('number.per.portion')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`,
 				);
 				texts.push(`${t('ray.portions')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(`${t('size')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
@@ -1208,10 +1208,10 @@ class MapObjectCommand extends Base {
 				texts.push(`${t('initial.velocity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(`${t('velocity.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(
-					`${t('initial.y.rotation')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+					`${t('initial.y.rotation')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`,
 				);
 				texts.push(
-					`${t('y.rotation.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+					`${t('y.rotation.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`,
 				);
 				break;
 			}
@@ -1221,7 +1221,7 @@ class MapObjectCommand extends Base {
 			time += `[${t('wait.end')}] `;
 		}
 		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			'seconds'
+			'seconds',
 		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
@@ -1236,8 +1236,8 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.tilesets.list
-				)}`
+					Project.current!.tilesets.list,
+				)}`,
 			);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1247,8 +1247,8 @@ class MapObjectCommand extends Base {
 					properties,
 					parameters,
 					Project.current!.songs.getList(SONG_KIND.MUSIC),
-					true
-				)}`
+					true,
+				)}`,
 			);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1258,8 +1258,8 @@ class MapObjectCommand extends Base {
 					properties,
 					parameters,
 					Project.current!.songs.getList(SONG_KIND.BACKGROUND_SOUND),
-					true
-				)}`
+					true,
+				)}`,
 			);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1268,8 +1268,8 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.systems.cameraProperties
-				)}`
+					Project.current!.systems.cameraProperties,
+				)}`,
 			);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1280,7 +1280,7 @@ class MapObjectCommand extends Base {
 						iterator,
 						properties,
 						parameters,
-						Project.current!.systems.colors
+						Project.current!.systems.colors,
 					)}`;
 					break;
 				case 1:
@@ -1288,7 +1288,7 @@ class MapObjectCommand extends Base {
 						iterator,
 						properties,
 						parameters,
-						Project.current!.systems.skyboxes
+						Project.current!.systems.skyboxes,
 					)}`;
 					break;
 			}
@@ -1306,7 +1306,7 @@ class MapObjectCommand extends Base {
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.TILESETS),
-				true
+				true,
 			);
 			texts.push(`${t('tileset.id')} ${tileset} ${t('to').toLowerCase()} ${newtileset}`);
 		}
@@ -1315,14 +1315,14 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.specialElements.autotiles
+				Project.current!.specialElements.autotiles,
 			);
 			const newAutotile = this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.AUTOTILES),
-				true
+				true,
 			);
 			texts.push(`${t('autotile.id')} ${autotile} ${t('to').toLowerCase()} ${newAutotile}`);
 		}
@@ -1331,14 +1331,14 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.specialElements.walls
+				Project.current!.specialElements.walls,
 			);
 			const newWall = this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.WALLS),
-				true
+				true,
 			);
 			texts.push(`${t('wall.id')} ${wall} ${t('to').toLowerCase()} ${newWall}`);
 		}
@@ -1347,14 +1347,14 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.specialElements.objects3D
+				Project.current!.specialElements.objects3D,
 			);
 			const newObject3D = this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.OBJECTS_3D),
-				true
+				true,
 			);
 			texts.push(`${t('object.3d.id')} ${object3D} ${t('to').toLowerCase()} ${newObject3D}`);
 		}
@@ -1363,14 +1363,14 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.specialElements.mountains
+				Project.current!.specialElements.mountains,
 			);
 			const newMountain = this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.MOUNTAINS),
-				true
+				true,
 			);
 			texts.push(`${t('mountain.id')} ${mountain} ${t('to').toLowerCase()} ${newMountain}`);
 		}
@@ -1404,7 +1404,7 @@ class MapObjectCommand extends Base {
 		text += ` ${t('chronometer.id').toLowerCase()} ${id}`;
 		if (operation === 0) {
 			text += ` ${t('time').toLowerCase()} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-				'seconds'
+				'seconds',
 			).toLowerCase()}`;
 			if (Utils.initializeBoolCommand(this.command, iterator)) {
 				text += ` [${t('display.on.screen')}]`;
@@ -1413,7 +1413,7 @@ class MapObjectCommand extends Base {
 			text += ` [${t('stock.current.chronometer.value.in.variable.id')} ${this.toStringDynamicValue(
 				iterator,
 				properties,
-				parameters
+				parameters,
 			)}]`;
 		}
 		return [text];
@@ -1424,11 +1424,11 @@ class MapObjectCommand extends Base {
 		texts.push(
 			`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
 				.t('to.the.coordinates')
-				.toLowerCase()}`
+				.toLowerCase()}`,
 		);
 		this.toStringPosition(texts, iterator, properties, parameters);
 		texts.push(
-			`[${t('direction')}: ${t(Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name)}]`
+			`[${t('direction')}: ${t(Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name)}]`,
 		);
 		return texts;
 	}
@@ -1462,7 +1462,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.animations.list
+			Project.current!.animations.list,
 		)}`;
 		texts.push(`${objectID} ${animation}`);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1492,13 +1492,13 @@ class MapObjectCommand extends Base {
 			optionsMove.push(t('camera.orientation'));
 		}
 		const x = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name,
 		)}`;
 		const y = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name,
 		)}`;
 		const z = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
-			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name,
 		)}`;
 		texts.push(`${t('move')}: X: ${x}; Y: ${y}; Z: ${z} [${optionsMove.join(';')}]`);
 		const optionsRotation: string[] = [];
@@ -1509,15 +1509,15 @@ class MapObjectCommand extends Base {
 		const v = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)}°`;
 		texts.push(
 			`${t('rotation')}: ${t('horizontal.short')}: ${h}; ${t('vertical.short')}: ${v} [${optionsRotation.join(
-				';'
-			)}]`
+				';',
+			)}]`,
 		);
 		texts.push(
 			`${t('zoom')}: ${t('distance')}: ${operation} ${this.toStringDynamicValue(
 				iterator,
 				properties,
-				parameters
-			)}`
+				parameters,
+			)}`,
 		);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1535,8 +1535,8 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.commonEvents.commonObjects
-			)} ${t('to.the.coordinates').toLowerCase()}`
+				Project.current!.commonEvents.commonObjects,
+			)} ${t('to.the.coordinates').toLowerCase()}`,
 		);
 		this.toStringPosition(texts, iterator, properties, parameters);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1544,8 +1544,8 @@ class MapObjectCommand extends Base {
 				`[${t('stock.instance.id.in').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
-					parameters
-				)}]`
+					parameters,
+				)}]`,
 			);
 		}
 		return texts;
@@ -1561,7 +1561,7 @@ class MapObjectCommand extends Base {
 			properties,
 			parameters,
 			Project.current!.pictures.getList(PICTURE_KIND.PICTURES),
-			true
+			true,
 		);
 		const index = this.toStringDynamicValue(iterator, properties, parameters);
 		const origin = t(Base.TOP_LEFT_CENTER_OPTIONS[this.command[iterator.i++] as number].name);
@@ -1573,7 +1573,7 @@ class MapObjectCommand extends Base {
 		return [
 			`ID=${id} ${t('index').toLowerCase()}=${index}`,
 			`${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t('opacity')}=${opacity}% ${t(
-				'angle'
+				'angle',
 			)}=${angle}°`,
 		];
 	}
@@ -1589,8 +1589,8 @@ class MapObjectCommand extends Base {
 					properties,
 					parameters,
 					Project.current!.pictures.getList(PICTURE_KIND.PICTURES),
-					true
-				)}`
+					true,
+				)}`,
 			);
 		}
 		checked = Utils.initializeBoolCommand(this.command, iterator);
@@ -1632,13 +1632,13 @@ class MapObjectCommand extends Base {
 			case 0: {
 				texts.push(
 					`${t('play').toLowerCase()} ${t('video').toLowerCase()} ${Project.current!.videos.getByID(
-						this.command[iterator.i++] as number
-					).toString()}`
+						this.command[iterator.i++] as number,
+					).toString()}`,
 				);
 				const options: string[] = [];
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
 					options.push(
-						`${t('start')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`
+						`${t('start')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`,
 					);
 				}
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1710,7 +1710,7 @@ class MapObjectCommand extends Base {
 		texts.push(
 			`${isActivated ? `${t('with.id').toLowerCase()} ${idNumber}` : id} ${i18next
 				.t('with.volume')
-				.toLowerCase()}: ${volume}`
+				.toLowerCase()}: ${volume}`,
 		);
 		const isStart = Utils.initializeBoolCommand(this.command, iterator);
 		const start = this.toStringDynamicValue(iterator, properties, parameters);
@@ -1746,7 +1746,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.systems.detections
+					Project.current!.systems.detections,
 				)}`;
 				const options = [];
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
@@ -1769,7 +1769,7 @@ class MapObjectCommand extends Base {
 		event.name =
 			Base.getByID(
 				event.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
-				event.id
+				event.id,
 			)?.name ?? '';
 		str += ` ${t('with.event').toLowerCase()} ${event.toString()}`;
 		return [str];
@@ -1791,7 +1791,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.commonEvents.states
+			Project.current!.commonEvents.states,
 		);
 		let operation = '';
 		switch (this.command[iterator.i++]) {
@@ -1823,7 +1823,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.systems.currencies
+			Project.current!.systems.currencies,
 		);
 		const operation = this.toStringOperation(iterator);
 		const value = this.toStringDynamicValue(iterator, properties, parameters);
@@ -1869,7 +1869,7 @@ class MapObjectCommand extends Base {
 				str += `${t('create.new.instance.with.level').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
-					parameters
+					parameters,
 				)} ${t('in').toLowerCase()} `;
 				str += `${t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase()} ${t('of')} `;
 				const stockVariable = this.toStringDynamicValue(iterator, properties, parameters);
@@ -1878,14 +1878,14 @@ class MapObjectCommand extends Base {
 						iterator,
 						properties,
 						parameters,
-						Project.current!.heroes.list
+						Project.current!.heroes.list,
 					)}`;
 				} else {
 					str += `${t('monster.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters,
-						Project.current!.monsters.list
+						Project.current!.monsters.list,
 					)}`;
 				}
 				str += ` ${t('and.stock.in.variable')} ${stockVariable}`;
@@ -1895,7 +1895,7 @@ class MapObjectCommand extends Base {
 				str += `${t('add.enemy.instance.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
-					parameters
+					parameters,
 				)} ${t('in')} `;
 				str += t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase();
 				break;
@@ -1937,11 +1937,11 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.troops.list
+					Project.current!.troops.list,
 				)}`;
 				break;
 			case 1:
-				str = `${t('random').toLowerCase()} [${t('in.map.property')}}`;
+				str = `${t('random').toLowerCase()} [${t('in.map.property')}]`;
 				break;
 		}
 		str += ` ${t('with.battle.map').toLowerCase()}`;
@@ -1955,7 +1955,7 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.systems.colors
+				Project.current!.systems.colors,
 			)}`;
 		}
 		const end = this.command[iterator.i++] as number;
@@ -1965,7 +1965,7 @@ class MapObjectCommand extends Base {
 				iterator,
 				properties,
 				parameters,
-				Project.current!.systems.colors
+				Project.current!.systems.colors,
 			)}`;
 		}
 		texts.push(transition);
@@ -1981,7 +1981,7 @@ class MapObjectCommand extends Base {
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.FACESETS),
-				true
+				true,
 			);
 			const indexX = this.command[iterator.i++];
 			const indexY = this.command[iterator.i++];
@@ -1993,7 +1993,7 @@ class MapObjectCommand extends Base {
 				properties,
 				parameters,
 				Project.current!.pictures.getList(PICTURE_KIND.BATTLERS),
-				true
+				true,
 			)}`;
 		}
 		return [text];
@@ -2021,7 +2021,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.skills.list
+					Project.current!.skills.list,
 				)}`;
 				break;
 			case MONSTER_ACTION_KIND.USE_ITEM:
@@ -2029,7 +2029,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.items.list
+					Project.current!.items.list,
 				)}`;
 				break;
 			case MONSTER_ACTION_KIND.DO_NOTHING:
@@ -2053,7 +2053,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.battleSystem.statistics
+			Project.current!.battleSystem.statistics,
 		)}`;
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		const operation = this.toStringOperation(iterator);
@@ -2086,7 +2086,7 @@ class MapObjectCommand extends Base {
 		str += ` ${t('level').toLowerCase()} ${t('range').toLowerCase()} ${this.toStringDynamicValue(
 			iterator,
 			properties,
-			parameters
+			parameters,
 		)} ${t('to').toLowerCase()} `;
 		str += `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next
 			.t('total.experience')
@@ -2103,7 +2103,7 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.status.list
+			Project.current!.status.list,
 		)} ${t('to').toLowerCase()} ${selection}`;
 		return [str];
 	}
@@ -2135,14 +2135,14 @@ class MapObjectCommand extends Base {
 			iterator,
 			properties,
 			parameters,
-			Project.current!.battleSystem.equipments
+			Project.current!.battleSystem.equipments,
 		);
 		const isWeapon = Utils.initializeBoolCommand(this.command, iterator);
 		const weaponArmor = this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters,
-			isWeapon ? Project.current!.weapons.list : Project.current!.armors.list
+			isWeapon ? Project.current!.weapons.list : Project.current!.armors.list,
 		);
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		const options = [];
@@ -2151,7 +2151,7 @@ class MapObjectCommand extends Base {
 		}
 		const texts = [
 			`${t('equipment.id')} ${equipment} ${t('with').toLowerCase()} ${t(
-				isWeapon ? 'weapon.id' : 'armor.id'
+				isWeapon ? 'weapon.id' : 'armor.id',
 			)} ${weaponArmor} ${t('to').toLowerCase()} ${selection}`,
 		];
 		if (options.length > 0) {
@@ -2187,7 +2187,7 @@ class MapObjectCommand extends Base {
 						str += `${t('are.named').toLowerCase()} ${this.toStringDynamicValue(
 							iterator,
 							properties,
-							parameters
+							parameters,
 						)}`;
 						break;
 					case 1:
@@ -2200,7 +2200,7 @@ class MapObjectCommand extends Base {
 							iterator,
 							properties,
 							parameters,
-							Project.current!.skills.list
+							Project.current!.skills.list,
 						)}`;
 						break;
 					case 3:
@@ -2211,7 +2211,7 @@ class MapObjectCommand extends Base {
 									iterator,
 									properties,
 									parameters,
-									Project.current!.weapons.list
+									Project.current!.weapons.list,
 								)}`;
 								break;
 							case 1:
@@ -2219,7 +2219,7 @@ class MapObjectCommand extends Base {
 									iterator,
 									properties,
 									parameters,
-									Project.current!.armors.list
+									Project.current!.armors.list,
 								)}`;
 						}
 						break;
@@ -2228,7 +2228,7 @@ class MapObjectCommand extends Base {
 							iterator,
 							properties,
 							parameters,
-							Project.current!.status.list
+							Project.current!.status.list,
 						)}`;
 						break;
 					case 5:
@@ -2236,7 +2236,7 @@ class MapObjectCommand extends Base {
 							iterator,
 							properties,
 							parameters,
-							Project.current!.battleSystem.statistics
+							Project.current!.battleSystem.statistics,
 						)} `;
 						str += compareOptions[this.command[iterator.i++] as number].name;
 						str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
@@ -2249,7 +2249,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.systems.currencies
+					Project.current!.systems.currencies,
 				)}`;
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
@@ -2259,7 +2259,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.items.list
+					Project.current!.items.list,
 				)}`;
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
@@ -2269,7 +2269,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.weapons.list
+					Project.current!.weapons.list,
 				)}`;
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
@@ -2282,7 +2282,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.armors.list
+					Project.current!.armors.list,
 				)}`;
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
@@ -2295,7 +2295,7 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-					Project.current!.keyboard.list
+					Project.current!.keyboard.list,
 				)} ${t('is').toLowerCase()} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
@@ -2307,7 +2307,7 @@ class MapObjectCommand extends Base {
 				break;
 			case 9:
 				str += `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)} ${t(
-					'is.looking.at'
+					'is.looking.at',
 				).toLowerCase()} `;
 				str += t(Base.ORIENTATION_OPTIONS[this.command[iterator.i++] as number].name);
 				break;
@@ -2320,7 +2320,7 @@ class MapObjectCommand extends Base {
 				break;
 			case 11:
 				str += `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)} ${t(
-					'is.climbing'
+					'is.climbing',
 				).toLowerCase()} `;
 				break;
 		}
@@ -2335,7 +2335,7 @@ class MapObjectCommand extends Base {
 		return [
 			Base.getByIDOrFirst(
 				Project.current!.commonEvents.commonReactions,
-				this.command[iterator.i++] as number
+				this.command[iterator.i++] as number,
 			).toString() as string,
 		];
 	}
@@ -2367,7 +2367,7 @@ class MapObjectCommand extends Base {
 				str += `${t('random.number.between').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
-					parameters
+					parameters,
 				)} ${t('and').toLowerCase()} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
@@ -2375,7 +2375,7 @@ class MapObjectCommand extends Base {
 				str += `${t('object.id').toLowerCase()} ${this.toStringDynamicObject(
 					iterator,
 					properties,
-					parameters
+					parameters,
 				)} `;
 				str += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name);
 				break;
@@ -2397,13 +2397,13 @@ class MapObjectCommand extends Base {
 						break;
 				}
 				str += ` ${this.toStringDynamicValue(iterator, properties, parameters, list)} ${t(
-					'in.inventory'
+					'in.inventory',
 				).toLowerCase()}`;
 				break;
 			}
 			case 6:
 				str += `${t('total.currency').toLowerCase()} ${t(
-					Base.CURRENCY_OPTIONS[this.command[iterator.i++] as number].name
+					Base.CURRENCY_OPTIONS[this.command[iterator.i++] as number].name,
 				).toLowerCase()} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters, Project.current!.systems.currencies);
 				break;
@@ -2411,13 +2411,13 @@ class MapObjectCommand extends Base {
 				str += `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
-					parameters
+					parameters,
 				)} ${t('statistic.id').toLowerCase()} `;
 				str += this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
-					Project.current!.battleSystem.statistics
+					Project.current!.battleSystem.statistics,
 				);
 				break;
 			case 8:
@@ -2427,7 +2427,7 @@ class MapObjectCommand extends Base {
 				break;
 			case 9:
 				str += t(
-					Base.VARIABLE_OTHER_CHARACTERISTICS_OPTIONS[this.command[iterator.i++] as number].name
+					Base.VARIABLE_OTHER_CHARACTERISTICS_OPTIONS[this.command[iterator.i++] as number].name,
 				).toLowerCase();
 				break;
 		}
