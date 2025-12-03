@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Bounce, toast, ToastOptions } from 'react-toastify';
 
 export const TOASTER_OPTIONS: ToastOptions<unknown> = {
@@ -12,6 +13,6 @@ export const TOASTER_OPTIONS: ToastOptions<unknown> = {
 	transition: Bounce,
 };
 
-export const notifySuccess = (text: string) => {
+export const notifySuccess = (text: string | ReactNode) => {
 	toast.success(text, { ...TOASTER_OPTIONS, autoClose: 5000 });
 };

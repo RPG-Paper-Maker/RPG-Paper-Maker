@@ -11,9 +11,10 @@
 
 import localforage from 'localforage';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
-import { checkFileExists, createFolder, readPublicFile } from '../../common/Platform';
+import { Constants, IO, LOCAL_FORAGE, notifySuccess, Paths, Utils } from '../../common';
+import { checkFileExists, createFolder, openWebsite, readPublicFile } from '../../common/Platform';
 import { LocalFile } from '../../core/LocalFile';
 import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
@@ -28,6 +29,8 @@ type Props = {
 };
 
 function PanelLoading({ setLoaded }: Props) {
+	const { t } = useTranslation();
+
 	const [displayLoader, setDisplayLoader] = useState(false);
 
 	const dispatch = useDispatch();
@@ -127,6 +130,30 @@ function PanelLoading({ setLoaded }: Props) {
 	const initializeEngineVersion = async () => {
 		Project.VERSION = await readPublicFile(Paths.FILE_VERSION);
 		document.title = `RPG Paper Maker - ${Project.VERSION}`;
+		if (EngineSettings.current.lastEngineVersion !== Project.VERSION) {
+			const version = EngineSettings.current.lastEngineVersion;
+			EngineSettings.current.lastEngineVersion = Project.VERSION;
+			await EngineSettings.current.save();
+			if (version !== null) {
+				const link = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/web-3.0.0-master/changelogs/${Project.VERSION}.md`;
+				notifySuccess(
+					<div>
+						{t('engine.updated.successfully', {
+							version: Project.VERSION,
+						})}
+						<a
+							href=''
+							onClick={async (e) => {
+								e.preventDefault();
+								await openWebsite(link);
+							}}
+						>
+							{link}
+						</a>
+					</div>,
+				);
+			}
+		}
 	};
 
 	const loadProjects = async () => {

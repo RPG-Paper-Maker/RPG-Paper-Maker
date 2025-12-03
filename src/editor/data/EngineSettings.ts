@@ -16,6 +16,7 @@ import { Keyboard, ProjectPreview } from '../models';
 class EngineSettings extends Serializable {
 	public static current: EngineSettings;
 
+	public lastEngineVersion!: string | null;
 	public recentProjects!: ProjectPreview[];
 	public currentLanguage!: string;
 	public showTipsGridHeight!: boolean;
@@ -28,6 +29,7 @@ class EngineSettings extends Serializable {
 	public getUnstableVersions!: boolean;
 
 	public static readonly bindings: BindingType[] = [
+		['lastEngineVersion', 'lev', null, BINDING.STRING],
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
 		['currentLanguage', 'cl', undefined, BINDING.STRING],
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
