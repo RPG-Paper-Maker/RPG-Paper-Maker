@@ -32,7 +32,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 
 	const isReactionDisabled = useMemo(
 		() => selectedReaction === null || selectedReaction.id === -1,
-		[selectedReaction]
+		[selectedReaction],
 	);
 
 	const initialize = () => {
@@ -103,19 +103,17 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 			<Flex one>
 				<Flex column spacedLarge fillWidth>
 					<Groupbox title={t('parameters')} disabled={isReactionDisabled}>
-						<Flex one fillHeight>
-							<Tree
-								constructorType={Model.CreateParameter}
-								list={parameters}
-								onListUpdated={handleUpdateParameters}
-								minHeight={TREES_MIN_HEIGHT}
-								disabled={isReactionDisabled}
-								noScrollOnForce
-								scrollable
-								canBeEmpty
-								cannotUpdateListSize
-							/>
-						</Flex>
+						<Tree
+							constructorType={Model.CreateParameter}
+							list={parameters}
+							onListUpdated={handleUpdateParameters}
+							height={TREES_MIN_HEIGHT}
+							disabled={isReactionDisabled}
+							noScrollOnForce
+							scrollable
+							canBeEmpty
+							cannotUpdateListSize
+						/>
 					</Groupbox>
 					<Checkbox isChecked={isBlock} onChange={handleChangeBlock} disabled={isReactionDisabled}>
 						{t('block.hero.when.reaction')}
