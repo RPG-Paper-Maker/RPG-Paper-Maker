@@ -236,7 +236,7 @@ const createWindow = async () => {
 				}
 			})();
 			if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
-				createSplash('Finishing updater update. Please do not close...');
+				createSplash('Finishing updater update. Please do NOT close.');
 				try {
 					await emptyFolder(`${basePath}/../../RPG Paper Maker`);
 				} catch (e) {
@@ -294,7 +294,7 @@ const createWindow = async () => {
 				}
 			} else {
 				// Update updater
-				createSplash('Updating the updater. Please do not close...');
+				createSplash('Updating the updater. Please do NOT close.');
 				const updaterZipName = (() => {
 					switch (process.platform) {
 						case 'win32':
