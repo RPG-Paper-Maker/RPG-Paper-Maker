@@ -172,6 +172,20 @@ const PanelMapObject = forwardRef(
 			}
 		};
 
+		const handlePasteState = (node: Node) => {
+			if (!selectedState) {
+				return;
+			}
+			const state = node.content as Model.MapObjectState;
+			for (const n of events) {
+				const event = n.content as Model.MapObjectEvent;
+				const copiedReaction = event.reactions.get('' + selectedState.id)?.clone();
+				if (copiedReaction) {
+					event.reactions.set('' + state.id, copiedReaction);
+				}
+			}
+		};
+
 		const handleUpdateProperties = () => {
 			if (saveOnUpdate) {
 				object.properties = Node.createListFromNodes(statesRef.current.properties);
@@ -512,6 +526,7 @@ const PanelMapObject = forwardRef(
 											onSelectedItem={handleSelectedItemState}
 											onCreateItem={handleCreateState}
 											onListUpdated={handleUpdateStates}
+											onPasteItem={handlePasteState}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
 											cannotUpdateListSize
