@@ -2090,5 +2090,6 @@
 	"no.updates": "Aucune mise à jour",
 	"close.all": "Tout fermer",
 	"get.unstable.versions": "Obtenir les versions instables",
-	"blank.project": "Projet vierge"
+	"blank.project": "Projet vierge",
+	"engine.updated.successfully": "RPG Paper Maker a été mis à jour avec succès vers la version {{version}}. Vous pouvez consulter le changelog :"
 }

@@ -2090,5 +2090,6 @@
 	"no.updates": "Немає оновлень",
 	"close.all": "Закрити все",
 	"get.unstable.versions": "Отримати нестабільні версії",
-	"blank.project": "Порожній проєкт"
+	"blank.project": "Порожній проєкт",
+	"engine.updated.successfully": "RPG Paper Maker успішно оновлено до версії {{version}}. Ви можете переглянути список змін:"
 }

@@ -2091,5 +2091,5 @@
 	"close.all": "Close all",
 	"get.unstable.versions": "Get unstable versions",
 	"blank.project": "Blank project",
-	"engine.updated.successfully": "RPG Paper Maker updated successfully to version {{version}}. You can have a look to the changelog:"
+	"engine.updated.successfully": "RPG Paper Maker updated successfully to version {{version}}. You can have a look to the changelog: "
 }
