@@ -370,7 +370,7 @@ const createWindow = async () => {
 					? screen.getPrimaryDisplay().size.height - 100
 					: isEngineDownloaded
 						? 150
-						: 300,
+						: 310,
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: true,
