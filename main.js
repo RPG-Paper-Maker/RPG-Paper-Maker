@@ -316,10 +316,25 @@ const createWindow = async () => {
 				const blob = Buffer.from(await res.arrayBuffer());
 				await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
 				await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
+				await fs.unlink(`${basePath}/../${updaterZipName}`);
 				await copyFolder(
 					`${__dirname}/dist`,
 					`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
 				);
+				if (process.platform === 'win32') {
+					if (await exists(`${basePath}/unins000.exe`)) {
+						await fs.copyFile(
+							`${basePath}/unins000.exe`,
+							`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+						);
+					}
+					if (await exists(`${basePath}/unins000.dat`)) {
+						await fs.copyFile(
+							`${basePath}/unins000.exe`,
+							`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+						);
+					}
+				}
 				const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
 					switch (process.platform) {
 						case 'win32':
