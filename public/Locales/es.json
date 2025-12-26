@@ -769,7 +769,7 @@
 	"error": "Error",
 	"tileset": "Tileset",
 	"project.without.name": "Proyecto sin nombre",
-	"project.without.name.folder": "proyecto-sin-nombre",
+	"project.without.name.folder": "Proyecto-sin-nombre",
 	"in.progress": "En progreso",
 	"warning.maximum": "Este máximo es incorrecto porque podría borrar IDs. Por favor, reordena tus cosas correctamente.",
 	"game.over": "Fin del juego",

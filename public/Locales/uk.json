@@ -769,7 +769,7 @@
 	"error": "Помилка",
 	"tileset": "Набір тайлів",
 	"project.without.name": "Проєкт без назви",
-	"project.without.name.folder": "project-without-name",
+	"project.without.name.folder": "Project-without-name",
 	"in.progress": "В процесі",
 	"warning.maximum": "Максимум неправильний, бо №№ будуть видалені. Будь ласка, змініть порядок елементів належним чином.",
 	"game.over": "Кінець гри",

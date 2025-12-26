@@ -76,10 +76,7 @@ class Utils {
 	}
 
 	static formatProjectFolderName(name: string) {
-		return name
-			.replace(/ /g, '-')
-			.replace(/[^a-zA-Z0-9-]/g, '')
-			.toLowerCase();
+		return name.replace(/ /g, '-').replace(/[^a-zA-Z0-9-]/g, '');
 	}
 
 	static sanitizeFilename(name: string): string {

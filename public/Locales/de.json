@@ -769,7 +769,7 @@
 	"error": "Fehler",
 	"tileset": "Tileset",
 	"project.without.name": "Projekt ohne Name",
-	"project.without.name.folder": "projekt-ohne-name",
+	"project.without.name.folder": "Projekt-ohne-name",
 	"in.progress": "In Arbeit",
 	"warning.maximum": "Dieser Maximalwert ist nicht korrekt, da er IDs löschen wird. Bitte ordne dein Material richtig.",
 	"game.over": "Spielende",
