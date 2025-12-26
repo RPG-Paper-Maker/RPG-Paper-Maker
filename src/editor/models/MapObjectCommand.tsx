@@ -588,10 +588,10 @@ class MapObjectCommand extends Base {
 		const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
 		switch (this.kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
-				texts = this.toStringShowText(iterator, parameters, properties);
+				texts = this.toStringShowText(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
-				texts = this.toStringDisplayChoices(iterator, parameters, properties);
+				texts = this.toStringDisplayChoices(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -614,71 +614,71 @@ class MapObjectCommand extends Base {
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
-				texts = this.toStringInputNumber(iterator, parameters, properties);
+				texts = this.toStringInputNumber(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
-				texts = this.toStringSetDialogBoxOptions(iterator, parameters, properties);
+				texts = this.toStringSetDialogBoxOptions(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
-				texts = this.toStringChangeScreenTone(iterator, parameters, properties);
+				texts = this.toStringChangeScreenTone(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
-				texts = this.toStringShakeScreen(iterator, parameters, properties);
+				texts = this.toStringShakeScreen(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
-				texts = this.toStringFlashScreen(iterator, parameters, properties);
+				texts = this.toStringFlashScreen(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
-				texts = this.toStringChangeWeather(iterator, parameters, properties);
+				texts = this.toStringChangeWeather(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
-				texts = this.toStringChangeMapProperties(iterator, parameters, properties);
+				texts = this.toStringChangeMapProperties(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
-				texts = this.toStringSwitchTexture(iterator, parameters, properties);
+				texts = this.toStringSwitchTexture(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.WAIT:
-				texts = this.toStringWait(iterator, parameters, properties);
+				texts = this.toStringWait(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
-				texts = this.toStringChangeChronometer(iterator, parameters, properties);
+				texts = this.toStringChangeChronometer(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
-				texts = this.toStringTeleportObject(iterator, parameters, properties);
+				texts = this.toStringTeleportObject(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
-				texts = this.toStringMoveObject(iterator, parameters, properties);
+				texts = this.toStringMoveObject(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
-				texts = this.toStringDisplayAnAnimation(iterator, parameters, properties);
+				texts = this.toStringDisplayAnAnimation(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
-				texts = this.toStringMoveCamera(iterator, parameters, properties);
+				texts = this.toStringMoveCamera(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
-				texts = this.toStringCreateObjectInMap(iterator, parameters, properties);
+				texts = this.toStringCreateObjectInMap(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
-				texts = this.toStringRemoveObjectFromMap(iterator, parameters, properties);
+				texts = this.toStringRemoveObjectFromMap(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
-				texts = this.toStringDisplayAPicture(iterator, parameters, properties);
+				texts = this.toStringDisplayAPicture(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
-				texts = this.toStringSetMoveTurnAPicture(iterator, parameters, properties);
+				texts = this.toStringSetMoveTurnAPicture(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
-				texts = this.toStringRemoveAPicture(iterator, parameters, properties);
+				texts = this.toStringRemoveAPicture(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
-				texts = this.toStringPlayAVideo(iterator, parameters, properties);
+				texts = this.toStringPlayAVideo(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
-				texts = this.toStringStartShopMenu(iterator, parameters, properties);
+				texts = this.toStringStartShopMenu(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
-				texts = this.toStringEnterANameMenu(iterator, parameters, properties);
+				texts = this.toStringEnterANameMenu(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
@@ -686,86 +686,86 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
-				texts = this.toStringPlaySong(iterator, parameters, properties);
+				texts = this.toStringPlaySong(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
-				texts = this.toStringStopSong(iterator, parameters, properties);
+				texts = this.toStringStopSong(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SEND_EVENT:
-				texts = this.toStringSendEvent(iterator, parameters, properties);
+				texts = this.toStringSendEvent(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
-				texts = this.toStringChangeState(iterator, parameters, properties);
+				texts = this.toStringChangeState(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
-				texts = this.toStringChangeProperty(iterator, parameters, properties);
+				texts = this.toStringChangeProperty(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
-				texts = this.toStringModifyCurrency(iterator, parameters, properties);
+				texts = this.toStringModifyCurrency(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
-				texts = this.toStringModifyInventory(iterator, parameters, properties);
+				texts = this.toStringModifyInventory(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
-				texts = this.toStringModifyTeam(iterator, parameters, properties);
+				texts = this.toStringModifyTeam(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
-				texts = this.toStringAllowForbidSavesMainMenu(iterator, parameters, properties);
+				texts = this.toStringAllowForbidSavesMainMenu(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.START_BATTLE:
-				texts = this.toStringStartBattle(iterator, parameters, properties);
+				texts = this.toStringStartBattle(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
-				texts = this.toStringChangeBattlerGraphics(iterator, parameters, properties);
+				texts = this.toStringChangeBattlerGraphics(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
-				texts = this.toStringDisplayHideABattler(iterator, parameters, properties);
+				texts = this.toStringDisplayHideABattler(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
-				texts = this.toStringTransformABattler(iterator, parameters, properties);
+				texts = this.toStringTransformABattler(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
-				texts = this.toStringForceAnAction(iterator, parameters, properties);
+				texts = this.toStringForceAnAction(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
-				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
+				texts = this.toStringChangeAStatistic(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
-				texts = this.toStringChangeExperienceCurve(iterator, parameters, properties);
+				texts = this.toStringChangeExperienceCurve(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_STATUS:
-				texts = this.toStringChangeStatus(iterator, parameters, properties);
+				texts = this.toStringChangeStatus(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
-				texts = this.toStringChangeASkill(iterator, parameters, properties);
+				texts = this.toStringChangeASkill(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_NAME:
-				texts = this.toStringChangeName(iterator, parameters, properties);
+				texts = this.toStringChangeName(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
-				texts = this.toStringChangeClass(iterator, parameters, properties);
+				texts = this.toStringChangeClass(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
-				texts = this.toStringChangeEquipment(iterator, parameters, properties);
+				texts = this.toStringChangeEquipment(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.LABEL:
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
-				texts = this.toStringLabel(iterator, parameters, properties);
+				texts = this.toStringLabel(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				texts = this.toStringCallACommonReaction(iterator);
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
-				texts = this.toStringChangeVariables(iterator, parameters, properties);
+				texts = this.toStringChangeVariables(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SCRIPT:
-				texts = this.toStringScript(iterator, parameters, properties);
+				texts = this.toStringScript(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.PLUGIN:
-				texts = this.toStringPlugin(iterator, parameters, properties);
+				texts = this.toStringPlugin(iterator, properties, parameters);
 				break;
 		}
 		return (
@@ -793,7 +793,7 @@ class MapObjectCommand extends Base {
 		const style = { fontWeight: 'bold', color };
 		switch (this.kind) {
 			case EVENT_COMMAND_KIND.IF:
-				return <div style={style}>{this.toStringIf(iterator, parameters, properties)}</div>;
+				return <div style={style}>{this.toStringIf(iterator, properties, parameters)}</div>;
 			case EVENT_COMMAND_KIND.COMMENT:
 				return <div style={style}>{this.command[0] as string}</div>;
 			default:
