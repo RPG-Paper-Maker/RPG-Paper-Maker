@@ -214,8 +214,18 @@ function Tree({
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
 
 	const scrollToSelectedElement = () => {
-		if (selectedElementRef.current) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+		if (listRef.current && selectedElementRef.current) {
+			const containerRect = listRef.current.getBoundingClientRect();
+			const itemRect = selectedElementRef.current.getBoundingClientRect();
+			const targetScrollTop =
+				listRef.current.scrollTop +
+				(itemRect.top - containerRect.top) -
+				containerRect.height / 2 +
+				itemRect.height / 2;
+			listRef.current.scrollTo({
+				top: targetScrollTop,
+				behavior: 'smooth',
+			});
 		}
 	};
 
