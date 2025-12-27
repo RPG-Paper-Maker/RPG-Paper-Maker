@@ -18,7 +18,7 @@ import { Serializable } from '../core/Serializable';
 import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
-	public static readonly MAX_SAVES = 50;
+	public static readonly MAX_SAVES = 150;
 	public static isProcessing = false;
 
 	private static getPathStates(): string {
@@ -70,7 +70,7 @@ class UndoRedo {
 	private static async apply(
 		position: Position,
 		element: MapElement.Base | Model.CommonObject | null,
-		kind: ELEMENT_MAP_KIND
+		kind: ELEMENT_MAP_KIND,
 	) {
 		if (Scene.Map.current) {
 			const mapPortion = Scene.Map.current.getMapPortionByPosition(position);

@@ -25,7 +25,7 @@ import {
 } from 'react-icons/ai';
 import { BiCube, BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaPlug, FaRegKeyboard } from 'react-icons/fa';
+import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaBackward, FaPlug, FaRegKeyboard } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuLanguages, LuMountain, LuRocket, LuSaveAll } from 'react-icons/lu';
@@ -72,6 +72,7 @@ import {
 	setCurrentTreeMapTag,
 	setLoading,
 	setLoadingBar,
+	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setOpenLoading,
 	setProjectMenuIndex,
@@ -401,6 +402,14 @@ function MainMenuBar() {
 		if (Project.current) {
 			await Project.current?.treeMaps.saveAllTags();
 			dispatch(triggerTreeMap());
+		}
+	};
+
+	const handleBackSaveProject = async () => {
+		if (Project.current) {
+			await Project.current?.treeMaps.backSaveAllTags();
+			dispatch(triggerTreeMap());
+			dispatch(setNeedsReloadMap());
 		}
 	};
 
@@ -743,6 +752,12 @@ function MainMenuBar() {
 					disabled: !canSaveAll,
 					onClick: handleSaveAll,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.S],
+				},
+				{
+					title: t('back.last.save'),
+					icon: <FaBackward />,
+					disabled: !canSaveAll,
+					onClick: handleBackSaveProject,
 				},
 				{
 					title: `${t('deploy')}...`,

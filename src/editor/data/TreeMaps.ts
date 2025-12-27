@@ -72,7 +72,19 @@ class TreeMaps extends Serializable {
 	}
 
 	async saveAllTags() {
-		await this.saveAllTagsRecursive(this.tree);
+		await this.backSaveAllTagsRecursive(this.tree);
+		await this.save();
+	}
+
+	private async backSaveAllTagsRecursive(nodes: Node[]) {
+		for (const node of nodes) {
+			await (node.content as Model.TreeMapTag).backSaveFiles();
+			await this.backSaveAllTagsRecursive(node.children);
+		}
+	}
+
+	async backSaveAllTags() {
+		await this.backSaveAllTagsRecursive(this.tree);
 		await this.save();
 	}
 
@@ -83,7 +95,7 @@ class TreeMaps extends Serializable {
 					node.children,
 					list,
 					level === 0 ? '' : `${basePath}${node.content.name}/`,
-					level + 1
+					level + 1,
 				);
 			} else {
 				list.push(Model.Base.create(node.content.id, `${basePath}${node.content.name}`));

@@ -76,6 +76,17 @@ class TreeMapTag extends Base {
 		this.saved = true;
 	}
 
+	async backSaveFiles() {
+		if (Project.current && !this.isFolder()) {
+			const pathTemp = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(this.id), Paths.TEMP);
+			const fileNames = await getFiles(pathTemp);
+			for (const fileName of fileNames) {
+				await removeFile(Paths.join(pathTemp, fileName));
+			}
+		}
+		this.saved = true;
+	}
+
 	copy(tag: TreeMapTag): void {
 		super.copy(tag);
 		this.saved = tag.saved;
