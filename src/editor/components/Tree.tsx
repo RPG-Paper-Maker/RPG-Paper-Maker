@@ -383,7 +383,7 @@ function Tree({
 					firstCloned = cloned;
 				}
 				cloned.parent = currentSelectedItemNode.parent;
-				ArrayUtils.insertAt(currentList, ++index, cloned);
+				ArrayUtils.insertAt(currentList, index++, cloned);
 				if (!doNotGenerateIDOnPaste) {
 					generateNewIDsToAllNodes(cloned);
 				}
