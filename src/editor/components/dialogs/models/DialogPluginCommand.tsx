@@ -91,7 +91,6 @@ function DialogPluginCommand({ isOpen, setIsOpen, model, onAccept, onReject }: P
 							<Tree
 								constructorType={Model.PluginDefaultParameter}
 								list={parameters}
-								noScrollOnForce
 								byIndex
 								cannotUpdateListSize
 							/>

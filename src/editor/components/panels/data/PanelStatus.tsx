@@ -159,7 +159,6 @@ const PanelStatus = forwardRef((props, ref) => {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectStatus}
 					onListUpdated={handleListUpdated}
-					noScrollOnForce
 					scrollable
 					showEditName
 					isLocalization
@@ -252,7 +251,6 @@ const PanelStatus = forwardRef((props, ref) => {
 										height={TREES_MIN_HEIGHT}
 										onListUpdated={handleReleaseStartTurnListUpdated}
 										disabled={isStatusDisabled || !isReleaseStartTurn}
-										noScrollOnForce
 										scrollable
 										applyDefault
 										byIndex
@@ -322,7 +320,6 @@ const PanelStatus = forwardRef((props, ref) => {
 										list={effects}
 										onListUpdated={handleUpdateEffects}
 										disabled={isStatusDisabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex
@@ -337,7 +334,6 @@ const PanelStatus = forwardRef((props, ref) => {
 										list={characteristics}
 										onListUpdated={handleUpdateCharacteristics}
 										disabled={isStatusDisabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex

@@ -374,7 +374,6 @@ const inject = Manager.Plugins.inject;
 													minWidth={TREES_MIN_WIDTH}
 													onSelectedItem={handleSelectPlugin}
 													disabled={pluginOnlineDisabled}
-													noScrollOnForce
 													scrollable
 													cannotAdd
 													cannotDelete

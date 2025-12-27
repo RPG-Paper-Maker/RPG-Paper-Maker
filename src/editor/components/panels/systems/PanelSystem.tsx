@@ -435,31 +435,21 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('font.sizes')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.FontSize}
-										list={fontSizes}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.FontSize} list={fontSizes} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('font.names')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.FontName}
-										list={fontNames}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.FontName} list={fontNames} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('colors')} fillWidth>
 								<Flex one fillHeight>
-									<Tree constructorType={Model.Color} list={colors} noScrollOnForce scrollable />
+									<Tree constructorType={Model.Color} list={colors} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -468,31 +458,21 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('window.skins')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.WindowSkin}
-										list={windowSkins}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.WindowSkin} list={windowSkins} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('currencies')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.Currency}
-										list={currencies}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.Currency} list={currencies} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('speeds')} fillWidth>
 								<Flex one fillHeight>
-									<Tree constructorType={Model.Speed} list={speeds} noScrollOnForce scrollable />
+									<Tree constructorType={Model.Speed} list={speeds} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -501,36 +481,21 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('detections')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.Detection}
-										list={detections}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.Detection} list={detections} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('camera.properties')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.CameraProperty}
-										list={cameraProperties}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.CameraProperty} list={cameraProperties} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('frequencies')} fillWidth>
 								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.Frequency}
-										list={frequencies}
-										noScrollOnForce
-										scrollable
-									/>
+									<Tree constructorType={Model.Frequency} list={frequencies} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -539,7 +504,7 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('skyboxes')} fillWidth>
 								<Flex one fillHeight>
-									<Tree constructorType={Model.Skybox} list={skyboxes} noScrollOnForce scrollable />
+									<Tree constructorType={Model.Skybox} list={skyboxes} scrollable />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -549,7 +514,6 @@ const PanelSystem = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.InitialPartyMember}
 										list={initialPartyMembers}
-										noScrollOnForce
 										scrollable
 									/>
 								</Flex>

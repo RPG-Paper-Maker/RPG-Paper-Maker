@@ -51,7 +51,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setSelectionTitleScreenBackgroundType(
 			titleScreenGameOver.isTitleBackgroundImage
 				? SELECTION_BACKGROUND_TYPE.IMAGE
-				: SELECTION_BACKGROUND_TYPE.VIDEO
+				: SELECTION_BACKGROUND_TYPE.VIDEO,
 		);
 		setTitleBackgroundImageID(titleScreenGameOver.titleBackgroundImageID);
 		setTitleBackgroundVideoID(titleScreenGameOver.titleBackgroundVideoID);
@@ -61,7 +61,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setSelectionGameOverBackgroundType(
 			titleScreenGameOver.isGameOverBackgroundImage
 				? SELECTION_BACKGROUND_TYPE.IMAGE
-				: SELECTION_BACKGROUND_TYPE.VIDEO
+				: SELECTION_BACKGROUND_TYPE.VIDEO,
 		);
 		setGameOverBackgroundImageID(titleScreenGameOver.gameOverBackgroundImageID);
 		setGameOverBackgroundVideoID(titleScreenGameOver.gameOverBackgroundVideoID);
@@ -153,7 +153,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.TitleCommand}
 									list={titleCommands}
-									noScrollOnForce
 									scrollable
 									doNotShowID
 								/>
@@ -227,7 +226,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.GameOverCommand}
 									list={gameOverCommands}
-									noScrollOnForce
 									scrollable
 									doNotShowID
 								/>

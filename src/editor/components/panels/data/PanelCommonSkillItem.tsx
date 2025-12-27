@@ -98,7 +98,6 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectElement}
 					onListUpdated={handleListUpdated}
-					noScrollOnForce
 					scrollable
 					showEditName
 					isLocalization

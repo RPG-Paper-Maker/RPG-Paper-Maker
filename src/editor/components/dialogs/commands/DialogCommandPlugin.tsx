@@ -87,9 +87,9 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 							param.defaultValue.copy(defaultValues[index]);
 						}
 						return param;
-					}
-				) ?? []
-			)
+					},
+				) ?? [],
+			),
 		);
 	};
 
@@ -160,7 +160,6 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 							constructorType={Model.PluginParameter}
 							list={parameters}
 							disabled={disabledParameters}
-							noScrollOnForce
 							cannotAdd
 							cannotDelete
 							cannotDragDrop

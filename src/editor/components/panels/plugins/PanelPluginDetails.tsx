@@ -115,7 +115,6 @@ const PanelPluginDetails = forwardRef(
 										list={parameters}
 										disabled={disabled}
 										onListUpdated={onParametersUpdated}
-										noScrollOnForce
 										cannotDelete
 										cannotAdd
 										cannotDragDrop
@@ -148,7 +147,7 @@ const PanelPluginDetails = forwardRef(
 				</Flex>
 			)
 		);
-	}
+	},
 );
 
 PanelPluginDetails.displayName = 'PanelPluginDetails';

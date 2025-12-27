@@ -92,7 +92,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 						list={reactions}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectReaction}
-						noScrollOnForce
 						scrollable
 						showEditName
 						applyDefault
@@ -109,7 +108,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 							onListUpdated={handleUpdateParameters}
 							height={TREES_MIN_HEIGHT}
 							disabled={isReactionDisabled}
-							noScrollOnForce
 							scrollable
 							canBeEmpty
 							cannotUpdateListSize

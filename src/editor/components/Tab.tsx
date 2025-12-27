@@ -67,7 +67,7 @@ function Tab({
 
 	const scrollToSelectedElement = () => {
 		if (!noScrollToSelectedElement && selectedElementRef.current) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 		}
 	};
 

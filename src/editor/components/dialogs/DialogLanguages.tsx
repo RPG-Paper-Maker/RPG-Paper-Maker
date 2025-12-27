@@ -61,7 +61,6 @@ function DialogLanguages({ setIsOpen }: Props) {
 				constructorType={Model.Language}
 				list={languages}
 				onListUpdated={handleListUpdated}
-				noScrollOnForce
 				scrollable
 				applyDefault
 			/>

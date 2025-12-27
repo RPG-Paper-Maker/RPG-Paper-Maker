@@ -206,13 +206,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				</Groupbox>
 				<Groupbox title={t('battle.maps')}>
 					<Flex one style={TREES_STYLE_HEIGHT}>
-						<Tree
-							constructorType={Model.BattleMap}
-							list={battleMaps}
-							noScrollOnForce
-							scrollable
-							cannotUpdateListSize
-						/>
+						<Tree constructorType={Model.BattleMap} list={battleMaps} scrollable cannotUpdateListSize />
 					</Flex>
 				</Groupbox>
 				<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
@@ -228,7 +222,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 									constructorType={Model.Element}
 									list={elements}
 									onListUpdated={updateElements}
-									noScrollOnForce
 									scrollable
 								/>
 							</Flex>
@@ -241,7 +234,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 									constructorType={Model.Statistic}
 									list={statistics}
 									onListUpdated={updateStatistics}
-									noScrollOnForce
 									scrollable
 								/>
 							</Flex>
@@ -250,12 +242,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('weapons.kind')} fillWidth>
 							<Flex one fillHeight>
-								<Tree
-									constructorType={Model.WeaponArmorKind}
-									list={weaponsKind}
-									noScrollOnForce
-									scrollable
-								/>
+								<Tree constructorType={Model.WeaponArmorKind} list={weaponsKind} scrollable />
 							</Flex>
 						</Groupbox>
 					</Flex>
@@ -264,12 +251,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('common.battle.commands')} fillWidth>
 							<Flex one fillHeight>
-								<Tree
-									constructorType={Model.BattleCommand}
-									list={battleCommands}
-									noScrollOnForce
-									scrollable
-								/>
+								<Tree constructorType={Model.BattleCommand} list={battleCommands} scrollable />
 							</Flex>
 						</Groupbox>
 					</Flex>
@@ -280,7 +262,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 									constructorType={Model.Localization}
 									list={equipments}
 									onListUpdated={updateEquipments}
-									noScrollOnForce
 									scrollable
 								/>
 							</Flex>
@@ -289,12 +270,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('armors.kind')} fillWidth>
 							<Flex one fillHeight>
-								<Tree
-									constructorType={Model.WeaponArmorKind}
-									list={armorsKind}
-									noScrollOnForce
-									scrollable
-								/>
+								<Tree constructorType={Model.WeaponArmorKind} list={armorsKind} scrollable />
 							</Flex>
 						</Groupbox>
 					</Flex>

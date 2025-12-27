@@ -54,7 +54,6 @@ const PanelClasses = forwardRef((props, ref) => {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectClass}
 					onListUpdated={handleListUpdated}
-					noScrollOnForce
 					scrollable
 					showEditName
 					isLocalization

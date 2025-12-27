@@ -61,7 +61,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	const isAnimationDisabled = useMemo(
 		() => selectedAnimation === null || selectedAnimation.id === -1,
-		[selectedAnimation]
+		[selectedAnimation],
 	);
 	const isFrameDisabled = useMemo(() => selectedFrame === null || selectedFrame.id === -1, [selectedFrame]);
 
@@ -297,7 +297,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 			list={animationFrameEffects}
 			minWidth={TREES_MIN_WIDTH}
 			onListUpdated={handleFrameEffectsUpdated}
-			noScrollOnForce
 			scrollable
 			applyDefault
 			byIndex
@@ -316,7 +315,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 						onSelectedItem={handleSelectAnimation}
 						onListUpdated={handleListUpdated}
 						disabled={isPlaying}
-						noScrollOnForce
 						scrollable
 						showEditName
 						isLocalization
@@ -352,7 +350,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 									onListUpdated={handleFramesListUpdated}
 									onSelectedItem={handleSelectFrame}
 									minWidth={TREES_SMALL_MIN_WIDTH}
-									noScrollOnForce
 									scrollable
 									applyDefault
 									disabled={isAnimationDisabled || isPlaying}

@@ -40,15 +40,15 @@ const PanelModels = forwardRef((props, ref) => {
 
 	const isModelDisabled = useMemo(
 		() => selectionType === SELECTION_KIND.LIST && (selectedModel === null || selectedModel.id === -1),
-		[selectedModel, selectionType]
+		[selectedModel, selectionType],
 	);
 	const typeDefault = useMemo(
 		() => (selectionType === SELECTION_KIND.DEFAULT ? BUTTON_TYPE.PRIMARY : BUTTON_TYPE.DEFAULT),
-		[selectionType]
+		[selectionType],
 	);
 	const typeHero = useMemo(
 		() => (selectionType === SELECTION_KIND.HERO ? BUTTON_TYPE.PRIMARY : BUTTON_TYPE.DEFAULT),
-		[selectionType]
+		[selectionType],
 	);
 
 	const initialize = () => {
@@ -119,7 +119,6 @@ const PanelModels = forwardRef((props, ref) => {
 						setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectModel}
-						noScrollOnForce
 						scrollable
 						showEditName
 						applyDefault

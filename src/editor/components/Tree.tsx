@@ -73,7 +73,6 @@ type Props = {
 	disabled?: boolean;
 	scrollable?: boolean;
 	multipleSelection?: boolean;
-	noScrollOnForce?: boolean;
 	applyDefault?: boolean;
 	noFirstSelection?: boolean;
 	isLocalization?: boolean;
@@ -127,7 +126,6 @@ function Tree({
 	disabled = false,
 	scrollable = false,
 	multipleSelection = false,
-	noScrollOnForce = false,
 	applyDefault = false,
 	noFirstSelection = false,
 	isLocalization = false,
@@ -215,9 +213,9 @@ function Tree({
 
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
 
-	const scrollToSelectedElement = (force = false) => {
-		if (selectedElementRef.current && (force || !noScrollOnForce)) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+	const scrollToSelectedElement = () => {
+		if (selectedElementRef.current) {
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 		}
 	};
 
@@ -654,30 +652,30 @@ function Tree({
 	}, []);
 
 	useEffect(() => {
-		const handleKeyDown = async (event: KeyboardEvent) => {
+		const handleKeyDown = (event: KeyboardEvent) => {
 			if (isFocused) {
 				const currentTime = new Date().getTime();
 				switch (event.key.toUpperCase()) {
 					case 'ARROWUP':
 						if (currentSelectedItemNode?.previous) {
 							event.preventDefault();
+							setCurrentSelectedItemNode(currentSelectedItemNode.previous);
 							if (currentTime >= RPM.treeArrowTime + RPM.TREE_ARROW_LIMIT) {
 								RPM.treeArrowTime = currentTime;
-								setCurrentSelectedItemNode(currentSelectedItemNode.previous);
 								onSelectedItem?.(currentSelectedItemNode.previous, true);
-								scrollToSelectedElement(true);
 							}
+							setNeedScroll(true);
 						}
 						break;
 					case 'ARROWDOWN':
 						if (currentSelectedItemNode?.next) {
 							event.preventDefault();
+							setCurrentSelectedItemNode(currentSelectedItemNode.next);
 							if (currentTime >= RPM.treeArrowTime + RPM.TREE_ARROW_LIMIT) {
 								RPM.treeArrowTime = currentTime;
-								setCurrentSelectedItemNode(currentSelectedItemNode.next);
 								onSelectedItem?.(currentSelectedItemNode.next, true);
-								scrollToSelectedElement(true);
 							}
+							setNeedScroll(true);
 						}
 						break;
 					default:
@@ -686,9 +684,25 @@ function Tree({
 			}
 			return true;
 		};
+		const handleKeyUp = (event: KeyboardEvent) => {
+			if (isFocused) {
+				switch (event.key.toUpperCase()) {
+					case 'ARROWUP':
+					case 'ARROWDOWN':
+						if (currentSelectedItemNode) {
+							onSelectedItem?.(currentSelectedItemNode, true);
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		};
 		window.addEventListener('keydown', handleKeyDown);
+		window.addEventListener('keyup', handleKeyUp);
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
+			window.removeEventListener('keyup', handleKeyUp);
 		};
 	}, [list, isFocused, currentSelectedItemNode, setCurrentSelectedItemNode]);
 

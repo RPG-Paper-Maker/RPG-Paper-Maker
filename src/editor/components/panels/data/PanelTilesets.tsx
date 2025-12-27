@@ -73,7 +73,6 @@ const PanelTilesets = forwardRef((props, ref) => {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectTileset}
 					onListUpdated={handleListUpdated}
-					noScrollOnForce
 					scrollable
 					showEditName
 					isLocalization

@@ -88,16 +88,16 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	}, [kind]);
 	const mountainPicture = useMemo(
 		() => Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain?.pictureID ?? -1),
-		[selectedMountain]
+		[selectedMountain],
 	);
 	const isAutotileDisabled = useMemo(
 		() => selectedAutotile === null || selectedAutotile.id === -1,
-		[selectedAutotile]
+		[selectedAutotile],
 	);
 	const isWallDisabled = useMemo(() => selectedWall === null || selectedWall.id === -1, [selectedWall]);
 	const isMountainDisabled = useMemo(
 		() => selectedMountain === null || selectedMountain.id === -1,
-		[selectedMountain]
+		[selectedMountain],
 	);
 
 	const initialize = () => {
@@ -273,7 +273,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		onSelectedItem: (node: Node | null) => void,
 		onListUpdated: () => void,
 		children: ReactNode | ReactNode[],
-		constructorType = Model.Base
+		constructorType = Model.Base,
 	) => (
 		<Flex fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
@@ -283,7 +283,6 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					minWidth={TREES_LARGE_MIN_WIDTH}
 					onSelectedItem={onSelectedItem}
 					onListUpdated={kind === undefined ? undefined : onListUpdated}
-					noScrollOnForce
 					scrollable
 					cannotAdd={kind === undefined}
 					cannotDelete={kind === undefined}
@@ -305,7 +304,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 		onListUpdated: () => void,
 		pictureID: number,
 		pictureKind: PICTURE_KIND,
-		constructorType = Model.Base
+		constructorType = Model.Base,
 	) =>
 		getTabContentWithChildren(
 			title,
@@ -313,7 +312,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 			onSelectedItem,
 			onListUpdated,
 			<TextureCollisionsEditor pictureID={pictureID} pictureKind={pictureKind} />,
-			constructorType
+			constructorType,
 		);
 
 	const getTilesetsContent = () =>
@@ -323,7 +322,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 			handleSelectTileset,
 			() => {},
 			selectedTileset?.pictureID ?? -1,
-			PICTURE_KIND.TILESETS
+			PICTURE_KIND.TILESETS,
 		);
 
 	const getCharactersContent = () =>
@@ -333,7 +332,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 			handleSelectCharacter,
 			() => {},
 			selectedCharacter?.id ?? -1,
-			PICTURE_KIND.CHARACTERS
+			PICTURE_KIND.CHARACTERS,
 		);
 
 	const getAutotilesContent = () =>
@@ -379,7 +378,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					/>
 				)
 			) : null,
-			Model.Autotile
+			Model.Autotile,
 		);
 
 	const getWallsContent = () =>
@@ -413,7 +412,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					<TextureCollisionsEditor pictureID={selectedWall.pictureID} pictureKind={PICTURE_KIND.WALLS} />
 				)
 			) : null,
-			Model.SpecialElement
+			Model.SpecialElement,
 		);
 
 	const getMountainsContent = () =>
@@ -451,7 +450,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					)}
 				</Flex>
 			) : null,
-			Model.Mountain
+			Model.Mountain,
 		);
 
 	const getObjectsContent = () =>
@@ -486,7 +485,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 					</Flex>
 					<PreviewerObject3D sceneID='dialog-object-3D-preview' objectID={selectedObject.id} />
 				</Flex>
-			) : null
+			) : null,
 		);
 
 	const getContent = () => {

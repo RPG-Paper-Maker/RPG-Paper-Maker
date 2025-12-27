@@ -45,7 +45,7 @@ const PanelTroops = forwardRef((props, ref) => {
 	const isTroopDisabled = useMemo(() => selectedTroop === null || selectedTroop.id === -1, [selectedTroop]);
 	const isReactionDisabled = useMemo(
 		() => selectedReaction === null || selectedReaction.id === -1,
-		[selectedReaction]
+		[selectedReaction],
 	);
 
 	const initialize = () => {
@@ -132,7 +132,6 @@ const PanelTroops = forwardRef((props, ref) => {
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectTroop}
 						onListUpdated={handleListUpdated}
-						noScrollOnForce
 						scrollable
 						showEditName
 						isLocalization
@@ -154,7 +153,6 @@ const PanelTroops = forwardRef((props, ref) => {
 												constructorType={Model.TroopMonster}
 												list={monsters}
 												onListUpdated={handleMonstersListUpdated}
-												noScrollOnForce
 												scrollable
 												applyDefault
 												disabled={isTroopDisabled}
@@ -180,7 +178,6 @@ const PanelTroops = forwardRef((props, ref) => {
 											height={TREES_LARGE_MIN_HEIGHT}
 											minWidth={TREES_MIN_WIDTH}
 											disabled={isTroopDisabled}
-											noScrollOnForce
 											scrollable
 											applyDefault
 											showEditName

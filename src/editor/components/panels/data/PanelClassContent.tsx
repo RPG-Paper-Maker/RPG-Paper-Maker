@@ -65,12 +65,12 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
 			ClassSkill.selectedClassSkills = selectedClass.skills;
 			setExperienceBase(
-				selectedClass.experienceBase === -1 ? upperClass!.experienceBase : selectedClass.experienceBase
+				selectedClass.experienceBase === -1 ? upperClass!.experienceBase : selectedClass.experienceBase,
 			);
 			setExperienceInflation(
 				selectedClass.experienceInflation === -1
 					? upperClass!.experienceInflation
-					: selectedClass.experienceInflation
+					: selectedClass.experienceInflation,
 			);
 			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression, false));
 			setCharacteristics(Node.createList(selectedClass.characteristics, false));
@@ -323,7 +323,6 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							onListUpdated={handleUpdateStatisticProgression}
 							minHeight={TREES_MIN_HEIGHT}
 							disabled={disabled}
-							noScrollOnForce
 							scrollable
 							canBeEmpty
 							cannotUpdateListSize
@@ -339,7 +338,6 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							list={characteristics}
 							onListUpdated={handleUpdateCharacteristics}
 							disabled={disabled}
-							noScrollOnForce
 							scrollable
 							canBeEmpty
 							byIndex
@@ -355,7 +353,6 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							onListUpdated={handleUpdateSkills}
 							minHeight={TREES_MIN_HEIGHT}
 							disabled={disabled}
-							noScrollOnForce
 							scrollable
 							canBeEmpty
 							cannotUpdateListSize

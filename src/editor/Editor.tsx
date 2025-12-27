@@ -35,6 +35,9 @@ function Editor() {
 			Inputs.isALT = e.altKey;
 			Inputs.isCTRL = e.ctrlKey;
 			Inputs.isSHIFT = e.shiftKey;
+			if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+				e.preventDefault();
+			}
 		};
 		const handleKeyUp = (e: globalThis.KeyboardEvent) => {
 			Inputs.isALT = e.altKey;

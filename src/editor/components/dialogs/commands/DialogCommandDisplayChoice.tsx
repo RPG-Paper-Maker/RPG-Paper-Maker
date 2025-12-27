@@ -114,7 +114,6 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 							minHeight={TREES_MIN_HEIGHT}
 							doNotShowID
 							byIndex
-							noScrollOnForce
 							scrollable
 						/>
 					</Groupbox>

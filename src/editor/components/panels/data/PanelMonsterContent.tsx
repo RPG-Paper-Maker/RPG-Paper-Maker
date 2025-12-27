@@ -36,7 +36,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 
 	const currenciesTitles = useMemo(
 		() => Project.current!.systems.currencies.map((currency, index) => Base.create(index, currency.getName())),
-		[]
+		[],
 	);
 
 	const update = async () => {
@@ -73,7 +73,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 				progression = ProgressionTable.createProgression(
 					DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
 					DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
-					0
+					0,
 				);
 				selectedMonster.currencies.set(currency.id, progression);
 			}
@@ -109,7 +109,6 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 								onListUpdated={handleUpdateLoots}
 								height={TREES_MIN_HEIGHT}
 								disabled={disabled}
-								noScrollOnForce
 								scrollable
 								canBeEmpty
 								byIndex
@@ -125,7 +124,6 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 						onListUpdated={handleUpdateActions}
 						height={TREES_MIN_HEIGHT}
 						disabled={disabled}
-						noScrollOnForce
 						scrollable
 						canBeEmpty
 						byIndex

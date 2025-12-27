@@ -64,41 +64,25 @@ const PanelMainMenu = forwardRef((props, ref) => {
 							constructorType={Model.Localization}
 							list={itemsTypes}
 							onListUpdated={updateItemsTypes}
-							noScrollOnForce
 							scrollable
 						/>
 					</Groupbox>
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('inventory.filters')} fillWidth>
-						<Tree
-							constructorType={Model.InventoryFilter}
-							list={inventoryFilters}
-							noScrollOnForce
-							scrollable
-						/>
+						<Tree constructorType={Model.InventoryFilter} list={inventoryFilters} scrollable />
 					</Groupbox>
 				</Flex>
 			</Flex>
 			<Flex one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('main.menu.commands')} fillWidth>
-						<Tree
-							constructorType={Model.MainMenuCommand}
-							list={mainMenuCommands}
-							noScrollOnForce
-							scrollable
-						/>
+						<Tree constructorType={Model.MainMenuCommand} list={mainMenuCommands} scrollable />
 					</Groupbox>
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('heroes.statistics.to.display')} fillWidth>
-						<Tree
-							constructorType={Model.HeroStatisticDisplay}
-							list={heroesStatisticsDisplay}
-							noScrollOnForce
-							scrollable
-						/>
+						<Tree constructorType={Model.HeroStatisticDisplay} list={heroesStatisticsDisplay} scrollable />
 					</Groupbox>
 				</Flex>
 			</Flex>

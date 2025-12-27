@@ -423,7 +423,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					onListUpdated={handleListUpdated}
 					onDeleteItem={handleDeletePlugin}
 					triggerUpdate={triggerUpdate}
-					noScrollOnForce
 					scrollable
 					applyDefault
 					canBeEmpty
@@ -559,7 +558,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 							constructorType={Model.PluginDefaultParameter}
 							list={defaultParameters}
 							onListUpdated={handleDefaultParametersUpdated}
-							noScrollOnForce
 							byIndex
 							doNotShowID
 							cannotUpdateListSize
@@ -572,7 +570,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 							constructorType={Model.PluginCommand}
 							list={commands}
 							onListUpdated={handleCommandsUpdated}
-							noScrollOnForce
 							cannotUpdateListSize
 						/>
 					</Flex>
@@ -606,7 +603,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					list={folders}
 					width={TREES_LARGE_MIN_WIDTH}
 					onSelectedItem={handleSelectSourceCode}
-					noScrollOnForce
 					scrollable
 					cannotAdd
 					cannotDelete

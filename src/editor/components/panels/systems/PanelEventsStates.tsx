@@ -75,7 +75,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 									list={events}
 									minWidth={TREES_MIN_WIDTH}
 									onSelectedItem={handleSelectEvent}
-									noScrollOnForce
 									scrollable
 									showEditName
 									applyDefault
@@ -91,7 +90,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 										list={parameters}
 										onListUpdated={handleUpdateParameters}
 										disabled={isEventDisabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										cannotUpdateListSize
@@ -105,14 +103,7 @@ const PanelEventsStates = forwardRef((props, ref) => {
 			<Flex one>
 				<Groupbox title={t('states')} fillWidth>
 					<Flex one fillHeight>
-						<Tree
-							list={states}
-							minWidth={TREES_MIN_WIDTH}
-							noScrollOnForce
-							scrollable
-							showEditName
-							doNotOpenDialog
-						/>
+						<Tree list={states} minWidth={TREES_MIN_WIDTH} scrollable showEditName doNotOpenDialog />
 					</Flex>
 				</Groupbox>
 			</Flex>

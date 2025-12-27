@@ -55,7 +55,6 @@ const PanelHeroes = forwardRef((props, ref) => {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectHero}
 					onListUpdated={handleListUpdated}
-					noScrollOnForce
 					scrollable
 					showEditName
 					isLocalization

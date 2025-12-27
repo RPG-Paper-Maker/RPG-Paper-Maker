@@ -328,7 +328,6 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										list={price}
 										onListUpdated={handleUpdatePrice}
 										disabled={disabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex
@@ -346,7 +345,6 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										onListUpdated={handleUpdateCosts}
 										disabled={disabled}
 										defaultNewModel={defaultCost}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex
@@ -367,7 +365,6 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										list={effects}
 										onListUpdated={handleUpdateEffects}
 										disabled={disabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex
@@ -386,7 +383,6 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										list={characteristics}
 										onListUpdated={handleUpdateCharacteristics}
 										disabled={disabled}
-										noScrollOnForce
 										scrollable
 										canBeEmpty
 										byIndex

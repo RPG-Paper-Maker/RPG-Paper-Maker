@@ -76,7 +76,6 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 						constructorType={Model.Keyboard}
 						list={engineControls}
 						height={TREES_MIN_HEIGHT}
-						noScrollOnForce
 						scrollable
 						applyDefault
 						cannotAdd
@@ -93,7 +92,6 @@ function DialogKeyboardControls({ setIsOpen }: Props) {
 									list={gameControls}
 									onListUpdated={handleUpdateGameControls}
 									minHeight={TREES_MIN_HEIGHT}
-									noScrollOnForce
 									scrollable
 									applyDefault
 								/>

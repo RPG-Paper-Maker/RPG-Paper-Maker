@@ -37,8 +37,8 @@ const getScrollableParent = (element: HTMLElement | ParentNode | null): Window |
 	!element || element === document.body
 		? window
 		: isScrollable(element as HTMLElement)
-		? (element as HTMLElement)
-		: getScrollableParent(element.parentNode);
+			? (element as HTMLElement)
+			: getScrollableParent(element.parentNode);
 
 type Props = {
 	selectedID: number;
@@ -141,7 +141,7 @@ function Dropdown({
 		if (container && dropdown && !noWidthChange) {
 			const v = `${Math.max(
 				container.getBoundingClientRect().width,
-				dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW
+				dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW,
 			)}px`;
 			if (fillWidth) {
 				container.style.minWidth = v;
@@ -197,7 +197,7 @@ function Dropdown({
 	}, [isOpen, preSelectedID]);
 
 	useEffect(() => {
-		preSelectedElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+		preSelectedElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 	}, [preSelectedID]);
 
 	useEffect(() => {
@@ -213,8 +213,8 @@ function Dropdown({
 		translateOptions
 			? t(selected.getName())
 			: displayIDs && selectedOrEmpty
-			? selected.toStringNameID()
-			: selected.getName();
+				? selected.toStringNameID()
+				: selected.getName();
 
 	const getDropdownItems = () =>
 		options.map((option) => (
@@ -228,7 +228,7 @@ function Dropdown({
 						disabled: disabledIds.includes(option.id),
 						whiteSpaceNowrap: !fillWidth,
 					},
-					'element'
+					'element',
 				)}
 				key={option.id}
 				onClick={() => handleClickOption(option)}
