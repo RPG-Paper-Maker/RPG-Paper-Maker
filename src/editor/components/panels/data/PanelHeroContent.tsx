@@ -54,15 +54,15 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			setFacesetTexture(
 				(await Project.current!.pictures.getByID(
 					PICTURE_KIND.FACESETS,
-					selectedHero.idFaceset
-				)?.getPathOrBase64()) ?? ''
+					selectedHero.idFaceset,
+				)?.getPathOrBase64()) ?? '',
 			);
 			setBattlerID(selectedHero.idBattler);
 			setBattlerTexture(
 				(await Project.current!.pictures.getByID(
 					PICTURE_KIND.BATTLERS,
-					selectedHero.idBattler
-				)?.getPathOrBase64()) ?? ''
+					selectedHero.idBattler,
+				)?.getPathOrBase64()) ?? '',
 			);
 		} else {
 			setClassID(1);
@@ -94,7 +94,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 		setFacesetIndexY(indexY);
 		setFacesetTexture('');
 		setFacesetTexture(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, id)?.getPathOrBase64()) ?? ''
+			(await Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, id)?.getPathOrBase64()) ?? '',
 		);
 	};
 
@@ -105,7 +105,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 		setBattlerID(id);
 		setBattlerTexture('');
 		setBattlerTexture(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, id)?.getPathOrBase64()) ?? ''
+			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, id)?.getPathOrBase64()) ?? '',
 		);
 	};
 
@@ -133,6 +133,8 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 					<Groupbox title={t('faceset')} disabled={disabled}>
 						<AssetSelector
 							selectedID={facesetID}
+							indexX={facesetIndexX}
+							indexY={facesetIndexY}
 							onChange={handleFacesetChange}
 							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
 							kind={PICTURE_KIND.FACESETS}
@@ -148,7 +150,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 											Project.current!.systems.facesetsSize * facesetIndexX,
 											Project.current!.systems.facesetsSize * facesetIndexY,
 											Project.current!.systems.facesetsSize,
-											Project.current!.systems.facesetsSize
+											Project.current!.systems.facesetsSize,
 										)
 									}
 									scale={1}
