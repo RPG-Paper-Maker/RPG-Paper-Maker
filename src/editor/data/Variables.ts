@@ -63,7 +63,7 @@ class Variables extends Serializable {
 		for (const [index, page] of this.pages.entries()) {
 			page.name = `${t('page')} ${index + 1}`;
 		}
-		this.getVariableByID(1)!.name = t('lucas_instance_id');
+		this.getVariableByID(1)!.name = t('lucas.instance.id');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
