@@ -32,7 +32,7 @@ import { CommandProps } from '../models';
 
 const TREES_STYLE_HEIGHT = { height: '100px' };
 
-function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandPlugin({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [pluginID, setPluginID] = useStateNumber();
@@ -115,15 +115,13 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('plugin')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'

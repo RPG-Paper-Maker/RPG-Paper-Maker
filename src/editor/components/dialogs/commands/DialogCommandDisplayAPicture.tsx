@@ -28,7 +28,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandDisplayAPicture({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [imageID] = useStateDynamicValue();
@@ -90,15 +90,13 @@ function DialogCommandDisplayAPicture({ commandKind, isOpen, setIsOpen, list, on
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('display.a.picture')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

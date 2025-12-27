@@ -24,7 +24,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandChangeName({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeName({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
@@ -58,15 +58,13 @@ function DialogCommandChangeName({ commandKind, isOpen, setIsOpen, list, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.name')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

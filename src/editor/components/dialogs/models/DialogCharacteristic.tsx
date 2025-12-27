@@ -33,14 +33,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogCharacteristic({ setIsOpen, model, onAccept, onReject }: Props) {
 	const characteristic = model as Model.Characteristic;
 
 	const { t } = useTranslation();
@@ -76,10 +75,10 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 		() =>
 			Project.current!.battleSystem.getWeaponsArmorsByEquipmentID(
 				beginEquipmentID,
-				beginWeaponArmorSelection === 0
+				beginWeaponArmorSelection === 0,
 			),
 
-		[beginEquipmentUpdate, beginWeaponArmorSelection]
+		[beginEquipmentUpdate, beginWeaponArmorSelection],
 	);
 
 	const initialize = () => {
@@ -176,10 +175,8 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	useLayoutEffect(() => {
 		if (beginWeaponArmorID.kind === DYNAMIC_VALUE_KIND.DATABASE && beginEquipmentDatabase.length === 0) {
@@ -399,7 +396,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 							databaseOptions={Project.current!.battleSystem.getWeaponsArmorsByEquipmentID(
 								beginEquipmentID,
-								beginWeaponArmorSelection === 0
+								beginWeaponArmorSelection === 0,
 							)}
 							disabled={kind !== CHARACTERISTIC_KIND.BEGIN_EQUIPMENT}
 						/>
@@ -440,7 +437,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 	return (
 		<Dialog
 			title={`${t('set.characteristic')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='700px'

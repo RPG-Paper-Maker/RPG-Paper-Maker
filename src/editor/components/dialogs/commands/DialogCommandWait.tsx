@@ -22,7 +22,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandWait({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandWait({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [time] = useStateDynamicValue();
@@ -51,15 +51,13 @@ function DialogCommandWait({ commandKind, isOpen, setIsOpen, list, onAccept, onR
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('wait')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

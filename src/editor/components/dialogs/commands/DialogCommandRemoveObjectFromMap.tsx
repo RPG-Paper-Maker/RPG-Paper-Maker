@@ -22,7 +22,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandRemoveObjectFromMap({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandRemoveObjectFromMap({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [objectID] = useStateDynamicValue();
@@ -52,16 +52,14 @@ function DialogCommandRemoveObjectFromMap({ commandKind, isOpen, setIsOpen, list
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<>
 			<Dialog
 				title={`${t('remove.object.from.map')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}

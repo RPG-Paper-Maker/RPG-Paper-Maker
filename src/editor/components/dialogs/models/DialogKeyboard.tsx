@@ -23,14 +23,13 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 import DialogKeyboardEnterShortcuts from './DialogKeyboardEnterShortcuts';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogKeyboard({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogKeyboard({ setIsOpen, model, onAccept, onReject }: Props) {
 	const keyboard = model as Model.Keyboard;
 
 	const { t } = useTranslation();
@@ -67,16 +66,14 @@ function DialogKeyboard({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<>
 			<Dialog
 				title={`${t('set.keyboard')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				initialWidth='400px'

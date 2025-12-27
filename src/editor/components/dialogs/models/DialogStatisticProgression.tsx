@@ -36,7 +36,6 @@ enum SELECTION_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -44,7 +43,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogStatisticProgression({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const statisticProgression = model as Model.StatisticProgression;
 
 	const { t } = useTranslation();
@@ -71,7 +70,7 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 	const handleAccept = async () => {
 		if (isNew || statisticProgression.id !== statisticID) {
 			const statistic = Model.StatisticProgression.selectedClassStatisticsProgression.find(
-				(s) => s.id === statisticID
+				(s) => s.id === statisticID,
 			);
 			if (statistic) {
 				dispatch(showWarning(t('id.already.exists.list')));
@@ -107,15 +106,13 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.statistic.progression')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'

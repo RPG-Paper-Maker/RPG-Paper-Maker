@@ -24,7 +24,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [choices, setChoices] = useState<Node[]>([]);
@@ -88,15 +88,13 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('display.choices')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'

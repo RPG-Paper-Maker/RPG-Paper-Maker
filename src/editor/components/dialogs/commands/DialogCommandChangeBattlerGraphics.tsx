@@ -28,7 +28,7 @@ import { CommandProps } from '../models';
 
 function DialogCommandChangeBattlerGraphics({
 	commandKind,
-	isOpen,
+
 	setIsOpen,
 	list,
 	onAccept,
@@ -102,15 +102,13 @@ function DialogCommandChangeBattlerGraphics({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.battler.graphics')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

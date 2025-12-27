@@ -88,11 +88,10 @@ const folderToTreeMapTag = async (foldersID: ITERATOR, filesID: ITERATOR, path: 
 };
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 };
 
-function DialogPlugins({ isOpen, setIsOpen }: Props) {
+function DialogPlugins({ setIsOpen }: Props) {
 	const { t } = useTranslation();
 
 	const importPictureInputRef = useRef<HTMLInputElement>(null);
@@ -129,13 +128,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		);
 		setPlugins(Node.createList(Project.current!.scripts.plugins, false));
 		setIsLoading(false);
-	};
-
-	const reset = () => {
-		setPlugins([]);
-		setSelectedPlugin(null);
-		setCode('');
-		setPictureBase64('');
 	};
 
 	const updateParametersDefaults = (plugin: Model.Plugin) => {
@@ -405,12 +397,8 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	}, []);
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize().catch(console.error);
-		} else {
-			reset();
-		}
-	}, [isOpen]);
+		initialize().catch(console.error);
+	}, []);
 
 	const getPluginsContent = () => (
 		<Flex key={0} spacedLarge fillWidth fillHeight>
@@ -632,7 +620,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	return (
 		<Dialog
 			title={`${t('plugins.manager')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={
 				<FooterCancelSaveClose
 					onCancel={handleCancel}

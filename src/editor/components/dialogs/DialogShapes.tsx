@@ -26,14 +26,13 @@ import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	kind?: CUSTOM_SHAPE_KIND;
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	shapeID?: number;
 	onAccept?: (shape: Model.Shape) => void;
 	onReject?: () => void;
 };
 
-function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: Props) {
+function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [isInitiating, setIsInitiating] = useState(false);
@@ -137,16 +136,12 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 	};
 
 	useLayoutEffect(() => {
-		if (selectedKind === undefined) {
+		if (selectedKind !== undefined) {
+			initialize().catch(console.error);
+		} else {
 			reset();
 		}
 	}, [selectedKind]);
-
-	useLayoutEffect(() => {
-		if (isOpen && selectedKind !== undefined) {
-			initialize().catch(console.error);
-		}
-	}, [isOpen, selectedKind]);
 
 	const getPreviewerContent = () => {
 		if (selectedShape && selectedShape.id !== -1) {
@@ -173,7 +168,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 	return (
 		<Dialog
 			title={`${t('select.shape')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

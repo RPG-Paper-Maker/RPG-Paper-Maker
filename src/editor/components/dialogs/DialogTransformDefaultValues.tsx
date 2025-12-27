@@ -19,7 +19,6 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	getMinX: () => number | undefined;
 	getMaxX: () => number | undefined;
@@ -34,7 +33,6 @@ type Props = {
 };
 
 function DialogTransformDefaultValues({
-	isOpen,
 	setIsOpen,
 	getMinX,
 	getMaxX,
@@ -91,15 +89,13 @@ function DialogTransformDefaultValues({
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('edit.default.transform.options', { transformOptions: kindText.toLowerCase() })}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

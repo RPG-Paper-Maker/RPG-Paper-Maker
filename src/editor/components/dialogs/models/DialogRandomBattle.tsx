@@ -34,14 +34,13 @@ enum SELECTION_TERRAIN_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogRandomBattle({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogRandomBattle({ setIsOpen, model, onAccept, onReject }: Props) {
 	const randomBattle = model as Model.RandomBattle;
 
 	const { t } = useTranslation();
@@ -57,7 +56,7 @@ function DialogRandomBattle({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 		priority.copy(randomBattle.priority);
 		setProbability(randomBattle.getProbability());
 		setSelectionTerrain(
-			randomBattle.isEntireMap ? SELECTION_TERRAIN_TYPE.ENTIRE_MAP : SELECTION_TERRAIN_TYPE.TERRAIN
+			randomBattle.isEntireMap ? SELECTION_TERRAIN_TYPE.ENTIRE_MAP : SELECTION_TERRAIN_TYPE.TERRAIN,
 		);
 		setTerrains(Node.createList(randomBattle.terrains));
 	};
@@ -83,15 +82,13 @@ function DialogRandomBattle({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.random.battle')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialHeight='400px'

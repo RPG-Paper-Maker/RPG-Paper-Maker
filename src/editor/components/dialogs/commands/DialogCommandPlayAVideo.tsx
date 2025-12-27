@@ -34,7 +34,7 @@ enum SELECTION_OPERATION_TYPE {
 	STOP,
 }
 
-function DialogCommandPlayAVideo({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandPlayAVideo({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [videoID, setVideoID] = useStateNumber();
@@ -95,15 +95,13 @@ function DialogCommandPlayAVideo({ commandKind, isOpen, setIsOpen, list, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('play.a.video')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

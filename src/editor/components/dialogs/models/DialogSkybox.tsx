@@ -22,14 +22,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogSkybox({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogSkybox({ setIsOpen, model, onAccept, onReject }: Props) {
 	const skybox = model as Model.Skybox;
 
 	const { t } = useTranslation();
@@ -70,15 +69,13 @@ function DialogSkybox({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.sky.box')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

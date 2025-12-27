@@ -330,20 +330,21 @@ function PanelTransform({ kind }: Props) {
 					)}
 				</Flex>
 			</Groupbox>
-			<DialogTransformDefaultValues
-				isOpen={needDefaultDialogOpen}
-				setIsOpen={setNeedDefaultDialogOpen}
-				getMinX={getMinX}
-				getMaxX={getMaxX}
-				getMinY={getMinY}
-				getMaxY={getMaxY}
-				getMinZ={getMinZ}
-				getMaxZ={getMaxZ}
-				isDecimal={isDecimal}
-				units={units}
-				kind={kind}
-				kindText={kindText}
-			/>
+			{needDefaultDialogOpen && (
+				<DialogTransformDefaultValues
+					setIsOpen={setNeedDefaultDialogOpen}
+					getMinX={getMinX}
+					getMaxX={getMaxX}
+					getMinY={getMinY}
+					getMaxY={getMaxY}
+					getMinZ={getMinZ}
+					getMaxZ={getMaxZ}
+					isDecimal={isDecimal}
+					units={units}
+					kind={kind}
+					kindText={kindText}
+				/>
+			)}
 		</>
 	);
 }

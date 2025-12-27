@@ -17,7 +17,6 @@ import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	defaultMapID: number;
 	defaultX: number;
@@ -28,7 +27,6 @@ type Props = {
 };
 
 function DialogSelectMapPosition({
-	isOpen,
 	setIsOpen,
 	defaultMapID,
 	defaultX,
@@ -56,16 +54,14 @@ function DialogSelectMapPosition({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<>
 			<Dialog
 				title={`${t('select.map.position')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				initialWidth='70%'
 				initialHeight='70%'

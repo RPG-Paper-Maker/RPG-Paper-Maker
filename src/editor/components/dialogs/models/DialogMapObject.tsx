@@ -17,13 +17,12 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	object: Model.CommonObject;
 	onAccept: () => Promise<void>;
 };
 
-function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
+function DialogMapObject({ setIsOpen, object, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
@@ -47,15 +46,13 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	useLayoutEffect(() => {
-		if (!isOpen) {
-			reset();
-		}
-	}, [isOpen]);
+		reset();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('edit.object')}...`}
-			isOpen={isOpen}
+			isOpen
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}

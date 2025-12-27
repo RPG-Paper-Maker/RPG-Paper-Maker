@@ -35,7 +35,7 @@ import DialogCommandPlaySong from './DialogCommandPlaySong';
 import DialogCommandScript from './DialogCommandScript';
 import DialogCommandWait from './DialogCommandWait';
 
-function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isDialogJumpOpen, setIsDialogJumpOpen] = useState(false);
@@ -56,16 +56,16 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 	const [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex] = useState<number | null>(null);
 	const [currentSelectedItemIndex, setCurrentSelectedItemIndex] = useStateNumber();
 	const [jump, setJump] = useState<Model.MapObjectCommandMove>(
-		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.JUMP)
+		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.JUMP),
 	);
 	const [speed, setSpeed] = useState<Model.MapObjectCommandMove>(
-		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_SPEED)
+		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_SPEED),
 	);
 	const [frequency, setFrequency] = useState<Model.MapObjectCommandMove>(
-		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_FREQUENCY)
+		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_FREQUENCY),
 	);
 	const [changeGraphics, setChangeGraphics] = useState<Model.MapObjectCommandMove>(
-		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS)
+		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS),
 	);
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
@@ -216,16 +216,14 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<>
 			<Dialog
 				title={`${t('move.object')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				initialWidth='750px'
@@ -398,55 +396,62 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 					</Flex>
 				</Flex>
 			</Dialog>
-			<DialogCommandMoveObjectJump
-				isOpen={isDialogJumpOpen}
-				setIsOpen={setIsDialogJumpOpen}
-				model={jump}
-				onAccept={handleAcceptJump}
-				isNew
-			/>
-			<DialogCommandMoveObjectChangeSpeedFrequency
-				isOpen={isDialogChangeSpeedOpen}
-				setIsOpen={setIsDialogChangeSpeedOpen}
-				model={speed}
-				onAccept={handleAcceptChangeSpeed}
-				isNew
-			/>
-			<DialogCommandMoveObjectChangeSpeedFrequency
-				isOpen={isDialogChangeFrequencyOpen}
-				setIsOpen={setIsDialogChangeFrequencyOpen}
-				model={frequency}
-				onAccept={handleAcceptChangeFrequency}
-				isNew
-			/>
-			<DialogCommandMoveObjectChangeGraphics
-				isOpen={isDialogChangeGraphicsOpen}
-				setIsOpen={setIsDialogChangeGraphicsOpen}
-				model={changeGraphics}
-				onAccept={handleAcceptChangeGraphics}
-				isNew
-			/>
-			<DialogCommandWait
-				commandKind={EVENT_COMMAND_KIND.WAIT}
-				isOpen={isDialogWaitOpen}
-				setIsOpen={setIsDialogWaitOpen}
-				onAccept={handleAcceptWait}
-				onReject={() => {}}
-			/>
-			<DialogCommandPlaySong
-				commandKind={EVENT_COMMAND_KIND.PLAY_SOUND}
-				isOpen={isDialogPlaySoundOpen}
-				setIsOpen={setIsDialogPlaySoundOpen}
-				onAccept={handleAcceptPlaySound}
-				onReject={() => {}}
-			/>
-			<DialogCommandScript
-				commandKind={EVENT_COMMAND_KIND.SCRIPT}
-				isOpen={isDialogScriptOpen}
-				setIsOpen={setIsDialogScriptOpen}
-				onAccept={handleAcceptScript}
-				onReject={() => {}}
-			/>
+			{isDialogJumpOpen && (
+				<DialogCommandMoveObjectJump
+					setIsOpen={setIsDialogJumpOpen}
+					model={jump}
+					onAccept={handleAcceptJump}
+					isNew
+				/>
+			)}
+			{isDialogChangeSpeedOpen && (
+				<DialogCommandMoveObjectChangeSpeedFrequency
+					setIsOpen={setIsDialogChangeSpeedOpen}
+					model={speed}
+					onAccept={handleAcceptChangeSpeed}
+					isNew
+				/>
+			)}
+			{isDialogChangeFrequencyOpen && (
+				<DialogCommandMoveObjectChangeSpeedFrequency
+					setIsOpen={setIsDialogChangeFrequencyOpen}
+					model={frequency}
+					onAccept={handleAcceptChangeFrequency}
+					isNew
+				/>
+			)}
+			{isDialogChangeGraphicsOpen && (
+				<DialogCommandMoveObjectChangeGraphics
+					setIsOpen={setIsDialogChangeGraphicsOpen}
+					model={changeGraphics}
+					onAccept={handleAcceptChangeGraphics}
+					isNew
+				/>
+			)}
+			{isDialogWaitOpen && (
+				<DialogCommandWait
+					commandKind={EVENT_COMMAND_KIND.WAIT}
+					setIsOpen={setIsDialogWaitOpen}
+					onAccept={handleAcceptWait}
+					onReject={() => {}}
+				/>
+			)}
+			{isDialogPlaySoundOpen && (
+				<DialogCommandPlaySong
+					commandKind={EVENT_COMMAND_KIND.PLAY_SOUND}
+					setIsOpen={setIsDialogPlaySoundOpen}
+					onAccept={handleAcceptPlaySound}
+					onReject={() => {}}
+				/>
+			)}
+			{isDialogScriptOpen && (
+				<DialogCommandScript
+					commandKind={EVENT_COMMAND_KIND.SCRIPT}
+					setIsOpen={setIsDialogScriptOpen}
+					onAccept={handleAcceptScript}
+					onReject={() => {}}
+				/>
+			)}
 		</>
 	);
 }

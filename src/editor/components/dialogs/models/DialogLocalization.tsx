@@ -21,19 +21,18 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogLocalization({ setIsOpen, model, onAccept, onReject }: Props) {
 	const localization = model as Model.Localization;
 
 	const { t } = useTranslation();
 
-	const [focusFirst, setFocustFirst] = useState(false);
+	const [focusFirst, setFocustFirst] = useState(true);
 	const [name, setName] = useStateString();
 	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
 	const [names, setNames] = useState<Map<string, string>>(new Map());
@@ -70,11 +69,8 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			setFocustFirst(true);
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getTabContents = () =>
 		Project.current!.languages.list.map((language) => (
@@ -90,7 +86,7 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 	return (
 		<Dialog
 			title={`${t('edit.name')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

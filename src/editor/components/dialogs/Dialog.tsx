@@ -314,7 +314,7 @@ function Dialog({
 				<div className='dialogFooter'>{footer}</div>
 			</div>
 		</div>,
-		root
+		root,
 	);
 }
 

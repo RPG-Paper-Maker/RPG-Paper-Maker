@@ -28,7 +28,7 @@ import { CommandProps } from '../models';
 
 function DialogCommandChangeExperienceCurve({
 	commandKind,
-	isOpen,
+
 	setIsOpen,
 	list,
 	onAccept,
@@ -79,15 +79,13 @@ function DialogCommandChangeExperienceCurve({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.experience.curve')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

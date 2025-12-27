@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core/Project';
@@ -29,11 +29,12 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeEquipment({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
+	const [initialized, setInitialized] = useState(false);
 	const [equipmentID] = useStateDynamicValue();
 	const [weaponArmorKind, setWeaponArmorKind] = useStateNumber();
 	const [weaponID] = useStateDynamicValue();
@@ -62,28 +63,36 @@ function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, on
 			panelSelectionHeroRef.current?.initialize();
 			setIsApplyOnlyIfInInventory(false);
 		}
-		setTrigger((v) => !v);
+		setTimeout(() => {
+			setInitialized(true);
+		}, 0);
 	};
 
 	const handleChangeEquipment = () => {
-		weaponID.updateToDefaultNumber(1);
-		armorID.updateToDefaultNumber(1);
-		if (equipmentID.kind === DYNAMIC_VALUE_KIND.NUMBER || equipmentID.kind === DYNAMIC_VALUE_KIND.DATABASE) {
-			if (
-				Project.current!.battleSystem.weaponsKind.some((kind) => kind.equipments[equipmentID.value as number])
-			) {
-				setWeaponArmorKind(0);
-				const db = getWeaponArmorDatabase(0);
-				weaponID.updateToDefaultDatabase(db[0]?.id);
-			} else if (
-				Project.current!.battleSystem.armorsKind.some((kind) => kind.equipments[equipmentID.value as number])
-			) {
-				setWeaponArmorKind(1);
-				const db = getWeaponArmorDatabase(1);
-				armorID.updateToDefaultDatabase(db[0]?.id);
+		if (initialized) {
+			weaponID.updateToDefaultNumber(1);
+			armorID.updateToDefaultNumber(1);
+			if (equipmentID.kind === DYNAMIC_VALUE_KIND.NUMBER || equipmentID.kind === DYNAMIC_VALUE_KIND.DATABASE) {
+				if (
+					Project.current!.battleSystem.weaponsKind.some(
+						(kind) => kind.equipments[equipmentID.value as number],
+					)
+				) {
+					setWeaponArmorKind(0);
+					const db = getWeaponArmorDatabase(0);
+					weaponID.updateToDefaultDatabase(db[0]?.id);
+				} else if (
+					Project.current!.battleSystem.armorsKind.some(
+						(kind) => kind.equipments[equipmentID.value as number],
+					)
+				) {
+					setWeaponArmorKind(1);
+					const db = getWeaponArmorDatabase(1);
+					armorID.updateToDefaultDatabase(db[0]?.id);
+				}
 			}
+			setTrigger((v) => !v);
 		}
-		setTrigger((v) => !v);
 	};
 
 	const handleAccept = async () => {
@@ -103,15 +112,13 @@ function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, on
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.equipment')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

@@ -29,14 +29,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogDetection({ setIsOpen, model, onAccept, onReject }: Props) {
 	const detection = model as Model.Detection;
 
 	const { t } = useTranslation();
@@ -83,23 +82,9 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 				Array.from(detection.boxes.entries(), ([position, value]) => [
 					position.toKey(),
 					MapElement.Object3DBox.create(value.clone()),
-				])
-			)
+				]),
+			),
 		);
-	};
-
-	const reset = () => {
-		setFieldLeft(0);
-		setFieldRight(0);
-		setFieldTop(0);
-		setFieldBot(0);
-		setNewBoxLengthSquares(1);
-		setNewBoxLengthPixels(0);
-		setNewBoxWidthSquares(1);
-		setNewBoxWidthPixels(0);
-		setNewBoxHeightSquares(1);
-		setNewBoxHeightPixels(0);
-		setBoxes(undefined);
 	};
 
 	const handleChangeFieldLeft = (n: number) => {
@@ -135,7 +120,7 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		detection.fieldTop = fieldTop;
 		detection.fieldBot = fieldBot;
 		detection.boxes = new Map(
-			Array.from(boxes!.entries(), ([key, value]) => [Position.fromKey(key), value.data.clone()])
+			Array.from(boxes!.entries(), ([key, value]) => [Position.fromKey(key), value.data.clone()]),
 		);
 		onAccept();
 		setIsOpen(false);
@@ -147,17 +132,13 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		} else {
-			reset();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.detection')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'

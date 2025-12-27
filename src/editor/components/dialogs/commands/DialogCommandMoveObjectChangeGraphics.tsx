@@ -26,7 +26,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -34,7 +33,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogCommandMoveObjectChangeGraphics({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const command = model as Model.MapObjectCommandMove;
 
 	const { t } = useTranslation();
@@ -155,15 +154,13 @@ function DialogCommandMoveObjectChangeGraphics({ isOpen, setIsOpen, model, isNew
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.graphics')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

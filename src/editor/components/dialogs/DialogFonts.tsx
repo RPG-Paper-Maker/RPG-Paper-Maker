@@ -23,12 +23,11 @@ import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	manager?: boolean;
 };
 
-function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
+function DialogFonts({ setIsOpen, manager }: Props) {
 	const { t } = useTranslation();
 
 	const [isInitiating, setIsInitiating] = useState(false);
@@ -87,15 +86,13 @@ function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize().catch(console.error);
-		}
-	}, [isOpen]);
+		initialize().catch(console.error);
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('fonts.manager')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

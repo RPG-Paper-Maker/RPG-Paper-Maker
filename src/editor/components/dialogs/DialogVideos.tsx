@@ -29,7 +29,6 @@ import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	videoID?: number;
 	dynamicVideoID?: DynamicValue;
@@ -40,7 +39,6 @@ type Props = {
 };
 
 function DialogVideos({
-	isOpen,
 	setIsOpen,
 	videoID,
 	dynamicVideoID,
@@ -171,10 +169,8 @@ function DialogVideos({
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize().catch(console.error);
-		}
-	}, [isOpen]);
+		initialize().catch(console.error);
+	}, []);
 
 	const getPreviewerContent = () => {
 		if (selectedVideo) {
@@ -221,7 +217,7 @@ function DialogVideos({
 	return (
 		<Dialog
 			title={`${t(manager ? 'videos.manager' : 'select.video')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

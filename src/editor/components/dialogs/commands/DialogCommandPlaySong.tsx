@@ -20,7 +20,7 @@ import { MapObjectCommandType } from '../../../models';
 import DialogSongs from '../DialogSongs';
 import { CommandProps } from '../models';
 
-function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandPlaySong({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [songID, setSongID] = useStateNumber();
@@ -92,17 +92,12 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		} else {
-			setIsInitialized(false);
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
-	return (
+	return isInitialized ? (
 		<DialogSongs
 			title={t(Model.MapObjectCommand.getCommandName(commandKind))}
-			isOpen={isOpen && isInitialized}
 			setIsOpen={setIsOpen}
 			songID={songID}
 			dynamicSongID={dynamicSongID}
@@ -113,7 +108,7 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 			displayOptions
 			active
 		/>
-	);
+	) : null;
 }
 
 export default DialogCommandPlaySong;

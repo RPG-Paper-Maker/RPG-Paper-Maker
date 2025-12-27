@@ -1136,43 +1136,43 @@ function MainMenuBar() {
 	const getDialog = () => {
 		switch (dialogType) {
 			case DIALOG_TYPE.NEW_PROJECT:
-				return <DialogNewProject isOpen setIsOpen={handleSetIsDialogOpen} onAccept={handleAcceptNewProject} />;
+				return <DialogNewProject setIsOpen={handleSetIsDialogOpen} onAccept={handleAcceptNewProject} />;
 			case DIALOG_TYPE.DEPLOY:
 				return <DialogDeploy setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.DATA:
-				return <DialogData isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogData setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.SYSTEMS:
-				return <DialogSystems isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogSystems setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.VARIABLES:
-				return <DialogVariables isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogVariables setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.COLLISIONS:
-				return <DialogCollisions isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogCollisions setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.KEYBOARD:
 				return <DialogKeyboardControls setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.LANGUAGES:
 				return <DialogLanguages setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.PLUGINS:
-				return <DialogPlugins isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogPlugins setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.DLCS:
 				return <DialogDLCs setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.PICTURES:
-				return <DialogPictures isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogPictures setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.VIDEOS:
-				return <DialogVideos manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogVideos manager setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.SONGS:
-				return <DialogSongs isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogSongs setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.SHAPES:
-				return <DialogShapes isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogShapes setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.FONTS:
-				return <DialogFonts manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogFonts manager setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.AUTOTILES:
-				return <DialogCollisions kind={PICTURE_KIND.AUTOTILES} isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogCollisions kind={PICTURE_KIND.AUTOTILES} setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.WALLS:
-				return <DialogCollisions kind={PICTURE_KIND.WALLS} isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogCollisions kind={PICTURE_KIND.WALLS} setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.OBJECTS_3D:
-				return <DialogObjects3DPreview manager isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogObjects3DPreview manager setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.MOUNTAINS:
-				return <DialogCollisions kind={PICTURE_KIND.MOUNTAINS} isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogCollisions kind={PICTURE_KIND.MOUNTAINS} setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.LOCATION_FOLDER_BR:
 			case DIALOG_TYPE.LOCATION_FOLDER_DLC:
 				return (
@@ -1188,7 +1188,7 @@ function MainMenuBar() {
 			case DIALOG_TYPE.GENERAL_OPTIONS:
 				return <DialogGeneralOptions setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.CHANGE_LANGUAGE:
-				return <DialogChangeLanguage isOpen setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogChangeLanguage setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.ABOUT:
 				return <DialogAbout setIsOpen={handleSetIsDialogOpen} />;
 			default:

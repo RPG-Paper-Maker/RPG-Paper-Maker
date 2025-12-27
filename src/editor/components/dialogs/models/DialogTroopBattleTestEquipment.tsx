@@ -24,14 +24,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogTroopBattleTestHeroEquipment({ setIsOpen, model, onAccept, onReject }: Props) {
 	const equipment = model as Model.TroopBattleTestHeroEquipment;
 
 	const { t } = useTranslation();
@@ -43,11 +42,11 @@ function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept
 	const equipmentID = useMemo(() => DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, equipment.id), [equipment]);
 	const weapons = useMemo(
 		() => Project.current!.battleSystem.getWeaponsArmorsByEquipmentID(equipmentID, true),
-		[equipmentID]
+		[equipmentID],
 	);
 	const armors = useMemo(
 		() => Project.current!.battleSystem.getWeaponsArmorsByEquipmentID(equipmentID, false),
-		[equipmentID]
+		[equipmentID],
 	);
 
 	const initialize = () => {
@@ -69,10 +68,8 @@ function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	useEffect(() => {
 		setWeaponID(weapons[0]?.id ?? 1);
@@ -85,7 +82,7 @@ function DialogTroopBattleTestHeroEquipment({ isOpen, setIsOpen, model, onAccept
 	return (
 		<Dialog
 			title={`${t('common.equipment')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

@@ -28,11 +28,10 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 };
 
-function DialogSystems({ isOpen, setIsOpen }: Props) {
+function DialogSystems({ setIsOpen }: Props) {
 	const { t } = useTranslation();
 
 	const dispatch = useDispatch();
@@ -79,7 +78,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	return (
 		<Dialog
 			title={`${t('systems.manager')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'

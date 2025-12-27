@@ -37,7 +37,7 @@ enum SELECTION_TROOP_TYPE {
 	RANDOM,
 }
 
-function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandStartBattle({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelPositionRef = useRef<PanelPositionRef>(null);
@@ -114,15 +114,13 @@ function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAcce
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('start.battle')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

@@ -29,7 +29,6 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	parent: Node | null;
@@ -37,7 +36,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onReject }: Props) {
+function DialogCustomStructure({ setIsOpen, model, parent, onAccept, onReject }: Props) {
 	const customStructure = model as Model.CustomStructure;
 
 	const { t } = useTranslation();
@@ -95,7 +94,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 		<>
 			<Dialog
 				title={`${t('element')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				initialWidth='600px'

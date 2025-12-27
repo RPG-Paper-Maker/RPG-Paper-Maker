@@ -224,11 +224,10 @@ const PanelTroops = forwardRef((props, ref) => {
 				</Flex>
 			</Flex>
 			{isDialogBattleTestOpen && (
-				<DialogTroopBattleTest isOpen setIsOpen={setIsDialogBattleTestOpen} troopID={selectedTroop?.id ?? -1} />
+				<DialogTroopBattleTest setIsOpen={setIsDialogBattleTestOpen} troopID={selectedTroop?.id ?? -1} />
 			)}
 			{isDialogReactionConditionsOpen && selectedReaction && (
 				<DialogTroopReactionConditions
-					isOpen
 					setIsOpen={setIsDialogReactionConditionsOpen}
 					conditions={selectedReaction.conditions}
 				/>

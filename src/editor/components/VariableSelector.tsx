@@ -81,12 +81,9 @@ function VariableSelector({
 					...
 				</Button>
 			</Flex>
-			<DialogVariables
-				isOpen={needDialogOpen}
-				setIsOpen={setNeedDialogOpen}
-				model={node.content}
-				onAccept={handleAccept}
-			/>
+			{needDialogOpen && (
+				<DialogVariables setIsOpen={setNeedDialogOpen} model={node.content} onAccept={handleAccept} />
+			)}
 		</>
 	);
 }

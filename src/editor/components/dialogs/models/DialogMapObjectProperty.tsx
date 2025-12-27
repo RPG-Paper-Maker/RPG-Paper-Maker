@@ -22,7 +22,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -30,7 +29,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogMapObjectProperty({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectProperty({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const property = model as Model.MapObjectProperty;
 
 	const { t } = useTranslation();
@@ -61,15 +60,13 @@ function DialogMapObjectProperty({ isOpen, setIsOpen, model, isNew, onAccept, on
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return initialValue ? (
 		<Dialog
 			title={`${t('set.property')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

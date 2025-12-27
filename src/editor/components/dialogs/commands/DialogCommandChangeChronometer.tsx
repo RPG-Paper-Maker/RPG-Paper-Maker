@@ -34,7 +34,7 @@ enum SELECTION_OPERATION_TYPE {
 	STOP,
 }
 
-function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeChronometer({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [stockValueVariableID] = useStateDynamicValue();
@@ -104,15 +104,13 @@ function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, 
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.chronometer')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
@@ -125,7 +123,7 @@ function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, 
 						{t(
 							selectionOperationType === SELECTION_OPERATION_TYPE.START
 								? 'stock.chronometer.id.in.variable.id'
-								: 'chronometer.id'
+								: 'chronometer.id',
 						)}
 						:
 					</div>

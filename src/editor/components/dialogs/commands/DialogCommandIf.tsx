@@ -59,7 +59,7 @@ enum SELECTION_HEROES_EQUIPED_TYPE {
 	ARMOR,
 }
 
-function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [forcedTabIndex, setForcedTabIndex] = useState<number | null>(null);
@@ -405,10 +405,8 @@ function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onRej
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getVariablesParamPropContent = () => (
 		<Flex column spacedLarge key={0}>
@@ -785,7 +783,7 @@ function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onRej
 	return (
 		<Dialog
 			title={`${t('condition')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='750px'

@@ -313,12 +313,13 @@ function MapEditor() {
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 				</div>
 			</ContextMenu>
-			<DialogMapObject
-				isOpen={isOpenMapObject}
-				setIsOpen={setIsOpenMapObject}
-				object={currentMapObject}
-				onAccept={handleAcceptMapObject}
-			/>
+			{isOpenMapObject && (
+				<DialogMapObject
+					setIsOpen={setIsOpenMapObject}
+					object={currentMapObject}
+					onAccept={handleAcceptMapObject}
+				/>
+			)}
 		</>
 	);
 }

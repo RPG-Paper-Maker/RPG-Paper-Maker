@@ -29,12 +29,11 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	troopID: number;
 };
 
-function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
+function DialogTroopBattleTest({ setIsOpen, troopID }: Props) {
 	const { t } = useTranslation();
 
 	const [model, setModel] = useState<TroopBattleTest>();
@@ -51,7 +50,7 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 	const titles = useMemo(
 		() => heroes.map((hero) => Base.create(hero.id, Project.current!.heroes.getByID(hero.heroID)?.getName() ?? '')),
 
-		[heroes, heroID]
+		[heroes, heroID],
 	);
 	const contents = useMemo(() => heroes.map(() => null), [heroes]);
 
@@ -136,10 +135,8 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	useEffect(() => {
 		handleCurrentIndexChanged(0);
@@ -162,10 +159,10 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 		</Flex>
 	);
 
-	return isOpen ? (
+	return (
 		<Dialog
 			title={`${t('test')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={getFooter()}
 			onClose={handleReject}
 			initialWidth='350px'
@@ -227,7 +224,7 @@ function DialogTroopBattleTest({ isOpen, setIsOpen, troopID }: Props) {
 				)}
 			</Flex>
 		</Dialog>
-	) : null;
+	);
 }
 
 export default DialogTroopBattleTest;

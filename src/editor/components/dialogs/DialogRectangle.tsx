@@ -20,7 +20,6 @@ import Dialog from './Dialog';
 import FooterClose from './footers/FooterClose';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	rectangle: Rectangle;
 	onChange?: () => void;
@@ -28,7 +27,7 @@ type Props = {
 	keepSize?: boolean;
 };
 
-function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange, maxSize, keepSize = false }: Props) {
+function DialogRectangle({ setIsOpen, rectangle, onChange, maxSize, keepSize = false }: Props) {
 	const { t } = useTranslation();
 
 	const [x, setX] = useStateNumber();
@@ -84,15 +83,13 @@ function DialogRectangle({ isOpen, setIsOpen, rectangle, onChange, maxSize, keep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('select.rect')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterClose onClose={handleClose} />}
 			onClose={handleClose}
 		>

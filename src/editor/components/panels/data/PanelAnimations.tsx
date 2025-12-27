@@ -371,7 +371,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 			{isDialogBattlerOpen && (
 				<DialogPictures
 					kind={PICTURE_KIND.BATTLERS}
-					isOpen
 					setIsOpen={setIsDialogBattlerOpen}
 					pictureID={battlerID}
 					onAccept={handleAcceptChangeBattler}
@@ -379,7 +378,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 			)}
 			{isDialogCopyFramesOpen && selectedAnimation && (
 				<DialogAnimationCopyFrames
-					isOpen
 					setIsOpen={setIsDialogCopyFramesOpen}
 					animation={selectedAnimation}
 					onAccept={handleTriggerDraw}
@@ -387,7 +385,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 			)}
 			{isDialogClearFramesOpen && selectedAnimation && (
 				<DialogAnimationClearFrames
-					isOpen
 					setIsOpen={setIsDialogClearFramesOpen}
 					animation={selectedAnimation}
 					onAccept={handleTriggerDraw}
@@ -395,7 +392,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 			)}
 			{isDialogCreateTransitionOpen && selectedAnimation && (
 				<DialogAnimationCreateTransition
-					isOpen
 					setIsOpen={setIsDialogcreateTransitionOpen}
 					animation={selectedAnimation}
 					onAccept={handleTriggerDraw}

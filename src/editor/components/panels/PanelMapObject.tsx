@@ -689,25 +689,26 @@ const PanelMapObject = forwardRef(
 						</Flex>
 					</Flex>
 				</Flex>
-				<DialogCommandMoveObject
-					commandKind={EVENT_COMMAND_KIND.MOVE_OBJECT}
-					isOpen={isDialogCommandMoveObjectOpen}
-					setIsOpen={setIsDialogCommandMoveObjectOpen}
-					list={eventCommandRoute?.command}
-					onAccept={handleAcceptEditRoute}
-					onReject={() => {}}
-				/>
-				<DialogCommandSendEvent
-					commandKind={EVENT_COMMAND_KIND.SEND_EVENT}
-					isOpen={isDialogCommandSendEventOpen}
-					setIsOpen={setIsDialogCommandSendEventOpen}
-					list={eventCommandDetection?.command}
-					onAccept={handleAcceptDetection}
-					onReject={() => {}}
-				/>
-				{selectedState && (
+				{isDialogCommandMoveObjectOpen && (
+					<DialogCommandMoveObject
+						commandKind={EVENT_COMMAND_KIND.MOVE_OBJECT}
+						setIsOpen={setIsDialogCommandMoveObjectOpen}
+						list={eventCommandRoute?.command}
+						onAccept={handleAcceptEditRoute}
+						onReject={() => {}}
+					/>
+				)}
+				{isDialogCommandSendEventOpen && (
+					<DialogCommandSendEvent
+						commandKind={EVENT_COMMAND_KIND.SEND_EVENT}
+						setIsOpen={setIsDialogCommandSendEventOpen}
+						list={eventCommandDetection?.command}
+						onAccept={handleAcceptDetection}
+						onReject={() => {}}
+					/>
+				)}
+				{isDialogTransformationsOpen && selectedState && (
 					<DialogTransformations
-						isOpen={isDialogTransformationsOpen}
 						setIsOpen={setIsDialogTransformationsOpen}
 						centerX={selectedState.centerX}
 						centerZ={selectedState.centerZ}

@@ -36,7 +36,7 @@ export enum SELECTION_TARGET_TYPE {
 	OBJECT,
 }
 
-function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelObjectEventRef = useRef<PanelObjectEventRef>(null);
@@ -106,15 +106,13 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('send.event')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

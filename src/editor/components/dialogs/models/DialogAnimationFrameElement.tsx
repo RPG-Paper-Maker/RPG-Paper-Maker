@@ -22,13 +22,12 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	element: AnimationFrameElement;
 	onAccept: () => void;
 };
 
-function DialogAnimationFrameElement({ isOpen, setIsOpen, element, onAccept }: Props) {
+function DialogAnimationFrameElement({ setIsOpen, element, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [index, setIndex] = useStateNumber();
@@ -66,15 +65,13 @@ function DialogAnimationFrameElement({ isOpen, setIsOpen, element, onAccept }: P
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.element')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

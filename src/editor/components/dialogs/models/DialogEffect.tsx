@@ -32,14 +32,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogEffect({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 	const effect = model as Model.Effect;
 
 	const { t } = useTranslation();
@@ -226,10 +225,8 @@ function DialogEffect({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getFooter = () => (
 		<Flex spaced centerV>
@@ -250,7 +247,7 @@ function DialogEffect({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 		<>
 			<Dialog
 				title={`${t('set.effect')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={getFooter()}
 				onClose={handleReject}
 				initialHeight='500px'
@@ -581,7 +578,6 @@ function DialogEffect({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 			</Dialog>
 			{isDialogCommonReactionOpen && (
 				<DialogCommandCallACommonReaction
-					isOpen
 					setIsOpen={setIsDialogCommonReactionOpen}
 					commandKind={EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION}
 					list={commonReaction ? commonReaction.command : undefined}

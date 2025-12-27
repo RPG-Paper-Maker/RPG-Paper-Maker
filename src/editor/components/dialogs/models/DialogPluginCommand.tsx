@@ -27,14 +27,13 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 const TREES_STYLE_HEIGHT = { height: '100px' };
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogPluginCommand({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogPluginCommand({ setIsOpen, model, onAccept, onReject }: Props) {
 	const command = model as Model.PluginCommand;
 
 	const { t } = useTranslation();
@@ -69,7 +68,7 @@ function DialogPluginCommand({ isOpen, setIsOpen, model, onAccept, onReject }: P
 	return (
 		<Dialog
 			title={`${t('command')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'

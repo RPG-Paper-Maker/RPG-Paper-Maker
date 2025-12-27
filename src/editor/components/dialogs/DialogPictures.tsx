@@ -32,7 +32,6 @@ import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	kind?: PICTURE_KIND;
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	pictureID?: number;
 	dynamicPictureID?: DynamicValue;
@@ -46,7 +45,6 @@ type Props = {
 
 function DialogPictures({
 	kind,
-	isOpen,
 	setIsOpen,
 	pictureID,
 	dynamicPictureID,
@@ -138,6 +136,7 @@ function DialogPictures({
 				}
 			}
 		}
+		console.log(rect, indexX, indexY);
 		setSelectedRect(rect);
 		setSelectedRectTileset(rectT);
 	};
@@ -243,19 +242,16 @@ function DialogPictures({
 	};
 
 	useLayoutEffect(() => {
-		if (selectedKind === undefined) {
+		if (selectedKind !== undefined) {
+			reset();
+			initialize().catch(console.error);
+		} else {
 			reset();
 		}
 	}, [selectedKind]);
 
-	useLayoutEffect(() => {
-		if (isOpen && selectedKind !== undefined) {
-			reset();
-			initialize().catch(console.error);
-		}
-	}, [isOpen, selectedKind]);
-
 	const getPreviewerContent = () => {
+		console.log(selectedRect);
 		if (selectedPicture) {
 			const path = selectedPicture.getPath();
 			switch (selectedKind) {
@@ -348,7 +344,7 @@ function DialogPictures({
 	return (
 		<Dialog
 			title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

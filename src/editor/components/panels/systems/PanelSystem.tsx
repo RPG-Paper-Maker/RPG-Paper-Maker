@@ -380,14 +380,15 @@ const PanelSystem = forwardRef((props, ref) => {
 							<Flex column spaced>
 								<div>{t('default.dialog.box.options')}:</div>
 								<Button onClick={handleClickDefaultDialogBoxOptions}>{t('select')}...</Button>
-								<DialogCommandSetDialogBoxOptions
-									commandKind={EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS}
-									isOpen={isDialogDefaultDialogBoxOptionsOpen}
-									setIsOpen={setIsDialogDefaultDialogBoxOptionsOpen}
-									list={dialogBoxbOptions.command}
-									onAccept={handleAcceptDefaultDialogBoxOptions}
-									onReject={() => {}}
-								/>
+								{isDialogDefaultDialogBoxOptionsOpen && (
+									<DialogCommandSetDialogBoxOptions
+										commandKind={EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS}
+										setIsOpen={setIsDialogDefaultDialogBoxOptionsOpen}
+										list={dialogBoxbOptions.command}
+										onAccept={handleAcceptDefaultDialogBoxOptions}
+										onReject={() => {}}
+									/>
+								)}
 							</Flex>
 							<Flex column spaced>
 								<div>
@@ -523,12 +524,13 @@ const PanelSystem = forwardRef((props, ref) => {
 					</Flex>
 				</Flex>
 			</Flex>
-			<DialogEnterNameOptions
-				isOpen={isDialogEnterNameOptionsOpen}
-				setIsOpen={setIsDialogEnterNameOptionOpen}
-				options={enterNameTable}
-				onAccept={handleAcceptEnterNameOptions}
-			/>
+			{isDialogEnterNameOptionsOpen && (
+				<DialogEnterNameOptions
+					setIsOpen={setIsDialogEnterNameOptionOpen}
+					options={enterNameTable}
+					onAccept={handleAcceptEnterNameOptions}
+				/>
+			)}
 		</>
 	);
 });

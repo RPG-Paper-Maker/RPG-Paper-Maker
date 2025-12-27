@@ -151,53 +151,56 @@ function AssetSelector({
 	};
 
 	const getDialog = () => {
-		const options = { isOpen, setIsOpen };
-		switch (selectionType) {
-			case ASSET_SELECTOR_TYPE.PICTURES:
-				return (
-					<DialogPictures
-						pictureID={getSelectedID()}
-						dynamicPictureID={selectedDynamic}
-						indexX={indexX}
-						indexY={indexY}
-						kind={kind ?? DEFAULT_PICTURE_KIND}
-						{...options}
-						onAccept={handleAcceptPicture}
-						active={active}
-					/>
-				);
-			case ASSET_SELECTOR_TYPE.SHAPES:
-				return (
-					<DialogShapes
-						shapeID={selectedID}
-						kind={kind ?? DEFAULT_CUSTOM_SHAPE_KIND}
-						{...options}
-						onAccept={handleAcceptShape}
-					/>
-				);
-			case ASSET_SELECTOR_TYPE.SONGS:
-				return (
-					<DialogSongs
-						songID={getSelectedID()}
-						dynamicSongID={selectedDynamic}
-						kind={kind ?? DEFAULT_SONG_KIND}
-						songOptions={songOptions}
-						displayOptions={!!songOptions}
-						{...options}
-						onAccept={handleAcceptSong}
-						active={active}
-					/>
-				);
-			case ASSET_SELECTOR_TYPE.VIDEOS:
-				return (
-					<DialogVideos
-						videoID={getSelectedID()}
-						dynamicVideoID={selectedDynamic}
-						{...options}
-						onAccept={handleAcceptVideo}
-						active={active}
-					/>
-				);
+		if (isOpen) {
+			switch (selectionType) {
+				case ASSET_SELECTOR_TYPE.PICTURES:
+					return (
+						<DialogPictures
+							pictureID={getSelectedID()}
+							dynamicPictureID={selectedDynamic}
+							indexX={indexX}
+							indexY={indexY}
+							kind={kind ?? DEFAULT_PICTURE_KIND}
+							setIsOpen={setIsOpen}
+							onAccept={handleAcceptPicture}
+							active={active}
+						/>
+					);
+				case ASSET_SELECTOR_TYPE.SHAPES:
+					return (
+						<DialogShapes
+							shapeID={selectedID}
+							kind={kind ?? DEFAULT_CUSTOM_SHAPE_KIND}
+							setIsOpen={setIsOpen}
+							onAccept={handleAcceptShape}
+						/>
+					);
+				case ASSET_SELECTOR_TYPE.SONGS:
+					return (
+						<DialogSongs
+							songID={getSelectedID()}
+							dynamicSongID={selectedDynamic}
+							kind={kind ?? DEFAULT_SONG_KIND}
+							songOptions={songOptions}
+							displayOptions={!!songOptions}
+							setIsOpen={setIsOpen}
+							onAccept={handleAcceptSong}
+							active={active}
+						/>
+					);
+				case ASSET_SELECTOR_TYPE.VIDEOS:
+					return (
+						<DialogVideos
+							videoID={getSelectedID()}
+							dynamicVideoID={selectedDynamic}
+							setIsOpen={setIsOpen}
+							onAccept={handleAcceptVideo}
+							active={active}
+						/>
+					);
+			}
+		} else {
+			return null;
 		}
 	};
 

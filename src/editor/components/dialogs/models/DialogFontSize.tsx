@@ -22,14 +22,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogFontSize({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogFontSize({ setIsOpen, model, onAccept, onReject }: Props) {
 	const fontSize = model as Model.FontSize;
 
 	const { t } = useTranslation();
@@ -55,15 +54,13 @@ function DialogFontSize({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.font.size')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

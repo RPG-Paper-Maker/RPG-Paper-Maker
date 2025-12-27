@@ -31,14 +31,13 @@ enum SELECTION_HERO_MONSTER_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogInitialPartyMember({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogInitialPartyMember({ setIsOpen, model, onAccept, onReject }: Props) {
 	const initialPartyMember = model as Model.InitialPartyMember;
 
 	const { t } = useTranslation();
@@ -54,7 +53,7 @@ function DialogInitialPartyMember({ isOpen, setIsOpen, model, onAccept, onReject
 		level.copy(initialPartyMember.level);
 		setTeamKind(initialPartyMember.teamKind);
 		setHeroSelection(
-			initialPartyMember.isHero ? SELECTION_HERO_MONSTER_TYPE.HERO : SELECTION_HERO_MONSTER_TYPE.MONSTER
+			initialPartyMember.isHero ? SELECTION_HERO_MONSTER_TYPE.HERO : SELECTION_HERO_MONSTER_TYPE.MONSTER,
 		);
 		if (initialPartyMember.isHero) {
 			heroID.copy(initialPartyMember.heroID);
@@ -82,15 +81,13 @@ function DialogInitialPartyMember({ isOpen, setIsOpen, model, onAccept, onReject
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.initial.party.member')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

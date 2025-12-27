@@ -70,13 +70,14 @@ function InputLocalization({
 				/>
 				<Button icon={<LuLanguages />} disabled={disabled} onClick={handleClick} />
 			</Flex>
-			<DialogLocalization
-				isOpen={isDialogLocalizationOpen}
-				setIsOpen={setIsDialogLocalizationOpen}
-				model={localization}
-				onAccept={handleAccept}
-				onReject={() => {}}
-			/>
+			{isDialogLocalizationOpen && (
+				<DialogLocalization
+					setIsOpen={setIsDialogLocalizationOpen}
+					model={localization}
+					onAccept={handleAccept}
+					onReject={() => {}}
+				/>
+			)}
 		</>
 	);
 }

@@ -25,14 +25,13 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogCost({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogCost({ setIsOpen, model, onAccept, onReject }: Props) {
 	const cost = model as Model.Cost;
 
 	const { t } = useTranslation();
@@ -67,10 +66,8 @@ function DialogCost({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getDamageValue = () => {
 		switch (kind) {
@@ -98,7 +95,7 @@ function DialogCost({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	return (
 		<Dialog
 			title={`${t('set.cost')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

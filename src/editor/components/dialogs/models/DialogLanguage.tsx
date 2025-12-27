@@ -23,14 +23,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogLanguage({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogLanguage({ setIsOpen, model, onAccept, onReject }: Props) {
 	const language = model as Model.Language;
 
 	const { t } = useTranslation();
@@ -65,15 +64,13 @@ function DialogLanguage({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.language')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

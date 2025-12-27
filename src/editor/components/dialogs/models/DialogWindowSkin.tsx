@@ -32,14 +32,13 @@ import DialogRectangle from '../DialogRectangle';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 	const windowSkin = model as Model.WindowSkin;
 
 	const { t } = useTranslation();
@@ -155,10 +154,8 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getRectangleButtons = (label: string, rectangle: Rectangle, setRectangle: (r: Rectangle) => void) => (
 		<>
@@ -188,7 +185,7 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 		<>
 			<Dialog
 				title={`${t('set.window.skin')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				initialWidth='750px'
@@ -240,13 +237,13 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 									{getRectangleButtons(
 										`${t('top')}-${t('right')}`,
 										borderTopRight,
-										setBorderTopRight
+										setBorderTopRight,
 									)}
 									{getRectangleButtons(`${t('bot')}-${t('left')}`, borderBotLeft, setBorderBotLeft)}
 									{getRectangleButtons(
 										`${t('bot')}-${t('right')}`,
 										borderBotRight,
-										setBorderBotRight
+										setBorderBotRight,
 									)}
 								</Form>
 							</Groupbox>
@@ -278,7 +275,7 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 									{getRectangleButtons(
 										t('target.selection'),
 										arrowTargetSelection,
-										setArrowTargetSelection
+										setArrowTargetSelection,
 									)}
 									{getRectangleButtons(t('end.message'), arrowEndMessage, setArrowEndMessage)}
 									{getRectangleButtons(`${t('up')} / ${t('down')}`, arrowUpDown, setArrowUpDown)}
@@ -296,12 +293,13 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 					</Flex>
 				</Flex>
 			</Dialog>
-			<DialogRectangle
-				isOpen={isDialogRectangleOpen}
-				setIsOpen={setIsDialogRectangleOpen}
-				rectangle={selectedRectangle!}
-				onChange={handleSelectionFinished}
-			/>
+			{isDialogRectangleOpen && (
+				<DialogRectangle
+					setIsOpen={setIsDialogRectangleOpen}
+					rectangle={selectedRectangle!}
+					onChange={handleSelectionFinished}
+				/>
+			)}
 		</>
 	);
 }

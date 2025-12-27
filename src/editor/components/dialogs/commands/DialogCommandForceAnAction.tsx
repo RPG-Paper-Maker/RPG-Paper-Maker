@@ -42,7 +42,7 @@ enum SELECTION_TARGET_KIND {
 	CUSTOM,
 }
 
-function DialogCommandForceAndAction({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandForceAndAction({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
@@ -116,15 +116,13 @@ function DialogCommandForceAndAction({ commandKind, isOpen, setIsOpen, list, onA
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('force.an.action')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

@@ -34,7 +34,7 @@ const COLOR_MAX = 255;
 const GREY_MIN = 0;
 const GREY_MAX = 100;
 
-function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeScreenTone({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
@@ -100,15 +100,13 @@ function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, o
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.screen.tone')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

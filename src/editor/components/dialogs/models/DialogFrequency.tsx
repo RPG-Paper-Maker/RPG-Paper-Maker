@@ -23,14 +23,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogFrequency({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogFrequency({ setIsOpen, model, onAccept, onReject }: Props) {
 	const frequency = model as Model.Frequency;
 
 	const { t } = useTranslation();
@@ -56,15 +55,13 @@ function DialogFrequency({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.speed.frequency')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

@@ -24,14 +24,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogMainMenuCommand({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogMainMenuCommand({ setIsOpen, model, onAccept, onReject }: Props) {
 	const mainMenuCommand = model as Model.MainMenuCommand;
 
 	const { t } = useTranslation();
@@ -60,15 +59,13 @@ function DialogMainMenuCommand({ isOpen, setIsOpen, model, onAccept, onReject }:
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.main.menu.command')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='450px'

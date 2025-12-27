@@ -29,7 +29,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isWindowSkinID, setIsWindowSkinID] = useStateBool();
@@ -81,7 +81,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list
 		setter: (b: boolean) => void,
 		dynamic: DynamicValue,
 		defaultKind: DYNAMIC_VALUE_KIND,
-		defaultValue: unknown
+		defaultValue: unknown,
 	) => {
 		const checked = Utils.initializeBoolCommand(l, iterator);
 		setter(checked);
@@ -106,7 +106,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list
 				setIsTransformHeight,
 				transformHeight,
 				DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
-				0
+				0,
 			);
 			initializeCheck(list, iterator, setIsPaddingLeft, paddingLeft, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 			initializeCheck(list, iterator, setIsPaddingTop, paddingTop, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
@@ -243,15 +243,13 @@ function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.dialog.box.options')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

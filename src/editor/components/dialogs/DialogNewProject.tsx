@@ -37,12 +37,11 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import FooterNoYes from './footers/FooterNoYes';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	onAccept: (data: Model.ProjectPreview) => void;
 };
 
-function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
+function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [focusFirst, setFocustFirst] = useState(false);
@@ -269,7 +268,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		<>
 			<Dialog
 				title={`${t('new.project')}...`}
-				isOpen={isOpen}
+				isOpen
 				isLoading={isLoading}
 				isDisabled={isDialogConfirmOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}

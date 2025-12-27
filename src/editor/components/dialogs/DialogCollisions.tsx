@@ -41,12 +41,11 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	kind?: PICTURE_KIND;
 };
 
-function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
+function DialogCollisions({ setIsOpen, kind }: Props) {
 	const { t } = useTranslation();
 
 	const [tilesets, setTilesets] = useState<Node[]>([]);
@@ -527,7 +526,7 @@ function DialogCollisions({ isOpen, setIsOpen, kind }: Props) {
 	return (
 		<Dialog
 			title={`${t(title)}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1100px'

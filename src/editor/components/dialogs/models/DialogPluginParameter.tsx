@@ -26,14 +26,14 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
 	isDefault?: boolean;
-	isOpen: boolean;
+
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogPluginParameter({ isDefault = false, setIsOpen, model, onAccept, onReject }: Props) {
 	const parameter = model as Model.PluginParameter;
 
 	const { t } = useTranslation();
@@ -80,7 +80,7 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 	return (
 		<Dialog
 			title={`${t('set.parameter')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'

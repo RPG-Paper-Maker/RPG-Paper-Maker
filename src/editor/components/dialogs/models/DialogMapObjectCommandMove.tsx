@@ -19,7 +19,6 @@ import DialogCommandMoveObjectJump from '../commands/DialogCommandMoveObjectJump
 import DialogCommandWait from '../commands/DialogCommandWait';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -27,12 +26,11 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogMapObjectCommandMove({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const command = model as MapObjectCommandMove;
 
 	const getDialogCommand = () => {
 		const options = {
-			isOpen,
 			setIsOpen,
 			model,
 			isNew,
@@ -56,7 +54,6 @@ function DialogMapObjectCommandMove({ isOpen, setIsOpen, model, isNew, onAccept,
 				return (
 					<DialogCommandWait
 						commandKind={EVENT_COMMAND_KIND.WAIT}
-						isOpen={isOpen}
 						setIsOpen={setIsOpen}
 						list={isNew ? undefined : list}
 						onAccept={handleAcceptWait}
@@ -70,11 +67,11 @@ function DialogMapObjectCommandMove({ isOpen, setIsOpen, model, isNew, onAccept,
 	};
 
 	useEffect(() => {
-		if (isOpen && !command.command) {
+		if (!command.command) {
 			onReject();
 			setIsOpen(false);
 		}
-	}, [isOpen]);
+	}, []);
 
 	return getDialogCommand();
 }

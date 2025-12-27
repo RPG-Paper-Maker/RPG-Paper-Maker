@@ -32,7 +32,7 @@ import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
@@ -165,10 +165,8 @@ function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept,
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getTabContents = () =>
 		Project.current!.languages.list.map((language) => (
@@ -280,7 +278,7 @@ function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept,
 		<>
 			<Dialog
 				title={`${t('show.text')}...`}
-				isOpen={isOpen}
+				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
@@ -306,15 +304,16 @@ function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept,
 					<Tab titles={tabTitles} contents={getTabContents()} />
 				</Flex>
 			</Dialog>
-			<DialogPictures
-				isOpen={isOpenDialogIcon}
-				setIsOpen={setIsOpenDialogIcon}
-				pictureID={-1}
-				indexX={0}
-				indexY={0}
-				kind={PICTURE_KIND.ICONS}
-				onAccept={handleAcceptIcon}
-			/>
+			{isOpenDialogIcon && (
+				<DialogPictures
+					setIsOpen={setIsOpenDialogIcon}
+					pictureID={-1}
+					indexX={0}
+					indexY={0}
+					kind={PICTURE_KIND.ICONS}
+					onAccept={handleAcceptIcon}
+				/>
+			)}
 		</>
 	);
 }

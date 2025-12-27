@@ -891,7 +891,6 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			</Flex>
 			{editingRectangle !== null && (
 				<DialogRectangle
-					isOpen
 					setIsOpen={handleSetIsOpenEditRectangle}
 					rectangle={editingRectangle}
 					onChange={handleChangePraticable}

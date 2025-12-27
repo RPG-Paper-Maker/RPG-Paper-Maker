@@ -38,13 +38,12 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Map;
 	onAccept: (previousModel: Model.Map) => Promise<void>;
 };
 
-function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
+function DialogMapProperties({ setIsOpen, model, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const playMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
@@ -98,10 +97,6 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		RandomBattle.currentList = battles;
 	};
 
-	const reset = () => {
-		panelMapObjectRef.current?.reset();
-	};
-
 	const handleAccept = async () => {
 		setIsLoading(true);
 		const previousModel = model.clone();
@@ -150,12 +145,8 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		} else {
-			reset();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getMapStartupReactionsContent = () => (
 		<PanelMapObject
@@ -213,7 +204,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	return (
 		<Dialog
 			title={`${t('edit.map.properties')}...`}
-			isOpen={isOpen}
+			isOpen
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}

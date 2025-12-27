@@ -50,7 +50,7 @@ enum SELECTION_VALUE_TYPE {
 	OTHER_CHARACTERISTICS = 9,
 }
 
-function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [selectionType, setSelectionType] = useStateNumber();
@@ -243,15 +243,13 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.variables')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

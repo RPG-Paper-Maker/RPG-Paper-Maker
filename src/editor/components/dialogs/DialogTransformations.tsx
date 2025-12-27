@@ -22,7 +22,6 @@ import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	centerX: DynamicValue;
 	centerZ: DynamicValue;
@@ -36,7 +35,6 @@ type Props = {
 };
 
 function DialogTransformations({
-	isOpen,
 	setIsOpen,
 	centerX,
 	centerZ,
@@ -90,15 +88,13 @@ function DialogTransformations({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('update.transformations')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onOK={handleAccept} onCancel={handleClose} />}
 			onClose={handleClose}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

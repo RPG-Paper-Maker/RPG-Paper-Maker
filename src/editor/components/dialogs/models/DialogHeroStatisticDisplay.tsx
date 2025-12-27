@@ -21,14 +21,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogHeroStatisticDisplay({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogHeroStatisticDisplay({ setIsOpen, model, onAccept, onReject }: Props) {
 	const heroStatisticDisplay = model as Model.HeroStatisticDisplay;
 
 	const { t } = useTranslation();
@@ -51,15 +50,13 @@ function DialogHeroStatisticDisplay({ isOpen, setIsOpen, model, onAccept, onReje
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.statistic')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

@@ -30,7 +30,6 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	object3DID?: number;
 	manager?: boolean;
@@ -38,7 +37,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false, onAccept, onReject }: Props) {
+function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [triggerUpdate, setTriggerUpdate] = useState(false);
@@ -202,10 +201,8 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 	}, [objects3D.length]);
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getPreviewerContent = () => {
 		if (selectedObject3D && selectedObject3D.id !== -1) {
@@ -364,7 +361,7 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, manager = false
 	return (
 		<Dialog
 			title={`${t('threed.objects')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

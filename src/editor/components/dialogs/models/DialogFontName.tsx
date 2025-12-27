@@ -32,14 +32,13 @@ enum SELECTION_FONT_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogFontName({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogFontName({ setIsOpen, model, onAccept, onReject }: Props) {
 	const fontName = model as Model.FontName;
 
 	const { t } = useTranslation();
@@ -71,15 +70,13 @@ function DialogFontName({ isOpen, setIsOpen, model, onAccept, onReject }: Props)
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.font.name')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

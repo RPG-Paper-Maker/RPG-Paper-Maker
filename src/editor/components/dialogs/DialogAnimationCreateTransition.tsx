@@ -24,13 +24,12 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
 	onAccept: () => void;
 };
 
-function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccept }: Props) {
+function DialogAnimationCreateTransition({ setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [fromFrames, setFromFrames] = useStateNumber();
@@ -88,7 +87,7 @@ function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccep
 							zoom - element.zoom,
 							duration,
 							element.zoom,
-							true
+							true,
 						);
 						const newAngle = ProgressionTable.easing(
 							equation,
@@ -96,14 +95,14 @@ function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccep
 							angle - element.angle,
 							duration,
 							element.angle,
-							true
+							true,
 						);
 						const newOpacity = ProgressionTable.easing(
 							equation,
 							posX,
 							opacity - element.opacity,
 							duration,
-							element.opacity
+							element.opacity,
 						);
 						const frameTransition = Base.getByID(animation.frames, j) as AnimationFrame | null;
 						if (frameTransition) {
@@ -146,15 +145,13 @@ function DialogAnimationCreateTransition({ isOpen, setIsOpen, animation, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('create.transition')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

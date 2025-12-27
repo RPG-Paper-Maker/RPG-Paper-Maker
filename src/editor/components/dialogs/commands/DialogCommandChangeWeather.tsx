@@ -41,7 +41,7 @@ enum SELECTION_TEXTURE_TYPE {
 	IMAGE,
 }
 
-function DialogCommandChangeWeather({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [selectionType, setSelectionType] = useStateNumber();
@@ -162,15 +162,13 @@ function DialogCommandChangeWeather({ commandKind, isOpen, setIsOpen, list, onAc
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.weather')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

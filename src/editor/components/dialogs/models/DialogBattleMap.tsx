@@ -18,14 +18,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogBattleMap({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogBattleMap({ setIsOpen, model, onAccept, onReject }: Props) {
 	const battleMap = model as Model.BattleMap;
 
 	const { t } = useTranslation();
@@ -57,15 +56,13 @@ function DialogBattleMap({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.battle.map')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='70%'

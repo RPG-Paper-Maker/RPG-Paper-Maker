@@ -74,7 +74,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 
 export type CommandProps = {
 	commandKind: EVENT_COMMAND_KIND;
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	list?: MapObjectCommandType[];
 	onAccept: (command: Model.MapObjectCommand) => void;
@@ -82,7 +81,6 @@ export type CommandProps = {
 };
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -90,7 +88,7 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const command = model as MapObjectCommand;
 
 	const { t } = useTranslation();
@@ -102,11 +100,6 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 	const initialize = () => {
 		setIsOpenCommand(!isNew);
 		setSelectedCommand(isNew ? undefined : command.kind);
-	};
-
-	const reset = () => {
-		setIsOpenCommand(false);
-		setSelectedCommand(undefined);
 	};
 
 	const handleClickOpenCommand = (kind: EVENT_COMMAND_KIND, isOpeningCommand: boolean) => {
@@ -138,12 +131,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		} else {
-			reset();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	const getButton = (kind: EVENT_COMMAND_KIND, disabled = false) => {
 		const isOpeningCommand = !MapObjectCommand.isNotOpeningCommand(kind);
@@ -335,7 +324,6 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 	const getDialogCommand = () => {
 		const options = {
 			commandKind: selectedCommand!,
-			isOpen: isOpenCommand,
 			setIsOpen: setIsOpenCommand,
 			onAccept: handleAcceptCommand,
 			onReject: handleRejectCommand,
@@ -463,7 +451,6 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 
 	useEffect(() => {
 		if (
-			isOpen &&
 			!isNew &&
 			(selectedCommand === EVENT_COMMAND_KIND.CHOICE ||
 				MapObjectCommand.isNotOpeningCommand(selectedCommand as EVENT_COMMAND_KIND))
@@ -471,14 +458,14 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			setIsOpen(false);
 			onReject();
 		}
-	}, [isOpen, isNew, selectedCommand]);
+	}, [isNew, selectedCommand]);
 
 	return (
 		<>
 			{!isOpenCommand && (
 				<Dialog
 					title={`${t('commands')}...`}
-					isOpen={isOpen}
+					isOpen
 					onClose={handleReject}
 					initialWidth='700px'
 					initialHeight='550px'

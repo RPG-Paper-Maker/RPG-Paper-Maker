@@ -35,7 +35,7 @@ enum SELECTION_SKY_TYPE {
 	SKYBOX,
 }
 
-function DialogCommandChangeMapProperties({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeMapProperties({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [mapID] = useStateDynamicValue();
@@ -156,15 +156,13 @@ function DialogCommandChangeMapProperties({ commandKind, isOpen, setIsOpen, list
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.map.properties')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

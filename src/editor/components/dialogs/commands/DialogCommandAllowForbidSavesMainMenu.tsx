@@ -22,14 +22,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandAllowForbidSavesMainMenu({
-	commandKind,
-	isOpen,
-	setIsOpen,
-	list,
-	onAccept,
-	onReject,
-}: CommandProps) {
+function DialogCommandAllowForbidSavesMainMenu({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [allow] = useStateDynamicValue();
@@ -58,17 +51,15 @@ function DialogCommandAllowForbidSavesMainMenu({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t(
-				commandKind === EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES ? 'allow.forbid.saves' : 'allow.forbid.main.menu'
+				commandKind === EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES ? 'allow.forbid.saves' : 'allow.forbid.main.menu',
 			)}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

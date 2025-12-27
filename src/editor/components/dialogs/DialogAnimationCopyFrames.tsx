@@ -20,13 +20,12 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
 	onAccept: () => void;
 };
 
-function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation, onAccept }: Props) {
+function DialogAnimationCopyFrames({ setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [from, setFrom] = useStateNumber();
@@ -60,15 +59,13 @@ function DialogAnimationCopyFrames({ isOpen, setIsOpen, animation, onAccept }: P
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('copy.frames')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

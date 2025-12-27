@@ -45,7 +45,6 @@ import FooterCancelOK from './footers/FooterCancelOK';
 type Props = {
 	title?: string;
 	kind?: SONG_KIND;
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	songID?: number;
 	dynamicSongID?: DynamicValue;
@@ -59,7 +58,6 @@ type Props = {
 function DialogSongs({
 	title,
 	kind,
-	isOpen,
 	setIsOpen,
 	songID,
 	dynamicSongID,
@@ -283,10 +281,10 @@ function DialogSongs({
 	}, [selectedKind]);
 
 	useLayoutEffect(() => {
-		if (isOpen && selectedKind !== undefined) {
+		if (selectedKind !== undefined) {
 			initialize().catch(console.error);
 		}
-	}, [isOpen, selectedKind]);
+	}, [selectedKind]);
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -383,7 +381,7 @@ function DialogSongs({
 	return (
 		<Dialog
 			title={`${title ?? t('songs.manager')}`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'

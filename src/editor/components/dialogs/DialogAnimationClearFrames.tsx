@@ -19,13 +19,12 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	animation: Animation;
 	onAccept: () => void;
 };
 
-function DialogAnimationClearFrames({ isOpen, setIsOpen, animation, onAccept }: Props) {
+function DialogAnimationClearFrames({ setIsOpen, animation, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [from, setFrom] = useStateNumber();
@@ -54,15 +53,13 @@ function DialogAnimationClearFrames({ isOpen, setIsOpen, animation, onAccept }: 
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('clear.frames')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

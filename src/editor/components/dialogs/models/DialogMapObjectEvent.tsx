@@ -17,7 +17,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -25,7 +24,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectEvent({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const event = model as Model.MapObjectEvent;
 
 	const { t } = useTranslation();
@@ -48,15 +47,13 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.event')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

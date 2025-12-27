@@ -19,17 +19,16 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogName({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogName({ setIsOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [focusFirst, setFocustFirst] = useState(false);
+	const [focusFirst, setFocustFirst] = useState(true);
 	const [name, setName] = useStateString();
 
 	const initialize = () => {
@@ -48,16 +47,13 @@ function DialogName({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			setFocustFirst(true);
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('edit.name')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

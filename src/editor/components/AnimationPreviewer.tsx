@@ -638,7 +638,6 @@ function AnimationPreviewer({
 			</ContextMenu>
 			{isDialogElementOpen && selectedElement && (
 				<DialogAnimationFrameElement
-					isOpen
 					setIsOpen={setIsDialogElementOpen}
 					element={selectedElement}
 					onAccept={handleEditElementAccept}

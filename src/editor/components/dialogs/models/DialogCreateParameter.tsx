@@ -22,14 +22,13 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogCreateParameter({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogCreateParameter({ setIsOpen, model, onAccept, onReject }: Props) {
 	const createParameter = model as Model.CreateParameter;
 
 	const { t } = useTranslation();
@@ -55,15 +54,13 @@ function DialogCreateParameter({ isOpen, setIsOpen, model, onAccept, onReject }:
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.parameter')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

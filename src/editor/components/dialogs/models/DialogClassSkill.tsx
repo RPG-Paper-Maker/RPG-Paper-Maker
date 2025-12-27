@@ -23,7 +23,6 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -31,7 +30,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogClassSkill({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogClassSkill({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const classSkill = model as Model.ClassSkill;
 
 	const { t } = useTranslation();
@@ -65,15 +64,13 @@ function DialogClassSkill({ isOpen, setIsOpen, model, isNew, onAccept, onReject 
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.skill.learn')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

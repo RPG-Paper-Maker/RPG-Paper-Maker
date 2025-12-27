@@ -22,7 +22,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -30,7 +29,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectState({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const state = model as Model.MapObjectState;
 
 	const { t } = useTranslation();
@@ -59,9 +58,9 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 				showWarning(
 					`${t('cannot.duplicate.state')} ${Model.Base.getByID(
 						Project.current!.commonEvents.states,
-						stateID
-					)?.toStringNameID()}`
-				)
+						stateID,
+					)?.toStringNameID()}`,
+				),
 			);
 		}
 	};
@@ -72,15 +71,13 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('select.a.state')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

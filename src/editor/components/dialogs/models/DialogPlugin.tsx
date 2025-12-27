@@ -53,7 +53,6 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
@@ -61,7 +60,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogPlugin({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const plugin = model as Model.Plugin;
 
 	const { t } = useTranslation();
@@ -293,15 +292,13 @@ const inject = Manager.Plugins.inject;
 	}, [loadingPlugins]);
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.plugin')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='800px'

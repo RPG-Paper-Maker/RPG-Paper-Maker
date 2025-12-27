@@ -36,7 +36,7 @@ enum SELECTION_TARGET_TYPE {
 	OBJECT,
 }
 
-function DialogCommandMoveCamera({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
@@ -131,15 +131,13 @@ function DialogCommandMoveCamera({ commandKind, isOpen, setIsOpen, list, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('move.camera')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

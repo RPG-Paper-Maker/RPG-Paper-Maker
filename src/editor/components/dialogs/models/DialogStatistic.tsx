@@ -32,14 +32,13 @@ enum SELECTION_PROPERTIES_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogStatistic({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogStatistic({ setIsOpen, model, onAccept, onReject }: Props) {
 	const statistic = model as Model.Statistic;
 
 	const { t } = useTranslation();
@@ -71,15 +70,13 @@ function DialogStatistic({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.statistic')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

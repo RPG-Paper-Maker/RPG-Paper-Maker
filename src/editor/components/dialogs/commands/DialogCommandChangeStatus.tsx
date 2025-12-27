@@ -33,7 +33,7 @@ enum SELECTION_OPERATION_TYPE {
 	REMOVE,
 }
 
-function DialogCommandChangeStatus({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeStatus({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
@@ -71,15 +71,13 @@ function DialogCommandChangeStatus({ commandKind, isOpen, setIsOpen, list, onAcc
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.status')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

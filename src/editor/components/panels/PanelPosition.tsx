@@ -289,16 +289,17 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 					</Form>
 				</RadioGroup>
 			</Groupbox>
-			<DialogSelectMapPosition
-				isOpen={isSelectMapPositionDialogOpen}
-				setIsOpen={setIsSelectMapPositionDialogOpen}
-				defaultMapID={mapID}
-				defaultX={x}
-				defaultY={y}
-				defaultYp={yp}
-				defaultZ={z}
-				onAccept={handleAcceptSelect}
-			/>
+			{isSelectMapPositionDialogOpen && (
+				<DialogSelectMapPosition
+					setIsOpen={setIsSelectMapPositionDialogOpen}
+					defaultMapID={mapID}
+					defaultX={x}
+					defaultY={y}
+					defaultYp={yp}
+					defaultZ={z}
+					onAccept={handleAcceptSelect}
+				/>
+			)}
 		</>
 	);
 });

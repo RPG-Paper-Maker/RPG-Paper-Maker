@@ -26,12 +26,11 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	conditions: Model.TroopReactionConditions;
 };
 
-function DialogTroopReactionConditions({ isOpen, setIsOpen, conditions }: Props) {
+function DialogTroopReactionConditions({ setIsOpen, conditions }: Props) {
 	const { t } = useTranslation();
 
 	const [isNumberOfTurn, setIsNumberOfTurn] = useStateBool();
@@ -102,15 +101,13 @@ function DialogTroopReactionConditions({ isOpen, setIsOpen, conditions }: Props)
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.conditions')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

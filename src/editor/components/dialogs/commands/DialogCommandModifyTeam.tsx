@@ -39,7 +39,7 @@ enum SELECTION_HERO_MONSTER_TYPE {
 	MONSTER,
 }
 
-function DialogCommandModifyTeam({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandModifyTeam({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [selectionType, setSelectionType] = useStateNumber();
@@ -147,15 +147,13 @@ function DialogCommandModifyTeam({ commandKind, isOpen, setIsOpen, list, onAccep
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('modify.team')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

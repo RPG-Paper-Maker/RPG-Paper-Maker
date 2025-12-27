@@ -27,7 +27,7 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandCallACommonReaction({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandCallACommonReaction({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [commonReactionID, setCommonReactionID] = useStateNumber();
@@ -58,7 +58,7 @@ function DialogCommandCallACommonReaction({ commandKind, isOpen, setIsOpen, list
 	const getDefaultParameters = (id: number) => {
 		const commonReaction = Model.Base.getByIDOrFirst(
 			Project.current!.commonEvents.commonReactions,
-			id
+			id,
 		) as Model.CommonReaction;
 		return commonReaction.getDefaultParameters();
 	};
@@ -90,15 +90,13 @@ function DialogCommandCallACommonReaction({ commandKind, isOpen, setIsOpen, list
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('call.a.common.reaction')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='500px'

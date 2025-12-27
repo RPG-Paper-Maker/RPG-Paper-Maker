@@ -31,14 +31,13 @@ enum SELECTION_TYPE {
 }
 
 type Props = {
-	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogAnimationFrameEffect({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogAnimationFrameEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 	const effect = model as Model.AnimationFrameEffect;
 
 	const { t } = useTranslation();
@@ -68,15 +67,13 @@ function DialogAnimationFrameEffect({ isOpen, setIsOpen, model, onAccept, onReje
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-	}, [isOpen]);
+		initialize();
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('set.animation.effect')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>

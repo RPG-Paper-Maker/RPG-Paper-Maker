@@ -354,34 +354,38 @@ function TreeMaps({
 				applyDefault
 				scrollable
 			/>
-			<DialogMapProperties
-				isOpen={isOpenMapProperties}
-				setIsOpen={setIsOpenMapProperties}
-				model={editedMap}
-				onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
-			/>
-			<DialogName
-				isOpen={isOpenName}
-				setIsOpen={setIsOpenName}
-				model={editedFolder}
-				onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
-			/>
-			<Dialog
-				title={t('warning')}
-				isOpen={isOpenDialogConfirm}
-				footer={
-					<FooterNoYes
-						onNo={handleRejectDelete}
-						onYes={isDeletingMap ? handleAcceptDeleteMap : handleAcceptDeleteFolder}
-					/>
-				}
-				onClose={handleRejectDelete}
-			>
-				<p className='warning textCenter'>
-					{isDeletingMap ? t('are.you.sure.delete.this.map') : t('are.you.sure.delete.this.directory')}
-					{!isDeletingMap && `${t('this.will.delete.all.maps.inside.folder')}.`}
-				</p>
-			</Dialog>
+			{isOpenMapProperties && (
+				<DialogMapProperties
+					setIsOpen={setIsOpenMapProperties}
+					model={editedMap}
+					onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
+				/>
+			)}
+			{isOpenName && (
+				<DialogName
+					setIsOpen={setIsOpenName}
+					model={editedFolder}
+					onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
+				/>
+			)}
+			{isOpenDialogConfirm && (
+				<Dialog
+					title={t('warning')}
+					isOpen
+					footer={
+						<FooterNoYes
+							onNo={handleRejectDelete}
+							onYes={isDeletingMap ? handleAcceptDeleteMap : handleAcceptDeleteFolder}
+						/>
+					}
+					onClose={handleRejectDelete}
+				>
+					<p className='warning textCenter'>
+						{isDeletingMap ? t('are.you.sure.delete.this.map') : t('are.you.sure.delete.this.directory')}
+						{!isDeletingMap && `${t('this.will.delete.all.maps.inside.folder')}.`}
+					</p>
+				</Dialog>
+			)}
 		</>
 	);
 }

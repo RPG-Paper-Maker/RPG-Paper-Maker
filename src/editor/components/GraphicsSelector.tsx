@@ -208,24 +208,26 @@ function GraphicsSelector({
 					fillWidth
 				/>
 			</Flex>
-			<DialogPictures
-				kind={PICTURE_KIND.CHARACTERS}
-				dynamicPictureID={dynamicID}
-				isOpen={isOpenDialogPictures}
-				setIsOpen={setIsOpenDialogPictures}
-				onAccept={handleAcceptPictures}
-				pictureID={graphicsID}
-				indexX={graphicsIndexX}
-				indexY={graphicsIndexY}
-				rectTileset={rectTileset}
-				active={dynamicID !== undefined}
-			/>
-			<DialogObjects3DPreview
-				isOpen={isOpenDialogObjects3D}
-				setIsOpen={setIsOpenDialogObjects3D}
-				onAccept={handleAcceptObjects3D}
-				object3DID={graphicsID}
-			/>
+			{isOpenDialogPictures && (
+				<DialogPictures
+					kind={PICTURE_KIND.CHARACTERS}
+					dynamicPictureID={dynamicID}
+					setIsOpen={setIsOpenDialogPictures}
+					onAccept={handleAcceptPictures}
+					pictureID={graphicsID}
+					indexX={graphicsIndexX}
+					indexY={graphicsIndexY}
+					rectTileset={rectTileset}
+					active={dynamicID !== undefined}
+				/>
+			)}
+			{isOpenDialogObjects3D && (
+				<DialogObjects3DPreview
+					setIsOpen={setIsOpenDialogObjects3D}
+					onAccept={handleAcceptObjects3D}
+					object3DID={graphicsID}
+				/>
+			)}
 		</>
 	);
 }

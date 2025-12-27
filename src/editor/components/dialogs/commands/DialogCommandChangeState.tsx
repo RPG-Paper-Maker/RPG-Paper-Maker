@@ -34,7 +34,7 @@ export enum SELECTION_OPERATION_TYPE {
 	REMOVE,
 }
 
-function DialogCommandChangeState({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [mapID] = useStateDynamicValue();
@@ -109,15 +109,13 @@ function DialogCommandChangeState({ commandKind, isOpen, setIsOpen, list, onAcce
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize().catch(console.error);
-		}
-	}, [isOpen]);
+		initialize().catch(console.error);
+	}, []);
 
 	return (
 		<Dialog
 			title={`${t('change.state')}...`}
-			isOpen={isOpen}
+			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
