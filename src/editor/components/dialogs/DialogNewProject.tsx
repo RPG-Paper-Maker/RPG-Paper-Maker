@@ -179,6 +179,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			for (const [k, v] of project.pictures.list.entries()) {
 				switch (k) {
 					case PICTURE_KIND.WINDOW_SKINS:
+					case PICTURE_KIND.CHARACTERS:
 						v.splice(2);
 						break;
 					case PICTURE_KIND.BARS:
