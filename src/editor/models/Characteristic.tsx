@@ -151,7 +151,7 @@ class Characteristic extends Base {
 		switch (this.kind) {
 			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
 				text += `${t(this.isIncreaseDecrease ? 'increase' : 'decrease')} ${t(
-					Base.INCREASE_DECREASE_OPTIONS[this.increaseDecreaseKind].name
+					Base.INCREASE_DECREASE_OPTIONS[this.increaseDecreaseKind].name,
 				)} `;
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE:
@@ -161,7 +161,7 @@ class Characteristic extends Base {
 						text += this.elementResID.toString(Project.current!.battleSystem.elements);
 						break;
 					case INCREASE_DECREASE_KIND.STATUS_RES:
-						text += this.statusResID.toString(Project.current!.battleSystem.elements);
+						text += this.statusResID.toString(Project.current!.status.list);
 						break;
 					case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
 						text += this.currencyGainID.toString(Project.current!.systems.currencies);
@@ -180,25 +180,25 @@ class Characteristic extends Base {
 				text += `${t(this.isAllowEquip ? 'allow' : 'forbid')} ${t('equip').toLowerCase()} ${
 					this.isAllowEquipWeapon
 						? `${t('weapon.id').toLowerCase()} ${this.equipWeaponTypeID.toString(
-								Project.current!.battleSystem.weaponsKind
-						  )}`
+								Project.current!.battleSystem.weaponsKind,
+							)}`
 						: `${t('armor.id').toLowerCase()} ${this.equipArmorTypeID.toString(
-								Project.current!.battleSystem.armorsKind
-						  )}`
+								Project.current!.battleSystem.armorsKind,
+							)}`
 				}`;
 				break;
 			case CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE:
 				text += `${t(this.isAllowChangeEquipment ? 'allow' : 'forbid')} ${t(
-					'change.equipment'
+					'change.equipment',
 				).toLowerCase()} ${this.changeEquipmentID.toString(Project.current!.battleSystem.equipments)}`;
 				break;
 			case CHARACTERISTIC_KIND.BEGIN_EQUIPMENT:
 				text += `${t('begin.equipment')} ${this.beginEquipmentID.toString(
-					Project.current!.battleSystem.equipments
+					Project.current!.battleSystem.equipments,
 				)} ${t('with').toLowerCase()} ${
 					this.isBeginWeapon ? t('weapon.id').toLowerCase() : t('armor.id').toLowerCase()
 				} ${this.beginWeaponArmorID.toString(
-					this.isBeginWeapon ? Project.current!.weapons.list : Project.current!.armors.list
+					this.isBeginWeapon ? Project.current!.weapons.list : Project.current!.armors.list,
 				)}`;
 				break;
 			case CHARACTERISTIC_KIND.SCRIPT:
