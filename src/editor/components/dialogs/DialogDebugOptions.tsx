@@ -11,11 +11,8 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { JSONType, Paths } from '../../common';
-import { getFiles, getFolders, readJSON, writeJSON } from '../../common/Platform';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data';
-import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
@@ -37,32 +34,6 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 	const [isBackupsActivated, setIsBackupsActivated] = useState(EngineSettings.current!.backupsActivated);
 	const [backupsInterval, setIsBackupsInterval] = useState(EngineSettings.current!.backupsInterval);
 	const [backupsMax, setBackupsMax] = useState(EngineSettings.current!.backupsMax);
-
-	const handleClickSynchronizeMapObjects = async () => {
-		const maps = await getFolders(Project.current!.getPathMaps());
-		for (const mapName of maps) {
-			const basePath = Paths.join(Project.current!.getPathMaps(), mapName);
-			const mapProperties = (await readJSON(Paths.join(basePath, Paths.FILE_MAP_INFOS))) as JSONType;
-			const allObjects: JSONType[] = [];
-			mapProperties.objs = allObjects;
-			const allPortions = await getFiles(Paths.join(basePath));
-			for (const portionFileName of allPortions) {
-				if (portionFileName !== Paths.FILE_MAP_INFOS) {
-					const objs = (await readJSON(Paths.join(basePath, portionFileName)))?.objs as JSONType[];
-					if (objs) {
-						allObjects.push(
-							...objs.map((obj) => ({
-								id: (obj.v as JSONType).id,
-								name: (obj.v as JSONType).name,
-								p: obj.k,
-							})),
-						);
-					}
-				}
-			}
-			await writeJSON(Paths.join(basePath, Paths.FILE_MAP_INFOS), mapProperties);
-		}
-	};
 
 	const handleAccept = async () => {
 		setIsLoading(true);
@@ -115,12 +86,6 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 									<InputNumber value={backupsMax} onChange={setBackupsMax} />
 								</Value>
 							</Form>
-							<Button
-								onClick={handleClickSynchronizeMapObjects}
-								disabled={!Project.current!.treeMaps.isAllMapsSaved()}
-							>
-								{t('synchronize.map.objects')}
-							</Button>
 						</Flex>
 					</Groupbox>
 				</Flex>

@@ -160,6 +160,8 @@ class Utils {
 		}
 		return btoa(binary); // Convert to Base64
 	};
+
+	static sleep = (ms: number): Promise<void> => new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
 export { Utils };

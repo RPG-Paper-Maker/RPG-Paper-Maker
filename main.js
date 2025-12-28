@@ -20,28 +20,62 @@ const run = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const EXEC_KIND = {
-	UPDATER: 0,
-	ENGINE: 1,
-	GAME: 2,
+const createSplash = (title) => {
+	const splashPath = path.join(__dirname, 'updater', 'splash.html');
+	const splashURL = `${pathToFileURL(splashPath).href}${title ? `?title=${encodeURIComponent(title)}` : ''}`;
+	splash = new BrowserWindow({
+		width: 650,
+		height: 400,
+		frame: false,
+		alwaysOnTop: true,
+		transparent: true,
+		center: true,
+		hasShadow: false,
+		icon: path.join(__dirname, 'updater', 'icon.png'),
+	});
+	splash.loadURL(splashURL);
 };
 
-const execKind =
-	process.argv[2] === undefined
-		? EXEC_KIND.UPDATER
-		: process.argv[2] === 'engine'
-			? EXEC_KIND.ENGINE
-			: EXEC_KIND.GAME;
-
 const runRPMEngine = () => {
-	const electronPath = process.execPath;
-	const args = ['./main.js', 'engine'];
-	spawn(electronPath, args, {
-		stdio: 'inherit',
-		detached: true,
-		cwd: app.isPackaged ? os.tmpdir() : undefined,
+	updater?.close();
+	updater = null;
+	createSplash();
+	setTimeout(() => {
+		splash.close();
+		splash = null;
+	}, 2000);
+	window = new BrowserWindow({
+		width: screen.getPrimaryDisplay().size.width - 100,
+		height: screen.getPrimaryDisplay().size.height - 100,
+		webPreferences: {
+			nodeIntegration: false,
+			contextIsolation: true,
+			sandbox: false,
+			preload: path.join(__dirname, 'preload.js'),
+			additionalArguments: [`--appPath=${app.getAppPath()}`],
+		},
+		icon: path.join(__dirname, 'dist', 'icon.png'),
+		frame: false,
 	});
-	app.quit();
+	window.removeMenu();
+	window.maximize();
+	window.loadFile(path.join(__dirname, 'dist', 'index.html'));
+	window.on('maximize', () => {
+		window.webContents.send('is-maximized');
+	});
+	window.on('unmaximize', () => {
+		window.webContents.send('is-unmaximized');
+	});
+	window.on('close', () => {
+		game?.close();
+		game = null;
+	});
+	const shortcuts = [`CommandOrControl+Alt+E`, `CommandOrControl+Shift+E`];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
+			window.openDevTools({ mode: 'undocked' });
+		});
+	}
 };
 
 async function extractZip(zipPath, destDir) {
@@ -57,14 +91,7 @@ async function extractZip(zipPath, destDir) {
 	}
 }
 
-if (!app.isPackaged && EXEC_KIND.UPDATER) {
-	runRPMEngine();
-}
-
 app.commandLine.appendSwitch('high-dpi-support', 1);
-if (!app.isPackaged || execKind === EXEC_KIND.GAME) {
-	app.commandLine.appendSwitch('force-device-scale-factor', 1);
-}
 if (process.platform === 'darwin') {
 	app.commandLine.appendSwitch('use-angle', 'metal');
 	app.commandLine.appendSwitch('use-gl', 'angle');
@@ -116,6 +143,8 @@ const getMimeType = (filePath) => {
 };
 
 let window;
+let game;
+let updater;
 let splash;
 
 const hasInternet = async () => {
@@ -180,212 +209,176 @@ const displayErrorUpdater = () => {
 	app.quit();
 };
 
-const createSplash = (title) => {
-	const splashPath = path.join(__dirname, 'updater', 'splash.html');
-	const splashURL = `${pathToFileURL(splashPath).href}${title ? `?title=${encodeURIComponent(title)}` : ''}`;
-	splash = new BrowserWindow({
-		width: 650,
-		height: 400,
-		frame: false,
-		alwaysOnTop: true,
-		transparent: true,
-		center: true,
-		hasShadow: false,
-		icon: path.join(__dirname, 'updater', 'icon.png'),
-	});
-	splash.loadURL(splashURL);
-};
-
-const createWindow = async () => {
-	if (execKind === EXEC_KIND.ENGINE) {
-		createSplash();
-		setTimeout(() => splash.close(), 2000);
-	}
+const init = async () => {
 	let isEngineDownloaded = false;
-	if (execKind === EXEC_KIND.UPDATER) {
-		// Check if dist exists
-		isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
-		if (isEngineDownloaded) {
-			// Check internet
-			if (!(await hasInternet())) {
+	// Check if dist exists
+	isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
+	if (isEngineDownloaded) {
+		// Check internet
+		if (!(await hasInternet())) {
+			runRPMEngine();
+			return;
+		}
+		// Check if ignore update
+		const data = await fs.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8').catch(() => null);
+		const json = data ? JSON.parse(data) : null;
+		const updateType = json?.ut ?? 0;
+		const getUnstable = json?.guv ?? false;
+		// If blocking updates, run engine
+		if (updateType === 2) {
+			runRPMEngine();
+			return;
+		}
+		// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
+		const basePath = `${__dirname}/${process.platform === 'darwin' ? '../../../..' : '../..'}`;
+		const execPath = (() => {
+			switch (process.platform) {
+				case 'win32':
+					return 'RPG Paper Maker.exe';
+				case 'linux':
+					return 'RPG Paper Maker';
+				case 'darwin':
+					return 'Contents/MacOS/RPG Paper Maker';
+			}
+		})();
+		if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
+			createSplash('Finishing updater update. Please do NOT close.');
+			try {
+				await emptyFolder(`${basePath}/../../RPG Paper Maker`);
+			} catch (e) {
+				displayErrorUpdater(e);
+			}
+			await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
+			const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
+			const args = ['./main.js'];
+			const child = spawn(electronPath, args, {
+				detached: true,
+				stdio: 'ignore',
+				cwd: os.tmpdir(),
+			});
+			child.unref();
+			app.quit();
+			setTimeout(() => {
+				process.exit(0);
+			}, 500);
+			return;
+		}
+		if (await exists(`${basePath}/../RPG Paper Maker temp`)) {
+			try {
+				await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
+			} catch {}
+		}
+		const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
+		const response = await fetchFrom(
+			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/updater/version',
+		);
+		const latestUpdaterVersion = await response.text();
+		if (currentUpdaterVersion === latestUpdaterVersion) {
+			const response = await fetchFrom(
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/versions/versions.json',
+			);
+			const versions = JSON.parse(await response.text());
+			const isLastVersionUnstable = versions.unstable;
+			const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
+			const latestEngineVersion =
+				versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
+			if (currentEngineVersion !== latestEngineVersion) {
+				if (updateType === 1) {
+					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+						type: 'question',
+						buttons: ['Yes', 'No'],
+						defaultId: 0,
+						cancelId: 1,
+						title: 'A new version of RPG Paper Maker is available!',
+						message: 'Would you like to download it now? Everything is automatic and fast!',
+					});
+					if (result.response === 1) {
+						runRPMEngine();
+						return;
+					}
+				}
+			} else {
 				runRPMEngine();
 				return;
 			}
-			// Check if ignore update
-			const data = await fs
-				.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8')
-				.catch(() => null);
-			const json = data ? JSON.parse(data) : null;
-			const updateType = json?.ut ?? 0;
-			const getUnstable = json?.guv ?? false;
-			// If blocking updates, run engine
-			if (updateType === 2) {
-				runRPMEngine();
-				return;
+		} else {
+			// Update updater
+			createSplash('Updating the updater. Please do NOT close.');
+			const updaterZipName = (() => {
+				switch (process.platform) {
+					case 'win32':
+						return 'RPG.Paper.Maker.Windows.zip';
+					case 'darwin':
+						return 'RPG.Paper.Maker.Mac.zip';
+					case 'linux':
+						return 'RPG.Paper.Maker.Linux.zip';
+					default:
+						throw new Error(`Unsupported platform: ${process.platform}`);
+				}
+			})();
+			const res = await fetchFrom(
+				`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
+			);
+			const blob = Buffer.from(await res.arrayBuffer());
+			await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
+			await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
+			await fs.unlink(`${basePath}/../${updaterZipName}`);
+			await copyFolder(
+				`${__dirname}/dist`,
+				`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
+			);
+			if (process.platform === 'win32') {
+				if (await exists(`${basePath}/unins000.exe`)) {
+					await fs.copyFile(
+						`${basePath}/unins000.exe`,
+						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+					);
+				}
+				if (await exists(`${basePath}/unins000.dat`)) {
+					await fs.copyFile(
+						`${basePath}/unins000.exe`,
+						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+					);
+				}
 			}
-			// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
-			const basePath = `${__dirname}/${process.platform === 'darwin' ? '../../../..' : '../..'}`;
-			const execPath = (() => {
+			const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
 				switch (process.platform) {
 					case 'win32':
 						return 'RPG Paper Maker.exe';
 					case 'linux':
 						return 'RPG Paper Maker';
 					case 'darwin':
-						return 'Contents/MacOS/RPG Paper Maker';
+						return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 				}
-			})();
-			if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
-				createSplash('Finishing updater update. Please do NOT close.');
-				try {
-					await emptyFolder(`${basePath}/../../RPG Paper Maker`);
-				} catch (e) {
-					displayErrorUpdater(e);
-				}
-				await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
-				const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
-				const args = ['./main.js'];
-				const child = spawn(electronPath, args, {
-					detached: true,
-					stdio: 'ignore',
-					cwd: os.tmpdir(),
-				});
-				child.unref();
-				app.quit();
-				setTimeout(() => {
-					process.exit(0);
-				}, 500);
-				return;
-			}
-			if (await exists(`${basePath}/../RPG Paper Maker temp`)) {
-				try {
-					await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
-				} catch {}
-			}
-			const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
-			const response = await fetchFrom(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/updater/version',
-			);
-			const latestUpdaterVersion = await response.text();
-			if (currentUpdaterVersion === latestUpdaterVersion) {
-				const response = await fetchFrom(
-					'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/versions/versions.json',
-				);
-				const versions = JSON.parse(await response.text());
-				const isLastVersionUnstable = versions.unstable;
-				const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
-				const latestEngineVersion =
-					versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
-				if (currentEngineVersion !== latestEngineVersion) {
-					if (updateType === 1) {
-						const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-							type: 'question',
-							buttons: ['Yes', 'No'],
-							defaultId: 0,
-							cancelId: 1,
-							title: 'A new version of RPG Paper Maker is available!',
-							message: 'Would you like to download it now? Everything is automatic and fast!',
-						});
-						if (result.response === 1) {
-							runRPMEngine();
-							return;
-						}
-					}
-				} else {
-					runRPMEngine();
-					return;
-				}
-			} else {
-				// Update updater
-				createSplash('Updating the updater. Please do NOT close.');
-				const updaterZipName = (() => {
-					switch (process.platform) {
-						case 'win32':
-							return 'RPG.Paper.Maker.Windows.zip';
-						case 'darwin':
-							return 'RPG.Paper.Maker.Mac.zip';
-						case 'linux':
-							return 'RPG.Paper.Maker.Linux.zip';
-						default:
-							throw new Error(`Unsupported platform: ${process.platform}`);
-					}
-				})();
-				const res = await fetchFrom(
-					`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
-				);
-				const blob = Buffer.from(await res.arrayBuffer());
-				await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
-				await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
-				await fs.unlink(`${basePath}/../${updaterZipName}`);
-				await copyFolder(
-					`${__dirname}/dist`,
-					`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
-				);
-				if (process.platform === 'win32') {
-					if (await exists(`${basePath}/unins000.exe`)) {
-						await fs.copyFile(
-							`${basePath}/unins000.exe`,
-							`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
-						);
-					}
-					if (await exists(`${basePath}/unins000.dat`)) {
-						await fs.copyFile(
-							`${basePath}/unins000.exe`,
-							`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
-						);
-					}
-				}
-				const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
-					switch (process.platform) {
-						case 'win32':
-							return 'RPG Paper Maker.exe';
-						case 'linux':
-							return 'RPG Paper Maker';
-						case 'darwin':
-							return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
-					}
-				})()}`;
-				const args = ['./main.js'];
-				const child = spawn(electronPath, args, {
-					detached: true,
-					stdio: 'ignore',
-					cwd: os.tmpdir(),
-				});
-				child.unref();
-				app.quit();
-				setTimeout(() => {
-					process.exit(0);
-				}, 500);
-				return;
-			}
-		} else {
-			// Check if internet
-			if (!(await hasInternet())) {
-				dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
-					type: 'warning',
-					title: 'No Internet',
-					message: 'You are currently offline.',
-					detail: 'It is needed to download RPG Paper Maker completely. Please check your network connection and try again.',
-				});
-				app.quit();
-			}
+			})()}`;
+			const args = ['./main.js'];
+			const child = spawn(electronPath, args, {
+				detached: true,
+				stdio: 'ignore',
+				cwd: os.tmpdir(),
+			});
+			child.unref();
+			app.quit();
+			setTimeout(() => {
+				process.exit(0);
+			}, 500);
+			return;
+		}
+	} else {
+		// Check if internet
+		if (!(await hasInternet())) {
+			dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+				type: 'warning',
+				title: 'No Internet',
+				message: 'You are currently offline.',
+				detail: 'It is needed to download RPG Paper Maker completely. Please check your network connection and try again.',
+			});
+			app.quit();
 		}
 	}
-	window = new BrowserWindow({
-		width:
-			execKind === EXEC_KIND.GAME
-				? 640
-				: execKind === EXEC_KIND.ENGINE
-					? screen.getPrimaryDisplay().size.width - 100
-					: 600,
-		height:
-			execKind === EXEC_KIND.GAME
-				? 480
-				: execKind === EXEC_KIND.ENGINE
-					? screen.getPrimaryDisplay().size.height - 100
-					: isEngineDownloaded
-						? 150
-						: 310,
+	updater = new BrowserWindow({
+		width: 600,
+		height: isEngineDownloaded ? 150 : 310,
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: true,
@@ -394,39 +387,28 @@ const createWindow = async () => {
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
 		icon: path.join(__dirname, 'dist', 'icon.png'),
-		frame: execKind !== EXEC_KIND.ENGINE,
+		frame: true,
 	});
-	window.removeMenu();
-	if (execKind === EXEC_KIND.ENGINE) {
-		window.maximize();
-	}
-	window.loadFile(
-		path.join(__dirname, execKind === EXEC_KIND.UPDATER ? 'updater' : 'dist', 'index.html'),
-		execKind === EXEC_KIND.GAME
-			? {
-					query: { project: process.argv[2], battleTest: process.argv[3] ?? false },
-				}
-			: undefined,
-	);
-	if (execKind !== EXEC_KIND.GAME) {
-		window.on('maximize', () => {
-			window.webContents.send('is-maximized');
-		});
-		window.on('unmaximize', () => {
-			window.webContents.send('is-unmaximized');
-		});
-	}
-	const letter = execKind === EXEC_KIND.ENGINE ? 'E' : 'I';
+	updater.removeMenu();
+	updater.loadFile(path.join(__dirname, 'updater', 'index.html'));
+	updater.on('close', () => {
+		updater = null;
+	});
+	const letter = 'I';
 	const shortcuts = [`CommandOrControl+Alt+${letter}`, `CommandOrControl+Shift+${letter}`];
 	for (const shortcut of shortcuts) {
 		globalShortcut.register(shortcut, () => {
-			window.openDevTools({ mode: 'undocked' });
+			updater.openDevTools({ mode: 'undocked' });
 		});
 	}
 };
 
 app.whenReady().then(() => {
-	createWindow().catch(console.error);
+	if (app.isPackaged) {
+		init().catch(console.error);
+	} else {
+		runRPMEngine();
+	}
 });
 
 ipcMain.handle('get-system-information', () => {
@@ -573,33 +555,54 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
-	const electronPath = process.execPath;
-	const args = ['./main.js', location, battleTest];
-	spawn(electronPath, args, {
-		stdio: 'inherit',
-		detached: false,
-		cwd: app.isPackaged ? os.tmpdir() : undefined,
+	game?.close();
+	game = new BrowserWindow({
+		width: 640,
+		height: 480,
+		webPreferences: {
+			nodeIntegration: false,
+			contextIsolation: true,
+			sandbox: false,
+			preload: path.join(__dirname, 'preload.js'),
+			additionalArguments: [`--appPath=${app.getAppPath()}`],
+		},
+		icon: path.join(__dirname, 'dist', 'icon.png'),
+		frame: true,
 	});
+	game.removeMenu();
+	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
+		query: { project: location, battleTest: battleTest ?? false },
+	});
+	game.on('close', () => {
+		game = null;
+	});
+	const letter = 'I';
+	const shortcuts = [`CommandOrControl+Alt+${letter}`, `CommandOrControl+Shift+${letter}`];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
+			game.openDevTools({ mode: 'undocked' });
+		});
+	}
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
-	window.setTitle(title);
+	BrowserWindow.getFocusedWindow()?.setTitle(title);
 });
 
 ipcMain.handle('change-window-size', function (event, w, h, f) {
 	if (f) {
-		window.setResizable(true);
-		window.setFullScreen(true);
+		BrowserWindow.getFocusedWindow()?.setResizable(true);
+		BrowserWindow.getFocusedWindow()?.setFullScreen(true);
 	} else {
-		window.setFullScreen(false);
-		window.setContentSize(w, h);
-		window.center();
+		BrowserWindow.getFocusedWindow()?.setFullScreen(false);
+		BrowserWindow.getFocusedWindow()?.setContentSize(w, h);
+		BrowserWindow.getFocusedWindow()?.center();
 	}
 });
 
 ipcMain.handle('close-game', () => {
-	window.close();
-	window = null;
+	game.close();
+	game = null;
 });
 
 ipcMain.handle('minimize', () => {
@@ -701,6 +704,6 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
 	if (!window) {
-		createWindow();
+		init();
 	}
 });

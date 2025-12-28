@@ -1,11 +1,16 @@
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
 import { toast } from 'react-toastify';
 import { LocalFile } from '../core/LocalFile';
 import '../styles/ToasterError.css';
 import { Constants } from './Constants';
+import { IO } from './IO';
+import { Paths } from './Paths';
+import { getFiles, readJSON, writeJSON } from './Platform';
 import { TOASTER_OPTIONS } from './ToasterUtils';
+import { JSONType } from './Types';
+import { Utils } from './Utils';
 
 const originalConsoleError = console.error;
 
@@ -117,6 +122,7 @@ type Props = {
 
 function ToasterError({ message, stack }: Props) {
 	const refDialog = useRef<HTMLDivElement>(null);
+	const refObjectLinkingDialog = useRef<HTMLDivElement>(null);
 
 	const handleClickClearCache = () => {
 		refDialog.current!.classList.add('open');
@@ -130,6 +136,53 @@ function ToasterError({ message, stack }: Props) {
 		}
 		refDialog.current!.classList.add('done');
 	};
+
+	useEffect(() => {
+		if (message.startsWith('Object linking issue')) {
+			const match = message.match(/Object linking issue\s+(\d+)/);
+			if (match) {
+				refObjectLinkingDialog.current!.classList.add('open');
+				const mapID = Number(match[1]);
+				(async () => {
+					const start = Date.now();
+					const basePath = Paths.join(
+						window.rpgPaperMakerProjectLocation,
+						Paths.MAPS,
+						'MAP' + Utils.formatNumberID(mapID),
+					);
+					const mapProperties = (await readJSON(Paths.join(basePath, Paths.FILE_MAP_INFOS))) as JSONType;
+					const allObjects: JSONType[] = [];
+					mapProperties.objs = allObjects;
+					const allPortions = await getFiles(Paths.join(basePath));
+					for (const portionFileName of allPortions) {
+						if (portionFileName !== Paths.FILE_MAP_INFOS) {
+							const objs = (await readJSON(Paths.join(basePath, portionFileName)))?.objs as JSONType[];
+							if (objs) {
+								allObjects.push(
+									...objs.map((obj) => ({
+										id: (obj.v as JSONType).id,
+										name: (obj.v as JSONType).name,
+										p: obj.k,
+									})),
+								);
+							}
+						}
+					}
+					await writeJSON(Paths.join(basePath, Paths.FILE_MAP_INFOS), mapProperties);
+					const elapsed = Date.now() - start;
+					const minDuration = 3000;
+					const remaining = minDuration - elapsed;
+					if (remaining > 0) {
+						await Utils.sleep(remaining);
+					}
+					refDialog.current!.classList.add('done');
+					if (Constants.IS_DESKTOP) {
+						await IO.openGame(window.rpgPaperMakerProjectLocation).catch(console.error);
+					}
+				})().catch(console.error);
+			}
+		}
+	}, [message]);
 
 	return (
 		<>
@@ -168,6 +221,15 @@ function ToasterError({ message, stack }: Props) {
 				This action will delete all your projects, and every settings you changed. Are you sure that you want to
 				continue?
 				<button onClick={handleClickClearCacheConfirm}>OK</button>
+			</div>
+			<div
+				className={'toasterErrorDialogWarning'}
+				ref={refObjectLinkingDialog}
+				style={{ flexDirection: 'column', alignItems: 'center', gap: '5px' }}
+			>
+				RPG Paper Maker object linking issue. Re-building map objects linking correctly and restarting the game.
+				No worries, this can happen!
+				<div className='spinner' />
 			</div>
 		</>
 	);
