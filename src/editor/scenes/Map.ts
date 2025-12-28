@@ -765,6 +765,7 @@ class Map extends Base {
 				break;
 			case ELEMENT_MAP_KIND.OBJECT: {
 				const previousPosition = this.cursorObject.position.clone();
+				position.layer = 0;
 				this.updateObjectCursor(preview, position);
 				this.moveObject(previousPosition, position);
 				break;
