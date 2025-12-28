@@ -45,6 +45,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 			const reaction = node.content as Model.CommonReaction;
 			setSelectedReaction(reaction);
 			setParameters(Node.createList(reaction.parameters));
+			Project.current!.currentMapObjectParameters = reaction.parameters;
 			setIsBlock(reaction.blockingHero);
 			setCommands(reaction.commands.map((node) => node.clone()));
 		}
@@ -53,6 +54,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 	const handleUpdateParameters = () => {
 		if (selectedReaction) {
 			selectedReaction.parameters = Node.createListFromNodes(parameters);
+			Project.current!.currentMapObjectParameters = selectedReaction.parameters;
 		}
 	};
 
@@ -81,6 +83,9 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		initialize();
+		return () => {
+			Project.current!.currentMapObjectParameters = [];
+		};
 	}, []);
 
 	return (
