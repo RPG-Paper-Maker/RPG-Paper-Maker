@@ -576,6 +576,11 @@ function Tree({
 		}
 	};
 
+	const handleSetFocus = (b: boolean) => {
+		RPM.isFocusingTree = b;
+		setIsFocused(b);
+	};
+
 	useLayoutEffect(() => {
 		if (
 			forcedCurrentSelectedItemID !== undefined &&
@@ -651,10 +656,10 @@ function Tree({
 
 		const handleMouseDownOutside = (e: MouseEvent) => {
 			if (listRef.current && !listRef.current.contains(e.target as globalThis.Node)) {
-				setIsFocused(false);
+				handleSetFocus(false);
 			}
 		};
-		const dialog = document.getElementsByClassName('dialog')[0] ?? document;
+		const dialog = Utils.getViewport();
 		dialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
 		return () => {
 			dialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
@@ -837,7 +842,7 @@ function Tree({
 						title: `${t('edit')}...`,
 						shortcut: [KEY.ENTER, KEY.SPACE],
 						onClick: handleEditItem,
-						disabled: disableAll || isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
+						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
@@ -940,7 +945,7 @@ function Tree({
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}
-					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
+					className={Utils.getClassName({ disabled, zeroHeight: scrollable, focused: isFocused }, 'tree')}
 					style={{
 						minWidth: `${minWidth}px`,
 						minHeight: `${minHeight}px`,
@@ -949,7 +954,7 @@ function Tree({
 					}}
 					ref={listRef}
 				>
-					<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
+					<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={handleSetFocus}>
 						<Flex spaced>{getHeaders()}</Flex>
 						{getItems()}
 					</ContextMenu>

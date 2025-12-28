@@ -60,8 +60,7 @@ function Table({ values, onChange, highlightedElements, widths, disabled = false
 				setEditingText('');
 			}
 		};
-		const dialogs = document.getElementsByClassName('dialog');
-		const currentDialog = dialogs.length === 0 ? document : dialogs[dialogs.length - 1];
+		const currentDialog = Utils.getViewport();
 		currentDialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
 		return () => {
 			currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);

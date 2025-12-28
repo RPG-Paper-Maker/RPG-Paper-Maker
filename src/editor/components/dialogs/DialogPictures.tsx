@@ -136,7 +136,6 @@ function DialogPictures({
 				}
 			}
 		}
-		console.log(rect, indexX, indexY);
 		setSelectedRect(rect);
 		setSelectedRectTileset(rectT);
 	};
@@ -251,7 +250,6 @@ function DialogPictures({
 	}, [selectedKind]);
 
 	const getPreviewerContent = () => {
-		console.log(selectedRect);
 		if (selectedPicture) {
 			const path = selectedPicture.getPath();
 			switch (selectedKind) {

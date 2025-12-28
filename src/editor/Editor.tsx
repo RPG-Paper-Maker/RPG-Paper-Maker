@@ -12,7 +12,7 @@
 import { lazy, useEffect, useLayoutEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Constants } from './common';
+import { Constants, RPM } from './common';
 import Flex from './components/Flex';
 import UpdateCountdown from './components/UpdateCountdown';
 import i18n from './i18n/i18n';
@@ -35,7 +35,8 @@ function Editor() {
 			Inputs.isALT = e.altKey;
 			Inputs.isCTRL = e.ctrlKey;
 			Inputs.isSHIFT = e.shiftKey;
-			if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+			if (RPM.isFocusingTree && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+				// Prevent parent scrollbar if focusing a list
 				e.preventDefault();
 			}
 		};

@@ -28,6 +28,10 @@
 		white-space: nowrap;
 	}
 
+	&.focused {
+		border: 1px solid var(--primary-color);
+	}
+
 	&.disabled {
 		color: var(--lighter-bg-color);
 	}
