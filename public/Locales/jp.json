@@ -2091,5 +2091,6 @@
 	"close.all": "すべて閉じる",
 	"get.unstable.versions": "不安定版を取得",
 	"blank.project": "空のプロジェクト",
-	"engine.updated.successfully": "RPG Paper Maker はバージョン {{version}} に正常に更新されました。変更履歴をご覧ください："
+	"engine.updated.successfully": "RPG Paper Maker はバージョン {{version}} に正常に更新されました。変更履歴をご覧ください：",
+	"back.last.save": "最後のセーブに戻る"
 }

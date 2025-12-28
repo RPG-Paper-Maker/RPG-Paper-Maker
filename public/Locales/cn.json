@@ -2091,5 +2091,6 @@
 	"close.all": "全部關閉",
 	"get.unstable.versions": "取得不穩定版本",
 	"blank.project": "空白專案",
-	"engine.updated.successfully": "RPG Paper Maker 已成功更新至版本 {{version}}。您可以查看更新日誌："
+	"engine.updated.successfully": "RPG Paper Maker 已成功更新至版本 {{version}}。您可以查看更新日誌：",
+	"back.last.save": "返回上次儲存"
 }

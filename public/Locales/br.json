@@ -2091,5 +2091,6 @@
 	"close.all": "Fechar tudo",
 	"get.unstable.versions": "Obter versões instáveis",
 	"blank.project": "Projeto em branco",
-	"engine.updated.successfully": "RPG Paper Maker foi atualizado com sucesso para a versão {{version}}. Você pode dar uma olhada no changelog:"
+	"engine.updated.successfully": "RPG Paper Maker foi atualizado com sucesso para a versão {{version}}. Você pode dar uma olhada no changelog:",
+	"back.last.save": "Voltar para o último salvamento"
 }

@@ -2091,5 +2091,6 @@
 	"close.all": "모두 닫기",
 	"get.unstable.versions": "불안정한 버전 받기",
 	"blank.project": "빈 프로젝트",
-	"engine.updated.successfully": "RPG Paper Maker가 버전 {{version}}으로 성공적으로 업데이트되었습니다. 변경 로그를 확인할 수 있습니다:"
+	"engine.updated.successfully": "RPG Paper Maker가 버전 {{version}}으로 성공적으로 업데이트되었습니다. 변경 로그를 확인할 수 있습니다:",
+	"back.last.save": "마지막 저장으로 돌아가기"
 }
