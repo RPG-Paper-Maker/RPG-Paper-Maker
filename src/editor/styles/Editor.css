@@ -338,6 +338,17 @@ a {
 	pointer-events: none;
 }
 
+.canvasRenderer3 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 2002;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
 .verticalSeparator {
 	height: 100%;
 	border-right: 1px solid var(--grey-light-color);

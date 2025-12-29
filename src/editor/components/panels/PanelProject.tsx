@@ -101,6 +101,7 @@ function PanelProject() {
 		Manager.GL.mainContext.initialize();
 		Manager.GL.layerOneContext.initialize(1);
 		Manager.GL.layerTwoContext.initialize(2);
+		Manager.GL.layerThreeContext.initialize(3);
 	}, []);
 
 	// When first opening the project with all data loaded

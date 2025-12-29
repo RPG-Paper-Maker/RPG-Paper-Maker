@@ -14,14 +14,12 @@ import { useTranslation } from 'react-i18next';
 import { COMMAND_MOVE_KIND, ELEMENT_MAP_KIND, Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Rectangle } from '../../../core/Rectangle';
-import { Model } from '../../../Editor';
+import { Manager, Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
-import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
-import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
 import Flex from '../../Flex';
-import GraphicsSelector from '../../GraphicsSelector';
+import GraphicsSelector, { GraphicsSelectorOptions } from '../../GraphicsSelector';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -38,24 +36,19 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 
 	const { t } = useTranslation();
 
-	const [graphicsID, setGraphicsID] = useState(-1);
-	const [graphicsIDDynamic] = useStateDynamicValue();
-	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
-	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
-	const [rectTileset, setRectTileset] = useState<Rectangle>();
-	const [graphicsKind, setGraphicsKind] = useStateNumber();
+	const [graphicOptions, setGraphicOptions] = useState<GraphicsSelectorOptions>({
+		graphicsID: -1,
+		dynamicID: new DynamicValue(),
+		graphicsIndexX: 0,
+		graphicsIndexY: 0,
+		graphicsKind: 0,
+	});
 	const [isDontChangeOrientation, setIsDontChangeOrientation] = useStateBool();
 
 	const initialize = () => {
 		if (isNew) {
-			setGraphicsID(-1);
-			graphicsIDDynamic.isActivated = false;
-			graphicsIDDynamic.updateToDefaultNumber();
-			setGraphicsIndexX(0);
-			setGraphicsIndexY(0);
-			setRectTileset(undefined);
-			setGraphicsKind(0);
-			setIsDontChangeOrientation(false);
+			graphicOptions.dynamicID!.isActivated = false;
+			graphicOptions.dynamicID!.updateToDefaultNumber();
 		} else {
 			const iterator = Utils.generateIterator();
 			iterator.i += 2;
@@ -72,38 +65,51 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 					kind = ELEMENT_MAP_KIND.OBJECT3D;
 					break;
 			}
-			setGraphicsKind(kind);
-			graphicsIDDynamic.updateCommand(command.command, iterator, true);
-			const id = graphicsIDDynamic.isActivated ? -1 : (graphicsIDDynamic.value as number);
-			setGraphicsID(id);
-			if (!graphicsIDDynamic.isActivated) {
-				graphicsIDDynamic.updateToDefaultNumber();
+			graphicOptions.dynamicID!.updateCommand(command.command, iterator, true);
+			const id = graphicOptions.dynamicID!.isActivated ? -1 : (graphicOptions.dynamicID!.value as number);
+			if (!graphicOptions.dynamicID!.isActivated) {
+				graphicOptions.dynamicID!.updateToDefaultNumber();
 			}
-			if (id === 0 && !graphicsIDDynamic.isActivated) {
+			let rect: Rectangle | undefined = undefined;
+			let indexX = 0;
+			let indexY = 0;
+			if (id === 0 && !graphicOptions.dynamicID!.isActivated) {
 				const x = Number(command.command[iterator.i++]);
 				const y = Number(command.command[iterator.i++]);
 				const w = Number(command.command[iterator.i++]);
 				const h = Number(command.command[iterator.i++]);
-				setRectTileset(new Rectangle(x, y, w, h));
-				setGraphicsIndexX(0);
-				setGraphicsIndexY(0);
+				rect = new Rectangle(x, y, w, h);
 			} else {
-				setGraphicsIndexX(Number(command.command[iterator.i++]));
-				setGraphicsIndexY(Number(command.command[iterator.i++]));
-				setRectTileset(undefined);
+				indexX = Number(command.command[iterator.i++]);
+				indexY = Number(command.command[iterator.i++]);
 			}
+			setGraphicOptions({
+				dynamicID: graphicOptions.dynamicID,
+				graphicsKind: kind,
+				graphicsID: id,
+				rectTileset: rect,
+				graphicsIndexX: indexX,
+				graphicsIndexY: indexY,
+			});
 		}
 	};
 
 	const handleChangeGraphicsKind = (kind: number) => {
-		setGraphicsKind(kind);
+		setGraphicOptions({
+			...graphicOptions,
+			graphicsKind: kind,
+		});
 	};
 
-	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
-		setGraphicsID(id);
-		setGraphicsIndexX(isTileset ? 0 : rect.x);
-		setGraphicsIndexY(isTileset ? 0 : rect.y);
-		setRectTileset(isTileset ? rect.clone() : undefined);
+	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean, kind: number) => {
+		setGraphicOptions({
+			dynamicID: graphicOptions.dynamicID,
+			graphicsID: id,
+			graphicsIndexX: isTileset ? 0 : rect.x,
+			graphicsIndexY: isTileset ? 0 : rect.y,
+			rectTileset: isTileset ? rect.clone() : undefined,
+			graphicsKind: kind,
+		});
 	};
 
 	const handleAccept = async () => {
@@ -113,7 +119,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		}
 		list.push(Utils.boolToNum(isDontChangeOrientation));
 		let index = 0;
-		switch (graphicsKind) {
+		switch (graphicOptions.graphicsKind) {
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 				index = 1;
 				break;
@@ -125,21 +131,21 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 				break;
 		}
 		list.push(index);
-		if (graphicsIDDynamic.isActivated) {
-			graphicsIDDynamic.getCommand(list, true);
+		if (graphicOptions.dynamicID!.isActivated) {
+			graphicOptions.dynamicID!.getCommand(list, true);
 		} else {
 			const value = new DynamicValue();
-			value.updateToDefaultNumber(graphicsID);
+			value.updateToDefaultNumber(graphicOptions.graphicsID);
 			value.getCommand(list, true);
 		}
-		if (rectTileset && !graphicsIDDynamic.isActivated && graphicsID === 0) {
-			list.push(rectTileset.x);
-			list.push(rectTileset.y);
-			list.push(rectTileset.width);
-			list.push(rectTileset.height);
+		if (graphicOptions.rectTileset && !graphicOptions.dynamicID!.isActivated && graphicOptions.graphicsID === 0) {
+			list.push(graphicOptions.rectTileset.x);
+			list.push(graphicOptions.rectTileset.y);
+			list.push(graphicOptions.rectTileset.width);
+			list.push(graphicOptions.rectTileset.height);
 		} else {
-			list.push(graphicsIndexX);
-			list.push(graphicsIndexY);
+			list.push(graphicOptions.graphicsIndexX);
+			list.push(graphicOptions.graphicsIndexY);
 			list.push(1);
 			list.push(1);
 		}
@@ -168,14 +174,10 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			<Flex column spaced centerH>
 				<GraphicsSelector
 					sceneID='dialog-command-move-object'
-					graphicsID={graphicsID}
-					dynamicID={graphicsIDDynamic}
-					graphicsIndexX={graphicsIndexX}
-					graphicsIndexY={graphicsIndexY}
-					rectTileset={rectTileset}
-					graphicsKind={graphicsKind}
+					options={graphicOptions}
 					onChangeGraphicsKind={handleChangeGraphicsKind}
 					onUpdateGraphics={handleUpdateGraphics}
+					GL={Manager.GL.layerTwoContext}
 				/>
 				<Checkbox isChecked={isDontChangeOrientation} onChange={setIsDontChangeOrientation}>
 					{t('dont.change.orientation')}

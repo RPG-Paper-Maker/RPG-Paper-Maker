@@ -24,30 +24,31 @@ import PreviewerObject3D from './PreviewerObject3D';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPictures from './dialogs/DialogPictures';
 
-type Props = {
-	sceneID: string;
+export type GraphicsSelectorOptions = {
 	graphicsID: number;
 	dynamicID?: DynamicValue;
 	graphicsIndexX: number;
 	graphicsIndexY: number;
 	rectTileset?: Rectangle;
 	graphicsKind: number;
+};
+
+type Props = {
+	sceneID: string;
+	options: GraphicsSelectorOptions;
 	hidden?: boolean;
-	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean) => void;
+	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean, kind: number) => void;
 	onChangeGraphicsKind: (kind: number) => void;
+	GL?: Manager.GL;
 };
 
 function GraphicsSelector({
 	sceneID,
-	graphicsID,
-	dynamicID,
-	graphicsIndexX,
-	graphicsIndexY,
-	rectTileset,
-	graphicsKind,
+	options,
 	hidden = false,
 	onChangeGraphicsKind,
 	onUpdateGraphics,
+	GL = Manager.GL.layerOneContext,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -58,13 +59,19 @@ function GraphicsSelector({
 	const refBorder = useRef<HTMLDivElement>(null);
 
 	const isCharacter =
-		graphicsKind === ELEMENT_MAP_KIND.NONE ||
-		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
-		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
+		options.graphicsKind === ELEMENT_MAP_KIND.NONE ||
+		options.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+		options.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 
-	const isObject3D = graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
+	const isObject3D = options.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
 
-	const updatePicture = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+	const updatePicture = async (
+		picture: Model.Picture,
+		rect: Rectangle,
+		isTileset: boolean,
+		kind: number,
+		triggerHandler = true,
+	) => {
 		const pic = isTileset
 			? Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, Scene.Map.current!.model.getTileset().pictureID)
 			: picture;
@@ -77,7 +84,9 @@ function GraphicsSelector({
 			clear(ctx);
 			draw(ctx, picture, img, rect, isTileset);
 		}
-		onUpdateGraphics(picture.id, rect, isTileset);
+		if (triggerHandler) {
+			onUpdateGraphics(picture.id, rect, isTileset, kind);
+		}
 	};
 
 	const getContext = () => {
@@ -141,35 +150,42 @@ function GraphicsSelector({
 	};
 
 	const handleAcceptPictures = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
-		await updatePicture(picture, rect, isTileset);
-		if (graphicsKind === ELEMENT_MAP_KIND.NONE) {
-			onChangeGraphicsKind(ELEMENT_MAP_KIND.SPRITE_FACE);
-		}
+		await updatePicture(
+			picture,
+			rect,
+			isTileset,
+			options.graphicsKind === ELEMENT_MAP_KIND.NONE ? ELEMENT_MAP_KIND.SPRITE_FACE : options.graphicsKind,
+		);
 	};
 
 	const handleAcceptObjects3D = (object3D: Model.Object3D) => {
-		onUpdateGraphics(object3D.id, new Rectangle(), false);
+		onUpdateGraphics(object3D.id, new Rectangle(), false, options.graphicsKind);
 	};
 
 	const handleChangeGraphicsKind = (kind: number) => {
 		if (
-			(graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX || graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE) &&
+			(options.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+				options.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE) &&
 			(kind === ELEMENT_MAP_KIND.SPRITE_FIX || kind === ELEMENT_MAP_KIND.SPRITE_FACE)
 		) {
 			onChangeGraphicsKind(kind);
 		} else {
-			onChangeGraphicsKind(kind);
-			onUpdateGraphics(kind === ELEMENT_MAP_KIND.NONE ? -1 : 1, new Rectangle(), false);
+			onUpdateGraphics(kind === ELEMENT_MAP_KIND.NONE ? -1 : 1, new Rectangle(), false, kind);
 		}
 	};
 
 	useEffect(() => {
+		GL.renderer.clear();
 		if (isCharacter) {
-			const isTileset = graphicsID === 0;
+			const isTileset = options.graphicsID === 0;
 			updatePicture(
-				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, graphicsID),
-				isTileset && rectTileset ? rectTileset.clone() : new Rectangle(graphicsIndexX, graphicsIndexY, 1, 1),
+				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, options.graphicsID),
+				isTileset && options.rectTileset
+					? options.rectTileset.clone()
+					: new Rectangle(options.graphicsIndexX, options.graphicsIndexY, 1, 1),
 				isTileset,
+				options.graphicsKind,
+				false,
 			).catch(console.error);
 		} else {
 			const ctx = getContext();
@@ -177,17 +193,13 @@ function GraphicsSelector({
 				clear(ctx);
 			}
 		}
-	}, [graphicsID, graphicsKind]);
+	}, [options]);
 
 	useEffect(() => {
 		if (isOpenDialogObjects3D || hidden) {
-			Manager.GL.layerOneContext.renderer.clear();
+			GL.renderer.clear();
 		}
 	}, [isOpenDialogObjects3D, hidden]);
-
-	useEffect(() => {
-		Manager.GL.layerOneContext.renderer.clear();
-	}, [graphicsKind]);
 
 	return (
 		<>
@@ -197,11 +209,11 @@ function GraphicsSelector({
 					<div ref={refBorder} className='border' />
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !isOpenDialogObjects3D && !hidden && (
-						<PreviewerObject3D sceneID={sceneID} objectID={graphicsID} />
+						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} GL={GL} />
 					)}
 				</div>
 				<Dropdown
-					selectedID={graphicsKind}
+					selectedID={options.graphicsKind}
 					onChange={handleChangeGraphicsKind}
 					options={Model.Base.GRAPHICS_OPTIONS}
 					translateOptions
@@ -211,21 +223,21 @@ function GraphicsSelector({
 			{isOpenDialogPictures && (
 				<DialogPictures
 					kind={PICTURE_KIND.CHARACTERS}
-					dynamicPictureID={dynamicID}
+					dynamicPictureID={options.dynamicID}
 					setIsOpen={setIsOpenDialogPictures}
 					onAccept={handleAcceptPictures}
-					pictureID={graphicsID}
-					indexX={graphicsIndexX}
-					indexY={graphicsIndexY}
-					rectTileset={rectTileset}
-					active={dynamicID !== undefined}
+					pictureID={options.graphicsID}
+					indexX={options.graphicsIndexX}
+					indexY={options.graphicsIndexY}
+					rectTileset={options.rectTileset}
+					active={options.dynamicID !== undefined}
 				/>
 			)}
 			{isOpenDialogObjects3D && (
 				<DialogObjects3DPreview
 					setIsOpen={setIsOpenDialogObjects3D}
 					onAccept={handleAcceptObjects3D}
-					object3DID={graphicsID}
+					object3DID={options.graphicsID}
 				/>
 			)}
 		</>

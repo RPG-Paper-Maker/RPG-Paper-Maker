@@ -124,6 +124,7 @@ function PanelLoading({ setLoaded }: Props) {
 		Manager.GL.mainContext = new Manager.GL();
 		Manager.GL.layerOneContext = new Manager.GL();
 		Manager.GL.layerTwoContext = new Manager.GL();
+		Manager.GL.layerThreeContext = new Manager.GL();
 		await Manager.GL.initializeShaders();
 	};
 

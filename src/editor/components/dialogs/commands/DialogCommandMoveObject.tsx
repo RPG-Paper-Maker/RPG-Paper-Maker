@@ -226,7 +226,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
-				initialWidth='750px'
+				initialWidth='850px'
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spacedLarge fillWidth>

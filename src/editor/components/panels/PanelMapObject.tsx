@@ -11,7 +11,7 @@
 
 import { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ELEMENT_MAP_KIND, EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
+import { EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Rectangle } from '../../core/Rectangle';
@@ -27,7 +27,7 @@ import DialogTransformations from '../dialogs/DialogTransformations';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
-import GraphicsSelector from '../GraphicsSelector';
+import GraphicsSelector, { GraphicsSelectorOptions } from '../GraphicsSelector';
 import Groupbox from '../Groupbox';
 import InputText from '../InputText';
 import Tab from '../Tab';
@@ -70,11 +70,12 @@ const PanelMapObject = forwardRef(
 		const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 		const [selectedState, setSelectedState] = useState<Model.MapObjectState | null>(null);
 		const [selectedEvent, setSelectedEvent] = useState<Model.MapObjectEvent | null>(null);
-		const [graphicsID, setGraphicsID] = useState(-1);
-		const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
-		const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
-		const [rectTileset, setRectTileset] = useState<Rectangle>();
-		const [graphicsKind, setGraphicsKind] = useStateNumber();
+		const [graphicOptions, setGraphicOptions] = useState<GraphicsSelectorOptions>({
+			graphicsID: -1,
+			graphicsIndexX: 0,
+			graphicsIndexY: 0,
+			graphicsKind: 0,
+		});
 		const [objectMovingKind, setObjectMovingKind] = useStateNumber();
 		const [eventCommandRoute, setEventCommandRoute] = useState<Model.MapObjectCommand | null>(null);
 		const [speedID, setSpeedID] = useStateNumber();
@@ -129,10 +130,12 @@ const PanelMapObject = forwardRef(
 		};
 
 		const reset = () => {
-			setGraphicsID(-1);
-			setGraphicsIndexX(0);
-			setGraphicsIndexY(0);
-			setGraphicsKind(ELEMENT_MAP_KIND.NONE);
+			setGraphicOptions({
+				graphicsID: -1,
+				graphicsIndexX: 0,
+				graphicsIndexY: 0,
+				graphicsKind: 0,
+			});
 			setSelectedState(null);
 			setStates([]);
 			setProperties([]);
@@ -287,11 +290,13 @@ const PanelMapObject = forwardRef(
 		const handleChangeState = (state: Model.MapObjectState | null, newEvents?: Node[]) => {
 			setSelectedState(state);
 			if (state) {
-				setGraphicsKind(state.graphicsKind);
-				setGraphicsIndexX(state.graphicsIndexX);
-				setGraphicsIndexY(state.graphicsIndexY);
-				setRectTileset(state.rectTileset);
-				setGraphicsID(state.graphicsID);
+				setGraphicOptions({
+					graphicsID: state.graphicsID,
+					graphicsIndexX: state.graphicsIndexX,
+					graphicsIndexY: state.graphicsIndexY,
+					graphicsKind: state.graphicsKind,
+					rectTileset: state.rectTileset,
+				});
 				setObjectMovingKind(state.objectMovingKind);
 				setEventCommandRoute(state.eventCommandRoute);
 				setSpeedID(state.speedID);
@@ -310,23 +315,30 @@ const PanelMapObject = forwardRef(
 		};
 
 		const handleChangeGraphicsKind = (kind: number) => {
-			setGraphicsKind(kind);
+			setGraphicOptions({
+				...graphicOptions,
+				graphicsKind: kind,
+			});
 			selectedState!.graphicsKind = kind;
 			handleUpdateStates();
 		};
 
-		const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
+		const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean, kind: number) => {
 			if (selectedState === null) {
 				return;
 			}
+			selectedState!.graphicsKind = kind;
 			selectedState!.graphicsID = id;
 			selectedState!.graphicsIndexX = isTileset ? 0 : rect.x;
 			selectedState!.graphicsIndexY = isTileset ? 0 : rect.y;
 			selectedState!.rectTileset = isTileset ? rect.clone() : undefined;
-			setGraphicsID(id);
-			setGraphicsIndexX(selectedState!.graphicsIndexX);
-			setGraphicsIndexY(selectedState!.graphicsIndexY);
-			setRectTileset(selectedState!.rectTileset);
+			setGraphicOptions({
+				graphicsKind: kind,
+				graphicsID: id,
+				graphicsIndexX: selectedState!.graphicsIndexX,
+				graphicsIndexY: selectedState!.graphicsIndexY,
+				rectTileset: selectedState!.rectTileset,
+			});
 			handleUpdateStates();
 		};
 
@@ -570,11 +582,7 @@ const PanelMapObject = forwardRef(
 							>
 								<GraphicsSelector
 									sceneID='dialog-map-object'
-									graphicsID={graphicsID}
-									graphicsIndexX={graphicsIndexX}
-									graphicsIndexY={graphicsIndexY}
-									rectTileset={rectTileset}
-									graphicsKind={graphicsKind}
+									options={graphicOptions}
 									onChangeGraphicsKind={handleChangeGraphicsKind}
 									onUpdateGraphics={handleUpdateGraphics}
 									hidden={!selectedState || hideStateValues}

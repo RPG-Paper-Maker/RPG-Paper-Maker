@@ -152,7 +152,7 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 						<PreviewerObject3D
 							sceneID='dialog-shape-preview'
 							shape={selectedShape}
-							GL={Manager.GL.layerTwoContext}
+							GL={Manager.GL.layerThreeContext}
 						/>
 					);
 				default:
@@ -173,7 +173,7 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
-			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			zIndex={Z_INDEX_LEVEL.LAYER_THREE}
 		>
 			<Flex spacedLarge fillWidth>
 				{kind === undefined && (

@@ -97,7 +97,6 @@ const PanelModels = forwardRef((props, ref) => {
 
 	useLayoutEffect(() => {
 		if (selectedModel) {
-			panelMapObjectRef.current?.reset();
 			panelMapObjectRef.current?.initialize();
 		}
 	}, [panelMapObjectRef.current, selectedModel]);

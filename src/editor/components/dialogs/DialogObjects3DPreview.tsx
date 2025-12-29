@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Model } from '../../Editor';
+import { Manager, Model } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { setNeedsReloadMap, showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
@@ -26,7 +26,7 @@ import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import PreviewerObject3D from '../PreviewerObject3D';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
@@ -212,6 +212,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 					objectID={selectedObject3D.id}
 					triggerUpdate={triggerUpdate}
 					setTriggerUpdate={setTriggerUpdate}
+					GL={Manager.GL.layerTwoContext}
 				/>
 			);
 		}
@@ -366,6 +367,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 			initialWidth='80%'
 			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<PanelAssetsPreviewer
 				constructorType={Model.Object3D}

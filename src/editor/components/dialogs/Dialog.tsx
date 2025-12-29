@@ -46,6 +46,7 @@ enum RESIZING_TYPE {
 
 export enum Z_INDEX_LEVEL {
 	LAYER_TWO = 2000,
+	LAYER_THREE = 2001,
 	LAYER_TOP = 9999,
 }
 
