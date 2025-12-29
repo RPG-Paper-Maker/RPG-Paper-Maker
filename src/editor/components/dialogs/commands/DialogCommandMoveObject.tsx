@@ -107,7 +107,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 
 	const addMoveStepSquare = (kind: COMMAND_MOVE_KIND) => {
 		const command = Model.MapObjectCommandMove.createMove(kind);
-		command.command.push('' + squareStepMoveType);
+		command.command.push(squareStepMoveType);
 		addCommand(command);
 	};
 
@@ -118,8 +118,8 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 
 	const addMoveOnOffPermanent = (kind: COMMAND_MOVE_KIND) => {
 		const command = Model.MapObjectCommandMove.createMove(kind);
-		command.command.push('' + Utils.boolToNum(objectOptionsType === 0));
-		command.command.push('' + Utils.boolToNum(isPermanent));
+		command.command.push(Utils.boolToNum(objectOptionsType === 0));
+		command.command.push(Utils.boolToNum(isPermanent));
 		addCommand(command);
 	};
 
@@ -132,7 +132,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptJump = () => {
-		ArrayUtils.insertAt(jump.command, 1, '' + squareStepMoveType);
+		ArrayUtils.insertAt(jump.command, 1, squareStepMoveType);
 		addCommand(jump);
 		setJump(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.JUMP));
 	};
@@ -142,7 +142,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptChangeSpeed = () => {
-		ArrayUtils.insertAt(speed.command, 1, '' + Utils.boolToNum(isPermanent));
+		ArrayUtils.insertAt(speed.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(speed);
 		setSpeed(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_SPEED));
 	};
@@ -152,7 +152,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptChangeFrequency = () => {
-		ArrayUtils.insertAt(frequency.command, 1, '' + Utils.boolToNum(isPermanent));
+		ArrayUtils.insertAt(frequency.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(frequency);
 		setFrequency(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_FREQUENCY));
 	};
@@ -162,7 +162,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptChangeGraphics = () => {
-		ArrayUtils.insertAt(changeGraphics.command, 1, '' + Utils.boolToNum(isPermanent));
+		ArrayUtils.insertAt(changeGraphics.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(changeGraphics);
 		setChangeGraphics(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS));
 	};
