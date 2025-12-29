@@ -181,7 +181,6 @@ function Dialog({
 	};
 
 	const handleClose = () => {
-		setIsMoved(false);
 		if (onClose) {
 			onClose();
 		}
