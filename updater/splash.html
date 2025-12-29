@@ -30,14 +30,18 @@
 	</head>
 	<body>
 		<div>
-			<img src="splash.png" alt="App Icon" />
-			<p id="title" />
+			<img id="splash" src="splash.png" alt="App Icon" />
+			<p id="title"></p>
 		</div>
 		<script>
 			const params = new URLSearchParams(window.location.search);
 			const title = params.get('title');
 			if (title) {
 				document.getElementById('title').textContent = title;
+			}
+			const month = new Date().getMonth();
+			if (month === 0 || month === 11) {
+				document.getElementById('splash').src = 'splash-winter.png';
 			}
 		</script>
 	</body>
