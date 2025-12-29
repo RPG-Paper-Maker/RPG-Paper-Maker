@@ -237,12 +237,19 @@ function MapEditor() {
 			Scene.Map.canvasRendering = canvasRendering;
 			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
 			Scene.Map.ctxRendering = canvasRendering.getContext('2d', { willReadFrequently: true });
-			const removeInputs = Inputs.initialize(canvas);
+			const container = canvas.parentElement;
+			if (!container) {
+				return;
+			}
+			const observer = new ResizeObserver(() => {
+				resize();
+			});
+			observer.observe(container);
 			resize();
-			window.addEventListener('resize', resize);
+			const removeInputs = Inputs.initialize(canvas);
 			loop();
 			return () => {
-				window.removeEventListener('resize', resize);
+				observer.disconnect();
 				clearMap();
 				removeInputs();
 				cancelAnimationFrame(Scene.Map.animationFrameID);
