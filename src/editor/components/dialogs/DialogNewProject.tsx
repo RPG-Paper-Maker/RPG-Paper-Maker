@@ -173,9 +173,13 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.animations.list[0].id = 1;
 			project.status.list.splice(1);
 			project.specialElements.autotiles = [Model.Autotile.createDefault() as Model.Autotile];
+			project.specialElements.autotiles[0].id = 1;
 			project.specialElements.walls = [Model.SpecialElement.createDefault() as Model.SpecialElement];
+			project.specialElements.walls[0].id = 1;
 			project.specialElements.mountains = [Model.Mountain.createDefault() as Model.Mountain];
+			project.specialElements.mountains[0].id = 1;
 			project.specialElements.objects3D = [Model.Object3D.createDefault() as Model.Object3D];
+			project.specialElements.objects3D[0].id = 1;
 			for (const [k, v] of project.pictures.list.entries()) {
 				switch (k) {
 					case PICTURE_KIND.WINDOW_SKINS:
