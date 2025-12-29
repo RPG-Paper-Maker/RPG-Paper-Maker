@@ -187,8 +187,9 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 					variableParamPropCompareValue.updateCommand(list, iterator);
 					break;
 				case SELECTION_TYPE.HEROES: {
-					setHeroesSelection(list[iterator.i++] as number);
-					if (heroesSelection === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
+					const hSelection = list[iterator.i++] as number;
+					setHeroesSelection(hSelection);
+					if (hSelection === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
 						heroInstanceID.updateCommand(list, iterator);
 					}
 					const checked = Utils.initializeBoolCommand(list, iterator);
@@ -464,7 +465,7 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 					selectedID={heroesInSelection}
 					onChange={setHeroesInSelection}
 					options={Model.Base.TEAM_OPTIONS}
-					disabled={!isHeroes}
+					disabled={!isHeroes || !isHeroesIn}
 					translateOptions
 				/>
 			</Flex>
