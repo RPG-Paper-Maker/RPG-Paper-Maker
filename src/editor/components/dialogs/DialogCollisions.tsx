@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
 	CUSTOM_SHAPE_KIND,
+	INPUT_TYPE_WIDTH,
 	MOUNTAIN_COLLISION_KIND,
 	OBJECT_COLLISION_KIND,
 	PICTURE_KIND,
@@ -288,6 +289,8 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 					cannotDragDrop={kind === undefined}
 					cannotEdit={kind === undefined}
 					applyDefault
+					showEditName={kind !== undefined}
+					inputNameWidth={INPUT_TYPE_WIDTH.FILL}
 				/>
 			</Groupbox>
 			<Flex one fillWidth>
