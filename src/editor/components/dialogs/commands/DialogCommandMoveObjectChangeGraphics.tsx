@@ -55,13 +55,13 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			setIsDontChangeOrientation(Utils.initializeBoolCommand(command.command, iterator));
 			let kind = ELEMENT_MAP_KIND.NONE;
 			switch (command.command[iterator.i++]) {
-				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case 1:
 					kind = ELEMENT_MAP_KIND.SPRITE_FIX;
 					break;
-				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case 2:
 					kind = ELEMENT_MAP_KIND.SPRITE_FACE;
 					break;
-				case ELEMENT_MAP_KIND.OBJECT3D:
+				case 3:
 					kind = ELEMENT_MAP_KIND.OBJECT3D;
 					break;
 			}
