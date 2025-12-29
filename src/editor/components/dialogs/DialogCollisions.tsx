@@ -291,6 +291,7 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 					applyDefault
 					showEditName={kind !== undefined}
 					inputNameWidth={INPUT_TYPE_WIDTH.FILL}
+					doNotOpenDialog
 				/>
 			</Groupbox>
 			<Flex one fillWidth>

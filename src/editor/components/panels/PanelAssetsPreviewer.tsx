@@ -270,6 +270,7 @@ function PanelAssetsPreviewer({
 								cannotAdd={!!itemsAvailable}
 								cannotEdit={!!itemsAvailable}
 								cannotUpdateListSize
+								doNotOpenDialog={!itemsAvailable}
 							/>
 						)}
 					</Flex>
