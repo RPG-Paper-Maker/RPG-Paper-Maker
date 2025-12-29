@@ -87,9 +87,17 @@ function PreviewerObject3D({
 
 	useEffect(() => {
 		initialize().catch(console.error);
-		window.addEventListener('resize', resize);
+		const container = refCanvas.current?.parentElement;
+		if (!container) {
+			return;
+		}
+		const observer = new ResizeObserver(() => {
+			resize();
+		});
+		observer.observe(container);
+		resize();
 		return () => {
-			window.removeEventListener('resize', resize);
+			observer.disconnect();
 			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
 	}, [sceneID]);
