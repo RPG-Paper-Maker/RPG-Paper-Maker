@@ -70,12 +70,6 @@ const runRPMEngine = () => {
 		game?.close();
 		game = null;
 	});
-	const shortcuts = [`CommandOrControl+Alt+E`, `CommandOrControl+Shift+E`];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			window.openDevTools({ mode: 'undocked' });
-		});
-	}
 };
 
 async function extractZip(zipPath, destDir) {
@@ -394,16 +388,22 @@ const init = async () => {
 	updater.on('close', () => {
 		updater = null;
 	});
-	const letter = 'I';
-	const shortcuts = [`CommandOrControl+Alt+${letter}`, `CommandOrControl+Shift+${letter}`];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			updater.openDevTools({ mode: 'undocked' });
-		});
-	}
 };
 
 app.whenReady().then(() => {
+	let shortcuts = [`CommandOrControl+Alt+I`, `CommandOrControl+Shift+I`];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
+			updater?.openDevTools({ mode: 'undocked' });
+			game?.openDevTools({ mode: 'undocked' });
+		});
+	}
+	shortcuts = [`CommandOrControl+Alt+E`, `CommandOrControl+Shift+E`];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
+			window?.openDevTools({ mode: 'undocked' });
+		});
+	}
 	if (app.isPackaged) {
 		init().catch(console.error);
 	} else {
@@ -576,13 +576,6 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 	game.on('close', () => {
 		game = null;
 	});
-	const letter = 'I';
-	const shortcuts = [`CommandOrControl+Alt+${letter}`, `CommandOrControl+Shift+${letter}`];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			game.openDevTools({ mode: 'undocked' });
-		});
-	}
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
