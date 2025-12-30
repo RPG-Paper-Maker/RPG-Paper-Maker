@@ -254,7 +254,7 @@ class Effect extends Base {
 				}
 				break;
 			case EFFECT_KIND.SPECIAL_ACTIONS:
-				text += `${t('special.action')}: ${Base.EFFECT_SPECIAL_ACTION_OPTIONS[this.specialActionKind].name}`;
+				text += `${t('special.action')}: ${t(Base.EFFECT_SPECIAL_ACTION_OPTIONS[this.specialActionKind].name)}`;
 				break;
 			case EFFECT_KIND.SCRIPT:
 				text += `${t('script')}: ${this.scriptFormula.toString()}`;
