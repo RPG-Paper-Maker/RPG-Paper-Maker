@@ -400,6 +400,7 @@ function Tree({
 				if (firstCloned) {
 					setCurrentSelectedItemNode(firstCloned);
 					onSelectedItem?.(firstCloned, false);
+					setCurrentName(firstCloned.content.name);
 				}
 			}
 			onListUpdated?.();
