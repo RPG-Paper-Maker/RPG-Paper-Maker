@@ -193,7 +193,7 @@ function Tree({
 
 	const isEditNameDisabled = () => disabled || !currentSelectedItemNode || currentSelectedItemNode.content.id <= 0;
 
-	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotAdd;
+	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotEdit;
 
 	const getNodeID = () => currentSelectedItemNode?.content?.id ?? null;
 
@@ -377,21 +377,28 @@ function Tree({
 			let index = getNewIndex();
 			let cloned: Node;
 			let firstCloned: Node | null = null;
-			for (const node of nodes) {
-				cloned = node.clone();
-				if (firstCloned === null) {
-					firstCloned = cloned;
+			if (cannotAdd) {
+				const id = currentList[index].content.id;
+				currentList[index].content.copy(nodes[0].content);
+				currentList[index].content.id = id;
+				setCurrentName(currentList[index].content.name);
+			} else {
+				for (const node of nodes) {
+					cloned = node.clone();
+					if (firstCloned === null) {
+						firstCloned = cloned;
+					}
+					cloned.parent = currentSelectedItemNode.parent;
+					ArrayUtils.insertAt(currentList, index++, cloned);
+					if (!doNotGenerateIDOnPaste) {
+						generateNewIDsToAllNodes(cloned);
+					}
+					onPasteItem?.(cloned);
 				}
-				cloned.parent = currentSelectedItemNode.parent;
-				ArrayUtils.insertAt(currentList, index++, cloned);
-				if (!doNotGenerateIDOnPaste) {
-					generateNewIDsToAllNodes(cloned);
+				if (firstCloned) {
+					setCurrentSelectedItemNode(firstCloned);
+					onSelectedItem?.(firstCloned, false);
 				}
-				onPasteItem?.(cloned);
-			}
-			if (firstCloned) {
-				setCurrentSelectedItemNode(firstCloned);
-				onSelectedItem?.(firstCloned, false);
 			}
 			onListUpdated?.();
 		}
@@ -863,7 +870,7 @@ function Tree({
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
 						disabled:
-							disableAll || ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotAdd,
+							disableAll || ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotEdit,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {

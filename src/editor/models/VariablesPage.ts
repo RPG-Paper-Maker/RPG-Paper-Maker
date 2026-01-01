@@ -16,6 +16,8 @@ import { Base } from './Base';
 const VARIABLES_PER_PAGE = 25;
 
 class VariablesPage extends Base {
+	public static type = 'VariablesPage';
+
 	public list!: Base[];
 
 	public static bindings: BindingType[] = [['list', 'list', undefined, BINDING.LIST, Base]];
