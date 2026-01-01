@@ -14,6 +14,8 @@ import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class Checkable extends Base {
+	public static type = 'Checkable';
+
 	public checked!: boolean;
 
 	public static bindings: BindingType[] = [['checked', 'checked', true, BINDING.BOOLEAN]];

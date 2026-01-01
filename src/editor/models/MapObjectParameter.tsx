@@ -18,6 +18,8 @@ import { Base, DIALOG_OPTIONS } from './Base';
 import { CreateParameter } from './CreateParameter';
 
 class MapObjectParameter extends Base {
+	public static type = 'MapObjectParameter';
+
 	public parameter!: CreateParameter | null;
 	public value!: DynamicValue;
 

@@ -84,6 +84,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Object: () => Model.Object3D,
 	Language: () => Model.Language,
 	Keyboard: () => Model.Keyboard,
+	VariablesPage: () => Model.VariablesPage,
 };
 
 class Node extends Serializable {

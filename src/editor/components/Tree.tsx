@@ -849,7 +849,7 @@ function Tree({
 						title: `${t('edit')}...`,
 						shortcut: [KEY.ENTER, KEY.SPACE],
 						onClick: handleEditItem,
-						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0,
+						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0 || cannotEdit,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {

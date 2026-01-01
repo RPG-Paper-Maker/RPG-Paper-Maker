@@ -20,6 +20,8 @@ import { Base, DIALOG_OPTIONS } from './Base';
 const { t } = i18next;
 
 class TroopBattleTestHeroEquipment extends Base {
+	public static type = 'TroopBattleTestHeroEquipment';
+
 	public kind!: number;
 	public weaponArmorID!: number;
 

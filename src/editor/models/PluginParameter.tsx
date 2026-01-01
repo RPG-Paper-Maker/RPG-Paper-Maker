@@ -16,6 +16,7 @@ import { PluginDefaultParameter } from './PluginDefaultParameter';
 
 class PluginParameter extends PluginDefaultParameter {
 	public static type = 'PluginParameter';
+
 	public defaultParameter!: PluginDefaultParameter;
 
 	static getTreeHeader(): string[] {
