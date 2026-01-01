@@ -249,6 +249,9 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIndex}
 										onSelectedItem={handleSelectedItem}
 										cannotUpdateListSize
+										canBeEmpty
+										canForcePasteAdd
+										cannotAdd
 										byIndex
 									/>
 								</Flex>

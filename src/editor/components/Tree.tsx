@@ -47,6 +47,7 @@ type Props = {
 	cannotDelete?: boolean;
 	canDelete?: (node: Node | null) => boolean;
 	canBeEmpty?: boolean;
+	canForcePasteAdd?: boolean;
 	doNotGenerateIDOnPaste?: boolean;
 	doNotShowID?: boolean;
 	showEditName?: boolean;
@@ -100,6 +101,7 @@ function Tree({
 	cannotDelete = false,
 	canDelete,
 	canBeEmpty = false,
+	canForcePasteAdd = false,
 	doNotGenerateIDOnPaste = false,
 	doNotShowID = false,
 	showEditName = false,
@@ -377,7 +379,7 @@ function Tree({
 			let index = getNewIndex();
 			let cloned: Node;
 			let firstCloned: Node | null = null;
-			if (cannotAdd) {
+			if (cannotAdd && !canForcePasteAdd) {
 				const id = currentList[index].content.id;
 				currentList[index].content.copy(nodes[0].content);
 				currentList[index].content.id = id;

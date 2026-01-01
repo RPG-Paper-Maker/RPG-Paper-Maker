@@ -67,7 +67,16 @@ function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onRejec
 	};
 
 	useEffect(() => {
-		if (!command.command) {
+		if (
+			!command.command ||
+			![
+				COMMAND_MOVE_KIND.JUMP,
+				COMMAND_MOVE_KIND.CHANGE_SPEED,
+				COMMAND_MOVE_KIND.CHANGE_FREQUENCY,
+				COMMAND_MOVE_KIND.CHANGE_GRAPHICS,
+				COMMAND_MOVE_KIND.WAIT,
+			].includes(command.getKind())
+		) {
 			onReject();
 			setIsOpen(false);
 		}

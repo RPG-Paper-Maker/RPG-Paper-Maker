@@ -21,6 +21,7 @@ import { MapObjectCommand, MapObjectCommandType } from './MapObjectCommand';
 const { t } = i18next;
 class MapObjectCommandMove extends Base {
 	public static type = 'MapObjectCommandMove';
+
 	public command!: MapObjectCommandType[];
 
 	static createMove(kind: COMMAND_MOVE_KIND) {
@@ -185,9 +186,9 @@ class MapObjectCommandMove extends Base {
 				const time = new DynamicValue();
 				time.updateCommand(this.command, iterator);
 				str += `${t(
-					'jump'
+					'jump',
 				)} ${squareStep.toLowerCase()} X:${x.toString()}, Y:${y.toString()}, Y+:${yp.toString()}, Z:${z.toString()}, ${t(
-					'peak'
+					'peak',
 				)} Y:${peakY.toString()}, Y+:${peakYp.toString()} ${t('time')}:${time.toString()}${i18next
 					.t('seconds')
 					.toLowerCase()}`;
