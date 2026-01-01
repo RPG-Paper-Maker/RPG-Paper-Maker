@@ -72,6 +72,10 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 		(node.content as Model.VariablesPage).initialize();
 	};
 
+	const handlePastePage = (node: Node) => {
+		(node.content as Model.VariablesPage).updateIDs();
+	};
+
 	const handleAccept = async () => {
 		Project.current!.variables.pages = Node.createListFromNodes(pages);
 		await Project.current!.variables.save();
@@ -100,8 +104,9 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			initialWidth='700px'
+			initialHeight='630px'
 		>
-			<Flex spacedLarge style={{ height: '510px' }} fillWidth>
+			<Flex spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('variables')}>
 					<Tree
 						constructorType={Model.VariablesPage}
@@ -111,6 +116,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleChangePage}
 						onCreateItem={handleCreatePage}
+						onPasteItem={handlePastePage}
 						showEditName
 					/>
 				</Groupbox>

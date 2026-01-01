@@ -31,6 +31,12 @@ class VariablesPage extends Base {
 		}
 	}
 
+	updateIDs() {
+		for (let i = 1; i <= VARIABLES_PER_PAGE; i++) {
+			this.list[i - 1].id = (this.id - 1) * VARIABLES_PER_PAGE + i;
+		}
+	}
+
 	copy(page: VariablesPage): void {
 		super.copy(page, VariablesPage.getBindings([]));
 	}
