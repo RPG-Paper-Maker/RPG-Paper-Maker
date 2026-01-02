@@ -72,7 +72,7 @@ class TreeMaps extends Serializable {
 	}
 
 	async saveAllTags() {
-		await this.backSaveAllTagsRecursive(this.tree);
+		await this.saveAllTagsRecursive(this.tree);
 		await this.save();
 	}
 
