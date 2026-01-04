@@ -58,7 +58,7 @@ type Props = {
 	onDoubleClick?: (node: Node | null) => void;
 	onCreateItem?: (node: Node) => void;
 	onDeleteItem?: (node: Node) => void;
-	onPasteItem?: (node: Node) => void;
+	onPasteItem?: (copied: Node, originalCopy: Node) => void;
 	onListUpdated?: () => void;
 	onAccept?: (node: Node, isNew: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
@@ -395,7 +395,7 @@ function Tree({
 					if (!doNotGenerateIDOnPaste) {
 						generateNewIDsToAllNodes(cloned);
 					}
-					onPasteItem?.(cloned);
+					onPasteItem?.(cloned, node);
 				}
 				if (firstCloned) {
 					setCurrentSelectedItemNode(firstCloned);

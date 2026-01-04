@@ -175,17 +175,15 @@ const PanelMapObject = forwardRef(
 			}
 		};
 
-		const handlePasteState = (node: Node) => {
-			if (!selectedState) {
-				return;
-			}
+		const handlePasteState = (node: Node, originalCopyNode: Node) => {
 			const state = node.content as Model.MapObjectState;
 			for (const n of events) {
 				const event = n.content as Model.MapObjectEvent;
-				const copiedReaction = event.reactions.get('' + selectedState.id)?.clone();
-				if (copiedReaction) {
-					event.reactions.set('' + state.id, copiedReaction);
-				}
+				const copiedReaction = event.reactions.get('' + originalCopyNode.content.id)?.clone();
+				event.reactions.set(
+					'' + state.id,
+					copiedReaction ?? (Model.MapObjectReaction.createDefault() as Model.MapObjectReaction),
+				);
 			}
 		};
 
