@@ -986,6 +986,7 @@ function Tree({
 								onChange={handleChangeName}
 								widthType={inputNameWidth}
 								disabled={isEditNameDisabled()}
+								onFocus={() => handleSetFocus(false)}
 							/>
 						)}
 					</Flex>

@@ -22,6 +22,7 @@ type Props = {
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
 	disabled?: boolean;
+	onFocus?: () => void;
 };
 
 function InputText({
@@ -33,6 +34,7 @@ function InputText({
 	focusFirst = false,
 	setFocustFirst,
 	disabled = false,
+	onFocus,
 }: Props) {
 	const refInput = useRef<HTMLInputElement>(null);
 
@@ -95,6 +97,7 @@ function InputText({
 			spellCheck='false'
 			style={{ ...style, maxWidth: getMaxWidth() }}
 			disabled={disabled}
+			onFocus={onFocus}
 		/>
 	);
 }
