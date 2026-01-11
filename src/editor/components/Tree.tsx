@@ -979,6 +979,7 @@ function Tree({
 								localization={currentSelectedItemNode?.content as Localization}
 								onUpdate={() => setForceUpdate((value) => !value)}
 								widthType={inputNameWidth}
+								onFocus={() => handleSetFocus(false)}
 							/>
 						) : (
 							<InputText

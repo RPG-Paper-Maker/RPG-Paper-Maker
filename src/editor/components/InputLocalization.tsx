@@ -25,6 +25,7 @@ type Props = {
 	setFocustFirst?: (b: boolean) => void;
 	disabled?: boolean;
 	onUpdate?: () => void;
+	onFocus?: () => void;
 };
 
 function InputLocalization({
@@ -34,6 +35,7 @@ function InputLocalization({
 	setFocustFirst,
 	disabled = false,
 	onUpdate,
+	onFocus,
 }: Props) {
 	const [isDialogLocalizationOpen, setIsDialogLocalizationOpen] = useState(false);
 	const [name, setName] = useState(localization.getName());
@@ -67,6 +69,7 @@ function InputLocalization({
 					focusFirst={focusFirst}
 					setFocustFirst={setFocustFirst}
 					disabled={disabled}
+					onFocus={onFocus}
 				/>
 				<Button icon={<LuLanguages />} disabled={disabled} onClick={handleClick} />
 			</Flex>
