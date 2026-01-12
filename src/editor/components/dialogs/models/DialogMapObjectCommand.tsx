@@ -322,6 +322,9 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	);
 
 	const getDialogCommand = () => {
+		if (!isOpenCommand) {
+			return null;
+		}
 		const options = {
 			commandKind: selectedCommand!,
 			setIsOpen: setIsOpenCommand,
