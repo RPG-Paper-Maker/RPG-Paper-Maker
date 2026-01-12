@@ -164,7 +164,10 @@ function Dialog({
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsClickedIn(true);
-		if (dialogRef.current && dialogRef.current.style.cursor) {
+		if (
+			dialogRef.current &&
+			Object.values(RESIZING_TYPE).includes(dialogRef.current.style.cursor as RESIZING_TYPE)
+		) {
 			setIsResizing(true);
 			setResizingType(dialogRef.current.style.cursor as RESIZING_TYPE);
 			setIsMoved(true);
