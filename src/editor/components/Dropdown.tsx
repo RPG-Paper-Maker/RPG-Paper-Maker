@@ -76,6 +76,7 @@ function Dropdown({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const selectedDropdownRef = useRef<HTMLInputElement>(null);
 	const preSelectedElementRef = useRef<HTMLDivElement>(null);
+	const selectedElementRef = useRef<HTMLDivElement>(null);
 
 	const canDisplayDropdown = () => isOpen && !needForceHide() && options.length > 0;
 
@@ -200,6 +201,10 @@ function Dropdown({
 	}, [preSelectedID]);
 
 	useEffect(() => {
+		selectedElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+	}, [selectedID]);
+
+	useEffect(() => {
 		if (disabled) {
 			setIsOpen(false);
 		}
@@ -218,7 +223,13 @@ function Dropdown({
 	const getDropdownItems = () =>
 		options.map((option) => (
 			<Flex
-				ref={option.id === preSelectedID ? preSelectedElementRef : null}
+				ref={
+					option.id === preSelectedID
+						? preSelectedElementRef
+						: option.id === selectedID
+							? selectedElementRef
+							: null
+				}
 				spaced
 				className={Utils.getClassName(
 					{
