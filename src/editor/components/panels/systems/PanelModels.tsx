@@ -123,6 +123,7 @@ const PanelModels = forwardRef((props, ref) => {
 						applyDefault
 						noFirstSelection
 						doNotOpenDialog
+						canBeEmpty
 					/>
 				</Flex>
 			</Groupbox>

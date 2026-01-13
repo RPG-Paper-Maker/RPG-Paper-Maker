@@ -82,7 +82,12 @@ const PanelMainMenu = forwardRef((props, ref) => {
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('heroes.statistics.to.display')} fillWidth>
-						<Tree constructorType={Model.HeroStatisticDisplay} list={heroesStatisticsDisplay} scrollable />
+						<Tree
+							constructorType={Model.HeroStatisticDisplay}
+							list={heroesStatisticsDisplay}
+							scrollable
+							canBeEmpty
+						/>
 					</Groupbox>
 				</Flex>
 			</Flex>

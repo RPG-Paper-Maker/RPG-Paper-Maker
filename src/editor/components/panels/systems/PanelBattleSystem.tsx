@@ -223,6 +223,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 									list={elements}
 									onListUpdated={updateElements}
 									scrollable
+									canBeEmpty
 								/>
 							</Flex>
 						</Groupbox>

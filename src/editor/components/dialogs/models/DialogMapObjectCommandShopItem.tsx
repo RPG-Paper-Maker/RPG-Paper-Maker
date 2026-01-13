@@ -153,6 +153,7 @@ function DialogMapObjectCommandShopItem({ setIsOpen, model, onAccept, onReject }
 										list={specificPrice}
 										disabled={selectionPrice !== 1}
 										cannotUpdateListSize
+										canBeEmpty
 									/>
 								</Flex>
 							</Flex>

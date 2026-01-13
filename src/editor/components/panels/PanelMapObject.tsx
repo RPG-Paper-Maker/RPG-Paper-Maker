@@ -552,6 +552,7 @@ const PanelMapObject = forwardRef(
 											constructorType={Model.MapObjectProperty}
 											onListUpdated={handleUpdateProperties}
 											cannotUpdateListSize
+											canBeEmpty
 										/>
 									</Flex>
 								</Flex>

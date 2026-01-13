@@ -466,7 +466,7 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('currencies')} fillWidth>
 								<Flex one fillHeight>
-									<Tree constructorType={Model.Currency} list={currencies} scrollable />
+									<Tree constructorType={Model.Currency} list={currencies} scrollable canBeEmpty />
 								</Flex>
 							</Groupbox>
 						</Flex>
