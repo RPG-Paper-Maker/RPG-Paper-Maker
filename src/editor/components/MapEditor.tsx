@@ -160,10 +160,14 @@ function MapEditor() {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
 		if (canvas && canvasHUD) {
-			if (Scene.Map.current) {
-				Scene.Map.current.camera.resizeGL(Manager.GL.mainContext, canvas.clientWidth, canvas.clientHeight);
-			}
 			const ratio = window.devicePixelRatio;
+			if (Scene.Map.current) {
+				Scene.Map.current.camera.resizeGL(
+					Manager.GL.mainContext,
+					canvas.clientWidth * ratio,
+					canvas.clientHeight * ratio,
+				);
+			}
 			canvasHUD.width = canvas.clientWidth * ratio;
 			canvasHUD.height = canvas.clientHeight * ratio;
 			canvasHUD.style.width = `${canvas.clientWidth}px`;

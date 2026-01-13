@@ -102,6 +102,21 @@ function PanelProject() {
 		Manager.GL.layerOneContext.initialize(1);
 		Manager.GL.layerTwoContext.initialize(2);
 		Manager.GL.layerThreeContext.initialize(3);
+		const observer = new ResizeObserver(() => {
+			for (const GL of [
+				Manager.GL.mainContext,
+				Manager.GL.layerOneContext,
+				Manager.GL.layerTwoContext,
+				Manager.GL.layerThreeContext,
+			]) {
+				GL.renderer.setPixelRatio(window.devicePixelRatio);
+				GL.renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+		});
+		observer.observe(document.body);
+		return () => {
+			observer.disconnect();
+		};
 	}, []);
 
 	// When first opening the project with all data loaded

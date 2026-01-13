@@ -2133,7 +2133,12 @@ class Map extends Base {
 	}
 
 	clearHUD() {
-		Map.ctxHUD!.clearRect(0, 0, Map.canvasHUD!.width, Map.canvasHUD!.height);
+		Map.ctxHUD!.clearRect(
+			0,
+			0,
+			Map.canvasHUD!.width / window.devicePixelRatio,
+			Map.canvasHUD!.height / window.devicePixelRatio,
+		);
 		Map.ctxHUD!.imageSmoothingEnabled = false;
 		Map.ctxHUD!.font = 'bold 12px sans-serif';
 		Map.ctxHUD!.fillStyle = 'white';
