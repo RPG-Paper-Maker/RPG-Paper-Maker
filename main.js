@@ -330,8 +330,8 @@ const init = async () => {
 				}
 				if (await exists(`${basePath}/unins000.dat`)) {
 					await fs.copyFile(
-						`${basePath}/unins000.exe`,
-						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+						`${basePath}/unins000.dat`,
+						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.dat`,
 					);
 				}
 			}
