@@ -84,7 +84,7 @@ function DialogCommandStartShopMenu({ commandKind, setIsOpen, list, onAccept, on
 
 	return (
 		<Dialog
-			title={`${t('start.shop.menu')}...`}
+			title={`${t(isRestock ? 'restock.shop' : 'start.shop.menu')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
