@@ -183,6 +183,7 @@ const PanelTroops = forwardRef((props, ref) => {
 											showEditName
 											cannotUpdateListSize
 											doNotOpenDialog
+											canBeEmpty
 										/>
 									</Flex>
 									<Flex one column spaced>
