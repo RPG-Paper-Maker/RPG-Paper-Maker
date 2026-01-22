@@ -90,6 +90,20 @@ function InputNumber({
 		}
 	}, [value, isTyping]);
 
+	useEffect(() => {
+		if (isTyping) {
+			const handleUp = () => {
+				Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
+			};
+			document.addEventListener('mouseup', handleUp);
+			document.addEventListener('keyup', handleUp);
+			return () => {
+				document.removeEventListener('mouseup', handleUp);
+				document.removeEventListener('keyup', handleUp);
+			};
+		}
+	}, [isTyping]);
+
 	return (
 		<input
 			type='number'
