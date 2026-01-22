@@ -1356,7 +1356,7 @@ class Map extends Base {
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
 		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
-		const isPlane = distPlane - 0.1 <= dist || this.rectangleStartPosition !== null; // -0.1 to avoid z-fighting issues
+		const isPlane = distPlane <= dist - 0.01 || this.rectangleStartPosition !== null; // -0.01 to avoid z-fighting issues
 		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
