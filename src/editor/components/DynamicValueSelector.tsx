@@ -52,32 +52,32 @@ function DynamicValueSelector({
 	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
 			? (value.value as number)
-			: 0
+			: 0,
 	);
 	const [valueText, setValueText] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.TEXT || value.kind === DYNAMIC_VALUE_KIND.FORMULA
 			? (value.value as string)
-			: ''
+			: '',
 	);
 	const [valueSwitch, setValueSwitch] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true
+		value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true,
 	);
 	const [valueVariableID, setValueVariableID] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1
+		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1,
 	);
 	const [forcedVariableID, setForcedVariabledID] = useState<number | null>(null);
 	const [valueKeyboardID, setValueKeyboardID] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0]?.id
+		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0]?.id,
 	);
 	const [valueParameterID, setValueParameterID] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.PARAMETER
 			? (value.value as number)
-			: Project.current!.currentMapObjectParameters[0]?.id
+			: Project.current!.currentMapObjectParameters[0]?.id,
 	);
 	const [valuePropertyID, setValuePropertyID] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.PROPERTY
 			? (value.value as number)
-			: Project.current!.currentMapObjectProperties[0]?.content?.id
+			: Project.current!.currentMapObjectProperties[0]?.content?.id,
 	);
 	const [valueDatabase, setValueDatabase] = useState(
 		[
@@ -134,7 +134,7 @@ function DynamicValueSelector({
 			DYNAMIC_VALUE_KIND.MUSIC_EFFECT,
 		].includes(value.kind)
 			? (value.value as number)
-			: 1
+			: 1,
 	);
 
 	const getOptionsKind = () => {
@@ -691,13 +691,8 @@ function DynamicValueSelector({
 						width={INPUT_WIDTH}
 					/>
 				);
-			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
-			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
-			case DYNAMIC_VALUE_KIND.VECTOR2:
-			case DYNAMIC_VALUE_KIND.VECTOR3:
-				return null;
 			default:
-				return null;
+				return <div style={{ width: INPUT_WIDTH }}></div>;
 		}
 	};
 
