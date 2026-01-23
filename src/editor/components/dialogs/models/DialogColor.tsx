@@ -41,23 +41,30 @@ function DialogColor({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [red, setRed] = useStateNumber();
 	const [green, setGreen] = useStateNumber();
 	const [blue, setBlue] = useStateNumber();
+	const [alpha, setAlpha] = useStateNumber();
+
+	const updateHex = (pColor: Color) => {
+		setHex(pColor.toHexString().slice(1));
+	};
 
 	const initialize = () => {
-		const pColor = new Color({ r: color.red, g: color.green, b: color.blue });
+		const pColor = new Color({ r: color.red, g: color.green, b: color.blue, a: color.alpha });
 		setPickerColor(pColor);
 		setName(color.name);
-		setHex(pColor.toHexString().slice(1));
+		updateHex(pColor);
 		setRed(color.red);
 		setGreen(color.green);
 		setBlue(color.blue);
+		setAlpha(color.alpha * 100);
 	};
 
 	const handlePickerColorChange = (newColor: Color) => {
 		setPickerColor(newColor);
-		setHex(newColor.toHexString().slice(1));
+		updateHex(newColor);
 		setRed(newColor.r);
 		setGreen(newColor.g);
 		setBlue(newColor.b);
+		setAlpha(newColor.a * 100);
 	};
 
 	const handleHexChange = (newHex: string) => {
@@ -67,31 +74,43 @@ function DialogColor({ setIsOpen, model, onAccept, onReject }: Props) {
 		setRed(newColor.r);
 		setGreen(newColor.g);
 		setBlue(newColor.b);
+		setAlpha(newColor.a * 100);
 	};
 
 	const handleRedChange = (newRed: number) => {
-		const newColor = new Color({ r: newRed, g: green, b: blue });
+		const newColor = new Color({ r: newRed, g: green, b: blue, a: alpha / 100 });
 		setPickerColor(newColor);
-		setHex(newColor.toHexString().slice(1));
+		updateHex(newColor);
 		setRed(newRed);
 	};
 
 	const handleGreenChange = (newGreen: number) => {
-		const newColor = new Color({ r: red, g: newGreen, b: blue });
+		const newColor = new Color({ r: red, g: newGreen, b: blue, a: alpha / 100 });
 		setPickerColor(newColor);
-		setHex(newColor.toHexString().slice(1));
+		updateHex(newColor);
 		setGreen(newGreen);
 	};
 
 	const handleBlueChange = (newBlue: number) => {
-		const newColor = new Color({ r: red, g: green, b: newBlue });
+		const newColor = new Color({ r: red, g: green, b: newBlue, a: alpha / 100 });
 		setPickerColor(newColor);
-		setHex(newColor.toHexString().slice(1));
+		updateHex(newColor);
 		setBlue(newBlue);
+	};
+
+	const handleAlphaChange = (newAlpha: number) => {
+		const newColor = new Color({ r: red, g: green, b: blue, a: newAlpha / 100 });
+		setPickerColor(newColor);
+		updateHex(newColor);
+		setAlpha(newAlpha);
 	};
 
 	const handleAccept = async () => {
 		color.name = name;
+		color.red = red;
+		color.green = green;
+		color.blue = blue;
+		color.alpha = alpha / 100;
 		onAccept();
 		setIsOpen(false);
 	};
@@ -106,46 +125,50 @@ function DialogColor({ setIsOpen, model, onAccept, onReject }: Props) {
 	}, []);
 
 	return (
-		<>
-			<Dialog
-				title={`${t('set.color')}...`}
-				isOpen
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-			>
-				<Flex column spacedLarge>
-					<Flex spaced centerV>
-						<div>{t('name')}:</div>
-						<InputText value={name} onChange={setName} />
-					</Flex>
-					<Flex spacedLarge>
-						<ColorPicker value={pickerColor} onChange={handlePickerColorChange} />
-						<Flex column>
-							<Form>
-								<Label>{t('HEX')}</Label>
-								<Value>
-									<Flex spaced centerV>
-										#<InputText value={hex} onChange={handleHexChange} />
-									</Flex>
-								</Value>
-								<Label>R</Label>
-								<Value>
-									<InputNumber value={red} onChange={handleRedChange} min={0} max={255} />
-								</Value>
-								<Label>G</Label>
-								<Value>
-									<InputNumber value={green} onChange={handleGreenChange} min={0} max={255} />
-								</Value>
-								<Label>B</Label>
-								<Value>
-									<InputNumber value={blue} onChange={handleBlueChange} min={0} max={255} />
-								</Value>
-							</Form>
-						</Flex>
+		<Dialog
+			title={`${t('set.color')}...`}
+			isOpen
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<Flex column spacedLarge>
+				<Flex spaced centerV>
+					<div>{t('name')}:</div>
+					<InputText value={name} onChange={setName} />
+				</Flex>
+				<Flex spacedLarge>
+					<ColorPicker value={pickerColor} onChange={handlePickerColorChange} />
+					<Flex column>
+						<Form>
+							<Label>{t('HEX')}</Label>
+							<Value>
+								<Flex spaced centerV>
+									#<InputText value={hex} onChange={handleHexChange} />
+								</Flex>
+							</Value>
+							<Label>R</Label>
+							<Value>
+								<InputNumber value={red} onChange={handleRedChange} min={0} max={255} />
+							</Value>
+							<Label>G</Label>
+							<Value>
+								<InputNumber value={green} onChange={handleGreenChange} min={0} max={255} />
+							</Value>
+							<Label>B</Label>
+							<Value>
+								<InputNumber value={blue} onChange={handleBlueChange} min={0} max={255} />
+							</Value>
+							<Label>Alpha</Label>
+							<Value>
+								<Flex spaced centerV>
+									<InputNumber value={alpha} onChange={handleAlphaChange} min={0} max={100} />%
+								</Flex>
+							</Value>
+						</Form>
 					</Flex>
 				</Flex>
-			</Dialog>
-		</>
+			</Flex>
+		</Dialog>
 	);
 }
 

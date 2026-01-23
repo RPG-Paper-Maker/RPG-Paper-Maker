@@ -14,7 +14,7 @@ import { copyFolder, getFiles, getFolders, readJSON, writeJSON } from '../common
 import { Project } from '../core/Project';
 
 class ProjectUpdater {
-	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19'];
+	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19', '3.0.22'];
 
 	static isIncompatibleVersion(version: string) {
 		return this.checkVersion(version, this.versions[this.versions.length - 1]);

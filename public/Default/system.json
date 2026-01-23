@@ -1,8 +1,8 @@
 {
 	"colors": [
-		{ "a": 255, "b": 0, "g": 0, "id": 1, "name": "Black", "r": 0 },
-		{ "a": 255, "b": 255, "g": 255, "id": 2, "name": "White", "r": 255 },
-		{ "a": 255, "b": 221, "g": 224, "id": 3, "name": "Blue sky", "r": 199 }
+		{ "a": 1, "b": 0, "g": 0, "id": 1, "name": "Black", "r": 0 },
+		{ "a": 1, "b": 255, "g": 255, "id": 2, "name": "White", "r": 255 },
+		{ "a": 1, "b": 221, "g": 224, "id": 3, "name": "Blue sky", "r": 199 }
 	],
 	"cp": [
 		{ "id": 1, "istoy": false, "name": "Outside", "toy": { "k": 3, "v": 8 } },
