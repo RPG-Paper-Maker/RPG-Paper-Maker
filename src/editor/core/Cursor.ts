@@ -18,7 +18,7 @@ import { Position } from './Position';
 import { Project } from './Project';
 
 class Cursor {
-	public static FRAME_MOVE_START = 200;
+	public static FRAME_MOVE_START = 40;
 	public position: Position;
 	public map: Scene.Map;
 	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
@@ -71,49 +71,51 @@ class Cursor {
 		this.map.scene.remove(this.mesh);
 	}
 
+	move() {
+		const angle = this.map.camera.horizontalAngle;
+		const minX = this.map.detectionFieldLeft === undefined ? 0 : -this.map.detectionFieldLeft;
+		const minZ = this.map.detectionFieldTop === undefined ? 0 : -this.map.detectionFieldTop;
+		const maxX =
+			this.map.detectionFieldRight === undefined ? this.map.model.length - 1 : this.map.detectionFieldRight;
+		const maxZ = this.map.detectionFieldBot === undefined ? this.map.model.width - 1 : this.map.detectionFieldBot;
+		let xPlus = 0;
+		let zPlus = 0;
+		if (EngineSettings.current!.getKeyboardCursorUp().isPressed(Inputs.keys)) {
+			xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
+			zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
+			this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+			this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+		}
+		if (EngineSettings.current!.getKeyboardCursorDown().isPressed(Inputs.keys)) {
+			xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
+			zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
+			this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+			this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+		}
+		if (EngineSettings.current!.getKeyboardCursorLeft().isPressed(Inputs.keys)) {
+			xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
+			zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
+			this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+			this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+		}
+		if (EngineSettings.current!.getKeyboardCursorRight().isPressed(Inputs.keys)) {
+			xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
+			zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
+			this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
+			this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
+		}
+		this.syncWithCameraTargetPosition();
+	}
+
 	onKeyDownImmediate() {
 		if (Inputs.isCTRL || Inputs.isALT || Inputs.isSHIFT) {
 			return;
 		}
-		const isNewFrameMove = this.frameMove.update() && !this.firstMove;
-		if (this.firstMove || isNewFrameMove) {
-			if (isNewFrameMove) {
+		if (this.frameMove.update()) {
+			if (!this.firstMove) {
 				this.frameMove.duration = 20;
 			}
-			const angle = this.map.camera.horizontalAngle;
-			const minX = this.map.detectionFieldLeft === undefined ? 0 : -this.map.detectionFieldLeft;
-			const minZ = this.map.detectionFieldTop === undefined ? 0 : -this.map.detectionFieldTop;
-			const maxX =
-				this.map.detectionFieldRight === undefined ? this.map.model.length - 1 : this.map.detectionFieldRight;
-			const maxZ =
-				this.map.detectionFieldBot === undefined ? this.map.model.width - 1 : this.map.detectionFieldBot;
-			let xPlus = 0;
-			let zPlus = 0;
-			if (EngineSettings.current!.getKeyboardCursorUp().isPressed(Inputs.keys)) {
-				xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
-				zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
-				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
-				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
-			}
-			if (EngineSettings.current!.getKeyboardCursorDown().isPressed(Inputs.keys)) {
-				xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
-				zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
-				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
-				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
-			}
-			if (EngineSettings.current!.getKeyboardCursorLeft().isPressed(Inputs.keys)) {
-				xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
-				zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
-				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
-				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
-			}
-			if (EngineSettings.current!.getKeyboardCursorRight().isPressed(Inputs.keys)) {
-				xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
-				zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
-				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
-				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
-			}
-			this.syncWithCameraTargetPosition();
+			this.move();
 		}
 		this.firstMove = false;
 	}
@@ -126,6 +128,7 @@ class Cursor {
 			!EngineSettings.current!.getKeyboardCursorRight().isPressed(Inputs.keys)
 		) {
 			this.frameMove.duration = Cursor.FRAME_MOVE_START;
+			this.move();
 			this.firstMove = true;
 		}
 	}
