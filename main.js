@@ -401,7 +401,9 @@ app.whenReady().then(() => {
 	shortcuts = [`CommandOrControl+Alt+E`, `CommandOrControl+Shift+E`];
 	for (const shortcut of shortcuts) {
 		globalShortcut.register(shortcut, () => {
-			window?.openDevTools({ mode: 'undocked' });
+			if (window && window.isFocused()) {
+				window.openDevTools({ mode: 'undocked' });
+			}
 		});
 	}
 	if (app.isPackaged) {
