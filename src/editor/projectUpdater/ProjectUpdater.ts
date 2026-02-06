@@ -14,7 +14,7 @@ import { copyFolder, getFiles, getFolders, readJSON, writeJSON } from '../common
 import { Project } from '../core/Project';
 
 class ProjectUpdater {
-	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19', '3.0.22'];
+	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19', '3.0.22', '3.0.24'];
 
 	static isIncompatibleVersion(version: string) {
 		return this.checkVersion(version, this.versions[this.versions.length - 1]);
@@ -100,13 +100,21 @@ class ProjectUpdater {
 		}
 	}
 
+	static doCallback = (commands: JSONType[], callback: (json: JSONType) => void) => {
+		for (const command of (commands ?? []) as JSONType[]) {
+			callback.call(this, command);
+			for (const child of (command.children ?? []) as JSONType[]) {
+				callback.call(this, child);
+				this.doCallback(child.children as JSONType[], callback);
+			}
+		}
+	};
+
 	static updateObjectCommand(obj: JSONType, callback: (json: JSONType) => void) {
 		for (const event of (obj.events ?? []) as JSONType[]) {
 			const reactions = event.r as Record<string, JSONType>;
 			for (const id in reactions) {
-				for (const command of reactions[id].c as JSONType[]) {
-					callback.call(this, command);
-				}
+				this.doCallback(reactions[id].c as JSONType[], callback);
 			}
 		}
 	}
@@ -141,9 +149,7 @@ class ProjectUpdater {
 				this.updateObjectCommand(obj, callback);
 			}
 			for (const reaction of jsonEvents.commonReactors as JSONType[]) {
-				for (const command of reaction.c as JSONType[]) {
-					callback.call(this, command);
-				}
+				this.doCallback(reaction.c as JSONType[], callback);
 			}
 			await writeJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS), jsonEvents);
 		}
@@ -154,9 +160,7 @@ class ProjectUpdater {
 			for (const troop of jsonTroops.troops as JSONType[]) {
 				if (troop.reactions) {
 					for (const reaction of troop.reactions as JSONType[]) {
-						for (const command of reaction.c as JSONType[]) {
-							callback.call(this, command);
-						}
+						this.doCallback(reaction.c as JSONType[], callback);
 					}
 				}
 			}
