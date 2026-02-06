@@ -545,7 +545,9 @@ ipcMain.handle('create-file', async (event, path, content) => {
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
-	await fs.unlink(path, content);
+	await fs.unlink(path, content).catch((e) => {
+		if (e.code !== 'ENOENT') throw e;
+	});
 });
 
 ipcMain.handle('copy-file', async (event, src, dst) => {
