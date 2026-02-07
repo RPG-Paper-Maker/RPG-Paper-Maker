@@ -1276,7 +1276,7 @@ class MapPortion {
 			const vecC = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z + Project.SQUARE_SIZE);
 			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + Project.SQUARE_SIZE);
 			geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
-			geometry.pushQuadIndices(count);
+			geometry.pushQuadIndices(count, position);
 			const coef = MapElement.Base.COEF_TEX / Project.SQUARE_SIZE;
 			const texA = new THREE.Vector2();
 			const texB = new THREE.Vector2();
@@ -1286,12 +1286,20 @@ class MapPortion {
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count += 4;
 
-			// First state graphics
+			// Apply transforms from first state for sprite geometry
 			const state = object.getFirstState();
 			if (state) {
+				position.centerX = state.centerX.getFixNumberValue();
+				position.centerZ = state.centerZ.getFixNumberValue();
+				position.angleX = state.angleX.getFixNumberValue();
+				position.angleY = state.angleY.getFixNumberValue();
+				position.angleZ = state.angleZ.getFixNumberValue();
 				position.scaleX = state.scaleX.getFixNumberValue();
 				position.scaleY = state.scaleY.getFixNumberValue();
 				position.scaleZ = state.scaleZ.getFixNumberValue();
+			}
+
+			if (state) {
 				let mesh: THREE.Mesh | null = null;
 				switch (state.graphicsKind) {
 					case ELEMENT_MAP_KIND.NONE:

@@ -154,6 +154,7 @@ class Map extends Base {
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 	public skyboxMesh: THREE.Mesh | null = null;
 	public showCoordinates = true;
+	public pointedObjectLabel: string | null = null;
 
 	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false, isBattle = false) {
 		super(tag, isDetection);
@@ -1344,6 +1345,7 @@ class Map extends Base {
 		}
 		const previousPointedMapElementPosition = this.pointedMapElementPosition;
 		const previousPointedMapElement = this.pointedMapElement;
+		const previousPointedObjectLabel = this.pointedObjectLabel;
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
 			this.meshPlane!.position.setY(
@@ -1555,6 +1557,7 @@ class Map extends Base {
 			this.lastPosition = position;
 			this.pointedMapElementPosition = position;
 			this.pointedMapElement = null;
+			this.pointedObjectLabel = null;
 			if (this.rectangleStartPosition) {
 				this.lastRectangleEndPosition = position.clone();
 			}
@@ -1568,10 +1571,11 @@ class Map extends Base {
 			this.layerRayPosition = null;
 			this.pointedMapElementPosition = null;
 			this.pointedMapElement = null;
+			this.pointedObjectLabel = null;
 		}
 
 		// For displaying information on left bottom corner
-		if (!isPlane) {
+		if (!isPlane || Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 			switch (Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.FLOOR:
 				case ELEMENT_MAP_KIND.AUTOTILE:
@@ -1591,6 +1595,9 @@ class Map extends Base {
 					break;
 				case ELEMENT_MAP_KIND.OBJECT3D:
 					layer = RAYCASTING_LAYER.OBJECTS3D;
+					break;
+				case ELEMENT_MAP_KIND.OBJECT:
+					layer = RAYCASTING_LAYER.OBJECTS;
 					break;
 				default:
 					layer = RAYCASTING_LAYER.PLANE;
@@ -1613,15 +1620,36 @@ class Map extends Base {
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
 					const mapPortion = this.getMapPortionByPosition(newPosition);
-					let element = mapPortion?.model.getMapElement(newPosition, Map.currentSelectedMapElementKind);
-					if (isLayerOn && isSpriteOptionSelected && (!element || element.isPreview)) {
-						element = mapPortion?.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
-					}
-					if (element && !element.isPreview) {
-						this.pointedMapElement = element;
-						this.pointedMapElementPosition = newPosition;
+					if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+						const object = mapPortion?.model.objects.get(newPositionKey);
+						if (object) {
+							const state = object.getFirstState();
+							if (state) {
+								newPosition.centerX = state.centerX.getFixNumberValue();
+								newPosition.centerZ = state.centerZ.getFixNumberValue();
+								newPosition.angleX = state.angleX.getFixNumberValue();
+								newPosition.angleY = state.angleY.getFixNumberValue();
+								newPosition.angleZ = state.angleZ.getFixNumberValue();
+								newPosition.scaleX = state.scaleX.getFixNumberValue();
+								newPosition.scaleY = state.scaleY.getFixNumberValue();
+								newPosition.scaleZ = state.scaleZ.getFixNumberValue();
+							}
+							this.pointedMapElementPosition = newPosition;
+							this.pointedObjectLabel = `${t('object')} ID: ${Utils.formatNumberID(object.id)} - ${object.name}`;
+						} else {
+							continue;
+						}
 					} else {
-						continue;
+						let element = mapPortion?.model.getMapElement(newPosition, Map.currentSelectedMapElementKind);
+						if (isLayerOn && isSpriteOptionSelected && (!element || element.isPreview)) {
+							element = mapPortion?.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
+						}
+						if (element && !element.isPreview) {
+							this.pointedMapElement = element;
+							this.pointedMapElementPosition = newPosition;
+						} else {
+							continue;
+						}
 					}
 				}
 			}
@@ -1637,6 +1665,7 @@ class Map extends Base {
 		}
 		if (
 			previousPointedMapElement !== this.pointedMapElement ||
+			previousPointedObjectLabel !== this.pointedObjectLabel ||
 			(previousPointedMapElementPosition === null && this.pointedMapElementPosition !== null) ||
 			(previousPointedMapElementPosition !== null && this.pointedMapElementPosition === null) ||
 			(previousPointedMapElementPosition !== null &&
@@ -2093,10 +2122,15 @@ class Map extends Base {
 	drawPointedCoords() {
 		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.model)) {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
-			ArrayUtils.insertFirst(
-				lines,
-				this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString(),
-			);
+			let label: string;
+			if (this.pointedMapElement !== null) {
+				label = this.pointedMapElement.toString();
+			} else if (this.pointedObjectLabel !== null) {
+				label = this.pointedObjectLabel;
+			} else {
+				label = i18n.t('none').toUpperCase();
+			}
+			ArrayUtils.insertFirst(lines, label);
 			Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;
 			const padding = 10;
