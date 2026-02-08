@@ -31,6 +31,7 @@ type Props = {
 function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
+	const [initialized, setInitialized] = useState(false);
 	const [pages, setPages] = useState<Node[]>([]);
 	const [variables, setVariables] = useState<Node[]>([]);
 	const [forcedPageCurrentSelectedItemID, setForcedPageCurrentSelectedItemID] = useState<number | null>(null);
@@ -45,7 +46,6 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 			const page = Data.Variables.getPageByVariableID(clonedPages, model.id);
 			if (page) {
 				setForcedPageCurrentSelectedItemID(page.id);
-				setForcedVariableCurrentSelectedItemID(model.id);
 				setVariables(Node.createList(page.list, false));
 			} else {
 				setVariables(Node.createList(clonedPages[0].list));
@@ -60,7 +60,6 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 			const page = Node.getNodeByID(pages, node.content.id)?.content as Model.VariablesPage | undefined;
 			if (page) {
 				setVariables(Node.createList(page.list, false));
-				setForcedVariableCurrentSelectedItemID(page.list[0]?.id || -1);
 				return;
 			}
 		}
@@ -96,6 +95,13 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 		initialize();
 	}, []);
 
+	useLayoutEffect(() => {
+		if (!initialized && variables && model && selectedVariable) {
+			setTimeout(() => setForcedVariableCurrentSelectedItemID(model.id));
+			setInitialized(true);
+		}
+	}, [variables, initialized, model, selectedVariable]);
+
 	return (
 		<Dialog
 			title={`${t('variables.manager')}...`}
@@ -118,6 +124,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 						onCreateItem={handleCreatePage}
 						onPasteItem={handlePastePage}
 						showEditName
+						noFirstSelection
 					/>
 				</Groupbox>
 				<Tree
