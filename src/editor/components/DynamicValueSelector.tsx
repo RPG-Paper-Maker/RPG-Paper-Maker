@@ -10,15 +10,18 @@
 */
 
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
+import DialogInfoFormulas from './dialogs/DialogInfoFormulas';
 import Dropdown from './Dropdown';
 import Flex from './Flex';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
+import TooltipInformation from './TooltipInformation';
 import VariableSelector from './VariableSelector';
 
 export const INPUT_WIDTH = '200px';
@@ -48,6 +51,8 @@ function DynamicValueSelector({
 	addNoneOption = false,
 	fillWidth = false,
 }: Props) {
+	const { t } = useTranslation();
+	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
@@ -697,16 +702,28 @@ function DynamicValueSelector({
 	};
 
 	return (
-		<div className='dynamicValueSelector'>
-			<Dropdown
-				selectedID={kind}
-				onChange={handleChangeKind}
-				options={getOptions()}
-				disabled={disabled}
-				translateOptions
-			/>
-			<Flex one>{getValueDisplay()}</Flex>
-		</div>
+		<>
+			<div className='dynamicValueSelector'>
+				<Dropdown
+					selectedID={kind}
+					onChange={handleChangeKind}
+					options={getOptions()}
+					disabled={disabled}
+					translateOptions
+				/>
+				<Flex one spaced>
+					{getValueDisplay()}
+					{kind === DYNAMIC_VALUE_KIND.FORMULA && (
+						<TooltipInformation
+							text={t('tooltip.click.formulas.overview')}
+							onClick={() => setIsDialogInfoFormulasOpen(true)}
+							disabled={disabled}
+						/>
+					)}
+				</Flex>
+			</div>
+			{isDialogInfoFormulasOpen && <DialogInfoFormulas setIsOpen={setIsDialogInfoFormulasOpen} />}
+		</>
 	);
 }
 

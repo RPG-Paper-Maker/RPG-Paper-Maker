@@ -5,9 +5,11 @@ import '../styles/Tooltip.css';
 type Props = {
 	children: ReactNode;
 	text: string;
+	onClick?: () => void;
+	disabled?: boolean;
 };
 
-export default function Tooltip({ children, text }: Props) {
+export default function Tooltip({ children, text, onClick, disabled = false }: Props) {
 	const [visible, setVisible] = useState(false);
 	const [isCentered, setIsCentered] = useState(true);
 	const tooltipRef = useRef<HTMLDivElement>(null);
@@ -26,8 +28,9 @@ export default function Tooltip({ children, text }: Props) {
 		<div
 			ref={containerRef}
 			className='tooltip'
-			onMouseEnter={() => setVisible(true)}
-			onMouseLeave={() => setVisible(false)}
+			onMouseEnter={disabled ? undefined : () => setVisible(true)}
+			onMouseLeave={disabled ? undefined : () => setVisible(false)}
+			onClick={disabled ? undefined : onClick}
 		>
 			{children}
 			<div ref={tooltipRef} className={Utils.getClassName({ visible, right: !isCentered }, 'tooltipBox')}>
