@@ -49,9 +49,9 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 			{
 				length: ProgressionTable.selectedClassFinalLevel - ProgressionTable.selectedClassInitialLevel + 1,
 			},
-			(_, i) => ProgressionTable.selectedClassInitialLevel + i
+			(_, i) => ProgressionTable.selectedClassInitialLevel + i,
 		);
-	}, []);
+	}, [progression]);
 	const yValues = useMemo(() => tableValues.map((lines) => Number(lines[1])), [tableValues]);
 
 	const initialize = () => {
@@ -59,8 +59,8 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 			setTableValues(
 				progression.getTableValues(
 					ProgressionTable.selectedClassInitialLevel,
-					ProgressionTable.selectedClassFinalLevel
-				)
+					ProgressionTable.selectedClassFinalLevel,
+				),
 			);
 			setEquation(progression.equation);
 		}
@@ -83,8 +83,8 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 		setTableValues(
 			progression!.getTableValues(
 				ProgressionTable.selectedClassInitialLevel,
-				ProgressionTable.selectedClassFinalLevel
-			)
+				ProgressionTable.selectedClassFinalLevel,
+			),
 		);
 	};
 

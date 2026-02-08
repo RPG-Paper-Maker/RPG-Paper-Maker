@@ -16,7 +16,7 @@ import { Project } from '../../../core/Project';
 import { Rectangle } from '../../../core/Rectangle';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
-import { Hero, Localization } from '../../../models';
+import { Hero, Localization, ProgressionTable } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
@@ -64,6 +64,14 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 					selectedHero.idBattler,
 				)?.getPathOrBase64()) ?? '',
 			);
+			ProgressionTable.selectedClassInitialLevel =
+				selectedHero.classInherit.initialLevel === -1
+					? upperClass!.initialLevel
+					: selectedHero.classInherit.initialLevel;
+			ProgressionTable.selectedClassFinalLevel =
+				selectedHero.classInherit.finalLevel === -1
+					? upperClass!.finalLevel
+					: selectedHero.classInherit.finalLevel;
 		} else {
 			setClassID(1);
 			setDescription(Localization.create(-1, ''));

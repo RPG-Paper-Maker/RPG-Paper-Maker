@@ -38,14 +38,25 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 		() => Project.current!.systems.currencies.map((currency, index) => Base.create(index, currency.getName())),
 		[],
 	);
+	const upperClass = useMemo(() => Project.current!.classes.getByID(selectedMonster?.class ?? 1), [selectedMonster]);
 
 	const update = async () => {
 		if (selectedMonster) {
 			setLoots(Node.createList(selectedMonster.loots, false));
 			MonsterAction.selectedMonsterActions = selectedMonster.actions;
 			setActions(Node.createList(selectedMonster.actions, false));
+			ProgressionTable.selectedClassInitialLevel =
+				selectedMonster.classInherit.initialLevel === -1
+					? upperClass!.initialLevel
+					: selectedMonster.classInherit.initialLevel;
+			ProgressionTable.selectedClassFinalLevel =
+				selectedMonster.classInherit.finalLevel === -1
+					? upperClass!.finalLevel
+					: selectedMonster.classInherit.finalLevel;
 		} else {
 			setLoots([]);
+			setActions([]);
+			MonsterAction.selectedMonsterActions = [];
 		}
 	};
 
