@@ -124,7 +124,7 @@ function DialogCommandStartBattle({ commandKind, setIsOpen, list, onAccept, onRe
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			initialHeight='calc(100% - 50px)'
+			initialHeight='min(calc(100% - 50px), 750px)'
 		>
 			<Flex one column spacedLarge className='scrollable'>
 				<Groupbox title={t('troop.id')}>
