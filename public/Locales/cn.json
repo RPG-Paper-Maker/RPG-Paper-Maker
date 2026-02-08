@@ -710,6 +710,7 @@
 	"copy": "复制",
 	"paste": "粘贴",
 	"delete": "删除",
+	"clear": "重置",
 	"edit.map.properties": "编辑地图属性",
 	"new.map": "新建地图",
 	"new.directory": "新建目录",

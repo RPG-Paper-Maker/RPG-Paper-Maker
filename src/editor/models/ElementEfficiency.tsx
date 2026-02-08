@@ -10,6 +10,7 @@
 */
 
 import { ReactNode } from 'react';
+import { DYNAMIC_VALUE_KIND } from '../common';
 import DialogDynamicNumber from '../components/dialogs/models/DialogDynamicNumber';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base, DIALOG_OPTIONS } from './Base';
@@ -18,6 +19,11 @@ class ElementEfficiency extends Base {
 	public static type = 'ElementEfficiency';
 
 	public value!: DynamicValue;
+
+	applyDefault(): void {
+		super.applyDefault([]);
+		this.value = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 1);
+	}
 
 	public static createEfficiency(id: number, name: string, value: DynamicValue): ElementEfficiency {
 		const element = new ElementEfficiency();

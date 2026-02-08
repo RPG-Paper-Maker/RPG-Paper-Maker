@@ -186,6 +186,7 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.COPY,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
+			CONTEXT_MENU_ITEM_KIND.CLEAR,
 		];
 		if (!cannotUpdateListSize && !cannotAdd) {
 			ArrayUtils.insertAt(contextMenuItems, 2, CONTEXT_MENU_ITEM_KIND.UPDATE_LIST_SIZE);
@@ -411,6 +412,20 @@ function Tree({
 		node.content.id = Node.getNewID(list);
 		for (const child of node.children) {
 			generateNewIDsToAllNodes(child);
+		}
+	};
+
+	const handleClearItem = async () => {
+		if (currentSelectedItemNode && !isEmpty) {
+			currentSelectedItemNode.content = currentSelectedItemNode.content.clone();
+			const model = currentSelectedItemNode.content;
+			const id = model.id;
+			model.applyDefault();
+			model.id = id;
+			model.name = '';
+			setCurrentName('');
+			onSelectedItem?.(currentSelectedItemNode, false);
+			onListUpdated?.();
 		}
 	};
 
@@ -893,6 +908,13 @@ function Tree({
 							((isEmpty || isFixed) && additionalSelectedNodes.length === 0) ||
 							cannotDelete ||
 							(!canBeEmpty && list.length === 1),
+					};
+				case CONTEXT_MENU_ITEM_KIND.CLEAR:
+					return {
+						title: t('clear'),
+						shortcut: [SPECIAL_KEY.CTRL, KEY.D],
+						onClick: handleClearItem,
+						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0 || cannotEdit,
 					};
 				default: {
 					const customItem = { ...kind };

@@ -347,6 +347,7 @@ export enum CONTEXT_MENU_ITEM_KIND {
 	COPY,
 	PASTE,
 	DELETE,
+	CLEAR,
 }
 
 export enum EXTENSION_KIND {

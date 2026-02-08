@@ -710,6 +710,7 @@
 	"copy": "Copiar",
 	"paste": "Colar",
 	"delete": "Excluir",
+	"clear": "Redefinir",
 	"edit.map.properties": "Editar propriedades do mapa",
 	"new.map": "Novo mapa",
 	"new.directory": "Novo diretório",

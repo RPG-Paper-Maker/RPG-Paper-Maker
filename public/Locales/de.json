@@ -710,6 +710,7 @@
 	"copy": "Kopieren",
 	"paste": "Einfügen",
 	"delete": "Lösche",
+	"clear": "Zurücksetzen",
 	"edit.map.properties": "Bearbeite Karteneigenschaften",
 	"new.map": "Neue Karte",
 	"new.directory": "Neues Verzeichnis",

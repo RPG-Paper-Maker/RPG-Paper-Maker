@@ -26,6 +26,10 @@ class VariablesPage extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(VariablesPage.getBindings(additionnalBinding));
+	}
+
 	initialize() {
 		this.list = [];
 		for (let i = 1; i <= VARIABLES_PER_PAGE; i++) {

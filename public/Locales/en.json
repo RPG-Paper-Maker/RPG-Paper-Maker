@@ -710,6 +710,7 @@
 	"copy": "Copy",
 	"paste": "Paste",
 	"delete": "Delete",
+	"clear": "Clear",
 	"edit.map.properties": "Edit map properties",
 	"new.map": "New map",
 	"new.directory": "New directory",
