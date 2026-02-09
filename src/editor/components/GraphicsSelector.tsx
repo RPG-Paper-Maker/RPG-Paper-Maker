@@ -10,6 +10,7 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
@@ -57,6 +58,8 @@ function GraphicsSelector({
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const refBorder = useRef<HTMLDivElement>(null);
+	const refContainer = useRef<HTMLDivElement>(null);
+	const refPortalBorder = useRef<HTMLDivElement>(null);
 
 	const isCharacter =
 		options.graphicsKind === ELEMENT_MAP_KIND.NONE ||
@@ -201,12 +204,31 @@ function GraphicsSelector({
 		}
 	}, [isOpenDialogObjects3D, hidden]);
 
+	useEffect(() => {
+		if (isObject3D && !isOpenDialogObjects3D && !hidden) {
+			let rafId: number;
+			const update = () => {
+				if (refContainer.current && refPortalBorder.current) {
+					const rect = refContainer.current.getBoundingClientRect();
+					const s = refPortalBorder.current.style;
+					s.top = `${rect.top + 5}px`;
+					s.left = `${rect.left + 5}px`;
+					s.width = `${rect.width - 14}px`;
+					s.height = `${rect.height - 14}px`;
+				}
+				rafId = requestAnimationFrame(update);
+			};
+			rafId = requestAnimationFrame(update);
+			return () => cancelAnimationFrame(rafId);
+		}
+	}, [isObject3D, isOpenDialogObjects3D, hidden]);
+
 	return (
 		<>
 			<Flex column spaced>
 				{t('graphics')}:
-				<div className='graphicsSelector' onDoubleClick={handleDoubleClick}>
-					<div ref={refBorder} className='border' />
+				<div ref={refContainer} className='graphicsSelector' onDoubleClick={handleDoubleClick}>
+					{!isObject3D && <div ref={refBorder} className='border' />}
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !isOpenDialogObjects3D && !hidden && (
 						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} GL={GL} />
@@ -240,6 +262,13 @@ function GraphicsSelector({
 					object3DID={options.graphicsID}
 				/>
 			)}
+			{isObject3D &&
+				!isOpenDialogObjects3D &&
+				!hidden &&
+				ReactDOM.createPortal(
+					<div ref={refPortalBorder} className='graphicsSelector-border-overlay' />,
+					document.getElementById('root')!,
+				)}
 		</>
 	);
 }
