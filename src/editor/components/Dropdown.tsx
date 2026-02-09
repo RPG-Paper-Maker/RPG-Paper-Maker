@@ -210,6 +210,28 @@ function Dropdown({
 		}
 	}, [disabled]);
 
+	const handleWheel = (e: React.WheelEvent) => {
+		if (isOpen || disabled || options.length === 0) {
+			return;
+		}
+		const index = options.findIndex((option) => option.id === selectedID);
+		if (e.deltaY > 0) {
+			for (let i = index + 1; i < options.length; i++) {
+				if (!disabledIds.includes(options[i].id)) {
+					onChange(options[i].id);
+					return;
+				}
+			}
+		} else if (e.deltaY < 0) {
+			for (let i = index - 1; i >= 0; i--) {
+				if (!disabledIds.includes(options[i].id)) {
+					onChange(options[i].id);
+					return;
+				}
+			}
+		}
+	};
+
 	const selectedOrEmpty = Model.Base.getByID(options, selectedID);
 	const selected = selectedOrEmpty ?? Model.Base.create(selectedID, noSelectionName);
 
@@ -254,6 +276,7 @@ function Dropdown({
 			style={{ width }}
 			ref={containerRef}
 			onClick={handleClick}
+			onWheel={handleWheel}
 		>
 			<Flex one centerV spaced>
 				<Flex one centerV className={Utils.getClassName({ textEllipsis: fillWidth })}>
