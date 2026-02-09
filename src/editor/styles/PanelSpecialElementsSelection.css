@@ -47,6 +47,8 @@
 
 		.pictureContainer {
 			width: var(--special-elements-size);
+			display: flex;
+			justify-content: center;
 		}
 
 		img {

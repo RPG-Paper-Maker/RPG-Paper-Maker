@@ -20,6 +20,7 @@ import MainPreviewer3D from '../MainPreviewer3D';
 import Splitter from '../Splitter';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSettingsMountains from './PanelSettingsMountains';
+import PanelMapObjectsSelection from './PanelMapObjectsSelection';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
 import PanelTransform from './PanelTransform';
 
@@ -70,6 +71,7 @@ function PanelTextures({ visible, extraContent }: Props) {
 				case ELEMENT_MAP_KIND.OBJECT3D:
 					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
 				case ELEMENT_MAP_KIND.OBJECT:
+					return <PanelMapObjectsSelection />;
 				case ELEMENT_MAP_KIND.START_POSITION:
 				case ELEMENT_MAP_KIND.VIEW:
 					return null;

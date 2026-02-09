@@ -613,6 +613,9 @@ class Map extends Base {
 				}
 			}
 		}
+		if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			this.needsUpdateComponent = true;
+		}
 		this.loading = false;
 	}
 
@@ -945,6 +948,7 @@ class Map extends Base {
 		const mapPortion = this.getMapPortionByPosition(position);
 		await this.model.updateObject(position, object);
 		mapPortion?.updateObject(position, object);
+		this.needsUpdateComponent = true;
 	}
 
 	getSelectedObject(): Model.CommonObject | null {
