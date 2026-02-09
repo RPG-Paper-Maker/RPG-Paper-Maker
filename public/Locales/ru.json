@@ -264,7 +264,7 @@
 	"main.menu": "Главное меню",
 	"events.states": "События / Состояния",
 	"common.reactions": "Общие реакции",
-	"block.hero.when.reaction": "Блокировать героя при реакции",
+	"block.hero.during.reaction": "Блокировать героя при реакции",
 	"models": "Модели",
 	"select.tileset.rect": "Выберите прямоугольник набора тайлов",
 	"variables": "Переменные",

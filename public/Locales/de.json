@@ -264,7 +264,7 @@
 	"main.menu": "Hauptmenü",
 	"events.states": "Ereignisse / Zustände",
 	"common.reactions": "Gemeinsame Reaktionen",
-	"block.hero.when.reaction": "Blockiere Held wenn Reaktion",
+	"block.hero.during.reaction": "Blockiere Held wenn Reaktion",
 	"models": "Modelle",
 	"select.tileset.rect": "Wähle ein Tileset-Rechteck",
 	"variables": "Variablen",

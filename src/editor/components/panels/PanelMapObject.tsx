@@ -521,7 +521,7 @@ const PanelMapObject = forwardRef(
 									onCurrentIndexChanged={handleCurrentIndexTabChanged}
 								/>
 								<Checkbox isChecked={blockingHero} onChange={handleChangeBlockingHero}>
-									{t('block.hero.when.reaction')}
+									{t('block.hero.during.reaction')}
 								</Checkbox>
 							</Flex>
 						</Flex>

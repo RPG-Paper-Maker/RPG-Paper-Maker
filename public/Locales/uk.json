@@ -264,7 +264,7 @@
 	"main.menu": "Основне меню",
 	"events.states": "Події / стани",
 	"common.reactions": "Загальні реакції",
-	"block.hero.when.reaction": "Блокувати героя під час реакції",
+	"block.hero.during.reaction": "Блокувати героя під час реакції",
 	"models": "Моделі",
 	"select.tileset.rect": "Вибір прямокутника з набору тайлів",
 	"variables": "Змінні",

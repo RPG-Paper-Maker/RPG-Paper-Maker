@@ -264,7 +264,7 @@
 	"main.menu": "Menu główne",
 	"events.states": "Ustawienie zdarzeń",
 	"common.reactions": "Typowe zdarzenia",
-	"block.hero.when.reaction": "Zablokuj bohatera podczas uruchomienia",
+	"block.hero.during.reaction": "Zablokuj bohatera podczas uruchomienia",
 	"models": "Modele",
 	"select.tileset.rect": "Wybierz prostokąt tilesetu",
 	"variables": "Zmienne",

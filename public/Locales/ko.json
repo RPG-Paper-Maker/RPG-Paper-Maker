@@ -264,7 +264,7 @@
 	"main.menu": "메인 메뉴",
 	"events.states": "이벤트 / 상태",
 	"common.reactions": "공통 반응",
-	"block.hero.when.reaction": "반응 중 영웅 이동 차단",
+	"block.hero.during.reaction": "반응 중 영웅 이동 차단",
 	"models": "모델",
 	"select.tileset.rect": "타일셋 영역 선택",
 	"variables": "변수",

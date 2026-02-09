@@ -119,7 +119,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 						/>
 					</Groupbox>
 					<Checkbox isChecked={isBlock} onChange={handleChangeBlock} disabled={isReactionDisabled}>
-						{t('block.hero.when.reaction')}
+						{t('block.hero.during.reaction')}
 					</Checkbox>
 					<Flex one>
 						<TreeCommands

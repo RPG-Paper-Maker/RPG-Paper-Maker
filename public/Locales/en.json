@@ -264,7 +264,7 @@
 	"main.menu": "Main menu",
 	"events.states": "Events / States",
 	"common.reactions": "Common reactions",
-	"block.hero.when.reaction": "Block hero when reaction",
+	"block.hero.during.reaction": "Block hero during reaction",
 	"models": "Models",
 	"select.tileset.rect": "Select a tileset rect",
 	"variables": "Variables",

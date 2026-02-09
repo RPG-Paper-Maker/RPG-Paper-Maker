@@ -264,7 +264,7 @@
 	"main.menu": "主菜单",
 	"events.states": "事件 / 状态",
 	"common.reactions": "公共反应",
-	"block.hero.when.reaction": "反应时锁定主角",
+	"block.hero.during.reaction": "反应时锁定主角",
 	"models": "模型",
 	"select.tileset.rect": "选择图块集区域",
 	"variables": "变量",

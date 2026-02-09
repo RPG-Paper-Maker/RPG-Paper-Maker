@@ -264,7 +264,7 @@
 	"main.menu": "メインメニュー",
 	"events.states": "イベント / ステート",
 	"common.reactions": "コモンイベント",
-	"block.hero.when.reaction": "イベント実行中にヒーローを停止",
+	"block.hero.during.reaction": "イベント実行中にヒーローを停止",
 	"models": "モデル",
 	"select.tileset.rect": "タイルセットの範囲を選択",
 	"variables": "変数",
