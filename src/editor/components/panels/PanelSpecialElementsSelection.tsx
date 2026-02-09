@@ -16,7 +16,6 @@ import { Manager, Model, Scene } from '../../Editor';
 import { Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core/Project';
 import { Rectangle } from '../../core/Rectangle';
-import useStateNumber from '../../hooks/useStateNumber';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -46,7 +45,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
 	const [positionScroll] = useState({ current: 0 });
 	const [urls] = useState<Map<number, string>>(new Map());
-	const [, setTriggerUpdate] = useStateNumber();
+	const [, setTriggerUpdate] = useState(-1);
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 
@@ -79,17 +78,17 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		switch (kind) {
 			case PICTURE_KIND.AUTOTILES:
 				return Project.current!.specialElements.autotiles.findIndex(
-					(autotile) => autotile.id === currentAutotileID
+					(autotile) => autotile.id === currentAutotileID,
 				);
 			case PICTURE_KIND.WALLS:
 				return Project.current!.specialElements.walls.findIndex((wall) => wall.id === currentWallID);
 			case PICTURE_KIND.MOUNTAINS:
 				return Project.current!.specialElements.mountains.findIndex(
-					(mountain) => mountain.id === currentMountainID
+					(mountain) => mountain.id === currentMountainID,
 				);
 			case PICTURE_KIND.OBJECTS_3D:
 				return Project.current!.specialElements.objects3D.findIndex(
-					(object) => object.id === currentObject3DID
+					(object) => object.id === currentObject3DID,
 				);
 		}
 		return 0;
@@ -318,8 +317,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 							divideWidth={
 								(element as Model.Autotile).isAnimated
 									? ((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) *
-									  2 *
-									  Project.current!.systems.autotilesFrames
+										2 *
+										Project.current!.systems.autotilesFrames
 									: ((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) * 2
 							}
 							divideHeight={((Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE) * 3}

@@ -18,7 +18,7 @@ import { ELEMENT_MAP_KIND, MenuItemType, PICTURE_KIND, Utils } from '../../commo
 import { Node } from '../../core/Node';
 import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
-import useStateNumber from '../../hooks/useStateNumber';
+import useStateString from '../../hooks/useStateString';
 import { RootState, setCopiedItems } from '../../store';
 import '../../styles/PanelSpecialElementsSelection.css';
 import ContextMenu from '../ContextMenu';
@@ -37,7 +37,7 @@ function PanelMapObjectsSelection() {
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
 	const [positionScroll] = useState({ current: 0 });
 	const [urls] = useState<Map<string, string | null>>(new Map());
-	const [, setTriggerUpdate] = useStateNumber();
+	const [, setTriggerUpdate] = useStateString();
 	const [isFocused, setIsFocused] = useState(false);
 	const [isOpenMapObject, setIsOpenMapObject] = useState(false);
 	const [currentMapObject, setCurrentMapObject] = useState<Model.CommonObject | null>(null);
@@ -211,7 +211,7 @@ function PanelMapObjectsSelection() {
 							dataURL = null;
 						}
 						urls.set(cacheKey, dataURL);
-						setTriggerUpdate(i);
+						setTriggerUpdate(String(i) + dataURL);
 					}
 				}
 			}
