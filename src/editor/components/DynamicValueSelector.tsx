@@ -11,7 +11,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
+import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
@@ -21,6 +21,7 @@ import Dropdown from './Dropdown';
 import Flex from './Flex';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
+import TextArea from './TextArea';
 import TooltipInformation from './TooltipInformation';
 import VariableSelector from './VariableSelector';
 
@@ -37,6 +38,7 @@ type Props = {
 	max?: number;
 	addNoneOption?: boolean;
 	fillWidth?: boolean;
+	isTextarea?: boolean;
 };
 
 function DynamicValueSelector({
@@ -50,6 +52,7 @@ function DynamicValueSelector({
 	max,
 	addNoneOption = false,
 	fillWidth = false,
+	isTextarea = false,
 }: Props) {
 	const { t } = useTranslation();
 	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
@@ -583,7 +586,9 @@ function DynamicValueSelector({
 				);
 			case DYNAMIC_VALUE_KIND.TEXT:
 			case DYNAMIC_VALUE_KIND.FORMULA:
-				return (
+				return isTextarea ? (
+					<TextArea text={valueText} onChange={handleChangeText} disabled={disabled} />
+				) : (
 					<InputText
 						value={valueText}
 						onChange={handleChangeText}
@@ -703,7 +708,7 @@ function DynamicValueSelector({
 
 	return (
 		<>
-			<div className='dynamicValueSelector'>
+			<div className={Utils.getClassName({ fillWidth }, 'dynamicValueSelector')}>
 				<Dropdown
 					selectedID={kind}
 					onChange={handleChangeKind}

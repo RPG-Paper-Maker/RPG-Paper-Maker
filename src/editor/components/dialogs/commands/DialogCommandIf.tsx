@@ -776,6 +776,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 					value={script}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
 					disabled={!isScript}
+					isTextarea
+					fillWidth
 				/>
 			</Flex>
 		</Flex>
