@@ -711,6 +711,8 @@
 	"paste": "Wklej",
 	"delete": "Usuń",
 	"clear": "Resetuj",
+	"disable": "Wyłącz",
+	"enable": "Włącz",
 	"edit.map.properties": "Edytuj właściwości mapy",
 	"new.map": "Nowa mapa",
 	"new.directory": "Nowy folder",

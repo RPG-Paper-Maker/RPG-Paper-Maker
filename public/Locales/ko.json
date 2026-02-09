@@ -711,6 +711,8 @@
 	"paste": "붙여넣기",
 	"delete": "삭제",
 	"clear": "초기화",
+	"disable": "비활성화",
+	"enable": "활성화",
 	"edit.map.properties": "맵 속성 편집",
 	"new.map": "새 맵",
 	"new.directory": "새 디렉토리",

@@ -87,10 +87,12 @@ class MapObjectCommand extends Base {
 	public static COLOR_COMMENT = '#ffffff';
 	public kind!: EVENT_COMMAND_KIND;
 	public command!: MapObjectCommandType[];
+	public disabled!: boolean;
 
 	public static bindings: BindingType[] = [
 		['kind', 'kind', undefined, BINDING.NUMBER],
-		['command', 'command', undefined, BINDING.NUMBER],
+		['command', 'command', undefined, BINDING.LIST_STRING],
+		['disabled', 'd', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -769,7 +771,10 @@ class MapObjectCommand extends Base {
 				break;
 		}
 		return (
-			<Flex spaced>
+			<Flex
+				spaced
+				style={{ opacity: this.disabled ? 0.5 : 1, textDecoration: this.disabled ? 'line-through' : 'none' }}
+			>
 				<Flex column spaced>
 					<Flex spaced>
 						{this.toStringFirstLine(color, commandName, texts, iterator, properties, parameters)}
@@ -2457,9 +2462,8 @@ class MapObjectCommand extends Base {
 		];
 	}
 
-	copy(command: MapObjectCommand): void {
-		this.kind = command.kind;
-		this.command = [...command.command];
+	copy(command: MapObjectCommand, additionnalBinding: BindingType[] = []): void {
+		super.copy(command, MapObjectCommand.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

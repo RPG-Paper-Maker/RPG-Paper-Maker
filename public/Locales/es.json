@@ -711,6 +711,8 @@
 	"paste": "Pegar",
 	"delete": "Borrar",
 	"clear": "Restablecer",
+	"disable": "Desactivar",
+	"enable": "Activar",
 	"edit.map.properties": "Editar propiedades del mapa",
 	"new.map": "Nuevo mapa",
 	"new.directory": "Nuevo directorio",

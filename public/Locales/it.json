@@ -711,6 +711,8 @@
 	"paste": "Incolla",
 	"delete": "Elimina",
 	"clear": "Ripristina",
+	"disable": "Disattiva",
+	"enable": "Attiva",
 	"edit.map.properties": "Modifica proprietà mappa",
 	"new.map": "Nuova mappa",
 	"new.directory": "Nuova cartella",

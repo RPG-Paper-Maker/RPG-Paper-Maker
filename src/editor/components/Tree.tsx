@@ -26,7 +26,7 @@ import { Node } from '../core/Node';
 import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
 import { Inputs } from '../managers';
-import { Localization } from '../models';
+import { Localization, MapObjectCommand } from '../models';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
@@ -45,9 +45,11 @@ type Props = {
 	cannotDragDrop?: boolean;
 	cannotUpdateListSize?: boolean;
 	cannotDelete?: boolean;
+	cannotClear?: boolean;
 	canDelete?: (node: Node | null) => boolean;
 	canBeEmpty?: boolean;
 	canForcePasteAdd?: boolean;
+	canDisable?: boolean;
 	doNotGenerateIDOnPaste?: boolean;
 	doNotShowID?: boolean;
 	showEditName?: boolean;
@@ -102,6 +104,8 @@ function Tree({
 	canDelete,
 	canBeEmpty = false,
 	canForcePasteAdd = false,
+	canDisable = false,
+	cannotClear = false,
 	doNotGenerateIDOnPaste = false,
 	doNotShowID = false,
 	showEditName = false,
@@ -190,6 +194,9 @@ function Tree({
 		];
 		if (!cannotUpdateListSize && !cannotAdd) {
 			ArrayUtils.insertAt(contextMenuItems, 2, CONTEXT_MENU_ITEM_KIND.UPDATE_LIST_SIZE);
+		}
+		if (canDisable) {
+			contextMenuItems.push(CONTEXT_MENU_ITEM_KIND.DISABLE);
 		}
 		hasCustomItems = false;
 	}
@@ -425,6 +432,16 @@ function Tree({
 			model.name = '';
 			setCurrentName('');
 			onSelectedItem?.(currentSelectedItemNode, false);
+			onListUpdated?.();
+		}
+	};
+
+	const handleDisableItem = async () => {
+		if (currentSelectedItemNode && !isEmpty) {
+			(currentSelectedItemNode.content as MapObjectCommand).disabled = !(
+				currentSelectedItemNode.content as MapObjectCommand
+			).disabled;
+			setForceUpdate((value) => !value);
 			onListUpdated?.();
 		}
 	};
@@ -914,8 +931,23 @@ function Tree({
 						title: t('clear'),
 						shortcut: [SPECIAL_KEY.CTRL, KEY.D],
 						onClick: handleClearItem,
-						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0 || cannotEdit,
+						disabled:
+							disableAll ||
+							cannotClear ||
+							isEmpty ||
+							isFixed ||
+							additionalSelectedNodes.length > 0 ||
+							cannotEdit,
 					};
+				case CONTEXT_MENU_ITEM_KIND.DISABLE: {
+					const isCommandDisabled = (currentSelectedItemNode?.content as MapObjectCommand)?.disabled;
+					return {
+						title: t(isCommandDisabled ? 'enable' : 'disable'),
+						shortcut: [KEY.D],
+						onClick: handleDisableItem,
+						disabled: disableAll || isEmpty || isFixed || additionalSelectedNodes.length > 0,
+					};
+				}
 				default: {
 					const customItem = { ...kind };
 					if (kind.onClick) {

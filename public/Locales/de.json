@@ -711,6 +711,8 @@
 	"paste": "Einfügen",
 	"delete": "Lösche",
 	"clear": "Zurücksetzen",
+	"disable": "Deaktivieren",
+	"enable": "Aktivieren",
 	"edit.map.properties": "Bearbeite Karteneigenschaften",
 	"new.map": "Neue Karte",
 	"new.directory": "Neues Verzeichnis",

@@ -711,6 +711,8 @@
 	"paste": "Paste",
 	"delete": "Delete",
 	"clear": "Clear",
+	"disable": "Disable",
+	"enable": "Enable",
 	"edit.map.properties": "Edit map properties",
 	"new.map": "New map",
 	"new.directory": "New directory",

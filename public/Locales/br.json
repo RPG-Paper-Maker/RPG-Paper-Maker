@@ -711,6 +711,8 @@
 	"paste": "Colar",
 	"delete": "Excluir",
 	"clear": "Redefinir",
+	"disable": "Desativar",
+	"enable": "Ativar",
 	"edit.map.properties": "Editar propriedades do mapa",
 	"new.map": "Novo mapa",
 	"new.directory": "Novo diretório",

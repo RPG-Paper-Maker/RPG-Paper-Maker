@@ -711,6 +711,8 @@
 	"paste": "Coller",
 	"delete": "Supprimer",
 	"clear": "Réinitialiser",
+	"disable": "Désactiver",
+	"enable": "Activer",
 	"edit.map.properties": "Éditer les propriétés de la carte",
 	"new.map": "Nouvelle carte",
 	"new.directory": "Nouveau répertoire",
