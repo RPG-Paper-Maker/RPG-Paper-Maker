@@ -124,7 +124,7 @@ class ProjectUpdater {
 
 		// Map portions
 		await this.updateAllMapPortions((json: JSONType) => {
-			for (const obj of json.objs as JSONType[]) {
+			for (const obj of (json.objs ?? []) as JSONType[]) {
 				this.updateObjectCommand(obj.v as JSONType, callback);
 			}
 		});
