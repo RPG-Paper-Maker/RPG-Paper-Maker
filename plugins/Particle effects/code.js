@@ -297,7 +297,7 @@ function evaluate(expr, t, r) {
 		case Token.ROUND:
 			return Math.round(left);
 		case Token.VAR:
-			return Core.Game.current.variables[Math.round(left)];
+			return Core.Game.current.variables.get(Math.round(left));
 		case Token.MIN:
 			return Math.min(...left);
 		case Token.MAX:

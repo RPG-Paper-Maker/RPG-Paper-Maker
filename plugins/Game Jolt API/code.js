@@ -39,7 +39,7 @@ function getMD5Hash(text) {
 
 function storeDataInSuccessVariable(data) {
 	if (successVariableID !== -1) {
-		Core.Game.current.variables[successVariableID] = data;
+		Core.Game.current.variables.set(successVariableID, data);
 	}
 }
 
@@ -75,7 +75,7 @@ Manager.Plugins.registerCommand(
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
 				if (returnDatatoreVariableID !== -1) {
-					Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
+					Core.Game.current.variables.set(returnDatatoreVariableID, JSON.stringify(data.response));
 				}
 				if (consoleLog) {
 					console.log(data.response);
@@ -160,31 +160,31 @@ Manager.Plugins.registerCommand(
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
 				if (messageVariableID !== -1) {
-					Core.Game.current.variables[messageVariableID] = data.response.message;
+					Core.Game.current.variables.set(messageVariableID, data.response.message);
 				}
 				if (timestampVariableID !== -1) {
-					Core.Game.current.variables[timestampVariableID] = data.response.timestamp;
+					Core.Game.current.variables.set(timestampVariableID, data.response.timestamp);
 				}
 				if (timezoneVariableID !== -1) {
-					Core.Game.current.variables[timezoneVariableID] = data.response.timezone;
+					Core.Game.current.variables.set(timezoneVariableID, data.response.timezone);
 				}
 				if (yearVariableID !== -1) {
-					Core.Game.current.variables[yearVariableID] = data.response.year;
+					Core.Game.current.variables.set(yearVariableID, data.response.year);
 				}
 				if (monthVariableID !== -1) {
-					Core.Game.current.variables[monthVariableID] = data.response.month;
+					Core.Game.current.variables.set(monthVariableID, data.response.month);
 				}
 				if (dayVariableID !== -1) {
-					Core.Game.current.variables[dayVariableID] = data.response.day;
+					Core.Game.current.variables.set(dayVariableID, data.response.day);
 				}
 				if (hourVariableID !== -1) {
-					Core.Game.current.variables[hourVariableID] = data.response.hour;
+					Core.Game.current.variables.set(hourVariableID, data.response.hour);
 				}
 				if (minuteVariableID !== -1) {
-					Core.Game.current.variables[minuteVariableID] = data.response.minute;
+					Core.Game.current.variables.set(minuteVariableID, data.response.minute);
 				}
 				if (secondVariableID !== -1) {
-					Core.Game.current.variables[secondVariableID] = data.response.second;
+					Core.Game.current.variables.set(secondVariableID, data.response.second);
 				}
 			} else {
 				console.error(`There was an error: ${data.response.message}`);
@@ -268,11 +268,11 @@ Manager.Plugins.registerCommand(
 			}
 
 			if (successVariableID !== -1) {
-				Core.Game.current.variables[successVariableID] = data.response.success;
+				Core.Game.current.variables.set(successVariableID, data.response.success);
 			}
 
 			if (returnDatatoreVariableID !== -1) {
-				Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
+				Core.Game.current.variables.set(returnDatatoreVariableID, JSON.stringify(data.response));
 			}
 		} catch (error) {
 			console.error(error);
@@ -297,7 +297,7 @@ Manager.Plugins.registerCommand(pluginName, 'Scores - Get Rank', async (sort, ta
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
 			if (rankVariableID !== -1) {
-				Core.Game.current.variables[rankVariableID] = data.response.rank;
+				Core.Game.current.variables.set(rankVariableID, data.response.rank);
 			}
 		} else {
 			console.error(`There was an error: ${data.response.message}`);
@@ -320,7 +320,7 @@ Manager.Plugins.registerCommand(pluginName, 'Scores - Tables', async (returnData
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
 			if (returnDatatoreVariableID !== -1) {
-				Core.Game.current.variables[returnDatatoreVariableID] = JSON.stringify(data.response);
+				Core.Game.current.variables.set(returnDatatoreVariableID, JSON.stringify(data.response));
 			}
 			if (consoleLog) {
 				console.log(data.response);
@@ -347,7 +347,7 @@ Manager.Plugins.registerCommand(pluginName, 'Sessions - Open', async () => {
 		const data = await response.json();
 		if (data.response.success == 'true') {
 			if (successVariableID !== -1) {
-				Core.Game.current.variables[successVariableID] = data.response.success;
+				Core.Game.current.variables.set(successVariableID, data.response.success);
 			}
 		} else {
 			console.error(`There was an error: ${data.response.message}`);
@@ -417,7 +417,7 @@ Manager.Plugins.registerCommand(pluginName, 'Sessions - Check', async () => {
 		const response = await fetch(sessionsURL);
 		const data = await response.json();
 		if (successVariableID !== -1) {
-			Core.Game.current.variables[successVariableID] = data.response.success;
+			Core.Game.current.variables.set(successVariableID, data.response.success);
 		}
 	} catch (error) {
 		console.error(`There was an error: ${error}`);
@@ -439,7 +439,7 @@ Manager.Plugins.registerCommand(pluginName, 'Friends - Friends', async (friendsV
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
 			if (friendsVariableID !== -1) {
-				Core.Game.current.variables[friendsVariableID] = JSON.stringify(data.response.friends);
+				Core.Game.current.variables.set(friendsVariableID, JSON.stringify(data.response.friends));
 			}
 		} else {
 			console.error(`There was an error: ${data.response.message}`);
@@ -469,7 +469,7 @@ Manager.Plugins.registerCommand(pluginName, 'Data Store - Fetch', async (key, pa
 		if (data.response.success == 'true') {
 			storeDataInSuccessVariable(data.response.success);
 			if (dataVariable !== -1) {
-				Core.Game.current.variables[dataVariable] = JSON.stringify(data.response.data);
+				Core.Game.current.variables.set(dataVariable, JSON.stringify(data.response.data));
 			}
 		} else {
 			console.error(`There was an error: ${data.response.message}`);
@@ -503,7 +503,7 @@ Manager.Plugins.registerCommand(
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
 				if (keyVariable !== -1) {
-					Core.Game.current.variables[keyVariable] = JSON.stringify(data.response.keys);
+					Core.Game.current.variables.set(keyVariable, JSON.stringify(data.response.keys));
 				}
 			} else {
 				console.error(`There was an error: ${data.response.message}`);
@@ -582,7 +582,7 @@ Manager.Plugins.registerCommand(
 			if (data.response.success == 'true') {
 				storeDataInSuccessVariable(data.response.success);
 				if (dataVariable !== -1) {
-					Core.Game.current.variables[dataVariable] = JSON.stringify(data.response.data);
+					Core.Game.current.variables.set(dataVariable, JSON.stringify(data.response.data));
 				}
 			} else {
 				console.error(`There was an error: ${data.response.message}`);

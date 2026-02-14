@@ -21,8 +21,8 @@ function checkCollisions(obj, v0, pos) {
 	for (var i = 0; i < mp.staticAutotilesList.length; i++)
 		if (!!mp.staticAutotilesList[i] && !!mp.staticAutotilesList[i][0].mesh)
 			obstacles.push(mp.staticAutotilesList[i][0].mesh);
-	for (var i = 0; i < mp.staticMountainsList.length; i++)
-		if (!!mp.staticMountainsList[i].mesh) obstacles.push(mp.staticMountainsList[i].mesh);
+	for (const [, mountain] of mp.staticMountainsList)
+		if (!!mountain.mesh) obstacles.push(mountain.mesh);
 	for (var i = 0; i < mp.staticWallsList.length; i++) obstacles.push(mp.staticWallsList[i]);
 	for (var i = 0; i < mp.staticObjects3DList.length; i++) obstacles.push(mp.staticObjects3DList[i]);
 

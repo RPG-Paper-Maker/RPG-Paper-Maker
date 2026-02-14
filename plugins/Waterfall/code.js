@@ -5,7 +5,7 @@ const pluginName = 'Waterfall';
 let Particle = null;
 let ParticleSystem = null;
 (async () => {
-	const result = Commmon.Interpreter.evaluate(
+	const result = Common.Interpreter.evaluate(
 		await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/ParticleSystem.js'),
 		{
 			addReturn: false,

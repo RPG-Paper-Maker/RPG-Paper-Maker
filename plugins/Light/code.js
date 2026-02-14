@@ -61,8 +61,6 @@ Manager.GL.load = async function () {
 	frag = frag.replace('int numberOfRings = 5;', 'int numberOfRings = ' + rings.toString() + ';');
 	Manager.GL.SHADER_FIX_VERTEX = vert;
 	Manager.GL.SHADER_FIX_FRAGMENT = frag;
-	Manager.GL.SHADER_FACE_VERTEX = vert;
-	Manager.GL.SHADER_FACE_FRAGMENT = frag;
 	Manager.GL.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 };
 

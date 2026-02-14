@@ -25,11 +25,11 @@ function updateWindow(id, x, y, width, height, wholeText, count) {
 }
 
 Manager.Plugins.registerCommand(pluginName, 'Is done typing', (textID, varID) => {
-	Core.Game.current.variables.get(varID) = false;
+	Core.Game.current.variables.set(varID, false);
 	for (var i = 0; i < Manager.Stack.displayedPictures.length; i++)
 		if (Manager.Stack.displayedPictures[i][0] === textID)
-			Core.Game.current.variables.get(varID) =
-				!!Manager.Stack.displayedPictures[i][1].typewriterTextPlugin_doneTyping;
+			Core.Game.current.variables.set(varID,
+				!!Manager.Stack.displayedPictures[i][1].typewriterTextPlugin_doneTyping);
 });
 
 // Typewriter plugin code - Start

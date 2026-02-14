@@ -78,15 +78,15 @@ setInterval(function () {
 				}
 			}
 			const v = Core.Game.current.variables;
-			if (v[eraseFloor] !== false && v[eraseFloor] !== true) v[eraseFloor] = false;
-			if (v[eraseMount] !== false && v[eraseMount] !== true) v[eraseMount] = true;
-			if (v[eraseWalls] !== false && v[eraseWalls] !== true) v[eraseWalls] = true;
-			if (v[eraseObj3D] !== false && v[eraseObj3D] !== true) v[eraseObj3D] = true;
-			if (isNaN(v[eraseRadius]) || v[eraseRadius] < 0.5) v[eraseRadius] = 2;
+			if (v.get(eraseFloor) !== false && v.get(eraseFloor) !== true) v.set(eraseFloor, false);
+			if (v.get(eraseMount) !== false && v.get(eraseMount) !== true) v.set(eraseMount, true);
+			if (v.get(eraseWalls) !== false && v.get(eraseWalls) !== true) v.set(eraseWalls, true);
+			if (v.get(eraseObj3D) !== false && v.get(eraseObj3D) !== true) v.set(eraseObj3D, true);
+			if (isNaN(v.get(eraseRadius)) || v.get(eraseRadius) < 0.5) v.set(eraseRadius, 2);
 			lastMap = Scene.Map.current;
 		}
-		for (var i = 0; i <= Scene.Map.current.maxObjectsID; i++) {
-			const obj = Scene.Map.current.allObjects[i];
+		for (var i = 0; i <= Scene.Map.current.mapProperties.maxObjectsID; i++) {
+			const obj = Scene.Map.current.mapProperties.allObjects.get(i);
 			if (!!obj) {
 				if (obj.x >= Scene.Map.current.mapProperties.length) continue;
 				if (obj.y >= Scene.Map.current.mapProperties.height) continue;
@@ -109,7 +109,7 @@ setInterval(function () {
 
 Scene.Map.prototype.updateCameraHiding = function (pointer) {
 	const v = Core.Game.current.variables;
-	customOffset.set(0, v[offsetY], 0);
+	customOffset.set(0, v.get(offsetY), 0);
 	const c = this.scene.children;
 	for (var i = 1; i < c.length; i++) {
 		if (!c[i].material || !c[i].material.userData || !c[i].material.userData.uniforms) continue;
@@ -132,16 +132,16 @@ Scene.Map.prototype.updateCameraHiding = function (pointer) {
 				const o = obj3dList.includes(intersects[i].object);
 				const e = !!intersects[i].object.viewBlockPlugin_isMapObj;
 				if (
-					(v[eraseMount] && m) ||
-					(v[eraseWalls] && w) ||
-					(v[eraseObj3D] && o) ||
+					(v.get(eraseMount) && m) ||
+					(v.get(eraseWalls) && w) ||
+					(v.get(eraseObj3D) && o) ||
 					(e && intersects[i].object.viewBlockPlugin_erase) ||
-					(v[eraseFloor] && !w && !m && !e && !o)
+					(v.get(eraseFloor) && !w && !m && !e && !o)
 				) {
 					intersects[i].object.material.userData.uniforms.viewBlockPlugin_isFloor = {
 						value: w || m || e || o ? 0 : 1,
 					};
-					intersects[i].object.material.userData.uniforms.viewBlockPlugin_radius = { value: v[eraseRadius] };
+					intersects[i].object.material.userData.uniforms.viewBlockPlugin_radius = { value: v.get(eraseRadius) };
 					intersects[i].object.material.userData.uniforms.viewBlockPlugin_squareSize = {
 						value: Data.Systems.SQUARE_SIZE,
 					};
@@ -160,9 +160,7 @@ Scene.Map.prototype.updateCameraHiding = function (pointer) {
 function overwriteShaders() {
 	if (
 		!!Manager.GL.SHADER_FIX_VERTEX &&
-		!!Manager.GL.SHADER_FIX_FRAGMENT &&
-		!!Manager.GL.SHADER_FACE_VERTEX &&
-		!!Manager.GL.SHADER_FACE_FRAGMENT
+		!!Manager.GL.SHADER_FIX_FRAGMENT
 	) {
 		const vertFix = Manager.GL.SHADER_FIX_VERTEX;
 		const vertFixBegin = vertFix.search(/void\smain\((void)*\)/);
@@ -170,17 +168,7 @@ function overwriteShaders() {
 		const fragFix = Manager.GL.SHADER_FIX_FRAGMENT;
 		const fragFixBegin = fragFix.search(/void\smain\((void)*\)/);
 		const fragFixEnd = fragFix.indexOf('{', fragFixBegin) + 1;
-		const vertFace = Manager.GL.SHADER_FACE_VERTEX;
-		const vertFaceBegin = vertFace.search(/void\smain\((void)*\)/);
-		const vertFaceEnd = vertFace.indexOf('{', vertFaceBegin) + 1;
-		const fragFace = Manager.GL.SHADER_FACE_FRAGMENT;
-		const fragFaceBegin = fragFace.search(/void\smain\((void)*\)/);
-		const fragFaceEnd = fragFace.indexOf('{', fragFaceBegin) + 1;
 		if (
-			vertFaceBegin < 0 ||
-			vertFaceEnd < 0 ||
-			fragFaceBegin < 0 ||
-			fragFaceEnd < 0 ||
 			vertFixBegin < 0 ||
 			vertFixEnd < 0 ||
 			fragFixBegin < 0 ||
@@ -193,8 +181,6 @@ function overwriteShaders() {
 		}
 		Manager.GL.SHADER_FIX_VERTEX = vertFix.substr(0, vertFixBegin) + extraVert + vertFix.substr(vertFixEnd);
 		Manager.GL.SHADER_FIX_FRAGMENT = fragFix.substr(0, fragFixBegin) + extraFrag + fragFix.substr(fragFixEnd);
-		Manager.GL.SHADER_FACE_VERTEX = vertFace.substr(0, vertFaceBegin) + extraVert + vertFace.substr(vertFaceEnd);
-		Manager.GL.SHADER_FACE_FRAGMENT = fragFace.substr(0, fragFaceBegin) + extraFrag + fragFace.substr(fragFaceEnd);
 	} else setTimeout(overwriteShaders, 33);
 }
 overwriteShaders();

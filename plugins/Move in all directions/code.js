@@ -20,13 +20,13 @@ function moveMapObj(id, dir, camera) {
 						result.object.speed.getValue() * Core.MapObject.SPEED_NORMAL * Manager.Stack.averageElapsedTime,
 					) * Data.Systems.SQUARE_SIZE;
 				result.object.move(
-					Common.Enum.Orientation.South,
+					Common.ORIENTATION.SOUTH,
 					dist * Math.cos((dir * Math.PI) / 180),
 					270 + (camera ? angle : -90),
 					camera,
 				);
 				result.object.move(
-					Common.Enum.Orientation.South,
+					Common.ORIENTATION.SOUTH,
 					dist * Math.sin((dir * Math.PI) / 180),
 					180 + (camera ? angle : -90),
 					camera,

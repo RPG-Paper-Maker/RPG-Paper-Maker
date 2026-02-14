@@ -11,7 +11,7 @@ const va = new THREE.Vector3();
 const vb = new THREE.Vector3();
 
 function raycast(v, d) {
-	Core.Game.current.variables[v] = -1;
+	Core.Game.current.variables.set(v, -1);
 	const intersects = raycaster.intersectObjects(Scene.Map.current.scene.children);
 	var mesh = null;
 	if (intersects.length > 0 && (d < 0 || intersects[0].distance < d)) {
@@ -19,14 +19,14 @@ function raycast(v, d) {
 		else if (intersects.length > 1) mesh = intersects[1].object;
 	}
 	if (!!mesh) {
-		for (var i = 1; i < Scene.Map.current.maxObjectsID + 1; i++) {
+		for (var i = 1; i < Scene.Map.current.mapProperties.maxObjectsID + 1; i++) {
 			var exitFor = false;
-			if (!Scene.Map.current.allObjects[i]) continue;
+			if (!Scene.Map.current.mapProperties.allObjects.get(i)) continue;
 			Core.MapObject.search(
 				i,
 				(result) => {
 					if (!!result.object.mesh && result.object.mesh === mesh) {
-						Core.Game.current.variables[v] = i;
+						Core.Game.current.variables.set(v, i);
 						exitFor = true;
 					}
 				},
@@ -118,8 +118,8 @@ Manager.Plugins.registerCommand(pluginName, 'Get object under cursor', (variable
 Manager.Plugins.registerCommand(pluginName, 'Get object screen position', (id, vx, vy) => {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
 		if (id === -1) id = Core.ReactionInterpreter.currentObject.id;
-		Core.Game.current.variables[vx] = null;
-		Core.Game.current.variables[vy] = null;
+		Core.Game.current.variables.set(vx, null);
+		Core.Game.current.variables.set(vy, null);
 		Core.MapObject.search(
 			id,
 			(result) => {
@@ -131,8 +131,8 @@ Manager.Plugins.registerCommand(pluginName, 'Get object screen position', (id, v
 					result.object.mesh.updateMatrixWorld();
 					v.setFromMatrixPosition(result.object.mesh.matrixWorld);
 					v.project(Scene.Map.current.camera.getThreeCamera());
-					Core.Game.current.variables[vx] = ((v.x + 1) * w) / 2;
-					Core.Game.current.variables[vy] = (-(v.y - 1) * h) / 2;
+					Core.Game.current.variables.set(vx, ((v.x + 1) * w) / 2);
+					Core.Game.current.variables.set(vy, (-(v.y - 1) * h) / 2);
 				}
 			},
 			Core.ReactionInterpreter.currentObject,

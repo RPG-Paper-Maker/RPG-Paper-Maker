@@ -1,5 +1,3 @@
-import { RPM } from '../path.js';
-
 /**
  * Discord Rich Presence Plugin for RPG Paper Maker
  *
@@ -14,13 +12,13 @@ import { RPM } from '../path.js';
 
 // Plugin configuration
 const pluginName = 'DiscordRichPresence';
-const inject = RPM.Manager.Plugins.inject;
+const inject = Manager.Plugins.inject;
 
 // Resolve configuration with safe defaults
-const PARAM_CLIENT_ID = RPM.Manager.Plugins.getParameter(pluginName, 'DISCORD_CLIENT_ID') || '';
-const PARAM_UPDATE_INTERVAL = Number(RPM.Manager.Plugins.getParameter(pluginName, 'UPDATE_INTERVAL') || 5000);
-const PARAM_LARGE_IMAGE_KEY = RPM.Manager.Plugins.getParameter(pluginName, 'LARGE_IMAGE_KEY') || 'game_logo';
-const PARAM_SMALL_IMAGE_KEY = RPM.Manager.Plugins.getParameter(pluginName, 'SMALL_IMAGE_KEY') || 'player_icon';
+const PARAM_CLIENT_ID = Manager.Plugins.getParameter(pluginName, 'DISCORD_CLIENT_ID') || '';
+const PARAM_UPDATE_INTERVAL = Number(Manager.Plugins.getParameter(pluginName, 'UPDATE_INTERVAL') || 5000);
+const PARAM_LARGE_IMAGE_KEY = Manager.Plugins.getParameter(pluginName, 'LARGE_IMAGE_KEY') || 'game_logo';
+const PARAM_SMALL_IMAGE_KEY = Manager.Plugins.getParameter(pluginName, 'SMALL_IMAGE_KEY') || 'player_icon';
 
 // Discord RPC setup (supports Electron renderer via window.require)
 let DiscordRPC;
@@ -415,7 +413,7 @@ function disconnect() {
  * Initialize Discord Rich Presence
  * Call this command to start the Rich Presence service
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Initialize Rich Presence', () => {
+Manager.Plugins.registerCommand(pluginName, 'Initialize Rich Presence', () => {
 	initializeDiscordRPC();
 });
 
@@ -423,7 +421,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, 'Initialize Rich Presence', () =
  * Set Custom Status
  * @param {string} message - The custom status message to display
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Set Custom Status', (message) => {
+Manager.Plugins.registerCommand(pluginName, 'Set Custom Status', (message) => {
 	setCustomStatus(message);
 });
 
@@ -431,7 +429,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, 'Set Custom Status', (message) =
  * Set Current Location
  * @param {string} location - The current location to display
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Set Current Location', (location) => {
+Manager.Plugins.registerCommand(pluginName, 'Set Current Location', (location) => {
 	setCurrentLocation(location);
 });
 
@@ -439,7 +437,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, 'Set Current Location', (locatio
  * Update Rich Presence
  * Manually trigger an update of the Rich Presence
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Update Rich Presence', () => {
+Manager.Plugins.registerCommand(pluginName, 'Update Rich Presence', () => {
 	updatePresence();
 });
 
@@ -447,7 +445,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, 'Update Rich Presence', () => {
  * Clear Rich Presence
  * Clear the current Rich Presence status
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Clear Rich Presence', () => {
+Manager.Plugins.registerCommand(pluginName, 'Clear Rich Presence', () => {
 	clearPresence();
 });
 
@@ -455,7 +453,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, 'Clear Rich Presence', () => {
  * Disconnect Rich Presence
  * Disconnect from Discord Rich Presence
  */
-RPM.Manager.Plugins.registerCommand(pluginName, 'Disconnect Rich Presence', () => {
+Manager.Plugins.registerCommand(pluginName, 'Disconnect Rich Presence', () => {
 	disconnect();
 });
 

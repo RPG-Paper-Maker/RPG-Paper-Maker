@@ -1,14 +1,11 @@
 const pluginName = 'party_presence';
 const inject = Manager.Plugins.inject;
 const Game = Core.Game;
-const Core = Core;
 const Interpreter = Common.Interpreter;
 const Platform = Common.Platform;
-const Data = Data;
 const Position = Core.Position;
-const CharacterKind = Common.Enum.CharacterKind;
+const CharacterKind = Common.CHARACTER_KIND;
 const Battler = Core.Battler;
-const Graphic = Graphic;
 
 // Start code here
 
@@ -23,9 +20,9 @@ inject(
 
 		console.log('Works!');
 
-		this.battle.battlers[CharacterKind.Hero] = new Array(l);
-		this.battle.players[CharacterKind.Hero] = new Array(l);
-		this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
+		this.battle.battlers[CharacterKind.HERO] = new Array(l);
+		this.battle.players[CharacterKind.HERO] = new Array(l);
+		this.battle.graphicPlayers[CharacterKind.HERO] = new Array(l);
 		let position, player, battler, center, offset;
 		for (let i = 0; i < l; i++) {
 			// Battlers
@@ -46,10 +43,10 @@ inject(
 			battler.updateDead(false);
 			player.battler = battler;
 			battler.updateHidden(false);
-			this.battle.battlers[CharacterKind.Hero][i] = battler;
-			this.battle.players[CharacterKind.Hero][i] = player;
+			this.battle.battlers[CharacterKind.HERO][i] = battler;
+			this.battle.players[CharacterKind.HERO][i] = player;
 			// Graphic player
-			this.battle.graphicPlayers[CharacterKind.Hero][i] = new Graphic.Player(player);
+			this.battle.graphicPlayers[CharacterKind.HERO][i] = new Graphic.Player(player);
 		}
 	},
 	false,

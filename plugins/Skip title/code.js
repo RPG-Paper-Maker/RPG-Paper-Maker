@@ -8,7 +8,7 @@ var settingsName = 'Enable Settings on Systems tab!';
 Scene.TitleScreen.prototype.load = async function () {
 	const l = Data.TitlescreenGameover.titleCommands;
 	for (var i = 0; i < l.length; i++)
-		if (l[i].kind === Common.Enum.TitleCommandKind.Settings) settingsName = l[i].name();
+		if (l[i].kind === Common.TITLE_COMMAND_KIND.SETTINGS) settingsName = l[i].name();
 	Core.Game.current = null;
 	Manager.Videos.stop();
 	Manager.Songs.stopAll();
@@ -54,8 +54,8 @@ Manager.Plugins.registerCommand(pluginName, 'Delete slot', async (slot) => {
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Slot exists?', async (slot, variable) => {
-	Core.Game.current.variables[variable] = -1;
-	Core.Game.current.variables[variable] = await Common.IO.fileExists(Common.Paths.SAVES + '/' + slot + '.json');
+	Core.Game.current.variables.set(variable, -1);
+	Core.Game.current.variables.set(variable, await Common.IO.fileExists(Common.Paths.SAVES + '/' + slot + '.json'));
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Get slot info', async (slot, info, time) => {
@@ -68,7 +68,7 @@ Manager.Plugins.registerCommand(pluginName, 'Get slot info', async (slot, info, 
 		const m = Math.floor(s / 60).toString();
 		const h = Math.floor(s / 3600).toString();
 		s = (s % 60).toString();
-		p.properties[info] = game.variables[infoVar];
+		p.properties[info] = game.variables.get(infoVar);
 		p.properties[time] =
 			(h.length === 1 ? '0' : '') +
 			h +

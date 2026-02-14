@@ -11,22 +11,22 @@ Core.MapObject.prototype.getFuturPosition = function (orientation, distance, ang
 	const lz = Scene.Map.current.mapLoopPlugin_loopZ;
 
 	var xPlus, zPlus, res;
-	if (orientation === Common.Enum.Orientation.South || this.previousOrientation === Common.Enum.Orientation.South) {
+	if (orientation === Common.ORIENTATION.SOUTH || this.previousOrientation === Common.ORIENTATION.SOUTH) {
 		xPlus = distance * Common.Mathf.cos((angle * Math.PI) / 180.0);
 		zPlus = distance * Common.Mathf.sin((angle * Math.PI) / 180.0);
 		futurePosAux(position, position.x - xPlus, position.z - zPlus, w, h, lx, lz);
 	}
-	if (orientation === Common.Enum.Orientation.West || this.previousOrientation === Common.Enum.Orientation.West) {
+	if (orientation === Common.ORIENTATION.WEST || this.previousOrientation === Common.ORIENTATION.WEST) {
 		xPlus = distance * Common.Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 		zPlus = distance * Common.Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 		futurePosAux(position, position.x + xPlus, position.z + zPlus, w, h, lx, lz);
 	}
-	if (orientation === Common.Enum.Orientation.North || this.previousOrientation === Common.Enum.Orientation.North) {
+	if (orientation === Common.ORIENTATION.NORTH || this.previousOrientation === Common.ORIENTATION.NORTH) {
 		xPlus = distance * Common.Mathf.cos((angle * Math.PI) / 180.0);
 		zPlus = distance * Common.Mathf.sin((angle * Math.PI) / 180.0);
 		futurePosAux(position, position.x + xPlus, position.z + zPlus, w, h, lx, lz);
 	}
-	if (orientation === Common.Enum.Orientation.East || this.previousOrientation === Common.Enum.Orientation.East) {
+	if (orientation === Common.ORIENTATION.EAST || this.previousOrientation === Common.ORIENTATION.EAST) {
 		xPlus = distance * Common.Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 		zPlus = distance * Common.Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 		futurePosAux(position, position.x - xPlus, position.z - zPlus, w, h, lx, lz);
@@ -35,7 +35,7 @@ Core.MapObject.prototype.getFuturPosition = function (orientation, distance, ang
 	this.updateBBPosition(position);
 	var yMountain = null;
 	var blocked = false;
-	var o = Common.Enum.Orientation.None;
+	var o = Common.ORIENTATION.NONE;
 	var i, l, result;
 	for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
 		this.currentBoundingBox = this.meshBoundingBox[i];

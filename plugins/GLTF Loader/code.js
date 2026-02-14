@@ -2,7 +2,7 @@ const pluginName = 'GLTF Loader';
 
 let GLTFLoader = null;
 (async () => {
-	GLTFLoader = Commmon.Interpreter.evaluate(
+	GLTFLoader = Common.Interpreter.evaluate(
 		await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/GLTFLoader.js'),
 		{
 			addReturn: false,

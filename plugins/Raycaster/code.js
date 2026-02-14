@@ -74,18 +74,18 @@ Manager.Plugins.registerCommand(pluginName, 'Get object on cursor', (variable, x
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
 		x = (x / document.innerWidth) * 2 - 1;
 		y = -(y / document.innerHeight) * 2 + 1;
-		raycaster.setFromCamera(new THREE.Vector2(x, y), Scene.Map.current.camera.perspectiveCamera);
-		Core.Game.current.variables[variable] = -1;
-		for (var i = 1; i < Scene.Map.current.maxObjectsID + 1; i++) {
+		raycaster.setFromCamera(new THREE.Vector2(x, y), Scene.Map.current.camera.getThreeCamera());
+		Core.Game.current.variables.set(variable, -1);
+		for (var i = 1; i < Scene.Map.current.mapProperties.maxObjectsID + 1; i++) {
 			var exitFor = false;
-			if (!Scene.Map.current.allObjects[i]) continue;
+			if (!Scene.Map.current.mapProperties.allObjects.get(i)) continue;
 			Core.MapObject.search(
 				i,
 				(result) => {
 					if (!!result) {
 						if (result.object.meshBoundingBox.length > 0) {
 							if (raycaster.ray.intersectsBox(result.object.meshBoundingBox[0].geometry.boundingBox)) {
-								Core.Game.current.variables[variable] = i;
+								Core.Game.current.variables.set(variable, i);
 								exitFor = true;
 							}
 						}

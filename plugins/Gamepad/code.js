@@ -56,8 +56,8 @@ setInterval(function () {
 			if (!!gp[i]) {
 				for (var j = 0; j < gp[i].buttons.length; j++) {
 					if (gp[i].buttons[j].pressed === true) {
-						if (Common.Inputs.keysPressed.indexOf(getKey(j)) === -1)
-							Common.Inputs.keysPressed.push(getKey(j));
+						if (!Common.Inputs.keysPressed.has(getKey(j)))
+							Common.Inputs.keysPressed.add(getKey(j));
 						if (buttonsList[i][j] === 0) {
 							Manager.Stack.onKeyPressed(getKey(j));
 							if (!Manager.Stack.isLoading()) Manager.Stack.onKeyPressedAndRepeat(getKey(j));
@@ -66,8 +66,8 @@ setInterval(function () {
 						if (!Manager.Stack.isLoading() && buttonsList[i][j] === repeatDelay)
 							Manager.Stack.onKeyPressedAndRepeat(getKey(j));
 					} else {
-						if (Common.Inputs.keysPressed.indexOf(getKey(j)) !== -1)
-							Common.Inputs.keysPressed.splice(getKey(j), 1);
+						if (Common.Inputs.keysPressed.has(getKey(j)))
+							Common.Inputs.keysPressed.delete(getKey(j));
 						if (buttonsList[i][j] > 0) Manager.Stack.onKeyReleased(getKey(j));
 						buttonsList[i][j] = 0;
 					}
@@ -81,8 +81,8 @@ setInterval(function () {
 					!Scene.Map.current.loading &&
 					!Core.ReactionInterpreter.blockingHero
 				) {
-					if (Core.Game.current.variables[deadzone] === 0) Core.Game.current.variables[deadzone] = 0.15;
-					const d = Math.min(Math.max(Core.Game.current.variables[deadzone], 0.05), 0.95);
+					if (Core.Game.current.variables.get(deadzone) === 0) Core.Game.current.variables.set(deadzone, 0.15);
+					const d = Math.min(Math.max(Core.Game.current.variables.get(deadzone), 0.05), 0.95);
 					const id = Model.DynamicValue.createNumber(i + 1);
 					if (Math.sqrt(lh * lh + lv * lv) > d) {
 						const x = Model.DynamicValue.createNumber(lh);
@@ -154,7 +154,7 @@ setInterval(function () {
 			} else {
 				for (var j = 0; j < buttonsList[i].length; j++) {
 					if (buttonsList[i][j] > 0) {
-						Common.Inputs.keysPressed.splice(getKey(j), 1);
+						Common.Inputs.keysPressed.delete(getKey(j));
 						Manager.Stack.onKeyReleased(getKey(j));
 					}
 					buttonsList[i][j] = 0;
@@ -192,6 +192,6 @@ window.addEventListener('gamepadconnected', (e) => {
 	if (Data.Keyboards.controls['LeftHero']) Data.Keyboards.controls['LeftHero'].sc.push(['Left']);
 	if (Data.Keyboards.controls['RightMenu']) Data.Keyboards.controls['RightMenu'].sc.push(['Right']);
 	if (Data.Keyboards.controls['RightHero']) Data.Keyboards.controls['RightHero'].sc.push(['Right']);
-	for (var i = 0; i < a.length; i++) Data.Settings.kb[c[a[i]].id] = c[a[i]].sc;
-	Data.Settings.write();
+	for (var i = 0; i < a.length; i++) Data.Settings.kb.set(c[a[i]].id, c[a[i]].sc);
+	Data.Settings.save();
 });

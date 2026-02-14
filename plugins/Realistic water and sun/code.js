@@ -1,15 +1,12 @@
-import { Sky } from './Sky.js';
-import { Water } from './Water.js';
-
 const pluginName = 'Realistic water and sun';
 
 let Sky = null;
 let Water = null;
 (async () => {
-	Sky = Commmon.Interpreter.evaluate(await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/Sky.js'), {
+	Sky = Common.Interpreter.evaluate(await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/Sky.js'), {
 		addReturn: false,
 	});
-	Water = Commmon.Interpreter.evaluate(
+	Water = Common.Interpreter.evaluate(
 		await Common.Platform.loadFile(Common.Paths.PLUGINS + pluginName + '/Water.js'),
 		{
 			addReturn: false,
@@ -61,12 +58,12 @@ Manager.Plugins.registerCommand(pluginName, 'Create water surface', (variable, x
 	);
 	waterList.push(water);
 	Scene.Map.current.scene.add(water);
-	Core.Game.current.variables[variable] = water;
+	Core.Game.current.variables.set(variable, water);
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Move water surface', (variable, y) => {
-	if (waterList.includes(Core.Game.current.variables[variable]))
-		Core.Game.current.variables[variable].position.y = y * Data.Systems.SQUARE_SIZE;
+	if (waterList.includes(Core.Game.current.variables.get(variable)))
+		Core.Game.current.variables.get(variable).position.y = y * Data.Systems.SQUARE_SIZE;
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Initialize sky', () => {
