@@ -25,6 +25,7 @@ import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import TooltipInformation from '../../TooltipInformation';
 import Tab from '../../Tab';
 import TextArea from '../../TextArea';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
@@ -285,11 +286,21 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 			>
 				<Flex column spaced>
 					<Form>
-						<Label>{t('interlocutor')}</Label>
+						<Label>
+							<Flex spaced centerV>
+								{t('interlocutor')}
+								<TooltipInformation text={t('tooltip.interlocutor')} />
+							</Flex>
+						</Label>
 						<Value>
 							<DynamicValueSelector value={interlocutor} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT} />
 						</Value>
-						<Label>{t('faceset')}</Label>
+						<Label>
+							<Flex spaced centerV>
+								{t('faceset')}
+								<TooltipInformation text={t('tooltip.faceset')} />
+							</Flex>
+						</Label>
 						<Value>
 							<AssetSelector
 								selectionType={ASSET_SELECTOR_TYPE.PICTURES}

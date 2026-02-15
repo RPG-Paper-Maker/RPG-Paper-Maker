@@ -23,6 +23,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import PanelObjectEvent, { PanelObjectEventRef } from '../../panels/PanelObjectEvent';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
@@ -143,6 +144,7 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 									>
 										{t('sender.cant.receive')}
 									</Checkbox>
+									<TooltipInformation text={t('tooltip.sender.cant.receive')} disabled={!isDetection} />
 									<Checkbox
 										isChecked={onlyTheClosest}
 										onChange={setOnlyTheClosest}
@@ -150,6 +152,7 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 									>
 										{t('only.the.closest')}
 									</Checkbox>
+									<TooltipInformation text={t('tooltip.only.the.closest')} disabled={!isDetection} />
 								</Flex>
 							</Value>
 							<Label>

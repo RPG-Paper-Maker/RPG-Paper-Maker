@@ -19,6 +19,7 @@ import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -124,7 +125,10 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 								value={maxNumberChoicesDisplay}
 								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 							/>
-							{t('cancel.auto.index')}
+							<Flex spaced centerV>
+								{t('cancel.auto.index')}
+								<TooltipInformation text={t('tooltip.cancel.auto.index')} />
+							</Flex>
 							<DynamicValueSelector
 								value={cancelAutoIndex}
 								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}

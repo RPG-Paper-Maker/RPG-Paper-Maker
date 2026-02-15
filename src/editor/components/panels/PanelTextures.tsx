@@ -19,8 +19,8 @@ import Flex from '../Flex';
 import MainPreviewer3D from '../MainPreviewer3D';
 import Splitter from '../Splitter';
 import TextureSquareSelector from '../TextureSquareSelector';
-import PanelSettingsMountains from './PanelSettingsMountains';
 import PanelMapObjectsSelection from './PanelMapObjectsSelection';
+import PanelSettingsMountains from './PanelSettingsMountains';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
 import PanelTransform from './PanelTransform';
 

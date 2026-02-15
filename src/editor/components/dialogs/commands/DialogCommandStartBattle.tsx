@@ -24,6 +24,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import { PanelPositionRef } from '../../panels';
 import PanelPosition from '../../panels/PanelPosition';
 import RadioButton from '../../RadioButton';
@@ -151,9 +152,12 @@ function DialogCommandStartBattle({ commandKind, setIsOpen, list, onAccept, onRe
 						<Checkbox isChecked={isAllowEscape} onChange={setIsAllowEscape}>
 							{t('allow.escape')}
 						</Checkbox>
-						<Checkbox isChecked={isDefeatGameOver} onChange={setIsDefeatGameOver}>
-							{t('defeat.causes.game.over')}
-						</Checkbox>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isDefeatGameOver} onChange={setIsDefeatGameOver}>
+								{t('defeat.causes.game.over')}
+							</Checkbox>
+							<TooltipInformation text={t('tooltip.defeat.causes.game.over')} />
+						</Flex>
 					</Flex>
 				</Groupbox>
 				<Groupbox title={t('transition')}>

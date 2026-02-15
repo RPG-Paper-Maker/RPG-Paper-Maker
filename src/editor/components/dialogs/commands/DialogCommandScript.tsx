@@ -20,6 +20,7 @@ import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
+import TooltipInformation from '../../TooltipInformation';
 import TextArea from '../../TextArea';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -86,6 +87,7 @@ function DialogCommandScript({ commandKind, setIsOpen, list, onAccept, onReject 
 					<Checkbox isChecked={isDynamicScript} onChange={setIsDynamicScript}>
 						{t('use.dynamic')}:
 					</Checkbox>
+					<TooltipInformation text={t('tooltip.use.dynamic')} />
 					<DynamicValueSelector
 						value={dynamicScript}
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.VARIABLE_PARAM_PROP}

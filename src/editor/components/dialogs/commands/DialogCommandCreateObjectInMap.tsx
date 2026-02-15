@@ -20,6 +20,7 @@ import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
+import TooltipInformation from '../../TooltipInformation';
 import PanelPosition, { PanelPositionRef } from '../../panels/PanelPosition';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -98,6 +99,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 						<Checkbox isChecked={isStockCurrentValueVariableID} onChange={setIsStockCurrentValueVariableID}>
 							{t('stock.id.in.variable.id')}
 						</Checkbox>
+						<TooltipInformation text={t('tooltip.stock.id.in.variable.id')} />
 						<DynamicValueSelector
 							value={stockCurrentValueVariableID}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}

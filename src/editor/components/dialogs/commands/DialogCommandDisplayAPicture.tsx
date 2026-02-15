@@ -24,6 +24,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -111,10 +112,12 @@ function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, 
 						active
 					/>
 					<div>{t('index')}:</div>
+					<TooltipInformation text={t('tooltip.picture.index')} />
 					<DynamicValueSelector value={index} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
 				</Flex>
-				<Flex spaced>
+				<Flex spaced centerV>
 					<div>{t('origin')}:</div>
+					<TooltipInformation text={t('tooltip.picture.origin')} />
 					<Dropdown
 						selectedID={originIndex}
 						onChange={setOriginIndex}
@@ -168,9 +171,12 @@ function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, 
 								</Flex>
 							</Value>
 						</Form>
-						<Checkbox isChecked={isStretch} onChange={setIsStretch}>
-							{t('stretch')}
-						</Checkbox>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isStretch} onChange={setIsStretch}>
+								{t('stretch')}
+							</Checkbox>
+							<TooltipInformation text={t('tooltip.stretch')} />
+						</Flex>
 					</Flex>
 				</Groupbox>
 			</Flex>

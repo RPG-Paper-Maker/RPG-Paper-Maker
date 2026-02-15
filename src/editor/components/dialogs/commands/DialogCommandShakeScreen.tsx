@@ -19,6 +19,7 @@ import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import TooltipInformation from '../../TooltipInformation';
 import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -75,14 +76,24 @@ function DialogCommandShakeScreen({ commandKind, setIsOpen, list, onAccept, onRe
 		>
 			<Flex column spacedLarge>
 				<Form>
-					<Label>{t('offset')}</Label>
+					<Label>
+						<Flex spaced centerV>
+							{t('offset')}
+							<TooltipInformation text={t('tooltip.shake.offset')} />
+						</Flex>
+					</Label>
 					<Value>
 						<Flex spaced>
 							<DynamicValueSelector value={offset} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
 							{t('pixel.s').toLowerCase()}
 						</Flex>
 					</Value>
-					<Label>{t('shakes.number')}</Label>
+					<Label>
+						<Flex spaced centerV>
+							{t('shakes.number')}
+							<TooltipInformation text={t('tooltip.shakes.number')} />
+						</Flex>
+					</Label>
 					<Value>
 						<Flex spaced>
 							<DynamicValueSelector

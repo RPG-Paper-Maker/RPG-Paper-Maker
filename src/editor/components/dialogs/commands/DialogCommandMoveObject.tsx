@@ -24,6 +24,7 @@ import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import Tree from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -255,15 +256,24 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 										byIndex
 									/>
 								</Flex>
-								<Checkbox isChecked={isIgnoreIfImpossible} onChange={setIsIgnoreIfImpossible}>
-									{t('ignore.if.impossible')}
-								</Checkbox>
-								<Checkbox isChecked={isWaitEnd} onChange={setIsWaitEnd}>
-									{t('wait.end')}
-								</Checkbox>
-								<Checkbox isChecked={isWithCameraOrientation} onChange={setIsWithCameraOrientation}>
-									{t('with.camera.orientation')}
-								</Checkbox>
+								<Flex spaced centerV>
+									<Checkbox isChecked={isIgnoreIfImpossible} onChange={setIsIgnoreIfImpossible}>
+										{t('ignore.if.impossible')}
+									</Checkbox>
+									<TooltipInformation text={t('tooltip.ignore.if.impossible')} />
+								</Flex>
+								<Flex spaced centerV>
+									<Checkbox isChecked={isWaitEnd} onChange={setIsWaitEnd}>
+										{t('wait.end')}
+									</Checkbox>
+									<TooltipInformation text={t('tooltip.wait.end')} />
+								</Flex>
+								<Flex spaced centerV>
+									<Checkbox isChecked={isWithCameraOrientation} onChange={setIsWithCameraOrientation}>
+										{t('with.camera.orientation')}
+									</Checkbox>
+									<TooltipInformation text={t('tooltip.with.camera.orientation')} />
+								</Flex>
 							</Flex>
 						</Flex>
 						<Groupbox title={t('moves')}>

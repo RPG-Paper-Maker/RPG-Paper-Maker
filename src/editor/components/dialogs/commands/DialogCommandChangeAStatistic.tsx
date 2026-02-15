@@ -23,6 +23,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
 import RadioButton from '../../RadioButton';
@@ -165,12 +166,18 @@ function DialogCommandChangeAStatistic({ commandKind, setIsOpen, list, onAccept,
 								<Value />
 							</Form>
 						</RadioGroup>
-						<Checkbox isChecked={isCanGoAboveMaximumValue} onChange={setIsCanGoAboveMaximumValue}>
-							{t('can.go.above.maximum.value')}
-						</Checkbox>
-						<Checkbox isChecked={isApplyChangeMaximumValue} onChange={setIsApplyChangeMaximumValue}>
-							{t('apply.change.maximum.value')}
-						</Checkbox>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isCanGoAboveMaximumValue} onChange={setIsCanGoAboveMaximumValue}>
+								{t('can.go.above.maximum.value')}
+							</Checkbox>
+							<TooltipInformation text={t('tooltip.can.go.above.maximum.value')} />
+						</Flex>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isApplyChangeMaximumValue} onChange={setIsApplyChangeMaximumValue}>
+								{t('apply.change.maximum.value')}
+							</Checkbox>
+							<TooltipInformation text={t('tooltip.apply.change.maximum.value')} />
+						</Flex>
 					</Flex>
 				</Groupbox>
 			</Flex>
