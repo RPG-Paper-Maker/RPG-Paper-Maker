@@ -28,6 +28,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 		const command = node.content as Model.MapObjectCommand;
 		const currentList = node.parent?.children ?? list;
 		let index = currentList.indexOf(node) + 1;
+		node.content.id = Node.getNewID(list);
 		switch (command.kind) {
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE: {
 				const nb = command.getChoicesNumber();
@@ -111,7 +112,6 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 				break;
 			}
 			default:
-				node.content.id = Node.getNewID(list);
 				break;
 		}
 	};
