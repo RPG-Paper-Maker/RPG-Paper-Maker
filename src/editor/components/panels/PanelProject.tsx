@@ -26,8 +26,7 @@ import {
 	setCurrentMountainWidthPixels,
 	setCurrentMountainWidthSquares,
 	setCurrentObject3DID,
-	setCurrentTilesetFloorTexture,
-	setCurrentTilesetSpriteTexture,
+	setCurrentTilesetFloorSpriteTexture,
 	setCurrentTreeMapTag,
 	setCurrentWallID,
 	setProjectMenuIndex,
@@ -128,8 +127,11 @@ function PanelProject() {
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
 			setMapTabForcedCurrentIndex(titles.findIndex((model) => model.id === Project.current!.treeMaps.currentMap));
 			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
-			dispatch(setCurrentTilesetFloorTexture(Project.current!.settings.mapEditorCurrentTilesetFloorTexture));
-			dispatch(setCurrentTilesetSpriteTexture(Project.current!.settings.mapEditorCurrentTilesetSpriteTexture));
+			dispatch(
+				setCurrentTilesetFloorSpriteTexture(
+					Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture,
+				),
+			);
 			dispatch(setCurrentAutotileID(Project.current!.settings.mapEditorCurrentAutotileID));
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));

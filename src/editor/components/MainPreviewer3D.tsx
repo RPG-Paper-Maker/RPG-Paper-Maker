@@ -23,8 +23,9 @@ function MainPreviewer3D({ id }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
-	const currentTilesetFloorTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetFloorTexture);
-	const currentTilesetSpriteTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetSpriteTexture);
+	const currentTilesetFloorSpriteTexture = useSelector(
+		(state: RootState) => state.mapEditor.currentTilesetFloorSpriteTexture,
+	);
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
@@ -32,7 +33,7 @@ function MainPreviewer3D({ id }: Props) {
 	const currentMountainWidthSquares = useSelector((state: RootState) => state.mapEditor.currentMountainWidthSquares);
 	const currentMountainWidthPixels = useSelector((state: RootState) => state.mapEditor.currentMountainWidthPixels);
 	const currentMountainHeightSquares = useSelector(
-		(state: RootState) => state.mapEditor.currentMountainHeightSquares
+		(state: RootState) => state.mapEditor.currentMountainHeightSquares,
 	);
 	const currentMountainHeightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
 	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
@@ -62,7 +63,7 @@ function MainPreviewer3D({ id }: Props) {
 			if (currentMapID && Scene.Map.isDrawing() && mapEditorLoaded) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
-						await scene.loadFloor(currentTilesetFloorTexture);
+						await scene.loadFloor(currentTilesetFloorSpriteTexture);
 						break;
 					case ELEMENT_MAP_KIND.AUTOTILE:
 						await scene.loadAutotile(currentAutotileID, currentAutotileTexture).catch(console.error);
@@ -71,7 +72,7 @@ function MainPreviewer3D({ id }: Props) {
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-						await scene.loadSprite(currentTilesetSpriteTexture, currentMapElementKind);
+						await scene.loadSprite(currentTilesetFloorSpriteTexture, currentMapElementKind);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_WALL:
 						await scene.loadWall(currentWallID);
@@ -79,11 +80,11 @@ function MainPreviewer3D({ id }: Props) {
 					case ELEMENT_MAP_KIND.MOUNTAIN:
 						await scene.loadMountain(
 							currentMountainID,
-							currentTilesetFloorTexture,
+							currentTilesetFloorSpriteTexture,
 							currentMountainWidthSquares,
 							currentMountainWidthPixels,
 							currentMountainHeightSquares,
-							currentMountainHeightPixels
+							currentMountainHeightPixels,
 						);
 						break;
 					case ELEMENT_MAP_KIND.OBJECT3D:
@@ -105,7 +106,7 @@ function MainPreviewer3D({ id }: Props) {
 						case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 							await scene.loadSprite(
 								(selectedMapElement as MapElement.Sprite).texture,
-								selectedMapElement.kind
+								selectedMapElement.kind,
 							);
 							break;
 						case ELEMENT_MAP_KIND.OBJECT3D:
@@ -157,8 +158,7 @@ function MainPreviewer3D({ id }: Props) {
 			update().catch(console.error);
 		}
 	}, [
-		currentTilesetFloorTexture,
-		currentTilesetSpriteTexture,
+		currentTilesetFloorSpriteTexture,
 		currentAutotileID,
 		currentAutotileTexture,
 		currentWallID,

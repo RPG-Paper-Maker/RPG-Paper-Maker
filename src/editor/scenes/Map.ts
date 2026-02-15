@@ -1800,7 +1800,7 @@ class Map extends Base {
 											Map.currentSelectedMapElementKind,
 											Project.current!.settings.mapEditorCurrentAutotileID,
 											Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
-												? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
+												? Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture
 												: Project.current!.settings.mapEditorCurrentAutotileTexture,
 										);
 										break;

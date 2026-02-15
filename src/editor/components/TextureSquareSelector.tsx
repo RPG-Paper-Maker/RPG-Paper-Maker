@@ -17,12 +17,7 @@ import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
-import {
-	RootState,
-	setCurrentAutotileTexture,
-	setCurrentTilesetFloorTexture,
-	setCurrentTilesetSpriteTexture,
-} from '../store';
+import { RootState, setCurrentAutotileTexture, setCurrentTilesetFloorSpriteTexture } from '../store';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -92,14 +87,13 @@ function TextureSquareSelector({
 		}
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
-				return Project.current!.settings.mapEditorCurrentTilesetFloorTexture;
-			case ELEMENT_MAP_KIND.AUTOTILE:
-				return Project.current!.settings.mapEditorCurrentAutotileTexture;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				return Project.current!.settings.mapEditorCurrentTilesetSpriteTexture;
+				return Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return Project.current!.settings.mapEditorCurrentAutotileTexture;
 			default:
 				return defaultRectangle ?? new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight);
 		}
@@ -125,21 +119,17 @@ function TextureSquareSelector({
 		if (!doNotUpdateTexture) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.FLOOR:
-					dispatch(setCurrentTilesetFloorTexture(currentState.selectedRect));
-					Project.current!.settings.mapEditorCurrentTilesetFloorTexture = currentState.selectedRect;
+				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+					dispatch(setCurrentTilesetFloorSpriteTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture = currentState.selectedRect;
 					await Project.current!.settings!.save();
 					break;
 				case ELEMENT_MAP_KIND.AUTOTILE:
 					dispatch(setCurrentAutotileTexture(currentState.selectedRect));
 					Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
-					await Project.current!.settings!.save();
-					break;
-				case ELEMENT_MAP_KIND.SPRITE_FACE:
-				case ELEMENT_MAP_KIND.SPRITE_FIX:
-				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-					dispatch(setCurrentTilesetSpriteTexture(currentState.selectedRect));
-					Project.current!.settings.mapEditorCurrentTilesetSpriteTexture = currentState.selectedRect;
 					await Project.current!.settings!.save();
 					break;
 				default:

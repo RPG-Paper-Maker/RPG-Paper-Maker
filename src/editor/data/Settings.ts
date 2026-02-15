@@ -22,8 +22,7 @@ class Settings extends Serializable {
 	public mapEditorLandsMenuIndex!: number;
 	public mapEditorSpritesMenuIndex!: number;
 	public mapEditorObjectsMenuIndex!: number;
-	public mapEditorCurrentTilesetFloorTexture!: Rectangle;
-	public mapEditorCurrentTilesetSpriteTexture!: Rectangle;
+	public mapEditorCurrentTilesetFloorSpriteTexture!: Rectangle;
 	public mapEditorCurrentAutotileID!: number;
 	public mapEditorCurrentAutotileTexture!: Rectangle;
 	public mapEditorCurrentWallID!: number;
@@ -58,8 +57,7 @@ class Settings extends Serializable {
 		['mapEditorLandsMenuIndex', 'melmi', 0, BINDING.NUMBER],
 		['mapEditorSpritesMenuIndex', 'mesmi', 0, BINDING.NUMBER],
 		['mapEditorObjectsMenuIndex', 'meomi', 0, BINDING.NUMBER],
-		['mapEditorCurrentTilesetFloorTexture', 'mectft', undefined, BINDING.RECTANGLE],
-		['mapEditorCurrentTilesetSpriteTexture', 'mectst', new Rectangle(0, 1, 2, 2), BINDING.RECTANGLE],
+		['mapEditorCurrentTilesetFloorSpriteTexture', 'mectfst', undefined, BINDING.RECTANGLE],
 		['mapEditorCurrentAutotileID', 'mecaid', 1, BINDING.NUMBER],
 		['mapEditorCurrentAutotileTexture', 'mecat', undefined, BINDING.RECTANGLE],
 		['mapEditorCurrentWallID', 'mecwid', 1, BINDING.NUMBER],

@@ -95,7 +95,7 @@ class MapPortion {
 				this.updateMapElement(
 					position,
 					MapElement.Floor.create(
-						Project.current!.settings.mapEditorCurrentTilesetFloorTexture,
+						Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture,
 						this.map.camera.getUp(),
 					),
 					ELEMENT_MAP_KIND.FLOOR,
@@ -131,7 +131,7 @@ class MapPortion {
 					position,
 					MapElement.Sprite.create(
 						Scene.Map.currentSelectedMapElementKind,
-						Project.current!.settings.mapEditorCurrentTilesetSpriteTexture,
+						Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture,
 						this.map.camera.getFront(Manager.GL.raycaster.ray.direction, position.angleY),
 						this.map.layerRayPosition ? this.map.layerRayPosition.x - position.x : 0,
 						this.map.layerRayPosition ? this.map.layerRayPosition.y - position.y : 0,
@@ -173,8 +173,8 @@ class MapPortion {
 					floorPosition,
 					MapElement.Floor.create(
 						new Rectangle(
-							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.x,
-							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y,
+							Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture.x,
+							Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture.y,
 						),
 					),
 					ELEMENT_MAP_KIND.FLOOR,

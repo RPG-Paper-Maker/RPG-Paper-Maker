@@ -25,8 +25,7 @@ const MapEditorSlice = createSlice({
 	name: 'mapEditor',
 	initialState: {
 		currentTreeMapTag: null as Model.TreeMapTag | null,
-		currentTilesetFloorTexture: new Rectangle(0, 0, 1, 1),
-		currentTilesetSpriteTexture: new Rectangle(0, 1, 2, 2),
+		currentTilesetFloorSpriteTexture: new Rectangle(0, 0, 1, 1),
 		currentAutotileID: 1,
 		currentAutotileTexture: new Rectangle(0, 0, 1, 1),
 		currentWallID: 1,
@@ -53,11 +52,8 @@ const MapEditorSlice = createSlice({
 		setCurrentTreeMapTag(state, action: PayloadAction<Model.TreeMapTag | null>) {
 			state.currentTreeMapTag = action.payload;
 		},
-		setCurrentTilesetFloorTexture(state, action: PayloadAction<Rectangle>) {
-			state.currentTilesetFloorTexture = action.payload;
-		},
-		setCurrentTilesetSpriteTexture(state, action: PayloadAction<Rectangle>) {
-			state.currentTilesetSpriteTexture = action.payload;
+		setCurrentTilesetFloorSpriteTexture(state, action: PayloadAction<Rectangle>) {
+			state.currentTilesetFloorSpriteTexture = action.payload;
 		},
 		setCurrentAutotileID(state, action: PayloadAction<number>) {
 			state.currentAutotileID = action.payload;
@@ -121,8 +117,7 @@ const MapEditorSlice = createSlice({
 
 export const {
 	setCurrentTreeMapTag,
-	setCurrentTilesetFloorTexture,
-	setCurrentTilesetSpriteTexture,
+	setCurrentTilesetFloorSpriteTexture,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
 	setCurrentWallID,
