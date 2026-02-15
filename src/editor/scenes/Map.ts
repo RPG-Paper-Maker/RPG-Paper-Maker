@@ -694,6 +694,17 @@ class Map extends Base {
 		return this.getMapPortionFromGlobalPortion(position.getGlobalPortion());
 	}
 
+	getMapPortionByPositionWall(position: Position): MapPortion | null {
+		const portion = position.getGlobalPortion();
+		if (position.x === this.model.length) {
+			portion.x = Math.ceil(this.model.length / Constants.PORTION_SIZE) - 1;
+		}
+		if (position.z === this.model.width) {
+			portion.z = Math.ceil(this.model.width / Constants.PORTION_SIZE) - 1;
+		}
+		return this.getMapPortionFromGlobalPortion(portion);
+	}
+
 	getBrutMapPortion(index: number): MapPortion | null {
 		return this.mapPortions[index];
 	}
@@ -901,7 +912,7 @@ class Map extends Base {
 			});
 		}
 		for (const position of positions) {
-			this.getMapPortionByPosition(position)?.updateWall(
+			this.getMapPortionByPositionWall(position)?.updateWall(
 				position,
 				add
 					? MapElement.SpriteWall.create(
@@ -1423,7 +1434,9 @@ class Map extends Base {
 							continue;
 						}
 					}
-					position = newPosition;
+					if (Map.currentSelectedMapElementKind !== ELEMENT_MAP_KIND.SPRITE_WALL) {
+						position = newPosition;
+					}
 				}
 			}
 			if ((this.canEdit || this.isDetection) && !Map.isRemoving()) {
@@ -1701,6 +1714,7 @@ class Map extends Base {
 		}
 		if (
 			!Inputs.isPointerPressed &&
+			!Inputs.isMouseRightPressed &&
 			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.model))
 		) {
 			this.forEachMapPortions((mapPortion) => {

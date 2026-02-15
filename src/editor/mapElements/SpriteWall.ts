@@ -119,7 +119,7 @@ class SpriteWall extends Base {
 	}
 
 	static getWall(map: Scene.Map, position: Position) {
-		const mapPortion = map.getMapPortionByPosition(position);
+		const mapPortion = map.getMapPortionByPositionWall(position);
 		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
 	}
 
@@ -153,7 +153,7 @@ class SpriteWall extends Base {
 			sideSprite?.update(map, sidePosition);
 			const sideGlobalPortion = sidePosition.getGlobalPortion();
 			if (!globalPortion.equals(sideGlobalPortion)) {
-				const mapPortion = map.getMapPortionFromGlobalPortion(sideGlobalPortion);
+				const mapPortion = map.getMapPortionByPositionWall(sidePosition);
 				if (mapPortion) {
 					map.portionsToUpdate.add(mapPortion);
 					if (save) {
