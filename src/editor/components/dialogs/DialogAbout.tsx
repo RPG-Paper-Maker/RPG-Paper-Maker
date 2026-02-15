@@ -73,8 +73,6 @@ function DialogAbout({ setIsOpen }: Props) {
 				http://rpg-paper-maker.com/
 				<div>{t('thanks.patreon')}:</div>
 				{patreons?.current}
-				<div>{t('thanks.patreon.previous')}:</div>
-				{patreons?.previous}
 				<div>RPG Paper Maker Copyright © {new Date().getFullYear()} Wano</div>
 				<div>{t('copyright')}</div>
 			</Flex>
