@@ -242,11 +242,12 @@ function PanelMapObjectsSelection() {
 		}
 	};
 
-	const handleEditMapObject = async () => {
-		if (!rightClickedObject) {
+	const handleEditMapObject = async (mapObject?: Model.MapObject) => {
+		const object = mapObject ?? rightClickedObject;
+		if (!object) {
 			return;
 		}
-		const commonObject = getCommonObject(rightClickedObject);
+		const commonObject = getCommonObject(object);
 		if (commonObject) {
 			setCurrentMapObject(commonObject.clone());
 			setIsOpenMapObject(true);
@@ -281,7 +282,7 @@ function PanelMapObjectsSelection() {
 		return [
 			{
 				title: `${t('edit')}...`,
-				onClick: handleEditMapObject,
+				onClick: () => handleEditMapObject(),
 			},
 			{
 				title: t('copy'),
@@ -358,6 +359,7 @@ function PanelMapObjectsSelection() {
 				className='element'
 				key={posKey}
 				onClick={() => handleClick(mapObject)}
+				onDoubleClick={() => handleEditMapObject(mapObject)}
 				onMouseDown={(e) => handleElementMouseDown(e, mapObject)}
 				onContextMenu={(e) => e.preventDefault()}
 			>
