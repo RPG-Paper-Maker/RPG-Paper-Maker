@@ -67,7 +67,6 @@
 		"countdown-web": "bash scripts/countdown-web.sh",
 		"ssh": "bash scripts/ssh.sh",
 		"tag-master-all": "bash scripts/tag-master-all.sh",
-		"update-locales": "node scripts/update-locales.mjs",
 		"get-commits": "bash scripts/get-commits.sh",
 		"generate-changelogs": "node scripts/generate-changelogs.mjs"
 	},
