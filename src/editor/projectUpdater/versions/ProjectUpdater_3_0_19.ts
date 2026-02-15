@@ -22,7 +22,7 @@ class ProjectUpdater_3_0_19 {
 			const characters = list?.find((v) => v.k === 4);
 			if (characters) {
 				const values = characters.v as JSONType[];
-				if (values[1]?.id !== 0) {
+				if ((values[1]?.id ?? 0) !== 0) {
 					ArrayUtils.insertAt(values, 1, { br: true, id: 0, name: 'Tileset' });
 					await writeJSON(Paths.join(projectPath, 'pictures.json'), jsonPictures);
 				}
@@ -30,19 +30,19 @@ class ProjectUpdater_3_0_19 {
 		}
 		const jsonSpecialElements = await readJSON(Paths.join(projectPath, 'specialElements.json'));
 		if (jsonSpecialElements) {
-			const autotile = (jsonSpecialElements.autotiles as JSONType[]).find((a) => a.id === 0);
+			const autotile = (jsonSpecialElements.autotiles as JSONType[]).find((a) => (a.id ?? 0) === 0);
 			if (autotile) {
 				autotile.id = 1;
 			}
-			const wall = (jsonSpecialElements.walls as JSONType[]).find((a) => a.id === 0);
+			const wall = (jsonSpecialElements.walls as JSONType[]).find((a) => (a.id ?? 0) === 0);
 			if (wall) {
 				wall.id = 1;
 			}
-			const mountain = (jsonSpecialElements.m as JSONType[]).find((a) => a.id === 0);
+			const mountain = (jsonSpecialElements.m as JSONType[]).find((a) => (a.id ?? 0) === 0);
 			if (mountain) {
 				mountain.id = 1;
 			}
-			const object = (jsonSpecialElements.o as JSONType[]).find((a) => a.id === 0);
+			const object = (jsonSpecialElements.o as JSONType[]).find((a) => (a.id ?? 0) === 0);
 			if (object) {
 				object.id = 1;
 			}
