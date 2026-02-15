@@ -94,7 +94,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		return 0;
 	};
 
-	const [firstIndex] = useState(getIndex());
+	const [firstIndex] = useState(Math.max(0, getIndex()));
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
