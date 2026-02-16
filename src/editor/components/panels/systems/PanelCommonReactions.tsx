@@ -51,6 +51,10 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 		}
 	};
 
+	const handleUpdateReactions = () => {
+		Project.current!.commonEvents.commonReactions = Node.createListFromNodes(reactions);
+	};
+
 	const handleUpdateParameters = () => {
 		if (selectedReaction) {
 			selectedReaction.parameters = Node.createListFromNodes(parameters);
@@ -97,6 +101,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 						list={reactions}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectReaction}
+						onListUpdated={handleUpdateReactions}
 						scrollable
 						showEditName
 						applyDefault
