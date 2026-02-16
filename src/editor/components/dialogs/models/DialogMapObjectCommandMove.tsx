@@ -48,7 +48,7 @@ function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onRejec
 			case COMMAND_MOVE_KIND.WAIT: {
 				const list = command.command.slice(1);
 				const handleAcceptWait = (c: Model.MapObjectCommand) => {
-					command.command = ['' + COMMAND_MOVE_KIND.WAIT, ...(c.command as string[])];
+					command.command = [COMMAND_MOVE_KIND.WAIT, ...(c.command as string[])];
 					onAccept();
 				};
 				return (
