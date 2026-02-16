@@ -2087,6 +2087,7 @@
 	"tooltip.maximum.value": "Der maximal mögliche Wert, den es erreichen kann (kann höher sein als der Endwert, wenn verbrauchbare Gegenstände den Maximalwert erhöhen).",
 	"tooltip.random.variation": "Fügt im Spiel etwas Zufälligkeit hinzu, um den Wert nach jedem Levelaufstieg zu ändern. Je höher die Variation, desto größer der Zufall. Der Endwert ändert sich jedoch nicht und bleibt immer gleich.",
 	"update.list.size": "Listengröße aktualisieren",
+	"update.id": "ID aktualisieren",
 	"warning.update.list.size": "Sie werden die Listengröße verringern. Die letzten Elemente werden entfernt. Bestätigen Sie?",
 	"deploy": "Bereitstellen",
 	"auto.updater": "Automatischer Updater",

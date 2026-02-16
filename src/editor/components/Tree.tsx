@@ -30,6 +30,7 @@ import { Localization, MapObjectCommand } from '../models';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogUpdateID from './dialogs/DialogUpdateID';
 import DialogUpdateListSize from './dialogs/DialogUpdateListSize';
 import Flex from './Flex';
 import InputLocalization from './InputLocalization';
@@ -175,6 +176,7 @@ function Tree({
 	const [needScroll, setNeedScroll] = useState(false);
 	const [isFocused, setIsFocused] = useState(false);
 	const [isDialogUpdateListSizeOpen, setIsDialogUpdateListSizeOpen] = useState(false);
+	const [isDialogUpdateIDOpen, setIsDialogUpdateIDOpen] = useState(false);
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -190,6 +192,7 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.COPY,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.PASTE_OVER,
+			CONTEXT_MENU_ITEM_KIND.UPDATE_ID,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
 			CONTEXT_MENU_ITEM_KIND.CLEAR,
 		];
@@ -427,6 +430,24 @@ function Tree({
 			setCurrentName(currentList[index].content.name);
 			onPasteItem?.(currentList[index], nodes[0]);
 			onListUpdated?.();
+		}
+	};
+
+	const handleUpdateID = async () => {
+		setIsDialogUpdateIDOpen(true);
+	};
+
+	const handleAcceptUpdateID = (newID: number) => {
+		if (currentSelectedItemNode) {
+			const oldID = currentSelectedItemNode.content.id;
+			if (newID !== oldID) {
+				const existingNode = Node.getNodeByID(list, newID);
+				if (existingNode) {
+					existingNode.content.id = oldID;
+				}
+				currentSelectedItemNode.content.id = newID;
+				onListUpdated?.();
+			}
 		}
 	};
 
@@ -936,6 +957,19 @@ function Tree({
 						onClick: handlePasteOverItem,
 						disabled: disableAll || !canPaste() || isEmpty || isFixed || additionalSelectedNodes.length > 0,
 					};
+				case CONTEXT_MENU_ITEM_KIND.UPDATE_ID:
+					return {
+						title: `${t('update.id')}...`,
+						shortcut: [KEY.I],
+						onClick: handleUpdateID,
+						disabled:
+							disableAll ||
+							isEmpty ||
+							isFixed ||
+							additionalSelectedNodes.length > 0 ||
+							cannotEdit ||
+							list.length <= 1,
+					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {
 						title: t('delete'),
@@ -1076,6 +1110,13 @@ function Tree({
 					initialSize={list.length}
 					canBeEmpty={canBeEmpty}
 					onAccept={handleAcceptUpdateListSize}
+				/>
+			)}
+			{isDialogUpdateIDOpen && currentSelectedItemNode && (
+				<DialogUpdateID
+					setIsOpen={setIsDialogUpdateIDOpen}
+					initialID={currentSelectedItemNode.content.id}
+					onAccept={handleAcceptUpdateID}
 				/>
 			)}
 		</>

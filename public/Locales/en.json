@@ -2087,6 +2087,7 @@
 	"tooltip.maximum.value": "The maximum possible value it can reach (can be more than the final value with consumable items increasing the max value).",
 	"tooltip.random.variation": "Add some random in game to change the value after each level up. The more the variation is high, the more the random is high. It does not change the final value that will always be the same.",
 	"update.list.size": "Update list size",
+	"update.id": "Update ID",
 	"warning.update.list.size": "You will reduced the size of the list. You will remove the last elements, do you confirm?",
 	"deploy": "Deploy",
 	"auto.updater": "Auto updater",

@@ -2087,6 +2087,7 @@
 	"tooltip.maximum.value": "O valor máximo que ele pode atingir (pode ser maior que o valor final com itens que aumentam o máximo).",
 	"tooltip.random.variation": "Adiciona um pouco de aleatoriedade ao jogo para variar o valor a cada nível. Quanto maior a variação, mais aleatório. Não altera o valor final.",
 	"update.list.size": "Atualizar tamanho da lista",
+	"update.id": "Atualizar ID",
 	"warning.update.list.size": "Você irá reduzir o tamanho da lista. Os últimos itens serão removidos, confirma?",
 	"deploy": "Implantar",
 	"auto.updater": "Atualizador automático",

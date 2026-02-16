@@ -2087,6 +2087,7 @@
 	"tooltip.maximum.value": "可以达到的最大可能数值（在使用增加上限的消耗品后可以超过最终值）。",
 	"tooltip.random.variation": "在游戏中加入随机性，使每次升级后的数值有所波动。波动值越高，随机性越大。这不会改变最终恒定的数值。",
 	"update.list.size": "更新列表大小",
+	"update.id": "更新ID",
 	"warning.update.list.size": "你将缩小列表大小，末尾的元素将被移除。是否确认？",
 	"deploy": "部署",
 	"auto.updater": "自动更新程序",

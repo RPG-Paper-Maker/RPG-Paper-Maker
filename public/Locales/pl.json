@@ -2087,6 +2087,7 @@
 	"tooltip.maximum.value": "Maksymalna możliwa wartość, jaką można osiągnąć (może być większa niż końcowa wartość, jeśli przedmioty konsumpcyjne zwiększają maksymalną wartość).",
 	"tooltip.random.variation": "Dodaje losowość w grze, aby zmieniać wartość po każdym awansie na poziom. Im większa wariacja, tym większa losowość. Nie zmienia to wartości końcowej, która zawsze będzie taka sama.",
 	"update.list.size": "Zaktualizuj rozmiar listy",
+	"update.id": "Zaktualizuj ID",
 	"warning.update.list.size": "Zmniejszysz rozmiar listy. Ostatnie elementy zostaną usunięte, potwierdzasz?",
 	"deploy": "Wdrażaj",
 	"auto.updater": "Automatyczny aktualizator",
