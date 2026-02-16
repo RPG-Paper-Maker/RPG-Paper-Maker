@@ -39,8 +39,10 @@
 			if (title) {
 				document.getElementById('title').textContent = title;
 			}
-			const month = new Date().getMonth();
-			if (month === 0 || month === 11) {
+			const now = new Date();
+			const month = now.getMonth();
+			const day = now.getDate();
+			if (month === 11 || (month === 0 && day <= 15)) {
 				document.getElementById('splash').src = 'splash-winter.png';
 			}
 		</script>
