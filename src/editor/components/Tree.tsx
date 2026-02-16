@@ -570,7 +570,7 @@ function Tree({
 		if (draggedNode) {
 			event.dataTransfer.dropEffect = 'move';
 			if (
-				draggedNode.content.id !== node.content.id &&
+				(byIndex || draggedNode.content.id !== node.content.id) &&
 				!checkNodeInsideNode(draggedNode, node) &&
 				!Node.checkIDExists(draggedNode.children, node.content.id)
 			) {
@@ -851,7 +851,7 @@ function Tree({
 						}
 						onDragOver={
 							!disabled && node.draggable && !node.content.isFixedNode()
-								? (e, n) => handleDragOver(e, n, nbSelectionNextIndex > 0)
+								? (e, n) => handleDragOver(e, n, byIndex || nbSelectionNextIndex > 0)
 								: undefined
 						}
 						onDragLeave={
