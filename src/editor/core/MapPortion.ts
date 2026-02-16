@@ -942,7 +942,6 @@ class MapPortion {
 						0,
 						true,
 						new THREE.Vector3(),
-						true,
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (
@@ -961,7 +960,6 @@ class MapPortion {
 						0,
 						true,
 						localPosition,
-						true,
 					);
 				} else {
 					let mesh = this.spritesFaceMeshes[position.layer];
@@ -1002,7 +1000,6 @@ class MapPortion {
 						0,
 						true,
 						new THREE.Vector3(),
-						true,
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (isPointedSprite && this.map.pointedMapElement === sprite) {
@@ -1017,7 +1014,6 @@ class MapPortion {
 						0,
 						true,
 						localPosition,
-						true,
 					);
 				} else {
 					let mesh = this.spritesFixMeshes[side][position.layer];
@@ -1053,7 +1049,6 @@ class MapPortion {
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j, false);
 					(mesh.geometry as CustomGeometry).updateAttributes();
 					this.map.scene.add(mesh);
 				}
@@ -1062,7 +1057,6 @@ class MapPortion {
 		for (let j = 0, l = this.spritesFaceMeshes.length; j < l; j++) {
 			const mesh = this.spritesFaceMeshes[j];
 			if (mesh) {
-				MapPortion.offsetMeshPositionLayer(this.map, mesh, 0, j, false);
 				(mesh.geometry as CustomGeometryFace).updateAttributes();
 				this.map.scene.add(mesh);
 			}
@@ -1424,19 +1418,6 @@ class MapPortion {
 						}
 					}
 				}
-			}
-			meshes = this.spritesFixMeshes[i];
-			for (let j = 0, l = meshes.length; j < l; j++) {
-				const mesh = meshes[j];
-				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j, false);
-				}
-			}
-		}
-		for (let j = 0, l = this.spritesFaceMeshes.length; j < l; j++) {
-			const mesh = this.spritesFaceMeshes[j];
-			if (mesh) {
-				MapPortion.offsetMeshPositionLayer(this.map, mesh, 0, j, false);
 			}
 		}
 		if (this.objectsMesh) {

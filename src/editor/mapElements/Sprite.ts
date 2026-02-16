@@ -139,15 +139,11 @@ class Sprite extends Base {
 		pos: THREE.Vector3,
 		position: Position,
 		size: THREE.Vector3,
-		forceOffset = false
 	) {
 		// Apply an offset according to layer position
-		let zPlus = 0;
-		if (forceOffset) {
-			zPlus = position.layer * map.camera.getYOffsetDepth();
-			if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
-				zPlus *= -1;
-			}
+		let zPlus = position.layer * map.camera.getYOffsetDepth();
+		if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
+			zPlus *= -1;
 		}
 		pos.setX(this.xOffset * Project.SQUARE_SIZE);
 		pos.setY(this.yOffset * Project.SQUARE_SIZE);
@@ -171,7 +167,6 @@ class Sprite extends Base {
 		count: number,
 		tileset: boolean,
 		localPosition: THREE.Vector3 | null,
-		forceOffset = false
 	): number {
 		const vecA = Sprite.MODEL[0].clone();
 		const vecB = Sprite.MODEL[1].clone();
@@ -186,7 +181,7 @@ class Sprite extends Base {
 		);
 
 		// For static sprites
-		this.getVectors(map, vecA, vecB, vecC, vecD, pos, position, size, forceOffset);
+		this.getVectors(map, vecA, vecB, vecC, vecD, pos, position, size);
 		if (localPosition !== null) {
 			vecA.add(localPosition);
 			vecB.add(localPosition);
