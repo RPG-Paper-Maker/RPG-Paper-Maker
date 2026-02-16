@@ -71,6 +71,7 @@ function Dropdown({
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [preSelectedID, setPreSelectedID] = useState(options[0]?.id ?? -1);
+	const [firstOpened, setFirstOpened] = useState(false);
 
 	const dropdownContainerRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -127,6 +128,9 @@ function Dropdown({
 	const handleClick = () => {
 		if (!disabled) {
 			setIsOpen((value) => !value);
+			if (!firstOpened) {
+				setFirstOpened(true);
+			}
 		}
 	};
 
@@ -211,7 +215,7 @@ function Dropdown({
 	}, [disabled]);
 
 	const handleWheel = (e: React.WheelEvent) => {
-		if (isOpen || disabled || options.length === 0) {
+		if (isOpen || disabled || options.length === 0 || !firstOpened) {
 			return;
 		}
 		const index = options.findIndex((option) => option.id === selectedID);
