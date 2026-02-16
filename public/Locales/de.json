@@ -2077,6 +2077,7 @@
 	"how.convert.project.2.0": "Wie konvertiere ich mein 2.0-Projekt?",
 	"id.already.exists.list": "Diese ID existiert bereits in dieser Liste.",
 	"web.update.countdown.message": "RPG Paper Maker wird am {{date}} CET aktualisiert. Verbleibende Zeit bis zur Wartung: {{timeLeft}}.",
+	"web.outdated.version.message": "Sie verwenden Version {{currentVersion}}. Eine neuere Version {{latestVersion}} ist verfügbar.",
 	"warning.project.2.0.11.version": "Ihre Projektversion ist {{version}}. Bitte laden Sie RPG Paper Maker 2.0.11 herunter, um Ihr Projekt auf 2.0.11 zu aktualisieren, bevor Sie hier erneut konvertieren.",
 	"tooltip.square": "Quadrat für Quadrat zeichnen",
 	"tooltip.pixel": "Pixelgenau zeichnen",

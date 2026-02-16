@@ -2077,6 +2077,7 @@
 	"how.convert.project.2.0": "2.0プロジェクトを変換する方法は？",
 	"id.already.exists.list": "このIDは既にリストに存在します。",
 	"web.update.countdown.message": "RPG Paper Makerは {{date}} (CET) にアップデートされます。メンテナンスまでの残り時間: {{timeLeft}}",
+	"web.outdated.version.message": "現在バージョン {{currentVersion}} を使用しています。新しいバージョン {{latestVersion}} が利用可能です。",
 	"warning.project.2.0.11.version": "プロジェクトのバージョンは {{version}} です。ここでの変換を試みる前に、RPG Paper Maker 2.0.11をダウンロードしてプロジェクトを2.0.11にアップデートしてください。",
 	"tooltip.square": "マス単位で描画",
 	"tooltip.pixel": "ピクセル単位で精密に描画",

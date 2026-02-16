@@ -2077,6 +2077,7 @@
 	"how.convert.project.2.0": "如何转换我的 2.0 项目？",
 	"id.already.exists.list": "此 ID 已存在于列表中。",
 	"web.update.countdown.message": "RPG Paper Maker 将于 {{date}} (CET) 进行更新。距离维护开始还剩：{{timeLeft}}。",
+	"web.outdated.version.message": "您当前使用的是版本 {{currentVersion}}。新版本 {{latestVersion}} 已可用。",
 	"warning.project.2.0.11.version": "你的项目版本是 {{version}}。请先下载 RPG Paper Maker 2.0.11 将项目更新至 2.0.11 版，然后再尝试在此处转换。",
 	"tooltip.square": "按方块绘制",
 	"tooltip.pixel": "像素级绘制",

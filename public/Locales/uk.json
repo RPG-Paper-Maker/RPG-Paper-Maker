@@ -2077,6 +2077,7 @@
 	"how.convert.project.2.0": "Як конвертувати мій проєкт 2.0?",
 	"id.already.exists.list": "Цей ідентифікатор вже існує в цьому списку.",
 	"web.update.countdown.message": "RPG Paper Maker буде оновлено {{date}} за CET. Час до початку обслуговування: {{timeLeft}}.",
+	"web.outdated.version.message": "Ви використовуєте версію {{currentVersion}}. Доступна новіша версія {{latestVersion}}.",
 	"warning.project.2.0.11.version": "Версія вашого проєкту — {{version}}. Завантажте RPG Paper Maker 2.0.11, щоб оновити проєкт до 2.0.11, перш ніж знову намагатися конвертувати тут.",
 	"tooltip.square": "Малювати квадрат за квадратом",
 	"tooltip.pixel": "Малювати з точністю до пікселя",

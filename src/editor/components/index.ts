@@ -31,3 +31,4 @@ export * from './Tree';
 export * from './TreeItem';
 export * from './TreeMaps';
 export * from './UpdateCountdown';
+export * from './UpdateVersionWarning';

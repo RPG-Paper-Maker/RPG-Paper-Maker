@@ -2077,6 +2077,7 @@
 	"how.convert.project.2.0": "How to convert my 2.0 project?",
 	"id.already.exists.list": "This ID already exists in this list.",
 	"web.update.countdown.message": "RPG Paper Maker will be updated the {{date}} CET. Time left before maintenance: {{timeLeft}}.",
+	"web.outdated.version.message": "You are using version {{currentVersion}}. A newer version {{latestVersion}} is available.",
 	"warning.project.2.0.11.version": "Your project version is {{version}}. Please download RPG Paper Maker 2.0.11 to update your project to 2.0.11 before trying to convert again here.",
 	"tooltip.square": "Draw square by square",
 	"tooltip.pixel": "Draw pixel perfect",
