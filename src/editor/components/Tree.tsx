@@ -192,12 +192,12 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.COPY,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.PASTE_OVER,
-			CONTEXT_MENU_ITEM_KIND.UPDATE_ID,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
 			CONTEXT_MENU_ITEM_KIND.CLEAR,
 		];
 		if (!cannotUpdateListSize && !cannotAdd) {
 			ArrayUtils.insertAt(contextMenuItems, 2, CONTEXT_MENU_ITEM_KIND.UPDATE_LIST_SIZE);
+			ArrayUtils.insertAt(contextMenuItems, 2, CONTEXT_MENU_ITEM_KIND.UPDATE_ID);
 		}
 		if (canDisable) {
 			contextMenuItems.push(CONTEXT_MENU_ITEM_KIND.DISABLE);
@@ -397,6 +397,7 @@ function Tree({
 				currentList[index].content.id = id;
 				setCurrentName(currentList[index].content.name);
 			} else {
+				index++;
 				for (const node of nodes) {
 					cloned = node.clone();
 					if (firstCloned === null) {
