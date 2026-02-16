@@ -709,6 +709,7 @@
 	"new": "Novo",
 	"copy": "Copiar",
 	"paste": "Colar",
+	"paste.over": "Colar sobre",
 	"delete": "Excluir",
 	"clear": "Redefinir",
 	"disable": "Desativar",

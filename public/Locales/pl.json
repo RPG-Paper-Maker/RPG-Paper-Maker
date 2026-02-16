@@ -709,6 +709,7 @@
 	"new": "Nowy",
 	"copy": "Kopiuj",
 	"paste": "Wklej",
+	"paste.over": "Wklej nadpisując",
 	"delete": "Usuń",
 	"clear": "Resetuj",
 	"disable": "Wyłącz",

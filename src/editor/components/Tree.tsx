@@ -189,6 +189,7 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.NEW,
 			CONTEXT_MENU_ITEM_KIND.COPY,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
+			CONTEXT_MENU_ITEM_KIND.PASTE_OVER,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
 			CONTEXT_MENU_ITEM_KIND.CLEAR,
 		];
@@ -411,6 +412,20 @@ function Tree({
 					setCurrentName(firstCloned.content.name);
 				}
 			}
+			onListUpdated?.();
+		}
+	};
+
+	const handlePasteOverItem = async () => {
+		if (currentSelectedItemNode && copiedItems) {
+			const nodes = copiedItems.values;
+			const currentList = currentSelectedItemNode.parent?.children ?? list;
+			const index = getNewIndex();
+			const id = currentList[index].content.id;
+			currentList[index].content.copy(nodes[0].content);
+			currentList[index].content.id = id;
+			setCurrentName(currentList[index].content.name);
+			onPasteItem?.(currentList[index], nodes[0]);
 			onListUpdated?.();
 		}
 	};
@@ -913,6 +928,13 @@ function Tree({
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
 						disabled: disableAll || !canPaste() || isFixed || additionalSelectedNodes.length > 0,
+					};
+				case CONTEXT_MENU_ITEM_KIND.PASTE_OVER:
+					return {
+						title: t('paste.over'),
+						shortcut: [SPECIAL_KEY.CTRL, KEY.B],
+						onClick: handlePasteOverItem,
+						disabled: disableAll || !canPaste() || isEmpty || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {

@@ -709,6 +709,7 @@
 	"new": "New",
 	"copy": "Copy",
 	"paste": "Paste",
+	"paste.over": "Paste over",
 	"delete": "Delete",
 	"clear": "Clear",
 	"disable": "Disable",
