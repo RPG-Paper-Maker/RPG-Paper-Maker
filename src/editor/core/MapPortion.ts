@@ -951,16 +951,7 @@ class MapPortion {
 				) {
 					const hoveredGeometry = new CustomGeometryFace();
 					this.map.hoveredMesh.geometry = hoveredGeometry;
-					sprite.updateGeometry(
-						this.map,
-						hoveredGeometry,
-						width,
-						height,
-						position,
-						0,
-						true,
-						localPosition,
-					);
+					sprite.updateGeometry(this.map, hoveredGeometry, width, height, position, 0, true, localPosition);
 				} else {
 					let mesh = this.spritesFaceMeshes[position.layer];
 					if (!mesh) {
@@ -1005,16 +996,7 @@ class MapPortion {
 				} else if (isPointedSprite && this.map.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometry();
 					this.map.hoveredMesh.geometry = hoveredGeometry;
-					sprite.updateGeometry(
-						this.map,
-						hoveredGeometry,
-						width,
-						height,
-						position,
-						0,
-						true,
-						localPosition,
-					);
+					sprite.updateGeometry(this.map, hoveredGeometry, width, height, position, 0, true, localPosition);
 				} else {
 					let mesh = this.spritesFixMeshes[side][position.layer];
 					if (!mesh) {
@@ -1399,7 +1381,7 @@ class MapPortion {
 
 	updatePositionLayers() {
 		for (let i = 0; i < 2; i++) {
-			let meshes = this.floorsMeshes[i];
+			const meshes = this.floorsMeshes[i];
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {

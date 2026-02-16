@@ -13,6 +13,7 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Scene } from '../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR } from '../../common';
+import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import useStateDynamicValue from '../../hooks/useStateDynamicValue';
 import useStateNumber from '../../hooks/useStateNumber';
@@ -198,11 +199,15 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 								<Button disabled={!isSelect} onClick={handleClickSelect}>
 									{t('select')}...
 								</Button>
+								<Form>
+									<Label disabled={!isSelect}>{t('map.id')}</Label>
+									<Value disabled={!isSelect}>
+										{mapID} [{Node.getPathByID(Project.current!.treeMaps.tree, mapID)}]
+									</Value>
+								</Form>
 								<Flex>
 									<Flex one>
 										<Form>
-											<Label disabled={!isSelect}>{t('map.id')}</Label>
-											<Value disabled={!isSelect}>{mapID}</Value>
 											<Label disabled={!isSelect}>X</Label>
 											<Value disabled={!isSelect}>{x}</Value>
 											<Label disabled={!isSelect}>Y</Label>
@@ -211,8 +216,6 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 									</Flex>
 									<Flex one>
 										<Form>
-											<Label hideColon />
-											<Value />
 											<Label disabled={!isSelect}>Z</Label>
 											<Value disabled={!isSelect}>{z}</Value>
 											<Label disabled={!isSelect}>Y+</Label>

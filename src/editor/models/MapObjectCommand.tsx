@@ -62,6 +62,7 @@ import {
 } from '../common';
 import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObjectCommand';
 import Flex from '../components/Flex';
+import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Scene } from '../Editor';
@@ -920,7 +921,10 @@ class MapObjectCommand extends Base {
 				yp = this.toStringDynamicValue(iterator, properties, parameters);
 				z = this.toStringDynamicValue(iterator, properties, parameters);
 			}
-			texts.push(`${t('map.id')}: ${id}`);
+			const idNumber = Number(id);
+			texts.push(
+				`${t('map.id')}: ${id} ${isNaN(idNumber) ? '' : `[${Node.getPathByID(Project.current!.treeMaps.tree, idNumber)}]`}`,
+			);
 			texts.push(`X: ${x}`);
 			texts.push(`Y: ${y}`);
 			texts.push(`Y+: ${yp}`);
