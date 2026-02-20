@@ -256,9 +256,39 @@ function MapEditorMenuBar() {
 		await handleGenericObjects(ELEMENT_MAP_KIND.OBJECT, 0);
 	};
 
+	const restorePreviousTab = () => {
+		const menuIndex = Project.current!.settings.mapEditorMenuIndex;
+		setSelectionIndex(menuIndex);
+		switch (menuIndex) {
+			case MENU_INDEX_MAP_EDITOR.LANDS:
+				handleLands().catch(console.error);
+				break;
+			case MENU_INDEX_MAP_EDITOR.SPRITES:
+				handleSprites().catch(console.error);
+				break;
+			case MENU_INDEX_MAP_EDITOR.MOUNTAINS:
+				handleMountains().catch(console.error);
+				break;
+			case MENU_INDEX_MAP_EDITOR.OBJECTS3D:
+				handleObjects3D().catch(console.error);
+				break;
+			case MENU_INDEX_MAP_EDITOR.OBJECTS:
+				handleObjects().catch(console.error);
+				break;
+			case MENU_INDEX_MAP_EDITOR.VIEW:
+				handleView().catch(console.error);
+				break;
+		}
+	};
+
 	const handleStartPosition = async () => {
+		const previousMenuIndex = Project.current!.settings.mapEditorMenuIndex;
 		handleGeneric(ELEMENT_MAP_KIND.START_POSITION, MENU_INDEX_MAP_EDITOR.START_POSITION);
-		await Project.current!.settings.save();
+		Project.current!.settings.mapEditorMenuIndex = previousMenuIndex;
+		Scene.Map.onStartPositionSet = () => {
+			Scene.Map.onStartPositionSet = null;
+			restorePreviousTab();
+		};
 	};
 
 	const handleView = async () => {
@@ -381,9 +411,6 @@ function MapEditorMenuBar() {
 					break;
 				case MENU_INDEX_MAP_EDITOR.OBJECTS:
 					handleObjects().catch(console.error);
-					break;
-				case MENU_INDEX_MAP_EDITOR.START_POSITION:
-					handleStartPosition().catch(console.error);
 					break;
 				case MENU_INDEX_MAP_EDITOR.VIEW:
 					handleView().catch(console.error);

@@ -56,6 +56,7 @@ class Map extends Base {
 	public static currentBattle: Map | null = null;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
+	public static onStartPositionSet: (() => void) | null = null;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
@@ -1988,7 +1989,11 @@ class Map extends Base {
 			this.updateUndoRedoSave();
 			await Project.current!.treeMaps.save();
 			if (this.needsSaveSystems) {
+				this.needsSaveSystems = false;
 				await Project.current!.systems.save();
+				if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.START_POSITION && Map.onStartPositionSet) {
+					Map.onStartPositionSet();
+				}
 			}
 		}
 		this.mouseUp = false;
