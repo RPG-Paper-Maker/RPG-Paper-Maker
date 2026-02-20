@@ -708,6 +708,7 @@
 	"please.retry.with.new.project": "Tente novamente com um novo projeto",
 	"new": "Novo",
 	"copy": "Copiar",
+	"cut.clipboard": "Recortar",
 	"paste": "Colar",
 	"paste.over": "Colar sobre",
 	"delete": "Excluir",

@@ -19,6 +19,8 @@ export type CopiedItemsType = {
 	values: Node[];
 	constructorClass: typeof Model.Base;
 	pathProject: string;
+	isCut?: boolean;
+	sourceNodes?: Node[];
 };
 
 export const NODE_CONSTRUCTOR_KIND = {

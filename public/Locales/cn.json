@@ -708,6 +708,7 @@
 	"please.retry.with.new.project": "请尝试新建项目",
 	"new": "新建",
 	"copy": "复制",
+	"cut.clipboard": "剪切",
 	"paste": "粘贴",
 	"paste.over": "覆盖粘贴",
 	"delete": "删除",

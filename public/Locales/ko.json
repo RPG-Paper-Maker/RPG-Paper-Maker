@@ -708,6 +708,7 @@
 	"please.retry.with.new.project": "새 프로젝트로 다시 시도해 주세요",
 	"new": "새로 만들기",
 	"copy": "복사",
+	"cut.clipboard": "잘라내기",
 	"paste": "붙여넣기",
 	"paste.over": "덮어쓰기 붙여넣기",
 	"delete": "삭제",

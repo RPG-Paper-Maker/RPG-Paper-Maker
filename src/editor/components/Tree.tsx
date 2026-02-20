@@ -190,6 +190,7 @@ function Tree({
 			CONTEXT_MENU_ITEM_KIND.EDIT,
 			CONTEXT_MENU_ITEM_KIND.NEW,
 			CONTEXT_MENU_ITEM_KIND.COPY,
+			CONTEXT_MENU_ITEM_KIND.CUT,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.PASTE_OVER,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
@@ -384,6 +385,26 @@ function Tree({
 		}
 	};
 
+	const handleCutItem = async () => {
+		const nodes = getCorrectSelectedNodes();
+		if (nodes.length > 0) {
+			const copied = await Node.saveToCopy(nodes);
+			copied.isCut = true;
+			copied.sourceNodes = nodes;
+			dispatch(setCopiedItems(copied));
+		}
+	};
+
+	const pasteCutItem = () => {
+		if (copiedItems!.isCut && copiedItems!.sourceNodes) {
+			for (const sourceNode of copiedItems!.sourceNodes) {
+				ArrayUtils.removeElement(sourceNode.parent?.children ?? list, sourceNode);
+				onDeleteItem?.(sourceNode);
+			}
+			dispatch(setCopiedItems(null));
+		}
+	};
+
 	const handlePasteItem = async () => {
 		if (currentSelectedItemNode && copiedItems) {
 			const nodes = copiedItems.values;
@@ -416,6 +437,7 @@ function Tree({
 					setCurrentName(firstCloned.content.name);
 				}
 			}
+			pasteCutItem();
 			onListUpdated?.();
 		}
 	};
@@ -430,6 +452,7 @@ function Tree({
 			currentList[index].content.id = id;
 			setCurrentName(currentList[index].content.name);
 			onPasteItem?.(currentList[index], nodes[0]);
+			pasteCutItem();
 			onListUpdated?.();
 		}
 	};
@@ -862,6 +885,7 @@ function Tree({
 						headers={headers}
 						doNotShowID={doNotShowID}
 						hideCheck={hideCheck}
+						isCutSource={copiedItems?.isCut === true && copiedItems.sourceNodes?.includes(node) === true}
 					/>
 				</div>,
 			);
@@ -943,6 +967,17 @@ function Tree({
 						onClick: handleCopyItem,
 						disabled:
 							disableAll || ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotEdit,
+					};
+				case CONTEXT_MENU_ITEM_KIND.CUT:
+					return {
+						title: t('cut.clipboard'),
+						shortcut: [SPECIAL_KEY.CTRL, KEY.X],
+						onClick: handleCutItem,
+						disabled:
+							disableAll ||
+							((isEmpty || isFixed) && additionalSelectedNodes.length === 0) ||
+							cannotEdit ||
+							cannotDelete,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
