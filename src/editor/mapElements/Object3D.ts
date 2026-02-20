@@ -68,6 +68,9 @@ abstract class Object3D extends Base {
 	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
 		const pictureID = object3D.pictureID;
+		if (pictureID === -1) {
+			return Manager.GL.loadTextureEmpty();
+		}
 		let textureObject3D = map ? map.texturesObjects3D[pictureID] : null;
 		if (!textureObject3D) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.OBJECTS_3D, pictureID);
@@ -91,7 +94,11 @@ abstract class Object3D extends Base {
 	static async loadShapeOBJ(objectID: number) {
 		const object = Project.current!.specialElements.getObject3DByID(objectID);
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
-			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).loadShape();
+			if (object.gltfID !== -1) {
+				await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID).loadShape();
+			} else {
+				await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).loadShape();
+			}
 		}
 	}
 

@@ -251,6 +251,7 @@ export enum CUSTOM_SHAPE_KIND {
 	OBJ,
 	MTL,
 	COLLISIONS,
+	GLTF,
 }
 
 export enum DYNAMIC_VALUE_KIND {

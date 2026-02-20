@@ -64,8 +64,8 @@ function Editor() {
 					className='fillSpace'
 					onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}
 				>
-					{Constants.IS_DESKTOP ? <UpdateVersionWarning /> : <UpdateCountdown />}
 					<MainMenuBar />
+					{Constants.IS_DESKTOP ? <UpdateVersionWarning /> : <UpdateCountdown />}
 					<PanelMain />
 				</Flex>
 			) : (

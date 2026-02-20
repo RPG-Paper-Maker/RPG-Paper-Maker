@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Base } from '.';
-import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Position } from '../core/Position';
@@ -170,6 +170,16 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
+		if (object.shapeKind === SHAPE_KIND.CUSTOM && object.gltfID !== -1 && object.pictureID === -1) {
+			const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID);
+			if (!shape.isShapeLoaded()) {
+				await shape.loadShape();
+			}
+			if (shape.gltfScene) {
+				this.addGltfScene(shape.gltfScene, object.scale);
+				return;
+			}
+		}
 		const texture = await Object3D.loadObject3DTexture(Scene.Map.current, object.id);
 		const geometry = new CustomGeometry();
 		const object3DElement = MapElement.Object3D.create(object);
@@ -185,11 +195,16 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-		const geometry = new CustomGeometry();
 		if (!shape.geometryData) {
 			await shape.loadShape();
 		}
+		// GLTF shapes: use embedded materials for preview
+		if (shape.kind === CUSTOM_SHAPE_KIND.GLTF && shape.gltfScene) {
+			this.addGltfScene(shape.gltfScene, 1);
+			return;
+		}
+		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const geometry = new CustomGeometry();
 		const object = new Model.Object3D();
 		object.shapeKind = SHAPE_KIND.CUSTOM;
 		object.scale = 1;
@@ -197,6 +212,34 @@ class Previewer3D extends Base {
 		object3DElement.shape = shape;
 		object3DElement.updateGeometry(geometry, new Position(), 0);
 		this.addToScene(geometry, texture);
+	}
+
+	addGltfScene(gltfScene: THREE.Group, scale: number) {
+		this.clear();
+		const clone = gltfScene.clone();
+		const resize = Project.SQUARE_SIZE;
+		let s = resize * scale;
+		clone.scale.set(s, s, s);
+		clone.rotation.y = this.currentRotation;
+		const box = new THREE.Box3().setFromObject(clone);
+		const center = box.getCenter(new THREE.Vector3());
+		clone.position.sub(center);
+		const wrapper = new THREE.Group();
+		wrapper.add(clone);
+		this.scene.add(wrapper);
+		this.meshes.push(wrapper as unknown as THREE.Mesh);
+		const size = box.getSize(new THREE.Vector3());
+		this.camera.distance = Math.max(size.x, size.y, size.z) + (size.x + size.y + size.z) / 3;
+		if (this.isCut) {
+			s = resize * ((resize * resize * 2) / this.camera.distance);
+			clone.scale.set(s, s, s);
+			const cutBox = new THREE.Box3().setFromObject(clone);
+			const cutCenter = cutBox.getCenter(new THREE.Vector3());
+			clone.position.set(0, 0, 0);
+			clone.position.sub(cutCenter);
+		}
+		this.camera.verticalAngle = 55;
+		this.camera.targetPosition.set(0, 0, 0);
 	}
 
 	addToScene(

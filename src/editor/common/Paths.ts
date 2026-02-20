@@ -56,6 +56,7 @@ class Paths {
 	public static readonly OBJ = Paths.join(Paths.SHAPES, 'OBJ');
 	public static readonly MTL = Paths.join(Paths.SHAPES, 'MTL');
 	public static readonly OBJ_COLLISIONS = Paths.join(Paths.SHAPES, 'Collisions');
+	public static readonly GLTF = Paths.join(Paths.SHAPES, 'GLTF');
 	public static readonly SCRIPTS = 'Scripts';
 	public static readonly PLUGINS = 'Plugins';
 	public static readonly PLUGINS_TEMP = 'Plugins_temp';

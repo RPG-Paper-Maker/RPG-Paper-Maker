@@ -129,6 +129,10 @@ const MIME_TYPES = {
 	// OBJ
 	obj: 'model/obj',
 	mtl: 'text/plain',
+
+	// GLTF
+	gltf: 'model/gltf+json',
+	glb: 'model/gltf-binary',
 };
 
 const getMimeType = (filePath) => {

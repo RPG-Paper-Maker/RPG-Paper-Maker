@@ -404,6 +404,7 @@
     },
     "Shapes": {
       "Collisions": {},
+      "GLTF": {},
       "MTL": {},
       "OBJ": {
         "files": [

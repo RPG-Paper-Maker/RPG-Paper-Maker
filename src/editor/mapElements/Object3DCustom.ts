@@ -40,7 +40,13 @@ class Object3DCustom extends Object3D {
 	}
 
 	getShape(): Model.Shape | undefined {
-		return this.shape ?? Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
+		if (this.shape) {
+			return this.shape;
+		}
+		if (this.data.gltfID !== -1) {
+			return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, this.data.gltfID);
+		}
+		return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
 	}
 
 	getCenterVector(): THREE.Vector3 {
@@ -95,7 +101,11 @@ class Object3DCustom extends Object3D {
 	}
 
 	async loadShape() {
-		await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).loadShape();
+		if (this.data.gltfID !== -1) {
+			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, this.data.gltfID).loadShape();
+		} else {
+			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).loadShape();
+		}
 	}
 }
 

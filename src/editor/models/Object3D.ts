@@ -19,6 +19,7 @@ class Object3D extends SpecialElement {
 	public static type = 'Object3D';
 	public shapeKind!: SHAPE_KIND;
 	public objID!: number;
+	public gltfID!: number;
 	public mtlID!: number;
 	public collisionKind!: OBJECT_COLLISION_KIND;
 	public collisionCustomID!: number;
@@ -35,6 +36,7 @@ class Object3D extends SpecialElement {
 	public static readonly bindings: BindingType[] = [
 		['shapeKind', 'sk', SHAPE_KIND.BOX, BINDING.NUMBER],
 		['objID', 'oid', -1, BINDING.NUMBER],
+		['gltfID', 'gid', -1, BINDING.NUMBER],
 		['mtlID', 'mid', -1, BINDING.NUMBER],
 		['collisionKind', 'ck', OBJECT_COLLISION_KIND.NONE, BINDING.NUMBER],
 		['collisionsCustomID', 'ccid', -1, BINDING.NUMBER],

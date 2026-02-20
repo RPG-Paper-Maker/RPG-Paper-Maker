@@ -133,6 +133,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		await createFolder(Paths.join(project.getPath(), Paths.OBJ_COLLISIONS));
 		await createFolder(Paths.join(project.getPath(), Paths.MTL));
 		await createFolder(Paths.join(project.getPath(), Paths.OBJ));
+		await createFolder(Paths.join(project.getPath(), Paths.GLTF));
 		await createFolder(Paths.join(project.getPath(), Paths.FONTS));
 		await createFolder(Paths.join(project.getPath(), Paths.STYLES));
 		await createFolder(Paths.join(project.getPath(), Paths.PLUGINS));

@@ -19,6 +19,7 @@ import { Manager, Model } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { setNeedsReloadMap, showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
+import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
@@ -54,8 +55,12 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 
 	const dispatch = useDispatch();
 
+	const [customShapeFormat, setCustomShapeFormat] = useState(CUSTOM_SHAPE_KIND.OBJ);
+	const [isTextureEnabled, setIsTextureEnabled] = useState(true);
+
 	const isCustom = selectedObject3D?.shapeKind === SHAPE_KIND.CUSTOM;
 	const isBox = selectedObject3D?.shapeKind === SHAPE_KIND.BOX;
+	const isGLTF = customShapeFormat === CUSTOM_SHAPE_KIND.GLTF;
 	const isCustomCollision = selectedObject3D?.collisionKind === OBJECT_COLLISION_KIND.CUSTOM;
 
 	const initialize = () => {
@@ -71,6 +76,8 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 	};
 
 	const update = (obj3D: Model.Object3D) => {
+		setCustomShapeFormat(obj3D.gltfID !== -1 ? CUSTOM_SHAPE_KIND.GLTF : CUSTOM_SHAPE_KIND.OBJ);
+		setIsTextureEnabled(obj3D.gltfID !== -1 ? obj3D.pictureID !== -1 : true);
 		setScale(obj3D.scale);
 		setWidthSquares(obj3D.widthSquare);
 		setWidthPixels(Model.Object3D.convertPixelFromPercent(obj3D.widthPixel));
@@ -95,12 +102,40 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 	const handleChangeShapeKind = (id: number) => {
 		selectedObject3D!.shapeKind = id;
 		selectedObject3D!.objID = -1;
+		selectedObject3D!.gltfID = -1;
 		handleChangeCollisionKind(OBJECT_COLLISION_KIND.NONE);
 		setTriggerUpdate(true);
 	};
 
-	const handleChangeObjID = (id: number) => {
-		selectedObject3D!.objID = id;
+	const handleChangeCustomShapeFormat = (id: number) => {
+		setCustomShapeFormat(id);
+		selectedObject3D!.objID = -1;
+		selectedObject3D!.gltfID = -1;
+		if (id === CUSTOM_SHAPE_KIND.GLTF) {
+			setIsTextureEnabled(false);
+			selectedObject3D!.pictureID = -1;
+		} else {
+			setIsTextureEnabled(true);
+		}
+		setTriggerUpdate(true);
+	};
+
+	const handleChangeShapeID = (id: number) => {
+		if (isGLTF) {
+			selectedObject3D!.gltfID = id;
+			selectedObject3D!.objID = -1;
+		} else {
+			selectedObject3D!.objID = id;
+			selectedObject3D!.gltfID = -1;
+		}
+		setTriggerUpdate(true);
+	};
+
+	const handleChangeTextureEnabled = (checked: boolean) => {
+		setIsTextureEnabled(checked);
+		if (!checked) {
+			selectedObject3D!.pictureID = -1;
+		}
 		setTriggerUpdate(true);
 	};
 
@@ -242,26 +277,55 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 						</Value>
 						{isCustom && (
 							<>
-								<Label>OBJ</Label>
+								<Label hideColon>
+									<Dropdown
+										selectedID={customShapeFormat}
+										onChange={handleChangeCustomShapeFormat}
+										options={[
+											Model.Base.create(CUSTOM_SHAPE_KIND.OBJ, 'OBJ'),
+											Model.Base.create(CUSTOM_SHAPE_KIND.GLTF, 'GLTF'),
+										]}
+									/>
+								</Label>
 								<Value>
 									<AssetSelector
 										selectionType={ASSET_SELECTOR_TYPE.SHAPES}
-										kind={CUSTOM_SHAPE_KIND.OBJ}
-										selectedID={selectedObject3D.objID}
-										onChange={handleChangeObjID}
+										kind={customShapeFormat}
+										selectedID={isGLTF ? selectedObject3D.gltfID : selectedObject3D.objID}
+										onChange={handleChangeShapeID}
 									/>
 								</Value>
 							</>
 						)}
-						<Label>{t('texture')}</Label>
-						<Value>
-							<AssetSelector
-								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-								kind={PICTURE_KIND.OBJECTS_3D}
-								selectedID={selectedObject3D.pictureID}
-								onChange={handleChangeTextureID}
-							/>
-						</Value>
+						{isCustom && isGLTF ? (
+							<>
+								<Label>{t('texture')}</Label>
+								<Value>
+									<Flex spaced centerV>
+										<Checkbox isChecked={isTextureEnabled} onChange={handleChangeTextureEnabled} />
+										<AssetSelector
+											selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+											kind={PICTURE_KIND.OBJECTS_3D}
+											selectedID={selectedObject3D.pictureID}
+											onChange={handleChangeTextureID}
+											disabled={!isTextureEnabled}
+										/>
+									</Flex>
+								</Value>
+							</>
+						) : (
+							<>
+								<Label>{t('texture')}</Label>
+								<Value>
+									<AssetSelector
+										selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+										kind={PICTURE_KIND.OBJECTS_3D}
+										selectedID={selectedObject3D.pictureID}
+										onChange={handleChangeTextureID}
+									/>
+								</Value>
+							</>
+						)}
 						<Label>{t('collisions')}</Label>
 						<Value>
 							<Flex spaced>

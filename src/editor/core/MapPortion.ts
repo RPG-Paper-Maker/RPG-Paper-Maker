@@ -11,7 +11,15 @@
 
 import * as THREE from 'three';
 
-import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
+import {
+	ACTION_KIND,
+	CUSTOM_SHAPE_KIND,
+	ELEMENT_MAP_KIND,
+	Mathf,
+	PICTURE_KIND,
+	RAYCASTING_LAYER,
+	SHAPE_KIND,
+} from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
@@ -1147,6 +1155,36 @@ class MapPortion {
 				object3D.data = Project.current!.specialElements.getObject3DByID(object3D.id);
 			}
 			if (object3D.data) {
+				if (
+					object3D.data.shapeKind === SHAPE_KIND.CUSTOM &&
+					object3D.data.gltfID !== -1 &&
+					object3D.data.pictureID === -1
+				) {
+					const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object3D.data.gltfID);
+					if (shape?.gltfScene) {
+						const clone = shape.gltfScene.clone();
+						const s = Project.SQUARE_SIZE * object3D.data.scale;
+						clone.scale.set(s * position.scaleX, s * position.scaleY, s * position.scaleZ);
+						const localPosition = object3D.getLocalPosition(position);
+						clone.position.copy(localPosition);
+						clone.rotation.set(
+							(position.angleX * Math.PI) / 180,
+							(position.angleY * Math.PI) / 180,
+							(position.angleZ * Math.PI) / 180,
+						);
+						clone.traverse((child) => {
+							if (child instanceof THREE.Mesh) {
+								child.receiveShadow = true;
+								child.castShadow = true;
+							}
+						});
+						clone.renderOrder = 999;
+						clone.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
+						this.objects3DMeshes.push(clone as unknown as THREE.Mesh);
+						this.map.scene.add(clone);
+					}
+					continue;
+				}
 				// Constructing the geometry
 				let obj = hash.get(object3D.data.pictureID);
 				let material: THREE.MeshPhongMaterial | null;

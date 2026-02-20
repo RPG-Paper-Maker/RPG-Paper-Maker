@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Constants, CUSTOM_SHAPE_KIND, IO, Paths } from '../common';
 import { readPublicFile } from '../common/Platform';
 import { LocalFile } from '../core/LocalFile';
@@ -32,6 +33,7 @@ class Shape extends Asset {
 
 	public kind!: CUSTOM_SHAPE_KIND;
 	public geometryData!: GeometryDataType;
+	public gltfScene: THREE.Group | null = null;
 
 	constructor(kind: CUSTOM_SHAPE_KIND) {
 		super();
@@ -46,6 +48,8 @@ class Shape extends Asset {
 				return '.mtl';
 			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return '.obj collisions';
+			case CUSTOM_SHAPE_KIND.GLTF:
+				return '.gltf';
 		}
 		return '';
 	}
@@ -174,6 +178,8 @@ class Shape extends Asset {
 				return Paths.MTL;
 			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return Paths.OBJ_COLLISIONS;
+			case CUSTOM_SHAPE_KIND.GLTF:
+				return Paths.GLTF;
 		}
 		return '';
 	}
@@ -196,18 +202,107 @@ class Shape extends Asset {
 		return !!this.geometryData;
 	}
 
+	static async parseGLTF(
+		buffer: ArrayBuffer,
+		squareSize: number,
+	): Promise<{ geometryData: GeometryDataType; scene: THREE.Group }> {
+		const loader = new GLTFLoader();
+		const gltf = await loader.parseAsync(buffer, '');
+		const vertices: THREE.Vector3[] = [];
+		const uvs: THREE.Vector2[] = [];
+		let minVertex = new THREE.Vector3();
+		let maxVertex = new THREE.Vector3();
+		let firstVertex = true;
+		gltf.scene.traverse((child) => {
+			if (!(child instanceof THREE.Mesh)) {
+				return;
+			}
+			let geometry = child.geometry as THREE.BufferGeometry;
+			if (geometry.index) {
+				geometry = geometry.toNonIndexed();
+			}
+			const posAttr = geometry.getAttribute('position');
+			const uvAttr = geometry.getAttribute('uv');
+			for (let i = 0; i < posAttr.count; i++) {
+				const vertex = new THREE.Vector3(
+					posAttr.getX(i) * squareSize,
+					posAttr.getY(i) * squareSize,
+					posAttr.getZ(i) * squareSize,
+				);
+				vertices.push(vertex);
+				if (uvAttr) {
+					uvs.push(new THREE.Vector2(uvAttr.getX(i), 1.0 - uvAttr.getY(i)));
+				} else {
+					uvs.push(new THREE.Vector2(0, 0));
+				}
+				if (firstVertex) {
+					minVertex = vertex.clone();
+					maxVertex = vertex.clone();
+					firstVertex = false;
+				} else {
+					minVertex.min(vertex);
+					maxVertex.max(vertex);
+				}
+			}
+		});
+		return {
+			geometryData: {
+				vertices,
+				uvs,
+				minVertex,
+				maxVertex,
+				center: new THREE.Vector3(
+					(maxVertex.x - minVertex.x) / 2 + minVertex.x,
+					(maxVertex.y - minVertex.y) / 2 + minVertex.y,
+					(maxVertex.z - minVertex.z) / 2 + minVertex.z,
+				),
+				w: maxVertex.x - minVertex.x,
+				h: maxVertex.y - minVertex.y,
+				d: maxVertex.z - minVertex.z,
+			},
+			scene: gltf.scene,
+		};
+	}
+
 	async loadShape() {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
-			const content = await (Constants.IS_DESKTOP
-				? ((await IO.readFile(this.getPath())) as string)
-				: this.isBR
-					? readPublicFile(this.getPath())
-					: await (await LocalFile.readBase64File(this.getPath())).text());
-			if (content) {
-				if (content.length === 0) {
+			if (this.kind === CUSTOM_SHAPE_KIND.GLTF) {
+				let buffer: ArrayBuffer | null = null;
+				if (Constants.IS_DESKTOP) {
+					const dataUri = await IO.readFile(this.getPath(), false, true);
+					if (dataUri) {
+						const base64 = (dataUri as string).split(',')[1];
+						const binary = atob(base64);
+						const bytes = new Uint8Array(binary.length);
+						for (let i = 0; i < binary.length; i++) {
+							bytes[i] = binary.charCodeAt(i);
+						}
+						buffer = bytes.buffer;
+					}
+				} else if (this.isBR) {
+					buffer = await (await fetch(this.getPath())).arrayBuffer();
+				} else {
+					buffer = await (await LocalFile.readBase64File(this.getPath())).arrayBuffer();
+				}
+				if (buffer && buffer.byteLength > 0) {
+					const result = await Shape.parseGLTF(buffer, Project.SQUARE_SIZE);
+					this.geometryData = result.geometryData;
+					this.gltfScene = result.scene;
+				} else {
 					console.warn(`The shape ${this.toStringNameID()} content is empty.`);
 				}
-				this.geometryData = Shape.parse(content);
+			} else {
+				const content = await (Constants.IS_DESKTOP
+					? ((await IO.readFile(this.getPath())) as string)
+					: this.isBR
+						? readPublicFile(this.getPath())
+						: await (await LocalFile.readBase64File(this.getPath())).text());
+				if (content) {
+					if (content.length === 0) {
+						console.warn(`The shape ${this.toStringNameID()} content is empty.`);
+					}
+					this.geometryData = Shape.parse(content);
+				}
 			}
 		}
 	}

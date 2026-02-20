@@ -55,6 +55,7 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.OBJ, 'OBJ'),
 									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.MTL, 'MTL'),
 									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.COLLISIONS, 'Collisions'),
+									Model.TreeMapTag.create(CUSTOM_SHAPE_KIND.GLTF, 'GLTF'),
 								],
 								false,
 							),
@@ -70,6 +71,8 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 				return '.obj';
 			case CUSTOM_SHAPE_KIND.MTL:
 				return '.mtl';
+			case CUSTOM_SHAPE_KIND.GLTF:
+				return '.gltf,.glb';
 		}
 	}, [selectedKind]);
 
@@ -148,6 +151,7 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 			switch (selectedKind) {
 				case CUSTOM_SHAPE_KIND.OBJ:
 				case CUSTOM_SHAPE_KIND.COLLISIONS:
+				case CUSTOM_SHAPE_KIND.GLTF:
 					return (
 						<PreviewerObject3D
 							sceneID='dialog-shape-preview'
