@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -258,7 +258,7 @@ class DynamicValue extends Serializable {
 
 	isFixNumberValue(): boolean {
 		return [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL].includes(
-			this.kind
+			this.kind,
 		);
 	}
 
@@ -284,7 +284,7 @@ class DynamicValue extends Serializable {
 				return `VAR: ${this.getBaseString(Project.current!.variables.getVariableByID(this.value as number))}`;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
 				return `KB: ${this.getBaseString(
-					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)
+					Model.Base.getByID(Project.current!.keyboard.list, this.value as number),
 				)}`;
 			case DYNAMIC_VALUE_KIND.DATABASE:
 			case DYNAMIC_VALUE_KIND.NUMBER:
@@ -306,7 +306,7 @@ class DynamicValue extends Serializable {
 				return '' + this.value;
 			default:
 				return this.getBaseString(
-					Model.Base.getByID(DynamicValue.getDatabase(this.kind), this.value as number)
+					Model.Base.getByID(DynamicValue.getDatabase(this.kind), this.value as number),
 				);
 		}
 	}

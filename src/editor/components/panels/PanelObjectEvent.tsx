@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -75,8 +75,8 @@ const PanelObjectEvent = forwardRef(({ event, isNew }: Props, ref) => {
 		setParameters(
 			Node.createList(
 				Model.MapObjectEvent.getDefaultParameters(eventID, isSys, Node.createListFromNodes(parameters)),
-				false
-			)
+				false,
+			),
 		);
 	};
 

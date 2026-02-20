@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -35,8 +35,8 @@ class CommonReaction extends MapObjectReaction {
 				createParameter.id,
 				createParameter.name,
 				createParameter,
-				DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT)
-			)
+				DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT),
+			),
 		);
 	}
 

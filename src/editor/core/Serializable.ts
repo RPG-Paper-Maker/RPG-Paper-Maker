@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -21,7 +21,7 @@ export type BindingType = [
 	BINDING, // type
 	(typeof Serializable | null)?, // constructorClass
 	((json: JSONType) => typeof Serializable)?, // additionalFunction
-	typeof PortionBase? // positionConstructor
+	typeof PortionBase?, // positionConstructor
 ];
 
 class Serializable {
@@ -89,7 +89,7 @@ class Serializable {
 						Array.from((value as Map<number, Serializable>).entries(), ([key, value]) => [
 							key,
 							value.clone(),
-						])
+						]),
 					);
 					break;
 				}
@@ -152,7 +152,7 @@ class Serializable {
 				case BINDING.LIST_BOOLEAN:
 					(this as JSONType)[name] = Utils.defaultValue(
 						json[jsonName],
-						defaultValue === undefined ? (this as JSONType)[name] : defaultValue
+						defaultValue === undefined ? (this as JSONType)[name] : defaultValue,
 					);
 					break;
 				case BINDING.DYNAMIC_VALUE: {
@@ -313,7 +313,7 @@ class Serializable {
 						json,
 						jsonName,
 						value ? [...(value as unknown[])] : value,
-						defaultValue as unknown[]
+						defaultValue as unknown[],
 					);
 					break;
 				}

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -115,7 +115,7 @@ class Map extends Localization {
 			Project.current!.getPathMaps(),
 			this.getRealName(),
 			temp ? Paths.TEMP : undefined,
-			Paths.FILE_MAP_INFOS
+			Paths.FILE_MAP_INFOS,
 		);
 	}
 
@@ -151,7 +151,7 @@ class Map extends Localization {
 		const globalPortion = new Portion(0, 0, 0);
 		await copyPublicFile(
 			Paths.join(Paths.DEFAULT, globalPortion.getFileName()),
-			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
+			Paths.join(Paths.join(folderMap, globalPortion.getFileName())),
 		);
 	}
 
@@ -208,7 +208,7 @@ class Map extends Localization {
 		return Paths.join(
 			Project.current!.getPathMaps(),
 			Model.Map.generateMapName(this.id),
-			globalPortion.getFileName()
+			globalPortion.getFileName(),
 		);
 	}
 

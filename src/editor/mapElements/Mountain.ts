@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -80,7 +80,7 @@ class Mountain extends Base {
 		widthSquares: number,
 		widthPixels: number,
 		heightSquares: number,
-		heightPixels: number
+		heightPixels: number,
 	): MapElement.Mountain {
 		const mountain = new MapElement.Mountain();
 		mountain.mountainID = mountainID;
@@ -160,7 +160,7 @@ class Mountain extends Base {
 		vecFrontB: THREE.Vector3,
 		vecBackB: THREE.Vector3,
 		geometry: CustomGeometry,
-		count: number
+		count: number,
 	): number {
 		let xKind = Mountain.X_LEFT_OFFSET;
 		const nbSteps = Math.ceil(faceHeight / Project.SQUARE_SIZE);
@@ -210,7 +210,7 @@ class Mountain extends Base {
 				geometry,
 				count,
 				0,
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 		} else if (faceHeight <= 2 * Project.SQUARE_SIZE) {
 			// 2 B / T sprites
@@ -243,7 +243,7 @@ class Mountain extends Base {
 				geometry,
 				count,
 				vecCenterA.distanceTo(vecCenterB),
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 
 			// Top
@@ -275,7 +275,7 @@ class Mountain extends Base {
 				geometry,
 				count,
 				0,
-				vecCenterA.distanceTo(vecCenterB)
+				vecCenterA.distanceTo(vecCenterB),
 			);
 		} else {
 			// 3 B / M / T sprites
@@ -310,7 +310,7 @@ class Mountain extends Base {
 				geometry,
 				count,
 				vecStepLeftB.distanceTo(vecStepRightB),
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 
 			// Middle: add as many as middle blocks as possible
@@ -347,7 +347,7 @@ class Mountain extends Base {
 					geometry,
 					count,
 					vecStepLeftB.distanceTo(vecStepRightB),
-					vecStepLeftA.distanceTo(vecStepRightA)
+					vecStepLeftA.distanceTo(vecStepRightA),
 				);
 			}
 
@@ -380,7 +380,7 @@ class Mountain extends Base {
 				geometry,
 				count,
 				0,
-				vecStepLeftB.distanceTo(vecStepRightB)
+				vecStepLeftB.distanceTo(vecStepRightB),
 			);
 		}
 		return count;
@@ -414,7 +414,7 @@ class Mountain extends Base {
 		geometry: CustomGeometry,
 		count: number,
 		xCornerOffsetTop: number,
-		xCornerOffsetBot: number
+		xCornerOffsetBot: number,
 	): number {
 		count = this.drawFace(
 			position,
@@ -440,7 +440,7 @@ class Mountain extends Base {
 			count,
 			0,
 			0,
-			false
+			false,
 		);
 
 		// Draw corner only if there is a border width
@@ -469,7 +469,7 @@ class Mountain extends Base {
 				count,
 				xCornerOffsetTop,
 				xCornerOffsetBot,
-				true
+				true,
 			);
 		}
 		return count;
@@ -499,7 +499,7 @@ class Mountain extends Base {
 		count: number,
 		xCornerOffsetTop: number,
 		xCornerOffsetBot: number,
-		isCorner: boolean
+		isCorner: boolean,
 	): number {
 		// Textures coordinates
 		let x = (xKind * Project.SQUARE_SIZE) / width;
@@ -524,24 +524,24 @@ class Mountain extends Base {
 			texA = new THREE.Vector2(
 				(Mountain.X_MID_OFFSET * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width +
 					coefX,
-				y
+				y,
 			);
 			texB = new THREE.Vector2(
 				((Mountain.X_MID_OFFSET + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) /
 					width -
 					coefX,
-				y
+				y,
 			);
 			texC = new THREE.Vector2(
 				((Mountain.X_MID_OFFSET + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) /
 					width -
 					coefX,
-				y + h
+				y + h,
 			);
 			texD = new THREE.Vector2(
 				(Mountain.X_MID_OFFSET * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width +
 					coefX,
-				y + h
+				y + h,
 			);
 		} else {
 			// Triangle form for corners
@@ -568,7 +568,7 @@ class Mountain extends Base {
 			texC,
 			texD,
 			count,
-			position
+			position,
 		);
 		return count;
 	}
@@ -585,7 +585,7 @@ class Mountain extends Base {
 		const center = new THREE.Vector3(
 			localPosition.x + Project.SQUARE_SIZE / 2,
 			localPosition.y + Project.SQUARE_SIZE / 2,
-			localPosition.z + Project.SQUARE_SIZE / 2
+			localPosition.z + Project.SQUARE_SIZE / 2,
 		);
 		const xLeft = localPosition.x;
 		const xRight = localPosition.x + Project.SQUARE_SIZE;
@@ -622,7 +622,7 @@ class Mountain extends Base {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Top
@@ -649,7 +649,7 @@ class Mountain extends Base {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Left
@@ -676,7 +676,7 @@ class Mountain extends Base {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Right
@@ -703,7 +703,7 @@ class Mountain extends Base {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		return count;

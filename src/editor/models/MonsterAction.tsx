@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -145,7 +145,7 @@ class MonsterAction extends Base {
 				return `${t('use.skill.id')} ${this.skillID.toString(Project.current!.skills.list)}`;
 			case MONSTER_ACTION_KIND.USE_ITEM:
 				return `${t('use.item.id')} ${this.itemID.toString(Project.current!.items.list)} ${t(
-					'number.max'
+					'number.max',
 				).toLowerCase()} ${this.itemNumberMax.toString()}`;
 			case MONSTER_ACTION_KIND.DO_NOTHING:
 				return t('do.nothing');
@@ -158,16 +158,16 @@ class MonsterAction extends Base {
 			conditions.push(
 				`${t('turn.value.is')} ${
 					Base.getCompareOptions()[this.operationKindTurn].name
-				} ${this.turnValueCompare.toString()}`
+				} ${this.turnValueCompare.toString()}`,
 			);
 		}
 		if (this.isConditionStatistic) {
 			conditions.push(
 				`${t('statistic.id')} ${this.statisticID.toString(Project.current!.battleSystem.statistics)} ${t(
-					'value.is'
+					'value.is',
 				).toLowerCase()} ${Base.getCompareOptions()[
 					this.operationKindStatistic
-				].name.toLowerCase()} ${this.statisticValueCompare.toString()}%`
+				].name.toLowerCase()} ${this.statisticValueCompare.toString()}%`,
 			);
 		}
 		if (this.isConditionVariable) {
@@ -176,12 +176,12 @@ class MonsterAction extends Base {
 					Project.current!.variables.getVariableByID(this.variableID)?.toString() ?? this.variableID
 				} ${t('value.is').toLowerCase()} ${Base.getCompareOptions()[
 					this.operationKindVariable
-				].name.toLowerCase()} ${this.statisticValueCompare.toString()}`
+				].name.toLowerCase()} ${this.statisticValueCompare.toString()}`,
 			);
 		}
 		if (this.isConditionStatus) {
 			conditions.push(
-				`${t('is.under.effect.of.status.id')} ${this.statusID.toString(Project.current!.status.list)}`
+				`${t('is.under.effect.of.status.id')} ${this.statusID.toString(Project.current!.status.list)}`,
 			);
 		}
 		if (this.isConditionScript) {

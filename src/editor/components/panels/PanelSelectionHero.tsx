@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -80,7 +80,7 @@ const PanelSelectionHero = forwardRef(({ isEnemy = false }: Props, ref) => {
 					? TroopMonster.currentMonsters.length > 0
 						? ENEMY_SELECTION_HERO_TYPE.ENEMY
 						: ENEMY_SELECTION_HERO_TYPE.INSTANCE_ID
-					: SELECTION_HERO_TYPE.INSTANCE_ID
+					: SELECTION_HERO_TYPE.INSTANCE_ID,
 			);
 			setSelectedEnemy(TroopMonster.currentMonsters[0]?.id ?? -1);
 		}

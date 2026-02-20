@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -65,7 +65,7 @@ function MenuCustom({
 		statesSpecialKeys: Map<string, boolean>,
 		key: string,
 		specialKeys: string[],
-		event: KeyboardEvent
+		event: KeyboardEvent,
 	) => {
 		for (const item of itemList) {
 			const { shortcut, disabled, onClick, children } = item;
@@ -120,7 +120,7 @@ function MenuCustom({
 				statesSpecialKeys,
 				event.key.toUpperCase(),
 				specialKeys,
-				event
+				event,
 			));
 		}
 		return true;

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -40,7 +40,7 @@ class Monster extends Hero {
 		this.experience = ProgressionTable.createProgression(
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
-			0
+			0,
 		);
 		this.currencies = new Map();
 	}

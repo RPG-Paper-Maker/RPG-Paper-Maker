@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,7 +27,7 @@ class CustomGeometry extends THREE.BufferGeometry {
 		x: number,
 		y: number,
 		w: number,
-		h: number
+		h: number,
 	) {
 		texA.set(x, y);
 		texB.set(x + w, y);
@@ -40,7 +40,7 @@ class CustomGeometry extends THREE.BufferGeometry {
 		center: THREE.Vector3,
 		angle: number,
 		axis: THREE.Vector3,
-		isDegree: boolean = true
+		isDegree: boolean = true,
 	) {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? Mathf.degreesToRadians(angle) : angle);

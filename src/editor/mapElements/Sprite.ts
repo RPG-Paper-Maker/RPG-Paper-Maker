@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -52,7 +52,7 @@ class Sprite extends Base {
 		front = true,
 		xOffset = 0,
 		yOffset = 0,
-		zOffset = 0
+		zOffset = 0,
 	): Sprite {
 		const sprite = new Sprite();
 		sprite.kind = kind;
@@ -75,7 +75,7 @@ class Sprite extends Base {
 		texC: THREE.Vector2,
 		texD: THREE.Vector2,
 		count: number,
-		position: Position
+		position: Position,
 	): number {
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(count, position);
@@ -177,7 +177,7 @@ class Sprite extends Base {
 		const size = new THREE.Vector3(
 			this.texture.width * Project.SQUARE_SIZE * position.scaleX,
 			this.texture.height * Project.SQUARE_SIZE * position.scaleY,
-			1.0
+			1.0,
 		);
 
 		// For static sprites
@@ -219,7 +219,7 @@ class Sprite extends Base {
 				Sprite.MODEL[1].clone().multiply(size).add(p),
 				Sprite.MODEL[2].clone().multiply(size).add(p),
 				Sprite.MODEL[3].clone().multiply(size).add(p),
-				c
+				c,
 			);
 			geometry.pushQuadIndices(count, position);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
@@ -244,7 +244,7 @@ class Sprite extends Base {
 				texC,
 				texD,
 				count,
-				position
+				position,
 			);
 		}
 
@@ -267,7 +267,7 @@ class Sprite extends Base {
 				texC,
 				texD,
 				count,
-				position
+				position,
 			);
 
 			// Quadra sprite
@@ -287,7 +287,7 @@ class Sprite extends Base {
 					vecQuadra1C,
 					vecQuadra1D,
 					center,
-					position.toRotationEuler()
+					position.toRotationEuler(),
 				);
 				Base.rotateQuad(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
 				Base.rotateQuadEuler(
@@ -296,7 +296,7 @@ class Sprite extends Base {
 					vecQuadra2C,
 					vecQuadra2D,
 					center,
-					position.toRotationEuler()
+					position.toRotationEuler(),
 				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
@@ -309,7 +309,7 @@ class Sprite extends Base {
 					texC,
 					texD,
 					count,
-					position
+					position,
 				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
@@ -322,7 +322,7 @@ class Sprite extends Base {
 					texC,
 					texD,
 					count,
-					position
+					position,
 				);
 			}
 		}
@@ -335,7 +335,7 @@ class Sprite extends Base {
 		height: number,
 		tileset: boolean,
 		position: Position,
-		localPosition: THREE.Vector3 | null = null
+		localPosition: THREE.Vector3 | null = null,
 	): [CustomGeometry, number] {
 		const geometry = new CustomGeometry();
 		const count = this.updateGeometry(map, geometry, width, height, position, 0, tileset, localPosition);

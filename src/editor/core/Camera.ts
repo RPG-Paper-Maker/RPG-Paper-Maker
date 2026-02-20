@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -32,7 +32,7 @@ class Camera {
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
 		this.distance = Utils.defaultValue(
 			tag?.cameraDistance,
-			(isDetection ? 400 : 800) * Project.current!.systems.getCoefSquareSize()
+			(isDetection ? 400 : 800) * Project.current!.systems.getCoefSquareSize(),
 		);
 		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, isDetection ? -125 : -90);
 		this.verticalAngle = Utils.defaultValue(tag?.cameraVerticalAngle, 55);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -112,7 +112,7 @@ class Autotiles {
 				0,
 				0,
 				Scene.Map.canvasRendering!.width,
-				Scene.Map.canvasRendering!.height
+				Scene.Map.canvasRendering!.height,
 			);
 			Scene.Map.canvasRendering!.width = 64 * Project.SQUARE_SIZE;
 			Scene.Map.canvasRendering!.height = Constants.MAX_PICTURE_SIZE;
@@ -126,7 +126,7 @@ class Autotiles {
 						texture,
 						picture,
 						offset,
-						autotile.isAnimated
+						autotile.isAnimated,
 					);
 				} else {
 					result = null;
@@ -153,7 +153,7 @@ class Autotiles {
 		texture: THREE.Texture,
 		picture: Model.Picture,
 		offset: number,
-		isAnimated: boolean
+		isAnimated: boolean,
 	): Promise<[TextureBundle | null, THREE.Texture, number]> {
 		const frames = isAnimated ? Project.current!.systems.autotilesFrames : 1;
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
@@ -172,7 +172,7 @@ class Autotiles {
 						0,
 						0,
 						Scene.Map.canvasRendering!.width,
-						Scene.Map.canvasRendering!.height
+						Scene.Map.canvasRendering!.height,
 					);
 					textureAutotile = null;
 				}
@@ -198,7 +198,7 @@ class Autotiles {
 						0,
 						0,
 						Scene.Map.canvasRendering!.width,
-						Scene.Map.canvasRendering!.height
+						Scene.Map.canvasRendering!.height,
 					);
 					textureAutotile = null;
 					offset = 0;
@@ -233,7 +233,7 @@ class Autotiles {
 							count * Project.SQUARE_SIZE,
 							(row + y) * Project.SQUARE_SIZE,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Scene.Map.ctxRendering!.drawImage(
 							img,
@@ -244,7 +244,7 @@ class Autotiles {
 							count * Project.SQUARE_SIZE + sDiv,
 							(row + y) * Project.SQUARE_SIZE,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Scene.Map.ctxRendering!.drawImage(
 							img,
@@ -255,7 +255,7 @@ class Autotiles {
 							count * Project.SQUARE_SIZE,
 							(row + y) * Project.SQUARE_SIZE + sDiv,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Scene.Map.ctxRendering!.drawImage(
 							img,
@@ -266,7 +266,7 @@ class Autotiles {
 							count * Project.SQUARE_SIZE + sDiv,
 							(row + y) * Project.SQUARE_SIZE + sDiv,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						count++;
 						if (count === 64) {
@@ -283,7 +283,7 @@ class Autotiles {
 		map: Scene.Map | null,
 		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle,
-		texture: THREE.Texture
+		texture: THREE.Texture,
 	) {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
@@ -315,7 +315,7 @@ class Autotiles {
 			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -324,7 +324,7 @@ class Autotiles {
 			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -333,7 +333,7 @@ class Autotiles {
 			map,
 			new Position(position.x, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -342,7 +342,7 @@ class Autotiles {
 			map,
 			new Position(position.x, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -351,7 +351,7 @@ class Autotiles {
 			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -360,7 +360,7 @@ class Autotiles {
 			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -368,13 +368,13 @@ class Autotiles {
 		map: Scene.Map,
 		position: Position,
 		id: number,
-		rect: Rectangle
+		rect: Rectangle,
 	): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -382,13 +382,13 @@ class Autotiles {
 		map: Scene.Map,
 		position: Position,
 		id: number,
-		rect: Rectangle
+		rect: Rectangle,
 	): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
-			rect
+			rect,
 		);
 	}
 
@@ -401,7 +401,7 @@ class Autotiles {
 					position.y,
 					position.yPixels,
 					position.z + j,
-					position.layer
+					position.layer,
 				);
 				const newAutotile = this.tileExisting(map, newPosition);
 				if (newAutotile) {
@@ -444,7 +444,7 @@ class Autotiles {
 				position,
 				this.width,
 				this.height,
-				count++
+				count++,
 			);
 			this.counts[side][position.layer] = count;
 		}

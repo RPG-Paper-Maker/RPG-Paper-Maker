@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -50,7 +50,7 @@ class ProgressionTable extends Base {
 		change: number,
 		duration: number,
 		start: number,
-		decimal = false
+		decimal = false,
 	): number {
 		let result = 0;
 		switch (equation) {

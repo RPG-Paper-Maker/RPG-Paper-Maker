@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -56,13 +56,13 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 		tag.cursorPosition = battleMap.position.clone();
 		const mapProperties = new Model.Map();
 		const json = await readJSON(
-			Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(tag.id), Paths.FILE_MAP_INFOS)
+			Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(tag.id), Paths.FILE_MAP_INFOS),
 		);
 		if (json) {
 			mapProperties.read(json);
 			const cameraProperties = Model.Base.getByID(
 				Project.current!.systems.cameraProperties,
-				mapProperties.cameraPropertiesID.getFixNumberValue()
+				mapProperties.cameraPropertiesID.getFixNumberValue(),
 			) as Model.CameraProperty | null;
 			if (cameraProperties) {
 				tag.cameraDistance =
@@ -94,7 +94,7 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 		Scene.Map.currentBattle!.update();
 		Manager.GL.staticRender.render(
 			Scene.Map.currentBattle!.scene,
-			Scene.Map.currentBattle!.camera.perspectiveCamera
+			Scene.Map.currentBattle!.camera.perspectiveCamera,
 		);
 		const overlayScene = new THREE.Scene();
 		const overlayCamera = new THREE.OrthographicCamera(-WIDTH / 2, WIDTH / 2, HEIGHT / 2, -HEIGHT / 2, 0, 10);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -41,7 +41,7 @@ class Land extends Base {
 		landBefore: Land | null,
 		autotileAfter: number,
 		textureAfter: Rectangle,
-		kindAfter: ELEMENT_MAP_KIND
+		kindAfter: ELEMENT_MAP_KIND,
 	) {
 		if (landBefore === null) {
 			return kindAfter === ELEMENT_MAP_KIND.NONE;
@@ -88,7 +88,7 @@ class Land extends Base {
 		count: number,
 		squareWidth = 1,
 		squareHeight = 1,
-		forceOffset = false
+		forceOffset = false,
 	) {
 		const localPosition = position.toVector3();
 		const a = localPosition.x;
@@ -108,7 +108,7 @@ class Land extends Base {
 		const vecC = new THREE.Vector3(
 			a + (Project.SQUARE_SIZE / 2) * squareWidth,
 			b,
-			c + (Project.SQUARE_SIZE / 2) * squareHeight
+			c + (Project.SQUARE_SIZE / 2) * squareHeight,
 		);
 		const vecD = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
 		const center = new THREE.Vector3(a, b, c);

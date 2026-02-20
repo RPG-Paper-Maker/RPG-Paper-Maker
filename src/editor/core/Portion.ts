@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,7 +27,7 @@ class Portion extends PortionBase {
 		return new Portion(
 			Math.floor(position.x / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
-			Math.floor(position.z / Project.SQUARE_SIZE / Constants.PORTION_SIZE)
+			Math.floor(position.z / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
 		);
 	}
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -35,27 +35,39 @@
 	color: white;
 
 	&.cursor-translate {
-		cursor: url('../../assets/icons/cursor-translate.svg') 10 10, pointer;
+		cursor:
+			url('../../assets/icons/cursor-translate.svg') 10 10,
+			pointer;
 	}
 
 	&.cursor-rotate {
-		cursor: url('../../assets/icons/cursor-rotate.svg') 10 10, pointer;
+		cursor:
+			url('../../assets/icons/cursor-rotate.svg') 10 10,
+			pointer;
 	}
 
 	&.cursor-scale {
-		cursor: url('../../assets/icons/cursor-scale.svg') 10 10, pointer;
+		cursor:
+			url('../../assets/icons/cursor-scale.svg') 10 10,
+			pointer;
 	}
 
 	&.cursor-pencil {
-		cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
+		cursor:
+			url('../../assets/icons/cursor-pencil.svg') 3 20,
+			pointer;
 	}
 
 	&.cursor-rectangle {
-		cursor: url('../../assets/icons/cursor-rectangle.svg') 10 10, pointer;
+		cursor:
+			url('../../assets/icons/cursor-rectangle.svg') 10 10,
+			pointer;
 	}
 
 	&.cursor-pin {
-		cursor: url('../../assets/icons/cursor-pin.svg') 20 20, pointer;
+		cursor:
+			url('../../assets/icons/cursor-pin.svg') 20 20,
+			pointer;
 	}
 
 	&.cursor-pointer {

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -45,7 +45,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 				await draw(
 					currentState.loadingTextures[0][0],
 					currentState.loadingTextures[0][1],
-					currentState.loadingTextures[0][2]
+					currentState.loadingTextures[0][2],
 				);
 				currentState.loadingTextures.shift();
 			}
@@ -53,7 +53,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 	};
 
 	const draw = async (t: string, b: boolean, r?: Rectangle) => {
-		const path = b && !Constants.IS_DESKTOP ? (await LocalFile.readFile(t)) ?? '' : t;
+		const path = b && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(t)) ?? '') : t;
 		currentState.picture = await Picture2D.loadImage(path);
 		currentState.path = path;
 		if (refCanvas.current) {
@@ -79,7 +79,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false,
 					0,
 					0,
 					(r ? r : currentState.picture).width * scale,
-					(r ? r : currentState.picture).height * scale
+					(r ? r : currentState.picture).height * scale,
 				);
 			}
 		}

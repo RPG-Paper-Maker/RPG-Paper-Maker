@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -103,14 +103,14 @@ class SpriteWall extends Base {
 			w - Math.floor(Project.SQUARE_SIZE / 2),
 			0,
 			Math.floor(Project.SQUARE_SIZE / 2),
-			image.height
+			image.height,
 		);
 		try {
 			Scene.Map.ctxRendering!.putImageData(left, w, 0);
 			Scene.Map.ctxRendering!.putImageData(right, w + Math.floor(Project.SQUARE_SIZE / 2), 0);
 		} catch {
 			console.error(
-				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
+				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.',
 			);
 		}
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
@@ -231,7 +231,7 @@ class SpriteWall extends Base {
 			texC,
 			texD,
 			count,
-			position
+			position,
 		);
 	}
 

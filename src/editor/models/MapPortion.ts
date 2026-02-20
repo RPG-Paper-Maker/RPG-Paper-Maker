@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -69,7 +69,7 @@ class MapPortion extends Serializable {
 				return Object3DCustom;
 			default:
 				throw new Error(
-					'Shape kind not supported yet. Remove this throw when all shape kinds are implemented.'
+					'Shape kind not supported yet. Remove this throw when all shape kinds are implemented.',
 				);
 		}
 	}

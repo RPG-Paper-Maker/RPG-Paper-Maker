@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -38,8 +38,8 @@ class Element extends Icon {
 			ElementEfficiency.createEfficiency(
 				element.id,
 				element.getName(),
-				this.efficiencies.get(element.id)?.clone() ?? DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 1)
-			)
+				this.efficiencies.get(element.id)?.clone() ?? DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 1),
+			),
 		);
 	}
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -86,7 +86,7 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 					colResize: isResizing && vertical,
 					rowResize: isResizing && !vertical,
 				},
-				`splitter flex ${className ?? ''}`
+				`splitter flex ${className ?? ''}`,
 			)}
 			onMouseMove={handleMouseMove}
 		>
@@ -100,7 +100,7 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 			<Flex one>{children[1]}</Flex>
 		</div>
 	) : (
-		children[0] ?? children[1] ?? null
+		(children[0] ?? children[1] ?? null)
 	);
 }
 

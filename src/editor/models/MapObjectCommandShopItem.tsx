@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -137,7 +137,7 @@ class MapObjectCommandShopItem extends Base {
 					if (this.itemID.isFixNumberValue()) {
 						item = Base.getByID(
 							Project.current!.items.list,
-							this.itemID.value as number
+							this.itemID.value as number,
 						) as CommonSkillItem;
 					} else {
 						return t('default');
@@ -147,7 +147,7 @@ class MapObjectCommandShopItem extends Base {
 					if (this.weaponID.isFixNumberValue()) {
 						item = Base.getByID(
 							Project.current!.weapons.list,
-							this.weaponID.value as number
+							this.weaponID.value as number,
 						) as CommonSkillItem;
 					} else {
 						return t('default');
@@ -157,7 +157,7 @@ class MapObjectCommandShopItem extends Base {
 					if (this.armorID.isFixNumberValue()) {
 						item = Base.getByID(
 							Project.current!.armors.list,
-							this.armorID.value as number
+							this.armorID.value as number,
 						) as CommonSkillItem;
 					} else {
 						return t('default');

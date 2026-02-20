@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -190,7 +190,7 @@ class Autotile extends Land {
 		position: Position,
 		width: number,
 		height: number,
-		count: number
+		count: number,
 	) {
 		const autotile = Project.current!.specialElements.getAutotileByID(this.autotileID);
 		return super.updateGeometryLand(
@@ -205,7 +205,7 @@ class Autotile extends Land {
 				height,
 			Project.SQUARE_SIZE / width,
 			Project.SQUARE_SIZE / height,
-			count
+			count,
 		);
 	}
 

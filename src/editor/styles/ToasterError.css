@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,7 +11,7 @@
 
 .toasterErrorDialogWarning {
 	width: 100%;
-    height: 100%;
+	height: 100%;
 	background-color: #29273d;
 	border: 1px solid #5f5a8a;
 	position: fixed;
@@ -23,8 +23,8 @@
 	flex-direction: column;
 	gap: 10px;
 	top: 0;
-    left: 0;
-    justify-content: center;
+	left: 0;
+	justify-content: center;
 
 	&.open {
 		display: flex;
@@ -49,7 +49,7 @@
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+	to {
+		transform: rotate(360deg);
+	}
 }

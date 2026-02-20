@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -44,7 +44,7 @@ function PanelSettingsMountains() {
 	const calculateAngle = () =>
 		MapElement.Mountains.calculateAngle(
 			widthSquares * Project.SQUARE_SIZE + widthPixels,
-			heightSquares * Project.SQUARE_SIZE + heightPixels
+			heightSquares * Project.SQUARE_SIZE + heightPixels,
 		).toFixed(2);
 
 	const handleChangeWidthSquares = async (value: number) => {

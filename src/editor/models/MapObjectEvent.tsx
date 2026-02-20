@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -40,7 +40,7 @@ class MapObjectEvent extends Base {
 	static getDefaultParameters(
 		eventID: number,
 		isSystem: boolean,
-		initialParameters: MapObjectParameter[]
+		initialParameters: MapObjectParameter[],
 	): MapObjectParameter[] {
 		const events = isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser;
 		const event = Base.getByID(events, eventID) as CommonEvent;
@@ -54,7 +54,7 @@ class MapObjectEvent extends Base {
 				}
 			}
 			parameters.push(
-				MapObjectParameter.create(createParameter.id, createParameter.name, createParameter, value)
+				MapObjectParameter.create(createParameter.id, createParameter.name, createParameter, value),
 			);
 		}
 		return parameters;
@@ -82,7 +82,7 @@ class MapObjectEvent extends Base {
 		return `${
 			Base.getByID(
 				this.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
-				this.id
+				this.id,
 			)?.name ?? ''
 		}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
 	}

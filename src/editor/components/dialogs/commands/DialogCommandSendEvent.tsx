@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -23,10 +23,10 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
-import TooltipInformation from '../../TooltipInformation';
 import PanelObjectEvent, { PanelObjectEventRef } from '../../panels/PanelObjectEvent';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -144,7 +144,10 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 									>
 										{t('sender.cant.receive')}
 									</Checkbox>
-									<TooltipInformation text={t('tooltip.sender.cant.receive')} disabled={!isDetection} />
+									<TooltipInformation
+										text={t('tooltip.sender.cant.receive')}
+										disabled={!isDetection}
+									/>
 									<Checkbox
 										isChecked={onlyTheClosest}
 										onChange={setOnlyTheClosest}

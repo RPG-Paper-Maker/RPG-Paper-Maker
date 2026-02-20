@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -69,7 +69,7 @@ class RandomBattle extends Base {
 		const priorities = list.map((node) =>
 			(node.content as RandomBattle).priority.isFixNumberValue()
 				? ((node.content as RandomBattle).priority.value as number)
-				: undefined
+				: undefined,
 		);
 		for (const priority of priorities) {
 			if (priority === undefined) {

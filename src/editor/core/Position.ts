@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -43,7 +43,7 @@ class Position extends Position3D {
 		angleZ: number = 0,
 		scaleX: number = 1,
 		scaleY: number = 1,
-		scaleZ: number = 1
+		scaleZ: number = 1,
 	) {
 		super(x, y, z, yPixels);
 
@@ -72,7 +72,7 @@ class Position extends Position3D {
 			array[9],
 			array[10],
 			array[11],
-			array[12]
+			array[12],
 		);
 	}
 
@@ -90,7 +90,7 @@ class Position extends Position3D {
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.z)) : undefined,
 			scale ? Mathf.forceDecimals(scale.x) : undefined,
 			scale ? Mathf.forceDecimals(scale.y) : undefined,
-			scale ? Mathf.forceDecimals(scale.z) : undefined
+			scale ? Mathf.forceDecimals(scale.z) : undefined,
 		);
 	}
 
@@ -122,7 +122,7 @@ class Position extends Position3D {
 		return new Portion(
 			Math.floor(this.x / Constants.PORTION_SIZE),
 			Math.floor(this.y / Constants.PORTION_SIZE),
-			Math.floor(this.z / Constants.PORTION_SIZE)
+			Math.floor(this.z / Constants.PORTION_SIZE),
 		);
 	}
 
@@ -309,7 +309,7 @@ class Position extends Position3D {
 		return `${this.toStringCoords()}\n${t('layer')} = ${this.layer}\n${t('angles')} = [${this.angleX}, ${
 			this.angleY
 		}, ${this.angleZ}]\n${t('scales')} = [${this.scaleX}, ${this.scaleY}, ${this.scaleZ}]\n${t(
-			'center'
+			'center',
 		)} = [X = ${this.getPixelsCenterX()}px, Z = ${this.getPixelsCenterZ()}px]`;
 	}
 
@@ -317,7 +317,7 @@ class Position extends Position3D {
 		return new THREE.Vector3(
 			this.x * Project.SQUARE_SIZE + (center ? this.getPixelsCenterX() : 0),
 			this.y * Project.SQUARE_SIZE + this.getTotalYPixels(),
-			this.z * Project.SQUARE_SIZE + (center ? this.getPixelsCenterZ() : 0)
+			this.z * Project.SQUARE_SIZE + (center ? this.getPixelsCenterZ() : 0),
 		);
 	}
 
@@ -325,7 +325,7 @@ class Position extends Position3D {
 		return new THREE.Euler(
 			Mathf.degreesToRadians(this.angleX),
 			Mathf.degreesToRadians(this.angleY),
-			Mathf.degreesToRadians(this.angleZ)
+			Mathf.degreesToRadians(this.angleZ),
 		);
 	}
 

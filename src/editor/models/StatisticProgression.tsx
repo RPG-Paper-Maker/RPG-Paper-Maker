@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -36,7 +36,7 @@ class StatisticProgression extends Base {
 			ProgressionTable.createProgression(
 				DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
 				DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
-				0
+				0,
 			),
 			BINDING.OBJECT,
 			ProgressionTable,
