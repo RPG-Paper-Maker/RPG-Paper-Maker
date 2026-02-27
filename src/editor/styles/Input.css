@@ -32,3 +32,30 @@ input[type='number']::-webkit-outer-spin-button {
 input:disabled {
 	opacity: 0.4;
 }
+
+.inputSuffixWrapper {
+	position: relative;
+	display: inline-flex;
+}
+
+.inputSuffixOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 14px;
+	display: flex;
+	align-items: center;
+	padding: 0 2px;
+	gap: 1px;
+	pointer-events: none;
+	background-color: var(--darkest-containers-bg-color);
+	border: 1px solid var(--lighter-bg-color);
+	color: var(--main-color);
+	font-size: 12px;
+}
+
+.inputSuffix {
+	font-size: 11px;
+	color: var(--grey-light-color);
+}

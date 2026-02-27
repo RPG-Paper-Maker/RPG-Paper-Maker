@@ -23,8 +23,15 @@ import {
 	setCurrentMountainHeightPixels,
 	setCurrentMountainHeightSquares,
 	setCurrentMountainID,
-	setCurrentMountainWidthPixels,
-	setCurrentMountainWidthSquares,
+	setCurrentMountainAllSides,
+	setCurrentMountainWidthPixelsBot,
+	setCurrentMountainWidthPixelsLeft,
+	setCurrentMountainWidthPixelsRight,
+	setCurrentMountainWidthPixelsTop,
+	setCurrentMountainWidthSquaresBot,
+	setCurrentMountainWidthSquaresLeft,
+	setCurrentMountainWidthSquaresRight,
+	setCurrentMountainWidthSquaresTop,
 	setCurrentObject3DID,
 	setCurrentTilesetFloorSpriteTexture,
 	setCurrentTreeMapTag,
@@ -136,8 +143,15 @@ function PanelProject() {
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));
 			dispatch(setCurrentMountainID(Project.current!.settings.mapEditorCurrentMountainID));
-			dispatch(setCurrentMountainWidthSquares(Project.current!.settings.mapEditorCurrentMountainWidthSquares));
-			dispatch(setCurrentMountainWidthPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels));
+			dispatch(setCurrentMountainWidthSquaresBot(Project.current!.settings.mapEditorCurrentMountainWidthSquaresBot));
+			dispatch(setCurrentMountainWidthPixelsBot(Project.current!.settings.mapEditorCurrentMountainWidthPixelsBot));
+			dispatch(setCurrentMountainWidthSquaresTop(Project.current!.settings.mapEditorCurrentMountainWidthSquaresTop));
+			dispatch(setCurrentMountainWidthPixelsTop(Project.current!.settings.mapEditorCurrentMountainWidthPixelsTop));
+			dispatch(setCurrentMountainWidthSquaresLeft(Project.current!.settings.mapEditorCurrentMountainWidthSquaresLeft));
+			dispatch(setCurrentMountainWidthPixelsLeft(Project.current!.settings.mapEditorCurrentMountainWidthPixelsLeft));
+			dispatch(setCurrentMountainWidthSquaresRight(Project.current!.settings.mapEditorCurrentMountainWidthSquaresRight));
+			dispatch(setCurrentMountainWidthPixelsRight(Project.current!.settings.mapEditorCurrentMountainWidthPixelsRight));
+			dispatch(setCurrentMountainAllSides(Project.current!.settings.mapEditorCurrentMountainAllSides));
 			dispatch(setCurrentMountainHeightSquares(Project.current!.settings.mapEditorCurrentMountainHeightSquares));
 			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
 			dispatch(setCurrentObject3DID(Project.current!.settings.mapEditorCurrentObject3DID));

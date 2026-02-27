@@ -159,8 +159,14 @@ class MapPortion {
 				);
 				const newMountain = MapElement.Mountain.create(
 					Project.current!.settings.mapEditorCurrentMountainID,
-					Project.current!.settings.mapEditorCurrentMountainWidthSquares,
-					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels),
+					Project.current!.settings.mapEditorCurrentMountainWidthSquaresBot,
+					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsBot),
+					Project.current!.settings.mapEditorCurrentMountainWidthSquaresTop,
+					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsTop),
+					Project.current!.settings.mapEditorCurrentMountainWidthSquaresLeft,
+					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsLeft),
+					Project.current!.settings.mapEditorCurrentMountainWidthSquaresRight,
+					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsRight),
 					y,
 					yPixels,
 				);

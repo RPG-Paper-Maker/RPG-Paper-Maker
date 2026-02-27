@@ -76,7 +76,14 @@ abstract class Object3D extends Base {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
 				const path = await picture.getPathOrBase64();
-				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
+				if (path) {
+					textureObject3D = await Manager.GL.loadTexture(path);
+					textureObject3D.polygonOffset = true;
+					textureObject3D.polygonOffsetFactor = 1;
+					textureObject3D.polygonOffsetUnits = 1;
+				} else {
+					textureObject3D = Manager.GL.loadTextureEmpty();
+				}
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}

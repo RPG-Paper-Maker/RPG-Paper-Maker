@@ -30,8 +30,31 @@ function MainPreviewer3D({ id }: Props) {
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
 	const currentMountainID = useSelector((state: RootState) => state.mapEditor.currentMountainID);
-	const currentMountainWidthSquares = useSelector((state: RootState) => state.mapEditor.currentMountainWidthSquares);
-	const currentMountainWidthPixels = useSelector((state: RootState) => state.mapEditor.currentMountainWidthPixels);
+	const currentMountainWidthSquaresBot = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthSquaresBot,
+	);
+	const currentMountainWidthPixelsBot = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthPixelsBot,
+	);
+	const currentMountainWidthSquaresTop = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthSquaresTop,
+	);
+	const currentMountainWidthPixelsTop = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthPixelsTop,
+	);
+	const currentMountainWidthSquaresLeft = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthSquaresLeft,
+	);
+	const currentMountainWidthPixelsLeft = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthPixelsLeft,
+	);
+	const currentMountainWidthSquaresRight = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthSquaresRight,
+	);
+	const currentMountainWidthPixelsRight = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainWidthPixelsRight,
+	);
+	const allSides = useSelector((state: RootState) => state.mapEditor.currentMountainAllSides);
 	const currentMountainHeightSquares = useSelector(
 		(state: RootState) => state.mapEditor.currentMountainHeightSquares,
 	);
@@ -81,8 +104,14 @@ function MainPreviewer3D({ id }: Props) {
 						await scene.loadMountain(
 							currentMountainID,
 							currentTilesetFloorSpriteTexture,
-							currentMountainWidthSquares,
-							currentMountainWidthPixels,
+							currentMountainWidthSquaresBot,
+							currentMountainWidthPixelsBot,
+							currentMountainWidthSquaresTop,
+							currentMountainWidthPixelsTop,
+							currentMountainWidthSquaresLeft,
+							currentMountainWidthPixelsLeft,
+							currentMountainWidthSquaresRight,
+							currentMountainWidthPixelsRight,
 							currentMountainHeightSquares,
 							currentMountainHeightPixels,
 						);
@@ -163,8 +192,15 @@ function MainPreviewer3D({ id }: Props) {
 		currentAutotileTexture,
 		currentWallID,
 		currentMountainID,
-		currentMountainWidthSquares,
-		currentMountainWidthPixels,
+		currentMountainWidthSquaresBot,
+		currentMountainWidthPixelsBot,
+		currentMountainWidthSquaresTop,
+		currentMountainWidthPixelsTop,
+		currentMountainWidthSquaresLeft,
+		currentMountainWidthPixelsLeft,
+		currentMountainWidthSquaresRight,
+		currentMountainWidthPixelsRight,
+		allSides,
 		currentMountainHeightSquares,
 		currentMountainHeightPixels,
 		currentObject3DID,

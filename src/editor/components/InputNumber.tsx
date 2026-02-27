@@ -22,6 +22,7 @@ type Props = {
 	min?: number;
 	decimals?: boolean;
 	disabled?: boolean;
+	suffixPlaceholder?: string;
 };
 
 function InputNumber({
@@ -32,6 +33,7 @@ function InputNumber({
 	max = 999999999,
 	decimals = false,
 	disabled = false,
+	suffixPlaceholder,
 }: Props) {
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
 
@@ -40,6 +42,7 @@ function InputNumber({
 
 	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
 	const [isTyping, setIsTyping] = useState(false);
+	const [focused, setFocused] = useState(false);
 
 	const width = (() => {
 		switch (widthType) {
@@ -103,6 +106,34 @@ function InputNumber({
 			};
 		}
 	}, [isTyping]);
+
+	if (suffixPlaceholder) {
+		return (
+			<div className='inputSuffixWrapper' style={{ minWidth: width, maxWidth: width }}>
+				<input
+					type='number'
+					min={min}
+					max={max}
+					value={displayedValue}
+					onFocus={() => setFocused(true)}
+					onBlur={() => {
+						setFocused(false);
+						handleBlur();
+					}}
+					onChange={handleChange}
+					step='any'
+					style={{ minWidth: width, maxWidth: width }}
+					disabled={disabled}
+				/>
+				{!focused && (
+					<div className='inputSuffixOverlay'>
+						{displayedValue}
+						<span className='inputSuffix'>{suffixPlaceholder}</span>
+					</div>
+				)}
+			</div>
+		);
+	}
 
 	return (
 		<input

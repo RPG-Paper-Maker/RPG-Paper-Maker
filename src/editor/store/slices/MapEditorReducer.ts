@@ -30,8 +30,15 @@ const MapEditorSlice = createSlice({
 		currentAutotileTexture: new Rectangle(0, 0, 1, 1),
 		currentWallID: 1,
 		currentMountainID: 1,
-		currentMountainWidthSquares: 0,
-		currentMountainWidthPixels: 0,
+		currentMountainWidthSquaresBot: 0,
+		currentMountainWidthPixelsBot: 0,
+		currentMountainWidthSquaresTop: 0,
+		currentMountainWidthPixelsTop: 0,
+		currentMountainWidthSquaresLeft: 0,
+		currentMountainWidthPixelsLeft: 0,
+		currentMountainWidthSquaresRight: 0,
+		currentMountainWidthPixelsRight: 0,
+		currentMountainAllSides: true,
 		currentMountainHeightSquares: 1,
 		currentMountainHeightPixels: 0,
 		currentObject3DID: 1,
@@ -67,11 +74,32 @@ const MapEditorSlice = createSlice({
 		setCurrentMountainID(state, action: PayloadAction<number>) {
 			state.currentMountainID = action.payload;
 		},
-		setCurrentMountainWidthSquares(state, action: PayloadAction<number>) {
-			state.currentMountainWidthSquares = action.payload;
+		setCurrentMountainWidthSquaresBot(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresBot = action.payload;
 		},
-		setCurrentMountainWidthPixels(state, action: PayloadAction<number>) {
-			state.currentMountainWidthPixels = action.payload;
+		setCurrentMountainWidthPixelsBot(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsBot = action.payload;
+		},
+		setCurrentMountainWidthSquaresTop(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresTop = action.payload;
+		},
+		setCurrentMountainWidthPixelsTop(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsTop = action.payload;
+		},
+		setCurrentMountainWidthSquaresLeft(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresLeft = action.payload;
+		},
+		setCurrentMountainWidthPixelsLeft(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsLeft = action.payload;
+		},
+		setCurrentMountainWidthSquaresRight(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresRight = action.payload;
+		},
+		setCurrentMountainWidthPixelsRight(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsRight = action.payload;
+		},
+		setCurrentMountainAllSides(state, action: PayloadAction<boolean>) {
+			state.currentMountainAllSides = action.payload;
 		},
 		setCurrentMountainHeightSquares(state, action: PayloadAction<number>) {
 			state.currentMountainHeightSquares = action.payload;
@@ -122,8 +150,15 @@ export const {
 	setCurrentAutotileTexture,
 	setCurrentWallID,
 	setCurrentMountainID,
-	setCurrentMountainWidthSquares,
-	setCurrentMountainWidthPixels,
+	setCurrentMountainWidthSquaresBot,
+	setCurrentMountainWidthPixelsBot,
+	setCurrentMountainWidthSquaresTop,
+	setCurrentMountainWidthPixelsTop,
+	setCurrentMountainWidthSquaresLeft,
+	setCurrentMountainWidthPixelsLeft,
+	setCurrentMountainWidthSquaresRight,
+	setCurrentMountainWidthPixelsRight,
+	setCurrentMountainAllSides,
 	setCurrentMountainHeightSquares,
 	setCurrentMountainHeightPixels,
 	setCurrentObject3DID,

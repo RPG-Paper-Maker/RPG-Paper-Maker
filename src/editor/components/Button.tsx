@@ -42,7 +42,7 @@ function Button({
 	intervalHold = 0,
 	icon,
 	activable = false,
-	active = true,
+	active = false,
 	big = false,
 	backgroundOnHoverOnly = false,
 	square = false,
@@ -59,8 +59,6 @@ function Button({
 	if (active !== activeState) {
 		setActiveState(active);
 	}
-
-	const unactive = !activeState;
 
 	const handleClick = () => {
 		if (!disabled) {
@@ -102,7 +100,7 @@ function Button({
 		<button
 			ref={ref}
 			className={Utils.getClassName(
-				{ disabled, unactive, big, backgroundOnHoverOnly, square, small, fillWidth },
+				{ disabled, active: activeState, big, backgroundOnHoverOnly, square, small, fillWidth },
 				buttonType,
 			)}
 			onClick={handleClick}

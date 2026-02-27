@@ -715,3 +715,10 @@ export enum OS_KIND {
 	DARWIN = 'darwin',
 	WEB = 'web',
 }
+
+export enum MOUNTAIN_SIDE {
+	BOT = 'bot',
+	TOP = 'top',
+	LEFT = 'left',
+	RIGHT = 'right',
+}

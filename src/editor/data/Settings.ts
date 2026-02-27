@@ -27,8 +27,15 @@ class Settings extends Serializable {
 	public mapEditorCurrentAutotileTexture!: Rectangle;
 	public mapEditorCurrentWallID!: number;
 	public mapEditorCurrentMountainID!: number;
-	public mapEditorCurrentMountainWidthSquares!: number;
-	public mapEditorCurrentMountainWidthPixels!: number;
+	public mapEditorCurrentMountainWidthSquaresBot!: number;
+	public mapEditorCurrentMountainWidthPixelsBot!: number;
+	public mapEditorCurrentMountainWidthSquaresTop!: number;
+	public mapEditorCurrentMountainWidthPixelsTop!: number;
+	public mapEditorCurrentMountainWidthSquaresLeft!: number;
+	public mapEditorCurrentMountainWidthPixelsLeft!: number;
+	public mapEditorCurrentMountainWidthSquaresRight!: number;
+	public mapEditorCurrentMountainWidthPixelsRight!: number;
+	public mapEditorCurrentMountainAllSides!: boolean;
 	public mapEditorCurrentMountainHeightSquares!: number;
 	public mapEditorCurrentMountainHeightPixels!: number;
 	public mapEditorCurrentObject3DID!: number;
@@ -62,8 +69,15 @@ class Settings extends Serializable {
 		['mapEditorCurrentAutotileTexture', 'mecat', undefined, BINDING.RECTANGLE],
 		['mapEditorCurrentWallID', 'mecwid', 1, BINDING.NUMBER],
 		['mapEditorCurrentMountainID', 'mecmid', 1, BINDING.NUMBER],
-		['mapEditorCurrentMountainWidthSquares', 'mecmws', 0, BINDING.NUMBER],
-		['mapEditorCurrentMountainWidthPixels', 'mecmwp', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthSquaresBot', 'mecmwsb', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthPixelsBot', 'mecmwpb', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthSquaresTop', 'mecmwst', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthPixelsTop', 'mecmwpt', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthSquaresLeft', 'mecmwsl', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthPixelsLeft', 'mecmwpl', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthSquaresRight', 'mecmwsr', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainWidthPixelsRight', 'mecmwpr', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainAllSides', 'mecmlw', true, BINDING.BOOLEAN],
 		['mapEditorCurrentMountainHeightSquares', 'mecmhs', 1, BINDING.NUMBER],
 		['mapEditorCurrentMountainHeightPixels', 'mecmhp', 0, BINDING.NUMBER],
 		['mapEditorCurrentObject3DID', 'mecoid', 1, BINDING.NUMBER],

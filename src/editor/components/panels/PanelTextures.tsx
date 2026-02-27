@@ -105,7 +105,7 @@ function PanelTextures({ visible, extraContent }: Props) {
 			className={Utils.getClassName({ hidden: !visible }, 'flex flexColumn flexOne gapSmall fillHeight')}
 		>
 			<Flex one>
-				<Splitter vertical defaultLeftSize={window.innerHeight / 3}>
+				<Splitter vertical defaultLeftSize={window.innerHeight / 2}>
 					<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall'>
 						{getMainContent()}
 					</div>

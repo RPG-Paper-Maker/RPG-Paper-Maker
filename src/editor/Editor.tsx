@@ -75,10 +75,10 @@ function Editor() {
 	);
 }
 
-export * as Data from './data/index';
 export * as Manager from './managers/index';
-export * as MapElement from './mapElements/index';
-export * as Model from './models/index';
 export * as Scene from './scenes/index';
+export * as Model from './models/index';
+export * as MapElement from './mapElements/index';
+export * as Data from './data/index';
 
 export default Editor;

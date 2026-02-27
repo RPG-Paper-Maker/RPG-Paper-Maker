@@ -12,7 +12,7 @@
 import i18next from 'i18next';
 import * as THREE from 'three';
 import { MapElement, Model, Scene } from '../Editor';
-import { BINDING, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType, MOUNTAIN_SIDE, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
@@ -36,8 +36,14 @@ class Mountain extends Base {
 	public static Y_MID_BOT_OFFSET = 6;
 
 	public mountainID!: number;
-	public widthSquares!: number;
-	public widthPixels!: number;
+	public widthSquaresBot!: number;
+	public widthPixelsBot!: number;
+	public widthSquaresTop!: number;
+	public widthPixelsTop!: number;
+	public widthSquaresLeft!: number;
+	public widthPixelsLeft!: number;
+	public widthSquaresRight!: number;
+	public widthPixelsRight!: number;
 	public heightSquares!: number;
 	public heightPixels!: number;
 	public top!: boolean;
@@ -48,8 +54,14 @@ class Mountain extends Base {
 
 	public static readonly bindings: BindingType[] = [
 		['mountainID', 'sid', -1, BINDING.NUMBER],
-		['widthSquares', 'ws', 0, BINDING.NUMBER],
-		['widthPixels', 'wp', 0, BINDING.NUMBER],
+		['widthSquaresBot', 'wsb', 0, BINDING.NUMBER],
+		['widthPixelsBot', 'wpb', 0, BINDING.NUMBER],
+		['widthSquaresTop', 'wst', 0, BINDING.NUMBER],
+		['widthPixelsTop', 'wpt', 0, BINDING.NUMBER],
+		['widthSquaresLeft', 'wsl', 0, BINDING.NUMBER],
+		['widthPixelsLeft', 'wpl', 0, BINDING.NUMBER],
+		['widthSquaresRight', 'wsr', 0, BINDING.NUMBER],
+		['widthPixelsRight', 'wpr', 0, BINDING.NUMBER],
 		['heightSquares', 'hs', 1, BINDING.NUMBER],
 		['heightPixels', 'hp', 0, BINDING.NUMBER],
 		['top', 't', false, BINDING.BOOLEAN],
@@ -77,15 +89,27 @@ class Mountain extends Base {
 
 	static create(
 		mountainID: number,
-		widthSquares: number,
-		widthPixels: number,
+		widthSquaresBot: number,
+		widthPixelsBot: number,
+		widthSquaresTop: number,
+		widthPixelsTop: number,
+		widthSquaresLeft: number,
+		widthPixelsLeft: number,
+		widthSquaresRight: number,
+		widthPixelsRight: number,
 		heightSquares: number,
 		heightPixels: number,
 	): MapElement.Mountain {
 		const mountain = new MapElement.Mountain();
 		mountain.mountainID = mountainID;
-		mountain.widthSquares = widthSquares;
-		mountain.widthPixels = widthPixels;
+		mountain.widthSquaresBot = widthSquaresBot;
+		mountain.widthPixelsBot = widthPixelsBot;
+		mountain.widthSquaresTop = widthSquaresTop;
+		mountain.widthPixelsTop = widthPixelsTop;
+		mountain.widthSquaresLeft = widthSquaresLeft;
+		mountain.widthPixelsLeft = widthPixelsLeft;
+		mountain.widthSquaresRight = widthSquaresRight;
+		mountain.widthPixelsRight = widthPixelsRight;
 		mountain.heightSquares = heightSquares;
 		mountain.heightPixels = heightPixels;
 		return mountain;
@@ -96,8 +120,14 @@ class Mountain extends Base {
 			const mountain = mapElement as MapElement.Mountain;
 			return (
 				mountain.mountainID === this.mountainID &&
-				mountain.widthSquares === this.widthSquares &&
-				mountain.widthPixels === this.widthPixels &&
+				mountain.widthSquaresBot === this.widthSquaresBot &&
+				mountain.widthPixelsBot === this.widthPixelsBot &&
+				mountain.widthSquaresTop === this.widthSquaresTop &&
+				mountain.widthPixelsTop === this.widthPixelsTop &&
+				mountain.widthSquaresLeft === this.widthSquaresLeft &&
+				mountain.widthPixelsLeft === this.widthPixelsLeft &&
+				mountain.widthSquaresRight === this.widthSquaresRight &&
+				mountain.widthPixelsRight === this.widthPixelsRight &&
 				mountain.heightSquares === this.heightSquares &&
 				mountain.heightPixels === this.heightPixels
 			);
@@ -111,23 +141,53 @@ class Mountain extends Base {
 	}
 
 	getTotalSquaresWidth(): number {
-		return this.widthSquares + (this.getWidthOnlyPixels() > 0 ? 1 : 0);
+		return (
+			Math.max(this.widthSquaresBot, this.widthSquaresTop, this.widthSquaresLeft, this.widthSquaresRight) +
+			(this.getMaxWidthOnlyPixels() > 0 ? 1 : 0)
+		);
 	}
 
 	getTotalSquaresHeight(yPixels: number): number {
 		return this.heightSquares + (this.getHeightOnlyPixels() + yPixels > 0 ? 1 : 0);
 	}
 
-	getWidthOnlyPixels(): number {
-		return Math.round((this.widthPixels * Project.SQUARE_SIZE) / 100);
+	getWidthOnlyPixelsForSide(side: MOUNTAIN_SIDE): number {
+		switch (side) {
+			case MOUNTAIN_SIDE.BOT:
+				return Math.round((this.widthPixelsBot * Project.SQUARE_SIZE) / 100);
+			case MOUNTAIN_SIDE.TOP:
+				return Math.round((this.widthPixelsTop * Project.SQUARE_SIZE) / 100);
+			case MOUNTAIN_SIDE.LEFT:
+				return Math.round((this.widthPixelsLeft * Project.SQUARE_SIZE) / 100);
+			case MOUNTAIN_SIDE.RIGHT:
+				return Math.round((this.widthPixelsRight * Project.SQUARE_SIZE) / 100);
+		}
+	}
+
+	getMaxWidthOnlyPixels(): number {
+		return Math.max(
+			this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.BOT),
+			this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.TOP),
+			this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.LEFT),
+			this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.RIGHT),
+		);
 	}
 
 	getHeightOnlyPixels(): number {
 		return Math.round((this.heightPixels * Project.SQUARE_SIZE) / 100);
 	}
 
-	getWidthTotalPixels(): number {
-		return this.widthSquares * Project.SQUARE_SIZE + this.getWidthOnlyPixels();
+	getWidthTotalPixelsForSide(side: MOUNTAIN_SIDE): number {
+		switch (side) {
+			case MOUNTAIN_SIDE.BOT:
+				return this.widthSquaresBot * Project.SQUARE_SIZE + this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.BOT);
+			case MOUNTAIN_SIDE.TOP:
+				return this.widthSquaresTop * Project.SQUARE_SIZE + this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.TOP);
+			case MOUNTAIN_SIDE.LEFT:
+				return this.widthSquaresLeft * Project.SQUARE_SIZE + this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.LEFT);
+			case MOUNTAIN_SIDE.RIGHT:
+				return this.widthSquaresRight * Project.SQUARE_SIZE + this.getWidthOnlyPixelsForSide(MOUNTAIN_SIDE.RIGHT);
+		}
 	}
 
 	getHeightTotalPixels(): number {
@@ -443,8 +503,8 @@ class Mountain extends Base {
 			false,
 		);
 
-		// Draw corner only if there is a border width
-		if (wp > 0) {
+		// Draw corner if this face has a slope (right-end cap) or the adjacent face does (left-end cap)
+		if (wp > 0 || xLeft > xLeftBot) {
 			count = this.drawFace(
 				position,
 				xKind,
@@ -504,7 +564,7 @@ class Mountain extends Base {
 		// Textures coordinates
 		let x = (xKind * Project.SQUARE_SIZE) / width;
 		let y =
-			((isCorner ? yKind + 4 : yKind) * Project.SQUARE_SIZE +
+			((isCorner ? Math.min(yKind + 4, Mountain.Y_MID_BOT_OFFSET) : yKind) * Project.SQUARE_SIZE +
 				(yKind === Mountain.Y_BOT_OFFSET ? Project.SQUARE_SIZE - faceHeight : 0)) /
 			height;
 		let h = faceHeight / height;
@@ -573,13 +633,41 @@ class Mountain extends Base {
 		return count;
 	}
 
+	buildFaceVectors(
+		wp: number,
+		wpAdjacent: number,
+		hp: number,
+		localPosition: THREE.Vector3,
+	): {
+		xLeft: number;
+		xRight: number;
+		yTop: number;
+		yBot: number;
+		zFront: number;
+		zBack: number;
+		vecFrontA: THREE.Vector3;
+		vecBackA: THREE.Vector3;
+		vecFrontB: THREE.Vector3;
+		vecBackB: THREE.Vector3;
+	} {
+		const xLeft = localPosition.x;
+		const xRight = localPosition.x + Project.SQUARE_SIZE;
+		const yTop = localPosition.y + hp;
+		const yBot = localPosition.y;
+		const zFront = localPosition.z + Project.SQUARE_SIZE + wp;
+		const zBack = zFront - wp;
+		const vecFrontA = new THREE.Vector3(xLeft - wpAdjacent, yBot, zBack);
+		const vecBackA = new THREE.Vector3(xLeft, yTop, zBack);
+		const vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
+		const vecBackB = new THREE.Vector3(xLeft, yTop, zBack);
+		return { xLeft, xRight, yTop, yBot, zFront, zBack, vecFrontA, vecBackA, vecFrontB, vecBackB };
+	}
+
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		// General configurations
-		const wp = this.getWidthTotalPixels();
 		const hp = this.getHeightTotalPixels();
 		const width = 4 * Project.SQUARE_SIZE;
 		const height = 7 * Project.SQUARE_SIZE;
-		const faceHeight = Math.sqrt(wp * wp + hp * hp);
 		const w = Project.SQUARE_SIZE / width;
 		const localPosition = position.toVector3(false);
 		const center = new THREE.Vector3(
@@ -587,19 +675,12 @@ class Mountain extends Base {
 			localPosition.y + Project.SQUARE_SIZE / 2,
 			localPosition.z + Project.SQUARE_SIZE / 2,
 		);
-		const xLeft = localPosition.x;
-		const xRight = localPosition.x + Project.SQUARE_SIZE;
-		const yTop = localPosition.y + hp;
-		const yBot = localPosition.y;
-		const zFront = localPosition.z + Project.SQUARE_SIZE + wp;
-		const zBack = zFront - wp;
-		const vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
-		const vecBackB = new THREE.Vector3(xLeft, yTop, zBack);
-		const vecFrontA = new THREE.Vector3(xLeft - wp, yBot, zBack);
-		const vecBackA = new THREE.Vector3(xLeft, yTop, zBack);
 
 		// Bot
 		if (!this.bot) {
+			const wpBot = this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.BOT);
+			const faceHeightBot = Math.sqrt(wpBot * wpBot + hp * hp);
+			const fBot = this.buildFaceVectors(wpBot, this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.LEFT), hp, localPosition);
 			count = this.drawEntireFaces(
 				position,
 				this.left,
@@ -609,24 +690,27 @@ class Mountain extends Base {
 				width,
 				height,
 				w,
-				faceHeight,
-				wp,
-				xLeft,
-				xRight,
-				yTop,
-				yBot,
-				zFront,
-				zBack,
-				vecFrontA,
-				vecBackA,
-				vecFrontB,
-				vecBackB,
+				faceHeightBot,
+				wpBot,
+				fBot.xLeft,
+				fBot.xRight,
+				fBot.yTop,
+				fBot.yBot,
+				fBot.zFront,
+				fBot.zBack,
+				fBot.vecFrontA,
+				fBot.vecBackA,
+				fBot.vecFrontB,
+				fBot.vecBackB,
 				geometry,
 				count,
 			);
 		}
 		// Top
 		if (!this.top) {
+			const wpTop = this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.TOP);
+			const faceHeightTop = Math.sqrt(wpTop * wpTop + hp * hp);
+			const fTop = this.buildFaceVectors(wpTop, this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.RIGHT), hp, localPosition);
 			count = this.drawEntireFaces(
 				position,
 				this.right,
@@ -636,24 +720,27 @@ class Mountain extends Base {
 				width,
 				height,
 				w,
-				faceHeight,
-				wp,
-				xLeft,
-				xRight,
-				yTop,
-				yBot,
-				zFront,
-				zBack,
-				vecFrontA,
-				vecBackA,
-				vecFrontB,
-				vecBackB,
+				faceHeightTop,
+				wpTop,
+				fTop.xLeft,
+				fTop.xRight,
+				fTop.yTop,
+				fTop.yBot,
+				fTop.zFront,
+				fTop.zBack,
+				fTop.vecFrontA,
+				fTop.vecBackA,
+				fTop.vecFrontB,
+				fTop.vecBackB,
 				geometry,
 				count,
 			);
 		}
 		// Left
 		if (!this.left) {
+			const wpLeft = this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.LEFT);
+			const faceHeightLeft = Math.sqrt(wpLeft * wpLeft + hp * hp);
+			const fLeft = this.buildFaceVectors(wpLeft, this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.TOP), hp, localPosition);
 			count = this.drawEntireFaces(
 				position,
 				this.top,
@@ -663,24 +750,27 @@ class Mountain extends Base {
 				width,
 				height,
 				w,
-				faceHeight,
-				wp,
-				xLeft,
-				xRight,
-				yTop,
-				yBot,
-				zFront,
-				zBack,
-				vecFrontA,
-				vecBackA,
-				vecFrontB,
-				vecBackB,
+				faceHeightLeft,
+				wpLeft,
+				fLeft.xLeft,
+				fLeft.xRight,
+				fLeft.yTop,
+				fLeft.yBot,
+				fLeft.zFront,
+				fLeft.zBack,
+				fLeft.vecFrontA,
+				fLeft.vecBackA,
+				fLeft.vecFrontB,
+				fLeft.vecBackB,
 				geometry,
 				count,
 			);
 		}
 		// Right
 		if (!this.right) {
+			const wpRight = this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.RIGHT);
+			const faceHeightRight = Math.sqrt(wpRight * wpRight + hp * hp);
+			const fRight = this.buildFaceVectors(wpRight, this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.BOT), hp, localPosition);
 			count = this.drawEntireFaces(
 				position,
 				this.bot,
@@ -690,18 +780,18 @@ class Mountain extends Base {
 				width,
 				height,
 				w,
-				faceHeight,
-				wp,
-				xLeft,
-				xRight,
-				yTop,
-				yBot,
-				zFront,
-				zBack,
-				vecFrontA,
-				vecBackA,
-				vecFrontB,
-				vecBackB,
+				faceHeightRight,
+				wpRight,
+				fRight.xLeft,
+				fRight.xRight,
+				fRight.yTop,
+				fRight.yBot,
+				fRight.zFront,
+				fRight.zBack,
+				fRight.vecFrontA,
+				fRight.vecBackA,
+				fRight.vecFrontB,
+				fRight.vecBackB,
 				geometry,
 				count,
 			);
@@ -732,8 +822,25 @@ class Mountain extends Base {
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		const legacyWs = json.ws ?? 0;
+		const legacyWp = json.wp ?? 0;
+		if (json.wsb === undefined && json.wst === undefined && json.wsl === undefined && json.wsr === undefined) {
+			json.wsb = legacyWs;
+			json.wst = legacyWs;
+			json.wsl = legacyWs;
+			json.wsr = legacyWs;
+		}
+		if (json.wpb === undefined && json.wpt === undefined && json.wpl === undefined && json.wpr === undefined) {
+			json.wpb = legacyWp;
+			json.wpt = legacyWp;
+			json.wpl = legacyWp;
+			json.wpr = legacyWp;
+		}
 		super.read(json, Mountain.getBindings(additionnalBinding));
-		this.angle = MapElement.Mountains.calculateAngle(this.getWidthTotalPixels(), this.getHeightTotalPixels());
+		this.angle = MapElement.Mountains.calculateAngle(
+			this.getWidthTotalPixelsForSide(MOUNTAIN_SIDE.BOT),
+			this.getHeightTotalPixels(),
+		);
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

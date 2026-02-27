@@ -136,7 +136,20 @@ class Previewer3D extends Base {
 		}
 	}
 
-	async loadMountain(mountainID: number, textureFloor: Rectangle, ws: number, wp: number, hs: number, hp: number) {
+	async loadMountain(
+		mountainID: number,
+		textureFloor: Rectangle,
+		wsb: number,
+		wpb: number,
+		wst: number,
+		wpt: number,
+		wsl: number,
+		wpl: number,
+		wsr: number,
+		wpr: number,
+		hs: number,
+		hp: number,
+	) {
 		const wall = Project.current!.specialElements.getMountainByID(mountainID);
 		if (!wall) {
 			this.clear();
@@ -144,9 +157,20 @@ class Previewer3D extends Base {
 		}
 		const textureMountain = await MapElement.Mountains.loadMountainTexture(Scene.Map.current, mountainID);
 		if (textureMountain) {
-			const wpercent = Position3D.getPercentOfPixels(wp);
 			const hpercent = Position3D.getPercentOfPixels(hp);
-			const mountainElement = MapElement.Mountain.create(mountainID, ws, wpercent, hs, hpercent);
+			const mountainElement = MapElement.Mountain.create(
+				mountainID,
+				wsb,
+				Position3D.getPercentOfPixels(wpb),
+				wst,
+				Position3D.getPercentOfPixels(wpt),
+				wsl,
+				Position3D.getPercentOfPixels(wpl),
+				wsr,
+				Position3D.getPercentOfPixels(wpr),
+				hs,
+				hpercent,
+			);
 			let geometry = new CustomGeometry();
 			mountainElement.updateGeometry(geometry, new Position(), 0);
 			this.addToScene(geometry, textureMountain);
@@ -156,7 +180,15 @@ class Previewer3D extends Base {
 			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
 			floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
-			this.addToScene(geometry, this.material, false, new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16));
+			const widthLeft = wsl * Project.SQUARE_SIZE + wpl;
+		const widthRight = wsr * Project.SQUARE_SIZE + wpr;
+		const widthTop = wst * Project.SQUARE_SIZE + wpt;
+		const widthBot = wsb * Project.SQUARE_SIZE + wpb;
+		this.addToScene(geometry, this.material, false, new THREE.Vector3(
+			(widthLeft - widthRight) * (Project.SQUARE_SIZE / 2),
+			(floorPosition.getTotalY() / 2) * Project.SQUARE_SIZE,
+			(widthTop - widthBot) * (Project.SQUARE_SIZE / 2),
+		));
 		}
 	}
 
@@ -257,7 +289,9 @@ class Previewer3D extends Base {
 			mesh.rotation.y = this.currentRotation;
 			mesh.geometry.center();
 			if (position) {
-				mesh.position.set(position.x, position.y, position.z);
+				const s = Project.SQUARE_SIZE;
+				mesh.geometry.translate(position.x / s, position.y / s, position.z / s);
+				mesh.geometry.computeBoundingBox();
 			}
 			this.meshes.push(mesh);
 			this.scene.add(mesh);

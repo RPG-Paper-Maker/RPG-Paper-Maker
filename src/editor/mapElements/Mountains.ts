@@ -195,6 +195,9 @@ class Mountains {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
 		const material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
+		material.polygonOffset = true;
+		material.polygonOffsetFactor = 1;
+		material.polygonOffsetUnits = 1;
 		if (map) {
 			map.texturesMountains.set(picture.id, material);
 		}

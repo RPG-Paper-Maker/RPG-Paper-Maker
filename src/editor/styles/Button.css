@@ -62,8 +62,12 @@ button:hover:not(.disabled) {
 	background-color: var(--lightest-bg-color);
 }
 
-button.unactive {
-	opacity: 0.5;
+button.active {
+	background-color: var(--primary-dark-color);
+
+	&:hover:not(.disabled) {
+		background-color: var(--hover-primary-dark-color);
+	}
 }
 
 button.primary:hover:not(.disabled) {

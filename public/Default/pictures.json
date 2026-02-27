@@ -817,7 +817,8 @@
 				{ "br": true, "id": 14, "name": "roof-white.png" },
 				{ "br": true, "id": 15, "name": "sand.png" },
 				{ "br": true, "id": 16, "name": "sandstone.png" },
-				{ "br": true, "id": 17, "name": "sewers.png" }
+				{ "br": true, "id": 17, "name": "sewers.png" },
+				{ "br": true, "id": 18, "name": "stairs.png" }
 			]
 		},
 		{
