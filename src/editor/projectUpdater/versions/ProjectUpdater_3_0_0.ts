@@ -191,7 +191,8 @@ class ProjectUpdater_3_0_0 {
 		const jsonEvents = await readJSON(Paths.join(projectPath, 'commonEvents.json'));
 		if (jsonEvents) {
 			const objects = jsonEvents.commonObjects as JSONType[];
-			let object = objects.find((obj) => obj.id === 1);
+			let index = objects.findIndex((obj) => obj.id === 1);
+			let object = objects[index];
 			jsonEvents.do = object ?? {
 				events: [{ id: 1, name: 'Hero action', p: [], r: { '1': { bh: true, c: [] } }, sys: false }],
 				hId: -1,
@@ -220,8 +221,11 @@ class ProjectUpdater_3_0_0 {
 					},
 				],
 			};
-			object = objects.find((obj) => obj.id === 2);
+			objects[index] = { ...object, name: 'Default_OLD' };
+			index = objects.findIndex((obj) => obj.id === 2);
+			object = objects[index];
 			jsonEvents.ho = object ?? jsonEvents.do;
+			objects[index] = { ...object, name: 'Hero_OLD' };
 			await writeJSON(Paths.join(projectPath, 'commonEvents.json'), jsonEvents);
 		}
 		callback(70);
