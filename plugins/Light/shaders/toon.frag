@@ -44,6 +44,7 @@ void getDirShadowMasks(inout float dirShadows[NUM_DIR_LIGHT_SHADOWS])
 		dirShadows[i] = receiveShadow ? getShadow(
 			directionalShadowMap[i],
 			directionalLight.shadowMapSize,
+			directionalLight.shadowIntensity,
 			directionalLight.shadowBias,
 			directionalLight.shadowRadius,
 			vDirectionalShadowCoord[i]
@@ -64,6 +65,7 @@ void getSpotShadowMasks(inout float spotShadows[NUM_SPOT_LIGHT_SHADOWS])
 		spotShadows[i] = receiveShadow ? getShadow(
 			spotShadowMap[i],
 			spotLight.shadowMapSize,
+			spotLight.shadowIntensity,
 			spotLight.shadowBias,
 			spotLight.shadowRadius,
 			vSpotShadowCoord[i]
@@ -84,6 +86,7 @@ void getPointShadowMasks(inout float pointShadows[NUM_POINT_LIGHT_SHADOWS])
 		pointShadows[i] = receiveShadow ? getPointShadow(
 			pointShadowMap[i],
 			pointLight.shadowMapSize,
+			pointLight.shadowIntensity,
 			pointLight.shadowBias,
 			pointLight.shadowRadius,
 			vPointShadowCoord[i],
