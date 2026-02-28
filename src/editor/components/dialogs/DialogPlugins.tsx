@@ -18,6 +18,7 @@ import { Constants, INPUT_TYPE_WIDTH, IO, ITERATOR, JSONType, Paths, PLUGIN_TYPE
 import {
 	checkFileExists,
 	copyFolder,
+	createFile,
 	exportFolder,
 	readFile,
 	readPublicFile,
@@ -184,9 +185,11 @@ function DialogPlugins({ setIsOpen }: Props) {
 		);
 	};
 
-	const handleOnChangeCode = (v?: string) => {
+	const handleOnChangeCode = async (v?: string) => {
 		if (selectedPlugin && v !== undefined) {
 			selectedPlugin.code = v;
+			const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin.name);
+			await createFile(Paths.join(path, Paths.FILE_PLUGIN_CODE), v);
 			selectedPlugin.saved = false;
 			setTriggerUpdate((b) => !b);
 		}
