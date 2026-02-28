@@ -52,7 +52,7 @@
 	},
 	"scripts": {
 		"start": "vite --host --port 3000",
-		"build": "rm -rf dist && npm run update-mods && npm run generate-file-manifest && npm run push-file-manifest && vite build && bash scripts/update-dist-dependencies.sh",
+		"build": "rm -rf dist && npm run update-mods && vite build && npm run generate-file-manifest && npm run push-file-manifest && bash scripts/update-dist-dependencies.sh",
 		"build-quick": "vite build",
 		"eslint": "eslint ./src",
 		"electron": "electron ./main.js",
