@@ -206,7 +206,8 @@
             "sewers.png",
             "sidewalk.png",
             "snow-no-borders.png",
-            "snow.png"
+            "snow.png",
+            "stairs.png"
           ]
         },
         "Objects3D": {
