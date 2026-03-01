@@ -39,13 +39,18 @@ class Tilesets extends Serializable {
 		this.list[1].name = t('haunted.plains.woods');
 		this.list[2].name = t('snow.plains.woods');
 		this.list[3].name = t('beach.desert');
-		this.list[4].name = t('town');
-		this.list[5].name = t('desert.town');
-		this.list[6].name = t('snow.town');
-		this.list[7].name = t('inside');
-		this.list[8].name = t('shop');
-		this.list[9].name = t('sewers');
-		this.list[10].name = t('dungeon.mines');
+		this.list[4].name = t('jungle');
+		this.list[5].name = t('town');
+		this.list[6].name = t('desert.town');
+		this.list[7].name = t('snow.town');
+		this.list[8].name = t('inside');
+		this.list[9].name = t('school');
+		this.list[10].name = t('shop');
+		this.list[11].name = t('sewers');
+		this.list[12].name = t('dungeon.mines');
+		this.list[13].name = t('castle');
+		this.list[14].name = t('volcano');
+		this.list[15].name = t('spaceship');
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
