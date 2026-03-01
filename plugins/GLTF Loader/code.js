@@ -11,7 +11,7 @@ let GLTFLoader = null;
 	loader = new GLTFLoader();
 	loader.setPath(Manager.Plugins.getParameter(pluginName, 'Models directory path'));
 })();
-const clock = new THREE.Clock();
+const clock = new THREE.Timer();
 
 var mixerList = [];
 var queue = [];
@@ -20,6 +20,7 @@ var lastMap = null;
 
 setInterval(function () {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
+		clock.update();
 		const delta = clock.getDelta();
 		if (Scene.Map.current !== lastMap) {
 			mixerList = [];

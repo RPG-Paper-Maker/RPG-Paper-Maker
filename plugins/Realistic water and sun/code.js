@@ -13,12 +13,13 @@ let Water = null;
 		},
 	);
 })();
-const clock = new THREE.Clock();
+const clock = new THREE.Timer();
 const sun = new THREE.Vector3();
 const waterList = [];
 
 setInterval(function () {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
+		clock.update();
 		const delta = clock.getDelta();
 		for (var i = 0; i < waterList.length; i++) {
 			if (waterList[i].parent !== Scene.Map.current.scene) waterList.splice(i, 1);

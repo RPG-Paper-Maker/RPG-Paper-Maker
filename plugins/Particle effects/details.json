@@ -88,6 +88,6 @@
 	],
 	"description": "Particle effects made easy*! Make your own fire, smoke, wind, sparkle and other effects!\n\n*as long as you know math.\n\nValid operators are +, -, *, ** (power), / and % (remainder).\nValid functions are ln, sin, cos, tan, sqrt, abs, round, var, min and max. min and max are the only functions which accept multiple arguments separated by comma. var returns the value of the game variable of given id. If the argument provided is not an integer, it is rounded.\nValid values are t, r, r2 and sq. t is the time (in seconds) since that particle was spawned. r and r2 are random values between 0 and 1 for that particle assigned at spawn. sq is the square size.\n\nTip: try this graphing calculator to help visualize formulas: https://www.desmos.com/calculator\n",
 	"name": "Particle effects",
-	"version": "1.3.0",
+	"version": "1.3.1",
 	"website": "https://github.com/yaleksander/RPM-Plugin-Particle-engine"
 }

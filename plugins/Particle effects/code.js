@@ -2,7 +2,7 @@ const pluginName = 'Particle effects';
 
 const emitterList = [];
 const dummy = new THREE.Object3D();
-const clock = new THREE.Clock();
+const clock = new THREE.Timer();
 const loader = new THREE.TextureLoader().setPath(Common.Paths.PLUGINS + pluginName + '/textures/');
 
 const vertShader = `
@@ -309,6 +309,7 @@ function evaluate(expr, t, r) {
 
 setInterval(function () {
 	if (Manager.Stack.top instanceof Scene.Map && !Scene.Map.current.loading) {
+		clock.update();
 		const delta = clock.getDelta();
 		for (var i = 0; i < emitterList.length; i++) {
 			const e = emitterList[i];

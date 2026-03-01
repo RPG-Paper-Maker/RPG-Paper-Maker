@@ -21,7 +21,7 @@ class Base {
 	public loading = true;
 	public initialized = false;
 	public canvas?: HTMLElement | null;
-	public clock = new THREE.Clock();
+	public clock = new THREE.Timer();
 	public delta = 0;
 
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
@@ -30,6 +30,7 @@ class Base {
 	}
 
 	update(): boolean {
+		this.clock.update();
 		this.delta += this.clock.getDelta();
 		if (this.delta > 1 / Base.maxFPS) {
 			this.delta = this.delta % (1 / Base.maxFPS);
