@@ -19,9 +19,10 @@ input {
 	font-size: 12px;
 }
 
-input:focus-visible {
+input:focus {
 	border: 1px solid var(--primary-color);
 	outline-width: 0;
+	outline: none;
 }
 
 input[type='number']::-webkit-inner-spin-button,
