@@ -75,7 +75,6 @@ const PanelTilesets = forwardRef((props, ref) => {
 					onListUpdated={handleListUpdated}
 					scrollable
 					showEditName
-					isLocalization
 					applyDefault
 					doNotOpenDialog
 				/>
