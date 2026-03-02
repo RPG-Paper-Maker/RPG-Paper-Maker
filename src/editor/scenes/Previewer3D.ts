@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import * as THREE from 'three/webgpu';
 import { Base } from '.';
 import {
 	ACTION_KIND,
@@ -38,7 +38,7 @@ class Previewer3D extends Base {
 
 	public id: string;
 	public parentCanvas!: HTMLElement;
-	public material: THREE.MeshPhongMaterial | null = null;
+	public material: THREE.MeshPhongNodeMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public meshes: THREE.Mesh[] = [];
 	public currentRotation: number = (45 * Math.PI) / 180;
@@ -296,7 +296,7 @@ class Previewer3D extends Base {
 			this.addGltfScene(shape.gltfScene, 1, shape.gltfAnimations);
 			return;
 		}
-		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const texture = new THREE.MeshPhongNodeMaterial({ color: 0xffffff, side: THREE.DoubleSide });
 		const geometry = new CustomGeometry();
 		const object = new Model.Object3D();
 		object.shapeKind = SHAPE_KIND.CUSTOM;
@@ -339,7 +339,7 @@ class Previewer3D extends Base {
 
 	addToScene(
 		geometry: CustomGeometry | CustomGeometryFace,
-		material: THREE.MeshPhongMaterial | null = this.material,
+		material: THREE.MeshPhongNodeMaterial | null = this.material,
 		needsClear = true,
 		position: THREE.Vector3 | null = null,
 	) {
@@ -594,16 +594,16 @@ class Previewer3D extends Base {
 	}
 
 	draw3DCut(GL: Manager.GL) {
-		if (GL.renderer && this.canvas) {
+		if (GL.renderer && GL.renderer.initialized && this.canvas) {
 			const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
 			const domRect = GL.renderer.domElement.getBoundingClientRect();
 			if (this.parentCanvas) {
 				const rect = this.parentCanvas.getBoundingClientRect();
-				GL.renderer.setScissor(rect.left, domRect.height - rect.bottom + domRect.top, rect.width, rect.height);
+				GL.renderer.setScissor(rect.left, domRect.height - rect.height, rect.width, rect.height);
 			} else {
-				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
+				GL.renderer.setScissor(left, domRect.height - height, width, height);
 			}
-			GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
+			GL.renderer.setViewport(left, domRect.height - height, width, height);
 			GL.renderer.render(this.scene, this.camera.getThreeCamera());
 		}
 	}

@@ -10,7 +10,7 @@
 */
 
 import { ReactNode } from 'react';
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { BINDING, JSONType, PICTURE_KIND } from '../common';
 import DialogSkybox from '../components/dialogs/models/DialogSkybox';
 import { Project } from '../core/Project';
@@ -44,8 +44,8 @@ class Skybox extends Base {
 		super.applyDefault(Skybox.getBindings([]));
 	}
 
-	async createTextures(): Promise<THREE.MeshPhongMaterial[]> {
-		const textures = [] as THREE.MeshPhongMaterial[];
+	async createTextures(): Promise<THREE.MeshPhongNodeMaterial[]> {
+		const textures = [] as THREE.MeshPhongNodeMaterial[];
 		const sides = [this.left, this.right, this.top, this.bot, this.front, this.back];
 		for (const side of sides) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side);

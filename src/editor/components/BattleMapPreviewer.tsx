@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useState } from 'react';
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Constants, Paths } from '../common';
 import { readJSON } from '../common/Platform';
 import { Battler } from '../core/Battler';

@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { BINDING, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Picture2D } from '../core/Picture2D';
@@ -55,12 +55,12 @@ class SpriteWall extends Base {
 		return wall;
 	}
 
-	static getWallTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+	static getWallTexture(map: Scene.Map, id: number): THREE.MeshPhongNodeMaterial | null {
 		const textureWall = map.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
 		return textureWall || null;
 	}
 
-	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const wall = Project.current!.specialElements.getWallByID(id);
 		const pictureID = wall.pictureID;
 		let textureWall = map ? map.texturesWalls[pictureID] : null;
@@ -82,7 +82,7 @@ class SpriteWall extends Base {
 		return textureWall;
 	}
 
-	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 		const texture = new THREE.Texture();
 		const w = image.width;

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import * as THREE from 'three/webgpu';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import { Base } from '.';
 import {
 	ACTION_KIND,
@@ -67,14 +67,14 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static positionSelectorAnimationFrameID: number;
-	public static materialCursor: THREE.MeshPhongMaterial;
-	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
-	public static materialObjectSquare: THREE.MeshPhongMaterial;
-	public static materialDetectionBox: THREE.MeshPhongMaterial;
-	public static materialDetectionArrow: THREE.MeshPhongMaterial;
+	public static materialCursor: THREE.MeshPhongNodeMaterial;
+	public static materialObjectSquareCursor: THREE.MeshPhongNodeMaterial;
+	public static materialObjectSquare: THREE.MeshPhongNodeMaterial;
+	public static materialDetectionBox: THREE.MeshPhongNodeMaterial;
+	public static materialDetectionArrow: THREE.MeshPhongNodeMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
-	public static materialStartPosition: THREE.MeshPhongMaterial;
+	public static materialStartPosition: THREE.MeshPhongNodeMaterial;
 
 	public id: number;
 	public tag?: Model.TreeMapTag;
@@ -109,8 +109,8 @@ class Map extends Base {
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
 	public previousPortion!: Portion;
-	public materialTileset!: THREE.MeshPhongMaterial;
-	public materialTilesetHover!: THREE.MeshPhongMaterial;
+	public materialTileset!: THREE.MeshPhongNodeMaterial;
+	public materialTilesetHover!: THREE.MeshPhongNodeMaterial;
 	public selectionOffset = new THREE.Vector2();
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
@@ -125,11 +125,11 @@ class Map extends Base {
 	public pointedMapElement: MapElement.Base | null = null;
 	public isMobileMovingCursor = false;
 	public texturesAutotiles: TextureBundle[][] = [];
-	public texturesWalls: THREE.MeshPhongMaterial[] = [];
-	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
-	public texturesObjects3DHover: THREE.MeshPhongMaterial[] = [];
-	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
-	public texturesCharacters: THREE.MeshPhongMaterial[] = [];
+	public texturesWalls: THREE.MeshPhongNodeMaterial[] = [];
+	public texturesObjects3D: THREE.MeshPhongNodeMaterial[] = [];
+	public texturesObjects3DHover: THREE.MeshPhongNodeMaterial[] = [];
+	public texturesMountains: globalThis.Map<number, THREE.MeshPhongNodeMaterial> = new globalThis.Map();
+	public texturesCharacters: THREE.MeshPhongNodeMaterial[] = [];
 	public autotilesOffset = new THREE.Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,

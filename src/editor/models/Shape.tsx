@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three/webgpu';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Constants, CUSTOM_SHAPE_KIND, IO, Paths } from '../common';
 import { readPublicFile } from '../common/Platform';
 import { LocalFile } from '../core/LocalFile';

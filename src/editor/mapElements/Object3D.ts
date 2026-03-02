@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { BINDING, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SHAPE_KIND, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
@@ -52,7 +52,7 @@ abstract class Object3D extends Base {
 		return object;
 	}
 
-	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): THREE.MeshPhongMaterial | null {
+	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): THREE.MeshPhongNodeMaterial | null {
 		const array = hovered ? map.texturesObjects3DHover : map.texturesObjects3D;
 		return array[Project.current!.specialElements.getObject3DByID(id).pictureID] || null;
 	}
@@ -65,7 +65,7 @@ abstract class Object3D extends Base {
 		return true;
 	}
 
-	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
 		const pictureID = object3D.pictureID;
 		if (pictureID === -1) {

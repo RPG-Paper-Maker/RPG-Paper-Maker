@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Mathf, Utils } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { PICTURE_KIND } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
@@ -19,14 +19,14 @@ import { Project } from '../core/Project';
 
 class Mountains {
 	public pictureID: number;
-	public material: THREE.MeshPhongMaterial;
+	public material: THREE.MeshPhongNodeMaterial;
 	public width: number;
 	public height: number;
 	public geometry: CustomGeometry;
 	public count: number;
 	public mesh: THREE.Mesh | null;
 
-	constructor(pictureID: number, material: THREE.MeshPhongMaterial) {
+	constructor(pictureID: number, material: THREE.MeshPhongNodeMaterial) {
 		this.pictureID = pictureID;
 		this.material = material;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
@@ -41,11 +41,11 @@ class Mountains {
 		return width === 0 ? 90 : (Math.atan(height / width) * 180) / Math.PI;
 	}
 
-	static getMountainTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+	static getMountainTexture(map: Scene.Map, id: number): THREE.MeshPhongNodeMaterial | null {
 		return map.texturesMountains.get(Project.current!.specialElements.getMountainByID(id)?.pictureID) || null;
 	}
 
-	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const mountain = Project.current!.specialElements.getMountainByID(id);
 		const pictureID = mountain?.pictureID;
 		let textureMountain = map ? map.texturesMountains.get(pictureID) : null;
@@ -65,7 +65,7 @@ class Mountains {
 		return textureMountain;
 	}
 
-	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongNodeMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 		if (image.width === 0 || image.height === 0) {
 			return Manager.GL.loadTextureEmpty();
