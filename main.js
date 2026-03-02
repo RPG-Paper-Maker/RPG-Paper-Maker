@@ -20,6 +20,8 @@ const run = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.commandLine.appendSwitch('enable-unsafe-webgpu', 'true');
+
 const createSplash = (title) => {
 	const splashPath = path.join(__dirname, 'updater', 'splash.html');
 	const splashURL = `${pathToFileURL(splashPath).href}${title ? `?title=${encodeURIComponent(title)}` : ''}`;

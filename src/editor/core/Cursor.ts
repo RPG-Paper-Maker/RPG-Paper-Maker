@@ -8,7 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
+import { uniform } from 'three/tsl';
 import { EngineSettings } from '../data';
 import { MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
@@ -21,7 +22,7 @@ class Cursor {
 	public static FRAME_MOVE_START = 40;
 	public position: Position;
 	public map: Scene.Map;
-	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
+	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongNodeMaterial>;
 	public frame = new Frame(200);
 	public frameMove = new Frame(Cursor.FRAME_MOVE_START);
 	public firstMove = true;
@@ -31,7 +32,7 @@ class Cursor {
 		this.map = map;
 	}
 
-	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true) {
+	initialize(material: THREE.MeshPhongNodeMaterial, frames = 4, addToScene = true) {
 		const vecA = new THREE.Vector3(0, 0, 0);
 		const vecB = new THREE.Vector3(Project.SQUARE_SIZE, 0, 0);
 		const vecC = new THREE.Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
@@ -147,10 +148,7 @@ class Cursor {
 
 	update() {
 		if (this.mesh && this.frame.update()) {
-			this.mesh.material.userData.uniforms.offset.value = new THREE.Vector2(
-				this.frame.value / this.frame.frames,
-				0,
-			);
+			this.mesh.material.userData.uniforms.offset = uniform(new THREE.Vector2(this.frame.value / this.frame.frames, 0));
 		}
 	}
 }

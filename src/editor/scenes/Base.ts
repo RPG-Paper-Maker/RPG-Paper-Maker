@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Manager, Model } from '../Editor';
 import { Camera } from '../core/Camera';
 
@@ -46,13 +46,12 @@ class Base {
 	onMouseUp() {}
 
 	draw3D(GL: Manager.GL) {
-		if (GL.renderer) {
+		if (GL.renderer && GL.renderer.initialized) {
 			if (this.canvas) {
 				const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
 				const domRect = GL.renderer.domElement.getBoundingClientRect();
-				GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
-				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
-				GL.renderer.clear();
+				GL.renderer.setScissor(left, domRect.height - height, width, height);
+				GL.renderer.setViewport(left, domRect.height - height, width, height);
 				GL.renderer.render(this.scene, this.camera.getThreeCamera());
 			}
 		}

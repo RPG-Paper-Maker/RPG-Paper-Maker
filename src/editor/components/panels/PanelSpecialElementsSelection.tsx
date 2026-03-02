@@ -139,6 +139,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 							scene.camera.perspectiveCamera.updateProjectionMatrix();
 							await scene.loadObject3D(elementID);
 							await scene.load();
+							await Manager.GL.staticRender.init();
 							Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
 							dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
 						} else {

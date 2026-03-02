@@ -10,7 +10,7 @@
 */
 
 import { ReactNode } from 'react';
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { BINDING, JSONType } from '../common';
 import DialogColor from '../components/dialogs/models/DialogColor';
 import { BindingType } from '../core/Serializable';
