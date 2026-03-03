@@ -85,6 +85,7 @@ type Props = {
 	triggerUpdate?: boolean;
 	doNotOpenDialog?: boolean;
 	inputNameWidth?: INPUT_TYPE_WIDTH;
+	hideTooltip?: boolean;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -140,6 +141,7 @@ function Tree({
 	hideCheck = false,
 	doNotOpenDialog = false,
 	inputNameWidth = INPUT_TYPE_WIDTH.SMALL,
+	hideTooltip = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -886,6 +888,7 @@ function Tree({
 						doNotShowID={doNotShowID}
 						hideCheck={hideCheck}
 						isCutSource={copiedItems?.isCut === true && copiedItems.sourceNodes?.includes(node) === true}
+						hideTooltip={hideTooltip}
 					/>
 				</div>,
 			);
@@ -918,6 +921,7 @@ function Tree({
 						onDragLeave={!disabled ? handleDragLeave : undefined}
 						onDrop={!disabled ? handleDrop : undefined}
 						hideCheck={hideCheck}
+						hideTooltip={hideTooltip}
 					/>
 				</div>,
 			);

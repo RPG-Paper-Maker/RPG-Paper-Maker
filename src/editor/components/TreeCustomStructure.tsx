@@ -123,6 +123,7 @@ function TreeCustomStructure({ list, onListUpdated, disabled }: Props) {
 			cannotAddEditRemoveRoot
 			cannotDragDrop
 			cannotUpdateListSize
+			hideTooltip
 		/>
 	) : null;
 }

@@ -135,6 +135,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 			cannotUpdateListSize
 			canDisable
 			cannotClear
+			hideTooltip
 		/>
 	) : null;
 }

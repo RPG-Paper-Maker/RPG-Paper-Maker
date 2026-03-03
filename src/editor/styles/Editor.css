@@ -271,7 +271,7 @@ a {
 }
 
 .textEllipsis {
-	display: block;
+	display: block !important;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

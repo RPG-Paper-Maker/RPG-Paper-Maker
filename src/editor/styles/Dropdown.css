@@ -39,6 +39,8 @@
 	padding: 5px;
 	color: var(--main-color);
 	text-align: start;
+	flex: 1;
+	display: flex;
 }
 
 .dropdown .content .element:hover:not(.disabled) {

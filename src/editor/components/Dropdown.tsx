@@ -295,7 +295,13 @@ function Dropdown({
 			onWheel={handleWheel}
 		>
 			<Flex one centerV spaced>
-				<Flex one centerV className='textEllipsis'>
+				<Flex
+					one
+					centerV
+					className={Utils.getClassName({
+						textEllipsis: !noWidthChange,
+					})}
+				>
 					{getCurrentItem()}
 				</Flex>
 				<Flex>

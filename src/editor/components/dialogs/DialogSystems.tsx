@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
-import { setNeedsReloadMap } from '../../store';
+import { setIsSystemsDialogOpen, setNeedsReloadMap } from '../../store';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
 import PanelCommonReactions from '../panels/systems/PanelCommonReactions';
 import PanelEventsStates from '../panels/systems/PanelEventsStates';
@@ -24,14 +24,25 @@ import PanelModels from '../panels/systems/PanelModels';
 import PanelSystem from '../panels/systems/PanelSystem';
 import PanelTitleScreenGameOver from '../panels/systems/PanelTitleScreenGameOver';
 import Tab from '../Tab';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
+
+export enum SYSTEMS_TAB {
+	SYSTEM,
+	BATTLE_SYSTEM,
+	TITLE_SCREEN_GAME_OVER,
+	MAIN_MENU,
+	EVENTS_STATES,
+	COMMON_REACTIONS,
+	MODELS,
+}
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
+	initialTabIndex?: SYSTEMS_TAB;
 };
 
-function DialogSystems({ setIsOpen }: Props) {
+function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 	const { t } = useTranslation();
 
 	const dispatch = useDispatch();
@@ -75,6 +86,13 @@ function DialogSystems({ setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
+	useEffect(() => {
+		dispatch(setIsSystemsDialogOpen(true));
+		return () => {
+			dispatch(setIsSystemsDialogOpen(false));
+		};
+	}, []);
+
 	return (
 		<Dialog
 			title={`${t('systems.manager')}...`}
@@ -83,6 +101,7 @@ function DialogSystems({ setIsOpen }: Props) {
 			onClose={handleReject}
 			initialWidth='1000px'
 			initialHeight='calc(100% - 50px)'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Tab
 				titles={Model.Base.mapListIndex([
@@ -103,7 +122,7 @@ function DialogSystems({ setIsOpen }: Props) {
 					<PanelCommonReactions key={5} ref={panelCommonReactionsRef} />,
 					<PanelModels key={6} ref={panelModelsRef} />,
 				]}
-				defaultIndex={Project.current!.settings.lastTabIndexSystems}
+				defaultIndex={initialTabIndex ?? Project.current!.settings.lastTabIndexSystems}
 				onCurrentIndexChanged={handleCurrentIndexChanged}
 				padding
 				scrollableContent

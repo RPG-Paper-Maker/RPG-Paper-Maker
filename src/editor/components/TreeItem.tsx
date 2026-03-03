@@ -35,6 +35,7 @@ type Props = {
 	doNotShowID?: boolean;
 	hideCheck?: boolean;
 	isCutSource?: boolean;
+	hideTooltip?: boolean;
 };
 
 function TreeItem({
@@ -52,6 +53,7 @@ function TreeItem({
 	doNotShowID = false,
 	hideCheck = false,
 	isCutSource = false,
+	hideTooltip = false,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).checked ?? false);
@@ -92,14 +94,14 @@ function TreeItem({
 	const getString = () => {
 		if (headers && headers.length > 0) {
 			return node.toStrings().map((value, index) => (
-				<Flex one spaced className='textEllipsis' key={headers[index]} title={value}>
+				<Flex one spaced className='textEllipsis' key={headers[index]} title={hideTooltip ? undefined : value}>
 					{value}
 				</Flex>
 			));
 		} else {
 			const name = doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString();
 			return (
-				<Flex one spaced className='textEllipsis' title={name}>
+				<Flex one spaced className='textEllipsis' title={hideTooltip ? undefined : name}>
 					{name}
 				</Flex>
 			);
