@@ -22,7 +22,14 @@ import {
 	PICTURE_KIND,
 	Utils,
 } from '../../common';
-import { copyPublicFile, createFile, createFolder, getFolders, removeFolder } from '../../common/Platform';
+import {
+	copyPublicFile,
+	copyPublicFolder,
+	createFile,
+	createFolder,
+	getFolders,
+	removeFolder,
+} from '../../common/Platform';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
@@ -32,9 +39,16 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import InputText from '../InputText';
+import Tooltip from '../Tooltip';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterNoYes from './footers/FooterNoYes';
+
+enum PROJECT_TYPE {
+	BLANK,
+	DEFAULT,
+	TUTORIAL,
+}
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
@@ -50,7 +64,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const [folderName, setFolderName] = useState(t('project.without.name.folder'));
 	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
 	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
-	const [blank, setBlank] = useState(false);
+	const [projectType, setProjectType] = useState(PROJECT_TYPE.DEFAULT);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
@@ -96,13 +110,17 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		Project.current = project;
 		const folderPath = project.getPath();
 		await createFolder(project.getPath());
+		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
+		if (projectType === PROJECT_TYPE.TUTORIAL) {
+			await copyPublicFolder([Paths.TUTORIAL], project.getPath());
+		} else {
+			for (const file of Paths.ALL_JSON) {
+				await copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
+			}
+			await createFolder(project.getPathMaps());
+		}
 		await createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
 		await createFolder(project.getPathSaves());
-		await createFolder(project.getPathMaps());
-		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
-		for (const file of Paths.ALL_JSON) {
-			await copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
-		}
 		await createFolder(Paths.join(project.getPath(), Paths.PICTURES));
 		await createFolder(Paths.join(project.getPath(), Paths.HUD));
 		await createFolder(Paths.join(project.getPath(), Paths.ANIMATIONS));
@@ -138,20 +156,23 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		await createFolder(Paths.join(project.getPath(), Paths.STYLES));
 		await createFolder(Paths.join(project.getPath(), Paths.PLUGINS));
 		await createFolder(Paths.join(project.getPath(), Paths.TEST));
+
 		await project.load();
 		if (Constants.IS_DESKTOP) {
 			project.systems.PATH_BR = Paths.join(Paths.DIST, Paths.BR);
 			project.systems.PATH_DLCS = Paths.join(Paths.DIST, Paths.DLCS);
 		}
-		await Model.Map.createDefaultMap(1, t('starting.map'));
-		await Model.Map.createDefaultMap(2, t('default'));
-		project.translateDefaults();
+		if (projectType !== PROJECT_TYPE.TUTORIAL) {
+			await Model.Map.createDefaultMap(1, t('starting.map'));
+			await Model.Map.createDefaultMap(2, t('default'));
+			project.translateDefaults();
+		}
 		project.settings.projectVersion = Project.VERSION;
 		if (Constants.IS_MOBILE) {
 			project.settings.projectMenuIndex = 2;
 		}
 		project.systems.projectName.updateMainName(projectName);
-		if (blank) {
+		if (projectType === PROJECT_TYPE.BLANK) {
 			project.classes.list = [Model.Class.createDefault() as Model.Class];
 			project.classes.list[0].id = 1;
 			project.heroes.list = [Model.Hero.createDefault() as Model.Hero];
@@ -228,6 +249,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.commonEvents.commonReactions.splice(1);
 			project.commonEvents.heroObject.states[0].graphicsID = -1;
 		}
+
 		await project.save();
 
 		// Update recent projects
@@ -312,9 +334,35 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 							</Flex>
 						</Flex>
 					)}
-					<Checkbox isChecked={blank} onChange={setBlank}>
-						{t('blank.project')}
-					</Checkbox>
+					<Flex spaced centerV>
+						<div>{t('project.type')}:</div>
+						<Flex spaced>
+							<Tooltip text={t('blank.tooltip')}>
+								<Button
+									active={projectType === PROJECT_TYPE.BLANK}
+									onClick={() => setProjectType(PROJECT_TYPE.BLANK)}
+								>
+									{t('blank')}
+								</Button>
+							</Tooltip>
+							<Tooltip text={t('default.tooltip')}>
+								<Button
+									active={projectType === PROJECT_TYPE.DEFAULT}
+									onClick={() => setProjectType(PROJECT_TYPE.DEFAULT)}
+								>
+									{t('default')}
+								</Button>
+							</Tooltip>
+							<Tooltip text={t('tutorial.tooltip')}>
+								<Button
+									active={projectType === PROJECT_TYPE.TUTORIAL}
+									onClick={() => setProjectType(PROJECT_TYPE.TUTORIAL)}
+								>
+									{t('tutorial')}
+								</Button>
+							</Tooltip>
+						</Flex>
+					</Flex>
 				</Flex>
 			</Dialog>
 			<Dialog

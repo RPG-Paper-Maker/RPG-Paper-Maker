@@ -25,29 +25,14 @@
 	white-space: break-spaces;
 	box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
 	display: none;
-	transform: scale(0.95);
-	transition:
-		opacity 0.2s ease,
-		transform 0.2s ease;
 	pointer-events: none;
 	z-index: 2002;
-	transform: translateX(-50%) translateY(0) scale(0.95);
 	max-width: 400px;
 	word-wrap: break-word;
-
-	&.right {
-		left: auto;
-		right: 0;
-		transform: translateX(0) scale(0.95);
-	}
+	text-align: center;
 
 	&.visible {
 		display: flex;
-		transform: translateX(-50%) translateY(-30px) scale(1);
 		pointer-events: auto;
-
-		&.right {
-			transform: translateX(0) translateY(-30px) scale(1);
-		}
 	}
 }

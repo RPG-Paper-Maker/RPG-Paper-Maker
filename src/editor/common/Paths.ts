@@ -65,6 +65,7 @@ class Paths {
 	public static readonly SAVES = 'Saves';
 	public static readonly TEST = 'Test';
 	public static readonly DEFAULT = 'Default';
+	public static readonly TUTORIAL = 'Tutorial';
 	public static readonly DEPLOY = 'Deploy';
 	public static readonly BUILD = 'build';
 	public static readonly TEMP = 'temp';

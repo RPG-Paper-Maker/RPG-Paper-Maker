@@ -1548,5 +1548,168 @@
         "default.vert"
       ]
     }
+  },
+  "Tutorial": {
+    "files": [
+      "animations.json",
+      "armors.json",
+      "battleSystem.json",
+      "classes.json",
+      "commonEvents.json",
+      "dlcs.json",
+      "fonts.json",
+      "game.rpmg",
+      "heroes.json",
+      "items.json",
+      "keyboard.json",
+      "langs.json",
+      "monsters.json",
+      "pictures.json",
+      "scripts.json",
+      "settings.json",
+      "shapes.json",
+      "skills.json",
+      "songs.json",
+      "specialElements.json",
+      "status.json",
+      "system.json",
+      "tilesets.json",
+      "titlescreenGameover.json",
+      "treeMaps.json",
+      "troops.json",
+      "variables.json",
+      "videos.json",
+      "weapons.json"
+    ],
+    "Fonts": {},
+    "Images": {
+      "HUD": {
+        "Animations": {},
+        "Bars": {},
+        "Facesets": {},
+        "GameOver": {},
+        "Icons": {},
+        "Pictures": {},
+        "TitleScreen": {},
+        "WindowSkins": {}
+      },
+      "Textures2D": {
+        "Autotiles": {},
+        "Battlers": {},
+        "Characters": {},
+        "Mountains": {},
+        "Objects3D": {},
+        "Particles": {},
+        "SkyBoxes": {},
+        "Tilesets": {},
+        "Walls": {}
+      }
+    },
+    "Maps": {
+      "MAP0001": {
+        "files": [
+          "0_-1_0.json",
+          "0_-1_1.json",
+          "0_-1_2.json",
+          "0_-1_3.json",
+          "0_0_0.json",
+          "0_0_1.json",
+          "0_0_2.json",
+          "0_0_3.json",
+          "1_-1_0.json",
+          "1_-1_1.json",
+          "1_-1_2.json",
+          "1_-1_3.json",
+          "1_0_0.json",
+          "1_0_1.json",
+          "1_0_2.json",
+          "1_0_3.json",
+          "2_-1_0.json",
+          "2_-1_1.json",
+          "2_-1_2.json",
+          "2_-1_3.json",
+          "2_0_0.json",
+          "2_0_1.json",
+          "2_0_2.json",
+          "2_0_3.json",
+          "3_-1_0.json",
+          "3_-1_1.json",
+          "3_-1_2.json",
+          "3_-1_3.json",
+          "3_0_0.json",
+          "3_0_1.json",
+          "3_0_2.json",
+          "3_0_3.json",
+          "4_-1_0.json",
+          "4_-1_1.json",
+          "4_-1_2.json",
+          "4_-1_3.json",
+          "4_0_0.json",
+          "4_0_1.json",
+          "4_0_2.json",
+          "4_0_3.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "0.json",
+            "1.json",
+            "2.json",
+            "3.json",
+            "4.json",
+            "5.json",
+            "6.json",
+            "7.json",
+            "8.json",
+            "9.json",
+            "index"
+          ]
+        }
+      },
+      "MAP0002": {
+        "files": [
+          "0_0_0.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "index"
+          ]
+        }
+      },
+      "MAP0003": {
+        "files": [
+          "0_0_0.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "index"
+          ]
+        }
+      }
+    },
+    "Plugins": {},
+    "Saves": {},
+    "Shapes": {
+      "Collisions": {},
+      "MTL": {},
+      "OBJ": {}
+    },
+    "Songs": {
+      "BackgroundSounds": {},
+      "MusicEffects": {},
+      "Musics": {},
+      "Sounds": {}
+    },
+    "Styles": {
+      "files": [
+        "fonts.css"
+      ]
+    },
+    "Videos": {}
   }
 }
