@@ -89,6 +89,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	};
 
 	const replaceProject = async () => {
+		setIsLoading(true);
 		setIsDialogConfirmOpen(false);
 		await removeFolder(getcompleteLocation());
 		await createProject();
