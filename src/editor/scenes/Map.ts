@@ -135,6 +135,8 @@ class Map extends Base {
 	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
+	public lastTransformPosition: Position | null = null;
+	public lastTransformKind: ELEMENT_MAP_KIND | null = null;
 	public hoveredMesh!: THREE.Mesh;
 	public rectangleStartPosition: Position | null = null;
 	public lastRectangleEndPosition: Position | null = null;
@@ -792,6 +794,8 @@ class Map extends Base {
 					for (const p of positions) {
 						this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
 					}
+					this.lastTransformPosition = position.clone();
+					this.lastTransformKind = Map.currentSelectedMapElementKind;
 				} else {
 					this.getMapPortionByPosition(position)?.add(
 						position,
@@ -1292,6 +1296,28 @@ class Map extends Base {
 
 	setTransformMode(action: ACTION_KIND) {
 		this.transformControls.setMode(this.getTransformMode(action));
+		this.updateRotationSnap(action);
+		if (this.selectedElement === null && this.lastTransformPosition !== null && this.lastTransformKind !== null) {
+			const mapPortion = this.getMapPortionByPosition(this.lastTransformPosition);
+			if (mapPortion) {
+				const element = mapPortion.model.getMapElement(this.lastTransformPosition, this.lastTransformKind);
+				if (element && !(action === ACTION_KIND.ROTATE && element.kind === ELEMENT_MAP_KIND.SPRITE_FACE)) {
+					this.selectedElement = element as MapElement.Base;
+					this.selectedPosition = this.lastTransformPosition.clone();
+					this.portionsToUpdate.add(mapPortion);
+					this.needsUpdateSelectedPosition = this.selectedPosition;
+					this.needsUpdateSelectedMapElement = true;
+				}
+			}
+		}
+	}
+
+	updateRotationSnap(action = Project.current!.settings.mapEditorCurrentActionIndex as ACTION_KIND) {
+		const isSquare =
+			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE;
+		this.transformControls.setRotationSnap(
+			action === ACTION_KIND.ROTATE && isSquare ? Mathf.degreesToRadians(45) : null,
+		);
 	}
 
 	updateUndoRedoSave() {
@@ -1839,6 +1865,10 @@ class Map extends Base {
 					this.scene.remove(this.selectedMesh);
 				}
 				this.selectedPosition = this.selectedElement === null ? null : this.pointedMapElementPosition;
+				if (this.selectedElement !== null && this.selectedPosition !== null) {
+					this.lastTransformPosition = this.selectedPosition.clone();
+					this.lastTransformKind = this.selectedElement.kind;
+				}
 				this.transformControls.detach();
 				const mapPortion = this.selectedPosition ? this.getMapPortionByPosition(this.selectedPosition) : null;
 				if (mapPortion) {

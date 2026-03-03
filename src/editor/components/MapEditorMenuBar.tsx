@@ -318,6 +318,7 @@ function MapEditorMenuBar() {
 		dispatch(setCurrentElementPositionKind(kind));
 		Project.current!.settings.mapEditorCurrentElementPositionIndex = kind;
 		await Project.current!.settings.save();
+		Scene.Map.current?.updateRotationSnap();
 	};
 
 	const handleSquare = async () => {
