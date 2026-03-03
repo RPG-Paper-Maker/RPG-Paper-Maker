@@ -138,7 +138,10 @@ class Previewer3D extends Base {
 
 	async loadMountain(
 		mountainID: number,
-		textureFloor: Rectangle,
+		topFloorIsAutotile: boolean,
+		topFloorTilesetRect: Rectangle,
+		topFloorAutotileID: number,
+		topFloorAutotileRect: Rectangle,
 		wsb: number,
 		wpb: number,
 		wst: number,
@@ -174,21 +177,46 @@ class Previewer3D extends Base {
 			let geometry = new CustomGeometry();
 			mountainElement.updateGeometry(geometry, new Position(), 0);
 			this.addToScene(geometry, textureMountain);
-			await this.loadMaterial();
-			const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
-			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
-			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
-			floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
 			const widthLeft = wsl * Project.SQUARE_SIZE + wpl;
-		const widthRight = wsr * Project.SQUARE_SIZE + wpr;
-		const widthTop = wst * Project.SQUARE_SIZE + wpt;
-		const widthBot = wsb * Project.SQUARE_SIZE + wpb;
-		this.addToScene(geometry, this.material, false, new THREE.Vector3(
-			(widthLeft - widthRight) * (Project.SQUARE_SIZE / 2),
-			(floorPosition.getTotalY() / 2) * Project.SQUARE_SIZE,
-			(widthTop - widthBot) * (Project.SQUARE_SIZE / 2),
-		));
+			const widthRight = wsr * Project.SQUARE_SIZE + wpr;
+			const widthTop = wst * Project.SQUARE_SIZE + wpt;
+			const widthBot = wsb * Project.SQUARE_SIZE + wpb;
+			const offset = new THREE.Vector3(
+				(widthLeft - widthRight) * (Project.SQUARE_SIZE / 2),
+				(floorPosition.getTotalY() / 2) * Project.SQUARE_SIZE,
+				(widthTop - widthBot) * (Project.SQUARE_SIZE / 2),
+			);
+			if (topFloorIsAutotile) {
+				const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(Scene.Map.current, topFloorAutotileID);
+				const autotileModel = Project.current!.specialElements.getAutotileByID(topFloorAutotileID);
+				if (texturesAutotile && autotileModel) {
+					const pictureID = autotileModel.pictureID;
+					let includedTexture: TextureBundle | null = null;
+					for (const textureAutotile of texturesAutotile) {
+						if (textureAutotile.isInTexture(pictureID, topFloorAutotileRect)) {
+							includedTexture = textureAutotile;
+							break;
+						}
+					}
+					if (includedTexture !== null) {
+						const autotiles = new MapElement.Autotiles(includedTexture);
+						autotiles.updateGeometry(
+							Scene.Map.current!,
+							floorPosition,
+							MapElement.Autotile.create(topFloorAutotileID, MapElement.Autotiles.PREVIEW_TILE, topFloorAutotileRect),
+						);
+						this.addToScene(autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material, false, offset);
+					}
+				}
+			} else {
+				await this.loadMaterial();
+				const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
+				const floor = MapElement.Floor.create(new Rectangle(topFloorTilesetRect.x, topFloorTilesetRect.y, 1, 1));
+				geometry = new CustomGeometry();
+				floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
+				this.addToScene(geometry, this.material, false, offset);
+			}
 		}
 	}
 

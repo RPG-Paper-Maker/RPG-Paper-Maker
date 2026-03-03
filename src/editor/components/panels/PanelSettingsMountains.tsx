@@ -9,17 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { PiDiamondsFour } from 'react-icons/pi';
 import { useDispatch, useSelector } from 'react-redux';
-import { Constants, INPUT_TYPE_WIDTH, MOUNTAIN_SIDE } from '../../common';
+import { Constants, INPUT_TYPE_WIDTH, MOUNTAIN_SIDE, PICTURE_KIND } from '../../common';
+import { LocalFile } from '../../core/LocalFile';
+import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
-import { MapElement } from '../../Editor';
+import { MapElement, Scene } from '../../Editor';
 import {
 	RootState,
+	setCurrentMountainAllSides,
 	setCurrentMountainHeightPixels,
 	setCurrentMountainHeightSquares,
-	setCurrentMountainAllSides,
 	setCurrentMountainWidthPixelsBot,
 	setCurrentMountainWidthPixelsLeft,
 	setCurrentMountainWidthPixelsRight,
@@ -29,14 +33,14 @@ import {
 	setCurrentMountainWidthSquaresRight,
 	setCurrentMountainWidthSquaresTop,
 } from '../../store';
+import '../../styles/PanelSettingsMountains.css';
 import Button from '../Button';
+import DialogMountainsTopFloor from '../dialogs/DialogMountainsTopFloor';
 import Flex from '../Flex';
+import Form, { Label, Value } from '../Form';
 import InputNumber from '../InputNumber';
 import Tips from '../Tips';
 import Tooltip from '../Tooltip';
-import '../../styles/PanelSettingsMountains.css';
-import { PiDiamondsFour } from 'react-icons/pi';
-import Form, { Label, Value } from '../Form';
 
 const MIN_VALUE = 0;
 const MAX_VALUE_SQUARES = 999;
@@ -55,10 +59,62 @@ function PanelSettingsMountains() {
 	const allSides = useSelector((state: RootState) => state.mapEditor.currentMountainAllSides);
 	const heightSquares = useSelector((state: RootState) => state.mapEditor.currentMountainHeightSquares);
 	const heightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
+	const topFloorIsAutotile = useSelector((state: RootState) => state.mapEditor.currentMountainTopFloorIsAutotile);
+	const topFloorTilesetRect = useSelector((state: RootState) => state.mapEditor.currentMountainTopFloorTilesetRect);
+	const topFloorAutotileID = useSelector((state: RootState) => state.mapEditor.currentMountainTopFloorAutotileID);
+	const topFloorAutotileRect = useSelector((state: RootState) => state.mapEditor.currentMountainTopFloorAutotileRect);
+
+	const [isTopFloorDialogOpen, setIsTopFloorDialogOpen] = useState(false);
+	const previewRef = useRef<HTMLCanvasElement>(null);
 
 	const dispatch = useDispatch();
 
 	const MAX_VALUE_PIXELS = Project.SQUARE_SIZE - 1;
+
+	const drawPreview = async () => {
+		const canvas = previewRef.current;
+		if (!canvas || !Scene.Map.current) return;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+		ctx.clearRect(0, 0, 32, 32);
+		if (!topFloorIsAutotile) {
+			const tileset = Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID);
+			if (!tileset) return;
+			const pic = Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, tileset.pictureID);
+			const path =
+				!pic.isBR && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(pic.getPath())) ?? '') : pic.getPath();
+			const img = await Picture2D.loadImage(path);
+			const sq = Project.SQUARE_SIZE;
+			ctx.drawImage(img, topFloorTilesetRect.x * sq, topFloorTilesetRect.y * sq, sq, sq, 0, 0, 32, 32);
+		} else {
+			const autotile = Project.current!.specialElements.autotiles.find((a) => a.id === topFloorAutotileID);
+			if (!autotile) return;
+			const pic = Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, autotile.pictureID);
+			const path =
+				!pic.isBR && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(pic.getPath())) ?? '') : pic.getPath();
+			const img = await Picture2D.loadImage(path);
+			const sq = Project.SQUARE_SIZE;
+			const cols = Math.floor(img.naturalWidth / sq / 2);
+			const rows = Math.floor(img.naturalHeight / sq / 3);
+			const cellSrcW = img.naturalWidth / cols;
+			const cellSrcH = img.naturalHeight / rows;
+			ctx.drawImage(
+				img,
+				topFloorAutotileRect.x * cellSrcW,
+				topFloorAutotileRect.y * cellSrcH,
+				sq,
+				sq,
+				0,
+				0,
+				32,
+				32,
+			);
+		}
+	};
+
+	useEffect(() => {
+		drawPreview().catch(console.error);
+	}, [topFloorIsAutotile, topFloorTilesetRect, topFloorAutotileID, topFloorAutotileRect]);
 
 	const getWidthSquares = (side: MOUNTAIN_SIDE) => {
 		switch (side) {
@@ -309,6 +365,17 @@ function PanelSettingsMountains() {
 			)}
 			<Flex column spaced paddingSmall>
 				<Form>
+					<Label>{t('top.floor')}</Label>
+					<Value>
+						<Flex spaced centerV>
+							<canvas
+								ref={previewRef}
+								width={Constants.BASE_SQUARE_SIZE}
+								height={Constants.BASE_SQUARE_SIZE}
+							/>
+							<Button onClick={() => setIsTopFloorDialogOpen(true)}>...</Button>
+						</Flex>
+					</Value>
 					<Label>{t('border.height')}</Label>
 					<Value>
 						<Flex spaced centerV>
@@ -392,6 +459,7 @@ function PanelSettingsMountains() {
 					</Flex>
 				)}
 			</Flex>
+			{isTopFloorDialogOpen && <DialogMountainsTopFloor setIsOpen={setIsTopFloorDialogOpen} />}
 		</>
 	);
 }

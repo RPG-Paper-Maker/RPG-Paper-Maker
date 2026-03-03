@@ -30,6 +30,10 @@ import TextureSquareSelector from '../TextureSquareSelector';
 
 type Props = {
 	kind: PICTURE_KIND;
+	onSelect?: (id: number) => void;
+	selectedID?: number;
+	onUpdateAutotileRect?: (rect: Rectangle) => void;
+	defaultAutotileRect?: Rectangle;
 };
 
 const ELEMENT_HEIGHT = 30;
@@ -37,7 +41,7 @@ const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
 
 const getCanvasID = (id: number) => `canvas-${id}`;
 
-function PanelSpecialElementsSelection({ kind }: Props) {
+function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAutotileRect, defaultAutotileRect }: Props) {
 	const [firstScroll, setFirstScroll] = useState(false);
 	const [testOffset, setTestOffset] = useState(false);
 	const [previousMinToDisplay, setPreviousMinToDisplay] = useState(0);
@@ -78,7 +82,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		switch (kind) {
 			case PICTURE_KIND.AUTOTILES:
 				return Project.current!.specialElements.autotiles.findIndex(
-					(autotile) => autotile.id === currentAutotileID,
+					(autotile) => autotile.id === (selectedID ?? currentAutotileID),
 				);
 			case PICTURE_KIND.WALLS:
 				return Project.current!.specialElements.walls.findIndex((wall) => wall.id === currentWallID);
@@ -183,6 +187,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	};
 
 	const handleClick = async (id: number) => {
+		onSelect?.(id);
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				if (id !== currentAutotileID) {
@@ -246,7 +251,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	let currentID: number;
 	switch (kind) {
 		case PICTURE_KIND.AUTOTILES:
-			currentID = currentAutotileID;
+			currentID = selectedID ?? currentAutotileID;
 			break;
 		case PICTURE_KIND.WALLS:
 			currentID = currentWallID;
@@ -325,6 +330,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 							canChangeSize={false}
 							base64={!picture.isBR}
 							cutTexture
+							doNotUpdateTexture={!!onUpdateAutotileRect}
+							defaultRectangle={onUpdateAutotileRect ? defaultAutotileRect : undefined}
+							onUpdateRectangle={onUpdateAutotileRect}
 						/>
 					</div>
 				)}

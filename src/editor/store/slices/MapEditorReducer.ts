@@ -41,6 +41,10 @@ const MapEditorSlice = createSlice({
 		currentMountainAllSides: true,
 		currentMountainHeightSquares: 1,
 		currentMountainHeightPixels: 0,
+		currentMountainTopFloorIsAutotile: false,
+		currentMountainTopFloorTilesetRect: new Rectangle(0, 0, 1, 1),
+		currentMountainTopFloorAutotileID: 1,
+		currentMountainTopFloorAutotileRect: new Rectangle(0, 0, 1, 1),
 		currentObject3DID: 1,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		currentActionKind: ACTION_KIND.PENCIL,
@@ -107,6 +111,18 @@ const MapEditorSlice = createSlice({
 		setCurrentMountainHeightPixels(state, action: PayloadAction<number>) {
 			state.currentMountainHeightPixels = action.payload;
 		},
+		setCurrentMountainTopFloorIsAutotile(state, action: PayloadAction<boolean>) {
+			state.currentMountainTopFloorIsAutotile = action.payload;
+		},
+		setCurrentMountainTopFloorTilesetRect(state, action: PayloadAction<Rectangle>) {
+			state.currentMountainTopFloorTilesetRect = action.payload;
+		},
+		setCurrentMountainTopFloorAutotileID(state, action: PayloadAction<number>) {
+			state.currentMountainTopFloorAutotileID = action.payload;
+		},
+		setCurrentMountainTopFloorAutotileRect(state, action: PayloadAction<Rectangle>) {
+			state.currentMountainTopFloorAutotileRect = action.payload;
+		},
 		setCurrentObject3DID(state, action: PayloadAction<number>) {
 			state.currentObject3DID = action.payload;
 		},
@@ -161,6 +177,10 @@ export const {
 	setCurrentMountainAllSides,
 	setCurrentMountainHeightSquares,
 	setCurrentMountainHeightPixels,
+	setCurrentMountainTopFloorIsAutotile,
+	setCurrentMountainTopFloorTilesetRect,
+	setCurrentMountainTopFloorAutotileID,
+	setCurrentMountainTopFloorAutotileRect,
 	setCurrentObject3DID,
 	setCurrentMapElementKind,
 	setCurrentActionKind,

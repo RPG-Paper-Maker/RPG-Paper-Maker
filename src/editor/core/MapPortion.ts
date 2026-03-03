@@ -179,21 +179,41 @@ class MapPortion {
 					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
 					if (previousFloorPosition.y !== y || previousFloorPosition.yPixels !== yPixels) {
 						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.AUTOTILE, preview, false, false, false, updateAutotiles);
 					}
 				}
+				const s = Project.current!.settings;
 				const floorPosition = position.clone();
 				floorPosition.addY(y, yPixels);
-				this.updateMapElement(
-					floorPosition,
-					MapElement.Floor.create(
-						new Rectangle(
-							Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture.x,
-							Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture.y,
+				if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
+					this.updateMapElement(
+						floorPosition,
+						MapElement.Autotile.create(
+							s.mapEditorCurrentMountainTopFloorAutotileID,
+							MapElement.Autotiles.PREVIEW_TILE,
+							s.mapEditorCurrentMountainTopFloorAutotileRect,
+							this.map.camera.getUp(),
 						),
-					),
-					ELEMENT_MAP_KIND.FLOOR,
-					preview,
-				);
+						ELEMENT_MAP_KIND.AUTOTILE,
+						preview,
+						false,
+						false,
+						false,
+						updateAutotiles,
+					);
+				} else {
+					this.updateMapElement(
+						floorPosition,
+						MapElement.Floor.create(
+							new Rectangle(
+								s.mapEditorCurrentMountainTopFloorTilesetRect.x,
+								s.mapEditorCurrentMountainTopFloorTilesetRect.y,
+							),
+						),
+						ELEMENT_MAP_KIND.FLOOR,
+						preview,
+					);
+				}
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
 			}

@@ -59,6 +59,18 @@ function MainPreviewer3D({ id }: Props) {
 		(state: RootState) => state.mapEditor.currentMountainHeightSquares,
 	);
 	const currentMountainHeightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
+	const currentMountainTopFloorIsAutotile = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainTopFloorIsAutotile,
+	);
+	const currentMountainTopFloorTilesetRect = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainTopFloorTilesetRect,
+	);
+	const currentMountainTopFloorAutotileID = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainTopFloorAutotileID,
+	);
+	const currentMountainTopFloorAutotileRect = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainTopFloorAutotileRect,
+	);
 	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
@@ -103,7 +115,10 @@ function MainPreviewer3D({ id }: Props) {
 					case ELEMENT_MAP_KIND.MOUNTAIN:
 						await scene.loadMountain(
 							currentMountainID,
-							currentTilesetFloorSpriteTexture,
+							currentMountainTopFloorIsAutotile,
+							currentMountainTopFloorTilesetRect,
+							currentMountainTopFloorAutotileID,
+							currentMountainTopFloorAutotileRect,
 							currentMountainWidthSquaresBot,
 							currentMountainWidthPixelsBot,
 							currentMountainWidthSquaresTop,
@@ -203,6 +218,10 @@ function MainPreviewer3D({ id }: Props) {
 		allSides,
 		currentMountainHeightSquares,
 		currentMountainHeightPixels,
+		currentMountainTopFloorIsAutotile,
+		currentMountainTopFloorTilesetRect,
+		currentMountainTopFloorAutotileID,
+		currentMountainTopFloorAutotileRect,
 		currentObject3DID,
 		currentMapElementKind,
 		currentMapID,

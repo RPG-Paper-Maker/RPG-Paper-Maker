@@ -24,6 +24,10 @@ import {
 	setCurrentMountainHeightSquares,
 	setCurrentMountainID,
 	setCurrentMountainAllSides,
+	setCurrentMountainTopFloorIsAutotile,
+	setCurrentMountainTopFloorTilesetRect,
+	setCurrentMountainTopFloorAutotileID,
+	setCurrentMountainTopFloorAutotileRect,
 	setCurrentMountainWidthPixelsBot,
 	setCurrentMountainWidthPixelsLeft,
 	setCurrentMountainWidthPixelsRight,
@@ -154,6 +158,26 @@ function PanelProject() {
 			dispatch(setCurrentMountainAllSides(Project.current!.settings.mapEditorCurrentMountainAllSides));
 			dispatch(setCurrentMountainHeightSquares(Project.current!.settings.mapEditorCurrentMountainHeightSquares));
 			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
+			dispatch(
+				setCurrentMountainTopFloorIsAutotile(
+					Project.current!.settings.mapEditorCurrentMountainTopFloorIsAutotile,
+				),
+			);
+			dispatch(
+				setCurrentMountainTopFloorTilesetRect(
+					Project.current!.settings.mapEditorCurrentMountainTopFloorTilesetRect,
+				),
+			);
+			dispatch(
+				setCurrentMountainTopFloorAutotileID(
+					Project.current!.settings.mapEditorCurrentMountainTopFloorAutotileID,
+				),
+			);
+			dispatch(
+				setCurrentMountainTopFloorAutotileRect(
+					Project.current!.settings.mapEditorCurrentMountainTopFloorAutotileRect,
+				),
+			);
 			dispatch(setCurrentObject3DID(Project.current!.settings.mapEditorCurrentObject3DID));
 		}
 	}, [openLoading]);

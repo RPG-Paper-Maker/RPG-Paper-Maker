@@ -38,6 +38,10 @@ class Settings extends Serializable {
 	public mapEditorCurrentMountainAllSides!: boolean;
 	public mapEditorCurrentMountainHeightSquares!: number;
 	public mapEditorCurrentMountainHeightPixels!: number;
+	public mapEditorCurrentMountainTopFloorIsAutotile!: boolean;
+	public mapEditorCurrentMountainTopFloorTilesetRect!: Rectangle;
+	public mapEditorCurrentMountainTopFloorAutotileID!: number;
+	public mapEditorCurrentMountainTopFloorAutotileRect!: Rectangle;
 	public mapEditorCurrentObject3DID!: number;
 	public mapEditorCurrentElementPositionIndex!: number;
 	public mapEditorCurrentActionIndex!: number;
@@ -80,6 +84,10 @@ class Settings extends Serializable {
 		['mapEditorCurrentMountainAllSides', 'mecmlw', true, BINDING.BOOLEAN],
 		['mapEditorCurrentMountainHeightSquares', 'mecmhs', 1, BINDING.NUMBER],
 		['mapEditorCurrentMountainHeightPixels', 'mecmhp', 0, BINDING.NUMBER],
+		['mapEditorCurrentMountainTopFloorIsAutotile', 'mecmtfia', false, BINDING.BOOLEAN],
+		['mapEditorCurrentMountainTopFloorTilesetRect', 'mecmtftr', undefined, BINDING.RECTANGLE],
+		['mapEditorCurrentMountainTopFloorAutotileID', 'mecmtfaid', 1, BINDING.NUMBER],
+		['mapEditorCurrentMountainTopFloorAutotileRect', 'mecmtfar', undefined, BINDING.RECTANGLE],
 		['mapEditorCurrentObject3DID', 'mecoid', 1, BINDING.NUMBER],
 		['mapEditorCurrentElementPositionIndex', 'mecepi', 0, BINDING.NUMBER],
 		['mapEditorCurrentActionIndex', 'mecai', ACTION_KIND.PENCIL, BINDING.NUMBER],
