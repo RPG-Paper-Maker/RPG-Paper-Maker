@@ -72,6 +72,7 @@ function Dropdown({
 	const [isOpen, setIsOpen] = useState(false);
 	const [preSelectedID, setPreSelectedID] = useState(options[0]?.id ?? -1);
 	const [firstOpened, setFirstOpened] = useState(false);
+	const [isWidthUpdated, setIsWidthUpdated] = useState(false);
 
 	const dropdownContainerRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -121,6 +122,7 @@ function Dropdown({
 			dropdown.style.left = `${left}px`;
 			if (!noWidthChange) {
 				dropdown.style.width = `${width}px`;
+				setIsWidthUpdated(true);
 			}
 		}
 	};
@@ -247,32 +249,42 @@ function Dropdown({
 				: selected.getName();
 
 	const getDropdownItems = () =>
-		options.map((option) => (
-			<Flex
-				ref={
-					option.id === preSelectedID
-						? preSelectedElementRef
-						: option.id === selectedID
-							? selectedElementRef
-							: null
-				}
-				spaced
-				className={Utils.getClassName(
-					{
-						selected: selectedID === option.id,
-						preSelected: preSelectedID === option.id,
-						disabled: disabledIds.includes(option.id),
-						whiteSpaceNowrap: !fillWidth,
-					},
-					'element',
-				)}
-				key={option.id}
-				onClick={() => handleClickOption(option)}
-			>
-				{option.getDropdownIcon()}
-				{translateOptions ? t(option.getName()) : displayIDs ? option.toStringNameID() : option.getName()}
-			</Flex>
-		));
+		options.map((option) => {
+			const name = translateOptions
+				? t(option.getName())
+				: displayIDs
+					? option.toStringNameID()
+					: option.getName();
+			return (
+				<Flex key={option.id} one fillWidth>
+					<Flex
+						ref={
+							option.id === preSelectedID
+								? preSelectedElementRef
+								: option.id === selectedID
+									? selectedElementRef
+									: null
+						}
+						spaced
+						className={Utils.getClassName(
+							{
+								selected: selectedID === option.id,
+								preSelected: preSelectedID === option.id,
+								disabled: disabledIds.includes(option.id),
+								whiteSpaceNowrap: !fillWidth,
+								textEllipsis: isWidthUpdated,
+							},
+							'element',
+						)}
+						onClick={() => handleClickOption(option)}
+						title={name}
+					>
+						{option.getDropdownIcon()}
+						{name}
+					</Flex>
+				</Flex>
+			);
+		});
 
 	return (
 		<div
@@ -283,7 +295,7 @@ function Dropdown({
 			onWheel={handleWheel}
 		>
 			<Flex one centerV spaced>
-				<Flex one centerV className={Utils.getClassName({ textEllipsis: fillWidth })}>
+				<Flex one centerV className='textEllipsis'>
 					{getCurrentItem()}
 				</Flex>
 				<Flex>

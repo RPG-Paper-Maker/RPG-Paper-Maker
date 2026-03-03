@@ -92,14 +92,15 @@ function TreeItem({
 	const getString = () => {
 		if (headers && headers.length > 0) {
 			return node.toStrings().map((value, index) => (
-				<Flex one spaced className='textEllipsis' key={headers[index]}>
+				<Flex one spaced className='textEllipsis' key={headers[index]} title={value}>
 					{value}
 				</Flex>
 			));
 		} else {
+			const name = doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString();
 			return (
-				<Flex one spaced className='textEllipsis'>
-					{doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString()}
+				<Flex one spaced className='textEllipsis' title={name}>
+					{name}
 				</Flex>
 			);
 		}

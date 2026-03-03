@@ -81,7 +81,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 			</Groupbox>
 			<Flex one column spacedLarge>
 				<Flex spacedLarge>
-					<Flex spaced>
+					<Flex spaced centerV>
 						<Flex disabledLabel={isTilesetDisabled}>{t('picture')}:</Flex>
 						<AssetSelector
 							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
@@ -91,7 +91,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 							disabled={isTilesetDisabled}
 						/>
 					</Flex>
-					<Flex spaced>
+					<Flex spaced centerV>
 						<Flex disabledLabel={isTilesetDisabled}>{t('battle.map')}:</Flex>
 						<DynamicValueSelector
 							value={battleMap}
