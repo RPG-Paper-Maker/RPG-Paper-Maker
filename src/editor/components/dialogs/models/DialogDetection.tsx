@@ -25,7 +25,7 @@ import Groupbox from '../../Groupbox';
 import InputNumber from '../../InputNumber';
 import InputText from '../../InputText';
 import MapEditorDetection from '../../MapEditorDetection';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -142,6 +142,7 @@ function DialogDetection({ setIsOpen, model, onAccept, onReject }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spacedLarge fillWidth fillHeight>
 				<Flex column spacedLarge>
