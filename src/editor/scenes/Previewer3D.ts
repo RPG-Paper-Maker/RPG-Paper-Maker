@@ -48,6 +48,10 @@ class Previewer3D extends Base {
 	public previewGrid: THREE.GridHelper | null = null;
 	public previewTransformControls: TransformControls | null = null;
 	public onTransformChange: (() => void) | null = null;
+	public gltfCloneRef: THREE.Group | null = null;
+	public gltfAnimations: THREE.AnimationClip[] = [];
+	public previewAnimMixer: THREE.AnimationMixer | null = null;
+	public previewTimer: THREE.Timer = new THREE.Timer();
 
 	constructor(id: string) {
 		super();
@@ -265,7 +269,7 @@ class Previewer3D extends Base {
 				await shape.loadShape();
 			}
 			if (shape.gltfScene) {
-				this.addGltfScene(shape.gltfScene, object.scale);
+				this.addGltfScene(shape.gltfScene, object.scale, shape.gltfAnimations);
 				return;
 			}
 		}
@@ -289,7 +293,7 @@ class Previewer3D extends Base {
 		}
 		// GLTF shapes: use embedded materials for preview
 		if (shape.kind === CUSTOM_SHAPE_KIND.GLTF && shape.gltfScene) {
-			this.addGltfScene(shape.gltfScene, 1);
+			this.addGltfScene(shape.gltfScene, 1, shape.gltfAnimations);
 			return;
 		}
 		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
@@ -303,9 +307,10 @@ class Previewer3D extends Base {
 		this.addToScene(geometry, texture);
 	}
 
-	addGltfScene(gltfScene: THREE.Group, scale: number) {
+	addGltfScene(gltfScene: THREE.Group, scale: number, animations: THREE.AnimationClip[] = []) {
 		this.clear();
-		const clone = gltfScene.clone();
+		this.gltfAnimations = animations;
+		const clone = gltfScene.clone(true);
 		const resize = Project.SQUARE_SIZE;
 		let s = resize * scale;
 		clone.scale.set(s, s, s);
@@ -313,6 +318,7 @@ class Previewer3D extends Base {
 		const box = new THREE.Box3().setFromObject(clone);
 		const center = box.getCenter(new THREE.Vector3());
 		clone.position.sub(center);
+		this.gltfCloneRef = clone;
 		const wrapper = new THREE.Group();
 		wrapper.add(clone);
 		this.scene.add(wrapper);
@@ -356,7 +362,31 @@ class Previewer3D extends Base {
 		}
 	}
 
+	playGltfAnimation(index: number, onFinished: () => void) {
+		if (!this.gltfCloneRef || index < 0 || index >= this.gltfAnimations.length) {
+			return;
+		}
+		if (this.previewAnimMixer) {
+			this.previewAnimMixer.stopAllAction();
+		}
+		this.previewAnimMixer = new THREE.AnimationMixer(this.gltfCloneRef);
+		this.previewAnimMixer.addEventListener('finished', () => {
+			onFinished();
+		});
+		this.previewTimer.reset();
+		const action = this.previewAnimMixer.clipAction(this.gltfAnimations[index]);
+		action.setLoop(THREE.LoopOnce, 1);
+		action.clampWhenFinished = true;
+		action.play();
+	}
+
 	clear() {
+		if (this.previewAnimMixer) {
+			this.previewAnimMixer.stopAllAction();
+			this.previewAnimMixer = null;
+		}
+		this.gltfCloneRef = null;
+		this.gltfAnimations = [];
 		if (this.previewTransformControls) {
 			this.previewTransformControls.detach();
 			this.scene.remove(this.previewTransformControls.getHelper());
@@ -541,6 +571,10 @@ class Previewer3D extends Base {
 
 	update() {
 		this.camera.update();
+		if (this.previewAnimMixer) {
+			this.previewTimer.update();
+			this.previewAnimMixer.update(this.previewTimer.getDelta());
+		}
 		if (super.update()) {
 			if (this.isRotating) {
 				this.currentRotation += 0.01;

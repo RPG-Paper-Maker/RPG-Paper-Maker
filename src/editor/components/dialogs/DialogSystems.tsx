@@ -24,7 +24,7 @@ import PanelModels from '../panels/systems/PanelModels';
 import PanelSystem from '../panels/systems/PanelSystem';
 import PanelTitleScreenGameOver from '../panels/systems/PanelTitleScreenGameOver';
 import Tab from '../Tab';
-import Dialog, { Z_INDEX_LEVEL } from './Dialog';
+import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 export enum SYSTEMS_TAB {
@@ -105,7 +105,6 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 			onClose={handleReject}
 			initialWidth='1000px'
 			initialHeight='calc(100% - 50px)'
-			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Tab
 				titles={Model.Base.mapListIndex([

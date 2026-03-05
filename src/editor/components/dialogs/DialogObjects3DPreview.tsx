@@ -11,14 +11,17 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaPlay } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
+import * as THREE from 'three';
+import { BUTTON_TYPE, CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Manager, Model } from '../../Editor';
+import { Manager, Model, Scene } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { setNeedsReloadMap, showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
+import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
@@ -57,6 +60,13 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 
 	const [customShapeFormat, setCustomShapeFormat] = useState(CUSTOM_SHAPE_KIND.OBJ);
 	const [isTextureEnabled, setIsTextureEnabled] = useState(true);
+	const [gltfAnimations, setGltfAnimations] = useState<THREE.AnimationClip[]>([]);
+	const [moveAnimEnabled, setMoveAnimEnabled] = useState(false);
+	const [stopAnimEnabled, setStopAnimEnabled] = useState(false);
+	const [moveAnimIndex, setMoveAnimIndex] = useState(0);
+	const [stopAnimIndex, setStopAnimIndex] = useState(0);
+	const [isPlayingMoveAnim, setIsPlayingMoveAnim] = useState(false);
+	const [isPlayingStopAnim, setIsPlayingStopAnim] = useState(false);
 
 	const isCustom = selectedObject3D?.shapeKind === SHAPE_KIND.CUSTOM;
 	const isBox = selectedObject3D?.shapeKind === SHAPE_KIND.BOX;
@@ -85,6 +95,42 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		setHeightPixels(Model.Object3D.convertPixelFromPercent(obj3D.heightPixel));
 		setDepthSquares(obj3D.depthSquare);
 		setDepthPixels(Model.Object3D.convertPixelFromPercent(obj3D.depthPixel));
+		if (obj3D.gltfID !== -1) {
+			loadGltfAnimations(obj3D);
+		} else {
+			setGltfAnimations([]);
+		}
+	};
+
+	const loadGltfAnimations = (obj3D: Model.Object3D) => {
+		const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, obj3D.gltfID);
+		if (!shape) {
+			setGltfAnimations([]);
+			return;
+		}
+		const applyAnimations = (animations: THREE.AnimationClip[]) => {
+			setGltfAnimations(animations);
+			const moveIdx =
+				obj3D.moveAnimationIndex >= 0 && obj3D.moveAnimationIndex < animations.length
+					? obj3D.moveAnimationIndex
+					: 0;
+			const stopIdx =
+				obj3D.stopAnimationIndex >= 0 && obj3D.stopAnimationIndex < animations.length
+					? obj3D.stopAnimationIndex
+					: 0;
+			setMoveAnimEnabled(obj3D.moveAnimationIndex !== -1);
+			setStopAnimEnabled(obj3D.stopAnimationIndex !== -1);
+			setMoveAnimIndex(moveIdx);
+			setStopAnimIndex(stopIdx);
+		};
+		if (shape.isShapeLoaded()) {
+			applyAnimations(shape.gltfAnimations);
+		} else {
+			shape
+				.loadShape()
+				.then(() => applyAnimations(shape.gltfAnimations))
+				.catch(console.error);
+		}
 	};
 
 	const updateObjects3DList = () => {
@@ -124,11 +170,57 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		if (isGLTF) {
 			selectedObject3D!.gltfID = id;
 			selectedObject3D!.objID = -1;
+			selectedObject3D!.moveAnimationIndex = -1;
+			selectedObject3D!.stopAnimationIndex = -1;
+			setMoveAnimEnabled(false);
+			setStopAnimEnabled(false);
+			setGltfAnimations([]);
+			if (id !== -1) {
+				loadGltfAnimations(selectedObject3D!);
+			}
 		} else {
 			selectedObject3D!.objID = id;
 			selectedObject3D!.gltfID = -1;
 		}
 		setTriggerUpdate(true);
+	};
+
+	const handleChangeMoveAnimEnabled = (checked: boolean) => {
+		setMoveAnimEnabled(checked);
+		selectedObject3D!.moveAnimationIndex = checked ? moveAnimIndex : -1;
+	};
+
+	const handleChangeStopAnimEnabled = (checked: boolean) => {
+		setStopAnimEnabled(checked);
+		selectedObject3D!.stopAnimationIndex = checked ? stopAnimIndex : -1;
+	};
+
+	const handleChangeMoveAnimIndex = (index: number) => {
+		setMoveAnimIndex(index);
+		if (moveAnimEnabled) {
+			selectedObject3D!.moveAnimationIndex = index;
+		}
+	};
+
+	const handleChangeStopAnimIndex = (index: number) => {
+		setStopAnimIndex(index);
+		if (stopAnimEnabled) {
+			selectedObject3D!.stopAnimationIndex = index;
+		}
+	};
+
+	const handlePlayMoveAnim = () => {
+		const scene = Scene.Previewer3D.listScenes.get('dialog-object-3D-preview');
+		if (!scene) return;
+		setIsPlayingMoveAnim(true);
+		scene.playGltfAnimation(moveAnimIndex, () => setIsPlayingMoveAnim(false));
+	};
+
+	const handlePlayStopAnim = () => {
+		const scene = Scene.Previewer3D.listScenes.get('dialog-object-3D-preview');
+		if (!scene) return;
+		setIsPlayingStopAnim(true);
+		scene.playGltfAnimation(stopAnimIndex, () => setIsPlayingStopAnim(false));
 	};
 
 	const handleChangeTextureEnabled = (checked: boolean) => {
@@ -273,6 +365,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 								onChange={handleChangeShapeKind}
 								options={Model.Base.SHAPE_KIND_OPTIONS}
 								translateOptions
+								noWidthChange
 							/>
 						</Value>
 						{isCustom && (
@@ -323,6 +416,50 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 										selectedID={selectedObject3D.pictureID}
 										onChange={handleChangeTextureID}
 									/>
+								</Value>
+							</>
+						)}
+						{isGLTF && gltfAnimations.length > 0 && (
+							<>
+								<Label>{t('move.animation')}</Label>
+								<Value>
+									<Flex spaced centerV>
+										<Checkbox isChecked={moveAnimEnabled} onChange={handleChangeMoveAnimEnabled} />
+										<Dropdown
+											selectedID={moveAnimIndex}
+											onChange={handleChangeMoveAnimIndex}
+											options={gltfAnimations.map((clip, i) =>
+												Model.Base.create(i, clip.name || `Animation ${i}`),
+											)}
+											disabled={!moveAnimEnabled}
+										/>
+										<Button
+											icon={<FaPlay />}
+											buttonType={BUTTON_TYPE.PRIMARY}
+											onClick={handlePlayMoveAnim}
+											disabled={!moveAnimEnabled || isPlayingMoveAnim}
+										/>
+									</Flex>
+								</Value>
+								<Label>{t('stop.animation')}</Label>
+								<Value>
+									<Flex spaced centerV>
+										<Checkbox isChecked={stopAnimEnabled} onChange={handleChangeStopAnimEnabled} />
+										<Dropdown
+											selectedID={stopAnimIndex}
+											onChange={handleChangeStopAnimIndex}
+											options={gltfAnimations.map((clip, i) =>
+												Model.Base.create(i, clip.name || `Animation ${i}`),
+											)}
+											disabled={!stopAnimEnabled}
+										/>
+										<Button
+											icon={<FaPlay />}
+											buttonType={BUTTON_TYPE.PRIMARY}
+											onClick={handlePlayStopAnim}
+											disabled={!stopAnimEnabled || isPlayingStopAnim}
+										/>
+									</Flex>
 								</Value>
 							</>
 						)}

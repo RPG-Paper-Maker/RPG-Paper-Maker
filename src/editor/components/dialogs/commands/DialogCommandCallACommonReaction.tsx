@@ -12,7 +12,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdEdit } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 import { Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Node } from '../../../core/Node';
@@ -21,14 +20,13 @@ import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
-import { RootState } from '../../../store';
 import Button from '../../Button';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
-import DialogSystems from '../DialogSystems';
+import DialogCommonReactions from '../DialogCommonReactions';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -39,8 +37,6 @@ function DialogCommandCallACommonReaction({ commandKind, setIsOpen, list, onAcce
 	const [parameters, setParameters] = useState<Node[]>([]);
 	const [, setTrigger] = useStateBool();
 	const [isSubSystemsOpen, setIsSubSystemsOpen] = useState(false);
-
-	const isSystemsDialogOpen = useSelector((state: RootState) => state.projects.isSystemsDialogOpen);
 
 	const initialize = () => {
 		if (list) {
@@ -120,11 +116,9 @@ function DialogCommandCallACommonReaction({ commandKind, setIsOpen, list, onAcce
 							options={Project.current!.commonEvents.commonReactions}
 							displayIDs
 						/>
-						{!isSystemsDialogOpen && (
-							<Button onClick={() => setIsSubSystemsOpen(true)}>
-								<MdEdit />
-							</Button>
-						)}
+						<Button onClick={() => setIsSubSystemsOpen(true)}>
+							<MdEdit />
+						</Button>
 					</Flex>
 					{parameters.length > 0 && (
 						<Groupbox title={t('parameter.values')}>
@@ -138,7 +132,7 @@ function DialogCommandCallACommonReaction({ commandKind, setIsOpen, list, onAcce
 					)}
 				</Flex>
 			</Dialog>
-			{isSubSystemsOpen && <DialogSystems initialTabIndex={5} setIsOpen={setIsSubSystemsOpen} />}
+			{isSubSystemsOpen && <DialogCommonReactions setIsOpen={setIsSubSystemsOpen} />}
 		</>
 	);
 }

@@ -34,6 +34,7 @@ class Shape extends Asset {
 	public kind!: CUSTOM_SHAPE_KIND;
 	public geometryData!: GeometryDataType;
 	public gltfScene: THREE.Group | null = null;
+	public gltfAnimations: THREE.AnimationClip[] = [];
 
 	constructor(kind: CUSTOM_SHAPE_KIND) {
 		super();
@@ -205,7 +206,7 @@ class Shape extends Asset {
 	static async parseGLTF(
 		buffer: ArrayBuffer,
 		squareSize: number,
-	): Promise<{ geometryData: GeometryDataType; scene: THREE.Group }> {
+	): Promise<{ geometryData: GeometryDataType; scene: THREE.Group; animations: THREE.AnimationClip[] }> {
 		const loader = new GLTFLoader();
 		const gltf = await loader.parseAsync(buffer, '');
 		const vertices: THREE.Vector3[] = [];
@@ -261,6 +262,7 @@ class Shape extends Asset {
 				d: maxVertex.z - minVertex.z,
 			},
 			scene: gltf.scene,
+			animations: gltf.animations ?? [],
 		};
 	}
 
@@ -288,6 +290,7 @@ class Shape extends Asset {
 					const result = await Shape.parseGLTF(buffer, Project.SQUARE_SIZE);
 					this.geometryData = result.geometryData;
 					this.gltfScene = result.scene;
+					this.gltfAnimations = result.animations;
 				} else {
 					console.warn(`The shape ${this.toStringNameID()} content is empty.`);
 				}

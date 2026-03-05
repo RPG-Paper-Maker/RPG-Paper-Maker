@@ -32,6 +32,8 @@ class Object3D extends SpecialElement {
 	public depthPixel!: number;
 	public stretch!: boolean;
 	public isTopLeft!: boolean;
+	public moveAnimationIndex!: number;
+	public stopAnimationIndex!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['shapeKind', 'sk', SHAPE_KIND.BOX, BINDING.NUMBER],
@@ -49,6 +51,8 @@ class Object3D extends SpecialElement {
 		['depthPixel', 'dp', 0, BINDING.NUMBER],
 		['stretch', 'st', false, BINDING.BOOLEAN],
 		['isTopLeft', 'itl', true, BINDING.BOOLEAN],
+		['moveAnimationIndex', 'mai', -1, BINDING.NUMBER],
+		['stopAnimationIndex', 'sai', -1, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
