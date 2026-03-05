@@ -42,6 +42,7 @@ import {
 	MOBILE_ACTION,
 } from '../common';
 import { Project } from '../core/Project';
+import { Inputs } from '../managers/Inputs';
 import {
 	RootState,
 	setCurrentActionKind,
@@ -331,6 +332,7 @@ function MapEditorMenuBar() {
 
 	const handleActionGeneric = async (kind: ACTION_KIND) => {
 		dispatch(setCurrentActionKind(kind));
+		setActionIndex(kind);
 		if (
 			kind > ACTION_KIND.SCALE ||
 			(Scene.Map.current!.selectedElement &&
@@ -387,6 +389,36 @@ function MapEditorMenuBar() {
 	const handleLayersOn = async () => {
 		await handleGenericLayers(LAYER_KIND.ON);
 	};
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.repeat || e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+				return;
+			}
+			if (!Inputs.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
+				return;
+			}
+			switch (e.key.toLowerCase()) {
+				case 't':
+					if (!isTranslateDisabled()) {
+						handleActionTranslate().catch(console.error);
+					}
+					break;
+				case 'r':
+					if (!Scene.Map.isRotateDisabled()) {
+						handleActionRotate().catch(console.error);
+					}
+					break;
+				case 'e':
+					if (!Scene.Map.isScaleDisabled()) {
+						handleActionScale().catch(console.error);
+					}
+					break;
+			}
+		};
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	}, []);
 
 	// When first opening the project with all data loaded
 	useEffect(() => {
@@ -579,19 +611,19 @@ function MapEditorMenuBar() {
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
 					<MenuItem
 						icon={<LuMove3D />}
-						tooltip={t('translation')}
+						tooltip={`${t('translation')} (T)`}
 						onClick={handleActionTranslate}
 						disabled={isTranslateDisabled()}
 					/>
 					<MenuItem
 						icon={<LuRotate3D />}
-						tooltip={t('rotation')}
+						tooltip={`${t('rotation')} (R)`}
 						onClick={handleActionRotate}
 						disabled={Scene.Map.isRotateDisabled()}
 					/>
 					<MenuItem
 						icon={<LuScale3D />}
-						tooltip={t('scaling')}
+						tooltip={`${t('scaling')} (E)`}
 						onClick={handleActionScale}
 						disabled={Scene.Map.isScaleDisabled()}
 					/>
