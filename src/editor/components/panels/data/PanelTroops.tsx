@@ -167,59 +167,61 @@ const PanelTroops = forwardRef((props, ref) => {
 									disabled={isTroopDisabled}
 								/>
 							</Flex>
-							<Groupbox title={t('reactions')} disabled={isTroopDisabled}>
-								<Flex spacedLarge>
-									<Flex>
-										<Tree
-											constructorType={Model.TroopReaction}
-											list={reactions}
-											onListUpdated={handleReactionsListUpdated}
-											onSelectedItem={handleSelectReaction}
-											height={TREES_LARGE_MIN_HEIGHT}
-											minWidth={TREES_MIN_WIDTH}
-											disabled={isTroopDisabled}
-											scrollable
-											applyDefault
-											showEditName
-											cannotUpdateListSize
-											doNotOpenDialog
-											canBeEmpty
-										/>
-									</Flex>
-									<Flex one column spaced>
-										<Flex spacedLarge>
-											<Flex spaced centerV>
-												<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
-													{t('conditions')}:
-												</Flex>
-												<Button
-													onClick={handleClickReactionConditions}
-													disabled={isTroopDisabled || isReactionDisabled}
-												>
-													...
-												</Button>
-											</Flex>
-											<Flex spaced centerV>
-												<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
-													{t('frequency')}:
-												</Flex>
-												<Dropdown
-													selectedID={frequency}
-													onChange={handleChangeFrequency}
-													options={Base.TROOP_REACTION_FREQUENCY_OPTIONS}
-													disabled={isTroopDisabled || isReactionDisabled}
-													translateOptions
-												/>
-											</Flex>
+							<Flex one>
+								<Groupbox title={t('reactions')} disabled={isTroopDisabled} fillWidth>
+									<Flex spacedLarge fillHeight>
+										<Flex>
+											<Tree
+												constructorType={Model.TroopReaction}
+												list={reactions}
+												onListUpdated={handleReactionsListUpdated}
+												onSelectedItem={handleSelectReaction}
+												height={TREES_LARGE_MIN_HEIGHT}
+												minWidth={TREES_MIN_WIDTH}
+												disabled={isTroopDisabled}
+												scrollable
+												applyDefault
+												showEditName
+												cannotUpdateListSize
+												doNotOpenDialog
+												canBeEmpty
+											/>
 										</Flex>
-										<TreeCommands
-											list={commands}
-											onListUpdated={handleUpdateCommands}
-											disabled={isTroopDisabled || isReactionDisabled}
-										/>
+										<Flex one column spaced>
+											<Flex spacedLarge>
+												<Flex spaced centerV>
+													<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
+														{t('conditions')}:
+													</Flex>
+													<Button
+														onClick={handleClickReactionConditions}
+														disabled={isTroopDisabled || isReactionDisabled}
+													>
+														...
+													</Button>
+												</Flex>
+												<Flex spaced centerV>
+													<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
+														{t('frequency')}:
+													</Flex>
+													<Dropdown
+														selectedID={frequency}
+														onChange={handleChangeFrequency}
+														options={Base.TROOP_REACTION_FREQUENCY_OPTIONS}
+														disabled={isTroopDisabled || isReactionDisabled}
+														translateOptions
+													/>
+												</Flex>
+											</Flex>
+											<TreeCommands
+												list={commands}
+												onListUpdated={handleUpdateCommands}
+												disabled={isTroopDisabled || isReactionDisabled}
+											/>
+										</Flex>
 									</Flex>
-								</Flex>
-							</Groupbox>
+								</Groupbox>
+							</Flex>
 						</Flex>
 					</Flex>
 				</Flex>
