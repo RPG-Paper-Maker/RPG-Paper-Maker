@@ -520,7 +520,11 @@ const PanelMapObject = forwardRef(
 									setForcedCurrentIndex={setForcedCurrentIndexTab}
 									onCurrentIndexChanged={handleCurrentIndexTabChanged}
 								/>
-								<Checkbox isChecked={blockingHero} onChange={handleChangeBlockingHero}>
+								<Checkbox
+									isChecked={blockingHero}
+									onChange={handleChangeBlockingHero}
+									title={t('tooltip.block.hero.during.reaction')}
+								>
 									{t('block.hero.during.reaction')}
 								</Checkbox>
 							</Flex>
@@ -674,12 +678,17 @@ const PanelMapObject = forwardRef(
 					</Flex>
 					<Flex spacedLarge>
 						<Flex one spaced>
-							<Checkbox isChecked={onlyOneEventPerFrame} onChange={handleChangeOnlyOneEventPerFrame}>
+							<Checkbox
+								isChecked={onlyOneEventPerFrame}
+								onChange={handleChangeOnlyOneEventPerFrame}
+								title={t('tooltip.only.one.event.per.frame')}
+							>
 								{t('only.one.event.per.frame')}
 							</Checkbox>
 							<Checkbox
 								isChecked={canBeTriggeredAnotherObject}
 								onChange={handleChangeCanBeTriggeredAnotherObject}
+								title={t('tooltip.can.be.triggered.another.object')}
 							>
 								{t('can.be.triggered.another.object')}
 							</Checkbox>
