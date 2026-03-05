@@ -27,7 +27,7 @@ import PanelTilesets from '../panels/data/PanelTilesets';
 import PanelTroops from '../panels/data/PanelTroops';
 import Tab from '../Tab';
 import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
@@ -54,7 +54,7 @@ function DialogData({ setIsOpen }: Props) {
 		Project.current!.settings.lastTabIndexData = index;
 	};
 
-	const handleAccept = async () => {
+	const handleSave = async () => {
 		if (panelClassesRef.current) {
 			await Project.current!.classes.save();
 		}
@@ -92,6 +92,10 @@ function DialogData({ setIsOpen }: Props) {
 		}
 		await Project.current!.settings.save();
 		dispatch(setNeedsReloadMap());
+	};
+
+	const handleAccept = async () => {
+		await handleSave();
 		setIsOpen(false);
 	};
 
@@ -139,7 +143,7 @@ function DialogData({ setIsOpen }: Props) {
 		<Dialog
 			title={`${t('data.manager')}...`}
 			isOpen
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			footer={<FooterCancelSaveClose onCancel={handleReject} onSave={handleSave} onSaveAndClose={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1200px'
 			initialHeight='calc(100% - 50px)'

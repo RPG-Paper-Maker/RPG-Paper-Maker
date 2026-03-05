@@ -25,7 +25,7 @@ import PanelSystem from '../panels/systems/PanelSystem';
 import PanelTitleScreenGameOver from '../panels/systems/PanelTitleScreenGameOver';
 import Tab from '../Tab';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 export enum SYSTEMS_TAB {
 	SYSTEM,
@@ -59,7 +59,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		Project.current!.settings.lastTabIndexSystems = index;
 	};
 
-	const handleAccept = async () => {
+	const handleSave = async () => {
 		panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
 		panelTitleScreenGameOverRef.current?.accept();
@@ -74,6 +74,10 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		await Project.current!.commonEvents.save();
 		await Project.current!.settings.save();
 		dispatch(setNeedsReloadMap());
+	};
+
+	const handleAccept = async () => {
+		await handleSave();
 		setIsOpen(false);
 	};
 
@@ -97,7 +101,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		<Dialog
 			title={`${t('systems.manager')}...`}
 			isOpen
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			footer={<FooterCancelSaveClose onCancel={handleReject} onSave={handleSave} onSaveAndClose={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'
 			initialHeight='calc(100% - 50px)'
