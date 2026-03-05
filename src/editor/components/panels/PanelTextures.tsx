@@ -9,16 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { JSX, useRef } from 'react';
+import { JSX, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
-import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import {
+	ACTION_KIND,
+	AXIS,
+	Constants,
+	ELEMENT_MAP_KIND,
+	ELEMENT_POSITION_KIND,
+	PICTURE_KIND,
+	Utils,
+} from '../../common';
 import { Project } from '../../core/Project';
 import { Scene } from '../../Editor';
 import { RootState } from '../../store';
+import Button from '../Button';
 import Flex from '../Flex';
+import Groupbox from '../Groupbox';
+import InputNumber from '../InputNumber';
 import MainPreviewer3D from '../MainPreviewer3D';
 import Splitter from '../Splitter';
 import TextureSquareSelector from '../TextureSquareSelector';
+import Tooltip from '../Tooltip';
 import PanelMapObjectsSelection from './PanelMapObjectsSelection';
 import PanelSettingsMountains from './PanelSettingsMountains';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
@@ -30,15 +44,32 @@ type Props = {
 };
 
 function PanelTextures({ visible, extraContent }: Props) {
+	const { t } = useTranslation();
 	const refTilesetPreviewDiv = useRef<HTMLDivElement>(null);
 	const refTileset = useRef<HTMLDivElement>(null);
 	const refPreviewer = useRef<HTMLDivElement>(null);
 
+	const [previewerMode, setPreviewerMode] = useState<ACTION_KIND | null>(null);
+	const [transformVersion, setTransformVersion] = useState(0);
+
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
+	const currentElementPositionKind = useSelector((state: RootState) => state.mapEditor.currentElementPositionKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const mapLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
 	useSelector((state: RootState) => state.triggers.splitting);
+
+	const getTransformValues = () =>
+		Scene.Previewer3D.mainPreviewerScene?.getPreviewTransformValues() ?? { x: 0, y: 0, z: 0 };
+
+	const handleTransformChange = (axis: AXIS) => (value: number) => {
+		Scene.Previewer3D.mainPreviewerScene?.setPreviewTransformValue(axis, value);
+	};
+
+	const handleRotateStep = (axis: AXIS, delta: number) => {
+		const current = getTransformValues();
+		Scene.Previewer3D.mainPreviewerScene?.setPreviewTransformValue(axis, current[axis as 'x' | 'y' | 'z'] + delta);
+	};
 
 	const getMainContent = () => {
 		if (!currentMapID || !Scene.Map.current || !mapLoaded) {
@@ -99,6 +130,17 @@ function PanelTextures({ visible, extraContent }: Props) {
 		}
 	};
 
+	// transformVersion is read to re-render when gizmo updates values
+	void transformVersion;
+
+	const transformTitle =
+		previewerMode === ACTION_KIND.ROTATE
+			? t('transform.options', { transform: Utils.capitalize(t('rotation').toLowerCase()) })
+			: t('transform.options', { transform: Utils.capitalize(t('scaling').toLowerCase()) });
+
+	const units = previewerMode === ACTION_KIND.ROTATE ? '°' : '';
+	const values = getTransformValues();
+
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
@@ -112,8 +154,123 @@ function PanelTextures({ visible, extraContent }: Props) {
 					{extraContent}
 				</Splitter>
 			</Flex>
-			<Flex ref={refPreviewer} centerH className='mobileHidden backgroundDarkestContainers'>
-				<MainPreviewer3D id='texture-previewer' />
+			{previewerMode !== null && (
+				<div className='scrollable gapSmall'>
+					<Groupbox
+						title={
+							<Flex spaced>
+								{transformTitle}
+								<div className='warning textCenter'>
+									(
+									{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+										? t('square.mode.applied')
+										: t('pixel.mode.applied')}
+									)
+								</div>
+							</Flex>
+						}
+					>
+						<Flex column spaced>
+							<Flex centerV spaced>
+								X:
+								<InputNumber
+									value={values.x}
+									onChange={handleTransformChange(AXIS.X)}
+									decimals={true}
+									min={previewerMode === ACTION_KIND.SCALE ? 0.0001 : undefined}
+								/>
+								{units}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.X, -90)}
+										/>
+									</Tooltip>
+								)}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.X, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+							<Flex centerV spaced>
+								Y:
+								<InputNumber
+									value={values.y}
+									onChange={handleTransformChange(AXIS.Y)}
+									decimals={true}
+									min={previewerMode === ACTION_KIND.SCALE ? 0.0001 : undefined}
+								/>
+								{units}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.Y, -90)}
+										/>
+									</Tooltip>
+								)}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.Y, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+							<Flex centerV spaced>
+								Z:
+								<InputNumber
+									value={values.z}
+									onChange={handleTransformChange(AXIS.Z)}
+									decimals={true}
+									min={previewerMode === ACTION_KIND.SCALE ? 0.0001 : undefined}
+								/>
+								{units}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.Z, -90)}
+										/>
+									</Tooltip>
+								)}
+								{previewerMode === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(AXIS.Z, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+						</Flex>
+					</Groupbox>
+				</div>
+			)}
+			<Flex ref={refPreviewer} centerH className='mobileHidden backgroundDarkestContainers relative'>
+				<MainPreviewer3D
+					id='texture-previewer'
+					onPreviewModeChange={setPreviewerMode}
+					onTransformVersionChange={() => setTransformVersion((v) => v + 1)}
+				/>
 			</Flex>
 		</div>
 	);

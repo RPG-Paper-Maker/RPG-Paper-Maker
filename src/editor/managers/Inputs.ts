@@ -223,7 +223,10 @@ class Inputs {
 				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseMove();
+				const isOutsideCanvas = x < 0 || y < 0 || x > rect.width || y > rect.height;
+				if (!isOutsideCanvas || Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed) {
+					(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseMove();
+				}
 				Inputs.previousMouseX = Inputs.mouseX;
 				Inputs.previousMouseY = Inputs.mouseY;
 				Inputs.mouseX = x;
@@ -232,6 +235,20 @@ class Inputs {
 			if (!canvasOnly) {
 				document.addEventListener('mousemove', handleMouseMove, false);
 			}
+
+			// Mouse leave canvas
+			const handleMouseLeave = () => {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
+					return;
+				}
+				if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed && !Inputs.isMouseWheelPressed) {
+					Scene.Map.current.forEachMapPortions((mapPortion) => {
+						mapPortion.removeLastPreview();
+					});
+					Scene.Map.current.requestPaintHUD = true;
+				}
+			};
+			canvas.addEventListener('mouseleave', handleMouseLeave, false);
 
 			// Mouse up
 			const handleMouseUp = async (e: MouseEvent) => {
@@ -278,6 +295,7 @@ class Inputs {
 					document.removeEventListener('mouseup', handleMouseUp, false);
 				}
 				canvas.removeEventListener('mousedown', handleMouseDown, false);
+				canvas.removeEventListener('mouseleave', handleMouseLeave, false);
 				canvas.removeEventListener('wheel', handleWheel);
 			};
 		}

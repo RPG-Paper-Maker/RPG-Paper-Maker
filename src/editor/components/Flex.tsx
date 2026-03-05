@@ -19,6 +19,7 @@ type Props = {
 	two?: boolean;
 	spaced?: boolean;
 	spacedLarge?: boolean;
+	gap?: number;
 	paddingSmall?: boolean;
 	centerV?: boolean;
 	centerH?: boolean;
@@ -45,6 +46,7 @@ function Flex({
 	two = false,
 	spaced = false,
 	spacedLarge = false,
+	gap,
 	paddingSmall = false,
 	centerV = false,
 	centerH = false,
@@ -89,6 +91,7 @@ function Flex({
 				},
 				`flex ${className ?? ''}`,
 			)}
+			style={gap ? { gap } : undefined}
 			onClick={onClick}
 			{...rest}
 		>

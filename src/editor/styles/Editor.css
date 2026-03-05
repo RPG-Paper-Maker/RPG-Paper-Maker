@@ -207,6 +207,12 @@ a {
 	position: absolute;
 }
 
+.topRight {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
 .fixed {
 	position: fixed;
 }

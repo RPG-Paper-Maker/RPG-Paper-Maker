@@ -9,18 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaEye } from 'react-icons/fa';
+import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
+import { LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { useSelector } from 'react-redux';
-import { ELEMENT_MAP_KIND } from '../common';
+import { ACTION_KIND, AXIS, ELEMENT_MAP_KIND } from '../common';
 import { Manager, MapElement, Scene } from '../Editor';
 import { RootState } from '../store';
+import Button from './Button';
+import Flex from './Flex';
+import Tooltip from './Tooltip';
 
 type Props = {
 	id: string;
+	onPreviewModeChange?: (mode: ACTION_KIND | null) => void;
+	onTransformVersionChange?: () => void;
 };
 
-function MainPreviewer3D({ id }: Props) {
+function MainPreviewer3D({ id, onPreviewModeChange, onTransformVersionChange }: Props) {
+	const { t } = useTranslation();
+
 	const refCanvas = useRef<HTMLDivElement>(null);
+
+	const [previewMode, setPreviewMode] = useState<ACTION_KIND | null>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentTilesetFloorSpriteTexture = useSelector(
@@ -86,6 +99,7 @@ function MainPreviewer3D({ id }: Props) {
 			Scene.Previewer3D.mainPreviewerScene = scene;
 			scene.loading = true;
 			await scene.load();
+			scene.onTransformChange = () => onTransformVersionChange?.();
 			await update();
 			resize();
 			loop();
@@ -161,6 +175,10 @@ function MainPreviewer3D({ id }: Props) {
 					scene.clear();
 				}
 			}
+			if (previewMode !== null) {
+				scene.setPreviewMode(previewMode);
+				onTransformVersionChange?.();
+			}
 		}
 	};
 
@@ -187,6 +205,24 @@ function MainPreviewer3D({ id }: Props) {
 		}
 	};
 
+	const setMode = (newMode: ACTION_KIND | null) => {
+		const scene = Scene.Previewer3D.mainPreviewerScene;
+		if (scene) {
+			scene.setPreviewMode(newMode);
+		}
+		setPreviewMode(newMode);
+		onPreviewModeChange?.(newMode);
+	};
+
+	const handleRotateY = (delta: number) => {
+		const scene = Scene.Previewer3D.mainPreviewerScene;
+		if (scene) {
+			const current = scene.getPreviewTransformValues();
+			scene.setPreviewTransformValue(AXIS.Y, current.y + delta);
+			onTransformVersionChange?.();
+		}
+	};
+
 	useEffect(() => {
 		if (refCanvas.current) {
 			const width = refCanvas.current.getBoundingClientRect().width;
@@ -194,6 +230,20 @@ function MainPreviewer3D({ id }: Props) {
 			resizeForced();
 		}
 	});
+
+	useEffect(() => {
+		if (previewMode === ACTION_KIND.ROTATE && Scene.Map.isRotateDisabled()) {
+			setMode(null);
+		} else if (previewMode === ACTION_KIND.SCALE && Scene.Map.isScaleDisabled()) {
+			setMode(null);
+		}
+	}, [selectedMapElement, currentMapElementKind]);
+
+	useEffect(() => {
+		if (Scene.Map.isTransforming()) {
+			setMode(null);
+		}
+	}, [currentActionKind]);
 
 	useEffect(() => {
 		if (currentMapID === undefined) {
@@ -240,7 +290,63 @@ function MainPreviewer3D({ id }: Props) {
 		};
 	}, []);
 
-	return <div style={{ width: '50%' }} ref={refCanvas} id={id} />;
+	const isRotateDisabled = Scene.Map.isRotateDisabled();
+	const isScaleDisabled = Scene.Map.isScaleDisabled();
+
+	return (
+		<>
+			{Scene.Map.isDrawing() && previewMode === ACTION_KIND.ROTATE && (
+				<Flex centerV>
+					<Tooltip text='-90° Y'>
+						<Button icon={<FaArrowRotateRight />} small onClick={() => handleRotateY(-90)} />
+					</Tooltip>
+				</Flex>
+			)}
+			<div style={{ width: '50%' }}>
+				<div ref={refCanvas} id={id} />
+				{Scene.Map.isDrawing() && (
+					<Flex gap={2} className='topRight'>
+						<Tooltip text={t('rotation')}>
+							<Button
+								icon={<LuRotate3D />}
+								onClick={() => setMode(previewMode === ACTION_KIND.ROTATE ? null : ACTION_KIND.ROTATE)}
+								disabled={isRotateDisabled}
+								active={previewMode === ACTION_KIND.ROTATE}
+								small
+								square
+							/>
+						</Tooltip>
+						<Tooltip text={t('scaling')}>
+							<Button
+								icon={<LuScale3D />}
+								onClick={() => setMode(previewMode === ACTION_KIND.SCALE ? null : ACTION_KIND.SCALE)}
+								disabled={isScaleDisabled}
+								active={previewMode === ACTION_KIND.SCALE}
+								small
+								square
+							/>
+						</Tooltip>
+						<Tooltip text={t('view')}>
+							<Button
+								icon={<FaEye />}
+								small
+								square
+								onClick={() => setMode(null)}
+								active={previewMode === null}
+							/>
+						</Tooltip>
+					</Flex>
+				)}
+			</div>
+			{Scene.Map.isDrawing() && previewMode === ACTION_KIND.ROTATE && (
+				<Flex centerV>
+					<Tooltip text='+90° Y'>
+						<Button icon={<FaArrowRotateLeft />} small onClick={() => handleRotateY(90)} />
+					</Tooltip>
+				</Flex>
+			)}
+		</>
+	);
 }
 
 export default MainPreviewer3D;

@@ -11,6 +11,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_POSITION_KIND, Utils } from '../../common';
 import { Position } from '../../core/Position';
@@ -23,7 +24,6 @@ import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import Tooltip from '../Tooltip';
-import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
 
 type Props = {
 	kind: ACTION_KIND;
@@ -288,13 +288,21 @@ function PanelTransform({ kind }: Props) {
 
 	return (
 		<>
-			<Groupbox title={title}>
+			<Groupbox
+				title={
+					<Flex spaced>
+						{title}
+						<div className='warning textCenter'>
+							(
+							{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+								? t('square.mode.applied')
+								: t('pixel.mode.applied')}
+							)
+						</div>
+					</Flex>
+				}
+			>
 				<Flex column spacedLarge>
-					<div className='warning textCenter'>
-						{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-							? t('square.mode.applied')
-							: t('pixel.mode.applied')}
-					</div>
 					{canEditDefaultValues && (
 						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
 							transform: kindText.toLowerCase(),
@@ -314,10 +322,24 @@ function PanelTransform({ kind }: Props) {
 									/>
 									{units}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, -90)} /></Tooltip>
+										<Tooltip text='-90°'>
+											<Button
+												icon={<FaArrowRotateRight />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, -90)}
+											/>
+										</Tooltip>
 									)}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, 90)} /></Tooltip>
+										<Tooltip text='+90°'>
+											<Button
+												icon={<FaArrowRotateLeft />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, 90)}
+											/>
+										</Tooltip>
 									)}
 								</Flex>
 								<Flex centerV spaced>
@@ -331,10 +353,24 @@ function PanelTransform({ kind }: Props) {
 									/>
 									{units}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, -90)} /></Tooltip>
+										<Tooltip text='-90°'>
+											<Button
+												icon={<FaArrowRotateRight />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, -90)}
+											/>
+										</Tooltip>
 									)}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, 90)} /></Tooltip>
+										<Tooltip text='+90°'>
+											<Button
+												icon={<FaArrowRotateLeft />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, 90)}
+											/>
+										</Tooltip>
 									)}
 								</Flex>
 								<Flex centerV spaced>
@@ -348,10 +384,24 @@ function PanelTransform({ kind }: Props) {
 									/>
 									{units}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, -90)} /></Tooltip>
+										<Tooltip text='-90°'>
+											<Button
+												icon={<FaArrowRotateRight />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, -90)}
+											/>
+										</Tooltip>
 									)}
 									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, 90)} /></Tooltip>
+										<Tooltip text='+90°'>
+											<Button
+												icon={<FaArrowRotateLeft />}
+												square
+												small
+												onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, 90)}
+											/>
+										</Tooltip>
 									)}
 								</Flex>
 							</Flex>

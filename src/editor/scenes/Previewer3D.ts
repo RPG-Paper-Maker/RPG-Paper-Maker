@@ -10,8 +10,18 @@
 */
 
 import * as THREE from 'three';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
-import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import {
+	ACTION_KIND,
+	AXIS,
+	CUSTOM_SHAPE_KIND,
+	ELEMENT_MAP_KIND,
+	ELEMENT_POSITION_KIND,
+	Mathf,
+	SHAPE_KIND,
+	SPRITE_WALL_TYPE,
+} from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Position } from '../core/Position';
@@ -33,6 +43,11 @@ class Previewer3D extends Base {
 	public meshes: THREE.Mesh[] = [];
 	public currentRotation: number = (45 * Math.PI) / 180;
 	public isCut = false;
+	public isRotating: boolean = true;
+	public previewMode: ACTION_KIND | null = null;
+	public previewGrid: THREE.GridHelper | null = null;
+	public previewTransformControls: TransformControls | null = null;
+	public onTransformChange: (() => void) | null = null;
 
 	constructor(id: string) {
 		super();
@@ -188,7 +203,10 @@ class Previewer3D extends Base {
 				(widthTop - widthBot) * (Project.SQUARE_SIZE / 2),
 			);
 			if (topFloorIsAutotile) {
-				const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(Scene.Map.current, topFloorAutotileID);
+				const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(
+					Scene.Map.current,
+					topFloorAutotileID,
+				);
 				const autotileModel = Project.current!.specialElements.getAutotileByID(topFloorAutotileID);
 				if (texturesAutotile && autotileModel) {
 					const pictureID = autotileModel.pictureID;
@@ -204,15 +222,26 @@ class Previewer3D extends Base {
 						autotiles.updateGeometry(
 							Scene.Map.current!,
 							floorPosition,
-							MapElement.Autotile.create(topFloorAutotileID, MapElement.Autotiles.PREVIEW_TILE, topFloorAutotileRect),
+							MapElement.Autotile.create(
+								topFloorAutotileID,
+								MapElement.Autotiles.PREVIEW_TILE,
+								topFloorAutotileRect,
+							),
 						);
-						this.addToScene(autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material, false, offset);
+						this.addToScene(
+							autotiles.meshes[0][0].geometry as CustomGeometry,
+							autotiles.bundle.material,
+							false,
+							offset,
+						);
 					}
 				}
 			} else {
 				await this.loadMaterial();
 				const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
-				const floor = MapElement.Floor.create(new Rectangle(topFloorTilesetRect.x, topFloorTilesetRect.y, 1, 1));
+				const floor = MapElement.Floor.create(
+					new Rectangle(topFloorTilesetRect.x, topFloorTilesetRect.y, 1, 1),
+				);
 				geometry = new CustomGeometry();
 				floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
 				this.addToScene(geometry, this.material, false, offset);
@@ -328,10 +357,147 @@ class Previewer3D extends Base {
 	}
 
 	clear() {
+		if (this.previewTransformControls) {
+			this.previewTransformControls.detach();
+			this.scene.remove(this.previewTransformControls.getHelper());
+			this.previewTransformControls.dispose();
+			this.previewTransformControls = null;
+		}
+		if (this.previewGrid) {
+			this.scene.remove(this.previewGrid);
+			this.previewGrid = null;
+		}
+		this.previewMode = null;
+		this.isRotating = true;
 		for (const mesh of this.meshes) {
 			this.scene.remove(mesh);
 		}
 		this.meshes = [];
+	}
+
+	setPreviewMode(mode: ACTION_KIND | null) {
+		this.previewMode = mode;
+		if (this.previewTransformControls) {
+			this.previewTransformControls.detach();
+			this.scene.remove(this.previewTransformControls.getHelper());
+			this.previewTransformControls.dispose();
+			this.previewTransformControls = null;
+		}
+		if (this.previewGrid) {
+			this.scene.remove(this.previewGrid);
+			this.previewGrid = null;
+		}
+		if (mode === ACTION_KIND.ROTATE || mode === ACTION_KIND.SCALE) {
+			this.isRotating = false;
+			if (mode === ACTION_KIND.ROTATE) {
+				for (const mesh of this.meshes) {
+					mesh.rotation.set(0, 0, 0);
+				}
+			}
+			if (this.meshes.length > 0) {
+				const box = new THREE.Box3();
+				for (const mesh of this.meshes) {
+					box.expandByObject(mesh);
+				}
+				const size = box.getSize(new THREE.Vector3());
+				const gridSize = Math.max(size.x, size.z, Project.SQUARE_SIZE) * 2;
+				this.previewGrid = new THREE.GridHelper(gridSize, 10, 0x888888, 0x444444);
+				const center = box.getCenter(new THREE.Vector3());
+				this.previewGrid.position.set(center.x, box.min.y, center.z);
+				this.scene.add(this.previewGrid);
+				if (this.canvas) {
+					this.previewTransformControls = new TransformControls(this.camera.getThreeCamera(), this.canvas);
+					this.previewTransformControls.setMode(mode === ACTION_KIND.ROTATE ? 'rotate' : 'scale');
+					this.previewTransformControls.attach(this.meshes[0]);
+					this.previewTransformControls.setSize(2);
+					const isSquare =
+						Project.current?.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE;
+					if (mode === ACTION_KIND.ROTATE) {
+						this.previewTransformControls.setRotationSnap(isSquare ? Mathf.degreesToRadians(45) : null);
+					}
+					this.previewTransformControls.addEventListener('objectChange', () => {
+						if (
+							this.previewMode === ACTION_KIND.SCALE &&
+							this.meshes.length > 0 &&
+							Project.current?.settings.mapEditorCurrentElementPositionIndex ===
+								ELEMENT_POSITION_KIND.SQUARE
+						) {
+							const mesh = this.meshes[0];
+							const s = Project.SQUARE_SIZE;
+							mesh.scale.setX(Math.max(s, mesh.scale.x - (mesh.scale.x % s)));
+							mesh.scale.setY(Math.max(s, mesh.scale.y - (mesh.scale.y % s)));
+							mesh.scale.setZ(Math.max(s, mesh.scale.z - (mesh.scale.z % s)));
+						}
+						this.syncSettingsFromMesh();
+						this.onTransformChange?.();
+					});
+					this.scene.add(this.previewTransformControls.getHelper());
+				}
+			}
+		} else {
+			this.isRotating = true;
+			this.camera.horizontalAngle = -90;
+			for (const mesh of this.meshes) {
+				mesh.rotation.set(0, this.currentRotation, 0);
+				mesh.scale.set(Project.SQUARE_SIZE, Project.SQUARE_SIZE, Project.SQUARE_SIZE);
+			}
+		}
+		this.syncSettingsFromMesh();
+	}
+
+	getPreviewTransformValues(): { x: number; y: number; z: number } {
+		if (this.meshes.length === 0) {
+			return { x: 0, y: 0, z: 0 };
+		}
+		const mesh = this.meshes[0];
+		if (this.previewMode === ACTION_KIND.ROTATE) {
+			const toDeg = (r: number) => (r * 180) / Math.PI;
+			return { x: toDeg(mesh.rotation.x), y: toDeg(mesh.rotation.y), z: toDeg(mesh.rotation.z) };
+		} else if (this.previewMode === ACTION_KIND.SCALE) {
+			const base = Project.SQUARE_SIZE;
+			return { x: mesh.scale.x / base, y: mesh.scale.y / base, z: mesh.scale.z / base };
+		}
+		return { x: 0, y: 0, z: 0 };
+	}
+
+	setPreviewTransformValue(axis: AXIS, value: number) {
+		if (this.meshes.length === 0) {
+			return;
+		}
+		const mesh = this.meshes[0];
+		if (this.previewMode === ACTION_KIND.ROTATE) {
+			mesh.rotation[axis as AXIS] = (value * Math.PI) / 180;
+		} else if (this.previewMode === ACTION_KIND.SCALE) {
+			mesh.scale[axis as AXIS] = value * Project.SQUARE_SIZE;
+		}
+		this.syncSettingsFromMesh();
+		this.onTransformChange?.();
+	}
+
+	syncSettingsFromMesh() {
+		if (!Project.current) {
+			return;
+		}
+		if (this.previewMode === ACTION_KIND.ROTATE && this.meshes.length > 0) {
+			const mesh = this.meshes[0];
+			const toDeg = (r: number) => (r * 180) / Math.PI;
+			Project.current.settings.mapEditorDefaultRotateX = toDeg(mesh.rotation.x);
+			Project.current.settings.mapEditorDefaultRotateY = toDeg(mesh.rotation.y);
+			Project.current.settings.mapEditorDefaultRotateZ = toDeg(mesh.rotation.z);
+		} else if (this.previewMode === ACTION_KIND.SCALE && this.meshes.length > 0) {
+			const mesh = this.meshes[0];
+			const base = Project.SQUARE_SIZE;
+			Project.current.settings.mapEditorDefaultScaleX = mesh.scale.x / base;
+			Project.current.settings.mapEditorDefaultScaleY = mesh.scale.y / base;
+			Project.current.settings.mapEditorDefaultScaleZ = mesh.scale.z / base;
+		} else {
+			Project.current.settings.mapEditorDefaultRotateX = 0;
+			Project.current.settings.mapEditorDefaultRotateY = 0;
+			Project.current.settings.mapEditorDefaultRotateZ = 0;
+			Project.current.settings.mapEditorDefaultScaleX = 1;
+			Project.current.settings.mapEditorDefaultScaleY = 1;
+			Project.current.settings.mapEditorDefaultScaleZ = 1;
+		}
 	}
 
 	updateCamera() {
@@ -376,9 +542,11 @@ class Previewer3D extends Base {
 	update() {
 		this.camera.update();
 		if (super.update()) {
-			this.currentRotation += 0.01;
-			for (const mesh of this.meshes) {
-				mesh.rotation.y = this.currentRotation;
+			if (this.isRotating) {
+				this.currentRotation += 0.01;
+				for (const mesh of this.meshes) {
+					mesh.rotation.y = this.currentRotation;
+				}
 			}
 		}
 		return false;

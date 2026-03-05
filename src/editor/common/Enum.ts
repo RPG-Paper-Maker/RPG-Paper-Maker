@@ -722,3 +722,9 @@ export enum MOUNTAIN_SIDE {
 	LEFT = 'left',
 	RIGHT = 'right',
 }
+
+export enum AXIS {
+	X = 'x',
+	Y = 'y',
+	Z = 'z',
+}

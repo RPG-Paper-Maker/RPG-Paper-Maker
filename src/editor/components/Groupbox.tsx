@@ -17,7 +17,7 @@ import Flex from './Flex';
 
 type Props = {
 	children?: ReactNode;
-	title?: string;
+	title?: string | ReactNode;
 	fillWidth?: boolean;
 	disabled?: boolean;
 	canExpand?: boolean;
