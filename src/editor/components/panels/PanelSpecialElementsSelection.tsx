@@ -153,11 +153,10 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	};
 
 	const updateMinMax = () => {
-		const offset = Math.floor(firstIndex / DISPLAY_INCREMENT) * DISPLAY_INCREMENT;
-		positionScroll.current = offset;
-		setMinToDisplay(offset);
-		setPreviousMinToDisplay(offset);
-		setMaxToDisplay(offset + DISPLAY_INCREMENT);
+		positionScroll.current = Math.max(0, firstIndex - 1);
+		setMinToDisplay(0);
+		setPreviousMinToDisplay(0);
+		setMaxToDisplay(firstIndex + DISPLAY_INCREMENT);
 		setTestOffset(true);
 	};
 
