@@ -55,6 +55,14 @@ class EngineSettings extends Serializable {
 		];
 	}
 
+	async applyKeyboardLayout() {
+		const [up, down, left, right] = await detectMovementKeys();
+		this.keyboardControls[0].shortcuts = [['ArrowUp'], [up]];
+		this.keyboardControls[1].shortcuts = [['ArrowDown'], [down]];
+		this.keyboardControls[2].shortcuts = [['ArrowLeft'], [left]];
+		this.keyboardControls[3].shortcuts = [['ArrowRight'], [right]];
+	}
+
 	getPath(): string {
 		return Paths.join(Constants.IS_DESKTOP ? Paths.DIST : LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
 	}
@@ -85,6 +93,30 @@ class EngineSettings extends Serializable {
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, EngineSettings.getBindings(additionnalBinding));
 	}
+}
+
+// AZERTY locales: France, Belgium, Luxembourg, Monaco, Belgian Dutch
+const AZERTY_LOCALES = ['fr-FR', 'fr-BE', 'fr-LU', 'fr-MC', 'nl-BE'];
+
+export async function detectMovementKeys(): Promise<[string, string, string, string]> {
+	const keyboard = (navigator as Navigator & { keyboard?: { getLayoutMap(): Promise<Map<string, string>> } }).keyboard;
+	if (keyboard) {
+		try {
+			const map = await keyboard.getLayoutMap();
+			return [
+				(map.get('KeyW') ?? 'w').toLowerCase(),
+				(map.get('KeyS') ?? 's').toLowerCase(),
+				(map.get('KeyA') ?? 'a').toLowerCase(),
+				(map.get('KeyD') ?? 'd').toLowerCase(),
+			];
+		} catch {
+			// getLayoutMap failed, fall through to locale detection
+		}
+	}
+	if (AZERTY_LOCALES.some((l) => (navigator.language ?? '').startsWith(l))) {
+		return ['z', 's', 'q', 'd'];
+	}
+	return ['w', 's', 'a', 'd'];
 }
 
 export { EngineSettings };

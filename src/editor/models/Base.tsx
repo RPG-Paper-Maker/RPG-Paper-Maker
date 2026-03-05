@@ -29,7 +29,6 @@ const { t } = i18next;
 
 export type DIALOG_OPTIONS = {
 	isNew: boolean;
-
 	setIsOpen: (b: boolean) => void;
 	model: Base;
 	parent: Node | null;

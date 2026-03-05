@@ -14,6 +14,7 @@ import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+import { detectMovementKeys } from './EngineSettings';
 
 const { t } = i18next;
 
@@ -46,6 +47,20 @@ class Keyboard extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_KEYBOARD);
+	}
+
+	async applyKeyboardLayout() {
+		const [up, down, left, right] = await detectMovementKeys();
+		// Hero movement
+		this.list[0].shortcuts = [[up]];
+		this.list[1].shortcuts = [[down]];
+		this.list[2].shortcuts = [[left]];
+		this.list[3].shortcuts = [[right]];
+		// Menu movement (keep arrow keys as primary)
+		this.list[4].shortcuts = [['ArrowUp'], [up]];
+		this.list[5].shortcuts = [['ArrowDown'], [down]];
+		this.list[6].shortcuts = [['ArrowLeft'], [left]];
+		this.list[7].shortcuts = [['ArrowRight'], [right]];
 	}
 
 	translateDefaults(): void {

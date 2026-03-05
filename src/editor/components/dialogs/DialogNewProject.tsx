@@ -168,6 +168,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			await Model.Map.createDefaultMap(2, t('default'));
 			project.translateDefaults();
 		}
+		await project.keyboard.applyKeyboardLayout();
 		project.settings.projectVersion = Project.VERSION;
 		if (Constants.IS_MOBILE) {
 			project.settings.projectMenuIndex = 2;

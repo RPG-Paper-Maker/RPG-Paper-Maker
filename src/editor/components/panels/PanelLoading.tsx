@@ -85,6 +85,7 @@ function PanelLoading({ setLoaded }: Props) {
 		if (!(await checkFileExists(EngineSettings.current.getPath()))) {
 			EngineSettings.current.read({});
 			EngineSettings.current.applyDefault();
+			await EngineSettings.current.applyKeyboardLayout();
 			await EngineSettings.current.save();
 		}
 		await EngineSettings.current.load();
