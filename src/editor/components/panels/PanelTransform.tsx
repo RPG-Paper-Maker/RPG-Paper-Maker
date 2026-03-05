@@ -22,6 +22,8 @@ import DialogTransformDefaultValues from '../dialogs/DialogTransformDefaultValue
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
+import Tooltip from '../Tooltip';
+import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
 
 type Props = {
 	kind: ACTION_KIND;
@@ -150,6 +152,8 @@ function PanelTransform({ kind }: Props) {
 				const min = -Scene.Map.current!.model.depth;
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
 			}
+			case ACTION_KIND.ROTATE:
+				return -360;
 			case ACTION_KIND.SCALE:
 				return 0.0001;
 			default:
@@ -163,6 +167,8 @@ function PanelTransform({ kind }: Props) {
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
 					? Scene.Map.current!.model.height - 1
 					: Scene.Map.current!.model.height * Project.SQUARE_SIZE - 1;
+			case ACTION_KIND.ROTATE:
+				return 360;
 			default:
 				return undefined;
 		}
@@ -172,6 +178,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return 0;
+			case ACTION_KIND.ROTATE:
+				return -360;
 			case ACTION_KIND.SCALE:
 				return 0.0001;
 			default:
@@ -185,6 +193,8 @@ function PanelTransform({ kind }: Props) {
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
 					? Scene.Map.current!.model.length - 1
 					: Scene.Map.current!.model.length * Project.SQUARE_SIZE - 1;
+			case ACTION_KIND.ROTATE:
+				return 360;
 			default:
 				return undefined;
 		}
@@ -211,7 +221,7 @@ function PanelTransform({ kind }: Props) {
 				}
 				break;
 			case ACTION_KIND.ROTATE:
-				position.angleX = value;
+				position.angleX = value % 360;
 				break;
 			case ACTION_KIND.SCALE:
 				position.scaleX = value;
@@ -233,7 +243,7 @@ function PanelTransform({ kind }: Props) {
 				}
 				break;
 			case ACTION_KIND.ROTATE:
-				position.angleY = value;
+				position.angleY = value % 360;
 				break;
 			case ACTION_KIND.SCALE:
 				position.scaleY = value;
@@ -254,7 +264,7 @@ function PanelTransform({ kind }: Props) {
 				}
 				break;
 			case ACTION_KIND.ROTATE:
-				position.angleZ = value;
+				position.angleZ = value % 360;
 				break;
 			case ACTION_KIND.SCALE:
 				position.scaleZ = value;
@@ -262,6 +272,10 @@ function PanelTransform({ kind }: Props) {
 				break;
 		}
 		updatePosition(position);
+	};
+
+	const handleRotateStep = (getCurrent: () => number, onChange: (v: number) => void, delta: number) => {
+		onChange(getCurrent() + delta);
 	};
 
 	const handleClickDefaultValues = () => {
@@ -299,6 +313,12 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, -90)} /></Tooltip>
+									)}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, 90)} /></Tooltip>
+									)}
 								</Flex>
 								<Flex centerV spaced>
 									Y:
@@ -310,6 +330,12 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, -90)} /></Tooltip>
+									)}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, 90)} /></Tooltip>
+									)}
 								</Flex>
 								<Flex centerV spaced>
 									Z:
@@ -321,6 +347,12 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='-90°'><Button icon={<FaArrowRotateRight />} square small onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, -90)} /></Tooltip>
+									)}
+									{kind === ACTION_KIND.ROTATE && (
+										<Tooltip text='+90°'><Button icon={<FaArrowRotateLeft />} square small onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, 90)} /></Tooltip>
+									)}
 								</Flex>
 							</Flex>
 						</Groupbox>
