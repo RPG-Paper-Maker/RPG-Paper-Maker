@@ -166,85 +166,85 @@ const PanelStatus = forwardRef((props, ref) => {
 					doNotOpenDialog
 				/>
 			</Groupbox>
-			<Flex one column>
-				<Flex one column scrollable zeroHeight>
-					<Flex>
-						<Flex one column spacedLarge>
-							<Form>
-								<Label disabled={isStatusDisabled}>{t('animation.id')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={animationID}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-										databaseOptions={Project.current!.animations.list}
-										disabled={isStatusDisabled}
-										addNoneOption
-									/>
-								</Value>
-								<Label disabled={isStatusDisabled}>{t('restrictions')}</Label>
-								<Value>
-									<Dropdown
-										selectedID={restrictionKind}
-										onChange={handleChangeRestrictionKind}
-										options={Base.STATUS_RESTRICTIONS_OPTIONS}
-										disabled={isStatusDisabled}
-										translateOptions
-									/>
-								</Value>
-								<Label disabled={isStatusDisabled}>{t('priority')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={priority}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-										disabled={isStatusDisabled}
-									/>
-								</Value>
-								<Label disabled={isStatusDisabled}>{t('battler.position')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={battlerPosition}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-										disabled={isStatusDisabled}
-									/>
-								</Value>
-							</Form>
-							<Groupbox title={t('release.conditions')} disabled={isStatusDisabled}>
-								<Flex column spacedLarge>
+			<Flex one>
+				<Flex one column spacedLarge>
+					<Form>
+						<Label disabled={isStatusDisabled}>{t('animation.id')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={animationID}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+								databaseOptions={Project.current!.animations.list}
+								disabled={isStatusDisabled}
+								addNoneOption
+							/>
+						</Value>
+						<Label disabled={isStatusDisabled}>{t('restrictions')}</Label>
+						<Value>
+							<Dropdown
+								selectedID={restrictionKind}
+								onChange={handleChangeRestrictionKind}
+								options={Base.STATUS_RESTRICTIONS_OPTIONS}
+								disabled={isStatusDisabled}
+								translateOptions
+							/>
+						</Value>
+						<Label disabled={isStatusDisabled}>{t('priority')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={priority}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								disabled={isStatusDisabled}
+							/>
+						</Value>
+						<Label disabled={isStatusDisabled}>{t('battler.position')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={battlerPosition}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								disabled={isStatusDisabled}
+							/>
+						</Value>
+					</Form>
+					<Flex one>
+						<Groupbox title={t('release.conditions')} disabled={isStatusDisabled} fillWidth>
+							<Flex column spacedLarge fillHeight>
+								<Checkbox
+									isChecked={isReleaseAtEndBattle}
+									onChange={handleChangeIsReleaseAtEndBattle}
+									disabled={isStatusDisabled}
+								>
+									{t('release.at.end.battle')}
+								</Checkbox>
+								<Flex spaced centerV>
 									<Checkbox
-										isChecked={isReleaseAtEndBattle}
-										onChange={handleChangeIsReleaseAtEndBattle}
+										isChecked={isReleaseAfterAttacked}
+										onChange={handleChangeIsReleaseAfterAttacked}
 										disabled={isStatusDisabled}
 									>
-										{t('release.at.end.battle')}
+										{t('release.with')}
 									</Checkbox>
-									<Flex spaced centerV>
-										<Checkbox
-											isChecked={isReleaseAfterAttacked}
-											onChange={handleChangeIsReleaseAfterAttacked}
-											disabled={isStatusDisabled}
-										>
-											{t('release.with')}
-										</Checkbox>
-										<DynamicValueSelector
-											value={chanceReleaseAfterAttacked}
-											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
-											disabled={isStatusDisabled || !isReleaseAfterAttacked}
-										/>
-										<Flex disabledLabel={isStatusDisabled || !isReleaseAfterAttacked}>%</Flex>
+									<DynamicValueSelector
+										value={chanceReleaseAfterAttacked}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={isStatusDisabled || !isReleaseAfterAttacked}
+									/>
+									<Flex disabledLabel={isStatusDisabled || !isReleaseAfterAttacked}>%</Flex>
+								</Flex>
+								<Flex spaced centerV>
+									<Flex fillSmallSpace />
+									<Flex disabledLabel={isStatusDisabled || !isReleaseAfterAttacked}>
+										{t('chance.after.being.attacked')}
 									</Flex>
-									<Flex spaced centerV>
-										<Flex fillSmallSpace />
-										<Flex disabledLabel={isStatusDisabled || !isReleaseAfterAttacked}>
-											{t('chance.after.being.attacked')}
-										</Flex>
-									</Flex>
-									<Checkbox
-										isChecked={isReleaseStartTurn}
-										onChange={handleChangeIsReleaseStartTurn}
-										disabled={isStatusDisabled}
-									>
-										{t('release.at.start.turn')}
-									</Checkbox>
+								</Flex>
+								<Checkbox
+									isChecked={isReleaseStartTurn}
+									onChange={handleChangeIsReleaseStartTurn}
+									disabled={isStatusDisabled}
+								>
+									{t('release.at.start.turn')}
+								</Checkbox>
+								<Flex one>
 									<Tree
 										constructorType={StatusReleaseTurn}
 										list={releaseStartTurn}
@@ -257,91 +257,91 @@ const PanelStatus = forwardRef((props, ref) => {
 										cannotUpdateListSize
 									/>
 								</Flex>
-							</Groupbox>
-							<Groupbox title={t('messages')} disabled={isStatusDisabled}>
-								<Flex column spacedLarge>
-									<Flex column spaced>
-										<Flex disabledLabel={isStatusDisabled}>{t('ally.affected')}:</Flex>
-										<DynamicValueSelector
-											value={messageAllyAffected}
-											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-											disabled={isStatusDisabled}
-											fillWidth
-										/>
-									</Flex>
-									<Flex column spaced>
-										<Flex disabledLabel={isStatusDisabled}>{t('enemy.affected')}:</Flex>
-										<DynamicValueSelector
-											value={messageEnemyAffected}
-											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-											disabled={isStatusDisabled}
-											fillWidth
-										/>
-									</Flex>
-									<Flex column spaced>
-										<Flex disabledLabel={isStatusDisabled}>{t('status.healed')}:</Flex>
-										<DynamicValueSelector
-											value={messageStatusHealed}
-											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-											disabled={isStatusDisabled}
-											fillWidth
-										/>
-									</Flex>
-									<Flex column spaced>
-										<Flex disabledLabel={isStatusDisabled}>{t('status.still.affected')}:</Flex>
-										<DynamicValueSelector
-											value={messageStatusStillAffected}
-											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-											disabled={isStatusDisabled}
-											fillWidth
-										/>
-									</Flex>
-								</Flex>
-							</Groupbox>
-						</Flex>
-						<Flex one column spacedLarge>
-							<Flex spaced centerV>
-								<Flex one />
-								<Flex disabledLabel={isStatusDisabled}>{t('icon')}:</Flex>
-								<AssetSelector
-									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-									kind={PICTURE_KIND.ICONS}
-									selectedID={iconID}
-									indexX={iconIndexX}
-									indexY={iconIndexY}
-									onChange={handleChangeIcon}
+							</Flex>
+						</Groupbox>
+					</Flex>
+					<Groupbox title={t('messages')} disabled={isStatusDisabled}>
+						<Flex column spacedLarge>
+							<Flex column spaced>
+								<Flex disabledLabel={isStatusDisabled}>{t('ally.affected')}:</Flex>
+								<DynamicValueSelector
+									value={messageAllyAffected}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+									disabled={isStatusDisabled}
+									fillWidth
 								/>
-								<TextureIconPreviewer id={iconID} indexX={iconIndexX} indexY={iconIndexY} />
 							</Flex>
-							<Flex one>
-								<Groupbox title={t('effects')} fillWidth>
-									<Tree
-										constructorType={Effect}
-										list={effects}
-										onListUpdated={handleUpdateEffects}
-										disabled={isStatusDisabled}
-										scrollable
-										canBeEmpty
-										byIndex
-										cannotUpdateListSize
-									/>
-								</Groupbox>
+							<Flex column spaced>
+								<Flex disabledLabel={isStatusDisabled}>{t('enemy.affected')}:</Flex>
+								<DynamicValueSelector
+									value={messageEnemyAffected}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+									disabled={isStatusDisabled}
+									fillWidth
+								/>
 							</Flex>
-							<Flex one>
-								<Groupbox title={t('characteristics')} fillWidth>
-									<Tree
-										constructorType={Characteristic}
-										list={characteristics}
-										onListUpdated={handleUpdateCharacteristics}
-										disabled={isStatusDisabled}
-										scrollable
-										canBeEmpty
-										byIndex
-										cannotUpdateListSize
-									/>
-								</Groupbox>
+							<Flex column spaced>
+								<Flex disabledLabel={isStatusDisabled}>{t('status.healed')}:</Flex>
+								<DynamicValueSelector
+									value={messageStatusHealed}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+									disabled={isStatusDisabled}
+									fillWidth
+								/>
+							</Flex>
+							<Flex column spaced>
+								<Flex disabledLabel={isStatusDisabled}>{t('status.still.affected')}:</Flex>
+								<DynamicValueSelector
+									value={messageStatusStillAffected}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+									disabled={isStatusDisabled}
+									fillWidth
+								/>
 							</Flex>
 						</Flex>
+					</Groupbox>
+				</Flex>
+				<Flex one column spacedLarge>
+					<Flex spaced centerV>
+						<Flex one />
+						<Flex disabledLabel={isStatusDisabled}>{t('icon')}:</Flex>
+						<AssetSelector
+							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+							kind={PICTURE_KIND.ICONS}
+							selectedID={iconID}
+							indexX={iconIndexX}
+							indexY={iconIndexY}
+							onChange={handleChangeIcon}
+						/>
+						<TextureIconPreviewer id={iconID} indexX={iconIndexX} indexY={iconIndexY} />
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('effects')} fillWidth>
+							<Tree
+								constructorType={Effect}
+								list={effects}
+								onListUpdated={handleUpdateEffects}
+								disabled={isStatusDisabled}
+								scrollable
+								canBeEmpty
+								byIndex
+								cannotUpdateListSize
+							/>
+						</Groupbox>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('characteristics')} fillWidth>
+							<Tree
+								constructorType={Characteristic}
+								list={characteristics}
+								onListUpdated={handleUpdateCharacteristics}
+								disabled={isStatusDisabled}
+								scrollable
+								canBeEmpty
+								byIndex
+								cannotUpdateListSize
+							/>
+						</Groupbox>
 					</Flex>
 				</Flex>
 			</Flex>
