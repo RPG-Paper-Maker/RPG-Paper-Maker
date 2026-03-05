@@ -381,6 +381,8 @@
 	"size": "크기",
 	"square.s": "칸",
 	"pixel.s": "픽셀",
+	"square.mode.applied": "칸(Square) 모드 적용됨",
+	"pixel.mode.applied": "픽셀 모드 적용됨",
 	"set.animation.effect": "애니메이션 효과 설정",
 	"sound.effect": "효과음",
 	"flash": "플래시",

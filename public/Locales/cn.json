@@ -381,6 +381,8 @@
 	"size": "大小",
 	"square.s": "方块",
 	"pixel.s": "像素",
+	"square.mode.applied": "方块模式已应用",
+	"pixel.mode.applied": "像素模式已应用",
 	"set.animation.effect": "设置动画效果",
 	"sound.effect": "音效",
 	"flash": "闪烁",

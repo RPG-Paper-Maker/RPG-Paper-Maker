@@ -381,6 +381,8 @@
 	"size": "Rozmiar",
 	"square.s": "Kwadraty",
 	"pixel.s": "Pixele",
+	"square.mode.applied": "Tryb kwadrat aktywny",
+	"pixel.mode.applied": "Tryb piksele aktywny",
 	"set.animation.effect": "Ustaw efekt animacji",
 	"sound.effect": "Dźwięk",
 	"flash": "Błysk",

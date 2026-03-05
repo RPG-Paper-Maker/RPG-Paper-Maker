@@ -381,6 +381,8 @@
 	"size": "Размер",
 	"square.s": "Квадрат(ы)",
 	"pixel.s": "Пиксель(ы)",
+	"square.mode.applied": "Режим площадь применён",
+	"pixel.mode.applied": "Режим пиксель применён",
 	"set.animation.effect": "Установить эффект анимации",
 	"sound.effect": "Звуковой эффект",
 	"flash": "Вспышка",

@@ -381,6 +381,8 @@
 	"size": "Розмір",
 	"square.s": "квадрат(ів)",
 	"pixel.s": "піксел(ів)",
+	"square.mode.applied": "Режим квадрат застосовано",
+	"pixel.mode.applied": "Режим піксель застосовано",
 	"set.animation.effect": "Встановити ефект анімації",
 	"sound.effect": "Звуковий ефект",
 	"flash": "Спалах",

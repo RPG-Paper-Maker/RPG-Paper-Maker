@@ -381,6 +381,8 @@
 	"size": "Tamaño",
 	"square.s": "Cuadrado(s)",
 	"pixel.s": "píxel(es)",
+	"square.mode.applied": "Modo cuadrado aplicado",
+	"pixel.mode.applied": "Modo píxel aplicado",
 	"set.animation.effect": "Establecer efecto de animación",
 	"sound.effect": "Efecto de sonido",
 	"flash": "Flash",

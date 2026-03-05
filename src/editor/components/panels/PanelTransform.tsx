@@ -276,6 +276,11 @@ function PanelTransform({ kind }: Props) {
 		<>
 			<Groupbox title={title}>
 				<Flex column spacedLarge>
+					<div className='warning textCenter'>
+						{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+							? t('square.mode.applied')
+							: t('pixel.mode.applied')}
+					</div>
 					{canEditDefaultValues && (
 						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
 							transform: kindText.toLowerCase(),

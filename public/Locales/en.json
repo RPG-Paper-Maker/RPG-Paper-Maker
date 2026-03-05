@@ -381,6 +381,8 @@
 	"size": "Size",
 	"square.s": "Square(s)",
 	"pixel.s": "Pixel(s)",
+	"square.mode.applied": "Square mode applied",
+	"pixel.mode.applied": "Pixel mode applied",
 	"set.animation.effect": "Set animation effect",
 	"sound.effect": "Sound effect",
 	"flash": "Flash",

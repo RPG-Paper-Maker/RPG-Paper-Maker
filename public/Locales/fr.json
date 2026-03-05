@@ -381,6 +381,8 @@
 	"size": "Taille",
 	"square.s": "Carré(s)",
 	"pixel.s": "Pixel(s)",
+	"square.mode.applied": "Mode carré appliqué",
+	"pixel.mode.applied": "Mode pixel appliqué",
 	"set.animation.effect": "Modifier les effets d'animation",
 	"sound.effect": "Effet sonore",
 	"flash": "Flash",

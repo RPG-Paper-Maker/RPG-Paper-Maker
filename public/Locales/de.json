@@ -381,6 +381,8 @@
 	"size": "Größe",
 	"square.s": "Kachel(n)",
 	"pixel.s": "Pixel",
+	"square.mode.applied": "Kachelmodus aktiv",
+	"pixel.mode.applied": "Pixelmodus aktiv",
 	"set.animation.effect": "Setze Animationseffekt",
 	"sound.effect": "Soundeffekt",
 	"flash": "Blitz",

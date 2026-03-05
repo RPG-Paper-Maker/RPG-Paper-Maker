@@ -381,6 +381,8 @@
 	"size": "Dimensione",
 	"square.s": "Quadrato/i",
 	"pixel.s": "Pixel",
+	"square.mode.applied": "Modalità quadrato applicata",
+	"pixel.mode.applied": "Modalità pixel applicata",
 	"set.animation.effect": "Imposta effetto animazione",
 	"sound.effect": "Effetto sonoro",
 	"flash": "Flash",

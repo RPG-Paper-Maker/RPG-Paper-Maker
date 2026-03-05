@@ -381,6 +381,8 @@
 	"size": "Taille",
 	"square.s": "Case(s)",
 	"pixel.s": "Pixel(s)",
+	"square.mode.applied": "Modo case aplicado",
+	"pixel.mode.applied": "Modo pixel aplicado",
 	"set.animation.effect": "Définir effet d’animation",
 	"sound.effect": "Effet sonore",
 	"flash": "Flash",

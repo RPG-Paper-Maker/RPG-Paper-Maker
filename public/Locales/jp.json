@@ -381,6 +381,8 @@
 	"size": "サイズ",
 	"square.s": "マス",
 	"pixel.s": "ピクセル",
+	"square.mode.applied": "四角形モード適用中",
+	"pixel.mode.applied": "ピクセルモード適用中",
 	"set.animation.effect": "アニメーション効果の設定",
 	"sound.effect": "効果音",
 	"flash": "フラッシュ",
