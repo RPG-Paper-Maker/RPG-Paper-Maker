@@ -57,6 +57,7 @@ class Map extends Base {
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static onStartPositionSet: (() => void) | null = null;
+	public static onSelectMapID: ((id: number) => void) | null = null;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();

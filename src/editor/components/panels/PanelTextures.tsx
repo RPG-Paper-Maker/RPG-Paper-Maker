@@ -12,6 +12,7 @@
 import { JSX, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
+import { IoMdLocate } from 'react-icons/io';
 import { useSelector } from 'react-redux';
 import {
 	ACTION_KIND,
@@ -71,6 +72,24 @@ function PanelTextures({ visible, extraContent }: Props) {
 		Scene.Previewer3D.mainPreviewerScene?.setPreviewTransformValue(axis, current[axis as 'x' | 'y' | 'z'] + delta);
 	};
 
+	const handleGoToStartPosition = () => {
+		const systems = Project.current?.systems;
+		if (!systems) return;
+		const heroMapID = systems.heroMapID;
+		if (heroMapID !== currentMapID) {
+			Scene.Map.onSelectMapID?.(heroMapID);
+		} else {
+			const map = Scene.Map.current;
+			if (!map) return;
+			const pos = systems.heroMapPosition;
+			map.cursor.position.setCoords(pos.x, pos.y, pos.yPixels, pos.z);
+			map.cursorObject.position.setCoords(pos.x, pos.y, pos.yPixels, pos.z);
+			map.cursorObject.updateMeshPosition();
+			map.cursor.syncWithCameraTargetPosition();
+			map.camera.update();
+		}
+	};
+
 	const getMainContent = () => {
 		if (!currentMapID || !Scene.Map.current || !mapLoaded) {
 			return null;
@@ -103,7 +122,18 @@ function PanelTextures({ visible, extraContent }: Props) {
 					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
 				case ELEMENT_MAP_KIND.OBJECT:
 					return <PanelMapObjectsSelection />;
-				case ELEMENT_MAP_KIND.START_POSITION:
+				case ELEMENT_MAP_KIND.START_POSITION: {
+					return (
+						<Flex centerH centerV one>
+							<Tooltip text={t('go.to.start.position')}>
+								<Button
+									icon={<IoMdLocate />}
+									onClick={handleGoToStartPosition}
+								/>
+							</Tooltip>
+						</Flex>
+					);
+				}
 				case ELEMENT_MAP_KIND.VIEW:
 					return null;
 				default: {

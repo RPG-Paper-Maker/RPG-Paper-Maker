@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Utils } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Manager, Model } from '../../Editor';
+import { Manager, Model, Scene } from '../../Editor';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -92,6 +92,19 @@ function PanelProject() {
 			}
 		}
 	};
+
+	const handleSelectedMapItemRef = useRef(handleSelectedMapItem);
+	handleSelectedMapItemRef.current = handleSelectedMapItem;
+
+	useEffect(() => {
+		Scene.Map.onSelectMapID = (id: number) => {
+			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
+			handleSelectedMapItemRef.current(node);
+		};
+		return () => {
+			Scene.Map.onSelectMapID = null;
+		};
+	}, []);
 
 	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base | undefined, isClick: boolean) => {
 		if (!openLoading) {

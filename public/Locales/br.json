@@ -1803,6 +1803,7 @@
 	"edit.default.transform.new.elements": "Editar {{transform}} padrão para novos elementos",
 	"no.map.element.selected": "Nenhum elemento de mapa selecionado",
 	"no.objects.in.map": "Nenhum objeto neste mapa",
+	"go.to.start.position": "Ir para a posição inicial",
 	"tip.grid.height": "Você pode mover o cursor do mapa para cima e para baixo pressionando CTRL+SETAS PARA CIMA/BAIXO. Para mover por pixel, use CTRL+SHIFT+SETAS PARA CIMA/BAIXO.",
 	"warning.project.version": "Esta versão do projeto vem de uma versão anterior. A compatibilidade retroativa ainda não é suportada para esta versão web. Crie um novo projeto.",
 	"warning.clearing.cache": "Esta ação irá apagar todos os seus projetos e configurações. Tem certeza que deseja continuar?",

@@ -1803,6 +1803,7 @@
 	"edit.default.transform.new.elements": "Modifica {{transform}} predefinita per nuovi elementi",
 	"no.map.element.selected": "Nessun elemento della mappa selezionato",
 	"no.objects.in.map": "Nessun oggetto in questa mappa",
+	"go.to.start.position": "Vai alla posizione iniziale",
 	"tip.grid.height": "Puoi muovere il cursore della mappa su e giù premendo CTRL+FRECCIA SU/GIÙ. Per muoverlo per pixel, usa CTRL+SHIFT+FRECCIA SU/GIÙ.",
 	"warning.project.version": "La versione di questo progetto proviene da una release precedente. La compatibilità retroattiva non è ancora gestita per questa versione web prototipo. Crea un nuovo progetto.",
 	"warning.clearing.cache": "Questa azione eliminerà tutti i tuoi progetti e ogni impostazione modificata. Sei sicuro di voler continuare?",

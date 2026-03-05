@@ -1803,6 +1803,7 @@
 	"edit.default.transform.new.elements": "{{transform}}-Standard für neue Elemente bearbeiten",
 	"no.map.element.selected": "Kein Kartenelement ausgewählt",
 	"no.objects.in.map": "Keine Objekte in dieser Karte",
+	"go.to.start.position": "Zur Startposition gehen",
 	"tip.grid.height": "Sie können den Kartencursor nach oben und unten bewegen, indem Sie STRG+NACH-OBEN/NACH-UNTEN-PFEIL drücken. Um sich pixelweise zu bewegen, verwenden Sie STRG+UMSCHALT+NACH-OBEN/NACH-UNTEN-PFEIL.",
 	"warning.project.version": "Diese Version des Projekts stammt aus einer früheren Version. Die Retroversionskompatibilität wird für diese Proto-Webversion noch nicht unterstützt. Bitte erstellen Sie ein neues Projekt.",
 	"warning.clearing.cache": "Diese Aktion löscht alle Ihre Projekte und alle von Ihnen geänderten Einstellungen. Sind Sie sicher, dass Sie fortfahren möchten?",

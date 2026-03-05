@@ -1804,6 +1804,7 @@
 	"edit.default.transform.new.elements": "새 요소에 대한 기본 {{transform}} 편집",
 	"no.map.element.selected": "선택된 맵 요소가 없습니다",
 	"no.objects.in.map": "이 맵에 오브젝트가 없습니다",
+	"go.to.start.position": "시작 위치로 이동",
 	"tip.grid.height": "CTRL+상/하 방향키로 맵 커서를 상하로 이동할 수 있습니다. 픽셀 단위로 이동하려면 CTRL+SHIFT+상/하 방향키를 사용하세요.",
 	"warning.project.version": "이 프로젝트 버전은 이전 버전의 것입니다. 이 프로토 웹 버전에서는 하위 버전 호환성이 아직 지원되지 않습니다. 새 프로젝트를 생성해 주세요.",
 	"warning.clearing.cache": "이 작업은 모든 프로젝트와 변경한 설정을 삭제합니다. 계속하시겠습니까?",

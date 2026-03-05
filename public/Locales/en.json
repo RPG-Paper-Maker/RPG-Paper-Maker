@@ -1803,6 +1803,7 @@
 	"edit.default.transform.new.elements": "Edit default {{transform}} for new elements",
 	"no.map.element.selected": "No map element selected",
 	"no.objects.in.map": "No objects in this map",
+	"go.to.start.position": "Go to start position",
 	"tip.grid.height": "You can move the map cursor up and down by pressing CTRL+ARROW UP/DOWN. To move by pixel, use CTRL+SHIFT+ARROW UP/DOWN.",
 	"warning.project.version": "This project version is from a previous version. Retro versions compatibility is not handled yet for this proto web version. Please create a new project.",
 	"warning.clearing.cache": "This action will delete all your projects, and every settings you changed. Are you sure that you want to continue?",

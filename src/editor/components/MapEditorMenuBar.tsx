@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BiCube, BiSolidPencil } from 'react-icons/bi';
@@ -66,6 +66,7 @@ function MapEditorMenuBar() {
 	const [elementPositionIndex, setElementPositionIndex] = useState(ELEMENT_POSITION_KIND.SQUARE);
 	const [actionIndex, setActionIndex] = useState(ACTION_KIND.PENCIL);
 	const [layersIndex, setLayersIndex] = useState(LAYER_KIND.OFF);
+	const previousMenuIndexRef = useRef<MENU_INDEX_MAP_EDITOR>(MENU_INDEX_MAP_EDITOR.LANDS);
 
 	const dispatch = useDispatch();
 
@@ -258,7 +259,8 @@ function MapEditorMenuBar() {
 	};
 
 	const restorePreviousTab = () => {
-		const menuIndex = Project.current!.settings.mapEditorMenuIndex;
+		const menuIndex = previousMenuIndexRef.current;
+		Project.current!.settings.mapEditorMenuIndex = menuIndex;
 		setSelectionIndex(menuIndex);
 		switch (menuIndex) {
 			case MENU_INDEX_MAP_EDITOR.LANDS:
@@ -283,9 +285,11 @@ function MapEditorMenuBar() {
 	};
 
 	const handleStartPosition = async () => {
-		const previousMenuIndex = Project.current!.settings.mapEditorMenuIndex;
+		const currentMenuIndex = Project.current!.settings.mapEditorMenuIndex;
+		if (currentMenuIndex !== MENU_INDEX_MAP_EDITOR.START_POSITION) {
+			previousMenuIndexRef.current = currentMenuIndex;
+		}
 		handleGeneric(ELEMENT_MAP_KIND.START_POSITION, MENU_INDEX_MAP_EDITOR.START_POSITION);
-		Project.current!.settings.mapEditorMenuIndex = previousMenuIndex;
 		Scene.Map.onStartPositionSet = () => {
 			Scene.Map.onStartPositionSet = null;
 			restorePreviousTab();
@@ -447,6 +451,9 @@ function MapEditorMenuBar() {
 					break;
 				case MENU_INDEX_MAP_EDITOR.VIEW:
 					handleView().catch(console.error);
+					break;
+				case MENU_INDEX_MAP_EDITOR.START_POSITION:
+					handleStartPosition().catch(console.error);
 					break;
 			}
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
