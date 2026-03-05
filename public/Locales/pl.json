@@ -1802,6 +1802,7 @@
 	"edit.default.transform.options": "Edytuj wartość domyślną {{transformOptions}}",
 	"edit.default.transform.new.elements": "Edytuj ustawienia domyślne {{transform}} dla nowych elementów",
 	"no.map.element.selected": "Nie wybrano żadnego elementu mapy",
+	"no.objects.in.map": "Brak obiektów na tej mapie",
 	"tip.grid.height": "Możesz przesuwać kursor mapy w górę i w dół, naciskając CTRL+STRZAŁKA W GÓRĘ/W DÓŁ. Aby przesuwać się o piksel, użyj CTRL+SHIFT+STRZAŁKA W GÓRĘ/W DÓŁ.",
 	"warning.project.version": "Ta wersja projektu pochodzi z poprzedniej wersji. Kompatybilność z wersją retro nie jest jeszcze obsługiwana dla tej proto wersji internetowej. Utwórz nowy projekt.",
 	"warning.clearing.cache": "Ta akcja spowoduje usunięcie wszystkich twoich projektów i wszelkich ustawień, które zmodyfikowałeś. Czy na pewno chcesz kontynuować?",

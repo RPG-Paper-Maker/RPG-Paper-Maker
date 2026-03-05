@@ -1803,6 +1803,7 @@
 	"edit.default.transform.options": "编辑默认 {{transformOptions}}",
 	"edit.default.transform.new.elements": "编辑新元素的默认 {{transform}}",
 	"no.map.element.selected": "未选中地图元素",
+	"no.objects.in.map": "此地图中没有对象",
 	"tip.grid.height": "你可以通过 CTRL+方向键上下移动地图光标。按 CTRL+SHIFT+方向键可按像素移动。",
 	"warning.project.version": "此项目来自旧版本。此 Web 原型版尚不支持旧版本兼容。请创建一个新项目。",
 	"warning.clearing.cache": "此操作将删除所有项目和所有已更改的设置。确定继续吗？",

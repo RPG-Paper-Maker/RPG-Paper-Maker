@@ -352,6 +352,14 @@ function PanelMapObjectsSelection() {
 		return url === null ? <FaQuestion /> : url ? <img src={url} alt='icon' /> : <FaRegSquare />;
 	};
 
+	if (list.length === 0) {
+		return (
+			<Flex centerH centerV fillWidth fillHeight className='textSmallDetail'>
+				{t('no.objects.in.map')}.
+			</Flex>
+		);
+	}
+
 	const listElements = filteredList.map((mapObject) => {
 		const posKey = mapObject.position.toKey();
 		return (

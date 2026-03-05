@@ -1802,6 +1802,7 @@
 	"edit.default.transform.options": "Editar el valor predeterminado {{transformOptions}}",
 	"edit.default.transform.new.elements": "Editar {{transform}} predeterminado para nuevos elementos",
 	"no.map.element.selected": "No se ha seleccionado ningún elemento del mapa",
+	"no.objects.in.map": "No hay objetos en este mapa",
 	"tip.grid.height": "Puedes mover el cursor del mapa hacia arriba y hacia abajo presionando CTRL+FLECHA ARRIBA/ABAJO. Para moverte por píxel, usa CTRL+MAYÚS+FLECHA ARRIBA/ABAJO.",
 	"warning.project.version": "Esta versión del proyecto proviene de una versión anterior. La compatibilidad con la versión retro aún no es compatible con esta versión proto web. Cree un nuevo proyecto.",
 	"warning.clearing.cache": "Esta acción eliminará todos tus proyectos y cualquier configuración que hayas modificado. ¿Estás seguro de que quieres continuar?",

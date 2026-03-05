@@ -1802,6 +1802,7 @@
 	"edit.default.transform.options": "デフォルトの {{transformOptions}} を編集",
 	"edit.default.transform.new.elements": "新規要素のデフォルト {{transform}} を編集",
 	"no.map.element.selected": "マップ要素が選択されていません",
+	"no.objects.in.map": "このマップにオブジェクトはありません",
 	"tip.grid.height": "CTRL+矢印キー（上下）でマップカーソルの高さを移動できます。ピクセル単位で移動するにはCTRL+SHIFT+矢印キーを使用してください。",
 	"warning.project.version": "このプロジェクトは旧バージョンで作成されています。このプロトタイプ・ウェブ版では過去バージョンとの互換性はまだサポートされていません。新しいプロジェクトを作成してください。",
 	"warning.clearing.cache": "この操作はすべてのプロジェクトと変更した設定を削除します。本当に続行しますか？",

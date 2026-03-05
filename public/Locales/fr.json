@@ -1802,6 +1802,7 @@
 	"edit.default.transform.options": "Modifier la valeur des {{transformOptions}} par défaut",
 	"edit.default.transform.new.elements": "Modifier {{transform}} par défaut pour les nouveaux éléments",
 	"no.map.element.selected": "Aucun élément de carte sélectionné",
+	"no.objects.in.map": "Aucun objet dans cette carte",
 	"tip.grid.height": "Vous pouvez déplacer le curseur de la carte de haut en bas en appuyant sur CTRL+FLÈCHE HAUT/BAS. Pour vous déplacer par pixel, utilisez CTRL+MAJ+FLÈCHE HAUT/BAS.",
 	"warning.project.version": "Cette version du projet provient d'une version précédente. La compatibilité des versions rétro n'est pas encore gérée pour cette version proto web. Veuillez créer un nouveau projet.",
 	"warning.clearing.cache": "Cette action supprimera tous vos projets et tous les paramètres que vous avez modifiés. Êtes-vous sûr de vouloir continuer ?",
