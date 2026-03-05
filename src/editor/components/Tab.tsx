@@ -186,20 +186,24 @@ function Tab({
 		<div className='tab'>
 			<div className='tabTitles'>
 				<div className={hideScroll ? 'flex' : 'scrollArea'}>
-					<ContextMenu
-						items={[
-							{
-								title: t('close.all'),
-								disabled: titles.length === 0,
-								onClick: handleCloseAll,
-							},
-						]}
-						isFocused={false}
-						setIsFocused={() => {}}
-						column={false}
-					>
-						{getTitles()}
-					</ContextMenu>
+					{closable ? (
+						<ContextMenu
+							items={[
+								{
+									title: t('close.all'),
+									disabled: titles.length === 0,
+									onClick: handleCloseAll,
+								},
+							]}
+							isFocused={false}
+							setIsFocused={() => {}}
+							column={false}
+						>
+							{getTitles()}
+						</ContextMenu>
+					) : (
+						getTitles()
+					)}
 				</div>
 				{!hideScroll && (
 					<>
