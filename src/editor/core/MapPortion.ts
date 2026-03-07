@@ -1413,7 +1413,7 @@ class MapPortion {
 				if (mesh) {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
-					mesh.renderOrder = 0;
+					mesh.renderOrder = state.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D ? 999 : 3;
 					this.map.scene.add(mesh);
 				}
 			}
