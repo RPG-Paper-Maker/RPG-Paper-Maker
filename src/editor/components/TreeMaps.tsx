@@ -191,6 +191,7 @@ function TreeMaps({
 				setMapsTabsContents?.(newContents);
 			}
 			RPM.treeCurrentSetSelectedItem(selectedNode.parent);
+			await Project.current!.treeMaps.save();
 		}
 		setIsOpenDialogConfirm(false);
 	};
@@ -271,6 +272,7 @@ function TreeMaps({
 				ArrayUtils.removeAt(newContents, tabIndex);
 				setMapsTabsContents?.(newContents);
 			}
+			await Project.current!.treeMaps.save();
 		}
 		setIsOpenDialogConfirm(false);
 	};

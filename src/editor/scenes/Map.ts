@@ -115,6 +115,7 @@ class Map extends Base {
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
 	public portionsSaving: Set<MapPortion> = new Set();
+	public savePortionsTempPromise: Promise<void> | null = null;
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
@@ -413,6 +414,7 @@ class Map extends Base {
 			}
 		}
 	}
+
 
 	async saveUndoRedoStates() {
 		const { index, length } = await Manager.UndoRedo.createStates(this.undoRedoStatesSaving);
@@ -2113,7 +2115,8 @@ class Map extends Base {
 				this.portionsToUpdate.clear();
 				if (this.portionsSaving.size === 0 && this.portionsToSave.size > 0) {
 					this.portionsSaving = new Set([...this.portionsToSave]);
-					this.savePortionsTemp().catch(console.error);
+					this.savePortionsTempPromise = this.savePortionsTemp();
+					this.savePortionsTempPromise.catch(console.error);
 					this.portionsToSave.clear();
 				}
 			}

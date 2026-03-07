@@ -66,7 +66,13 @@ const runRPMEngine = () => {
 	window.on('unmaximize', () => {
 		window.webContents.send('is-unmaximized');
 	});
-	window.on('close', () => {
+	isReadyToClose = false;
+	window.on('close', (e) => {
+		if (!isReadyToClose) {
+			e.preventDefault();
+			window.webContents.send('before-close');
+			return;
+		}
 		game?.close();
 		game = null;
 	});
@@ -144,6 +150,7 @@ let window;
 let game;
 let updater;
 let splash;
+let isReadyToClose = false;
 
 const hasInternet = async () => {
 	try {
@@ -619,6 +626,11 @@ ipcMain.handle('unmaximize', () => {
 });
 
 ipcMain.handle('close', () => {
+	window.close();
+});
+
+ipcMain.handle('ready-to-close', () => {
+	isReadyToClose = true;
 	window.close();
 });
 

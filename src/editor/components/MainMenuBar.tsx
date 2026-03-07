@@ -1115,6 +1115,15 @@ function MainMenuBar() {
 			IO.onUnmaximized(() => {
 				setIsMaximized(false);
 			});
+			IO.on('before-close', async () => {
+				if (Scene.Map.current?.savePortionsTempPromise) {
+					await Scene.Map.current.savePortionsTempPromise;
+				}
+				if (Project.current) {
+					await Project.current.save();
+				}
+				await IO.invoke('ready-to-close');
+			});
 		}
 	}, []);
 
