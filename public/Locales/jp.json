@@ -491,6 +491,7 @@
 	"available": "使用可能",
 	"user.animation.id": "使用者アニメーションID",
 	"target.animation.id": "対象者アニメーションID",
+	"run.on.enemy": "敵に向かって走る",
 	"price": "価格",
 	"costs": "コスト",
 	"rewards": "報酬",

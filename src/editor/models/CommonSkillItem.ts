@@ -32,6 +32,7 @@ class CommonSkillItem extends Icon {
 	public sound!: PlaySong;
 	public animationUserID!: DynamicValue;
 	public animationTargetID!: DynamicValue;
+	public runOnEnemy!: DynamicValue;
 	public canBeSold!: DynamicValue;
 	public battleMessage!: Localization;
 	public price!: Cost[];
@@ -60,6 +61,13 @@ class CommonSkillItem extends Icon {
 			'animationTargetID',
 			'atid',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NONE),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'runOnEnemy',
+			'roe',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, false),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],

@@ -69,6 +69,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 	const [availableKind, setAvailableKind] = useStateNumber();
 	const [animationUserID, setAnimationUserID] = useStateDynamicValue();
 	const [animationTargetID, setAnimationTargetID] = useStateDynamicValue();
+	const [runOnEnemy, setRunOnEnemy] = useStateDynamicValue();
 	const [canBeSold, setCanBeSold] = useStateDynamicValue();
 	const [battleMessage, setBattleMessage] = useState<Localization>(new Localization());
 	const [price, setPrice] = useState<Node[]>([]);
@@ -105,6 +106,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 			playSoundSelectorRef.current?.initialize(selectedElement.sound);
 			setAnimationUserID(selectedElement.animationUserID);
 			setAnimationTargetID(selectedElement.animationTargetID);
+			setRunOnEnemy(selectedElement.runOnEnemy);
 			setCanBeSold(selectedElement.canBeSold);
 			setBattleMessage(selectedElement.battleMessage);
 			setPrice(Node.createList(selectedElement.price, false));
@@ -290,6 +292,14 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 										databaseOptions={Project.current!.animations.list}
 										disabled={disabled}
 										addNoneOption
+									/>
+								</Value>
+								<Label disabled={disabled}>{t('run.on.enemy')}</Label>
+								<Value>
+									<DynamicValueSelector
+										value={runOnEnemy}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH}
+										disabled={disabled}
 									/>
 								</Value>
 							</>

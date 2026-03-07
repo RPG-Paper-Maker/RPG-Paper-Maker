@@ -491,6 +491,7 @@
 	"available": "사용 가능",
 	"user.animation.id": "사용자 애니메이션 ID",
 	"target.animation.id": "대상 애니메이션 ID",
+	"run.on.enemy": "적에게 달려가기",
 	"price": "가격",
 	"costs": "비용",
 	"rewards": "보상",
