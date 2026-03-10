@@ -193,11 +193,11 @@ class ProjectUpdater_3_0_0 {
 			const objects = jsonEvents.commonObjects as JSONType[];
 			let index = objects.findIndex((obj) => obj.id === 1);
 			let object = objects[index];
-			jsonEvents.do = object ?? {
+			const defaultObject = {
 				events: [{ id: 1, name: 'Hero action', p: [], r: { '1': { bh: true, c: [] } }, sys: false }],
 				hId: -1,
 				id: 1,
-				name: 'Empty',
+				name: '',
 				ooepf: false,
 				states: [
 					{
@@ -221,11 +221,12 @@ class ProjectUpdater_3_0_0 {
 					},
 				],
 			};
-			objects[index] = { ...object, name: 'Default_OLD' };
+			jsonEvents.do = object ?? defaultObject;
+			objects[index] = object ?? defaultObject;
 			index = objects.findIndex((obj) => obj.id === 2);
 			object = objects[index];
 			jsonEvents.ho = object ?? jsonEvents.do;
-			objects[index] = { ...object, name: 'Hero_OLD' };
+			objects[index] = object ?? defaultObject;
 			await writeJSON(Paths.join(projectPath, 'commonEvents.json'), jsonEvents);
 		}
 		callback(70);
