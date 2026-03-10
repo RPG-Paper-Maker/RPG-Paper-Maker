@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
-import { FaHandsHelping } from 'react-icons/fa';
+import { FaDiscord, FaHandsHelping } from 'react-icons/fa';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
@@ -90,6 +90,15 @@ function PanelNoProject() {
 					<Button big onClick={handleDLCs}>
 						<MdOutlineAddchart />
 						{t('dlcs')}
+					</Button>
+					<Button
+						icon={<FaDiscord />}
+						big
+						onClick={async () => {
+							await openWebsite('https://discord.com/invite/QncEnCE');
+						}}
+					>
+						{t('join.discord')}
 					</Button>
 					<Button buttonType={BUTTON_TYPE.PATREON} big onClick={handleContribute}>
 						<FaHandsHelping />
