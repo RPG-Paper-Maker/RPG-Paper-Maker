@@ -535,7 +535,7 @@ function Tree({
 			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			node = Node.create(model);
 			node.parent = currentSelectedItemNode.parent;
-			ArrayUtils.insertAt(currentList, getNewIndex(), node);
+			ArrayUtils.insertAt(currentList, getNewIndex() + 1, node);
 			onCreateItem?.(node);
 			onAccept?.(node, true);
 		} else {
