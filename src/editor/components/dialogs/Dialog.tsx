@@ -243,9 +243,10 @@ function Dialog({
 		const dialogs = document.getElementsByClassName('dialog');
 		Inputs.isMapFocused = dialogs.length === 0;
 		if (dialogRef.current && isOpen) {
-			dialogRef.current.style.width = initialWidth || '';
-			dialogRef.current.style.height = initialHeight || '';
-			dialogRef.current.style.minHeight = initialHeight || '';
+			const rect = dialogRef.current.getBoundingClientRect();
+			dialogRef.current.style.width = initialWidth || `${rect.width}px`;
+			dialogRef.current.style.height = initialHeight || `${rect.height}px`;
+			dialogRef.current.style.minHeight = initialHeight || `${rect.height}px`;
 		}
 	}, [isOpen, initialWidth, initialHeight]);
 
