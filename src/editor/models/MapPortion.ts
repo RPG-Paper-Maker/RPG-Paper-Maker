@@ -173,6 +173,17 @@ class MapPortion extends Serializable {
 		return count - 1;
 	}
 
+	getLastLandLayerAt(position: Position): number {
+		const p = position.clone();
+		let count = p.layer;
+		let land: Floor | Autotile | null = null;
+		do {
+			p.layer = ++count;
+			land = this.lands.get(p.toKey()) || null;
+		} while (land !== null && !land.isPreview);
+		return count - 1;
+	}
+
 	fillDefaultFloor(map: Model.Map) {
 		const rect = new Rectangle(0, 0, 1, 1);
 		const p = new Position();

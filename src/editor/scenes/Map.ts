@@ -1403,7 +1403,9 @@ class Map extends Base {
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
 		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
-		const isPlane = distPlane <= dist - 0.01 || this.rectangleStartPosition !== null; // -0.01 to avoid z-fighting issues
+		const meshHitGridY = intersects.length > 0 ? Math.round(intersects[0].point.y / Project.SQUARE_SIZE) : -Infinity;
+	const planeGridY = Math.round(this.meshPlane!.position.y / Project.SQUARE_SIZE);
+	const isPlane = (intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
 		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
@@ -1482,7 +1484,7 @@ class Map extends Base {
 					position.layer =
 						(isSpriteOptionSelected
 							? this.getMapPortionByPosition(position)?.model.getLastSpriteLayerAt(position) || 0
-							: position.layer) + 1;
+							: this.getMapPortionByPosition(position)?.model.getLastLandLayerAt(position) ?? position.layer) + 1;
 				} else {
 					if (!Map.isRotateDisabled()) {
 						position.angleX = Project.current!.settings.mapEditorDefaultRotateX;
