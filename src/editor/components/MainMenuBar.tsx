@@ -104,6 +104,7 @@ import {
 	triggerVariables,
 	triggerVideos,
 	triggerWalls,
+	setErrorDialog,
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
@@ -370,13 +371,27 @@ function MainMenuBar() {
 		const version = currentVersion;
 		setCurrentVersion('');
 		dispatch(setLoading(true));
-		const warning = await ProjectUpdater.update(version, updateLoadingBar);
-		dispatch(setLoadingBar(null));
-		if (warning) {
+		try {
+			const warning = await ProjectUpdater.update(version, updateLoadingBar);
+			dispatch(setLoadingBar(null));
+			if (warning) {
+				dispatch(setLoading(false));
+				setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
+			} else {
+				await handleOpenProject(
+					Model.ProjectPreview.create('Unkown', Project.current!.location),
+					currentVersion,
+				);
+			}
+		} catch (error) {
+			dispatch(setLoadingBar(null));
 			dispatch(setLoading(false));
-			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
-		} else {
-			await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location), currentVersion);
+			dispatch(
+				setErrorDialog({
+					message: error instanceof Error ? error.message : String(error),
+					stack: error instanceof Error ? (error.stack ?? '') : '',
+				}),
+			);
 		}
 	};
 

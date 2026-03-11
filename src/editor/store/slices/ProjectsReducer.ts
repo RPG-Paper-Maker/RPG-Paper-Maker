@@ -26,6 +26,7 @@ const ProjectsSlice = createSlice({
 		menuIndex: 1,
 		copiedItems: null as CopiedItemsType | null,
 		warning: '',
+		errorDialog: null as { message: string; stack: string } | null,
 		dialogsOpen: false,
 		isSystemsDialogOpen: false,
 	},
@@ -58,6 +59,9 @@ const ProjectsSlice = createSlice({
 		showWarning(state, action: PayloadAction<string>) {
 			state.warning = action.payload;
 		},
+		setErrorDialog(state, action: PayloadAction<{ message: string; stack: string } | null>) {
+			state.errorDialog = action.payload;
+		},
 		setDialogsOpen(state, action: PayloadAction<boolean>) {
 			state.dialogsOpen = action.payload;
 		},
@@ -77,6 +81,7 @@ export const {
 	setProjectMenuIndex,
 	setCopiedItems,
 	showWarning,
+	setErrorDialog,
 	setDialogsOpen,
 	setIsSystemsDialogOpen,
 } = ProjectsSlice.actions;

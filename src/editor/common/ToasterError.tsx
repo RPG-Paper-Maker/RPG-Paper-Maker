@@ -3,6 +3,7 @@ import { FaRegCopy } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
 import { toast } from 'react-toastify';
 import { LocalFile } from '../core/LocalFile';
+import { setErrorDialog, store } from '../store';
 import '../styles/ToasterError.css';
 import { Constants } from './Constants';
 import { IO } from './IO';
@@ -13,6 +14,7 @@ import { JSONType } from './Types';
 import { Utils } from './Utils';
 
 const originalConsoleError = console.error;
+const isGameMode = !!new URLSearchParams(window.location.search).get('project');
 
 const notifyError = (text: string | ReactNode) => {
 	toast.error(text, TOASTER_OPTIONS);
@@ -57,6 +59,9 @@ console.error = (...args) => {
 		});
 	}
 	notifyError(<ToasterError message={message} stack={stack} />);
+	if (!isGameMode) {
+		store.dispatch(setErrorDialog({ message, stack }));
+	}
 };
 
 const originalWindowError = window.onerror;
@@ -68,6 +73,9 @@ window.onerror = function (message, source, lineno, colno, error) {
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
 	notifyError(<ToasterError message={message as string} stack={stack} />);
+	if (!isGameMode) {
+		store.dispatch(setErrorDialog({ message: message as string, stack }));
+	}
 };
 
 window.addEventListener('unhandledrejection', (event) => {
@@ -79,6 +87,9 @@ window.addEventListener('unhandledrejection', (event) => {
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
 	notifyError(<ToasterError message={message} stack={stack} />);
+	if (!isGameMode) {
+		store.dispatch(setErrorDialog({ message, stack }));
+	}
 });
 
 const notifyWarning = (text: string | ReactNode) => {

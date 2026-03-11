@@ -48,6 +48,7 @@ function PanelLoading({ setLoaded }: Props) {
 		await initializeTextures();
 		await initializeEngineVersion();
 		await loadProjects();
+		throw new Error('test');
 		setLoaded(true);
 	};
 
