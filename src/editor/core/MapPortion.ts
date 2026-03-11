@@ -179,7 +179,16 @@ class MapPortion {
 					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
 					if (previousFloorPosition.y !== y || previousFloorPosition.yPixels !== yPixels) {
 						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
-						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.AUTOTILE, preview, false, false, false, updateAutotiles);
+						this.updateMapElement(
+							previousFloorPosition,
+							null,
+							ELEMENT_MAP_KIND.AUTOTILE,
+							preview,
+							false,
+							false,
+							false,
+							updateAutotiles,
+						);
 					}
 				}
 				const s = Project.current!.settings;

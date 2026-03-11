@@ -317,7 +317,6 @@ const PanelAnimations = forwardRef((props, ref) => {
 						disabled={isPlaying}
 						scrollable
 						showEditName
-						isLocalization
 						applyDefault
 						doNotOpenDialog
 					/>

@@ -134,7 +134,6 @@ const PanelTroops = forwardRef((props, ref) => {
 						onListUpdated={handleListUpdated}
 						scrollable
 						showEditName
-						isLocalization
 						applyDefault
 						doNotOpenDialog
 					/>
