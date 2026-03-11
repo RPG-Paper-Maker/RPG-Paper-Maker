@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import * as THREE from 'three/webgpu';
-import { uniform } from 'three/tsl';
 import { EngineSettings } from '../data';
 import { MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
@@ -148,7 +147,7 @@ class Cursor {
 
 	update() {
 		if (this.mesh && this.frame.update()) {
-			this.mesh.material.userData.uniforms.offset = uniform(new THREE.Vector2(this.frame.value / this.frame.frames, 0));
+			this.mesh.material.userData.uniforms.offset.value.set(this.frame.value / this.frame.frames, 0);
 		}
 	}
 }
