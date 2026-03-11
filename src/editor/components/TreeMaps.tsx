@@ -221,6 +221,23 @@ function TreeMaps({
 		setIsOpenDialogConfirm(false);
 	};
 
+	const handleDoubleClick = (node: Node | null) => {
+		if (!node) return;
+		const tag = node.content as TreeMapTag;
+		if (tag.isFolder()) {
+			setEditedFolder(tag);
+			setIsNew(false);
+			setIsOpenName(true);
+		} else {
+			const map = Model.Map.create(tag.id, tag.name);
+			map.load().then(() => {
+				setEditedMap(map);
+				setIsNew(false);
+				setIsOpenMapProperties(true);
+			});
+		}
+	};
+
 	const handleEditMap = async () => {
 		const map = Model.Map.create(RPM.treeCurrentItem!.content.id, RPM.treeCurrentItem!.content.name);
 		await map.load();
@@ -348,6 +365,7 @@ function TreeMaps({
 				contextMenuItems={getContextMenuItems()}
 				defaultSelectedID={-1}
 				onSelectedItem={handleSelectedItem}
+				onDoubleClick={handleDoubleClick}
 				forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
 				setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
 				onDrop={handleDrop}

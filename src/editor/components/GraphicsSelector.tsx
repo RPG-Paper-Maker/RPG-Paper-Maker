@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
-import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
+import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
@@ -60,6 +60,7 @@ function GraphicsSelector({
 	const refBorder = useRef<HTMLDivElement>(null);
 	const refContainer = useRef<HTMLDivElement>(null);
 	const refPortalBorder = useRef<HTMLDivElement>(null);
+	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
 
 	const isCharacter =
 		options.graphicsKind === ELEMENT_MAP_KIND.NONE ||
@@ -227,7 +228,7 @@ function GraphicsSelector({
 		<>
 			<Flex column spaced>
 				{t('graphics')}:
-				<div ref={refContainer} className='graphicsSelector' onDoubleClick={handleDoubleClick}>
+				<div ref={refContainer} className='graphicsSelector' onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
 					{!isObject3D && <div ref={refBorder} className='border' />}
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !isOpenDialogObjects3D && !hidden && (

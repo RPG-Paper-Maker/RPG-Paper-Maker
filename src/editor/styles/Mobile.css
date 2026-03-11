@@ -28,6 +28,28 @@
 }
 
 @media (max-width: 1000px) {
+	/* Index 0 (TreeMaps): hide texture content top half */
+	.mobilePanel0 .panelTexturesSplitter > .mobileFillWidth {
+		display: none;
+	}
+
+	/* Index 1 (Textures): hide TreeMaps bottom half, show previewer */
+	.mobilePanel1 .panelTexturesSplitter > .flexOne {
+		display: none;
+	}
+
+	.mobilePanel1 .panelPreviewer3D {
+		display: flex !important;
+	}
+
+	.mainMenuBar .mobileOnly .menuItem {
+		padding: 8px 20px;
+	}
+
+	.mainMenuBar .mobileOnly .menuItem.active {
+		background-color: var(--primary-dark-color) !important;
+	}
+
 	.mobileColumn {
 		flex-direction: column;
 	}
@@ -43,6 +65,22 @@
 	.mobileFillWidth {
 		width: 100% !important;
 		max-width: 100% !important;
+	}
+
+	.mapEditorBar .menu.menuHorizontal > .menuSub > .title {
+		font-size: 0;
+		gap: 0;
+		padding: 5px 7px;
+	}
+
+	.mapEditorBar .menu.menuHorizontal > .menuItem:not(.separator):not(:has(.tooltip)) {
+		font-size: 0;
+		gap: 0;
+		padding: 5px 7px;
+	}
+
+	.mapEditorBar .menu.menuHorizontal > .menuItem:not(.separator) .tooltip {
+		padding: 5px 7px;
 	}
 }
 

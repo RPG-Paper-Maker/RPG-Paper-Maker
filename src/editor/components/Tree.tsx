@@ -146,6 +146,7 @@ function Tree({
 	const { t } = useTranslation();
 
 	const listRef = useRef<HTMLDivElement>(null);
+	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
 
 	const createDefault = (id: number) => {
 		if (applyDefault) {
@@ -1105,6 +1106,7 @@ function Tree({
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}
+					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
 					className={Utils.getClassName({ disabled, zeroHeight: scrollable, focused: isFocused }, 'tree')}
 					style={{
 						minWidth: `${minWidth}px`,

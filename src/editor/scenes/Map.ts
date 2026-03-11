@@ -1754,19 +1754,19 @@ class Map extends Base {
 	}
 
 	addMobileKeyMove() {
-		const offset =
-			((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) * (this.canvas!.clientWidth + this.canvas!.clientHeight)) / 2;
+		const rect = this.canvas!.getBoundingClientRect();
+		const offset = ((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) * (rect.width + rect.height)) / 2;
 		if (Inputs.getPositionX() < offset) {
-			Inputs.keys.push('a');
+			Inputs.keys.push('ArrowLeft');
 		}
-		if (Inputs.getPositionX() > this.canvas!.clientWidth - offset) {
-			Inputs.keys.push('d');
+		if (Inputs.getPositionX() > rect.width - offset) {
+			Inputs.keys.push('ArrowRight');
 		}
 		if (Inputs.getPositionY() < offset) {
-			Inputs.keys.push('w');
+			Inputs.keys.push('ArrowUp');
 		}
-		if (Inputs.getPositionY() > this.canvas!.clientHeight - offset) {
-			Inputs.keys.push('s');
+		if (Inputs.getPositionY() > rect.height - offset) {
+			Inputs.keys.push('ArrowDown');
 		}
 	}
 
@@ -2036,6 +2036,9 @@ class Map extends Base {
 		await this.onMouseUp();
 		this.lastPosition = null;
 		Inputs.keys = [];
+		if (this.isMobileMovingCursor) {
+			this.onKeyUp();
+		}
 		this.isMobileMovingCursor = false;
 	}
 

@@ -12,7 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
@@ -54,6 +54,7 @@ function MapEditor() {
 	const refCanvas = useRef<HTMLDivElement>(null);
 	const refCanvasHUD = useRef<HTMLCanvasElement>(null);
 	const refCanvasRendering = useRef<HTMLCanvasElement>(null);
+	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
 
 	const canPaste = () => copiedItems?.constructorClass === Model.CommonObject;
 
@@ -318,7 +319,7 @@ function MapEditor() {
 		<>
 			<Loader isLoading={firstLoading} />
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<div className={`mapEditor ${cursorClass()}`} onDoubleClick={handleDoubleClick}>
+				<div className={`mapEditor ${cursorClass()}`} onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
 					<div ref={refCanvas} id='canvas-map-editor' className='fillSpace' />
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />

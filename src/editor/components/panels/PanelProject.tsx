@@ -215,6 +215,7 @@ function PanelProject() {
 					{!openLoading && (
 						<PanelTextures
 							visible
+							mobileMenuIndex={projectMenuIndex}
 							extraContent={
 								<TreeMaps
 									onSelectedItem={handleSelectedMapItem}

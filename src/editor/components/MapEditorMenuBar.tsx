@@ -464,6 +464,7 @@ function MapEditorMenuBar() {
 			setLayersIndex(Project.current!.settings.mapEditorCurrentLayerIndex);
 			dispatch(setCurrentLayerKind(Project.current!.settings.mapEditorCurrentLayerIndex));
 			setMobileIndex(Project.current!.settings.mapEditorMobileActionIndex);
+			Scene.Map.currentSelectedMobileAction = Project.current!.settings.mapEditorMobileActionIndex;
 		}
 	}, [openLoading, mapEditorLoaded]);
 
@@ -535,7 +536,7 @@ function MapEditorMenuBar() {
 
 	return (
 		<Flex wrap>
-			<Flex>
+			<Flex className="mobileFillWidth">
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={getLandsIcon()} title={t(getLandsText())} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
@@ -597,9 +598,9 @@ function MapEditorMenuBar() {
 					</Menu>
 				)}
 			</Flex>
-			<Flex one />
-			<Flex one>
-				<Flex one />
+			<Flex one className="mobileHidden" />
+			<Flex one className="mobileFillWidth">
+				<Flex one className="mobileHidden" />
 				<Menu
 					horizontal
 					isActivable

@@ -42,9 +42,10 @@ import PanelTransform from './PanelTransform';
 type Props = {
 	visible: boolean;
 	extraContent?: JSX.Element;
+	mobileMenuIndex?: number;
 };
 
-function PanelTextures({ visible, extraContent }: Props) {
+function PanelTextures({ visible, extraContent, mobileMenuIndex }: Props) {
 	const { t } = useTranslation();
 	const refTilesetPreviewDiv = useRef<HTMLDivElement>(null);
 	const refTileset = useRef<HTMLDivElement>(null);
@@ -174,11 +175,14 @@ function PanelTextures({ visible, extraContent }: Props) {
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
-			className={Utils.getClassName({ hidden: !visible }, 'flex flexColumn flexOne gapSmall fillHeight')}
+			className={Utils.getClassName(
+				{ hidden: !visible },
+				`flex flexColumn flexOne gapSmall fillHeight${mobileMenuIndex !== undefined ? ` mobilePanel${mobileMenuIndex}` : ''}`,
+			)}
 		>
 			<Flex one>
-				<Splitter vertical defaultLeftSize={window.innerHeight / 2}>
-					<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall'>
+				<Splitter vertical defaultLeftSize={window.innerHeight / 2} className='panelTexturesSplitter'>
+					<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall panelTexturesMain'>
 						{getMainContent()}
 					</div>
 					{extraContent}
@@ -295,7 +299,7 @@ function PanelTextures({ visible, extraContent }: Props) {
 					</Groupbox>
 				</div>
 			)}
-			<Flex ref={refPreviewer} centerH className='mobileHidden backgroundDarkestContainers relative'>
+			<Flex ref={refPreviewer} centerH className='mobileHidden panelPreviewer3D backgroundDarkestContainers relative'>
 				<MainPreviewer3D
 					id='texture-previewer'
 					onPreviewModeChange={setPreviewerMode}
