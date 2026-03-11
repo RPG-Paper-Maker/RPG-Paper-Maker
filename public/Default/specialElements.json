@@ -199,6 +199,7 @@
 		{ "id": 15, "name": "Wood", "pic": 15 },
 		{ "id": 16, "name": "Sewers", "pic": 16 },
 		{ "id": 17, "name": "Cave", "pic": 17 },
-		{ "id": 18, "name": "Stone", "pic": 18 }
+		{ "id": 18, "name": "Stone", "pic": 18 },
+		{ "id": 19, "name": "Castle 1", "pic": 19 }
 	]
 }
