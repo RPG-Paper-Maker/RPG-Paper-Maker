@@ -152,6 +152,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_TREE_MAPS));
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_GAME_RPMG));
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_FONTS));
+		await removeFolder(Paths.join(path, Paths.BUILD, Paths.BACKUPS));
 		await removeFolder(Paths.join(path, Paths.BUILD, Paths.TEST));
 		await removeFolder(Paths.join(path, Paths.BUILD, Paths.SAVES));
 		await createFolder(Paths.join(path, Paths.BUILD, Paths.SAVES));
