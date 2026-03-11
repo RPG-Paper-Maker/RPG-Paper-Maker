@@ -90,6 +90,58 @@
 	display: none;
 }
 
+.mobileCursorControls {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 2;
+}
+
+.mobileCursorBtn {
+	position: absolute;
+	pointer-events: all;
+	color: var(--main-bg-color);
+	opacity: 0.25;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px;
+
+	svg {
+		width: 32px;
+		height: 32px;
+	}
+
+	&:active {
+		opacity: 1;
+	}
+}
+
+.mobileCursorUp {
+	top: 0px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.mobileCursorDown {
+	bottom: 0px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.mobileCursorLeft {
+	left: 0px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.mobileCursorRight {
+	right: 0px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
 #texture-previewer {
 	background-color: var(--darkest-containers-bg-color);
 }

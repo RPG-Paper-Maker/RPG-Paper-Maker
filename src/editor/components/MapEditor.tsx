@@ -12,7 +12,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY, Utils } from '../common';
+import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowAltCircleUp } from 'react-icons/fa';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
@@ -177,6 +178,21 @@ function MapEditor() {
 		}
 	};
 
+	const handleDirectionPress = (key: string) => (e: React.PointerEvent) => {
+		e.stopPropagation();
+		if (Scene.Map.current && !Inputs.keys.includes(key)) {
+			Inputs.keys.push(key);
+		}
+	};
+
+	const handleDirectionRelease = (key: string) => (e: React.PointerEvent) => {
+		e.stopPropagation();
+		Inputs.keys = Inputs.keys.filter((k) => k !== key);
+		if (Scene.Map.current) {
+			Scene.Map.current.onKeyUp();
+		}
+	};
+
 	const handleDoubleClick = async () => {
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
@@ -321,6 +337,42 @@ function MapEditor() {
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 				<div className={`mapEditor ${cursorClass()}`} onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
 					<div ref={refCanvas} id='canvas-map-editor' className='fillSpace' />
+				{Constants.IS_MOBILE && (
+					<div className='mobileCursorControls'>
+						<div
+							className='mobileCursorBtn mobileCursorUp'
+							onPointerDown={handleDirectionPress('ArrowUp')}
+							onPointerUp={handleDirectionRelease('ArrowUp')}
+							onPointerLeave={handleDirectionRelease('ArrowUp')}
+						>
+							<FaArrowAltCircleUp />
+						</div>
+						<div
+							className='mobileCursorBtn mobileCursorDown'
+							onPointerDown={handleDirectionPress('ArrowDown')}
+							onPointerUp={handleDirectionRelease('ArrowDown')}
+							onPointerLeave={handleDirectionRelease('ArrowDown')}
+						>
+							<FaArrowAltCircleDown />
+						</div>
+						<div
+							className='mobileCursorBtn mobileCursorLeft'
+							onPointerDown={handleDirectionPress('ArrowLeft')}
+							onPointerUp={handleDirectionRelease('ArrowLeft')}
+							onPointerLeave={handleDirectionRelease('ArrowLeft')}
+						>
+							<FaArrowAltCircleLeft />
+						</div>
+						<div
+							className='mobileCursorBtn mobileCursorRight'
+							onPointerDown={handleDirectionPress('ArrowRight')}
+							onPointerUp={handleDirectionRelease('ArrowRight')}
+							onPointerLeave={handleDirectionRelease('ArrowRight')}
+						>
+							<FaArrowAltCircleRight />
+						</div>
+					</div>
+				)}
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 				</div>

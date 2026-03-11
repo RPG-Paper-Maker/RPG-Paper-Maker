@@ -123,7 +123,7 @@ class Map extends Base {
 	public lastMapElement: MapElement.Base | null = null;
 	public pointedMapElementPosition: Position | null = null;
 	public pointedMapElement: MapElement.Base | null = null;
-	public isMobileMovingCursor = false;
+
 	public texturesAutotiles: TextureBundle[][] = [];
 	public texturesWalls: THREE.MeshPhongNodeMaterial[] = [];
 	public texturesObjects3D: THREE.MeshPhongNodeMaterial[] = [];
@@ -1753,22 +1753,6 @@ class Map extends Base {
 		}
 	}
 
-	addMobileKeyMove() {
-		const rect = this.canvas!.getBoundingClientRect();
-		const offset = ((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) * (rect.width + rect.height)) / 2;
-		if (Inputs.getPositionX() < offset) {
-			Inputs.keys.push('ArrowLeft');
-		}
-		if (Inputs.getPositionX() > rect.width - offset) {
-			Inputs.keys.push('ArrowRight');
-		}
-		if (Inputs.getPositionY() < offset) {
-			Inputs.keys.push('ArrowUp');
-		}
-		if (Inputs.getPositionY() > rect.height - offset) {
-			Inputs.keys.push('ArrowDown');
-		}
-	}
 
 	onKeyDown() {}
 
@@ -1894,15 +1878,9 @@ class Map extends Base {
 
 	onPointerDown() {
 		if (Inputs.previousTouchDistance === 0 && this.rectangleStartPosition === null) {
-			this.addMobileKeyMove();
-			if (Inputs.keys.length > 0) {
-				this.cursor.onKeyDownImmediate();
-				this.isMobileMovingCursor = true;
-			} else {
-				if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
-					this.needsUpdateRaycasting = true;
-					this.needsMouseDown = true;
-				}
+			if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
+				this.needsUpdateRaycasting = true;
+				this.needsMouseDown = true;
 			}
 		}
 	}
@@ -1924,11 +1902,7 @@ class Map extends Base {
 
 	onPointerMove() {
 		if (Inputs.isPointerPressed) {
-			if (this.isMobileMovingCursor) {
-				Inputs.keys = [];
-				this.addMobileKeyMove();
-				this.cursor.onKeyDownImmediate();
-			} else if (Inputs.previousTouchDistance !== 0) {
+			if (Inputs.previousTouchDistance !== 0) {
 				const zoomFactor = Inputs.touchDistance / Inputs.previousTouchDistance;
 				if (zoomFactor > 1) {
 					this.zoomIn(zoomFactor / 10);
@@ -2036,10 +2010,6 @@ class Map extends Base {
 		await this.onMouseUp();
 		this.lastPosition = null;
 		Inputs.keys = [];
-		if (this.isMobileMovingCursor) {
-			this.onKeyUp();
-		}
-		this.isMobileMovingCursor = false;
 	}
 
 	async onMouseWheel(delta: number) {

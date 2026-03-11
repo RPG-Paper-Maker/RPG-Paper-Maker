@@ -1131,6 +1131,7 @@ function Tree({
 								localization={currentSelectedItemNode?.content as Localization}
 								onUpdate={() => setForceUpdate((value) => !value)}
 								widthType={inputNameWidth}
+								disabled={isEditNameDisabled()}
 								onFocus={() => handleSetFocus(false)}
 							/>
 						) : (
