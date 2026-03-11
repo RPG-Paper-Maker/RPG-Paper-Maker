@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three/webgpu';
-import { uniform, uv, Fn, vec2, vec3, vec4, mix, If, texture } from 'three/tsl';
+import { uniform, uv, Fn, vec2, vec3, vec4, mix, If, step, texture } from 'three/tsl';
 import { Paths, Utils } from '../common';
 import { readPublicFile } from '../common/Platform';
 
@@ -123,7 +123,7 @@ class GL {
 			map: opts.texture,
 			side,
 			transparent: true,
-			alphaTest: 0.5,
+			alphaTest: 0.01,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
 			opacity: 1,
 			shininess: 0,
@@ -141,7 +141,7 @@ class GL {
 			{
 				color.addAssign(vec4(0.1, 0.1, 0.1, 0));
 			});
-			return vec4(vec3(mix(intensity, color, u.colorD.w)), tex.a);
+			return vec4(vec3(mix(intensity, color, u.colorD.w)), step(0.5, tex.a).mul(u.opacity));
 		});
 		material.colorNode = colorShader();
 		return material;
