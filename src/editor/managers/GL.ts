@@ -24,6 +24,14 @@ class GL {
 	public static layerTwoContext: GL;
 	public static layerThreeContext: GL;
 	public static staticRender = new THREE.WebGPURenderer({ alpha: true });
+	private static staticRenderInitialized = false;
+
+	static async initStaticRender() {
+		if (!this.staticRenderInitialized) {
+			await this.staticRender.init();
+			this.staticRenderInitialized = true;
+		}
+	}
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;

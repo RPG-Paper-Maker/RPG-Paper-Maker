@@ -62,6 +62,7 @@ function PanelMapObjectsSelection() {
 	const initialize = async () => {
 		const content = contentRef.current;
 		if (content) {
+			await Manager.GL.initStaticRender();
 			Manager.GL.staticRender.shadowMap.enabled = true;
 			Manager.GL.staticRender.setSize(300, 300);
 			await update();

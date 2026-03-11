@@ -115,6 +115,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		const content = contentRef.current;
 		if (content) {
 			if (displayCanvas) {
+				await Manager.GL.initStaticRender();
 				Manager.GL.staticRender.shadowMap.enabled = true;
 				Manager.GL.staticRender.setSize(300, 300);
 			}

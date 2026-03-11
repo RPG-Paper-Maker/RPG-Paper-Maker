@@ -49,6 +49,7 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 
 	const initializeMap = async () => {
 		setFirstLoading(true);
+		await Manager.GL.initStaticRender();
 		Manager.GL.staticRender.shadowMap.enabled = true;
 		Manager.GL.staticRender.setSize(WIDTH, HEIGHT);
 		const battleMap = Project.current!.battleSystem.battleMaps[0];

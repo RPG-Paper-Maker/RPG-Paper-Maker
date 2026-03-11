@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import * as THREE from 'three/webgpu';
 import { Base } from '.';
 import {
@@ -595,15 +595,14 @@ class Previewer3D extends Base {
 
 	draw3DCut(GL: Manager.GL) {
 		if (GL.renderer && GL.renderer.initialized && this.canvas) {
-			const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
-			const domRect = GL.renderer.domElement.getBoundingClientRect();
+			const { left, top, width, height } = this.canvas.getBoundingClientRect();
 			if (this.parentCanvas) {
 				const rect = this.parentCanvas.getBoundingClientRect();
-				GL.renderer.setScissor(rect.left, domRect.height - rect.height, rect.width, rect.height);
+				GL.renderer.setScissor(rect.left, rect.top, rect.width, rect.height);
 			} else {
-				GL.renderer.setScissor(left, domRect.height - height, width, height);
+				GL.renderer.setScissor(left, top, width, height);
 			}
-			GL.renderer.setViewport(left, domRect.height - height, width, height);
+			GL.renderer.setViewport(left, top, width, height);
 			GL.renderer.render(this.scene, this.camera.getThreeCamera());
 		}
 	}
