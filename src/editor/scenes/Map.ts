@@ -424,10 +424,10 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
+		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.37 : Math.PI);
 		this.scene.add(ambient);
 		if (this.model.isSunlight) {
-			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
+			this.sunLight = new THREE.DirectionalLight(0xffffff, 2.28);
 			this.sunLight.position.set(-1, 1.75, 1);
 			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);

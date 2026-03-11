@@ -48,10 +48,9 @@ class Base {
 	draw3D(GL: Manager.GL) {
 		if (GL.renderer && GL.renderer.initialized) {
 			if (this.canvas) {
-				const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
-				const domRect = GL.renderer.domElement.getBoundingClientRect();
-				GL.renderer.setScissor(left, domRect.height - height, width, height);
-				GL.renderer.setViewport(left, domRect.height - height, width, height);
+				const { left, top, width, height } = this.canvas.getBoundingClientRect();
+				GL.renderer.setScissor(left, top, width, height);
+				GL.renderer.setViewport(left, top, width, height);
 				GL.renderer.render(this.scene, this.camera.getThreeCamera());
 			}
 		}
