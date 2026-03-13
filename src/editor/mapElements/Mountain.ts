@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { MapElement, Model, Scene } from '../Editor';
 import { BINDING, ELEMENT_MAP_KIND, JSONType, MOUNTAIN_SIDE, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';

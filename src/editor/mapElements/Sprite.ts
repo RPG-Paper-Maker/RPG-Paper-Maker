@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { BINDING, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
@@ -83,11 +83,11 @@ class Sprite extends Base {
 		return count + 4;
 	}
 
-	static getCharacterTexture(map: Scene.Map, id: number): THREE.MeshPhongNodeMaterial | null {
+	static getCharacterTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
 		return map.texturesCharacters[id] || null;
 	}
 
-	static async loadCharacterTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongNodeMaterial> {
+	static async loadCharacterTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		let textureCharacter = map ? map.texturesCharacters[id] : null;
 		if (!textureCharacter) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id);

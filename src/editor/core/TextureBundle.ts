@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { Rectangle } from './Rectangle';
 
 class TextureBundle {
 	public list: [number, number[]][];
-	public material: THREE.MeshPhongNodeMaterial | null;
+	public material: THREE.MeshPhongMaterial | null;
 	public beginID!: number;
 	public beginPoint!: number[];
 	public endID!: number;

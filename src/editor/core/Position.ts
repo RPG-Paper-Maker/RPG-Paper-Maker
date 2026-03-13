@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { Constants, Mathf } from '../common';
 import { Model } from '../Editor';
 import { Portion } from './Portion';

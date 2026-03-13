@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
 import { Manager, Scene } from '../Editor';
 import { Sprite } from '../mapElements';
@@ -45,7 +45,7 @@ class Battler {
 					.add(new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE));
 			}
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero?.idBattler);
-			let material: THREE.MeshPhongNodeMaterial;
+			let material: THREE.MeshPhongMaterial;
 			if (picture) {
 				const path = await picture?.getPathOrBase64();
 				material = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();

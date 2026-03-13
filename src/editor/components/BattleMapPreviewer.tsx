@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useState } from 'react';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { Constants, Paths } from '../common';
 import { readJSON } from '../common/Platform';
 import { Battler } from '../core/Battler';
@@ -49,7 +49,6 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 
 	const initializeMap = async () => {
 		setFirstLoading(true);
-		await Manager.GL.initStaticRender();
 		Manager.GL.staticRender.shadowMap.enabled = true;
 		Manager.GL.staticRender.setSize(WIDTH, HEIGHT);
 		const battleMap = Project.current!.battleSystem.battleMaps[0];

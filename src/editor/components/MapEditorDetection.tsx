@@ -58,7 +58,7 @@ function MapEditorDetection({
 			Scene.Map.currentpositionSelector.close();
 			Scene.Map.currentpositionSelector = null;
 			Manager.GL.layerTwoContext.renderer.setScissorTest(false);
-			Manager.GL.layerTwoContext.renderer.setClearColor(0xffffff, 0);
+			Manager.GL.layerTwoContext.renderer.setClearColor(0x000000, 0);
 			Manager.GL.layerTwoContext.renderer.clear(true, true);
 			Manager.GL.layerTwoContext.renderer.setScissorTest(true);
 		}

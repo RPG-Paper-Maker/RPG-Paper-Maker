@@ -9,8 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
-import { uniform } from 'three/tsl';
+import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
@@ -290,7 +289,9 @@ class Autotiles {
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture });
 		if (map) {
-			textureAutotile.material.userData.uniforms.offset = uniform(textureAutotile.isAnimated ? map.autotilesOffset : new THREE.Vector2());
+			textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
+				? map.autotilesOffset
+				: new THREE.Vector2();
 		}
 		texturesAutotile.push(textureAutotile);
 	}

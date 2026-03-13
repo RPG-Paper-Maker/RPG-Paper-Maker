@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 
 import {
 	ACTION_KIND,
@@ -32,7 +32,7 @@ import { UndoRedoState } from './UndoRedoState';
 
 type GeometryMaterialType = {
 	geometry: CustomGeometry;
-	material: THREE.MeshPhongNodeMaterial | null;
+	material: THREE.MeshPhongMaterial | null;
 	count?: number;
 };
 
@@ -1107,7 +1107,7 @@ class MapPortion {
 		for (const [positionKey, wall] of this.model.walls) {
 			const position = Position.fromKey(positionKey);
 			let obj = hash.get(wall.wallID);
-			let material: THREE.MeshPhongNodeMaterial | null;
+			let material: THREE.MeshPhongMaterial | null;
 			let geometry: CustomGeometry;
 			let count: number;
 			if (obj) {
@@ -1222,7 +1222,7 @@ class MapPortion {
 				}
 				// Constructing the geometry
 				let obj = hash.get(object3D.data.pictureID);
-				let material: THREE.MeshPhongNodeMaterial | null;
+				let material: THREE.MeshPhongMaterial | null;
 				let geometry: CustomGeometry | null = null;
 				let count = 0;
 				if (

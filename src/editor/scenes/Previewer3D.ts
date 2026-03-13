@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
 import {
 	ACTION_KIND,
@@ -38,7 +38,7 @@ class Previewer3D extends Base {
 
 	public id: string;
 	public parentCanvas!: HTMLElement;
-	public material: THREE.MeshPhongNodeMaterial | null = null;
+	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public meshes: THREE.Mesh[] = [];
 	public currentRotation: number = (45 * Math.PI) / 180;
@@ -59,7 +59,7 @@ class Previewer3D extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+		const ambient = new THREE.AmbientLight(0xffffff, Math.PI - 14 / 9);
 		this.scene.add(ambient);
 		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 		this.sunLight.position.set(-1, 1.75, 1);
@@ -296,7 +296,7 @@ class Previewer3D extends Base {
 			this.addGltfScene(shape.gltfScene, 1, shape.gltfAnimations);
 			return;
 		}
-		const texture = new THREE.MeshPhongNodeMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
 		const geometry = new CustomGeometry();
 		const object = new Model.Object3D();
 		object.shapeKind = SHAPE_KIND.CUSTOM;
@@ -339,7 +339,7 @@ class Previewer3D extends Base {
 
 	addToScene(
 		geometry: CustomGeometry | CustomGeometryFace,
-		material: THREE.MeshPhongNodeMaterial | null = this.material,
+		material: THREE.MeshPhongMaterial | null = this.material,
 		needsClear = true,
 		position: THREE.Vector3 | null = null,
 	) {
@@ -594,15 +594,16 @@ class Previewer3D extends Base {
 	}
 
 	draw3DCut(GL: Manager.GL) {
-		if (GL.renderer && GL.renderer.initialized && this.canvas) {
-			const { left, top, width, height } = this.canvas.getBoundingClientRect();
+		if (GL.renderer && this.canvas) {
+			const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
+			const domRect = GL.renderer.domElement.getBoundingClientRect();
 			if (this.parentCanvas) {
 				const rect = this.parentCanvas.getBoundingClientRect();
-				GL.renderer.setScissor(rect.left, rect.top, rect.width, rect.height);
+				GL.renderer.setScissor(rect.left, domRect.height - rect.bottom + domRect.top, rect.width, rect.height);
 			} else {
-				GL.renderer.setScissor(left, top, width, height);
+				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
 			}
-			GL.renderer.setViewport(left, top, width, height);
+			GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
 			GL.renderer.render(this.scene, this.camera.getThreeCamera());
 		}
 	}

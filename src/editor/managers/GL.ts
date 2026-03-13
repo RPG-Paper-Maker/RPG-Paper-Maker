@@ -9,8 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
-import { uniform, uv, Fn, vec2, vec3, vec4, mix, If, step, texture } from 'three/tsl';
+import * as THREE from 'three';
 import { Paths, Utils } from '../common';
 import { readPublicFile } from '../common/Platform';
 
@@ -23,23 +22,15 @@ class GL {
 	public static layerOneContext: GL;
 	public static layerTwoContext: GL;
 	public static layerThreeContext: GL;
-	public static staticRender = new THREE.WebGPURenderer({ alpha: true });
-	private static staticRenderInitialized = false;
-
-	static async initStaticRender() {
-		if (!this.staticRenderInitialized) {
-			await this.staticRender.init();
-			this.staticRenderInitialized = true;
-		}
-	}
+	public static staticRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
-	public renderer!: THREE.WebGPURenderer;
+	public renderer!: THREE.WebGLRenderer;
 	public canvasWidth: number = 0;
 	public canvasHeight: number = 0;
 
-	static async loadTexture(path: string): Promise<THREE.MeshPhongNodeMaterial> {
+	static async loadTexture(path: string): Promise<THREE.MeshPhongMaterial> {
 		const texture: THREE.Texture = await new Promise((resolve) => {
 			this.textureLoader.load(
 				path,
@@ -62,8 +53,8 @@ class GL {
 		return this.createMaterial({ texture });
 	}
 
-	static loadTextureEmpty(): THREE.MeshPhongNodeMaterial {
-		const material = new THREE.MeshPhongNodeMaterial({ opacity: 0, transparent: true });
+	static loadTextureEmpty(): THREE.MeshPhongMaterial {
+		const material = new THREE.MeshPhongMaterial({ opacity: 0, transparent: true });
 		material.userData.uniforms = {
 			t: { value: undefined },
 		};
@@ -75,7 +66,7 @@ class GL {
 		this.SHADER_DEFAULT_FRAGMENT = await readPublicFile(Paths.join('Scripts', 'Shaders', 'default.frag'));
 	}
 
-	static getMaterialTextureSize(material: THREE.MeshPhongNodeMaterial | null): { width: number; height: number } {
+	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
 		return {
 			width: (material?.map?.image as HTMLImageElement)?.width ?? 0,
 			height: (material?.map?.image as HTMLImageElement)?.height ?? 0,
@@ -86,84 +77,101 @@ class GL {
 		texture?: THREE.Texture | null;
 		flipX?: boolean;
 		flipY?: boolean;
-		uniforms?: Record<string, THREE.Uniform<unknown>>;
+		uniforms?: Record<string, THREE.IUniform<unknown>>;
 		side?: THREE.Side;
 		repeat?: number;
 		opacity?: number;
 		shadows?: boolean;
 		depthWrite?: boolean;
 		hovered?: boolean;
-	}): THREE.MeshPhongNodeMaterial {
+	}): THREE.MeshPhongMaterial {
 		if (!opts.texture) {
 			opts.texture = new THREE.Texture();
 		}
 		opts.texture.magFilter = THREE.NearestFilter;
 		opts.texture.minFilter = THREE.NearestFilter;
+		opts.texture.colorSpace = THREE.NoColorSpace;
 		opts.texture.flipY = opts.flipY ? true : false;
 		opts.texture.wrapS = THREE.RepeatWrapping;
 		opts.texture.wrapT = THREE.RepeatWrapping;
-		opts.texture.colorSpace = THREE.SRGBColorSpace;
+		const repeat = Utils.defaultValue(opts.repeat, 1.0);
 		const opacity = Utils.defaultValue(opts.opacity, 1.0);
 		const shadows = Utils.defaultValue(opts.shadows, true);
 		const side = Utils.defaultValue(opts.side, THREE.DoubleSide);
 		const hovered = Utils.defaultValue(opts.hovered, false);
-		const u =
-		{
-			offset: uniform(new THREE.Vector2()),
-			colorD: uniform(this.screenTone),
-			enableShadows: uniform(shadows),
-			hovered: uniform(hovered),
-			reverseH: uniform(opts.flipX ? true : false),
-			opacity: uniform(opacity)
-		};
+		const fragment = this.SHADER_DEFAULT_FRAGMENT;
+		const vertex = this.SHADER_DEFAULT_VERTEX;
+		const screenTone = this.screenTone;
+		const uniforms = Utils.defaultValue(opts.uniforms, {
+			offset: { value: new THREE.Vector2() },
+			colorD: { value: screenTone },
+			repeat: { value: repeat },
+			enableShadows: { value: shadows },
+			hovered: { value: hovered },
+		});
+
+		// Program cache key for multiple shader programs
+		const key = fragment === this.SHADER_DEFAULT_FRAGMENT ? 0 : 1;
 
 		// Create material
-		const material = new THREE.MeshPhongNodeMaterial({
+		const material = new THREE.MeshPhongMaterial({
 			map: opts.texture,
 			side,
 			transparent: true,
-			alphaTest: 0.01,
+			alphaTest: 0.5,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
-			opacity: 1,
+			opacity,
 			shininess: 0,
+			specular: new THREE.Color(0x000000),
 		});
-		material.userData.uniforms = u;
+		material.userData.uniforms = uniforms;
 		material.forceSinglePass = true;
-		material.lights = shadows;
-		const colorShader = Fn(() =>
-		{
-			const coords = vec2(uv().add(u.offset)).mul(vec2(material.map?.repeat || new THREE.Vector2(1, 1)));
-			const tex = texture(material.map || new THREE.Texture(), coords);
-			const color = vec3(tex.add(u.colorD));
-			const intensity = vec3(color.dot(vec3(0.2125, 0.7154, 0.0721)));
-			If (u.hovered, () =>
-			{
-				color.addAssign(vec4(0.1, 0.1, 0.1, 0));
-			});
-			return vec4(vec3(mix(intensity, color, u.colorD.w)), step(0.5, tex.a).mul(u.opacity));
+		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
+			depthPacking: THREE.RGBADepthPacking,
+			map: opts.texture,
+			alphaTest: 0.5,
 		});
-		material.colorNode = colorShader();
+
+		// Edit shader information before compiling shader
+		material.onBeforeCompile = (shader) => {
+			shader.fragmentShader = fragment;
+			shader.vertexShader = vertex;
+			shader.uniforms.colorD = uniforms.colorD;
+			shader.uniforms.reverseH = { value: opts.flipX };
+			shader.uniforms.repeat = { value: repeat };
+			shader.uniforms.offset = uniforms.offset;
+			shader.uniforms.enableShadows = { value: shadows };
+			shader.uniforms.hovered = { value: hovered };
+			material.userData.uniforms = shader.uniforms;
+
+			// Important to run a unique shader only once and be able to use
+			// multiple shader with before compile
+			material.customProgramCacheKey = () => {
+				return '' + key;
+			};
+		};
+
 		return material;
 	}
 
-	async initialize(layer = 0) {
+	initialize(layer = 0) {
 		if (!this.renderer) {
 			const parent = document.getElementById('root');
 			if (parent === null) {
 				throw new Error('No root found in document for GL renderer.');
 			}
 			this.parent = parent;
-			this.renderer = new THREE.WebGPURenderer({
+			this.renderer = new THREE.WebGLRenderer({
 				alpha: true,
-				// Firefox has a screen flickering bug on WebGPU, remove this line once it is fixed
-				forceWebGL: navigator.userAgent.search("Firefox") > -1
 			});
 			this.renderer.setPixelRatio(window.devicePixelRatio);
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
 			this.renderer.shadowMap.enabled = true;
 			this.renderer.domElement.classList.add(`canvasRenderer${layer}`);
-			this.renderer.setClearColor(0xffffff, 0);
-			await this.renderer.init();
+			this.renderer.autoClear = false;
+			this.renderer.setScissorTest(false);
+			this.renderer.setClearColor(0x000000, 0);
+			this.renderer.clear(true, true);
 			this.renderer.setScissorTest(true);
 		}
 		this.parent.appendChild(this.renderer.domElement);

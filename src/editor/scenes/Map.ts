@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import * as THREE from 'three';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
 import {
 	ACTION_KIND,
@@ -67,14 +67,14 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static positionSelectorAnimationFrameID: number;
-	public static materialCursor: THREE.MeshPhongNodeMaterial;
-	public static materialObjectSquareCursor: THREE.MeshPhongNodeMaterial;
-	public static materialObjectSquare: THREE.MeshPhongNodeMaterial;
-	public static materialDetectionBox: THREE.MeshPhongNodeMaterial;
-	public static materialDetectionArrow: THREE.MeshPhongNodeMaterial;
+	public static materialCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquare: THREE.MeshPhongMaterial;
+	public static materialDetectionBox: THREE.MeshPhongMaterial;
+	public static materialDetectionArrow: THREE.MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
-	public static materialStartPosition: THREE.MeshPhongNodeMaterial;
+	public static materialStartPosition: THREE.MeshPhongMaterial;
 
 	public id: number;
 	public tag?: Model.TreeMapTag;
@@ -109,8 +109,8 @@ class Map extends Base {
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
 	public previousPortion!: Portion;
-	public materialTileset!: THREE.MeshPhongNodeMaterial;
-	public materialTilesetHover!: THREE.MeshPhongNodeMaterial;
+	public materialTileset!: THREE.MeshPhongMaterial;
+	public materialTilesetHover!: THREE.MeshPhongMaterial;
 	public selectionOffset = new THREE.Vector2();
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
@@ -125,11 +125,11 @@ class Map extends Base {
 	public pointedMapElement: MapElement.Base | null = null;
 
 	public texturesAutotiles: TextureBundle[][] = [];
-	public texturesWalls: THREE.MeshPhongNodeMaterial[] = [];
-	public texturesObjects3D: THREE.MeshPhongNodeMaterial[] = [];
-	public texturesObjects3DHover: THREE.MeshPhongNodeMaterial[] = [];
-	public texturesMountains: globalThis.Map<number, THREE.MeshPhongNodeMaterial> = new globalThis.Map();
-	public texturesCharacters: THREE.MeshPhongNodeMaterial[] = [];
+	public texturesWalls: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3DHover: THREE.MeshPhongMaterial[] = [];
+	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
+	public texturesCharacters: THREE.MeshPhongMaterial[] = [];
 	public autotilesOffset = new THREE.Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
@@ -415,7 +415,6 @@ class Map extends Base {
 		}
 	}
 
-
 	async saveUndoRedoStates() {
 		const { index, length } = await Manager.UndoRedo.createStates(this.undoRedoStatesSaving);
 		this.undoRedoStatesSaving = [];
@@ -424,10 +423,10 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.37 : Math.PI);
+		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? Math.PI - 14 / 9 : Math.PI);
 		this.scene.add(ambient);
 		if (this.model.isSunlight) {
-			this.sunLight = new THREE.DirectionalLight(0xffffff, 2.28);
+			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
 			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);
@@ -1401,11 +1400,11 @@ class Map extends Base {
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		Manager.GL.raycaster.layers.set(RAYCASTING_LAYER.PLANE);
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
-		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
-		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
-		const meshHitGridY = intersects.length > 0 ? Math.round(intersects[0].point.y / Project.SQUARE_SIZE) : -Infinity;
-	const planeGridY = Math.round(this.meshPlane!.position.y / Project.SQUARE_SIZE);
-	const isPlane = (intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
+		const meshHitGridY =
+			intersects.length > 0 ? Math.round(intersects[0].point.y / Project.SQUARE_SIZE) : -Infinity;
+		const planeGridY = Math.round(this.meshPlane!.position.y / Project.SQUARE_SIZE);
+		const isPlane =
+			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
 		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
@@ -1484,7 +1483,8 @@ class Map extends Base {
 					position.layer =
 						(isSpriteOptionSelected
 							? this.getMapPortionByPosition(position)?.model.getLastSpriteLayerAt(position) || 0
-							: this.getMapPortionByPosition(position)?.model.getLastLandLayerAt(position) ?? position.layer) + 1;
+							: (this.getMapPortionByPosition(position)?.model.getLastLandLayerAt(position) ??
+								position.layer)) + 1;
 				} else {
 					if (!Map.isRotateDisabled()) {
 						position.angleX = Project.current!.settings.mapEditorDefaultRotateX;
@@ -1754,7 +1754,6 @@ class Map extends Base {
 			});
 		}
 	}
-
 
 	onKeyDown() {}
 

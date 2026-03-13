@@ -115,7 +115,6 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		const content = contentRef.current;
 		if (content) {
 			if (displayCanvas) {
-				await Manager.GL.initStaticRender();
 				Manager.GL.staticRender.shadowMap.enabled = true;
 				Manager.GL.staticRender.setSize(300, 300);
 			}
@@ -140,7 +139,6 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 							scene.camera.perspectiveCamera.updateProjectionMatrix();
 							await scene.loadObject3D(elementID);
 							await scene.load();
-							await Manager.GL.staticRender.init();
 							Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
 							dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
 						} else {
