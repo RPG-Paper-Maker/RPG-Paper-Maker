@@ -83,7 +83,7 @@ function TreeMaps({
 	};
 
 	const handleAcceptEditFolder = async () => {
-		RPM.treeCurrentForceUpdate();
+		RPM.treeCurrentForceUpdate?.();
 	};
 
 	const handleNewMap = async () => {
@@ -265,7 +265,7 @@ function TreeMaps({
 			await tag.saveFiles();
 			dispatch(setNeedsReloadMap());
 		}
-		RPM.treeCurrentForceUpdate();
+		RPM.treeCurrentForceUpdate?.();
 	};
 
 	const handleDeleteMap = async () => {

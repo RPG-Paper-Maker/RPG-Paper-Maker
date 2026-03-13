@@ -292,6 +292,15 @@ function Tree({
 				await handleEditItem();
 			}
 		}
+		RPM.treeCurrentItems = list;
+		RPM.treeCurrentItem = currentSelectedItemNode;
+		RPM.treeCurrentForceUpdate = () => {
+			setForceUpdate((value) => !value);
+		};
+		RPM.treeCurrentSetSelectedItem = (node: Node) => {
+			setCurrentSelectedItemNode(node);
+			onSelectedItem?.(node, false);
+		};
 		onDoubleClick?.(currentSelectedItemNode);
 	};
 
