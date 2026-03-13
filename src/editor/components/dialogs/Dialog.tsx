@@ -244,9 +244,9 @@ function Dialog({
 		Inputs.isMapFocused = dialogs.length === 0;
 		if (dialogRef.current && isOpen) {
 			const rect = dialogRef.current.getBoundingClientRect();
-			dialogRef.current.style.width = initialWidth || `${rect.width}px`;
-			dialogRef.current.style.height = initialHeight || `${rect.height}px`;
-			dialogRef.current.style.minHeight = initialHeight || `${rect.height}px`;
+			dialogRef.current.style.width = initialWidth || `${rect.width + 1}px`;
+			dialogRef.current.style.height = initialHeight || `${rect.height + 1}px`;
+			dialogRef.current.style.minHeight = initialHeight || `${rect.height + 1}px`;
 		}
 	}, [isOpen, initialWidth, initialHeight]);
 
