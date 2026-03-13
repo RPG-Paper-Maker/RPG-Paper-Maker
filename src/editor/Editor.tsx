@@ -13,7 +13,7 @@ import { lazy, useEffect, useLayoutEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Constants, RPM } from './common';
-import ErrorDialog from './components/ErrorDialog';
+import DialogError from './components/dialogs/DialogError';
 import Flex from './components/Flex';
 import UpdateCountdown from './components/UpdateCountdown';
 import UpdateVersionWarning from './components/UpdateVersionWarning';
@@ -58,7 +58,7 @@ function Editor() {
 
 	return (
 		<I18nextProvider i18n={i18n}>
-			<ErrorDialog />
+			<DialogError />
 			{loaded ? (
 				<Flex
 					id='main'

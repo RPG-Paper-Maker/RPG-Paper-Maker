@@ -20,6 +20,8 @@ type Props = {
 	setTriggerInsertText?: (t: string[] | null) => void;
 	disabled?: boolean;
 	fillHeight?: boolean;
+	smallDefaultHeight?: boolean;
+	placeholder?: string;
 };
 
 function TextArea({
@@ -29,6 +31,8 @@ function TextArea({
 	setTriggerInsertText,
 	disabled = false,
 	fillHeight = false,
+	smallDefaultHeight = false,
+	placeholder,
 }: Props) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -72,13 +76,14 @@ function TextArea({
 
 	return (
 		<textarea
-			className={Utils.getClassName({ fillHeight })}
+			className={Utils.getClassName({ fillHeight, smallDefaultHeight })}
 			ref={textareaRef}
 			value={text}
 			onChange={handleChange}
 			onBlur={handleBlur}
 			spellCheck='false'
 			disabled={disabled}
+			placeholder={placeholder}
 		/>
 	);
 }

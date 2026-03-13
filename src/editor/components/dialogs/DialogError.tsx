@@ -13,20 +13,22 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosSend } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import { BUTTON_TYPE, Constants } from '../common';
-import { Project } from '../core/Project';
-import { RootState, setErrorDialog } from '../store';
-import Button from './Button';
-import Dialog, { Z_INDEX_LEVEL } from './dialogs/Dialog';
-import FooterOK from './dialogs/footers/FooterOK';
-import Flex from './Flex';
-import InputText from './InputText';
+import { BUTTON_TYPE, Constants } from '../../common';
+import { Project } from '../../core/Project';
+import { RootState, setErrorDialog } from '../../store';
+import Button from '../Button';
+import Flex from '../Flex';
+import InputText from '../InputText';
+import TextArea from '../TextArea';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
+import FooterOK from './footers/FooterOK';
 
-function ErrorDialog() {
+function DialogError() {
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const errorDialog = useSelector((state: RootState) => state.projects.errorDialog);
 	const [email, setEmail] = useState('');
+	const [description, setDescription] = useState('');
 	const [sendStatus, setSendStatus] = useState<{ ok: boolean; message: string } | null>(null);
 	const [loading, setLoading] = useState(false);
 
@@ -38,7 +40,7 @@ function ErrorDialog() {
 		setSendStatus(null);
 		setLoading(true);
 		try {
-			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report?_ts=123456', {
+			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -49,6 +51,7 @@ function ErrorDialog() {
 					message: errorDialog.message,
 					stack: errorDialog.stack,
 					email,
+					description,
 				}),
 			});
 			if (!res.ok) {
@@ -85,8 +88,14 @@ function ErrorDialog() {
 						{sendStatus.message}
 					</div>
 				) : (
-					<Flex spaced centerH fillWidth>
+					<Flex column spaced fillWidth>
 						<InputText value={email} onChange={setEmail} placeholder={t('error.dialog.optional.mail')} />
+						<TextArea
+							text={description}
+							onChange={setDescription}
+							placeholder={t('error.dialog.optional.description')}
+							smallDefaultHeight
+						/>
 						<Button
 							icon={<IoIosSend />}
 							buttonType={BUTTON_TYPE.PRIMARY}
@@ -102,4 +111,4 @@ function ErrorDialog() {
 	);
 }
 
-export default ErrorDialog;
+export default DialogError;
