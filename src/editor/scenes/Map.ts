@@ -1624,7 +1624,7 @@ class Map extends Base {
 		}
 
 		// For displaying information on left bottom corner
-		if (!isPlane || Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+		if (!isPlane || Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT || Map.isTransforming()) {
 			switch (Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.FLOOR:
 				case ELEMENT_MAP_KIND.AUTOTILE:
