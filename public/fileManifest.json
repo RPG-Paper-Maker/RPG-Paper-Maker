@@ -784,9 +784,7 @@
         "howler.core.min.js",
         "howler.min.js",
         "three.core.min.js",
-        "three.module.min.js",
-        "three.tsl.min.js",
-        "three.webgpu.min.js"
+        "three.module.min.js"
       ],
       "localforage": {
         "drivers": {
