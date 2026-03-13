@@ -53,8 +53,7 @@ class GL {
 					const t = new THREE.Texture();
 					t.image = new Image();
 					if (path !== '') {
-						const error = 'Could not load ' + path;
-						console.error(error);
+						console.warn('Could not load ' + path);
 					}
 					resolve(t);
 				},
