@@ -28,6 +28,65 @@ import { Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
 import { ProjectUpdater } from '../ProjectUpdater';
 
+const DEG_TO_RAD = Math.PI / 180;
+const RAD_TO_DEG = 180 / Math.PI;
+
+function convertRotationAngles(angleY: number, angleX: number, angleZ: number): [number, number, number] {
+	const ay = angleY * DEG_TO_RAD;
+	const ax = angleX * DEG_TO_RAD;
+	const az = angleZ * DEG_TO_RAD;
+
+	const cy = Math.cos(ay);
+	const sy = Math.sin(ay);
+	const cx = Math.cos(ax);
+	const sx = Math.sin(ax);
+	const cz = Math.cos(az);
+	const sz = Math.sin(az);
+	const m02 = cz * sy + sz * sx * cy;
+	const m12 = sz * sy - cz * sx * cy;
+	const m22 = cx * cy;
+	const m01 = -sz * cx;
+	const m00 = cz * cy - sz * sx * sy;
+	const m21 = sx;
+	const m11 = cz * cx;
+	const newAY = Math.asin(Math.max(-1, Math.min(1, m02)));
+	let newAX: number;
+	let newAZ: number;
+	if (Math.abs(Math.cos(newAY)) > 1e-6) {
+		newAX = Math.atan2(-m12, m22);
+		newAZ = Math.atan2(-m01, m00);
+	} else {
+		newAZ = 0;
+		newAX = Math.atan2(m21, m11);
+	}
+	return [
+		Math.round(newAY * RAD_TO_DEG * 1000) / 1000,
+		Math.round(newAX * RAD_TO_DEG * 1000) / 1000,
+		Math.round(newAZ * RAD_TO_DEG * 1000) / 1000,
+	];
+}
+
+function convertPositionAngles(posArray: number[]) {
+	if (!posArray || posArray.length < 10) {
+		return;
+	}
+
+	const angleY = posArray[7] ?? 0;
+	const angleX = posArray[8] ?? 0;
+	const angleZ = posArray[9] ?? 0;
+	let nonZeroCount = 0;
+	if (angleY !== 0) nonZeroCount++;
+	if (angleX !== 0) nonZeroCount++;
+	if (angleZ !== 0) nonZeroCount++;
+	if (nonZeroCount < 2) {
+		return;
+	}
+	const [newAngleY, newAngleX, newAngleZ] = convertRotationAngles(angleY, angleX, angleZ);
+	posArray[7] = newAngleY;
+	posArray[8] = newAngleX;
+	posArray[9] = newAngleZ;
+}
+
 class ProjectUpdater_3_0_0 {
 	static async update(callback: (percent: number) => void) {
 		const projectPath = Project.current!.getPath();
@@ -575,6 +634,24 @@ class ProjectUpdater_3_0_0 {
 			}
 			await writeJSON(Paths.join(projectPath, 'keyboard.json'), jsonKeyboard);
 		}
+
+		await ProjectUpdater.updateAllMapPortions((json: JSONType) => {
+			for (const entry of (json.objs3d ?? []) as JSONType[]) {
+				convertPositionAngles(entry.k as number[]);
+			}
+			for (const entry of (json.sprites ?? []) as JSONType[]) {
+				convertPositionAngles(entry.k as number[]);
+			}
+			for (const entry of (json.lands ?? []) as JSONType[]) {
+				convertPositionAngles(entry.k as number[]);
+			}
+			for (const entry of (json.walls ?? []) as JSONType[]) {
+				convertPositionAngles(entry.k as number[]);
+			}
+			for (const entry of (json.moun ?? []) as JSONType[]) {
+				convertPositionAngles(entry.k as number[]);
+			}
+		});
 	}
 }
 

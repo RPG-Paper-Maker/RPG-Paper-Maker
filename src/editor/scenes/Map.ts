@@ -112,6 +112,7 @@ class Map extends Base {
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public materialTilesetHover!: THREE.MeshPhongMaterial;
 	public selectionOffset = new THREE.Vector2();
+	public selectedPivotOffset = new THREE.Vector3();
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
 	public portionsSaving: Set<MapPortion> = new Set();
@@ -1192,11 +1193,14 @@ class Map extends Base {
 		this.updateTransformPosition();
 		if (this.selectedPosition && this.selectedElement) {
 			this.getMapPortionByPosition(this.selectedPosition)?.removeSelected();
-			this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position))?.addSelected();
+			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
+			this.getMapPortionByPosition(Position.createFromVector3(worldPos))?.addSelected();
 		}
 	}
 
 	updateTransformPosition() {
+		// Remove pivot offset before snapping/clamping, re-add after
+		this.selectedMesh.position.sub(this.selectedPivotOffset);
 		if (
 			this.selectedElement &&
 			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
@@ -1266,17 +1270,20 @@ class Map extends Base {
 			this.selectedMesh.scale.setX(this.selectedMesh.scale.z);
 		}
 		this.selectedMesh.scale.setY(this.selectedMesh.scale.y <= 0 ? 0.001 : this.selectedMesh.scale.y);
+		this.selectedMesh.position.add(this.selectedPivotOffset);
 	}
 
 	removeTransform() {
 		if (this.selectedElement) {
 			this.transformControls.detach();
-			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
+			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
+			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(worldPos));
 			if (mapPortion) {
 				this.portionsToUpdate.add(mapPortion);
 			}
 			this.selectedPosition = null;
 			this.selectedElement = null;
+			this.selectedPivotOffset.set(0, 0, 0);
 			this.scene.remove(this.selectedMesh);
 			this.needsUpdateSelectedPosition = null;
 			this.needsUpdateSelectedMapElement = true;

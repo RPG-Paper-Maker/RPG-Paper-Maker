@@ -53,6 +53,20 @@ class Object3DCustom extends Object3D {
 		return this.getShape()!.geometryData.center.clone();
 	}
 
+	getScaledCenter(scale: THREE.Vector3): THREE.Vector3 {
+		const modelGeometry = this.getShape()?.geometryData;
+		if (!modelGeometry) {
+			return new THREE.Vector3();
+		}
+		const center = modelGeometry.center.clone();
+		center.multiply(new THREE.Vector3(this.data.scale * scale.x, this.data.scale * scale.y, this.data.scale * scale.z));
+		return center;
+	}
+
+	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
+		return Position.createFromVector3(vec.clone().sub(this.getScaledCenter(scale)), rotation, scale);
+	}
+
 	getAdditionalX(): number {
 		return Math.floor(Project.SQUARE_SIZE / 2);
 	}
@@ -71,7 +85,8 @@ class Object3DCustom extends Object3D {
 		const uvs = modelGeometry.uvs;
 		const scale = this.data.scale;
 		const scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
-		const center = new THREE.Vector3();
+		const center = modelGeometry.center.clone();
+		center.multiply(scaleVec);
 		for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
 			const vecA = vertices[i].clone();
 			const vecB = vertices[i + 1].clone();

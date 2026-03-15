@@ -1246,12 +1246,24 @@ class MapPortion {
 								),
 								0,
 							);
-							this.updateSelected(
-								geometry,
-								material,
-								this.map.selectedElement.getLocalPosition(position),
-								position,
-							);
+							const selectedLocalPosition =
+								this.map.selectedElement.getLocalPosition(position);
+							// For custom OBJ models, center geometry at origin for correct
+							// rotation pivot, and track the offset for the transform system
+							if (object3D instanceof MapElement.Object3DCustom) {
+								const center = object3D.getScaledCenter(position.toScaleVector());
+								const verts = geometry._vertices;
+								for (let vi = 0; vi < verts.length; vi += 3) {
+									verts[vi] -= center.x;
+									verts[vi + 1] -= center.y;
+									verts[vi + 2] -= center.z;
+								}
+								this.map.selectedPivotOffset.copy(center);
+								selectedLocalPosition.add(center);
+							} else {
+								this.map.selectedPivotOffset.set(0, 0, 0);
+							}
+							this.updateSelected(geometry, material, selectedLocalPosition, position);
 						} else {
 							object3D.updateGeometry(geometry, position, 0);
 							obj = {
