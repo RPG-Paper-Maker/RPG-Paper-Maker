@@ -54,6 +54,7 @@ import {
 	getFolders,
 	loadZip,
 	openGame,
+	openWebsite,
 	readJSON,
 	removeFolder,
 } from '../common/Platform';
@@ -174,6 +175,7 @@ function MainMenuBar() {
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
+	const [isWarning2011, setIsWarning2011] = useState(false);
 	const [currentVersion, setCurrentVersion] = useState('');
 	const [warningImportPath, setWarningImportPath] = useState('');
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
@@ -284,6 +286,7 @@ function MainMenuBar() {
 						const fileVersion = await IO.readFile(Paths.join(project.location, 'game.rpm'));
 						if (fileVersion !== '2.0.11') {
 							setWarningVersionMessage(t('warning.project.2.0.11.version', { version: fileVersion }));
+							setIsWarning2011(true);
 							setIsDialogWarningProjectVersionOpen(true);
 							Project.current = null;
 							dispatch(setOpenLoading(false));
@@ -365,6 +368,7 @@ function MainMenuBar() {
 
 	const handleCloseWarningProjectVersionOpen = () => {
 		setIsDialogWarningProjectVersionOpen(false);
+		setIsWarning2011(false);
 	};
 
 	const handleAcceptUpdateProjectVersion = async () => {
@@ -1297,7 +1301,32 @@ function MainMenuBar() {
 					footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
 					onClose={handleCloseWarningProjectVersionOpen}
 				>
-					<p>{warningVersionMessage}</p>
+					<p>
+						{isWarning2011 && (!Constants.IS_DESKTOP || navigator.userAgent.includes('Win'))
+							? (() => {
+									const linkText = 'RPG Paper Maker 2.0.11';
+									const index = warningVersionMessage.indexOf(linkText);
+									if (index === -1) return warningVersionMessage;
+									return (
+										<>
+											{warningVersionMessage.substring(0, index)}
+											<a
+												href='#'
+												onClick={(e) => {
+													e.preventDefault();
+													void openWebsite(
+														'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/2.0.11/RPG.Paper.Maker.2.0.11.zip'
+													);
+												}}
+											>
+												{linkText}
+											</a>
+											{warningVersionMessage.substring(index + linkText.length)}
+										</>
+									);
+								})()
+							: warningVersionMessage}
+					</p>
 				</Dialog>
 			)}
 			{!!currentVersion && (
