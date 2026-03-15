@@ -1631,43 +1631,41 @@ class Map extends Base {
 		}
 
 		// For displaying information on left bottom corner
-		if (!isPlane || Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT || Map.isTransforming()) {
-			switch (Map.currentSelectedMapElementKind) {
-				case ELEMENT_MAP_KIND.FLOOR:
-				case ELEMENT_MAP_KIND.AUTOTILE:
-					layer = RAYCASTING_LAYER.LANDS;
-					break;
-				case ELEMENT_MAP_KIND.SPRITE_FACE:
-				case ELEMENT_MAP_KIND.SPRITE_FIX:
-				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-					layer = RAYCASTING_LAYER.SPRITES;
-					break;
-				case ELEMENT_MAP_KIND.SPRITE_WALL:
-					layer = RAYCASTING_LAYER.WALLS;
-					break;
-				case ELEMENT_MAP_KIND.MOUNTAIN:
-					layer = RAYCASTING_LAYER.MOUNTAINS;
-					break;
-				case ELEMENT_MAP_KIND.OBJECT3D:
-					layer = RAYCASTING_LAYER.OBJECTS3D;
-					break;
-				case ELEMENT_MAP_KIND.OBJECT:
-					layer = RAYCASTING_LAYER.OBJECTS;
-					break;
-				default:
-					layer = RAYCASTING_LAYER.PLANE;
-					break;
-			}
-			if (isLayerOn && isSpriteOptionSelected) {
-				Manager.GL.raycaster.layers.enable(layer);
-				Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
-				Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
-			} else {
-				Manager.GL.raycaster.layers.set(layer);
-			}
-			intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		switch (Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				layer = RAYCASTING_LAYER.LANDS;
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				layer = RAYCASTING_LAYER.SPRITES;
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				layer = RAYCASTING_LAYER.WALLS;
+				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				layer = RAYCASTING_LAYER.MOUNTAINS;
+				break;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				layer = RAYCASTING_LAYER.OBJECTS3D;
+				break;
+			case ELEMENT_MAP_KIND.OBJECT:
+				layer = RAYCASTING_LAYER.OBJECTS;
+				break;
+			default:
+				layer = RAYCASTING_LAYER.PLANE;
+				break;
 		}
+		if (isLayerOn && isSpriteOptionSelected) {
+			Manager.GL.raycaster.layers.enable(layer);
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
+		} else {
+			Manager.GL.raycaster.layers.set(layer);
+		}
+		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
 				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
