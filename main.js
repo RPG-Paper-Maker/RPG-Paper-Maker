@@ -142,7 +142,7 @@ const MIME_TYPES = {
 };
 
 const getMimeType = (filePath) => {
-	const ext = path.extname(filePath).toLowerCase();
+	const ext = path.extname(filePath).toLowerCase().replace('.', '');
 	return MIME_TYPES[ext] || 'application/octet-stream';
 };
 
