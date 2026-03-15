@@ -274,26 +274,19 @@ function DialogDeploy({ setIsOpen }: Props) {
 						</Flex>
 					)}
 					<Groupbox title={t('type.export')}>
-						<RadioGroup selected={exportType} onChange={setExportType}>
-							<Flex column spacedLarge>
-								{Constants.IS_DESKTOP && (
-									<Flex column spacedLarge>
+						<Flex column spacedLarge>
+							<RadioGroup selected={exportType} onChange={setExportType}>
+								<Flex column spacedLarge>
+									{Constants.IS_DESKTOP && (
 										<RadioButton value={EXPORT_TYPE.APPLICATION}>{t('deploy.desktop')}</RadioButton>
-										<Flex>
-											<Flex fillSmallSpace />{' '}
-											<Checkbox
-												isChecked={protectData}
-												onChange={setProtectData}
-												disabled={exportType !== EXPORT_TYPE.APPLICATION}
-											>
-												{t('protect.data')}
-											</Checkbox>
-										</Flex>
-									</Flex>
-								)}
-								<RadioButton value={EXPORT_TYPE.WEB}>{t('deploy.web')}</RadioButton>
-							</Flex>
-						</RadioGroup>
+									)}
+									<RadioButton value={EXPORT_TYPE.WEB}>{t('deploy.web')}</RadioButton>
+								</Flex>
+							</RadioGroup>
+							<Checkbox isChecked={protectData} onChange={setProtectData}>
+								{t('protect.data')}
+							</Checkbox>
+						</Flex>
 					</Groupbox>
 					<Groupbox title={t('version')}>
 						<Flex fillWidth spacedLarge>
