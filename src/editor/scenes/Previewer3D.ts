@@ -52,6 +52,12 @@ class Previewer3D extends Base {
 	public gltfAnimations: THREE.AnimationClip[] = [];
 	public previewAnimMixer: THREE.AnimationMixer | null = null;
 	public previewTimer: THREE.Timer = new THREE.Timer();
+	public previewRotateX: number = 0;
+	public previewRotateY: number = 0;
+	public previewRotateZ: number = 0;
+	public previewScaleX: number = 1;
+	public previewScaleY: number = 1;
+	public previewScaleZ: number = 1;
 
 	constructor(id: string) {
 		super();
@@ -458,7 +464,7 @@ class Previewer3D extends Base {
 							mesh.scale.setY(Math.max(s, mesh.scale.y - (mesh.scale.y % s)));
 							mesh.scale.setZ(Math.max(s, mesh.scale.z - (mesh.scale.z % s)));
 						}
-						this.syncSettingsFromMesh();
+						this.syncPreviewTransform();
 						this.onTransformChange?.();
 					});
 					this.scene.add(this.previewTransformControls.getHelper());
@@ -472,7 +478,7 @@ class Previewer3D extends Base {
 				mesh.scale.set(Project.SQUARE_SIZE, Project.SQUARE_SIZE, Project.SQUARE_SIZE);
 			}
 		}
-		this.syncSettingsFromMesh();
+		this.syncPreviewTransform();
 	}
 
 	getPreviewTransformValues(): { x: number; y: number; z: number } {
@@ -500,33 +506,30 @@ class Previewer3D extends Base {
 		} else if (this.previewMode === ACTION_KIND.SCALE) {
 			mesh.scale[axis as AXIS] = value * Project.SQUARE_SIZE;
 		}
-		this.syncSettingsFromMesh();
+		this.syncPreviewTransform();
 		this.onTransformChange?.();
 	}
 
-	syncSettingsFromMesh() {
-		if (!Project.current) {
-			return;
-		}
+	syncPreviewTransform() {
 		if (this.previewMode === ACTION_KIND.ROTATE && this.meshes.length > 0) {
 			const mesh = this.meshes[0];
 			const toDeg = (r: number) => (r * 180) / Math.PI;
-			Project.current.settings.mapEditorDefaultRotateX = toDeg(mesh.rotation.x);
-			Project.current.settings.mapEditorDefaultRotateY = toDeg(mesh.rotation.y);
-			Project.current.settings.mapEditorDefaultRotateZ = toDeg(mesh.rotation.z);
+			this.previewRotateX = toDeg(mesh.rotation.x);
+			this.previewRotateY = toDeg(mesh.rotation.y);
+			this.previewRotateZ = toDeg(mesh.rotation.z);
 		} else if (this.previewMode === ACTION_KIND.SCALE && this.meshes.length > 0) {
 			const mesh = this.meshes[0];
 			const base = Project.SQUARE_SIZE;
-			Project.current.settings.mapEditorDefaultScaleX = mesh.scale.x / base;
-			Project.current.settings.mapEditorDefaultScaleY = mesh.scale.y / base;
-			Project.current.settings.mapEditorDefaultScaleZ = mesh.scale.z / base;
+			this.previewScaleX = mesh.scale.x / base;
+			this.previewScaleY = mesh.scale.y / base;
+			this.previewScaleZ = mesh.scale.z / base;
 		} else {
-			Project.current.settings.mapEditorDefaultRotateX = 0;
-			Project.current.settings.mapEditorDefaultRotateY = 0;
-			Project.current.settings.mapEditorDefaultRotateZ = 0;
-			Project.current.settings.mapEditorDefaultScaleX = 1;
-			Project.current.settings.mapEditorDefaultScaleY = 1;
-			Project.current.settings.mapEditorDefaultScaleZ = 1;
+			this.previewRotateX = 0;
+			this.previewRotateY = 0;
+			this.previewRotateZ = 0;
+			this.previewScaleX = 1;
+			this.previewScaleY = 1;
+			this.previewScaleZ = 1;
 		}
 	}
 

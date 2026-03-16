@@ -1808,8 +1808,6 @@
 	"warning.delete.project": "Are you sure that you want to delete {{projectName}}?",
 	"start.position": "Start position",
 	"transform.options": "{{transform}} options",
-	"edit.default.transform.options": "Edit default {{transformOptions}}",
-	"edit.default.transform.new.elements": "Edit default {{transform}} for new elements",
 	"no.map.element.selected": "No map element selected",
 	"no.objects.in.map": "No objects in this map",
 	"go.to.start.position": "Go to start position",

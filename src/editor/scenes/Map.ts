@@ -45,6 +45,7 @@ import { UndoRedoState } from '../core/UndoRedoState';
 import { Manager, MapElement, Model } from '../Editor';
 import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
+import { Previewer3D } from './Previewer3D';
 
 const { t } = i18next;
 
@@ -1493,15 +1494,18 @@ class Map extends Base {
 							: (this.getMapPortionByPosition(position)?.model.getLastLandLayerAt(position) ??
 								position.layer)) + 1;
 				} else {
-					if (!Map.isRotateDisabled()) {
-						position.angleX = Project.current!.settings.mapEditorDefaultRotateX;
-						position.angleY = Project.current!.settings.mapEditorDefaultRotateY;
-						position.angleZ = Project.current!.settings.mapEditorDefaultRotateZ;
-					}
-					if (!Map.isScaleDisabled()) {
-						position.scaleX = Project.current!.settings.mapEditorDefaultScaleX;
-						position.scaleY = Project.current!.settings.mapEditorDefaultScaleY;
-						position.scaleZ = Project.current!.settings.mapEditorDefaultScaleZ;
+					const previewer = Previewer3D.mainPreviewerScene;
+					if (previewer) {
+						if (!Map.isRotateDisabled()) {
+							position.angleX = previewer.previewRotateX;
+							position.angleY = previewer.previewRotateY;
+							position.angleZ = previewer.previewRotateZ;
+						}
+						if (!Map.isScaleDisabled()) {
+							position.scaleX = previewer.previewScaleX;
+							position.scaleY = previewer.previewScaleY;
+							position.scaleZ = previewer.previewScaleZ;
+						}
 					}
 				}
 			}

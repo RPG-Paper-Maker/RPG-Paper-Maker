@@ -1808,8 +1808,6 @@
 	"warning.delete.project": "本当に {{projectName}} を削除しますか？",
 	"start.position": "スタート位置",
 	"transform.options": "{{transform}} オプション",
-	"edit.default.transform.options": "デフォルトの {{transformOptions}} を編集",
-	"edit.default.transform.new.elements": "新規要素のデフォルト {{transform}} を編集",
 	"no.map.element.selected": "マップ要素が選択されていません",
 	"no.objects.in.map": "このマップにオブジェクトはありません",
 	"go.to.start.position": "スタート位置へ移動",

@@ -1808,8 +1808,6 @@
 	"warning.delete.project": "Ви впевнені, що хочете видалити {{projectName}}?",
 	"start.position": "Початкова позиція",
 	"transform.options": "{{transform}} параметри",
-	"edit.default.transform.options": "Редагувати значення за замовчуванням {{transformOptions}}",
-	"edit.default.transform.new.elements": "Редагувати {{transform}} за умовчанням для нових елементів",
 	"no.map.element.selected": "He вибрано жодного елемента карти",
 	"no.objects.in.map": "В цій карті немає об'єктів",
 	"go.to.start.position": "Перейти до стартової позиції",

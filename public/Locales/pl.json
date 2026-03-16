@@ -1808,8 +1808,6 @@
 	"warning.delete.project": "Czy na pewno chcesz usunąć {{projectName}}?",
 	"start.position": "Pozycja wyjściowa",
 	"transform.options": "Opcje {{transform}}",
-	"edit.default.transform.options": "Edytuj wartość domyślną {{transformOptions}}",
-	"edit.default.transform.new.elements": "Edytuj ustawienia domyślne {{transform}} dla nowych elementów",
 	"no.map.element.selected": "Nie wybrano żadnego elementu mapy",
 	"no.objects.in.map": "Brak obiektów na tej mapie",
 	"go.to.start.position": "Przejdź do pozycji startowej",

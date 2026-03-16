@@ -1809,8 +1809,6 @@
 	"warning.delete.project": "정말로 {{projectName}}을(를) 삭제하시겠습니까?",
 	"start.position": "시작 위치",
 	"transform.options": "{{transform}} 옵션",
-	"edit.default.transform.options": "기본 {{transformOptions}} 편집",
-	"edit.default.transform.new.elements": "새 요소에 대한 기본 {{transform}} 편집",
 	"no.map.element.selected": "선택된 맵 요소가 없습니다",
 	"no.objects.in.map": "이 맵에 오브젝트가 없습니다",
 	"go.to.start.position": "시작 위치로 이동",

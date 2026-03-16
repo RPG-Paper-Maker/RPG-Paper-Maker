@@ -1809,8 +1809,6 @@
 	"warning.delete.project": "确定要删除项目 {{projectName}} 吗？",
 	"start.position": "起始位置",
 	"transform.options": "{{transform}} 选项",
-	"edit.default.transform.options": "编辑默认 {{transformOptions}}",
-	"edit.default.transform.new.elements": "编辑新元素的默认 {{transform}}",
 	"no.map.element.selected": "未选中地图元素",
 	"no.objects.in.map": "此地图中没有对象",
 	"go.to.start.position": "前往开始位置",

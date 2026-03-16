@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowRotateLeft, FaArrowRotateRight } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,7 +18,6 @@ import { Project } from '../../core/Project';
 import { Scene } from '../../Editor';
 import { RootState, setSelectedPosition } from '../../store';
 import Button from '../Button';
-import DialogTransformDefaultValues from '../dialogs/DialogTransformDefaultValues';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
@@ -31,8 +29,6 @@ type Props = {
 
 function PanelTransform({ kind }: Props) {
 	const { t } = useTranslation();
-
-	const [needDefaultDialogOpen, setNeedDefaultDialogOpen] = useState(false);
 
 	const selectedPosition = useSelector((state: RootState) => state.mapEditor.selectedPosition);
 	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
@@ -76,8 +72,6 @@ function PanelTransform({ kind }: Props) {
 			units = '°';
 			break;
 	}
-
-	const canEditDefaultValues = kind !== ACTION_KIND.TRANSLATE;
 
 	const getCurrentX = () => {
 		switch (kind) {
@@ -278,17 +272,12 @@ function PanelTransform({ kind }: Props) {
 		onChange(getCurrent() + delta);
 	};
 
-	const handleClickDefaultValues = () => {
-		setNeedDefaultDialogOpen(true);
-	};
-
 	if (!Scene.Map.current) {
 		return null;
 	}
 
 	return (
-		<>
-			<Groupbox
+		<Groupbox
 				title={
 					<Flex spaced>
 						{title}
@@ -303,11 +292,6 @@ function PanelTransform({ kind }: Props) {
 				}
 			>
 				<Flex column spacedLarge>
-					{canEditDefaultValues && (
-						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
-							transform: kindText.toLowerCase(),
-						})}...`}</Button>
-					)}
 					{isSelected && (
 						<Groupbox title={t('current.values')}>
 							<Flex column spaced>
@@ -417,22 +401,6 @@ function PanelTransform({ kind }: Props) {
 					)}
 				</Flex>
 			</Groupbox>
-			{needDefaultDialogOpen && (
-				<DialogTransformDefaultValues
-					setIsOpen={setNeedDefaultDialogOpen}
-					getMinX={getMinX}
-					getMaxX={getMaxX}
-					getMinY={getMinY}
-					getMaxY={getMaxY}
-					getMinZ={getMinZ}
-					getMaxZ={getMaxZ}
-					isDecimal={isDecimal}
-					units={units}
-					kind={kind}
-					kindText={kindText}
-				/>
-			)}
-		</>
 	);
 }
 

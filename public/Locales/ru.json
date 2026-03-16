@@ -1808,8 +1808,6 @@
 	"warning.delete.project": "Вы уверены, что хотите удалить {{projectName}}?",
 	"start.position": "Начальная позиция",
 	"transform.options": "Параметры {{transform}}",
-	"edit.default.transform.options": "Отредактируйте значение {{transformOptions}} по умолчанию",
-	"edit.default.transform.new.elements": "Изменить {{transform}} по умолчанию для новых элементов",
 	"no.map.element.selected": "Элемент карты не выбран",
 	"no.objects.in.map": "В этой карте нет объектов",
 	"go.to.start.position": "Перейти к стартовой позиции",
