@@ -11,7 +11,7 @@
 
 import { useTranslation } from 'react-i18next';
 import '../../styles/DialogInfoFormulas.css';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
@@ -33,6 +33,7 @@ function DialogInfoFormulas({ setIsOpen }: Props) {
 			onClose={handleClose}
 			initialWidth='700px'
 			initialHeight='600px'
+			zIndex={Z_INDEX_LEVEL.LAYER_THREE}
 		>
 			<div className='dialogInfoFormulas'>
 				<div className='formulaSection'>{t('formulas.section.context')}</div>
