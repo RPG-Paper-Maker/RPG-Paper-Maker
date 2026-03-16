@@ -1847,7 +1847,7 @@ class Map extends Base {
 						}
 					}
 				}
-			} else if (this.canEdit && !this.transformControls.dragging && Inputs.isPointerPressed) {
+			} else if (this.canEdit && !this.transformControls.dragging && (Inputs.isPointerPressed || this.needsMouseDown)) {
 				this.selectedElement =
 					this.pointedMapElement === null ||
 					(Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.ROTATE &&
@@ -1917,8 +1917,10 @@ class Map extends Base {
 				}
 			} else {
 				if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
+					if (this.canEdit && this.transformControls.dragging) {
+						this.isDraggingTransforming = true;
+					}
 					this.needsUpdateRaycasting = true;
-					this.updateMoveTransformDragging();
 				} else {
 					this.camera.onMouseWheelUpdate(this === Map.current);
 				}
@@ -2058,6 +2060,11 @@ class Map extends Base {
 			if (this.needsUpdateRaycasting) {
 				this.updateRaycasting();
 				this.needsUpdateRaycasting = false;
+			}
+
+			// Apply transform snapping in the update loop so it runs after TransformControls has updated the mesh position
+			if (Constants.IS_MOBILE) {
+				this.updateMoveTransformDragging();
 			}
 
 			// Skybox
