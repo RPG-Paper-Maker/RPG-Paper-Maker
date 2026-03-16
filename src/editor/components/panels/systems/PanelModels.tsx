@@ -102,7 +102,7 @@ const PanelModels = forwardRef((props, ref) => {
 	}, [panelMapObjectRef.current, selectedModel]);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('models')}>
 				<Flex column spaced one fillHeight>
 					<Button buttonType={typeDefault} onClick={handleClickDefault}>

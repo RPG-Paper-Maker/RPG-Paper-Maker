@@ -10,6 +10,7 @@
 */
 
 import { useEffect, useMemo, useRef } from 'react';
+import { Constants } from '../common';
 
 type Props = {
 	xValues: number[];
@@ -21,7 +22,7 @@ type Props = {
 function Graph({ xValues, yValues, steps = 5, disabled = false }: Props) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
-	const PIXEL_RATIO = useMemo(() => window.devicePixelRatio || 1, []);
+	const PIXEL_RATIO = useMemo(() => (Constants.IS_MOBILE ? 1 : window.devicePixelRatio || 1), []);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;

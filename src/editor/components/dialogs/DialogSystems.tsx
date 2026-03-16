@@ -103,7 +103,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 			isOpen
 			footer={<FooterCancelSaveClose onCancel={handleReject} onSave={handleSave} onSaveAndClose={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='1000px'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '1000px'}
 			initialHeight='calc(100% - 50px)'
 		>
 			<Tab

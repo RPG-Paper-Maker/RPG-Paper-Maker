@@ -130,32 +130,39 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 								<RadioButton value={SELECTION_TARGET_TYPE.DETECTION}>{t('detection.id')}</RadioButton>
 							</Label>
 							<Value>
-								<Flex spaced>
+								<Flex columnMobile spaced>
 									<DynamicValueSelector
 										value={detectionID}
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 										databaseOptions={Project.current!.systems.detections}
 										disabled={!isDetection}
 									/>
-									<Checkbox
-										isChecked={senderCantReceive}
-										onChange={setSenderCantReceive}
-										disabled={!isDetection}
-									>
-										{t('sender.cant.receive')}
-									</Checkbox>
-									<TooltipInformation
-										text={t('tooltip.sender.cant.receive')}
-										disabled={!isDetection}
-									/>
-									<Checkbox
-										isChecked={onlyTheClosest}
-										onChange={setOnlyTheClosest}
-										disabled={!isDetection}
-									>
-										{t('only.the.closest')}
-									</Checkbox>
-									<TooltipInformation text={t('tooltip.only.the.closest')} disabled={!isDetection} />
+									<Flex spaced>
+										<Checkbox
+											isChecked={senderCantReceive}
+											onChange={setSenderCantReceive}
+											disabled={!isDetection}
+										>
+											{t('sender.cant.receive')}
+										</Checkbox>
+										<TooltipInformation
+											text={t('tooltip.sender.cant.receive')}
+											disabled={!isDetection}
+										/>
+									</Flex>
+									<Flex spaced>
+										<Checkbox
+											isChecked={onlyTheClosest}
+											onChange={setOnlyTheClosest}
+											disabled={!isDetection}
+										>
+											{t('only.the.closest')}
+										</Checkbox>
+										<TooltipInformation
+											text={t('tooltip.only.the.closest')}
+											disabled={!isDetection}
+										/>
+									</Flex>
 								</Flex>
 							</Value>
 							<Label>

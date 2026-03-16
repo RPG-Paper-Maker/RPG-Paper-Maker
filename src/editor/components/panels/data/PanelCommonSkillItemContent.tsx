@@ -172,9 +172,9 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 
 	return (
 		<Flex one column spacedLarge fillWidth fillHeight>
-			<Flex spaced centerV>
+			<Flex columnMobile spaced>
 				{kind !== COMMON_SKILL_ITEM_KIND.SKILL && (
-					<>
+					<Flex spaced centerV>
 						<Flex disabledLabel={disabled}>{t('type')}:</Flex>
 						<Dropdown
 							selectedID={elementType}
@@ -183,7 +183,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 							disabled={disabled}
 							displayIDs
 						/>
-					</>
+					</Flex>
 				)}
 				{kind === COMMON_SKILL_ITEM_KIND.ITEM && (
 					<Checkbox isChecked={consumable} onChange={handleChangeConsumable} disabled={disabled}>
@@ -196,18 +196,20 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 					</Checkbox>
 				)}
 				<Flex one />
-				<Flex disabledLabel={disabled}>{t('icon')}:</Flex>
-				<AssetSelector
-					selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-					kind={PICTURE_KIND.ICONS}
-					selectedID={iconID}
-					indexX={iconIndexX}
-					indexY={iconIndexY}
-					onChange={handleChangeIcon}
-				/>
-				<TextureIconPreviewer id={iconID} indexX={iconIndexX} indexY={iconIndexY} />
+				<Flex spaced centerV>
+					<Flex disabledLabel={disabled}>{t('icon')}:</Flex>
+					<AssetSelector
+						selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+						kind={PICTURE_KIND.ICONS}
+						selectedID={iconID}
+						indexX={iconIndexX}
+						indexY={iconIndexY}
+						onChange={handleChangeIcon}
+					/>
+					<TextureIconPreviewer id={iconID} indexX={iconIndexX} indexY={iconIndexY} />
+				</Flex>
 			</Flex>
-			<Flex one spacedLarge>
+			<Flex columnMobile one spacedLarge>
 				<Flex column spacedLarge>
 					<Flex disabledLabel={disabled}>{t('description')}:</Flex>
 					<InputLocalization
@@ -215,7 +217,7 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 						disabled={disabled}
 						widthType={INPUT_TYPE_WIDTH.FILL}
 					/>
-					<Form>
+					<Form verticalMobile>
 						<Label disabled={disabled}>{t('condition.formula')}</Label>
 						<Value>
 							<DynamicValueSelector

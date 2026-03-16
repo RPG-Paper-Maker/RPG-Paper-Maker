@@ -173,62 +173,66 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 		Project.current!.languages.list.map((language) => (
 			<Flex key={language.id} column spaced>
 				<Flex column>
-					<Flex>
-						<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickBold}>
-							<FaBold />
-						</Button>
-						<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickItalic}>
-							<FaItalic />
-						</Button>
-						<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickLeft}>
-							<FaAlignLeft />
-						</Button>
-						<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickCenter}>
-							<FaAlignCenter />
-						</Button>
-						<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickRight}>
-							<FaAlignRight />
-						</Button>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeFontSize}
-							options={Project.current!.systems.fontSizes}
-							noSelectionName={t('font.size')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeFontName}
-							options={Project.current!.systems.fontNames}
-							noSelectionName={t('font.name')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeTextColor}
-							options={Project.current!.systems.colors}
-							noSelectionName={t('text.color')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeBackColor}
-							options={Project.current!.systems.colors}
-							noSelectionName={t('back.color')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeOutlineColor}
-							options={Project.current!.systems.colors}
-							noSelectionName={t('outline.color')}
-							displayIDs
-							noWidthChange
-						/>
+					<Flex columnMobile>
+						<Flex>
+							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickBold}>
+								<FaBold />
+							</Button>
+							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickItalic}>
+								<FaItalic />
+							</Button>
+							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickLeft}>
+								<FaAlignLeft />
+							</Button>
+							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickCenter}>
+								<FaAlignCenter />
+							</Button>
+							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickRight}>
+								<FaAlignRight />
+							</Button>
+						</Flex>
+						<Flex>
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeFontSize}
+								options={Project.current!.systems.fontSizes}
+								noSelectionName={t('font.size')}
+								displayIDs
+								noWidthChange
+							/>
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeFontName}
+								options={Project.current!.systems.fontNames}
+								noSelectionName={t('font.name')}
+								displayIDs
+								noWidthChange
+							/>
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeTextColor}
+								options={Project.current!.systems.colors}
+								noSelectionName={t('text.color')}
+								displayIDs
+								noWidthChange
+							/>
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeBackColor}
+								options={Project.current!.systems.colors}
+								noSelectionName={t('back.color')}
+								displayIDs
+								noWidthChange
+							/>
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeOutlineColor}
+								options={Project.current!.systems.colors}
+								noSelectionName={t('outline.color')}
+								displayIDs
+								noWidthChange
+							/>
+						</Flex>
 					</Flex>
 					<Flex>
 						<Dropdown

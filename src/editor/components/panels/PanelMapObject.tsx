@@ -508,7 +508,7 @@ const PanelMapObject = forwardRef(
 							/>
 						</Flex>
 					</Flex>
-					<Flex one spacedLarge>
+					<Flex columnMobile one spacedLarge>
 						<Flex one spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 							<Flex column one spaced>
 								<Tab
@@ -530,7 +530,7 @@ const PanelMapObject = forwardRef(
 							</Flex>
 						</Flex>
 						<Flex column spaced>
-							<Flex one spacedLarge>
+							<Flex columnMobile one spacedLarge>
 								<Flex column one spaced>
 									{t('states')}:
 									<Flex one zeroHeight>
@@ -677,7 +677,7 @@ const PanelMapObject = forwardRef(
 						</Flex>
 					</Flex>
 					<Flex spacedLarge>
-						<Flex one spaced>
+						<Flex columnMobile one spaced>
 							<Checkbox
 								isChecked={onlyOneEventPerFrame}
 								onChange={handleChangeOnlyOneEventPerFrame}

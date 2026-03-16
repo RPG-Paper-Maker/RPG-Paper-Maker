@@ -112,24 +112,54 @@ function TextureWindowSkinSelector({
 	}, [currentState, zoomFactor, selectedRectangle]);
 
 	useEffect(() => {
-		const handleMouseDown = (e: MouseEvent) => {
+		const getOffset = (e: MouseEvent | Touch) => {
+			if (e instanceof MouseEvent) {
+				return { x: e.offsetX, y: e.offsetY };
+			}
+			const canvas = refCanvas.current!;
+			const rect = canvas.getBoundingClientRect();
+			return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+		};
+		const handleDown = (x: number, y: number) => {
 			if (!selectedRectangle) {
 				setSelectedRectangle(
-					new Rectangle(Math.floor(e.offsetX / zoomFactor), Math.floor(e.offsetY / zoomFactor), 0, 0),
+					new Rectangle(Math.floor(x / zoomFactor), Math.floor(y / zoomFactor), 0, 0),
 				);
 			}
 		};
-		const handleMouseMove = (e: MouseEvent) => {
+		const handleMove = (x: number, y: number) => {
 			if (selectedRectangle) {
-				selectedRectangle.width = Math.max(0, Math.floor(e.offsetX / zoomFactor) - selectedRectangle.x);
-				selectedRectangle.height = Math.max(0, Math.floor(e.offsetY / zoomFactor) - selectedRectangle.y);
+				selectedRectangle.width = Math.max(0, Math.floor(x / zoomFactor) - selectedRectangle.x);
+				selectedRectangle.height = Math.max(0, Math.floor(y / zoomFactor) - selectedRectangle.y);
 				setSelectedRectangle(selectedRectangle.clone());
 			}
 		};
-		const handleMouseUp = () => {
+		const handleUp = () => {
 			if (selectedRectangle) {
 				onSelectionFinished();
 			}
+		};
+		const handleMouseDown = (e: MouseEvent) => {
+			const { x, y } = getOffset(e);
+			handleDown(x, y);
+		};
+		const handleMouseMove = (e: MouseEvent) => {
+			const { x, y } = getOffset(e);
+			handleMove(x, y);
+		};
+		const handleTouchStart = (e: TouchEvent) => {
+			e.preventDefault();
+			const { x, y } = getOffset(e.touches[0]);
+			handleDown(x, y);
+		};
+		const handleTouchMove = (e: TouchEvent) => {
+			e.preventDefault();
+			const { x, y } = getOffset(e.touches[0]);
+			handleMove(x, y);
+		};
+		const handleTouchEnd = (e: TouchEvent) => {
+			e.preventDefault();
+			handleUp();
 		};
 		update();
 		if (isSelecting) {
@@ -137,11 +167,17 @@ function TextureWindowSkinSelector({
 			if (canvas) {
 				canvas.addEventListener('mousedown', handleMouseDown);
 				canvas.addEventListener('mousemove', handleMouseMove);
-				canvas.addEventListener('mouseup', handleMouseUp);
+				canvas.addEventListener('mouseup', handleUp);
+				canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+				canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+				canvas.addEventListener('touchend', handleTouchEnd);
 				return () => {
 					canvas.removeEventListener('mousedown', handleMouseDown);
 					canvas.removeEventListener('mousemove', handleMouseMove);
-					canvas.removeEventListener('mouseup', handleMouseUp);
+					canvas.removeEventListener('mouseup', handleUp);
+					canvas.removeEventListener('touchstart', handleTouchStart);
+					canvas.removeEventListener('touchmove', handleTouchMove);
+					canvas.removeEventListener('touchend', handleTouchEnd);
 				};
 			}
 		}

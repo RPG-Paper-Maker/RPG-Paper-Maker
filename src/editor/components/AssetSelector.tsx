@@ -206,7 +206,7 @@ function AssetSelector({
 
 	return (
 		<>
-			<Flex one spaced>
+			<Flex one spaced className='assetSelector'>
 				<Tree
 					list={list}
 					defaultSelectedID={-999}

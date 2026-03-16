@@ -136,7 +136,7 @@ function DialogColor({ setIsOpen, model, onAccept, onReject }: Props) {
 					<div>{t('name')}:</div>
 					<InputText value={name} onChange={setName} />
 				</Flex>
-				<Flex spacedLarge>
+				<Flex columnMobile spacedLarge>
 					<ColorPicker value={pickerColor} onChange={handlePickerColorChange} />
 					<Flex column>
 						<Form>

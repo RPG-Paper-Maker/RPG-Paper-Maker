@@ -164,11 +164,11 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	const getGraphicsContent = () => (
 		<Flex column spaced fillWidth fillHeight>
-			<Flex one spaced>
-				<Flex one scrollable>
-					<Flex one zeroWidth>
+			<Flex columnMobile one spaced>
+				<Flex one scrollableNoMobile>
+					<Flex one zeroWidth scrollableMobileOnly>
 						<Flex column one>
-							<Flex one zeroHeight>
+							<Flex one zeroHeightNoMobile>
 								<AnimationPreviewer
 									animation={selectedAnimation}
 									pictureID={pictureID}
@@ -270,10 +270,10 @@ const PanelAnimations = forwardRef((props, ref) => {
 					</Flex>
 				</Groupbox>
 			</Flex>
-			<Flex one scrollable>
-				<Flex one zeroWidth>
+			<Flex one scrollableNoMobile>
+				<Flex one zeroWidth scrollableMobileOnly>
 					<Flex column one>
-						<Flex one zeroHeight>
+						<Flex one zeroHeightNoMobile>
 							<AnimationPreviewerTexture
 								pictureID={pictureID}
 								rows={rows}
@@ -306,7 +306,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 
 	return (
 		<>
-			<Flex spacedLarge fillWidth fillHeight>
+			<Flex columnMobile spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('animations')} disabled={isPlaying}>
 					<Tree
 						constructorType={Animation}
@@ -322,25 +322,29 @@ const PanelAnimations = forwardRef((props, ref) => {
 					/>
 				</Groupbox>
 				<Flex one column spacedLarge>
-					<Flex spaced centerV>
-						<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('picture')}:</Flex>
-						<AssetSelector
-							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-							kind={PICTURE_KIND.ANIMATIONS}
-							selectedID={pictureID}
-							onChange={handleChangePictureID}
-							disabled={isAnimationDisabled || isPlaying}
-						/>
-						<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('position')}:</Flex>
-						<Dropdown
-							selectedID={positionKind}
-							onChange={setPositionKind}
-							options={Base.ANIMATION_POSITION_OPTIONS}
-							disabled={isAnimationDisabled || isPlaying}
-							translateOptions
-						/>
+					<Flex columnMobile spaced>
+						<Flex spaced centerV>
+							<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('picture')}:</Flex>
+							<AssetSelector
+								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+								kind={PICTURE_KIND.ANIMATIONS}
+								selectedID={pictureID}
+								onChange={handleChangePictureID}
+								disabled={isAnimationDisabled || isPlaying}
+							/>
+						</Flex>
+						<Flex spaced centerV>
+							<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('position')}:</Flex>
+							<Dropdown
+								selectedID={positionKind}
+								onChange={setPositionKind}
+								options={Base.ANIMATION_POSITION_OPTIONS}
+								disabled={isAnimationDisabled || isPlaying}
+								translateOptions
+							/>
+						</Flex>
 					</Flex>
-					<Flex one>
+					<Flex columnMobile one>
 						<Flex>
 							<Groupbox title={t('frames')} fillWidth disabled={isAnimationDisabled || isPlaying}>
 								<Tree

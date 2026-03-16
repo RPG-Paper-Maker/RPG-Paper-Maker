@@ -120,7 +120,7 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth>
 				<Groupbox title={t('object')}>
 					<Form>
 						<Label>{t('map.id')}</Label>

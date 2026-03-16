@@ -32,6 +32,8 @@
 		rgba(0, 0, 0, 0.5) 0px 3px 14px 2px;
 	z-index: 998;
 	animation: fadeIn 0.25s;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .dialogDisable {
@@ -70,7 +72,7 @@
 	display: flex;
 	flex-grow: 1;
 	padding: 20px 20px 10px 20px;
-	overflow-x: auto;
+	overflow: auto;
 }
 
 .dialogFooter {

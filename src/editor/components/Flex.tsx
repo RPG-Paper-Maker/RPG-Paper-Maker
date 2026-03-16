@@ -25,14 +25,19 @@ type Props = {
 	centerH?: boolean;
 	centerSelfV?: boolean;
 	rightH?: boolean;
+	columnMobile?: boolean;
 	wrap?: boolean;
 	fillWidth?: boolean;
 	fillHeight?: boolean;
 	zeroWidth?: boolean;
+	zeroWidthNoMobile?: boolean;
 	zeroHeight?: boolean;
+	zeroHeightNoMobile?: boolean;
 	fillSmallSpace?: boolean;
 	disabledLabel?: boolean;
 	scrollable?: boolean;
+	scrollableNoMobile?: boolean;
+	scrollableMobileOnly?: boolean;
 	whiteSpaceNowrap?: boolean;
 	className?: string;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -52,14 +57,19 @@ function Flex({
 	centerH = false,
 	centerSelfV = false,
 	rightH = false,
+	columnMobile = false,
 	wrap = false,
 	fillWidth = false,
 	fillHeight = false,
 	zeroWidth = false,
+	zeroWidthNoMobile = false,
 	zeroHeight = false,
+	zeroHeightNoMobile = false,
 	fillSmallSpace = false,
 	disabledLabel = false,
 	scrollable = false,
+	scrollableNoMobile = false,
+	scrollableMobileOnly = false,
 	whiteSpaceNowrap = false,
 	className,
 	onClick,
@@ -79,14 +89,19 @@ function Flex({
 					flexCenterH: centerH,
 					flexCenterSelfV: centerSelfV,
 					flexRightHorizontally: rightH,
+					mobileColumn: columnMobile,
 					flexWrap: wrap,
 					fillWidth,
 					fillHeight,
 					zeroWidth,
+					zeroWidthNoMobile,
 					zeroHeight,
+					zeroHeightNoMobile,
 					fillSmallSpace,
 					disabledLabel,
 					scrollable,
+					scrollableNoMobile,
+					scrollableMobileOnly,
 					whiteSpaceNowrap,
 				},
 				`flex ${className ?? ''}`,

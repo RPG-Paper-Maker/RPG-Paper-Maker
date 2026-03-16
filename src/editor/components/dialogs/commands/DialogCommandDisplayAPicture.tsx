@@ -102,18 +102,22 @@ function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, 
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge>
-				<Flex spaced centerV>
-					<div className='whiteSpaceNowrap'>{t('image.id')}:</div>
-					<AssetSelector
-						selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-						kind={PICTURE_KIND.PICTURES}
-						selectedDynamic={imageID}
-						active
-					/>
-					<div>{t('index')}:</div>
-					<TooltipInformation text={t('tooltip.picture.index')} />
-					<DynamicValueSelector value={index} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+			<Flex column spacedLarge fillWidth fillHeight>
+				<Flex columnMobile spaced>
+					<Flex spaced centerV>
+						<div className='whiteSpaceNowrap'>{t('image.id')}:</div>
+						<AssetSelector
+							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+							kind={PICTURE_KIND.PICTURES}
+							selectedDynamic={imageID}
+							active
+						/>
+					</Flex>
+					<Flex spaced centerV>
+						<div>{t('index')}:</div>
+						<TooltipInformation text={t('tooltip.picture.index')} />
+						<DynamicValueSelector value={index} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+					</Flex>
 				</Flex>
 				<Flex spaced centerV>
 					<div>{t('origin')}:</div>

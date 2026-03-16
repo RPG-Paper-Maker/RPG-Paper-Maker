@@ -275,7 +275,7 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 		children: ReactNode | ReactNode[],
 		constructorType = Model.Base,
 	) => (
-		<Flex fillWidth fillHeight spacedLarge>
+		<Flex columnMobile fillWidth fillHeight spacedLarge>
 			<Groupbox title={t(title)}>
 				<Tree
 					constructorType={constructorType}

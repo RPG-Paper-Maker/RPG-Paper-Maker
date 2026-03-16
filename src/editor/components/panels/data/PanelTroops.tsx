@@ -124,7 +124,7 @@ const PanelTroops = forwardRef((props, ref) => {
 
 	return (
 		<>
-			<Flex spacedLarge fillWidth fillHeight>
+			<Flex columnMobile spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('troops')}>
 					<Tree
 						constructorType={Model.Troop}
@@ -141,7 +141,7 @@ const PanelTroops = forwardRef((props, ref) => {
 				<Flex one column>
 					<Flex one column scrollable zeroHeight>
 						<Flex column one spacedLarge>
-							<Flex spaced>
+							<Flex columnMobile spaced>
 								<Flex one column spacedLarge>
 									<Button onClick={handleClickTest} disabled={isTroopDisabled}>
 										{t('test')}...
@@ -166,9 +166,9 @@ const PanelTroops = forwardRef((props, ref) => {
 									disabled={isTroopDisabled}
 								/>
 							</Flex>
-							<Flex one>
+							<Flex columnMobile one>
 								<Groupbox title={t('reactions')} disabled={isTroopDisabled} fillWidth>
-									<Flex spacedLarge fillHeight>
+									<Flex columnMobile spacedLarge fillHeight>
 										<Flex>
 											<Tree
 												constructorType={Model.TroopReaction}

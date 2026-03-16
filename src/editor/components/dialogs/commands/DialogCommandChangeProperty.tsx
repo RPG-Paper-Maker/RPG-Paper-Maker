@@ -76,7 +76,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth>
 				<Groupbox title={t('selection')}>
 					<Flex spaced centerV>
 						<div>{t('property.id')}:</div>

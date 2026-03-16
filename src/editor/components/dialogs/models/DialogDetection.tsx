@@ -144,7 +144,7 @@ function DialogDetection({ setIsOpen, model, onAccept, onReject }: Props) {
 			initialWidth='1000px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex spacedLarge fillWidth fillHeight>
+			<Flex columnMobile spacedLarge fillWidth fillHeight>
 				<Flex column spacedLarge>
 					<Flex spaced centerV>
 						<div>{t('name')}:</div>

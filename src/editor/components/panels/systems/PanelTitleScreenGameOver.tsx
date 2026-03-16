@@ -97,9 +97,9 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 
 	return (
 		<Flex column spacedLarge fillWidth fillHeight>
-			<Flex one>
+			<Flex columnMobile one>
 				<Groupbox title={t('title.screen')} fillWidth>
-					<Flex spacedLarge fillHeight>
+					<Flex columnMobile spacedLarge fillHeight>
 						<Flex column spacedLarge>
 							<Groupbox title={t('background')}>
 								<RadioGroup
@@ -172,9 +172,9 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 					</Flex>
 				</Groupbox>
 			</Flex>
-			<Flex one>
+			<Flex columnMobile one>
 				<Groupbox title={t('game.over')} fillWidth>
-					<Flex spacedLarge fillHeight>
+					<Flex columnMobile spacedLarge fillHeight>
 						<Flex column spacedLarge>
 							<Groupbox title={t('background')}>
 								<RadioGroup

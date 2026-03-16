@@ -144,7 +144,15 @@ a {
 	width: 0;
 }
 
+.zeroWidthNoMobile {
+	width: 0;
+}
+
 .zeroHeight {
+	height: 0;
+}
+
+.zeroHeightNoMobile {
 	height: 0;
 }
 
@@ -247,6 +255,12 @@ a {
 }
 
 .scrollable {
+	overflow: auto;
+	overflow-x: overlay;
+	overflow-y: overlay;
+}
+
+.scrollableNoMobile {
 	overflow: auto;
 	overflow-x: overlay;
 	overflow-y: overlay;

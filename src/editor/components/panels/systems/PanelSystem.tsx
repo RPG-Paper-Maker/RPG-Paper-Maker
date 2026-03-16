@@ -208,7 +208,7 @@ const PanelSystem = forwardRef((props, ref) => {
 
 	return (
 		<>
-			<Flex spacedLarge>
+			<Flex columnMobile spacedLarge>
 				<Flex column spacedLarge>
 					<Flex column spaced>
 						<div>{t('game.name')}:</div>
@@ -432,7 +432,7 @@ const PanelSystem = forwardRef((props, ref) => {
 					</Groupbox>
 				</Flex>
 				<Flex column spaced fillWidth>
-					<Flex one spaced>
+					<Flex columnMobile one spaced>
 						<Flex one>
 							<Groupbox title={t('font.sizes')} fillWidth>
 								<Flex one fillHeight>
@@ -455,7 +455,7 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex one spaced>
+					<Flex columnMobile one spaced>
 						<Flex one>
 							<Groupbox title={t('window.skins')} fillWidth>
 								<Flex one fillHeight>
@@ -478,7 +478,7 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex one spaced>
+					<Flex columnMobile one spaced>
 						<Flex one>
 							<Groupbox title={t('detections')} fillWidth>
 								<Flex one fillHeight>
@@ -501,7 +501,7 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 					</Flex>
-					<Flex one spaced>
+					<Flex columnMobile one spaced>
 						<Flex one>
 							<Groupbox title={t('skyboxes')} fillWidth>
 								<Flex one fillHeight>

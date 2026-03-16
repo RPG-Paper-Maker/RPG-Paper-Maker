@@ -239,7 +239,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 							databaseOptions={objectsList}
 						/>
 					</Flex>
-					<Flex spaced>
+					<Flex columnMobile spaced>
 						<Flex one fillWidth>
 							<Flex column spaced one fillWidth>
 								<Flex one zeroHeight>
@@ -277,7 +277,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 							</Flex>
 						</Flex>
 						<Groupbox title={t('moves')}>
-							<Flex spacedLarge>
+							<Flex columnMobile spacedLarge>
 								<Flex column spaced>
 									<div>{t('step.square.moves')}:</div>
 									<Dropdown

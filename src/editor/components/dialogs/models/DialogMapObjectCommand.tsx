@@ -149,7 +149,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	};
 
 	const getStagingContent = () => (
-		<Flex spaced key={0}>
+		<Flex columnMobile spaced key={0}>
 			<Flex column one spaced>
 				<Groupbox title={t('dialogs')}>
 					<Flex column spaced>
@@ -203,7 +203,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	);
 
 	const getMapContent = () => (
-		<Flex spaced key={1}>
+		<Flex columnMobile spaced key={1}>
 			<Flex column one spaced>
 				<Groupbox title={t('menus')}>
 					<Flex column spaced>
@@ -254,7 +254,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	);
 
 	const getBattleContent = () => (
-		<Flex spaced key={2}>
+		<Flex columnMobile spaced key={2}>
 			<Flex column one spaced>
 				<Groupbox title={t('battles')}>
 					<Flex column spaced>
@@ -290,7 +290,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	);
 
 	const getStructureContent = () => (
-		<Flex spaced key={3}>
+		<Flex columnMobile spaced key={3}>
 			<Flex column one spaced>
 				<Groupbox title={t('syntax')}>
 					<Flex column spaced>

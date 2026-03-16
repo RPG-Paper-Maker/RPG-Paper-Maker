@@ -120,7 +120,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge>
+		<Flex columnMobile spacedLarge>
 			<Flex column spacedLarge>
 				<Flex column spaced>
 					<div>{t('statistic.associated.level')}:</div>
@@ -214,7 +214,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				</Checkbox>
 			</Flex>
 			<Flex column spaced fillWidth fillHeight>
-				<Flex one spaced>
+				<Flex columnMobile one spaced>
 					<Flex one>
 						<Groupbox title={t('elements')} fillWidth>
 							<Flex one fillHeight>
@@ -248,7 +248,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 						</Groupbox>
 					</Flex>
 				</Flex>
-				<Flex one spaced>
+				<Flex columnMobile one spaced>
 					<Flex one>
 						<Groupbox title={t('common.battle.commands')} fillWidth>
 							<Flex one fillHeight>

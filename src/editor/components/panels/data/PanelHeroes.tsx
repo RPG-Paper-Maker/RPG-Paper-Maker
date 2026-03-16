@@ -47,7 +47,7 @@ const PanelHeroes = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('heroes')}>
 				<Tree
 					constructorType={Model.Hero}

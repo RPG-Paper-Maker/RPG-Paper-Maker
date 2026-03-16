@@ -122,7 +122,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 	}, [selectedHero]);
 
 	return (
-		<Flex one spacedLarge>
+		<Flex columnMobile one spacedLarge fillWidth>
 			<Flex column spacedLarge fillHeight>
 				<Flex column spaced>
 					<Flex disabledLabel={disabled}>{t('class')}:</Flex>
@@ -138,7 +138,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 					<InputLocalization localization={description} disabled={disabled} />
 				</Flex>
 				<Flex one>
-					<Groupbox title={t('faceset')} disabled={disabled}>
+					<Groupbox title={t('faceset')} disabled={disabled} fillWidth>
 						<AssetSelector
 							selectedID={facesetID}
 							indexX={facesetIndexX}
@@ -168,7 +168,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 					</Groupbox>
 				</Flex>
 				<Flex one>
-					<Groupbox title={t('battler')} disabled={disabled}>
+					<Groupbox title={t('battler')} disabled={disabled} fillWidth>
 						<AssetSelector
 							selectedID={battlerID}
 							onChange={handleBattlerChange}

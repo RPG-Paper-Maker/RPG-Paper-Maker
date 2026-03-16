@@ -74,6 +74,11 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		setTimerID(id);
 	};
 
+	const handleTouchMove = () => {
+		clearTimeout(timerID);
+		setTimerID(undefined);
+	};
+
 	// Function to handle touch end event
 	const handleTouchEnd = () => {
 		// Clear the timer when touch ends
@@ -114,6 +119,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 			ref={refComplete}
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
+			onTouchMove={handleTouchMove}
 			onTouchEnd={handleTouchEnd}
 		>
 			{children}

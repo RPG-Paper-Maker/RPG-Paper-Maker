@@ -266,7 +266,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 						disabled={!isWindowSkinID}
 					/>
 				</Flex>
-				<Flex spaced>
+				<Flex columnMobile spaced>
 					<Flex column spaced>
 						<Groupbox title={t('transform')}>
 							<Form>

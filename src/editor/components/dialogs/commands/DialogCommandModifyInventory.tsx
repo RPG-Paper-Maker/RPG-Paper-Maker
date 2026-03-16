@@ -106,7 +106,7 @@ function DialogCommandModifyInventory({ commandKind, setIsOpen, list, onAccept, 
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth>
 				<Groupbox title={t('selection')}>
 					<RadioGroup selected={selectionItem} onChange={setSelectionItem}>
 						<Form>

@@ -251,7 +251,7 @@ function PanelAssetsPreviewer({
 					)}
 				</Flex>
 			)}
-			<Flex one spacedLarge fillHeight>
+			<Flex columnMobile one spacedLarge fillHeight>
 				<Flex column>
 					<Flex one zeroHeight>
 						{list.length > 0 && (
@@ -275,7 +275,7 @@ function PanelAssetsPreviewer({
 						)}
 					</Flex>
 				</Flex>
-				<Flex one spacedLarge>
+				<Flex columnMobile one spacedLarge>
 					{showAvailableContent && itemsAvailable && (
 						<>
 							<Flex column centerSelfV>
@@ -337,7 +337,7 @@ function PanelAssetsPreviewer({
 							</Flex>
 						</>
 					)}
-					<Flex one column zeroWidth spacedLarge>
+					<Flex one column zeroWidthNoMobile spacedLarge style={{ minHeight: '500px' }}>
 						{selectedItem && (
 							<>
 								<Flex one className='scrollable'>
@@ -346,21 +346,21 @@ function PanelAssetsPreviewer({
 								<div>{options}</div>
 							</>
 						)}
+						{active && dynamicValueID && (
+							<Flex spaced>
+								<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
+									{t('select.by.id')}:
+								</Checkbox>
+								<DynamicValueSelector
+									value={dynamicValueID}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									disabled={!isCheckedActivated}
+								/>
+							</Flex>
+						)}
 					</Flex>
 				</Flex>
 			</Flex>
-			{active && dynamicValueID && (
-				<Flex spaced>
-					<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
-						{t('select.by.id')}:
-					</Checkbox>
-					<DynamicValueSelector
-						value={dynamicValueID}
-						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-						disabled={!isCheckedActivated}
-					/>
-				</Flex>
-			)}
 		</Flex>
 	);
 }

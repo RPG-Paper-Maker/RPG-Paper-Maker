@@ -163,12 +163,13 @@ class Utils {
 
 	static sleep = (ms: number): Promise<void> => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-	static createDoubleTapHandler(threshold = 300): (e: { changedTouches: { length: number } }, callback: () => void) => void {
+	static createDoubleTapHandler(threshold = 300): (e: { changedTouches: { length: number }; preventDefault: () => void }, callback: () => void) => void {
 		let lastTapTime = 0;
 		return (e, callback) => {
 			if (e.changedTouches.length === 1) {
 				const now = Date.now();
 				if (now - lastTapTime < threshold) {
+					e.preventDefault();
 					callback();
 					lastTapTime = 0;
 				} else {

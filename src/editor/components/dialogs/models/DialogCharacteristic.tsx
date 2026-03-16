@@ -197,7 +197,7 @@ function DialogCharacteristic({ setIsOpen, model, onAccept, onReject }: Props) {
 				<RadioButton value={CHARACTERISTIC_KIND.INCREASE_DECREASE}>{t('buff')}</RadioButton>
 			</Label>
 			<Value>
-				<Flex spaced>
+				<Flex columnMobile spaced>
 					<Dropdown
 						selectedID={increaseDescrease}
 						onChange={setIncreaseDecrease}
@@ -305,7 +305,7 @@ function DialogCharacteristic({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	const getCharacterSpecificContent = () => {
 		return (
-			<Form>
+			<Form verticalMobile>
 				<Label>
 					<RadioButton value={CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP}>{t('equip')}</RadioButton>
 				</Label>

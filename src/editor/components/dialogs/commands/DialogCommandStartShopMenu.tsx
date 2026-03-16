@@ -88,7 +88,7 @@ function DialogCommandStartShopMenu({ commandKind, setIsOpen, list, onAccept, on
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='50%'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '50%'}
 			initialHeight='60%'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>

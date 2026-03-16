@@ -90,7 +90,7 @@ const PanelCommonSkillItem = forwardRef(({ kind }: Props, ref) => {
 	};
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t(getLabel())}>
 				<Tree
 					constructorType={Model.CommonSkillItem}

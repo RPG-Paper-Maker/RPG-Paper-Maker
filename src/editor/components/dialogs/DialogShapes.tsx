@@ -174,12 +174,12 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 			title={`${t('select.shape')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='80%'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '80%'}
 			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_THREE}
 		>
-			<Flex spacedLarge fillWidth>
+			<Flex columnMobile spacedLarge fillWidth>
 				{kind === undefined && (
 					<Flex>
 						<Tree

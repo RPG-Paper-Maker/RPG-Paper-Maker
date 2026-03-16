@@ -587,6 +587,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				currentState.pictureModel!.collisions.delete(key);
 			}
 		}
+		draw();
 	};
 
 	useEffect(() => {
@@ -607,8 +608,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		if (canvas) {
 			const handleMouseMove = (e: MouseEvent) => {
 				const rect = canvas.getBoundingClientRect();
-				currentState.mouseX = e.clientX - rect.left;
-				currentState.mouseY = e.clientY - rect.top;
+				currentState.mouseX = Math.max(0, e.clientX - rect.left);
+				currentState.mouseY = Math.max(0, e.clientY - rect.top);
 				const x = Math.floor(currentState.mouseX / zoomFactor / Project.SQUARE_SIZE);
 				const y = Math.floor(currentState.mouseY / zoomFactor / Project.SQUARE_SIZE);
 				currentState.hoveredPoint = new Point(x, y).toKey();
@@ -817,16 +818,39 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					setZoom((v) => Math.min(Math.max(0, v + (event.deltaY < 0 ? 1 : -1)), 10));
 				}
 			};
+			const handleTouchMove = (e: TouchEvent) => {
+				e.preventDefault();
+				const touch = e.touches[0];
+				if (touch) {
+					handleMouseMove(touch as unknown as MouseEvent);
+				}
+			};
+			const handleTouchStart = (e: TouchEvent) => {
+				const touch = e.touches[0];
+				if (touch) {
+					handleMouseMove(touch as unknown as MouseEvent);
+					handleMouseDown({ ...touch, button: 0 } as unknown as MouseEvent);
+				}
+			};
+			const handleTouchEnd = () => {
+				handleMouseUp();
+			};
 			canvas.addEventListener('mousemove', handleMouseMove);
 			canvas.addEventListener('mousedown', handleMouseDown);
 			canvas.addEventListener('dblclick', handleDoubleClick);
+			canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+			canvas.addEventListener('touchstart', handleTouchStart);
 			window.addEventListener('mouseup', handleMouseUp);
+			window.addEventListener('touchend', handleTouchEnd);
 			window.addEventListener('wheel', handleWheel, { passive: false });
 			return () => {
 				canvas.removeEventListener('mousemove', handleMouseMove);
 				canvas.removeEventListener('mousedown', handleMouseDown);
 				canvas.removeEventListener('dblclick', handleDoubleClick);
+				canvas.removeEventListener('touchmove', handleTouchMove, { passive: false } as AddEventListenerOptions);
+				canvas.removeEventListener('touchstart', handleTouchStart);
 				window.removeEventListener('mouseup', handleMouseUp);
+				window.removeEventListener('touchend', handleTouchEnd);
 				window.removeEventListener('wheel', handleWheel, { passive: false } as AddEventListenerOptions);
 			};
 		}
@@ -864,10 +888,10 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						hideScroll
 					/>
 				</Flex>
-				<Flex one scrollable>
-					<Flex one zeroWidth>
+				<Flex one scrollableNoMobile>
+					<Flex one zeroWidth scrollableMobileOnly>
 						<Flex column one>
-							<Flex one zeroHeight>
+							<Flex one zeroHeightNoMobile>
 								<ContextMenu
 									items={getContextMenuItems()}
 									isFocused={isFocused}

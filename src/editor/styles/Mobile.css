@@ -28,12 +28,10 @@
 }
 
 @media (max-width: 1000px) {
-	/* Index 0 (TreeMaps): hide texture content top half */
 	.mobilePanel0 .panelTexturesSplitter > .mobileFillWidth {
 		display: none;
 	}
 
-	/* Index 1 (Textures): hide TreeMaps bottom half, show previewer */
 	.mobilePanel1 .panelTexturesSplitter > .flexOne {
 		display: none;
 	}
@@ -67,6 +65,46 @@
 		max-width: 100% !important;
 	}
 
+	input:not([type='range']) {
+		min-width: 0 !important;
+		max-width: 100px !important;
+	}
+
+	.inputSuffixWrapper {
+		min-width: 0 !important;
+		max-width: 50% !important;
+	}
+
+	.dropdown {
+		max-width: 150px;
+	}
+
+	.assetSelector {
+		max-width: 185px !important;
+	}
+
+	.assetSelector .tree {
+		max-width: 100px !important;
+	}
+
+	.variableSelector {
+		min-width: 0 !important;
+		max-width: 100px !important;
+	}
+
+	.mobileColumn .zeroHeight,
+	.scrollable.zeroHeight {
+		min-height: 150px;
+	}
+
+	.zeroWidthNoMobile {
+		width: auto;
+	}
+
+	.zeroHeightNoMobile {
+		height: auto;
+	}
+
 	.mapEditorBar .menu.menuHorizontal > .menuSub > .title {
 		font-size: 0;
 		gap: 0;
@@ -81,6 +119,32 @@
 
 	.mapEditorBar .menu.menuHorizontal > .menuItem:not(.separator) .tooltip {
 		padding: 5px 7px;
+	}
+
+	.scrollableNoMobile {
+		overflow: initial;
+		overflow-x: initial;
+		overflow-y: initial;
+	}
+
+	.scrollableMobileOnly {
+		overflow: auto;
+		overflow-x: overlay;
+		overflow-y: overlay;
+	}
+
+	table.formVerticalMobile tr {
+		display: flex;
+		flex-direction: column;
+	}
+
+	table.formVerticalMobile tr > :first-child {
+		padding-right: 0;
+		height: auto;
+	}
+
+	table.formVerticalMobile tr > :nth-child(2) {
+		display: block;
 	}
 }
 

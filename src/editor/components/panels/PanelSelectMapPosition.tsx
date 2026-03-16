@@ -140,7 +140,7 @@ const PanelSelectMapPosition = forwardRef(
 		}));
 
 		return (
-			<Flex spaced fillWidth fillHeight>
+			<Flex columnMobile spaced fillWidth fillHeight>
 				<Flex fillHeight>
 					<TreeMaps
 						onSelectedItem={handleSelectedMapItem}
@@ -154,7 +154,7 @@ const PanelSelectMapPosition = forwardRef(
 					<MapPositionSelector currentMapTag={currentMapTag} onCursorUpdated={handleCursorUpdated} />
 				</Flex>
 				<Flex fillHeight>
-					<Groupbox title={t('coordinates')} disabled={disabledCoords}>
+					<Groupbox title={t('coordinates')} disabled={disabledCoords} fillWidth>
 						<Form>
 							<Label disabled={disabledCoords}>X</Label>
 							<Value>

@@ -97,7 +97,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 			<Flex column spacedLarge>
 				<Groupbox title={t('rewards')} disabled={disabled}>
 					<Flex column spacedLarge>
-						<Flex spacedLarge>
+						<Flex columnMobile spacedLarge>
 							<Flex one column spaced>
 								<div>{t('experience')}:</div>
 								<PanelProgression progression={selectedMonster?.experience} disabled={disabled} />

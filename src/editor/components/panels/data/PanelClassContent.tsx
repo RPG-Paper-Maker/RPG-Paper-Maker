@@ -245,7 +245,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 
 	return (
 		<Flex one column spacedLarge fillWidth fillHeight>
-			<Flex two spacedLarge>
+			<Flex columnMobile two spacedLarge>
 				<Flex one>
 					<Groupbox title={t('experience')} disabled={disabled} fillWidth>
 						<Flex one column spacedLarge fillHeight>
@@ -338,6 +338,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							list={characteristics}
 							onListUpdated={handleUpdateCharacteristics}
 							disabled={disabled}
+							minHeight={TREES_MIN_HEIGHT}
 							scrollable
 							canBeEmpty
 							byIndex

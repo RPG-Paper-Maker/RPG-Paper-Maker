@@ -185,7 +185,7 @@ function Tab({
 	return (
 		<div className='tab'>
 			<div className='tabTitles'>
-				<div className={hideScroll ? 'flex' : 'scrollArea'}>
+				<div className={hideScroll ? 'flex flexWrap' : 'scrollArea'}>
 					{closable ? (
 						<ContextMenu
 							items={[
@@ -224,7 +224,7 @@ function Tab({
 			</div>
 			<div
 				className={Utils.getClassName(
-					{ padding, scrollable: scrollableContent, zeroHeight: scrollableContent },
+					{ padding, scrollableNoMobile: scrollableContent, zeroHeight: scrollableContent },
 					'tabContent',
 				)}
 				style={minHeightContent ? { minHeight: minHeightContent } : undefined}

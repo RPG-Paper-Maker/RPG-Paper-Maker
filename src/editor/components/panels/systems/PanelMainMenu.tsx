@@ -57,7 +57,7 @@ const PanelMainMenu = forwardRef((props, ref) => {
 
 	return (
 		<Flex column spacedLarge fillWidth fillHeight>
-			<Flex one spacedLarge>
+			<Flex columnMobile one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('items.types')} fillWidth>
 						<Tree
@@ -74,7 +74,7 @@ const PanelMainMenu = forwardRef((props, ref) => {
 					</Groupbox>
 				</Flex>
 			</Flex>
-			<Flex one spacedLarge>
+			<Flex columnMobile one spacedLarge>
 				<Flex one>
 					<Groupbox title={t('main.menu.commands')} fillWidth>
 						<Tree constructorType={Model.MainMenuCommand} list={mainMenuCommands} scrollable />

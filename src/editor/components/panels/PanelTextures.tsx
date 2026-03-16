@@ -127,10 +127,7 @@ function PanelTextures({ visible, extraContent, mobileMenuIndex }: Props) {
 					return (
 						<Flex centerH centerV one>
 							<Tooltip text={t('go.to.start.position')}>
-								<Button
-									icon={<IoMdLocate />}
-									onClick={handleGoToStartPosition}
-								/>
+								<Button icon={<IoMdLocate />} onClick={handleGoToStartPosition} />
 							</Tooltip>
 						</Flex>
 					);
@@ -182,7 +179,10 @@ function PanelTextures({ visible, extraContent, mobileMenuIndex }: Props) {
 		>
 			<Flex one>
 				<Splitter vertical defaultLeftSize={window.innerHeight / 2} className='panelTexturesSplitter'>
-					<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall panelTexturesMain'>
+					<div
+						ref={refTileset}
+						className='scrollable flex flexColumn flexOne gapSmall panelTexturesMain zeroWidth'
+					>
 						{getMainContent()}
 					</div>
 					{extraContent}
@@ -299,7 +299,11 @@ function PanelTextures({ visible, extraContent, mobileMenuIndex }: Props) {
 					</Groupbox>
 				</div>
 			)}
-			<Flex ref={refPreviewer} centerH className='mobileHidden panelPreviewer3D backgroundDarkestContainers relative'>
+			<Flex
+				ref={refPreviewer}
+				centerH
+				className='mobileHidden panelPreviewer3D backgroundDarkestContainers relative'
+			>
 				<MainPreviewer3D
 					id='texture-previewer'
 					onPreviewModeChange={setPreviewerMode}

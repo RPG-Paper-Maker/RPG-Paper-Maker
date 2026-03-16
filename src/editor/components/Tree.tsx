@@ -1116,7 +1116,10 @@ function Tree({
 				<div
 					onDoubleClick={handleDoubleClick}
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
-					className={Utils.getClassName({ disabled, zeroHeight: scrollable, focused: isFocused }, 'tree')}
+					className={Utils.getClassName(
+						{ disabled, zeroHeightNoMobile: scrollable, focused: isFocused },
+						'tree',
+					)}
 					style={{
 						minWidth: `${minWidth}px`,
 						minHeight: `${minHeight}px`,

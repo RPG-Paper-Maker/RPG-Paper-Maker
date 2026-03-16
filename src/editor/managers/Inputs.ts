@@ -52,10 +52,15 @@ class Inputs {
 	static initialize(canvas: HTMLDivElement, canvasOnly = false) {
 		Inputs.keys = [];
 
+		const getMap = canvasOnly
+			? () => Scene.Map.currentpositionSelector
+			: () => Scene.Map.current;
+
 		if (Constants.IS_MOBILE) {
 			// Pointer down
 			const handlePointerDown = (e: PointerEvent) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				Inputs.isPointerPressed = true;
@@ -66,13 +71,14 @@ class Inputs {
 				Inputs.pointerY = y;
 				Inputs.previousPointerX = x;
 				Inputs.previousPointerY = y;
-				Scene.Map.current.onPointerDown();
+				map.onPointerDown();
 			};
 			canvas.addEventListener('pointerdown', handlePointerDown, false);
 
 			// Pointer move
 			const handlePointerMove = (e: PointerEvent) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				Inputs.isPointerPressed = true;
@@ -83,7 +89,7 @@ class Inputs {
 				Inputs.previousPointerY = Inputs.pointerY;
 				Inputs.pointerX = x;
 				Inputs.pointerY = y;
-				Scene.Map.current.onPointerMove();
+				map.onPointerMove();
 			};
 			canvas.addEventListener('pointermove', handlePointerMove, false);
 
@@ -96,13 +102,13 @@ class Inputs {
 					Inputs.previousTouchDistance = Inputs.touchDistance;
 				}
 			};
-			if (!canvasOnly) {
-				document.addEventListener('touchstart', handleTouchStart, false);
-			}
+			const touchTarget: EventTarget = canvasOnly ? canvas : document;
+			touchTarget.addEventListener('touchstart', handleTouchStart as EventListener, false);
 
 			// Touch move
 			const handleTouchMove = (e: TouchEvent) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				if (e.touches.length === 2) {
@@ -117,33 +123,29 @@ class Inputs {
 					Inputs.previousTouchDistance = 0;
 					Inputs.touchDistance = 0;
 				}
-				Scene.Map.current.onTouchMove();
+				map.onTouchMove();
 			};
-			if (!canvasOnly) {
-				document.addEventListener('touchmove', handleTouchMove, false);
-			}
+			touchTarget.addEventListener('touchmove', handleTouchMove as EventListener, false);
 
 			// Touch end
 			const handleTouchEnd = async () => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				Inputs.previousTouchDistance = 0;
 				Inputs.touchDistance = 0;
-				await Scene.Map.current.onTouchEnd();
+				await map.onTouchEnd();
 				Inputs.isPointerPressed = false;
 			};
-			if (!canvasOnly) {
-				document.addEventListener('touchend', handleTouchEnd, false);
-			}
+			touchTarget.addEventListener('touchend', handleTouchEnd as EventListener, false);
 
 			return () => {
 				canvas.removeEventListener('pointerdown', handlePointerDown, false);
 				canvas.removeEventListener('pointermove', handlePointerMove, false);
-				if (!canvasOnly) {
-					document.removeEventListener('touchmove', handleTouchMove, false);
-					document.removeEventListener('touchend', handleTouchEnd, false);
-				}
+				touchTarget.removeEventListener('touchstart', handleTouchStart as EventListener, false);
+				touchTarget.removeEventListener('touchmove', handleTouchMove as EventListener, false);
+				touchTarget.removeEventListener('touchend', handleTouchEnd as EventListener, false);
 			};
 		} else {
 			// Key down

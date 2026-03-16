@@ -35,7 +35,7 @@ function PanelOperation({ selectionType, setSelectionType }: Props) {
 	return (
 		<Groupbox title={t('operation')}>
 			<RadioGroup selected={selectionType} onChange={setSelectionType}>
-				<Flex spaced>
+				<Flex columnMobile spaced>
 					<RadioButton value={SELECTION_OPERATION_TYPE.EQUALS}>(=) {t('equals')}</RadioButton>
 					<RadioButton value={SELECTION_OPERATION_TYPE.PLUS}>(+) {t('plus')}</RadioButton>
 					<RadioButton value={SELECTION_OPERATION_TYPE.MINUS}>(-) {t('minus')}</RadioButton>

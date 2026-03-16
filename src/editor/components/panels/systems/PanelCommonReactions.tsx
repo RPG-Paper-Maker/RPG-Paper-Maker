@@ -93,7 +93,7 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('common.reactions')}>
 				<Flex one fillHeight>
 					<Tree

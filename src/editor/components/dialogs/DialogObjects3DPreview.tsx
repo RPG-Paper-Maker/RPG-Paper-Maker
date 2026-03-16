@@ -523,32 +523,44 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 							<Form>
 								<Label>{t('width')}</Label>
 								<Value>
-									<Flex spaced>
-										<InputNumber value={widthSquares} onChange={handleChangeWidthSquares} />
-										{t('square.s')}
+									<Flex columnMobile spaced>
+										<Flex spaced>
+											<InputNumber value={widthSquares} onChange={handleChangeWidthSquares} />
+											{t('square.s')}
+										</Flex>
 										<div>+</div>
-										<InputNumber value={widthPixels} onChange={handleChangeWidthPixels} />
-										{t('pixel.s')}
+										<Flex spaced>
+											<InputNumber value={widthPixels} onChange={handleChangeWidthPixels} />
+											{t('pixel.s')}
+										</Flex>
 									</Flex>
 								</Value>
 								<Label>{t('height')}</Label>
 								<Value>
-									<Flex spaced>
-										<InputNumber value={heightSquares} onChange={handleChangeHeightSquares} />
-										{t('square.s')}
+									<Flex columnMobile spaced>
+										<Flex spaced>
+											<InputNumber value={heightSquares} onChange={handleChangeHeightSquares} />
+											{t('square.s')}
+										</Flex>
 										<div>+</div>
-										<InputNumber value={heightPixels} onChange={handleChangeHeightPixels} />
-										{t('pixel.s')}
+										<Flex spaced>
+											<InputNumber value={heightPixels} onChange={handleChangeHeightPixels} />
+											{t('pixel.s')}
+										</Flex>
 									</Flex>
 								</Value>
 								<Label>{t('depth')}</Label>
 								<Value>
-									<Flex spaced>
-										<InputNumber value={depthSquares} onChange={handleChangeDepthSquares} />
-										{t('square.s')}
+									<Flex columnMobile spaced>
+										<Flex spaced>
+											<InputNumber value={depthSquares} onChange={handleChangeDepthSquares} />
+											{t('square.s')}
+										</Flex>
 										<div>+</div>
-										<InputNumber value={depthPixels} onChange={handleChangeDepthPixels} />
-										{t('pixel.s')}
+										<Flex spaced>
+											<InputNumber value={depthPixels} onChange={handleChangeDepthPixels} />
+											{t('pixel.s')}
+										</Flex>
 									</Flex>
 								</Value>
 							</Form>
@@ -565,7 +577,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 			title={`${t('threed.objects')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='80%'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '80%'}
 			initialHeight='calc(100% - 50px)'
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}

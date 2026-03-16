@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowAltCircleUp } from 'react-icons/fa';
-import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY, Utils } from '../common';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
@@ -194,6 +194,9 @@ function MapEditor() {
 	};
 
 	const handleDoubleClick = async () => {
+		if (Constants.IS_MOBILE && Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.MOVE) {
+			return;
+		}
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
 			if (isNew) {

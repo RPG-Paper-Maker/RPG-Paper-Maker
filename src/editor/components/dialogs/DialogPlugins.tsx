@@ -404,7 +404,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 	}, []);
 
 	const getPluginsContent = () => (
-		<Flex key={0} spacedLarge fillWidth fillHeight>
+		<Flex columnMobile key={0} spacedLarge fillWidth fillHeight>
 			<Flex>
 				<Tree
 					constructorType={Model.Plugin}
@@ -587,7 +587,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 	);
 
 	const getPluginsSourceCode = () => (
-		<Flex key={1} spacedLarge fillWidth fillHeight>
+		<Flex columnMobile key={1} spacedLarge fillWidth fillHeight>
 			<Flex>
 				<Tree
 					constructorType={Model.TreeMapTag}
@@ -632,7 +632,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 				/>
 			}
 			onClose={handleCancel}
-			initialWidth='1000px'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '1000px'}
 			initialHeight='700px'
 			isLoading={isLoading}
 		>

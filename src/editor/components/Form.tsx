@@ -15,9 +15,10 @@ import '../styles/Form.css';
 
 type Props = {
 	children: ReactNode[];
+	verticalMobile?: boolean;
 };
 
-function Form({ children }: Props) {
+function Form({ children, verticalMobile = false }: Props) {
 	const getRowsWithoutFragment = (cleanedChildren: ReactNode[], rows: ReactNode[]) => {
 		for (const child of rows) {
 			if (React.isValidElement(child)) {
@@ -47,7 +48,7 @@ function Form({ children }: Props) {
 	};
 
 	return (
-		<table className='form'>
+		<table className={Utils.getClassName({ formVerticalMobile: verticalMobile }, 'form')}>
 			<tbody>{getRows()}</tbody>
 		</table>
 	);

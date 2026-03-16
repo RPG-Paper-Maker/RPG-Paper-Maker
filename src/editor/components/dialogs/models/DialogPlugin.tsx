@@ -359,7 +359,7 @@ const inject = Manager.Plugins.inject;
 								padding
 								scrollableContent
 							/>
-							<Flex spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
+							<Flex columnMobile spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
 								{loadingPlugins ? (
 									<Loader isLoading alone />
 								) : (

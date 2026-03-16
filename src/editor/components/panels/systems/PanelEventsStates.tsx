@@ -65,9 +65,9 @@ const PanelEventsStates = forwardRef((props, ref) => {
 
 	return (
 		<Flex column spacedLarge fillWidth fillHeight>
-			<Flex one>
+			<Flex columnMobile one>
 				<Groupbox title={t('events')} fillWidth>
-					<Flex spacedLarge fillHeight>
+					<Flex columnMobile spacedLarge fillHeight>
 						<Flex column fillHeight>
 							<Flex one fillHeight>
 								<Tree

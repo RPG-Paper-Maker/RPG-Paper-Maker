@@ -9,15 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND } from '../../../common';
 import { Project } from '../../../core/Project';
 import { Rectangle } from '../../../core/Rectangle';
 import { Model } from '../../../Editor';
-import useStateBool from '../../../hooks/useStateBool';
-import useStateNumber from '../../../hooks/useStateNumber';
-import useStateString from '../../../hooks/useStateString';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
 import Dropdown from '../../Dropdown';
@@ -44,59 +41,32 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [isDialogRectangleOpen, setIsDialogRectangleOpen] = useState(false);
-	const [name, setName] = useStateString();
-	const [pictureID, setPictureID] = useStateNumber();
-	const [zoom, setZoom] = useStateNumber();
+	const [name, setName] = useState(windowSkin.name);
+	const [pictureID, setPictureID] = useState(windowSkin.pictureID);
+	const [zoom, setZoom] = useState(6);
 	const [selectedRectangle, setSelectedRectangle] = useState<Rectangle>();
-	const [isSelecting, setIsSelecting] = useStateBool();
+	const [isSelecting, setIsSelecting] = useState(false);
 	const [selectingSetter, setSelectingSetter] = useState<{ setter: (r: Rectangle) => void }>();
-	const [borderTopLeft, setBorderTopLeft] = useState(new Rectangle());
-	const [borderTopRight, setBorderTopRight] = useState(new Rectangle());
-	const [borderBotLeft, setBorderBotLeft] = useState(new Rectangle());
-	const [borderBotRight, setBorderBotRight] = useState(new Rectangle());
-	const [borderLeft, setBorderLeft] = useState(new Rectangle());
-	const [borderRight, setBorderRight] = useState(new Rectangle());
-	const [borderTop, setBorderTop] = useState(new Rectangle());
-	const [borderBot, setBorderBot] = useState(new Rectangle());
-	const [background, setBackground] = useState(new Rectangle());
-	const [backgroundSelection, setBackgroundSelection] = useState(new Rectangle());
-	const [backgroundRepeatIndex, setBackgroundRepeatIndex] = useStateNumber();
-	const [arrowTargetSelection, setArrowTargetSelection] = useState(new Rectangle());
-	const [arrowEndMessage, setArrowEndMessage] = useState(new Rectangle());
-	const [arrowUpDown, setArrowUpDown] = useState(new Rectangle());
-	const [normalText, setNormalText] = useState(new Rectangle());
-	const [healText, setHealText] = useState(new Rectangle());
-	const [criticalText, setCriticalText] = useState(new Rectangle());
-	const [missText, setMissText] = useState(new Rectangle());
+	const [borderTopLeft, setBorderTopLeft] = useState(windowSkin.borderTopLeft.clone());
+	const [borderTopRight, setBorderTopRight] = useState(windowSkin.borderTopRight.clone());
+	const [borderBotLeft, setBorderBotLeft] = useState(windowSkin.borderBotLeft.clone());
+	const [borderBotRight, setBorderBotRight] = useState(windowSkin.borderBotRight.clone());
+	const [borderLeft, setBorderLeft] = useState(windowSkin.borderLeft.clone());
+	const [borderRight, setBorderRight] = useState(windowSkin.borderRight.clone());
+	const [borderTop, setBorderTop] = useState(windowSkin.borderTop.clone());
+	const [borderBot, setBorderBot] = useState(windowSkin.borderBot.clone());
+	const [background, setBackground] = useState(windowSkin.background.clone());
+	const [backgroundSelection, setBackgroundSelection] = useState(windowSkin.backgroundSelection.clone());
+	const [backgroundRepeatIndex, setBackgroundRepeatIndex] = useState(windowSkin.backgroundRepeat ? 1 : 0);
+	const [arrowTargetSelection, setArrowTargetSelection] = useState(windowSkin.arrowTargetSelection.clone());
+	const [arrowEndMessage, setArrowEndMessage] = useState(windowSkin.arrowEndMessage.clone());
+	const [arrowUpDown, setArrowUpDown] = useState(windowSkin.arrowUpDown.clone());
+	const [normalText, setNormalText] = useState(windowSkin.textNormal.clone());
+	const [healText, setHealText] = useState(windowSkin.textHeal.clone());
+	const [criticalText, setCriticalText] = useState(windowSkin.textCritical.clone());
+	const [missText, setMissText] = useState(windowSkin.textMiss.clone());
 
 	const selectedPicture = Project.current!.pictures.getByID(PICTURE_KIND.WINDOW_SKINS, pictureID);
-
-	const initialize = () => {
-		setIsDialogRectangleOpen(false);
-		setName(windowSkin.name);
-		setPictureID(windowSkin.pictureID);
-		setZoom(6);
-		setSelectedRectangle(undefined);
-		setIsSelecting(false);
-		borderTopLeft.copy(windowSkin.borderTopLeft);
-		borderTopRight.copy(windowSkin.borderTopRight);
-		borderBotLeft.copy(windowSkin.borderBotLeft);
-		borderBotRight.copy(windowSkin.borderBotRight);
-		borderLeft.copy(windowSkin.borderLeft);
-		borderRight.copy(windowSkin.borderRight);
-		borderTop.copy(windowSkin.borderTop);
-		borderBot.copy(windowSkin.borderBot);
-		background.copy(windowSkin.background);
-		backgroundSelection.copy(windowSkin.backgroundSelection);
-		setBackgroundRepeatIndex(windowSkin.backgroundRepeat ? 1 : 0);
-		arrowTargetSelection.copy(windowSkin.arrowTargetSelection);
-		arrowEndMessage.copy(windowSkin.arrowEndMessage);
-		arrowUpDown.copy(windowSkin.arrowUpDown);
-		normalText.copy(windowSkin.textNormal);
-		healText.copy(windowSkin.textHeal);
-		criticalText.copy(windowSkin.textCritical);
-		missText.copy(windowSkin.textMiss);
-	};
 
 	const handleMouseEnterButton = (rectangle: Rectangle) => {
 		if (!isSelecting) {
@@ -153,10 +123,6 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
-		initialize();
-	}, []);
-
 	const getRectangleButtons = (label: string, rectangle: Rectangle, setRectangle: (r: Rectangle) => void) => (
 		<>
 			<Label disabled={isSelecting}>{t(label)}</Label>
@@ -191,9 +157,9 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 				initialWidth='750px'
 				initialHeight='400px'
 			>
-				<Flex spacedLarge fillWidth>
-					<Flex one column spacedLarge zeroWidth>
-						<Flex one scrollable>
+				<Flex columnMobile spacedLarge fillWidth>
+					<Flex one column spacedLarge zeroWidthNoMobile scrollableMobileOnly>
+						<Flex one scrollableNoMobile>
 							<TextureWindowSkinSelector
 								texture={selectedPicture?.getPath()}
 								zoom={zoom}

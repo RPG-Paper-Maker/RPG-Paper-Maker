@@ -65,7 +65,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('tilesets')}>
 				<Tree
 					constructorType={Tileset}
@@ -80,7 +80,7 @@ const PanelTilesets = forwardRef((props, ref) => {
 				/>
 			</Groupbox>
 			<Flex one column spacedLarge>
-				<Flex spacedLarge>
+				<Flex columnMobile spacedLarge>
 					<Flex spaced centerV>
 						<Flex disabledLabel={isTilesetDisabled}>{t('picture')}:</Flex>
 						<AssetSelector

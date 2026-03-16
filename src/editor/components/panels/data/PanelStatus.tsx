@@ -151,7 +151,7 @@ const PanelStatus = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
+		<Flex columnMobile spacedLarge fillWidth fillHeight>
 			<Groupbox title={t('status')}>
 				<Tree
 					constructorType={Status}
@@ -166,9 +166,9 @@ const PanelStatus = forwardRef((props, ref) => {
 					doNotOpenDialog
 				/>
 			</Groupbox>
-			<Flex one>
+			<Flex columnMobile one>
 				<Flex one column spacedLarge>
-					<Form>
+					<Form verticalMobile>
 						<Label disabled={isStatusDisabled}>{t('animation.id')}</Label>
 						<Value>
 							<DynamicValueSelector

@@ -65,6 +65,7 @@ function VariableSelector({
 			<Flex
 				one
 				spaced
+				className='variableSelector'
 				onDoubleClick={handleOpenVariables}
 				style={{ minWidth: INPUT_WIDTH, maxWidth: fillWidth ? undefined : INPUT_WIDTH }}
 			>

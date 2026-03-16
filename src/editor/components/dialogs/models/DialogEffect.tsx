@@ -230,14 +230,16 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	const getFooter = () => (
 		<Flex spaced centerV>
-			<Checkbox isChecked={isTemporarilyChangeTarget} onChange={setIsTemporarilyChangeTarget}>
-				{t('temporarily.change.target')}:
-			</Checkbox>
-			<DynamicValueSelector
-				value={temporarilyChangeTargetFormula}
-				optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-				disabled={!isTemporarilyChangeTarget}
-			/>
+			<Flex columnMobile>
+				<Checkbox isChecked={isTemporarilyChangeTarget} onChange={setIsTemporarilyChangeTarget}>
+					{t('temporarily.change.target')}:
+				</Checkbox>
+				<DynamicValueSelector
+					value={temporarilyChangeTargetFormula}
+					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+					disabled={!isTemporarilyChangeTarget}
+				/>
+			</Flex>
 			<Flex one />
 			<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />
 		</Flex>
@@ -255,7 +257,7 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 				<RadioGroup selected={kind} onChange={handleChangeKind}>
 					<Flex one column>
 						<Flex one column scrollable zeroHeight>
-							<Form>
+							<Form verticalMobile>
 								<Label>
 									<RadioButton value={EFFECT_KIND.DAMAGES}>{t('damages.on')}</RadioButton>
 								</Label>
