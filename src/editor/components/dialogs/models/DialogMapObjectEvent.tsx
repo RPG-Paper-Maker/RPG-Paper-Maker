@@ -56,6 +56,7 @@ function DialogMapObjectEvent({ setIsOpen, model, isNew, onAccept, onReject }: P
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			initialHeight='300px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<PanelObjectEvent event={event} isNew={isNew} ref={panelPositionRef} />
