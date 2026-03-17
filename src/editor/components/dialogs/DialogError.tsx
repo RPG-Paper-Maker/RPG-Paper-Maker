@@ -17,6 +17,7 @@ import { BUTTON_TYPE, Constants } from '../../common';
 import { Project } from '../../core/Project';
 import { RootState, setErrorDialog } from '../../store';
 import Button from '../Button';
+import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import InputText from '../InputText';
 import TextArea from '../TextArea';
@@ -28,6 +29,7 @@ function DialogError() {
 	const dispatch = useDispatch();
 	const errorDialog = useSelector((state: RootState) => state.projects.errorDialog);
 	const [email, setEmail] = useState('');
+	const [isDescription, setIsDescription] = useState(false);
 	const [description, setDescription] = useState('');
 	const [sendStatus, setSendStatus] = useState<{ ok: boolean; message: string } | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -51,7 +53,7 @@ function DialogError() {
 					message: errorDialog.message,
 					stack: errorDialog.stack,
 					email,
-					description,
+					description: isDescription ? description : undefined,
 				}),
 			});
 			if (!res.ok) {
@@ -72,10 +74,20 @@ function DialogError() {
 		<Dialog
 			isOpen
 			title={t('error.dialog.title')}
-			footer={<FooterOK onOK={handleClose} />}
+			footer={
+				<FooterOK
+					onOK={handleClose}
+					leftContent={
+						<Checkbox isChecked={isDescription} onChange={setIsDescription}>
+							{t('error.dialog.optional.description')}
+						</Checkbox>
+					}
+				/>
+			}
 			onClose={handleClose}
 			zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 			isLoading={loading}
+			initialHeight='300px'
 		>
 			<Flex column spaced>
 				<p>{t('error.dialog.intro')}</p>
@@ -88,22 +100,32 @@ function DialogError() {
 						{sendStatus.message}
 					</div>
 				) : (
-					<Flex column spaced fillWidth>
-						<InputText value={email} onChange={setEmail} placeholder={t('error.dialog.optional.mail')} />
-						<TextArea
-							text={description}
-							onChange={setDescription}
-							placeholder={t('error.dialog.optional.description')}
-							smallDefaultHeight
+					<Flex column={isDescription} spaced fillWidth fillHeight centerV>
+						<Flex one />
+						<InputText
+							value={email}
+							onChange={setEmail}
+							placeholder={t('error.dialog.optional.mail')}
+							style={{ width: isDescription ? '100%' : undefined }}
 						/>
+						{isDescription && (
+							<TextArea
+								text={description}
+								onChange={setDescription}
+								placeholder={t('error.dialog.optional.description')}
+								smallDefaultHeight
+							/>
+						)}
 						<Button
 							icon={<IoIosSend />}
 							buttonType={BUTTON_TYPE.PRIMARY}
 							onClick={sendErrorReport}
 							disabled={!!sendStatus}
+							fillWidth={isDescription}
 						>
 							{t('error.dialog.mail')}
 						</Button>
+						<Flex one />
 					</Flex>
 				)}
 			</Flex>

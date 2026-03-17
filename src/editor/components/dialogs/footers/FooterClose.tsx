@@ -11,6 +11,7 @@
 
 import { useTranslation } from 'react-i18next';
 import Button from '../../Button';
+import Flex from '../../Flex';
 
 type Props = {
 	onClose: () => void;
@@ -20,9 +21,10 @@ function FooterClose({ onClose }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footerButtons'>
+		<Flex centerV spaced>
+			<Flex one />
 			<Button onClick={onClose}>{t('close')}</Button>
-		</div>
+		</Flex>
 	);
 }
 

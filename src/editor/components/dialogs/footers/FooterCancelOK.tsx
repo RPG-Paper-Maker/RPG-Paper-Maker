@@ -12,6 +12,7 @@
 import { useTranslation } from 'react-i18next';
 import { BUTTON_TYPE } from '../../../common';
 import Button from '../../Button';
+import Flex from '../../Flex';
 
 type Props = {
 	onOK: () => void;
@@ -22,12 +23,13 @@ function FooterCancelOK({ onOK, onCancel }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footerButtons'>
+		<Flex centerV spaced>
+			<Flex one />
 			<Button onClick={onCancel}>{t('cancel')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
 				{t('ok')}
 			</Button>
-		</div>
+		</Flex>
 	);
 }
 

@@ -12,6 +12,7 @@
 import { useTranslation } from 'react-i18next';
 import { BUTTON_TYPE } from '../../../common';
 import Button from '../../Button';
+import Flex from '../../Flex';
 
 type Props = {
 	onCancel: () => void;
@@ -23,13 +24,14 @@ function FooterCancelSaveClose({ onCancel, onSave, onSaveAndClose }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footerButtons'>
+		<Flex centerV spaced>
+			<Flex one />
 			<Button onClick={onCancel}>{t('cancel')}</Button>
 			<Button onClick={onSave}>{t('save')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onSaveAndClose}>
 				{t('save.and.close')}
 			</Button>
-		</div>
+		</Flex>
 	);
 }
 

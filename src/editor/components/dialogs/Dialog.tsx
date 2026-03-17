@@ -19,7 +19,6 @@ import { Inputs } from '../../managers';
 import { setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
-import '../../styles/Footer.css';
 import Button from '../Button';
 import Flex from '../Flex';
 import Loader from '../Loader';

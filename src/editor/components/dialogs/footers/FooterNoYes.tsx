@@ -12,6 +12,7 @@
 import { useTranslation } from 'react-i18next';
 import { BUTTON_TYPE } from '../../../common';
 import Button from '../../Button';
+import Flex from '../../Flex';
 
 type Props = {
 	onNo: () => void;
@@ -22,12 +23,13 @@ function FooterNoYes({ onNo, onYes }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footerButtons'>
+		<Flex centerV spaced>
+			<Flex one />
 			<Button onClick={onNo}>{t('no')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>
 				{t('yes')}
 			</Button>
-		</div>
+		</Flex>
 	);
 }
 

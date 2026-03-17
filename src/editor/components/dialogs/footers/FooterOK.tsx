@@ -9,23 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BUTTON_TYPE } from '../../../common';
 import Button from '../../Button';
+import Flex from '../../Flex';
 
 type Props = {
 	onOK: () => void;
+	leftContent?: ReactNode;
 };
 
-function FooterOK({ onOK }: Props) {
+function FooterOK({ onOK, leftContent }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footerButtons'>
+		<Flex centerV spaced>
+			{leftContent}
+			<Flex one />
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
 				{t('ok')}
 			</Button>
-		</div>
+		</Flex>
 	);
 }
 
