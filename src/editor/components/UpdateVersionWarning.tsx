@@ -25,7 +25,7 @@ function UpdateVersionWarning() {
 	const tryGetLatestVersion = async () => {
 		try {
 			const response = await fetch(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0-master/public/version',
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/public/version',
 			);
 			if (response.ok) {
 				const trimmed = (await response.text()).trim();

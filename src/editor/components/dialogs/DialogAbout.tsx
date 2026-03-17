@@ -33,7 +33,7 @@ function DialogAbout({ setIsOpen }: Props) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [patreons, setPatreons] = useState<PatreonJSONType>();
 
-	const changelogsLink = 'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/web-3.0.0-master/changelogs';
+	const changelogsLink = 'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/changelogs';
 
 	const initialize = async () => {
 		setPatreons(JSON.parse(await readPublicFile(Paths.FILE_PATREON)));

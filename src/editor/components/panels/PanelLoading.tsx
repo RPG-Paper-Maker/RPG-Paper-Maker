@@ -137,7 +137,7 @@ function PanelLoading({ setLoaded }: Props) {
 			EngineSettings.current.lastEngineVersion = Project.VERSION;
 			await EngineSettings.current.save();
 			if (version !== null) {
-				const link = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/web-3.0.0-master/changelogs/${Project.VERSION}.md`;
+				const link = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/changelogs/${Project.VERSION}.md`;
 				notifySuccess(
 					<div>
 						{t('engine.updated.successfully', {

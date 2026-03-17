@@ -44,7 +44,7 @@ import { PluginParameter } from './PluginParameter';
 class Plugin extends Checkable {
 	public static type = 'Plugin';
 	public static readonly BASE_GIT_URL =
-		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins';
+		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/develop/plugins';
 	public type!: PLUGIN_TYPE_KIND;
 	public category!: PLUGIN_CATEGORY_KIND;
 	public author!: string;
