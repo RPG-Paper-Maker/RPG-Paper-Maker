@@ -31,12 +31,20 @@ function DialogDLCs({ setIsOpen }: Props) {
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [dlcs, setDlcs] = useState<Checkable[]>([]);
+	const [wrongFolderPath, setWrongFolderPath] = useState(false);
 
 	const dispatch = useDispatch();
 
 	const updateDLCsList = async () => {
-		const names = await IO.getFolders(Paths.join(Paths.DIST, Paths.DLCS));
-		setDlcs(names.map((name) => Checkable.createCheckable(-1, name, Project.current!.dlcs.list.includes(name))));
+		try {
+			const names = await IO.getFolders(Paths.join(window.env.appPath, Paths.DLCS));
+			setDlcs(
+				names.map((name) => Checkable.createCheckable(-1, name, Project.current!.dlcs.list.includes(name))),
+			);
+		} catch (error: unknown) {
+			setWrongFolderPath(true);
+			console.warn(t('warning.dlcs.folder.path.wrong'), error);
+		}
 		setIsLoading(false);
 	};
 
@@ -45,7 +53,7 @@ function DialogDLCs({ setIsOpen }: Props) {
 		if (path) {
 			setIsLoading(true);
 			const folderName = Paths.getFileName(path);
-			await IO.copyFolder(path, Paths.join(Paths.DIST, Paths.DLCS, folderName));
+			await IO.copyFolder(path, Paths.join(window.env.appPath, Paths.DLCS, folderName));
 			await updateDLCsList();
 		}
 	};
@@ -103,7 +111,9 @@ function DialogDLCs({ setIsOpen }: Props) {
 			<Flex column spacedLarge fillWidth fillHeight>
 				<Flex>
 					<Flex one />
-					<Button onClick={handleClickImportDLC}>{t('import.dlc.s')}...</Button>
+					<Button onClick={handleClickImportDLC} disabled={wrongFolderPath}>
+						{t('import.dlc.s')}...
+					</Button>
 					<Flex one />
 				</Flex>
 				{getDlcsContent()}

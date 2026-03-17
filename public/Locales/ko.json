@@ -1805,6 +1805,7 @@
 	"starting.map": "시작 맵",
 	"folder.name": "폴더 이름",
 	"warning.project.exist.overwrite": "이 프로젝트가 이미 {{path}}에 존재합니다. 덮어쓰시겠습니까?",
+	"warning.dlcs.folder.path.wrong": "DLC 폴더 경로가 잘못되었습니다",
 	"new.folder": "새 폴더",
 	"warning.delete.project": "정말로 {{projectName}}을(를) 삭제하시겠습니까?",
 	"start.position": "시작 위치",

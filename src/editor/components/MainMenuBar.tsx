@@ -71,6 +71,7 @@ import {
 	RootState,
 	setCurrentProject,
 	setCurrentTreeMapTag,
+	setErrorDialog,
 	setLoading,
 	setLoadingBar,
 	setNeedsReloadMap,
@@ -105,7 +106,6 @@ import {
 	triggerVariables,
 	triggerVideos,
 	triggerWalls,
-	setErrorDialog,
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
@@ -328,7 +328,7 @@ function MainMenuBar() {
 					await Project.current.systems.save();
 				}
 				if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
-					const newDLCsPath = Paths.join(Paths.DIST, Paths.DLCS);
+					const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
 					Project.current.systems.PATH_DLCS = newDLCsPath;
 					await Project.current.systems.save();
 				}
@@ -1315,7 +1315,7 @@ function MainMenuBar() {
 												onClick={(e) => {
 													e.preventDefault();
 													void openWebsite(
-														'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/2.0.11/RPG.Paper.Maker.2.0.11.zip'
+														'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/2.0.11/RPG.Paper.Maker.2.0.11.zip',
 													);
 												}}
 											>

@@ -4,7 +4,7 @@
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
 
-  f'F<<<<<<<<<<A35HHHCFFA33333333333333333333333333333333333333333333333333333333333 J  Use Commercial edition for commercial use of your games.
+	Use Commercial edition for commercial use of your games.
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */

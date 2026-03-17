@@ -1804,6 +1804,7 @@
 	"starting.map": "Начальная карта",
 	"folder.name": "Имя папки",
 	"warning.project.exist.overwrite": "Этот проект уже существует в {{path}}. Вы хотите ero перезаписать?",
+	"warning.dlcs.folder.path.wrong": "Путь к папке DLC неверен",
 	"new.folder": "Новая папка",
 	"warning.delete.project": "Вы уверены, что хотите удалить {{projectName}}?",
 	"start.position": "Начальная позиция",

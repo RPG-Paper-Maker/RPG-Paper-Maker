@@ -161,7 +161,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		await project.load();
 		if (Constants.IS_DESKTOP) {
 			project.systems.PATH_BR = Paths.join(Paths.DIST, Paths.BR);
-			project.systems.PATH_DLCS = Paths.join(Paths.DIST, Paths.DLCS);
+			project.systems.PATH_DLCS = Paths.join(window.env.appPath, Paths.DLCS);
 		}
 		if (projectType !== PROJECT_TYPE.TUTORIAL) {
 			await Model.Map.createDefaultMap(1, t('starting.map'));

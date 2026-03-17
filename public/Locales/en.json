@@ -1804,6 +1804,7 @@
 	"starting.map": "Starting map",
 	"folder.name": "Folder name",
 	"warning.project.exist.overwrite": "This project already exists in {{path}}. Would you like to overwrite it?",
+	"warning.dlcs.folder.path.wrong": "The DLCs folder path is wrong",
 	"new.folder": "New folder",
 	"warning.delete.project": "Are you sure that you want to delete {{projectName}}?",
 	"start.position": "Start position",

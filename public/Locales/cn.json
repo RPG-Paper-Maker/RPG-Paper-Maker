@@ -1805,6 +1805,7 @@
 	"starting.map": "起始地图",
 	"folder.name": "文件夹名称",
 	"warning.project.exist.overwrite": "路径 {{path}} 中已存在此项目。是否覆盖？",
+	"warning.dlcs.folder.path.wrong": "DLC 文件夹路径不正确",
 	"new.folder": "新建文件夹",
 	"warning.delete.project": "确定要删除项目 {{projectName}} 吗？",
 	"start.position": "起始位置",

@@ -1804,6 +1804,7 @@
 	"starting.map": "Startkarte",
 	"folder.name": "Ordnername",
 	"warning.project.exist.overwrite": "Dieses Projekt existiert bereits in {{path}}. Möchten Sie es überschreiben?",
+	"warning.dlcs.folder.path.wrong": "Der DLCs-Ordnerpfad ist falsch",
 	"new.folder": "Neuer Ordner",
 	"warning.delete.project": "Sind Sie sicher, dass Sie {{projectName}} löschen möchten?",
 	"start.position": "Startposition",

@@ -56,16 +56,14 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 	};
 
 	const handleClickAuto = async () => {
-		let folderName: string;
 		switch (locationType) {
 			case LOCATION_TYPE.BR:
-				folderName = Paths.BR;
+				setLocation(Paths.join(Paths.DIST, Paths.BR));
 				break;
 			case LOCATION_TYPE.DLCS:
-				folderName = Paths.DLCS;
+				setLocation(Paths.join(window.env.appPath, Paths.DLCS));
 				break;
 		}
-		setLocation(Paths.join(Paths.DIST, folderName));
 	};
 
 	const handleAccept = async () => {

@@ -1804,6 +1804,7 @@
 	"starting.map": "Carte de départ",
 	"folder.name": "Nom du dossier",
 	"warning.project.exist.overwrite": "Ce projet existe déjà dans {{path}}. Souhaitez vous l'écraser ?",
+	"warning.dlcs.folder.path.wrong": "Le chemin du dossier DLCs est incorrect",
 	"new.folder": "Nouveau dossier",
 	"warning.delete.project": "Etes vous sûr de vouloir supprimer {{projectName}} ?",
 	"start.position": "Position de départ",
