@@ -22,12 +22,12 @@ git push origin ${tagName}
 
 sleep 60
 
-git checkout web-3.0.0-master
-git pull --rebase origin web-3.0.0
-git push origin web-3.0.0-master
-git checkout web-3.0.0
+git checkout master
+git pull --rebase origin develop
+git push origin master
+git checkout develop
 cd ../Game-Scripts
-git checkout web-3.0.0-master
-git pull --rebase origin web-3.0.0
-git push origin web-3.0.0-master
-git checkout web-3.0.0
+git checkout master
+git pull --rebase origin develop
+git push origin master
+git checkout develop
