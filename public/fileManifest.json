@@ -520,11 +520,6 @@
       "preload.js"
     ]
   },
-  "DLCs": {
-    "files": [
-      "empty"
-    ]
-  },
   "Locales": {
     "files": [
       "br.json",
