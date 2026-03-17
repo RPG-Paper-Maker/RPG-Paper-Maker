@@ -71,10 +71,7 @@ const runRPMEngine = () => {
 		if (!isReadyToClose) {
 			e.preventDefault();
 			window.webContents.send('before-close');
-			return;
 		}
-		game?.close();
-		game = null;
 	});
 };
 
@@ -629,7 +626,14 @@ ipcMain.handle('close', () => {
 	window.close();
 });
 
-ipcMain.handle('ready-to-close', () => {
+ipcMain.handle('ready-to-close', async () => {
+	if (game && !game.isDestroyed()) {
+		await new Promise((resolve) => {
+			game.once('closed', resolve);
+			game.close();
+		});
+		game = null;
+	}
 	isReadyToClose = true;
 	window.close();
 });
