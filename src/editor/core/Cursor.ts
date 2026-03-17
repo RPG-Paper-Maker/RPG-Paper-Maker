@@ -134,6 +134,7 @@ class Cursor {
 	}
 
 	updateMeshPosition() {
+		if (!this.mesh) return;
 		const vector = this.position.toVector3(false);
 		this.mesh.position.set(vector.x, vector.y + this.map.camera.getYOffsetDepth(), vector.z);
 	}
