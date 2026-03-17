@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+		<meta name="theme-color" content="#000000" />
+		<title>Updater</title>
+		<style>
+			body {
+				font-family: sans-serif;
+				padding: 10px;
+			}
+			.flex {
+				display: flex;
+			}
+			.column {
+				flex-direction: column;
+			}
+			.spaced {
+				gap: 10px;
+			}
+			.centerV {
+				align-items: center;
+			}
+			.hidden {
+				visibility: hidden;
+			}
+			fieldset {
+				border: 1px solid #ccc;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			select {
+				margin-left: 10px;
+				padding: 5px;
+			}
+			input[type='radio'] {
+				margin: 0;
+			}
+			button {
+				padding: 8px 14px;
+				border: none;
+				border-radius: 5px;
+				background-color: #4caf50;
+				color: white;
+				cursor: pointer;
+			}
+			button:disabled {
+				background-color: #ccc;
+			}
+			#progressContainer {
+				width: 100%;
+				height: 20px;
+				background: #ddd;
+				margin-top: 10px;
+				text-align: center;
+			}
+			#progressBar {
+				width: 0%;
+				height: 100%;
+				background: #4caf50;
+				transition: width 0.2s ease;
+				text-align: center;
+				color: white;
+				font-size: 12px;
+				border-radius: 20px;
+			}
+			#progressText {
+				width: 90%;
+				position: absolute;
+				color: white;
+				margin-top: 2px;
+			}
+			#fileLabel {
+				margin-top: 8px;
+				font-size: 13px;
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div class="flex column spaced">
+			<div
+				id="errorBox"
+				style="
+					margin-top: 15px;
+					padding: 10px;
+					border-radius: 5px;
+					background: #ffdddd;
+					border: 1px solid #cc0000;
+					color: #900;
+					display: none;
+					white-space: pre-wrap;
+					word-wrap: break-word;
+				"
+			></div>
+			<div id="stepInstallComplete" class="flex column spaced hidden">
+				<p>You can download RPG Paper Maker now. Would you like to continue with those options?</p>
+				<fieldset>
+					<legend title="options">Options</legend>
+					<div class="flex column spaced">
+						<label class="flex spaced centerV">
+							<input type="radio" name="versionChoice" id="latestVersion" value="latest" checked />
+							<span id="latestLabel">Download latest version (...) </span>
+						</label>
+						<label class="flex spaced centerV">
+							<input type="radio" name="versionChoice" id="olderVersion" value="older" />
+							<span>Download older version:</span>
+							<select id="versionSelect" disabled>
+								<option>Loading...</option>
+							</select>
+						</label>
+					</div>
+				</fieldset>
+				<button id="continueBtn">Download</button>
+			</div>
+			<div id="progressContainer" hidden>
+				<div id="progressText">0%</div>
+				<div id="progressBar"></div>
+			</div>
+			<div id="fileLabel"></div>
+		</div>
+
+		<script>
+			(async () => {
+				try {
+					const arrayRemoveValue = (arr, value) => {
+						const index = arr.indexOf(value);
+						if (index !== -1) {
+							arr.splice(index, 1);
+						}
+					};
+					const latestLabel = document.getElementById('latestLabel');
+					const versionSelect = document.getElementById('versionSelect');
+					const radioLatest = document.getElementById('latestVersion');
+					const radioOlder = document.getElementById('olderVersion');
+					const continueBtn = document.getElementById('continueBtn');
+					const progressContainer = document.getElementById('progressContainer');
+					const progressBar = document.getElementById('progressBar');
+					const fileLabel = document.getElementById('fileLabel');
+					const stepInstallComplete = document.getElementById('stepInstallComplete');
+					const progressText = document.getElementById('progressText');
+
+					let versionsData = null;
+
+					// Radio control logic
+					radioLatest.addEventListener('change', () => {
+						versionSelect.disabled = true;
+					});
+					radioOlder.addEventListener('change', () => {
+						versionSelect.disabled = false;
+					});
+
+					(async () => {
+						const res = await fetch(
+							'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
+						);
+						const data = await res.json();
+						const isLastVersionUnstable = data.unstable;
+						const isEngineSettings = await window.ipcRenderer.invoke(
+							'check-file-exists',
+							`${window.env.appPath}/dist/engineSettings.json`,
+						);
+						let getUnstable = false;
+						if (isEngineSettings) {
+							getUnstable =
+								JSON.parse(
+									await window.ipcRenderer.invoke(
+										'read-file',
+										`${window.env.appPath}/dist/engineSettings.json`,
+									),
+								).guv ?? false;
+						}
+						data.lastVersion =
+							data.versions[data.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
+						versionsData = data;
+						const isEngineDownloaded = await window.ipcRenderer.invoke(
+							'check-file-exists',
+							`${window.env.appPath}/dist`,
+						);
+						if (isEngineDownloaded) {
+							await window.ipcRenderer.invoke(
+								'change-window-title',
+								`Updating to ${data.lastVersion}...`,
+							);
+							if (isEngineSettings) {
+								await window.ipcRenderer.invoke(
+									'rename-file',
+									`${window.env.appPath}/dist/engineSettings.json`,
+									`${window.env.appPath}/engineSettings.json`,
+								);
+							}
+							await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+							await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
+							if (isEngineSettings) {
+								await window.ipcRenderer.invoke(
+									'rename-file',
+									`${window.env.appPath}/engineSettings.json`,
+									`${window.env.appPath}/dist/engineSettings.json`,
+								);
+							}
+							await download();
+						} else {
+							latestLabel.textContent = `Download latest version (${data.lastVersion})`;
+							versionSelect.innerHTML = '';
+							data.versions.pop();
+							if (data.versions.length === 0) {
+								radioOlder.disabled = true;
+							} else {
+								data.versions
+									.slice()
+									.reverse()
+									.forEach((v) => {
+										const opt = document.createElement('option');
+										opt.value = v;
+										opt.textContent = v;
+										versionSelect.appendChild(opt);
+									});
+							}
+							stepInstallComplete.classList.remove('hidden');
+						}
+					})();
+
+					// Utility: flatten fileManifest.json
+					function collectFiles(manifest, baseVersionTag) {
+						const files = [];
+						const addFiles = (prefix, destPrefix, obj, baseURL) => {
+							if (obj.files) {
+								for (const f of obj.files) {
+									files.push({
+										url: `${baseURL}/${prefix}${f}`,
+										dest: `${destPrefix}${f}`,
+									});
+								}
+							}
+							for (const key in obj) {
+								if (typeof obj[key] === 'object' && key !== 'files') {
+									let newDestPrefix = destPrefix ? `${destPrefix}${key}/` : `${key}/`;
+									let newPrefix = newDestPrefix;
+									let urlPrefix;
+									if (newDestPrefix.startsWith('BR')) {
+										urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/refs/tags/${baseVersionTag}/Content`;
+										newPrefix = newDestPrefix.slice(3);
+									} else if (newDestPrefix.startsWith('Scripts')) {
+										if (newDestPrefix.includes('/localforage/')) {
+											urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/web`;
+											newPrefix = 'localforage/' + newDestPrefix.split('/localforage/')[1];
+										} else {
+											urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts-Build/refs/tags/${baseVersionTag}`;
+										}
+									} else if (newDestPrefix.startsWith('Deploy')) {
+										urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/refs/tags/${baseVersionTag}`;
+										newPrefix = newDestPrefix.slice(7);
+									} else if (newDestPrefix.startsWith('assets')) {
+										urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/dist`;
+									} else {
+										urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/public`;
+									}
+									addFiles(newPrefix, newDestPrefix, obj[key], urlPrefix);
+								}
+							}
+						};
+						addFiles(
+							'',
+							'',
+							manifest,
+							`https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${baseVersionTag}/public`,
+						);
+						// Exceptions
+						files.push({
+							url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts-Build/refs/tags/${baseVersionTag}/Scripts/Common/Platform.js`,
+							dest: `Deploy/Platform.js`,
+						});
+						files.push({
+							url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/web/Platform.js`,
+							dest: `Scripts/Common/Platform.js`,
+						});
+						files.push({
+							url: `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${baseVersionTag}/dist/index.html`,
+							dest: `index.html`,
+						});
+						return files;
+					}
+
+					function collectFolders(manifest) {
+						const folders = new Set();
+
+						function addFolders(prefix, obj) {
+							for (const key in obj) {
+								if (typeof obj[key] === 'object' && key !== 'files') {
+									const newPrefix = prefix ? `${prefix}${key}/` : `${key}/`;
+									folders.add(newPrefix);
+									addFolders(newPrefix, obj[key]);
+								}
+							}
+						}
+
+						addFolders('', manifest);
+
+						// Sort folders so parent directories come first
+						return Array.from(folders).sort((a, b) => a.localeCompare(b));
+					}
+
+					async function downloadFileWithRetry(file, retries = 3) {
+						for (let i = 0; i < retries; i++) {
+							try {
+								const res = await fetch(file.url);
+								if (!res.ok) {
+									throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+								}
+								const blob = new Uint8Array(await res.arrayBuffer());
+								await window.ipcRenderer.invoke(
+									'create-file',
+									`${window.env.appPath}/dist/${file.dest}`,
+									blob,
+								);
+								return;
+							} catch (e) {
+								console.warn(`Retry ${i + 1}/${retries} failed for ${file.url}:`, e);
+								if (i === retries - 1) throw e;
+								await new Promise((r) => setTimeout(r, 1000));
+							}
+						}
+					}
+
+					// Download manager
+					async function downloadAll(files, folders) {
+						stepInstallComplete.style.display = 'none';
+						progressContainer.hidden = false;
+						let completed = 0;
+						const total = files.length + folders.length;
+						const concurrency = 5;
+						let index = 0;
+						let indexFolders = 0;
+						let isError = false;
+
+						async function worker() {
+							while (indexFolders < folders.length) {
+								if (isError) {
+									return;
+								}
+								const i = indexFolders++;
+								const folder = folders[i];
+								fileLabel.textContent = `Creating ${folder}`;
+								try {
+									await window.ipcRenderer.invoke(
+										'create-folder',
+										`${window.env.appPath}/dist/${folder}`,
+									);
+								} catch (err) {
+									if (!isError) {
+										reportError(`Error creating ${folder}`);
+										isError = true;
+									}
+									return;
+								}
+								completed++;
+								const pct = Math.round((completed / total) * 100);
+								progressBar.style.width = pct + '%';
+								progressText.textContent = pct + '%';
+							}
+							while (index < files.length) {
+								if (isError) {
+									return;
+								}
+								const i = index++;
+								const file = files[i];
+								fileLabel.textContent = `Downloading ${file.dest}`;
+								try {
+									await downloadFileWithRetry(file);
+								} catch (err) {
+									if (!isError) {
+										reportError(
+											`Error downloading ${file.url}\nDestination: ${window.env.appPath}/dist/${file.dest}`,
+										);
+										isError = true;
+									}
+									return;
+								}
+								completed++;
+								const pct = Math.round((completed / total) * 100);
+								progressBar.style.width = pct + '%';
+								progressText.textContent = pct + '%';
+							}
+						}
+
+						const workers = Array(concurrency).fill(0).map(worker);
+						await Promise.all(workers);
+						fileLabel.textContent = 'All files downloaded successfully.';
+					}
+
+					async function download() {
+						try {
+							const isLatest = radioLatest.checked;
+							const versionTag = isLatest ? versionsData.lastVersion : versionSelect.value;
+
+							const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${versionTag}/dist/fileManifest.json`;
+
+							fileLabel.textContent = 'Fetching file manifest...';
+							const manifest = await fetch(manifestURL).then((r) => r.json());
+							arrayRemoveValue(manifest.Deploy.files, 'Platform.js');
+							arrayRemoveValue(manifest.Scripts.Common.files, 'Platform.js');
+							arrayRemoveValue(manifest.files, 'index.html');
+							arrayRemoveValue(manifest.files, 'engineSettings.json');
+							const files = collectFiles(manifest, versionTag);
+							const folders = collectFolders(manifest);
+							await downloadAll(files, folders);
+							await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
+						} catch (err) {
+							reportError('Download error:\n' + err.stack);
+						}
+					}
+
+					function reportError(message) {
+						const box = document.getElementById('errorBox');
+						box.style.display = 'block';
+						box.textContent = message;
+						window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+					}
+
+					continueBtn.addEventListener('click', async () => {
+						await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
+						await download();
+					});
+				} catch (err) {
+					reportError('Error:\n' + err.stack);
+				}
+			})();
+		</script>
+	</body>
+</html>

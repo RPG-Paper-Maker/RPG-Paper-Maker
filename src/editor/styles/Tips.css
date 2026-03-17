@@ -1,0 +1,25 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+.tips {
+	display: flex;
+	gap: 5px;
+	padding: 5px;
+	border-radius: 10px;
+	background-color: var(--green-color);
+	font-size: 0.8em;
+	text-align: center;
+	cursor: pointer;
+
+	.icon {
+		padding-top: 2px;
+	}
+}

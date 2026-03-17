@@ -1,0 +1,180 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import localforage from 'localforage';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { Constants, IO, LOCAL_FORAGE, notifySuccess, Paths, Utils } from '../../common';
+import { checkFileExists, createFolder, openWebsite, readPublicFile } from '../../common/Platform';
+import { LocalFile } from '../../core/LocalFile';
+import { Picture2D } from '../../core/Picture2D';
+import { Project } from '../../core/Project';
+import { EngineSettings } from '../../data/EngineSettings';
+import { Manager, Scene } from '../../Editor';
+import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
+import { setProjects, setTheme } from '../../store';
+import Loader from '../Loader';
+
+type Props = {
+	setLoaded: (v: boolean) => void;
+};
+
+function PanelLoading({ setLoaded }: Props) {
+	const { t } = useTranslation();
+
+	const [displayLoader, setDisplayLoader] = useState(false);
+
+	const dispatch = useDispatch();
+
+	const initialize = async () => {
+		Constants.IS_MOBILE = Utils.isMobile();
+		Constants.IS_DESKTOP = Utils.isDesktop();
+		Paths.DIST = Paths.join(Constants.IS_DESKTOP ? window.env.appPath : window.__dirname, 'dist');
+		await initializeLocalFiles();
+		await initializeSystemInformation();
+		await initializeEngineSettings();
+		await initializeLocales();
+		setDisplayLoader(true);
+		await initializeGL();
+		await initializeTextures();
+		await initializeEngineVersion();
+		await loadProjects();
+		setLoaded(true);
+	};
+
+	const initializeLocalFiles = async () => {
+		if (!Constants.IS_DESKTOP) {
+			await LocalFile.config();
+			const cacheVersion = await localforage.getItem('CACHE_VERSION');
+			if (!cacheVersion || cacheVersion !== LocalFile.CACHE_VERSION) {
+				const all = await LocalFile.allStorage();
+				for (const path of all) {
+					await LocalFile.brutRemove(path);
+				}
+				await localforage.setItem('CACHE_VERSION', LocalFile.CACHE_VERSION);
+			}
+			await LocalFile.readFileManifest();
+		}
+	};
+
+	const initializeSystemInformation = async () => {
+		if (Constants.IS_DESKTOP) {
+			const { documentsFolder, gamesFolder, userLocale } = await IO.getSystemInformation();
+			Paths.GLOBAL_DOCUMENTS = documentsFolder;
+			Paths.GLOBAL_RPM_GAMES = gamesFolder;
+			Constants.USER_LOCALE = userLocale;
+		}
+	};
+
+	const initializeEngineSettings = async () => {
+		if (!Constants.IS_DESKTOP) {
+			if (!(await LocalFile.checkFileExists(LOCAL_FORAGE.ENGINE))) {
+				await LocalFile.createFolder(LOCAL_FORAGE.ENGINE);
+			}
+		}
+		EngineSettings.current = new EngineSettings();
+		if (!(await checkFileExists(EngineSettings.current.getPath()))) {
+			EngineSettings.current.read({});
+			EngineSettings.current.applyDefault();
+			await EngineSettings.current.applyKeyboardLayout();
+			await EngineSettings.current.save();
+		}
+		await EngineSettings.current.load();
+		dispatch(setTheme(Constants.THEMES[EngineSettings.current.theme]));
+	};
+
+	const initializeLocales = async () => {
+		await loadLocales();
+		if (!EngineSettings.current.currentLanguage) {
+			if (Constants.IS_DESKTOP) {
+				if (LANGUAGES_SHORTS.includes(Constants.USER_LOCALE)) {
+					EngineSettings.current.currentLanguage = Constants.USER_LOCALE;
+				} else {
+					EngineSettings.current.currentLanguage = 'en';
+				}
+			} else {
+				EngineSettings.current.currentLanguage = i18n.language;
+			}
+			await EngineSettings.current.save();
+		}
+		await i18n.changeLanguage(EngineSettings.current.currentLanguage);
+	};
+
+	const initializeTextures = async () => {
+		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Pictures/cursor.png');
+		Scene.Map.materialObjectSquareCursor = await Manager.GL.loadTexture('./Pictures/object-square-cursor.png');
+		Scene.Map.materialObjectSquare = await Manager.GL.loadTexture('./Pictures/object-square.png');
+		Scene.Map.materialDetectionBox = await Manager.GL.loadTexture('./Pictures/detection-box.png');
+		Scene.Map.materialDetectionArrow = await Manager.GL.loadTexture('./Pictures/detection-arrow.png');
+		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Pictures/tileset-cursor.png');
+		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Pictures/cursor-layers-on.svg');
+		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Pictures/start-position.png');
+		Picture2D.PICTURE_DIRECTION = await Picture2D.loadImage('./Pictures/direction.png');
+	};
+
+	const initializeGL = async () => {
+		Manager.GL.mainContext = new Manager.GL();
+		Manager.GL.layerOneContext = new Manager.GL();
+		Manager.GL.layerTwoContext = new Manager.GL();
+		Manager.GL.layerThreeContext = new Manager.GL();
+		await Manager.GL.initializeShaders();
+	};
+
+	const initializeEngineVersion = async () => {
+		Project.VERSION = await readPublicFile(Paths.FILE_VERSION);
+		document.title = `RPG Paper Maker - ${Project.VERSION}`;
+		if (EngineSettings.current.lastEngineVersion !== Project.VERSION) {
+			const version = EngineSettings.current.lastEngineVersion;
+			EngineSettings.current.lastEngineVersion = Project.VERSION;
+			await EngineSettings.current.save();
+			if (version !== null) {
+				const link = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/changelogs/${Project.VERSION}.md`;
+				notifySuccess(
+					<div>
+						{t('engine.updated.successfully', {
+							version: Project.VERSION,
+						})}
+						<a
+							href=''
+							onClick={async (e) => {
+								e.preventDefault();
+								await openWebsite(link);
+							}}
+						>
+							{link}
+						</a>
+					</div>,
+				);
+			}
+		}
+	};
+
+	const loadProjects = async () => {
+		dispatch(setProjects(EngineSettings.current.recentProjects));
+		const path = Paths.getRPMGamesFolder();
+		if (!(await checkFileExists(path))) {
+			await createFolder(path);
+		}
+	};
+
+	useEffect(() => {
+		initialize().catch(console.error);
+	}, []);
+
+	if (!displayLoader) {
+		return null;
+	}
+
+	return <Loader large isLoading />;
+}
+
+export default PanelLoading;

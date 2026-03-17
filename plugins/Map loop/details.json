@@ -1,0 +1,28 @@
+{
+	"author": "RussoDaFederal",
+	"category": 2,
+	"commands": [
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 10, "v": true },
+					"description": "Loop on the X dimension",
+					"id": -1,
+					"name": "x"
+				},
+				{
+					"defaultValue": { "k": 10, "v": true },
+					"description": "Loop on the Z dimension",
+					"id": -1,
+					"name": "z"
+				}
+			],
+			"id": 1,
+			"name": "Set map loop"
+		}
+	],
+	"description": "This plugin enables looping on the X and Z dimensions, just like in RPG Maker. Perfect for the Yume Nikki fans out there. To enable it, simply call the \"set map loop\" command on map load. The command needs to be called every time you teleport to a new map.",
+	"name": "Map loop",
+	"website": "https://github.com/yaleksander/RPM-Plugin-Map-loop",
+	"version": "1.1.0"
+}

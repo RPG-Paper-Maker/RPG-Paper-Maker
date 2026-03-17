@@ -1,0 +1,267 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Position } from '../core/Position';
+
+class Mathf {
+	static clamp(value: number, min: number, max: number): number {
+		return value <= min ? min : value >= max ? max : value;
+	}
+
+	static cos(v: number): number {
+		return parseFloat(Math.cos(v).toFixed(10));
+	}
+
+	static sin(v: number): number {
+		return parseFloat(Math.sin(v).toFixed(10));
+	}
+
+	static mod(x: number, m: number): number {
+		const r = x % m;
+		return r < 0 ? r + m : r;
+	}
+
+	static radiansToDegrees(radians: number): number {
+		return radians * (180 / Math.PI);
+	}
+
+	static degreesToRadians(degrees: number): number {
+		return degrees * (Math.PI / 180);
+	}
+
+	static forceDecimalsText(num: number, decimals = 4): string {
+		return num.toFixed(decimals);
+	}
+
+	static forceDecimals(num: number, decimals = 4): number {
+		return parseFloat(this.forceDecimalsText(num, decimals));
+	}
+
+	static forceInteger(num: number): number {
+		return Math.floor(num);
+	}
+
+	static traceLine(previous: Position | null, current: Position) {
+		if (previous === null) {
+			return [current];
+		}
+		const positions: Position[] = [];
+		let x1 = previous.x;
+		const x2 = current.x;
+		const y = current.y;
+		const yPlus = current.yPixels;
+		let z1 = previous.z;
+		const z2 = current.z;
+		let dx = x2 - x1;
+		let dz = z2 - z1;
+		const test = true;
+		if (dx !== 0) {
+			if (dx > 0) {
+				if (dz !== 0) {
+					if (dz > 0) {
+						if (dx >= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								x1++;
+								if (x1 === x2) {
+									break;
+								}
+								e -= dz;
+								if (e < 0) {
+									z1++;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								z1++;
+								if (z1 === z2) {
+									break;
+								}
+								e -= dx;
+								if (e < 0) {
+									x1++;
+									e += dz;
+								}
+							}
+						}
+					} else {
+						if (dx >= -dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								x1++;
+								if (x1 === x2) {
+									break;
+								}
+								e += dz;
+								if (e < 0) {
+									z1--;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								z1--;
+								if (z1 === z2) {
+									break;
+								}
+								e += dx;
+								if (e > 0) {
+									x1++;
+									e += dz;
+								}
+							}
+						}
+					}
+				} else {
+					while (x1 !== x2) {
+						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						x1++;
+					}
+				}
+			} else {
+				dz = z2 - z1;
+				if (dz !== 0) {
+					if (dz > 0) {
+						if (-dx >= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								x1--;
+								if (x1 === x2) {
+									break;
+								}
+								e += dz;
+								if (e >= 0) {
+									z1++;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								z1++;
+								if (z1 === z2) {
+									break;
+								}
+								e += dx;
+								if (e <= 0) {
+									x1--;
+									e += dz;
+								}
+							}
+						}
+					} else {
+						if (dx <= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								x1--;
+								if (x1 === x2) break;
+								e -= dz;
+								if (e >= 0) {
+									z1--;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								z1--;
+								if (z1 === z2) break;
+								e -= dx;
+								if (e >= 0) {
+									x1--;
+									e += dz;
+								}
+							}
+						}
+					}
+				} else {
+					while (x1 !== x2) {
+						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						x1--;
+					}
+				}
+			}
+		} else {
+			dz = z2 - z1;
+			if (dz !== 0) {
+				if (dz > 0) {
+					while (z1 !== z2) {
+						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						z1++;
+					}
+				} else {
+					while (z1 !== z2) {
+						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						z1--;
+					}
+				}
+			}
+		}
+		positions.push(current);
+		return positions;
+	}
+
+	static rotatePoint(x: number, y: number, cx: number, cy: number, angle: number): [number, number] {
+		const s = Math.sin(angle * (Math.PI / 180));
+		const c = Math.cos(angle * (Math.PI / 180));
+
+		// translate point back to origin:
+		x -= cx;
+		y -= cy;
+
+		// rotate point
+		const xNew = x * c - y * s;
+		const yNew = x * s + y * c;
+
+		// translate point back:
+		x = Math.round(xNew + cx);
+		y = Math.round(yNew + cy);
+
+		return [x, y];
+	}
+}
+
+export { Mathf };

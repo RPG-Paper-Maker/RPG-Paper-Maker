@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Loading...</title>
+		<style>
+			img {
+				width: 600px;
+			}
+			p {
+				position: absolute;
+				text-align: center;
+				left: 20px;
+				top: 20px;
+				color: rgb(186, 93, 21);
+				font-family: 'Arial Black', Arial, sans-serif;
+				font-weight: 900;
+				font-size: 45px;
+				text-shadow:
+					-5px -5px 0 white,
+					5px -5px 0 white,
+					-5px 5px 0 white,
+					5px 5px 0 white,
+					0px 5px 0 white,
+					5px 0px 0 white,
+					-5px 0px 0 white,
+					0px -5px 0 white;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<img id="splash" src="splash.png" alt="App Icon" />
+			<p id="title"></p>
+		</div>
+		<script>
+			const params = new URLSearchParams(window.location.search);
+			const title = params.get('title');
+			if (title) {
+				document.getElementById('title').textContent = title;
+			}
+			const now = new Date();
+			const month = now.getMonth();
+			const day = now.getDate();
+			if (month === 11 || (month === 0 && day <= 15)) {
+				document.getElementById('splash').src = 'splash-winter.png';
+			}
+		</script>
+	</body>
+</html>

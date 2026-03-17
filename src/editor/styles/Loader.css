@@ -1,0 +1,79 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+.loader {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	gap: 10px;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	background-color: rgba(0, 0, 0, 0.4);
+
+	&.alone {
+		background-color: transparent;
+		position: relative;
+	}
+
+	.spinner {
+		border: 5px solid var(--grey-light-color);
+		border-top: 5px solid var(--primary-color);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		width: 20px;
+		height: 20px;
+	}
+
+	&.large .spinner {
+		width: 150px;
+		height: 150px;
+		border-width: 10px;
+	}
+
+	.text {
+		position: absolute;
+		color: var(--darkest-bg-color);
+		font-weight: bold;
+		text-shadow:
+			-1px -1px 0 var(--main-color),
+			1px -1px 0 var(--main-color),
+			-1px 1px 0 var(--main-color),
+			1px 1px 0 var(--main-color);
+		font-size: 18px;
+	}
+}
+
+.loaderHidder {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 998;
+	background-color: var(--darkest-bg-color);
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

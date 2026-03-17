@@ -1,0 +1,79 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+.tab {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	background-color: var(--darker-bg-color);
+}
+
+.tab .tabTitles {
+	display: flex;
+	gap: 1px;
+	white-space: nowrap;
+	align-items: center;
+
+	.scrollArea {
+		display: flex;
+		flex-grow: 1;
+		overflow: hidden;
+		width: 0;
+	}
+}
+
+.tab .tabTitles .scrollArea {
+	display: flex;
+	flex-grow: 1;
+	overflow: hidden;
+	width: 0;
+}
+
+.tab .tabContent {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.tab .tabContent.padding {
+	padding: 10px;
+}
+
+.tab .tabItem {
+	display: flex;
+	align-items: center;
+	padding: 5px 10px 5px 10px;
+	gap: 5px;
+	font-size: 12px;
+	background-color: var(--main-bg-color);
+	border-radius: 5px 5px 0px 0px;
+	background-color: var(--darker-bg-color);
+	color: var(--grey-color);
+	cursor: pointer;
+}
+
+.tab .tabItem:hover {
+	color: var(--lightest-bg-color);
+}
+
+.tab .tabItem.disabled:hover {
+	color: var(--grey-color);
+	cursor: default;
+}
+
+.tab .tabItem.selected {
+	background-color: var(--main-bg-color);
+	color: white;
+}
+
+.tab .tabItem:has(svg:hover) {
+	color: var(--red-color);
+}

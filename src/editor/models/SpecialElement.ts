@@ -1,0 +1,46 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { BINDING, JSONType } from '../common';
+import { BindingType } from '../core/Serializable';
+import { Base } from './Base';
+
+class SpecialElement extends Base {
+	public static type = 'SpecialElement';
+	public static readonly JSON_PICTURE_ID = 'pic';
+	public static readonly DEFAULT_PICTURE_ID = -1;
+
+	public pictureID!: number;
+
+	public static readonly bindings: BindingType[] = [['pictureID', 'pic', -1, BINDING.NUMBER]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...SpecialElement.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(SpecialElement.getBindings(additionnalBinding));
+	}
+
+	copy(specialElement: SpecialElement, additionnalBinding: BindingType[] = []): void {
+		super.copy(specialElement, SpecialElement.getBindings(additionnalBinding));
+	}
+
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.read(json, SpecialElement.getBindings(additionnalBinding));
+	}
+
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.write(json, SpecialElement.getBindings(additionnalBinding));
+	}
+}
+
+export { SpecialElement };

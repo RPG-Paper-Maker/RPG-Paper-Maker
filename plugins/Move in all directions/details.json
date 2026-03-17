@@ -1,0 +1,55 @@
+{
+	"author": "RussoDaFederal",
+	"category": 2,
+	"commands": [
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 12, "v": -1 },
+					"description": "Map object ID. -1 is self, 0 is hero",
+					"id": -1,
+					"name": "id"
+				},
+				{
+					"description": "Direction, in degrees. 0 is east, 90 is north, 180 is west and 270 is south",
+					"id": -1,
+					"name": "dir"
+				},
+				{
+					"defaultValue": { "k": 10, "v": false },
+					"description": "Whether to move according to camera orientation",
+					"id": -1,
+					"name": "camera"
+				}
+			],
+			"description": "Move object of given ID (-1 is self, 0 is hero) a single step in an angle (in degrees)",
+			"id": 1,
+			"name": "Move 1 step in angle"
+		},
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 12, "v": -1 },
+					"description": "Map object ID. -1 is self, 0 is hero",
+					"id": -1,
+					"name": "id"
+				},
+				{ "description": "X (horizontal) direction", "id": -1, "name": "x" },
+				{ "description": "Y (depth) direction", "id": -1, "name": "y" },
+				{
+					"defaultValue": { "k": 10, "v": false },
+					"description": "Whether to move according to camera orientation",
+					"id": -1,
+					"name": "camera"
+				}
+			],
+			"description": "Move object of given ID (-1 is self, 0 is hero) a single step to (x, y) direction",
+			"id": 2,
+			"name": "Move 1 step in direction"
+		}
+	],
+	"description": "This plugin adds a simple command to move any map object a step (not a square) in any direction, defined by angle (in degrees) or by X and Y values, and not by orientation. Does not work for battle maps.",
+	"name": "Move in all directions",
+	"version": "1.1.0",
+	"website": "https://github.com/yaleksander/RPM-Plugin-Move-in-all-directions"
+}

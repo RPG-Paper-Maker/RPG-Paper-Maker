@@ -1,0 +1,13 @@
+<svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black outline -->
+  <path d="M5 3v16h16" stroke-width="4" stroke="black"></path>
+  <path d="m5 19 6-6" stroke-width="4" stroke="black"></path>
+  <path d="m2 6 3-3 3 3" stroke-width="4" stroke="black"></path>
+  <path d="m18 16 3 3-3 3" stroke-width="4" stroke="black"></path>
+  
+  <!-- White fill -->
+  <path d="M5 3v16h16" stroke="white" fill="none"></path>
+  <path d="m5 19 6-6" stroke="white" fill="none"></path>
+  <path d="m2 6 3-3 3 3" stroke="white" fill="none"></path>
+  <path d="m18 16 3 3-3 3" stroke="white" fill="none"></path>
+</svg>

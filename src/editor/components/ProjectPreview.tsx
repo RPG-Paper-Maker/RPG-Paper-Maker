@@ -1,0 +1,132 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { BiExport } from 'react-icons/bi';
+import { FaTrashAlt } from 'react-icons/fa';
+import { RxCross2 } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
+import { Constants, Utils } from '../common';
+import { checkFileExists, exportFolder, removeFolder } from '../common/Platform';
+import { EngineSettings } from '../data/EngineSettings';
+import { Model } from '../Editor';
+import { RootState, triggerOpenProject } from '../store';
+import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
+import '../styles/ProjectPreview.css';
+import Dialog from './dialogs/Dialog';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
+import FooterOK from './dialogs/footers/FooterOK';
+import Flex from './Flex';
+
+type Props = {
+	project: Model.ProjectPreview;
+};
+
+function ProjectPreview({ project }: Props) {
+	const { t } = useTranslation();
+
+	const [isDialogWarningLocationOpen, setIsDialogWarningLocationOpen] = useState(false);
+	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+
+	const projects = useSelector((state: RootState) => state.projects.list);
+
+	const dispatch = useDispatch();
+
+	const handleOpenProject = () => {
+		dispatch(triggerOpenProject(project));
+	};
+
+	const handleClickCloseProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		e.stopPropagation();
+		const newList = projects.filter((p) => project.location !== p.location);
+		dispatch(setProjects(newList));
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
+	};
+
+	const handleClickExportProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		dispatch(setLoading(true));
+		e.stopPropagation();
+		await exportFolder(project.location);
+		dispatch(setLoading(false));
+	};
+
+	const handleClickRemoveProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		e.stopPropagation();
+		if (await checkFileExists(project.location)) {
+			setIsDialogConfirmOpen(true);
+		} else {
+			setIsDialogWarningLocationOpen(true);
+		}
+	};
+
+	const handleCloseWarningLocation = () => {
+		setIsDialogWarningLocationOpen(false);
+	};
+
+	const handleRejectRemoveProject = () => {
+		setIsDialogConfirmOpen(false);
+	};
+
+	const handleAcceptRemoveProject = async () => {
+		setIsDialogConfirmOpen(false);
+		dispatch(setLoading(true));
+		const newList = projects.filter((p) => project.location !== p.location);
+		dispatch(setProjects(newList));
+		await removeFolder(project.location);
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
+		dispatch(setLoading(false));
+	};
+
+	return (
+		<>
+			<div
+				className={Utils.getClassName({ selected: isDialogConfirmOpen }, 'projectPreview')}
+				onClick={handleOpenProject}
+			>
+				<Flex column one spaced>
+					<div className='title'>{project.name}</div>
+					{project.location.length > 0 && <div className='textSmallDetail'>{project.location}</div>}
+				</Flex>
+				<Flex centerV>
+					{Constants.IS_DESKTOP ? (
+						<RxCross2 onClick={handleClickCloseProject} />
+					) : (
+						<>
+							<BiExport onClick={handleClickExportProject} />
+							<FaTrashAlt onClick={handleClickRemoveProject} />
+						</>
+					)}
+				</Flex>
+			</div>
+			<Dialog
+				title={t('warning')}
+				isOpen={isDialogConfirmOpen}
+				footer={<FooterNoYes onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
+				onClose={handleRejectRemoveProject}
+			>
+				<div className='warning textCenter'>{t('warning.delete.project', { projectName: project.name })}</div>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={isDialogWarningLocationOpen}
+				footer={<FooterOK onOK={handleCloseWarningLocation} />}
+				onClose={handleCloseWarningLocation}
+			>
+				<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
+			</Dialog>
+		</>
+	);
+}
+
+export default ProjectPreview;

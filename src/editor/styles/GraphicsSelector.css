@@ -1,0 +1,29 @@
+.graphicsSelector {
+	display: flex;
+	flex-grow: 1;
+	background-color: var(--darkest-containers-bg-color);
+	border: 1px solid var(--lighter-bg-color);
+	border-radius: 2px;
+	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	width: 100px;
+	height: 100px;
+
+	.border {
+		display: flex;
+		border: 2px dashed var(--primary-color);
+		cursor: pointer;
+		position: absolute;
+		width: calc(100% - 10px);
+		height: calc(100% - 10px);
+	}
+}
+
+.graphicsSelector-border-overlay {
+	position: fixed;
+	z-index: 1001;
+	border: 2px dashed var(--primary-color);
+	pointer-events: none;
+}

@@ -1,0 +1,20 @@
+{
+	"list": [
+		{ "id": 1, "name": "Plains / woods", "pic": 1 },
+		{ "id": 2, "name": "Haunted plains / woods", "pic": 2 },
+		{ "id": 3, "name": "Snow plains / woods", "pic": 3 },
+		{ "id": 4, "name": "Beach / desert", "pic": 4 },
+		{ "id": 5, "name": "Jungle", "pic": 5 },
+		{ "id": 6, "name": "Town", "pic": 6 },
+		{ "id": 7, "name": "Desert town", "pic": 7 },
+		{ "id": 8, "name": "Snow town", "pic": 8 },
+		{ "id": 9, "name": "Inside", "pic": 9 },
+		{ "id": 10, "name": "School", "pic": 10 },
+		{ "id": 11, "name": "Shop", "pic": 11 },
+		{ "id": 12, "name": "Sewers", "pic": 12 },
+		{ "id": 13, "name": "Dungeon / mines", "pic": 13 },
+		{ "id": 14, "name": "Castle", "pic": 14 },
+		{ "id": 15, "name": "Volcano", "pic": 15 },
+		{ "id": 16, "name": "Spaceship", "pic": 16 }
+	]
+}

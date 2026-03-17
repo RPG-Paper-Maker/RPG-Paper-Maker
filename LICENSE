@@ -1,7 +1,7 @@
-RPG Paper Maker EULA - February 11 2020    
-Copyright (c) 2017-2020 Wano
+RPG Paper Maker EULA – October 4 2023  
+Copyright (c) 2017-2023 Wano
 
-*** END USER LICENSE AGREEMENT ***
+**_ END USER LICENSE AGREEMENT _**
 
 IMPORTANT: PLEASE READ THIS LICENSE CAREFULLY BEFORE USING THIS SOFTWARE.
 
@@ -9,9 +9,9 @@ IMPORTANT: PLEASE READ THIS LICENSE CAREFULLY BEFORE USING THIS SOFTWARE.
 
 1.1 Introduction
 
-By receiving, opening the file package, and/or using RPG Paper Maker("Software") containing this software, you agree that this End User User License Agreement(EULA) is a legally binding and valid contract and agree to be bound by it. You agree to abide by the intellectual property laws and all of the terms and conditions of this Agreement.
+By receiving, opening the file package, and/or using RPG Paper Maker(“Software”) containing this software, you agree that this End User User License Agreement(EULA) is a legally binding and valid contract and agree to be bound by it. You agree to abide by the intellectual property laws and all of the terms and conditions of this Agreement.
 
-Unless you have a different license agreement signed by Wano(Marie Laporte as an individual person and as "Owner" and "Developer") your use of RPG Paper Maker indicates your acceptance of this license agreement and warranty.
+Unless you have a different license agreement signed by Wano(Marie Laporte as an individual person and as “Owner” and “Developer”) your use of RPG Paper Maker indicates your acceptance of this license agreement and warranty.
 
 Subject to the terms of this Agreement, Wano grants to you a limited, non-exclusive, non-transferable license, without right to sub-license, to use RPG Paper Maker in accordance with this Agreement and any other written agreement with Wano. Wano does not transfer the title of RPG Paper Maker to you; the license granted to you is not a sale. This agreement is a binding legal agreement between Wano and the purchasers or users of RPG Paper Maker.
 
@@ -19,31 +19,23 @@ If you do not agree to be bound by this agreement, remove RPG Paper Maker from y
 
 1.2 Definitions
 
-The users can create "Games" with the software (output).
+The users can create “Games” with the software (output).
 
-The software includes "Default materials" (images, musics, sounds, 3D models) that are optional for creating games.
+The software includes “Default materials” (images, musics, sounds, 3D models) that are optional for creating games.
 
-"Non-commercial use" of the software means that you don't sell a game done with the software, or sell a game using the default materials. Your games done with the software can be published if it is totally free to use it. You can publish games using the default materials if it is totally free to use it.
+“Non-commercial use” of the software means that you don’t sell a game done with the software, or sell a game using the default materials. Your games done with the software can be published if it is totally free to use it. You can publish games using the default materials if it is totally free to use it.
 
 1.3 Free version
 
 This version is provided as freeware, but only for personal, non-commercial use at home.
 
-This can't be used by users in an Academic Institution.
-
-You can also capture your engine use (images, videos, lives) and publish your captures for non-commercial or commercial purposes. The license doesn't ask for any fee in that case.
+You can also capture your engine use (images, videos, lives) and publish your captures for non-commercial or commercial purposes. The license doesn’t ask for any fee in that case.
 
 1.4 Commercial edition
 
 A single person may use RPG Paper Maker commercial edition for his or her exclusive use on multiple computers for commercial purposes.
 
 The commercial license authorizes the use of the RPG Paper Maker commercial edition in a corporate, government or business environment. A company or department may purchase a license for a subset of users as long as RPG Paper Maker commercial edition is installed on devices only accessible by licensed users.
-
-1.5 Academic edition
-
-If you are an Academic Institution, you may store the RPG Paper Maker academic edition on any of your computers, and you may allow all users of those computers to use that RPG Paper Maker academic edition under the License. This doesn't give users any rights to use it for commercial purposes.
-
-This edition needs a subscription with 30$ fees per device. You can end the subscription at any time.
 
 2. DISTRIBUTION
 
@@ -67,13 +59,13 @@ You may make one copy of RPG Paper Maker for backup purposes, providing you have
 
 This Software contains copyrighted material, trade secrets and other proprietary material. You shall not, and shall not attempt to, modify, reverse engineer, disassemble or decompile RPG Paper Maker for commercial purposes. Nor can you create any derivative works or other works that are based upon or derived from RPG Paper Maker in whole or in part for commercial purpose.
 
-If you want to contribute to the software, the source code is directly available on github at https://github.com/RPG-Paper-Maker. Any code written and suggested by other contributors in Pull Requests becomes this software copyrighted material.
+If you want to contribute to the software, the source code is directly available on github at https://github.com/RPG-Paper-Maker. Any code written and suggested by other contributors in Pull Requests becomes this software copyrighted material, except for the Pull Requests in https://github.com/RPG-Paper-Maker/RPG-Paper-Maker with a title including “[PLUGIN REQUEST]”. Those Pull Requests will only affect the “Plugins” folder which is only there to display a list of plugins directly online, RPG Paper Maker doesn’t have any copyright on these.
 
 Copyright law and international copyright treaty provisions protect all parts of RPG Paper Maker, products and services. No program, code, part, image, audio sample, or text may be copied or used in commercial purpose by the user except for commercial edition. All rights not expressly granted hereunder are reserved for Wano.
 
 3.4 Limitation of Responsibility
 
-You will indemnify, hold harmless, and defend Wano against any and all claims, proceedings, demand and costs resulting from or in any way connected with your use of Wano's Software.
+You will indemnify, hold harmless, and defend Wano against any and all claims, proceedings, demand and costs resulting from or in any way connected with your use of Wano’s Software.
 
 In no event (including, without limitation, in the event of negligence) will Wano be liable for any consequential, incidental, indirect, special or punitive damages whatsoever (including, without limitation, damages for loss of profits, loss of use, business interruption, loss of information or data, or pecuniary loss), in connection with or arising out of or related to this Agreement, RPG Paper Maker or the use or inability to use RPG Paper Maker or the furnishing, performance or use of any other matters hereunder whether based upon contract, tort or any other theory including negligence.
 
@@ -93,4 +85,4 @@ Any failure to comply with the terms and conditions of this Agreement will resul
 
 4. DISCLAIMER OF WARRANTY
 
-THIS SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD "AS IS" AND WITHOUT WARRANTIES AS TO PERFORMANCE OR MERCHANTABILITY OR ANY OTHER WARRANTIES WHETHER EXPRESSED OR IMPLIED. THIS DISCLAIMER CONCERNS ALL FILES GENERATED AND EDITED BY RPG PAPER MAKER AS WELL.
+THIS SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD “AS IS” AND WITHOUT WARRANTIES AS TO PERFORMANCE OR MERCHANTABILITY OR ANY OTHER WARRANTIES WHETHER EXPRESSED OR IMPLIED. THIS DISCLAIMER CONCERNS ALL FILES GENERATED AND EDITED BY RPG PAPER MAKER AS WELL.

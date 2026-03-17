@@ -1,0 +1,113 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { useLayoutEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
+import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
+import { MapObjectCommandType } from '../../../models';
+import DynamicValueSelector from '../../DynamicValueSelector';
+import Flex from '../../Flex';
+import Form, { Label, Value } from '../../Form';
+import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
+import TooltipInformation from '../../TooltipInformation';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
+
+function DialogCommandShakeScreen({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+	const { t } = useTranslation();
+
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
+
+	const [offset] = useStateDynamicValue();
+	const [shakesNumber] = useStateDynamicValue();
+	const [, setTrigger] = useStateBool();
+
+	const initialize = () => {
+		if (list) {
+			const iterator = Utils.generateIterator();
+			offset.updateCommand(list, iterator);
+			shakesNumber.updateCommand(list, iterator);
+			panelWaitTimeRef.current?.initialize(list, iterator);
+		} else {
+			offset.updateToDefaultNumber(30);
+			shakesNumber.updateToDefaultNumber(2, true);
+			panelWaitTimeRef.current?.initialize();
+		}
+		setTrigger((v) => !v);
+	};
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		const newList: MapObjectCommandType[] = [];
+		offset.getCommand(newList);
+		shakesNumber.getCommand(newList);
+		panelWaitTimeRef.current?.getCommand(newList);
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+	};
+
+	const handleReject = async () => {
+		setIsOpen(false);
+		onReject();
+	};
+
+	useLayoutEffect(() => {
+		initialize();
+	}, []);
+
+	return (
+		<Dialog
+			title={`${t('shake.screen')}...`}
+			isOpen
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex column spacedLarge>
+				<Form>
+					<Label>
+						<Flex spaced centerV>
+							{t('offset')}
+							<TooltipInformation text={t('tooltip.shake.offset')} />
+						</Flex>
+					</Label>
+					<Value>
+						<Flex spaced>
+							<DynamicValueSelector value={offset} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+							{t('pixel.s').toLowerCase()}
+						</Flex>
+					</Value>
+					<Label>
+						<Flex spaced centerV>
+							{t('shakes.number')}
+							<TooltipInformation text={t('tooltip.shakes.number')} />
+						</Flex>
+					</Label>
+					<Value>
+						<Flex spaced>
+							<DynamicValueSelector
+								value={shakesNumber}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							/>
+							{t('per.second').toLowerCase()}
+						</Flex>
+					</Value>
+				</Form>
+				<PanelWaitTime ref={panelWaitTimeRef} defaultSeconds={2} />
+			</Flex>
+		</Dialog>
+	);
+}
+
+export default DialogCommandShakeScreen;

@@ -1,0 +1,166 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Constants } from './Constants';
+import { LOCAL_FORAGE } from './Enum';
+
+class Paths {
+	public static readonly ROOT_DIRECTORY_LOCAL = '.';
+	public static readonly FILES = 'file:///';
+	public static readonly BR = 'BR';
+	public static readonly DLCS = 'DLCs';
+	public static readonly MAPS = 'Maps';
+	public static readonly LOCALES = 'Locales';
+	public static readonly FILE_LOCALES = 'locales.json';
+	public static readonly PICTURES = 'Images';
+	public static readonly VIDEOS = 'Videos';
+	public static readonly FONTS = 'Fonts';
+	public static readonly STYLES = 'Styles';
+	public static readonly BACKUPS = 'Backups';
+	public static readonly RESOURCES = 'resources';
+	public static readonly RESOURCES_DARWIN = 'Resources';
+	public static readonly APP = 'app';
+	public static readonly HUD = Paths.join(Paths.PICTURES, 'HUD');
+	public static readonly TEXTURES2D = Paths.join(Paths.PICTURES, 'Textures2D');
+	public static readonly BARS = Paths.join(Paths.HUD, 'Bars');
+	public static readonly FACESETS = Paths.join(Paths.HUD, 'Facesets');
+	public static readonly ICONS = Paths.join(Paths.HUD, 'Icons');
+	public static readonly WINDOW_SKINS = Paths.join(Paths.HUD, 'WindowSkins');
+	public static readonly TITLE_SCREEN = Paths.join(Paths.HUD, 'TitleScreen');
+	public static readonly GAME_OVER = Paths.join(Paths.HUD, 'GameOver');
+	public static readonly HUD_PICTURES = Paths.join(Paths.HUD, 'Pictures');
+	public static readonly ANIMATIONS = Paths.join(Paths.HUD, 'Animations');
+	public static readonly AUTOTILES = Paths.join(Paths.TEXTURES2D, 'Autotiles');
+	public static readonly CHARACTERS = Paths.join(Paths.TEXTURES2D, 'Characters');
+	public static readonly TILESETS = Paths.join(Paths.TEXTURES2D, 'Tilesets');
+	public static readonly WALLS = Paths.join(Paths.TEXTURES2D, 'Walls');
+	public static readonly BATTLERS = Paths.join(Paths.TEXTURES2D, 'Battlers');
+	public static readonly OBJECTS_3D = Paths.join(Paths.TEXTURES2D, 'Objects3D');
+	public static readonly MOUNTAINS = Paths.join(Paths.TEXTURES2D, 'Mountains');
+	public static readonly SKYBOXES = Paths.join(Paths.TEXTURES2D, 'SkyBoxes');
+	public static readonly PARTICLES = Paths.join(Paths.TEXTURES2D, 'Particles');
+	public static readonly SONGS = 'Songs';
+	public static readonly MUSICS = Paths.join(Paths.SONGS, 'Musics');
+	public static readonly BACKGROUND_SOUNDS = Paths.join(Paths.SONGS, 'BackgroundSounds');
+	public static readonly SOUNDS = Paths.join(Paths.SONGS, 'Sounds');
+	public static readonly MUSIC_EFFECTS = Paths.join(Paths.SONGS, 'MusicEffects');
+	public static readonly SHAPES = 'Shapes';
+	public static readonly OBJ = Paths.join(Paths.SHAPES, 'OBJ');
+	public static readonly MTL = Paths.join(Paths.SHAPES, 'MTL');
+	public static readonly OBJ_COLLISIONS = Paths.join(Paths.SHAPES, 'Collisions');
+	public static readonly GLTF = Paths.join(Paths.SHAPES, 'GLTF');
+	public static readonly SCRIPTS = 'Scripts';
+	public static readonly PLUGINS = 'Plugins';
+	public static readonly PLUGINS_TEMP = 'Plugins_temp';
+	public static readonly SYSTEM = Paths.join(Paths.SCRIPTS, 'System');
+	public static readonly SHADERS = Paths.join(Paths.SCRIPTS, 'Shaders');
+	public static readonly SAVES = 'Saves';
+	public static readonly TEST = 'Test';
+	public static readonly DEFAULT = 'Default';
+	public static readonly TUTORIAL = 'Tutorial';
+	public static readonly DEPLOY = 'Deploy';
+	public static readonly BUILD = 'build';
+	public static readonly TEMP = 'temp';
+	public static readonly INDEX = 'index';
+	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
+	public static readonly FILE_MAP_INFOS = 'infos.json';
+	public static readonly FILE_PICTURES = 'pictures.json';
+	public static readonly FILE_VIDEOS = 'videos.json';
+	public static readonly FILE_FONTS = 'fonts.json';
+	public static readonly FILE_SONGS = 'songs.json';
+	public static readonly FILE_SHAPES = 'shapes.json';
+	public static readonly FILE_COMMON_EVENTS = 'commonEvents.json';
+	public static readonly FILE_ITEMS = 'items.json';
+	public static readonly FILE_SKILLS = 'skills.json';
+	public static readonly FILE_WEAPONS = 'weapons.json';
+	public static readonly FILE_ARMORS = 'armors.json';
+	public static readonly FILE_HEROES = 'heroes.json';
+	public static readonly FILE_MONSTERS = 'monsters.json';
+	public static readonly FILE_TROOPS = 'troops.json';
+	public static readonly FILE_BATTLE_SYSTEM = 'battleSystem.json';
+	public static readonly FILE_TITLE_SCREEN_GAME_OVER = 'titlescreenGameover.json';
+	public static readonly FILE_KEYBOARD = 'keyboard.json';
+	public static readonly FILE_SYSTEM = 'system.json';
+	public static readonly FILE_CLASSES = 'classes.json';
+	public static readonly FILE_TILESETS = 'tilesets.json';
+	public static readonly FILE_SPECIAL_ELEMENTS = 'specialElements.json';
+	public static readonly FILE_VARIABLES = 'variables.json';
+	public static readonly FILE_SETTINGS = 'settings.json';
+	public static readonly FILE_DLCS = 'dlcs.json';
+	public static readonly FILE_ANIMATIONS = 'animations.json';
+	public static readonly FILE_STATUS = 'status.json';
+	public static readonly FILE_SCRIPTS = 'scripts.json';
+	public static readonly FILE_TREE_MAPS = 'treeMaps.json';
+	public static readonly FILE_LANGS = 'langs.json';
+	public static readonly FILE_PROTECT = '.protect';
+	public static readonly FILE_PLUGIN_CODE = 'code.js';
+	public static readonly FILE_PLUGIN_DETAILS = 'details.json';
+	public static readonly FILE_PLUGIN_PICTURE = 'pic.png';
+	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
+	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
+	public static readonly FILE_TEST = 'test.json';
+	public static readonly FILE_VERSION = 'version';
+	public static readonly FILE_GAME_RPMG = 'game.rpmg';
+	public static readonly FILE_FONTS_CSS = 'fonts.css';
+	public static readonly FILE_PATREON = 'patreon.json';
+	public static DIST = '';
+	public static GLOBAL_DOCUMENTS = '';
+	public static GLOBAL_RPM_GAMES = '';
+
+	public static readonly ALL_JSON = [
+		Paths.FILE_PICTURES,
+		Paths.FILE_VIDEOS,
+		Paths.FILE_FONTS,
+		Paths.FILE_SONGS,
+		Paths.FILE_SHAPES,
+		Paths.FILE_COMMON_EVENTS,
+		Paths.FILE_ITEMS,
+		Paths.FILE_SKILLS,
+		Paths.FILE_WEAPONS,
+		Paths.FILE_ARMORS,
+		Paths.FILE_HEROES,
+		Paths.FILE_MONSTERS,
+		Paths.FILE_TROOPS,
+		Paths.FILE_BATTLE_SYSTEM,
+		Paths.FILE_TITLE_SCREEN_GAME_OVER,
+		Paths.FILE_KEYBOARD,
+		Paths.FILE_SYSTEM,
+		Paths.FILE_CLASSES,
+		Paths.FILE_TILESETS,
+		Paths.FILE_SPECIAL_ELEMENTS,
+		Paths.FILE_VARIABLES,
+		Paths.FILE_SETTINGS,
+		Paths.FILE_DLCS,
+		Paths.FILE_ANIMATIONS,
+		Paths.FILE_STATUS,
+		Paths.FILE_SCRIPTS,
+		Paths.FILE_LANGS,
+		Paths.FILE_TREE_MAPS,
+	];
+
+	static join(...args: (string | undefined | number)[]): string {
+		return this.normalize(args.filter((arg) => arg !== undefined && arg !== '').join('/'));
+	}
+
+	static normalize(path: string): string {
+		return path.replaceAll('\\', '/');
+	}
+
+	static getFileName(path: string): string {
+		return this.normalize(path).split('/').pop() ?? '';
+	}
+
+	static getRPMGamesFolder(): string {
+		return Constants.IS_DESKTOP ? Paths.GLOBAL_RPM_GAMES : LOCAL_FORAGE.PROJECTS;
+	}
+}
+
+export { Paths };

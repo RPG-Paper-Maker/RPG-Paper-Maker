@@ -1,0 +1,1101 @@
+{
+  "BR": {
+    "Fonts": {
+      "files": [
+        "Default.ttf"
+      ]
+    },
+    "Images": {
+      "HUD": {
+        "Animations": {
+          "files": [
+            "arrow.png",
+            "basic.png",
+            "bullet.png",
+            "emotes-status.png",
+            "skills-items1.png",
+            "skills-items2.png",
+            "skills-items3.png"
+          ]
+        },
+        "Bars": {
+          "files": [
+            "hpBar.png",
+            "mpBar.png",
+            "tpBar.png"
+          ]
+        },
+        "Facesets": {
+          "files": [
+            "heroes.png",
+            "monsters.png",
+            "others.png"
+          ]
+        },
+        "GameOver": {
+          "files": [
+            "background.png"
+          ]
+        },
+        "Icons": {
+          "files": [
+            "armors.png",
+            "currencies.png",
+            "emotes-status.png",
+            "items.png",
+            "skills.png",
+            "weapons.png"
+          ]
+        },
+        "Pictures": {
+          "files": [
+            "bibi.png",
+            "kate.png",
+            "lucas.png",
+            "shana.png"
+          ]
+        },
+        "TitleScreen": {
+          "files": [
+            "background-logo.png",
+            "background.png"
+          ]
+        },
+        "WindowSkins": {
+          "files": [
+            "black.png",
+            "blue.png",
+            "green.png",
+            "red.png"
+          ]
+        }
+      },
+      "Textures2D": {
+        "Autotiles": {
+          "files": [
+            "general.png",
+            "haunted.png",
+            "lava.png",
+            "snow.png",
+            "water.png"
+          ]
+        },
+        "Battlers": {
+          "files": [
+            "angel.png",
+            "bat.png",
+            "bibi.png",
+            "caitlyn.png",
+            "charles.png",
+            "demon.png",
+            "fantom.png",
+            "fortune.png",
+            "goblin.png",
+            "harpy.png",
+            "kate.png",
+            "knight.png",
+            "lamia.png",
+            "lily.png",
+            "lucas.png",
+            "mimic.png",
+            "mushroomy.png",
+            "ogre.png",
+            "rat.png",
+            "shana.png",
+            "skeleton.png",
+            "slime-black.png",
+            "slime-blue.png",
+            "slime-gold.png",
+            "spider.png",
+            "squid.png",
+            "template.png",
+            "wooly.png",
+            "zombie.png"
+          ]
+        },
+        "Characters": {
+          "files": [
+            "angel.png",
+            "bat.png",
+            "bibi.png",
+            "caitlyn.png",
+            "cat-black.png",
+            "cat-brown.png",
+            "cat-calico.png",
+            "cat-white.png",
+            "charles.png",
+            "chicken-black.png",
+            "chicken-brown.png",
+            "chicken-white.png",
+            "cow-black.png",
+            "cow-brown.png",
+            "cow-white.png",
+            "dancer.png",
+            "demon.png",
+            "dog-black.png",
+            "dog-brown.png",
+            "dog-white.png",
+            "doors.png",
+            "fantom.png",
+            "fires.png",
+            "fortune.png",
+            "goblin.png",
+            "harpy.png",
+            "kate.png",
+            "knight.png",
+            "lamia.png",
+            "lily.png",
+            "lucas-full.png",
+            "lucas.png",
+            "mushroomy.png",
+            "naked-man.png",
+            "naked-woman.png",
+            "ogre.png",
+            "rat.png",
+            "rocks.png",
+            "save-warp-point.png",
+            "shana.png",
+            "signs.png",
+            "skeleton.png",
+            "slime-black.png",
+            "slime-blue.png",
+            "slime-gold.png",
+            "spider.png",
+            "squid.png",
+            "switches.png",
+            "template.png",
+            "villager1.png",
+            "villager10.png",
+            "villager11.png",
+            "villager12.png",
+            "villager13.png",
+            "villager14.png",
+            "villager15.png",
+            "villager16.png",
+            "villager17.png",
+            "villager18.png",
+            "villager19.png",
+            "villager2.png",
+            "villager20.png",
+            "villager3.png",
+            "villager4.png",
+            "villager5.png",
+            "villager6.png",
+            "villager7.png",
+            "villager8.png",
+            "villager9.png",
+            "wooly.png",
+            "zombie.png"
+          ]
+        },
+        "Mountains": {
+          "files": [
+            "cave.png",
+            "desert.png",
+            "grass-noborders.png",
+            "grass-small-cave-entry.png",
+            "grass.png",
+            "haunted-noborders.png",
+            "haunted.png",
+            "roof-blue.png",
+            "roof-green.png",
+            "roof-red.png",
+            "roof-white.png",
+            "sand.png",
+            "sandstone.png",
+            "sewers.png",
+            "sidewalk.png",
+            "snow-no-borders.png",
+            "snow.png",
+            "stairs.png"
+          ]
+        },
+        "Objects3D": {
+          "files": [
+            "barrel-closed.png",
+            "barrel-fruits.png",
+            "barrel-vegetables.png",
+            "barrel.png",
+            "bath.png",
+            "bed-big-black.png",
+            "bed-big-blue.png",
+            "bed-big-green.png",
+            "bed-big-red.png",
+            "bed-big-white.png",
+            "bed-black.png",
+            "bed-blue.png",
+            "bed-green.png",
+            "bed-red.png",
+            "bed-white.png",
+            "bench-stone.png",
+            "bench-wood.png",
+            "bookshelf-small.png",
+            "bookshelf.png",
+            "building-brick-big.png",
+            "building-brick.png",
+            "building-stone-big.png",
+            "building-stone.png",
+            "building-wood-big.png",
+            "building-wood.png",
+            "bus.png",
+            "cabinets1.png",
+            "cabinets2.png",
+            "cabinets3.png",
+            "car-black.png",
+            "car-blue.png",
+            "car-green.png",
+            "car-red.png",
+            "car-white.png",
+            "chair-blue.png",
+            "chair-green.png",
+            "chair-red.png",
+            "chair-white.png",
+            "chest-opened1.png",
+            "chest-opened2.png",
+            "chest-small-blue.png",
+            "chest-small-green.png",
+            "chest-small-opened-blue.png",
+            "chest-small-opened-green.png",
+            "chest-small-opened-red.png",
+            "chest-small-opened.png",
+            "chest-small-red.png",
+            "chest-small.png",
+            "chest.png",
+            "chimney-brick.png",
+            "chimney-stone.png",
+            "crate.png",
+            "cube-cobblestone.png",
+            "dresser.png",
+            "fridge.png",
+            "house-brick-blue-snow.png",
+            "house-brick-blue.png",
+            "house-brick-green-snow.png",
+            "house-brick-green.png",
+            "house-brick-red-snow.png",
+            "house-brick-red.png",
+            "house-stone-blue-snow.png",
+            "house-stone-blue.png",
+            "house-stone-green-snow.png",
+            "house-stone-green.png",
+            "house-stone-red-snow.png",
+            "house-stone-red.png",
+            "house-wood-blue-snow.png",
+            "house-wood-blue.png",
+            "house-wood-green-snow.png",
+            "house-wood-green.png",
+            "house-wood-red-snow.png",
+            "house-wood-red.png",
+            "log-big.png",
+            "log-small.png",
+            "log.png",
+            "minecart.png",
+            "picnic-table-stone.png",
+            "picnic-table-wood.png",
+            "shop-stand-big-black-snow.png",
+            "shop-stand-big-black.png",
+            "shop-stand-big-blue-snow.png",
+            "shop-stand-big-blue.png",
+            "shop-stand-big-green-snow.png",
+            "shop-stand-big-green.png",
+            "shop-stand-big-red-snow.png",
+            "shop-stand-big-red.png",
+            "shop-stand-big-white-snow.png",
+            "shop-stand-big-white.png",
+            "shop-stand-black.png",
+            "shop-stand-blue.png",
+            "shop-stand-green.png",
+            "shop-stand-red.png",
+            "shop-stand-white.png",
+            "sink.png",
+            "sofa-black.png",
+            "sofa-blue.png",
+            "sofa-green.png",
+            "sofa-red.png",
+            "sofa-white.png",
+            "table-big.png",
+            "table-small.png",
+            "table.png",
+            "template.png",
+            "tent.png",
+            "toilet.png",
+            "tv-small.png",
+            "tv.png",
+            "woodfence-snow.png",
+            "woodfence.png"
+          ]
+        },
+        "Particles": {
+          "files": [
+            "raindrop.png",
+            "snowflake.png"
+          ]
+        },
+        "SkyBoxes": {
+          "files": [
+            "day-back.png",
+            "day-bottom.png",
+            "day-front.png",
+            "day-left.png",
+            "day-right.png",
+            "day-top.png",
+            "evening-sun-back.png",
+            "evening-sun-bottom.png",
+            "evening-sun-front.png",
+            "evening-sun-left.png",
+            "evening-sun-right.png",
+            "evening-sun-top.png",
+            "night-back.png",
+            "night-bottom.png",
+            "night-front.png",
+            "night-left.png",
+            "night-right.png",
+            "night-top.png"
+          ]
+        },
+        "Tilesets": {
+          "files": [
+            "beach-desert.png",
+            "castle.png",
+            "dungeon-mines.png",
+            "inside.png",
+            "jungle.png",
+            "plains-woods-haunted.png",
+            "plains-woods-snow.png",
+            "plains-woods.png",
+            "school.png",
+            "sewers.png",
+            "shop.png",
+            "spaceship.png",
+            "town-desert.png",
+            "town-snow.png",
+            "town.png",
+            "volcano.png"
+          ]
+        },
+        "Walls": {
+          "files": [
+            "brick.png",
+            "bridge-string.png",
+            "bush-haunted.png",
+            "bush-snow.png",
+            "bush.png",
+            "castle1.png",
+            "cave1.png",
+            "hedge-snow.png",
+            "hedge.png",
+            "inside-door-opened.png",
+            "inside1.png",
+            "inside2.png",
+            "inside3.png",
+            "jungle1.png",
+            "jungle2.png",
+            "sandstone-big.png",
+            "sandstone.png",
+            "sewers.png",
+            "spaceship1.png",
+            "spaceship2.png",
+            "stone.png",
+            "volcano1.png",
+            "volcano2.png",
+            "white-wall.png",
+            "wood.png",
+            "woods-wall.png"
+          ]
+        }
+      }
+    },
+    "Shapes": {
+      "Collisions": {},
+      "GLTF": {},
+      "MTL": {},
+      "OBJ": {
+        "files": [
+          "barrel.obj",
+          "car.obj",
+          "chair.obj",
+          "chest-opened.obj",
+          "house1.obj",
+          "sink.obj",
+          "sofa.obj",
+          "tent.obj",
+          "toilet.obj",
+          "woodfence1.obj",
+          "woodfence2.obj",
+          "woodfence3.obj"
+        ]
+      }
+    },
+    "Songs": {
+      "BackgroundSounds": {
+        "files": [
+          "Cave.mp3",
+          "Rain.mp3"
+        ]
+      },
+      "MusicEffects": {
+        "files": [
+          "Levelup.wav"
+        ]
+      },
+      "Musics": {
+        "files": [
+          "Battle1.mp3",
+          "Battle2.mp3",
+          "BattleBoss1.mp3",
+          "Dungeon1.mp3",
+          "Dungeon2.mp3",
+          "Field1.mp3",
+          "Theme1.mp3",
+          "TitleScreen1.mp3",
+          "Town1.mp3"
+        ]
+      },
+      "Sounds": {
+        "files": [
+          "Bip.wav",
+          "Cancel.wav",
+          "Confirmation.wav",
+          "Confuse.wav",
+          "Cursor.wav",
+          "Dead.wav",
+          "Heal.wav",
+          "Hit.wav",
+          "Levelup.wav",
+          "Malus.wav",
+          "Mana.wav",
+          "Poison.wav",
+          "Up.wav"
+        ]
+      }
+    },
+    "Videos": {}
+  },
+  "files": [
+    "date",
+    "favicon.ico",
+    "fileManifest.json",
+    "icon.png",
+    "patreon.json",
+    "version"
+  ],
+  "Default": {
+    "files": [
+      "0_0_0.json",
+      "animations.json",
+      "armors.json",
+      "battleSystem.json",
+      "classes.json",
+      "commonEvents.json",
+      "dlcs.json",
+      "fonts.json",
+      "heroes.json",
+      "items.json",
+      "keyboard.json",
+      "langs.json",
+      "monsters.json",
+      "pictures.json",
+      "scripts.json",
+      "settings.json",
+      "shapes.json",
+      "skills.json",
+      "songs.json",
+      "specialElements.json",
+      "status.json",
+      "system.json",
+      "tilesets.json",
+      "titlescreenGameover.json",
+      "treeMaps.json",
+      "troops.json",
+      "variables.json",
+      "videos.json",
+      "weapons.json"
+    ]
+  },
+  "Deploy": {
+    "files": [
+      "index.html",
+      "main.js",
+      "package.json",
+      "Platform.js",
+      "preload.js"
+    ]
+  },
+  "DLCs": {
+    "files": [
+      "empty"
+    ]
+  },
+  "Locales": {
+    "files": [
+      "br.json",
+      "cn.json",
+      "de.json",
+      "en.json",
+      "es.json",
+      "fr.json",
+      "it.json",
+      "jp.json",
+      "ko.json",
+      "locales.json",
+      "pl.json",
+      "ru.json",
+      "uk.json"
+    ]
+  },
+  "Pictures": {
+    "files": [
+      "bullet-br.png",
+      "bullet-custom.png",
+      "bullet-dlc.png",
+      "cursor-layers-on.svg",
+      "cursor.png",
+      "detection-arrow.png",
+      "detection-box.png",
+      "direction.png",
+      "missing.png",
+      "object-square-cursor.png",
+      "object-square.png",
+      "start-position.png",
+      "tileset-cursor.png"
+    ]
+  },
+  "Scripts": {
+    "Common": {
+      "files": [
+        "ArrayUtils.js",
+        "Constants.js",
+        "Enum.js",
+        "index.js",
+        "Inputs.js",
+        "Interpreter.js",
+        "IO.js",
+        "Mathf.js",
+        "Paths.js",
+        "Platform.js",
+        "ScreenResolution.js",
+        "Types.js",
+        "Utils.js"
+      ]
+    },
+    "Core": {
+      "files": [
+        "Animation.js",
+        "Autotile.js",
+        "Autotiles.js",
+        "Battler.js",
+        "Bitmap.js",
+        "Camera.js",
+        "Chrono.js",
+        "CollisionSquare.js",
+        "CustomGeometry.js",
+        "CustomGeometryFace.js",
+        "Floor.js",
+        "Frame.js",
+        "Game.js",
+        "index.js",
+        "Item.js",
+        "Land.js",
+        "MapElement.js",
+        "MapObject.js",
+        "MapPortion.js",
+        "Mountain.js",
+        "Mountains.js",
+        "Node.js",
+        "Object3D.js",
+        "Object3DBox.js",
+        "Object3DCustom.js",
+        "Party.js",
+        "Picture2D.js",
+        "Player.js",
+        "Portion.js",
+        "Position.js",
+        "ReactionInterpreter.js",
+        "Rectangle.js",
+        "Skill.js",
+        "SpinBox.js",
+        "Sprite.js",
+        "SpriteWall.js",
+        "Status.js",
+        "TextureBundle.js",
+        "Tree.js",
+        "WindowBox.js",
+        "WindowChoices.js"
+      ]
+    },
+    "Data": {
+      "files": [
+        "Animations.js",
+        "Armors.js",
+        "Base.js",
+        "BattleSystems.js",
+        "Classes.js",
+        "CommonEvents.js",
+        "Heroes.js",
+        "index.js",
+        "Items.js",
+        "Keyboards.js",
+        "Languages.js",
+        "Monsters.js",
+        "Pictures.js",
+        "Settings.js",
+        "Shapes.js",
+        "Skills.js",
+        "Songs.js",
+        "SpecialElements.js",
+        "Status.js",
+        "Systems.js",
+        "Tilesets.js",
+        "TitleScreenGameOver.js",
+        "Troops.js",
+        "Variables.js",
+        "Videos.js",
+        "Weapons.js"
+      ]
+    },
+    "EventCommand": {
+      "files": [
+        "AllowForbidMainMenu.js",
+        "AllowForbidSaves.js",
+        "Base.js",
+        "CallACommonReaction.js",
+        "ChangeASkill.js",
+        "ChangeAStatistic.js",
+        "ChangeBattleMusic.js",
+        "ChangeBattlerGraphics.js",
+        "ChangeChronometer.js",
+        "ChangeClass.js",
+        "ChangeEquipment.js",
+        "ChangeExperienceCurve.js",
+        "ChangeMapProperties.js",
+        "ChangeName.js",
+        "ChangeProperty.js",
+        "ChangeScreenTone.js",
+        "ChangeState.js",
+        "ChangeStatus.js",
+        "ChangeVariables.js",
+        "ChangeVictoryMusic.js",
+        "ChangeWeather.js",
+        "Choice.js",
+        "Comment.js",
+        "CreateObjectInMap.js",
+        "DisplayAnAnimation.js",
+        "DisplayAPicture.js",
+        "DisplayChoice.js",
+        "DisplayHideABattler.js",
+        "Else.js",
+        "EndBattle.js",
+        "EnterANameMenu.js",
+        "FlashScreen.js",
+        "ForceAnAction.js",
+        "GameOver.js",
+        "If.js",
+        "IfLose.js",
+        "IfWin.js",
+        "index.js",
+        "InputNumber.js",
+        "JumpToLabel.js",
+        "Label.js",
+        "ModifyCurrency.js",
+        "ModifyInventory.js",
+        "ModifyTeam.js",
+        "MoveCamera.js",
+        "MoveObject.js",
+        "OpenMainMenu.js",
+        "OpenSavesMenu.js",
+        "PlayAVideo.js",
+        "PlayBackgroundSound.js",
+        "PlayMusic.js",
+        "PlayMusicEffect.js",
+        "PlaySound.js",
+        "Plugin.js",
+        "RemoveAPicture.js",
+        "RemoveObjectFromMap.js",
+        "ResetCamera.js",
+        "Script.js",
+        "SendEvent.js",
+        "SetDialogBoxOptions.js",
+        "SetMoveTurnAPicture.js",
+        "ShakeScreen.js",
+        "ShowText.js",
+        "StartBattle.js",
+        "StartShopMenu.js",
+        "StopASound.js",
+        "StopBackgroundSound.js",
+        "StopMusic.js",
+        "StopReaction.js",
+        "SwitchTexture.js",
+        "TeleportObject.js",
+        "TitleScreen.js",
+        "TransformABattler.js",
+        "Wait.js",
+        "While.js",
+        "WhileBreak.js"
+      ]
+    },
+    "Graphic": {
+      "files": [
+        "Base.js",
+        "Equip.js",
+        "EquipStats.js",
+        "index.js",
+        "Item.js",
+        "Keyboard.js",
+        "Loots.js",
+        "Message.js",
+        "Player.js",
+        "PlayerDescription.js",
+        "RewardsTop.js",
+        "Save.js",
+        "Setting.js",
+        "ShopCurrencies.js",
+        "Skill.js",
+        "SkillItem.js",
+        "SpinBox.js",
+        "Statistic.js",
+        "StatisticProgression.js",
+        "Text.js",
+        "TextIcon.js",
+        "TimeCurrencies.js",
+        "UseSkillItem.js",
+        "XPProgression.js"
+      ]
+    },
+    "files": [
+      "index.js",
+      "main.js"
+    ],
+    "Libs": {
+      "examples": {
+        "jsm": {
+          "loaders": {
+            "files": [
+              "GLTFLoader.js"
+            ]
+          },
+          "utils": {
+            "files": [
+              "BufferGeometryUtils.js",
+              "SkeletonUtils.js"
+            ]
+          }
+        }
+      },
+      "files": [
+        "howler.core.min.js",
+        "howler.min.js",
+        "three.core.min.js",
+        "three.module.min.js"
+      ],
+      "localforage": {
+        "drivers": {
+          "files": [
+            "indexeddb.js",
+            "localstorage.js",
+            "websql.js"
+          ]
+        },
+        "files": [
+          "localforage.js"
+        ],
+        "utils": {
+          "files": [
+            "createBlob.js",
+            "executeCallback.js",
+            "executeTwoCallbacks.js",
+            "getCallback.js",
+            "idb.js",
+            "includes.js",
+            "isArray.js",
+            "isIndexedDBValid.js",
+            "isLocalStorageValid.js",
+            "isWebSQLValid.js",
+            "normalizeKey.js",
+            "promise.js",
+            "serializer.js"
+          ]
+        }
+      }
+    },
+    "Manager": {
+      "files": [
+        "Collisions.js",
+        "Events.js",
+        "GL.js",
+        "index.js",
+        "Plugins.js",
+        "Songs.js",
+        "Stack.js",
+        "Videos.js"
+      ]
+    },
+    "Model": {
+      "files": [
+        "Animation.js",
+        "AnimationFrame.js",
+        "AnimationFrameEffect.js",
+        "AnimationFrameElement.js",
+        "Armor.js",
+        "Autotile.js",
+        "Base.js",
+        "BattleMap.js",
+        "CameraProperties.js",
+        "Characteristic.js",
+        "Class.js",
+        "ClassSkill.js",
+        "Color.js",
+        "CommonEvent.js",
+        "CommonReaction.js",
+        "CommonSkillItem.js",
+        "Cost.js",
+        "Currency.js",
+        "Detection.js",
+        "DynamicValue.js",
+        "Effect.js",
+        "Element.js",
+        "Event.js",
+        "FontName.js",
+        "GameOverCommand.js",
+        "Hero.js",
+        "HeroTroopBattleTest.js",
+        "HeroTroopBattleTestEquipment.js",
+        "Icon.js",
+        "index.js",
+        "InitialPartyMember.js",
+        "InventoryFilter.js",
+        "Item.js",
+        "Keyboard.js",
+        "Localization.js",
+        "Loot.js",
+        "MainMenuCommand.js",
+        "MapObject.js",
+        "MapProperties.js",
+        "Monster.js",
+        "MonsterAction.js",
+        "Mountain.js",
+        "Object3D.js",
+        "Parameter.js",
+        "Picture.js",
+        "PlaySong.js",
+        "Plugin.js",
+        "ProgressionTable.js",
+        "Property.js",
+        "RandomBattle.js",
+        "Reaction.js",
+        "Shape.js",
+        "ShopItem.js",
+        "Skill.js",
+        "Skybox.js",
+        "Song.js",
+        "SpecialElement.js",
+        "State.js",
+        "Statistic.js",
+        "StatisticProgression.js",
+        "Status.js",
+        "StatusReleaseTurn.js",
+        "Tileset.js",
+        "TitleCommand.js",
+        "Troop.js",
+        "TroopMonster.js",
+        "TroopReaction.js",
+        "TroopReactionConditions.js",
+        "Video.js",
+        "Weapon.js",
+        "WeaponArmorKind.js",
+        "WindowSkin.js"
+      ]
+    },
+    "Scene": {
+      "files": [
+        "Base.js",
+        "Battle.js",
+        "BattleAnimation.js",
+        "BattleEndTurn.js",
+        "BattleEnemyAttack.js",
+        "BattleInitialize.js",
+        "BattleSelection.js",
+        "BattleStartTurn.js",
+        "BattleVictory.js",
+        "ChangeLanguage.js",
+        "Confirm.js",
+        "GameOver.js",
+        "index.js",
+        "KeyboardAssign.js",
+        "LoadGame.js",
+        "Loading.js",
+        "Map.js",
+        "Menu.js",
+        "MenuBase.js",
+        "MenuDescriptionState.js",
+        "MenuEnterAName.js",
+        "MenuEquip.js",
+        "MenuInventory.js",
+        "MenuShop.js",
+        "MenuSkills.js",
+        "SaveGame.js",
+        "SaveLoadGame.js",
+        "ShowTextPreview.js",
+        "TitleScreen.js",
+        "TitleSettings.js"
+      ]
+    },
+    "Shaders": {
+      "files": [
+        "default.frag",
+        "default.vert"
+      ]
+    }
+  },
+  "Tutorial": {
+    "files": [
+      "animations.json",
+      "armors.json",
+      "battleSystem.json",
+      "classes.json",
+      "commonEvents.json",
+      "dlcs.json",
+      "fonts.json",
+      "game.rpmg",
+      "heroes.json",
+      "items.json",
+      "keyboard.json",
+      "langs.json",
+      "monsters.json",
+      "pictures.json",
+      "scripts.json",
+      "settings.json",
+      "shapes.json",
+      "skills.json",
+      "songs.json",
+      "specialElements.json",
+      "status.json",
+      "system.json",
+      "tilesets.json",
+      "titlescreenGameover.json",
+      "treeMaps.json",
+      "troops.json",
+      "variables.json",
+      "videos.json",
+      "weapons.json"
+    ],
+    "Fonts": {},
+    "Images": {
+      "HUD": {
+        "Animations": {},
+        "Bars": {},
+        "Facesets": {},
+        "GameOver": {},
+        "Icons": {},
+        "Pictures": {},
+        "TitleScreen": {},
+        "WindowSkins": {}
+      },
+      "Textures2D": {
+        "Autotiles": {},
+        "Battlers": {},
+        "Characters": {},
+        "Mountains": {},
+        "Objects3D": {},
+        "Particles": {},
+        "SkyBoxes": {},
+        "Tilesets": {},
+        "Walls": {}
+      }
+    },
+    "Maps": {
+      "MAP0001": {
+        "files": [
+          "0_-1_0.json",
+          "0_-1_1.json",
+          "0_-1_2.json",
+          "0_-1_3.json",
+          "0_0_0.json",
+          "0_0_1.json",
+          "0_0_2.json",
+          "0_0_3.json",
+          "1_-1_0.json",
+          "1_-1_1.json",
+          "1_-1_2.json",
+          "1_-1_3.json",
+          "1_0_0.json",
+          "1_0_1.json",
+          "1_0_2.json",
+          "1_0_3.json",
+          "2_-1_0.json",
+          "2_-1_1.json",
+          "2_-1_2.json",
+          "2_-1_3.json",
+          "2_0_0.json",
+          "2_0_1.json",
+          "2_0_2.json",
+          "2_0_3.json",
+          "3_-1_0.json",
+          "3_-1_1.json",
+          "3_-1_2.json",
+          "3_-1_3.json",
+          "3_0_0.json",
+          "3_0_1.json",
+          "3_0_2.json",
+          "3_0_3.json",
+          "4_-1_0.json",
+          "4_-1_1.json",
+          "4_-1_2.json",
+          "4_-1_3.json",
+          "4_0_0.json",
+          "4_0_1.json",
+          "4_0_2.json",
+          "4_0_3.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "index"
+          ]
+        }
+      },
+      "MAP0002": {
+        "files": [
+          "0_0_0.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "index"
+          ]
+        }
+      },
+      "MAP0003": {
+        "files": [
+          "0_0_0.json",
+          "infos.json"
+        ],
+        "temp": {},
+        "temp-undo-redo": {
+          "files": [
+            "index"
+          ]
+        }
+      }
+    },
+    "Plugins": {},
+    "Saves": {},
+    "Shapes": {
+      "Collisions": {},
+      "MTL": {},
+      "OBJ": {}
+    },
+    "Songs": {
+      "BackgroundSounds": {},
+      "MusicEffects": {},
+      "Musics": {},
+      "Sounds": {}
+    },
+    "Styles": {
+      "files": [
+        "fonts.css"
+      ]
+    },
+    "Videos": {}
+  }
+}

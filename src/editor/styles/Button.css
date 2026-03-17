@@ -1,0 +1,98 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+button {
+	border: none;
+	padding: 3px 10px 3px 10px;
+	border-radius: 3px;
+	background-color: var(--lighter-bg-color);
+	color: white;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	font-size: 12px;
+	height: 20px;
+
+	&:has(svg.close:hover) {
+		color: var(--orange-color);
+	}
+
+	svg {
+		width: 14px;
+		height: 14px;
+	}
+}
+
+button.primary {
+	background-color: var(--primary-dark-color);
+}
+
+button.patreon {
+	background-color: var(--patreon-color);
+}
+
+button.red {
+	background-color: var(--red-color);
+}
+
+button.primaryText {
+	color: var(--primary-color);
+}
+
+button.backgroundOnHoverOnly {
+	background-color: var(--main-bg-color);
+}
+
+button.square {
+	border-radius: 0;
+	height: 100%;
+}
+
+button:hover:not(.disabled) {
+	background-color: var(--lightest-bg-color);
+}
+
+button.active {
+	background-color: var(--primary-dark-color);
+
+	&:hover:not(.disabled) {
+		background-color: var(--hover-primary-dark-color);
+	}
+}
+
+button.primary:hover:not(.disabled) {
+	background-color: var(--hover-primary-dark-color);
+}
+
+button.big {
+	padding: 15px 35px 15px 35px;
+	font-size: 15px;
+	height: auto;
+}
+
+button.patreon:hover {
+	background-color: var(--hover-patreon-color);
+}
+
+button.red:hover {
+	background-color: var(--hover-red-color);
+}
+
+button.disabled {
+	opacity: 0.4;
+	cursor: initial;
+}
+
+button.small {
+	padding: 2px;
+}

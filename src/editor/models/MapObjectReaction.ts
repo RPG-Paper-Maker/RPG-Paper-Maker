@@ -1,0 +1,57 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { BINDING, JSONType } from '../common';
+import { Node } from '../core/Node';
+import { BindingType } from '../core/Serializable';
+import { Base } from './Base';
+import { MapObjectCommand } from './MapObjectCommand';
+
+class MapObjectReaction extends Base {
+	public commands!: Node[];
+	public blockingHero!: boolean;
+
+	public static bindings: BindingType[] = [['blockingHero', 'bh', undefined, BINDING.BOOLEAN]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(MapObjectReaction.getBindings(additionnalBinding));
+		this.commands = [];
+	}
+
+	copy(reaction: MapObjectReaction, additionnalBinding: BindingType[] = []): void {
+		super.copy(reaction, MapObjectReaction.getBindings(additionnalBinding));
+		this.commands = reaction.commands.map((command) => command.clone());
+	}
+
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.read(json, MapObjectReaction.getBindings(additionnalBinding));
+		this.commands = (json.c as JSONType[]).map((jsonNode) => {
+			const node = new Node();
+			node.read(jsonNode, [], MapObjectCommand);
+			return node;
+		});
+	}
+
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.write(json, MapObjectReaction.getBindings(additionnalBinding));
+		json.c = this.commands.map((node) => {
+			const nodeJson = {};
+			node.write(nodeJson);
+			return nodeJson;
+		});
+	}
+}
+
+export { MapObjectReaction };

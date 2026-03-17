@@ -1,0 +1,65 @@
+.dropdown {
+	display: flex;
+	background-color: var(--lighter-bg-color);
+	color: var(--main-color);
+	border-radius: 5px;
+	height: 20px;
+	padding: 5px;
+	cursor: pointer;
+	box-sizing: border-box;
+	white-space: nowrap;
+}
+
+.dropdown.open {
+	border-radius: 5px 5px 0 0;
+}
+
+.dropdown.disabled {
+	opacity: 0.4;
+	cursor: initial;
+}
+
+.dropdown .content {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--darker-bg-color);
+	z-index: 1000;
+	max-height: 440px;
+	position: fixed;
+	cursor: pointer;
+	box-shadow:
+		rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+		rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+		rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+	border-radius: 0 0 5px 5px;
+	overflow: auto;
+}
+
+.dropdown .content .element {
+	padding: 5px;
+	color: var(--main-color);
+	text-align: start;
+	flex: 1;
+	display: flex;
+}
+
+.dropdown .content .element:hover:not(.disabled) {
+	background-color: var(--main-bg-color);
+}
+
+.dropdown .content .element.selected {
+	background-color: var(--lighter-bg-color);
+}
+
+.dropdown .content .element.selected:hover {
+	background-color: var(--lightest-bg-color);
+}
+
+.dropdown .content .element.disabled {
+	color: var(--lighter-bg-color);
+	cursor: default;
+}
+
+.dropdown .content .element.preSelected {
+	background-color: var(--main-bg-color);
+}

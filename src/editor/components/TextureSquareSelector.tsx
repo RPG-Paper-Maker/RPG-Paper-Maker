@@ -1,0 +1,436 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Scene } from '../Editor';
+import { Constants, ELEMENT_MAP_KIND } from '../common';
+import { LocalFile } from '../core/LocalFile';
+import { Picture2D } from '../core/Picture2D';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
+import { RootState, setCurrentAutotileTexture, setCurrentTilesetFloorSpriteTexture } from '../store';
+
+type CurrentStateProps = {
+	picture: HTMLImageElement | null;
+	path: string;
+	originalPath: string;
+	firstX: number;
+	firstY: number;
+	selectedRect: Rectangle;
+	previewRect: Rectangle | null;
+	squareWidth: number;
+	squareHeight: number;
+};
+
+type Props = {
+	texture: string;
+	divideWidth?: number;
+	divideHeight?: number;
+	canChangeSize?: boolean;
+	columns?: number;
+	rows?: number;
+	squareWidth?: number;
+	squareHeight?: number;
+	defaultRectangle?: Rectangle;
+	onUpdateRectangle?: (rect: Rectangle) => void;
+	adjustPositionSize?: boolean;
+	doNotUpdateTexture?: boolean;
+	base64?: boolean;
+	cutTexture?: boolean;
+};
+
+function TextureSquareSelector({
+	texture,
+	divideWidth = 1,
+	divideHeight = 1,
+	canChangeSize = true,
+	columns = -1,
+	rows = -1,
+	squareWidth,
+	squareHeight,
+	defaultRectangle,
+	onUpdateRectangle,
+	adjustPositionSize,
+	doNotUpdateTexture = false,
+	base64 = false,
+	cutTexture = false,
+}: Props) {
+	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
+
+	const getDefaultRectangle = () => {
+		if (doNotUpdateTexture) {
+			let resizedRectangle: Rectangle | undefined = undefined;
+			if (defaultRectangle) {
+				if (squareWidth !== undefined && squareHeight !== undefined) {
+					resizedRectangle = new Rectangle(
+						defaultRectangle.x * squareWidth,
+						defaultRectangle.y * squareHeight,
+						squareWidth,
+						squareHeight,
+					);
+				}
+			}
+			return (
+				resizedRectangle ??
+				defaultRectangle ??
+				new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight)
+			);
+		}
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				return Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return Project.current!.settings.mapEditorCurrentAutotileTexture;
+			default:
+				return defaultRectangle ?? new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight);
+		}
+	};
+
+	const currentState = useState<CurrentStateProps>({
+		picture: null,
+		path: '',
+		originalPath: '',
+		firstX: -1,
+		firstY: -1,
+		selectedRect: new Rectangle(),
+		previewRect: null,
+		squareWidth: 1,
+		squareHeight: 1,
+	})[0];
+
+	const refCanvas = useRef<HTMLCanvasElement>(null);
+
+	const dispatch = useDispatch();
+
+	const updateRectangle = async () => {
+		if (!doNotUpdateTexture) {
+			switch (Scene.Map.currentSelectedMapElementKind) {
+				case ELEMENT_MAP_KIND.FLOOR:
+				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+					dispatch(setCurrentTilesetFloorSpriteTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentTilesetFloorSpriteTexture = currentState.selectedRect;
+					await Project.current!.settings!.save();
+					break;
+				case ELEMENT_MAP_KIND.AUTOTILE:
+					dispatch(setCurrentAutotileTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
+					await Project.current!.settings!.save();
+					break;
+				default:
+					break;
+			}
+		}
+		onUpdateRectangle?.(currentState.selectedRect);
+	};
+
+	const initialize = async () => {
+		const path = base64 && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(texture)) ?? '') : texture;
+		currentState.picture = await Picture2D.loadImage(path);
+		const firstTime = currentState.path === '';
+		currentState.originalPath = texture;
+		currentState.path = path;
+		currentState.squareWidth =
+			squareWidth ??
+			(columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns));
+		currentState.squareHeight =
+			squareHeight ?? (rows === -1 ? 1 : Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows));
+		currentState.firstX = -1;
+		currentState.firstY = -1;
+		currentState.selectedRect = getDefaultRectangle();
+		if (adjustPositionSize) {
+			currentState.selectedRect.x = Math.min(
+				currentState.selectedRect.x * (firstTime ? currentState.squareWidth : 1),
+				(columns - 1) * currentState.squareWidth,
+			);
+			if (currentState.selectedRect.x % currentState.squareWidth !== 0) {
+				currentState.selectedRect.x += currentState.selectedRect.x % currentState.squareWidth;
+			}
+			currentState.selectedRect.y = Math.min(
+				currentState.selectedRect.y * (firstTime ? currentState.squareHeight : 1),
+				(rows - 1) * currentState.squareHeight,
+			);
+			if (currentState.selectedRect.y % currentState.squareHeight !== 0) {
+				currentState.selectedRect.y += currentState.selectedRect.y % currentState.squareHeight;
+			}
+			currentState.selectedRect.width = currentState.squareWidth;
+			currentState.selectedRect.height = currentState.squareHeight;
+		}
+		currentState.previewRect = null;
+		if (refCanvas.current) {
+			const w = (currentState.picture.width * 2) / divideWidth;
+			const h = (currentState.picture.height * 2) / divideHeight;
+			refCanvas.current.width = w;
+			refCanvas.current.height = h;
+			refCanvas.current.style.width = `${w}px`;
+			refCanvas.current.style.height = `${h}px`;
+		}
+		await updateRectangle();
+		update();
+	};
+
+	const isVisible = () => (refCanvas.current?.getBoundingClientRect().width || 0) > 0;
+
+	const getContext = () => {
+		if (refCanvas.current) {
+			return refCanvas.current.getContext('2d');
+		}
+		return null;
+	};
+
+	const getCurrentPosition = (e: MouseEvent) => {
+		if (refCanvas.current) {
+			const rect = refCanvas.current.getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+			return {
+				x:
+					Math.floor(Math.floor(x / Constants.BASE_SQUARE_SIZE) / currentState.squareWidth) *
+					currentState.squareWidth,
+				y:
+					Math.floor(Math.floor(y / Constants.BASE_SQUARE_SIZE) / currentState.squareHeight) *
+					currentState.squareHeight,
+			};
+		}
+		return { x: 0, y: 0 };
+	};
+
+	const getCurrentPositionMobile = (e: TouchEvent) => {
+		if (refCanvas.current) {
+			const rect = refCanvas.current.getBoundingClientRect();
+			const x = e.touches[0].pageX - rect.left;
+			const y = e.touches[0].pageY - rect.top;
+			return { x: Math.floor(x / Constants.BASE_SQUARE_SIZE), y: Math.floor(y / Constants.BASE_SQUARE_SIZE) };
+		}
+		return { x: 0, y: 0 };
+	};
+
+	const clear = (ctx: CanvasRenderingContext2D) => {
+		const canvas = refCanvas.current;
+		if (canvas) {
+			ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+		}
+	};
+
+	const drawTexture = useCallback(
+		(ctx: CanvasRenderingContext2D) => {
+			if (currentState.picture) {
+				if (cutTexture) {
+					const multiple = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
+					const cols = Math.floor(
+						currentState.picture.width / Project.SQUARE_SIZE / (divideWidth / multiple),
+					);
+					const rows = Math.floor(
+						currentState.picture.height / Project.SQUARE_SIZE / (divideHeight / multiple),
+					);
+					for (let i = 0; i < cols; i++) {
+						for (let j = 0; j < rows; j++) {
+							const x = i * (currentState.picture.width / cols);
+							const y = j * (currentState.picture.height / rows);
+							ctx.drawImage(
+								currentState.picture,
+								x,
+								y,
+								Project.SQUARE_SIZE,
+								Project.SQUARE_SIZE,
+								i * Constants.BASE_SQUARE_SIZE,
+								j * Constants.BASE_SQUARE_SIZE,
+								Constants.BASE_SQUARE_SIZE,
+								Constants.BASE_SQUARE_SIZE,
+							);
+						}
+					}
+				} else {
+					ctx.drawImage(
+						currentState.picture,
+						0,
+						0,
+						(currentState.picture.width * 2) / divideWidth,
+						(currentState.picture.height * 2) / divideHeight,
+					);
+				}
+			}
+		},
+		[currentState, divideWidth, divideHeight, cutTexture],
+	);
+
+	const drawSelection = (ctx: CanvasRenderingContext2D, rect: Rectangle, opacity = 1) => {
+		ctx.globalAlpha = opacity;
+		const x = rect.x * Constants.BASE_SQUARE_SIZE;
+		const y = rect.y * Constants.BASE_SQUARE_SIZE;
+		const w = rect.width * Constants.BASE_SQUARE_SIZE;
+		const h = rect.height * Constants.BASE_SQUARE_SIZE;
+		if (rect.width === 1 && rect.height === 1) {
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, x, y, w, h);
+		} else {
+			const s = Constants.BASE_SQUARE_SIZE / 2;
+			const xCorner = x + w - s;
+			const yCorner = y + h - s;
+			const lineW = w - 2 * s;
+			const lineH = h - 2 * s;
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, 0, s, s, x, y, s, s); // Top Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, 0, s, s, xCorner, y, s, s); // Top Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s, s, s, xCorner, yCorner, s, s); // Bottom Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s, s, s, x, yCorner, s, s); // Bottom Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, 0, 1, s, x + s, y, lineW, s); // Top
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, s, 1, s, x + s, yCorner, lineW, s); // Bottom
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s / 2, s, 1, x, y + s, s, lineH); // Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s / 2, s, 1, xCorner, y + s, s, lineH); // Right
+		}
+		ctx.globalAlpha = 1;
+	};
+
+	const updateMove = (x: number, y: number) => {
+		if (!currentState.picture) {
+			return;
+		}
+		let width = currentState.squareWidth;
+		let height = currentState.squareHeight;
+		if (currentState.firstX !== -1 && currentState.firstY !== -1) {
+			x = Math.min(Math.max(x, 0), Math.floor(currentState.picture.width / Project.SQUARE_SIZE) - 1);
+			y = Math.min(Math.max(y, 0), Math.floor(currentState.picture.height / Project.SQUARE_SIZE) - 1);
+			if (canChangeSize) {
+				if (x > currentState.firstX) {
+					width = x - currentState.firstX + 1;
+					x = currentState.firstX;
+				} else if (x < currentState.firstX) {
+					width = currentState.firstX - x + 1;
+				}
+				if (y > currentState.firstY) {
+					height = y - currentState.firstY + 1;
+					y = currentState.firstY;
+				} else if (y < currentState.firstY) {
+					height = currentState.firstY - y + 1;
+				}
+			}
+		}
+		const rect = new Rectangle(x, y, width, height);
+		if (currentState.previewRect === null || !currentState.previewRect.equals(rect)) {
+			currentState.previewRect = rect;
+			update();
+		}
+	};
+
+	const update = useCallback(() => {
+		const ctx = getContext();
+		if (ctx && currentState.picture) {
+			clear(ctx);
+			ctx.lineWidth = 1;
+			ctx.imageSmoothingEnabled = false;
+			drawTexture(ctx);
+			drawSelection(ctx, currentState.selectedRect);
+			if (currentState.previewRect) {
+				drawSelection(ctx, currentState.previewRect, 0.5);
+			}
+		}
+	}, [currentState, drawTexture]);
+
+	const handleMouseDown = (e: MouseEvent) => {
+		const { x, y } = getCurrentPosition(e);
+		currentState.firstX = x;
+		currentState.firstY = y;
+	};
+
+	const handleTouchStart = (e: TouchEvent) => {
+		const { x, y } = getCurrentPositionMobile(e);
+		currentState.firstX = x;
+		currentState.firstY = y;
+		updateMove(x, y);
+	};
+
+	const handleMouseMove = (e: MouseEvent) => {
+		if (!isVisible() || !currentState.picture) {
+			return;
+		}
+		const { x, y } = getCurrentPosition(e);
+		updateMove(x, y);
+	};
+
+	const handleMouseUp = async () => {
+		if (isVisible() && currentState.firstX !== -1 && currentState.firstY !== -1) {
+			if (currentState.previewRect) {
+				currentState.selectedRect = currentState.previewRect;
+				currentState.previewRect = null;
+				await updateRectangle();
+				update();
+			}
+			currentState.firstX = -1;
+			currentState.firstY = -1;
+		}
+	};
+
+	const handleTouchMove = (e: TouchEvent) => {
+		if (!isVisible() || !currentState.picture) {
+			return;
+		}
+		const { x, y } = getCurrentPositionMobile(e);
+		updateMove(x, y);
+	};
+
+	useEffect(() => {
+		currentState.selectedRect = getDefaultRectangle();
+		update();
+	}, [currentMapElementKind]);
+
+	useEffect(() => {
+		initialize().catch(console.error);
+		const canvas = refCanvas.current;
+		if (canvas) {
+			if (Constants.IS_MOBILE) {
+				canvas.addEventListener('touchstart', handleTouchStart);
+				document.addEventListener('touchmove', handleTouchMove, false);
+				document.addEventListener('touchend', handleMouseUp, false);
+			} else {
+				canvas.addEventListener('mousedown', handleMouseDown);
+				window.addEventListener('mousemove', handleMouseMove);
+				window.addEventListener('mouseup', handleMouseUp);
+			}
+			return () => {
+				if (Constants.IS_MOBILE) {
+					canvas.removeEventListener('touchstart', handleTouchStart);
+					document.removeEventListener('touchmove', handleTouchMove, false);
+					document.removeEventListener('touchend', handleMouseUp, false);
+				} else {
+					canvas.removeEventListener('mousedown', handleMouseDown);
+					window.removeEventListener('mousemove', handleMouseMove);
+					window.removeEventListener('mouseup', handleMouseUp);
+				}
+			};
+		}
+	}, [texture]);
+
+	useEffect(() => {
+		if (texture === currentState.originalPath) {
+			currentState.squareWidth =
+				columns === -1 || !currentState.picture
+					? 1
+					: Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
+			currentState.squareHeight =
+				rows === -1 || !currentState.picture
+					? 1
+					: Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
+			currentState.selectedRect.width = currentState.squareWidth;
+			currentState.selectedRect.height = currentState.squareHeight;
+			update();
+		}
+	}, [currentState, texture, rows, columns]);
+
+	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
+}
+
+export default TextureSquareSelector;

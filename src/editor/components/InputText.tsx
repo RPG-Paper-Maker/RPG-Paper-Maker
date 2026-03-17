@@ -1,0 +1,108 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import React, { useEffect, useRef, useState } from 'react';
+import { INPUT_TYPE_WIDTH } from '../common';
+import '../styles/Input.css';
+
+type Props = {
+	value?: string;
+	widthType?: INPUT_TYPE_WIDTH;
+	style?: React.CSSProperties;
+	onChange: (e: string) => void;
+	isAsyncChange?: boolean;
+	focusFirst?: boolean;
+	setFocustFirst?: (b: boolean) => void;
+	disabled?: boolean;
+	onFocus?: () => void;
+	placeholder?: string;
+};
+
+function InputText({
+	value,
+	widthType = INPUT_TYPE_WIDTH.NORMAL,
+	style,
+	onChange,
+	isAsyncChange = false,
+	focusFirst = false,
+	setFocustFirst,
+	disabled = false,
+	onFocus,
+	placeholder,
+}: Props) {
+	const refInput = useRef<HTMLInputElement>(null);
+
+	const [queue] = useState<string[]>([]);
+	const [isProcessing, setIsProcessing] = useState(false);
+
+	const processQueue = async () => {
+		if (isProcessing || queue.length === 0) {
+			return;
+		}
+		setIsProcessing(true);
+		while (queue.length > 0) {
+			const value = queue[0];
+			queue.shift();
+			onChange(value);
+		}
+		setIsProcessing(false);
+	};
+
+	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (isAsyncChange) {
+			queue.push(e.target.value);
+			await processQueue();
+		} else {
+			onChange(e.target.value);
+		}
+	};
+
+	const getMaxWidth = () => {
+		if (style !== undefined) {
+			return undefined;
+		}
+		switch (widthType) {
+			case INPUT_TYPE_WIDTH.FILL:
+				return '100%';
+			case INPUT_TYPE_WIDTH.SMALL:
+				return '100px';
+			case INPUT_TYPE_WIDTH.NORMAL:
+				return '180px';
+			case INPUT_TYPE_WIDTH.LARGE:
+				return '300px';
+		}
+	};
+
+	useEffect(() => {
+		if (focusFirst) {
+			refInput.current?.focus();
+			setFocustFirst?.(false);
+		}
+	}, [focusFirst, setFocustFirst]);
+
+	return (
+		<input
+			ref={refInput}
+			value={value}
+			onChange={handleChange}
+			autoComplete='off'
+			autoCorrect='off'
+			autoCapitalize='off'
+			spellCheck='false'
+			style={{ ...style, maxWidth: getMaxWidth() }}
+			disabled={disabled}
+			onFocus={onFocus}
+			placeholder={placeholder}
+		/>
+	);
+}
+
+export default InputText;

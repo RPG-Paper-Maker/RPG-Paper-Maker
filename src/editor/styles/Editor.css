@@ -1,0 +1,392 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+:root {
+	--main-bg-color: #2e324a;
+	--main-color: white;
+	--darker-bg-color: #29273d;
+	--darkest-bg-color: #221f35;
+	--darkest-containers-bg-color: #221f2e;
+	--hover-main-bg-color: #383c58;
+	--lighter-bg-color: #5f5a8a;
+	--lightest-bg-color: #6e709c;
+	--grey-color: #878787;
+	--grey-light-color: #cacaca;
+	--primary-color: #25bbb9;
+	--primary-dark-color: #218584;
+	--hover-primary-dark-color: #2a9896;
+	--orange-color: #f6b780;
+	--red-color: #de3a3c;
+	--hover-red-color: #ce4144;
+	--patreon-color: #f96753;
+	--hover-patreon-color: #fe7765;
+	--special-elements-size: 30px;
+	--green-color: #78ad51;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+body {
+	margin: 0;
+	font-family:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+		'Droid Sans', 'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	padding: 0;
+	background-color: var(--main-bg-color);
+	color: var(--main-color);
+	font-size: 12px;
+	touch-action: none;
+	image-rendering: pixelated;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+a {
+	color: var(--primary-color);
+}
+
+.flex {
+	display: flex;
+	flex-direction: row;
+}
+
+.flexColumn {
+	flex-direction: column;
+}
+
+.flexOne {
+	flex-grow: 1;
+	flex-basis: 0;
+}
+
+.flexTwo {
+	flex-grow: 2;
+	flex-basis: 0;
+}
+
+.flexCenterV {
+	align-items: center;
+}
+
+.flexCenterSelfV {
+	align-self: center;
+}
+
+.flexCenterH {
+	justify-content: center;
+}
+
+.flexRightHorizontally {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.flexWrap {
+	flex-wrap: wrap;
+}
+
+.gapSmall {
+	gap: 5px;
+}
+
+.gapMedium {
+	gap: 10px;
+}
+
+.paddingSmall {
+	padding: 5px;
+}
+
+.paddingLarge {
+	padding: 30px;
+}
+
+.label {
+	margin-right: 0.5em;
+}
+
+.fillSpace {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.fillWidth {
+	width: 100%;
+}
+
+.fillHeight {
+	height: 100%;
+}
+
+.zeroWidth {
+	width: 0;
+}
+
+.zeroWidthNoMobile {
+	width: 0;
+}
+
+.zeroHeight {
+	height: 0;
+}
+
+.zeroHeightNoMobile {
+	height: 0;
+}
+
+.fillSmallSpace {
+	min-width: 20px;
+	min-height: 20px;
+}
+
+.noSelectText {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+     supported by Chrome, Edge, Opera and Firefox */
+}
+
+.pointer {
+	cursor: pointer !important;
+}
+
+.crosshair {
+	cursor: crosshair !important;
+}
+
+.grabbing {
+	cursor: grabbing !important;
+}
+
+.loading {
+	cursor: progress !important;
+}
+
+.ew-resize {
+	cursor: ew-resize !important;
+}
+
+.ns-resize {
+	cursor: ns-resize !important;
+}
+
+.nesw-resize {
+	cursor: nesw-resize !important;
+}
+
+.nwse-resize {
+	cursor: nwse-resize !important;
+}
+
+.col-resize {
+	cursor: col-resize !important;
+}
+
+.row-resize {
+	cursor: row-resize !important;
+}
+
+.absolute {
+	position: absolute;
+}
+
+.topRight {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.fixed {
+	position: fixed;
+}
+
+.relative {
+	position: relative;
+}
+
+.hightZIndex {
+	z-index: 999;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #888;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: white;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #f1f1f1;
+}
+
+.scrollable {
+	overflow: auto;
+	overflow-x: overlay;
+	overflow-y: overlay;
+}
+
+.scrollableNoMobile {
+	overflow: auto;
+	overflow-x: overlay;
+	overflow-y: overlay;
+}
+
+.scrollableFlexOne {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	height: 0px;
+	min-height: 100px;
+}
+
+.warning {
+	color: var(--orange-color);
+}
+
+.error {
+	color: var(--red-color);
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.textSmallDetail {
+	color: var(--grey-color);
+	font-size: 11px;
+}
+
+.textEllipsis {
+	display: block !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 0px;
+	flex: 1;
+}
+
+.whiteSpaceNowrap {
+	white-space: nowrap;
+}
+
+.bgDarker {
+	background-color: var(--darker-bg-color);
+}
+
+.hidden {
+	display: none !important;
+}
+
+.visibilityHidden {
+	visibility: hidden;
+}
+
+.mobileOnly {
+	display: none;
+}
+
+.disabledLabel {
+	opacity: 0.4;
+	cursor: initial;
+}
+
+.canvasRenderer0 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
+.canvasRenderer1 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 1000;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
+.canvasRenderer2 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 2001;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
+.canvasRenderer3 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 2002;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
+.verticalSeparator {
+	height: 100%;
+	border-right: 1px solid var(--grey-light-color);
+}
+
+.horizontalSeparator {
+	width: 100%;
+	border-bottom: 1px solid var(--grey-light-color);
+}
+
+.backgroundDarkestContainers {
+	background-color: var(--darkest-containers-bg-color);
+}
+
+.rc-color-picker-panel {
+	background-color: var(--darkest-containers-bg-color) !important;
+}
+
+svg.iconMedium {
+	width: 18px;
+	height: 18px;
+}

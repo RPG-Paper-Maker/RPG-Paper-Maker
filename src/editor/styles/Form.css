@@ -1,0 +1,33 @@
+table.form {
+	border-collapse: separate;
+	width: 100%;
+}
+
+table.form tr > :first-child {
+	display: flex;
+	align-items: center;
+	padding-right: 5px;
+	display: flex;
+	vertical-align: middle;
+	height: 25px;
+	white-space: nowrap;
+}
+
+table.form tr > :nth-child(2) {
+	width: 100%;
+	vertical-align: middle;
+	display: table-cell;
+	text-align: left;
+}
+
+table.form tr > :nth-child(2) > * {
+	width: 100%;
+}
+
+table.form tr td.disabled {
+	color: var(--lighter-bg-color);
+}
+
+table.form tr td div.colon.disabled {
+	color: var(--lighter-bg-color);
+}

@@ -1,0 +1,123 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { useLayoutEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { Node } from '../../../core/Node';
+import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
+import { MapObjectCommandType } from '../../../models';
+import DynamicValueSelector from '../../DynamicValueSelector';
+import Flex from '../../Flex';
+import Form, { Label, Value } from '../../Form';
+import Tree from '../../Tree';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
+
+function DialogCommandStartShopMenu({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+	const { t } = useTranslation();
+
+	const [shopItems, setShopItems] = useState<Node[]>([]);
+	const [buyOnly] = useStateDynamicValue();
+	const [shopID] = useStateDynamicValue();
+	const [, setTrigger] = useStateBool();
+
+	const isRestock = commandKind === EVENT_COMMAND_KIND.RESTOCK_SHOP;
+
+	const initialize = () => {
+		if (list) {
+			const iterator = Utils.generateIterator();
+			if (!isRestock) {
+				buyOnly.updateCommand(list, iterator);
+			}
+			shopID.updateCommand(list, iterator);
+			const items: Model.MapObjectCommandShopItem[] = [];
+			while (iterator.i < list.length) {
+				const shopItem = new Model.MapObjectCommandShopItem();
+				shopItem.applyDefault();
+				shopItem.initialize(list, iterator);
+				shopItem.id = items.length + 1;
+				items.push(shopItem);
+			}
+			setShopItems(Node.createList(items, false));
+		} else {
+			setShopItems([]);
+			buyOnly.updateToDefaultSwitch(false);
+			shopID.updateToDefaultNumber(1);
+		}
+		setTrigger((v) => !v);
+	};
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		const newList: MapObjectCommandType[] = [];
+		if (!isRestock) {
+			buyOnly.getCommand(newList);
+		}
+		shopID.getCommand(newList);
+		for (const node of shopItems) {
+			const shopItem = node.content as Model.MapObjectCommandShopItem;
+			shopItem.getCommand(newList);
+		}
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+	};
+
+	const handleReject = async () => {
+		setIsOpen(false);
+		onReject();
+	};
+
+	useLayoutEffect(() => {
+		initialize();
+	}, []);
+
+	return (
+		<Dialog
+			title={`${t(isRestock ? 'restock.shop' : 'start.shop.menu')}...`}
+			isOpen
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '50%'}
+			initialHeight='60%'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex one column spacedLarge fillHeight>
+				<Flex one zeroHeight>
+					<Tree
+						constructorType={Model.MapObjectCommandShopItem}
+						list={shopItems}
+						cannotUpdateListSize
+						canBeEmpty
+					/>
+				</Flex>
+				<Form>
+					{!isRestock && (
+						<>
+							<Label>{t('buy.only')}</Label>
+							<Value>
+								<DynamicValueSelector value={buyOnly} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH} />
+							</Value>
+						</>
+					)}
+					<Label>{t('shop.id')}</Label>
+					<Value>
+						<DynamicValueSelector value={shopID} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+					</Value>
+				</Form>
+			</Flex>
+		</Dialog>
+	);
+}
+
+export default DialogCommandStartShopMenu;

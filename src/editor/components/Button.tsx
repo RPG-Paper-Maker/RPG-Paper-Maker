@@ -1,0 +1,117 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { RxCross2 } from 'react-icons/rx';
+import { BUTTON_TYPE, Utils } from '../common';
+import '../styles/Button.css';
+
+type Props = {
+	children?: ReactNode;
+	buttonType?: BUTTON_TYPE;
+	disabled?: boolean;
+	canHold?: boolean;
+	intervalHold?: number;
+	icon?: ReactNode;
+	activable?: boolean;
+	active?: boolean;
+	big?: boolean;
+	backgroundOnHoverOnly?: boolean;
+	square?: boolean;
+	small?: boolean;
+	fillWidth?: boolean;
+	onClick?: () => void;
+	onMouseEnter?: () => void;
+	onMouseLeave?: () => void;
+	onClose?: () => void;
+};
+
+function Button({
+	children,
+	buttonType = BUTTON_TYPE.DEFAULT,
+	disabled = false,
+	canHold = false,
+	intervalHold = 0,
+	icon,
+	activable = false,
+	active = false,
+	big = false,
+	backgroundOnHoverOnly = false,
+	square = false,
+	small = false,
+	fillWidth = false,
+	onClick,
+	onMouseEnter,
+	onMouseLeave,
+	onClose,
+}: Props) {
+	const [activeState, setActiveState] = useState(active);
+	const ref = useRef<HTMLButtonElement>(null);
+
+	if (active !== activeState) {
+		setActiveState(active);
+	}
+
+	const handleClick = () => {
+		if (!disabled) {
+			if (onClick) {
+				onClick();
+			}
+			if (activable) {
+				setActiveState(!activeState);
+			}
+		}
+	};
+
+	useEffect(() => {
+		const current = ref.current;
+		if (canHold && current) {
+			const handle = () => {
+				const int = setInterval(() => {
+					handleClick();
+				}, intervalHold);
+				const f1 = () => {
+					clearInterval(int);
+					document.removeEventListener('mouseup', f1);
+				};
+				const f2 = () => {
+					clearInterval(int);
+					document.removeEventListener('touchend', f2);
+				};
+				document.addEventListener('mouseup', f1);
+				document.addEventListener('touchend', f2);
+			};
+			current.addEventListener('pointerdown', handle);
+			return () => {
+				current.removeEventListener('pointerdown', handle);
+			};
+		}
+	}, []);
+
+	return (
+		<button
+			ref={ref}
+			className={Utils.getClassName(
+				{ disabled, active: activeState, big, backgroundOnHoverOnly, square, small, fillWidth },
+				buttonType,
+			)}
+			onClick={handleClick}
+			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
+		>
+			{icon}
+			{children}
+			{onClose && <RxCross2 className='close' onClick={onClose} />}
+		</button>
+	);
+}
+
+export default Button;

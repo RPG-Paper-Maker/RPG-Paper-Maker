@@ -1,0 +1,196 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { MapElement, Model } from '../../Editor';
+import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND, LAYER_KIND } from '../../common';
+import { Position } from '../../core/Position';
+import { Rectangle } from '../../core/Rectangle';
+
+export interface ProjectState {
+	name: string;
+	location: string;
+}
+
+const MapEditorSlice = createSlice({
+	name: 'mapEditor',
+	initialState: {
+		currentTreeMapTag: null as Model.TreeMapTag | null,
+		currentTilesetFloorSpriteTexture: new Rectangle(0, 0, 1, 1),
+		currentAutotileID: 1,
+		currentAutotileTexture: new Rectangle(0, 0, 1, 1),
+		currentWallID: 1,
+		currentMountainID: 1,
+		currentMountainWidthSquaresBot: 0,
+		currentMountainWidthPixelsBot: 0,
+		currentMountainWidthSquaresTop: 0,
+		currentMountainWidthPixelsTop: 0,
+		currentMountainWidthSquaresLeft: 0,
+		currentMountainWidthPixelsLeft: 0,
+		currentMountainWidthSquaresRight: 0,
+		currentMountainWidthPixelsRight: 0,
+		currentMountainAllSides: true,
+		currentMountainHeightSquares: 1,
+		currentMountainHeightPixels: 0,
+		currentMountainTopFloorIsAutotile: false,
+		currentMountainTopFloorTilesetRect: new Rectangle(0, 0, 1, 1),
+		currentMountainTopFloorAutotileID: 1,
+		currentMountainTopFloorAutotileRect: new Rectangle(0, 0, 1, 1),
+		currentObject3DID: 1,
+		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
+		currentActionKind: ACTION_KIND.PENCIL,
+		currentElementPositionKind: ELEMENT_POSITION_KIND.SQUARE,
+		currentLayerKind: LAYER_KIND.OFF,
+		selectedPosition: null as Position | null,
+		selectedMapElement: null as MapElement.Base | null,
+		undoRedo: {
+			index: -1,
+			length: 0,
+		},
+		needsUpdate: false,
+		loaded: false,
+	},
+	reducers: {
+		setCurrentTreeMapTag(state, action: PayloadAction<Model.TreeMapTag | null>) {
+			state.currentTreeMapTag = action.payload;
+		},
+		setCurrentTilesetFloorSpriteTexture(state, action: PayloadAction<Rectangle>) {
+			state.currentTilesetFloorSpriteTexture = action.payload;
+		},
+		setCurrentAutotileID(state, action: PayloadAction<number>) {
+			state.currentAutotileID = action.payload;
+		},
+		setCurrentAutotileTexture(state, action: PayloadAction<Rectangle>) {
+			state.currentAutotileTexture = action.payload;
+		},
+		setCurrentWallID(state, action: PayloadAction<number>) {
+			state.currentWallID = action.payload;
+		},
+		setCurrentMountainID(state, action: PayloadAction<number>) {
+			state.currentMountainID = action.payload;
+		},
+		setCurrentMountainWidthSquaresBot(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresBot = action.payload;
+		},
+		setCurrentMountainWidthPixelsBot(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsBot = action.payload;
+		},
+		setCurrentMountainWidthSquaresTop(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresTop = action.payload;
+		},
+		setCurrentMountainWidthPixelsTop(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsTop = action.payload;
+		},
+		setCurrentMountainWidthSquaresLeft(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresLeft = action.payload;
+		},
+		setCurrentMountainWidthPixelsLeft(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsLeft = action.payload;
+		},
+		setCurrentMountainWidthSquaresRight(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquaresRight = action.payload;
+		},
+		setCurrentMountainWidthPixelsRight(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixelsRight = action.payload;
+		},
+		setCurrentMountainAllSides(state, action: PayloadAction<boolean>) {
+			state.currentMountainAllSides = action.payload;
+		},
+		setCurrentMountainHeightSquares(state, action: PayloadAction<number>) {
+			state.currentMountainHeightSquares = action.payload;
+		},
+		setCurrentMountainHeightPixels(state, action: PayloadAction<number>) {
+			state.currentMountainHeightPixels = action.payload;
+		},
+		setCurrentMountainTopFloorIsAutotile(state, action: PayloadAction<boolean>) {
+			state.currentMountainTopFloorIsAutotile = action.payload;
+		},
+		setCurrentMountainTopFloorTilesetRect(state, action: PayloadAction<Rectangle>) {
+			state.currentMountainTopFloorTilesetRect = action.payload;
+		},
+		setCurrentMountainTopFloorAutotileID(state, action: PayloadAction<number>) {
+			state.currentMountainTopFloorAutotileID = action.payload;
+		},
+		setCurrentMountainTopFloorAutotileRect(state, action: PayloadAction<Rectangle>) {
+			state.currentMountainTopFloorAutotileRect = action.payload;
+		},
+		setCurrentObject3DID(state, action: PayloadAction<number>) {
+			state.currentObject3DID = action.payload;
+		},
+		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
+			state.currentMapElementKind = action.payload;
+		},
+		setCurrentActionKind(state, action: PayloadAction<ACTION_KIND>) {
+			state.currentActionKind = action.payload;
+		},
+		setCurrentElementPositionKind(state, action: PayloadAction<ELEMENT_POSITION_KIND>) {
+			state.currentElementPositionKind = action.payload;
+		},
+		setCurrentLayerKind(state, action: PayloadAction<LAYER_KIND>) {
+			state.currentLayerKind = action.payload;
+		},
+		setSelectedPosition(state, action: PayloadAction<Position | null>) {
+			state.selectedPosition = action.payload;
+		},
+		setSelectedMapElement(state, action: PayloadAction<MapElement.Base | null>) {
+			state.selectedMapElement = action.payload;
+		},
+		setUndoRedoIndex(state, action: PayloadAction<number>) {
+			state.undoRedo.index = action.payload;
+		},
+		setUndoRedoLength(state, action: PayloadAction<number>) {
+			state.undoRedo.length = action.payload;
+		},
+		setNeedsUpdateMapEditor(state) {
+			state.needsUpdate = !state.needsUpdate;
+		},
+		setMapEditorLoaded(state, action: PayloadAction<boolean>) {
+			state.loaded = action.payload;
+		},
+	},
+});
+
+export const {
+	setCurrentTreeMapTag,
+	setCurrentTilesetFloorSpriteTexture,
+	setCurrentAutotileID,
+	setCurrentAutotileTexture,
+	setCurrentWallID,
+	setCurrentMountainID,
+	setCurrentMountainWidthSquaresBot,
+	setCurrentMountainWidthPixelsBot,
+	setCurrentMountainWidthSquaresTop,
+	setCurrentMountainWidthPixelsTop,
+	setCurrentMountainWidthSquaresLeft,
+	setCurrentMountainWidthPixelsLeft,
+	setCurrentMountainWidthSquaresRight,
+	setCurrentMountainWidthPixelsRight,
+	setCurrentMountainAllSides,
+	setCurrentMountainHeightSquares,
+	setCurrentMountainHeightPixels,
+	setCurrentMountainTopFloorIsAutotile,
+	setCurrentMountainTopFloorTilesetRect,
+	setCurrentMountainTopFloorAutotileID,
+	setCurrentMountainTopFloorAutotileRect,
+	setCurrentObject3DID,
+	setCurrentMapElementKind,
+	setCurrentActionKind,
+	setCurrentElementPositionKind,
+	setCurrentLayerKind,
+	setSelectedPosition,
+	setSelectedMapElement,
+	setUndoRedoIndex,
+	setUndoRedoLength,
+	setNeedsUpdateMapEditor,
+	setMapEditorLoaded,
+} = MapEditorSlice.actions;
+export const MapEditorReducer = MapEditorSlice.reducer;

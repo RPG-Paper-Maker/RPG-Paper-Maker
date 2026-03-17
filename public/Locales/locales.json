@@ -1,0 +1,16 @@
+{
+	"names": [
+		"English",
+		"Français",
+		"Deutsch",
+		"Português - Brasil",
+		"Espanol",
+		"Polski",
+		"Русский (beta)",
+		"Українська (beta)",
+		"日本語 (beta)",
+		"中文 (beta)",
+		"한국어 (beta)"
+	],
+	"shorts": ["en", "fr", "de", "br", "es", "it", "pl", "ru", "uk", "jp", "cn", "ko"]
+}

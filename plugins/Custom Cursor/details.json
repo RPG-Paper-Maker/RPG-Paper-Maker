@@ -1,0 +1,9 @@
+{
+	"author": "SpunkyAmbassador",
+	"category": 3,
+	"description": "Use your own custom cursor in your games!\n\nTutorial -\n1. Make sure your cursor is 32x32 pixels in width and height\n2. Make sure the file is a `.png` file and the name should be `cursor.png`\n3. Place it in \"<your-game>/resources/app/Content/Data/Scripts/Plugins/Custom Cursor\" directory\n4. Profit!!!\n\nAn example cursor is already provided with the plugin.",
+	"name": "Custom Cursor",
+	"tutorial": "See Description",
+	"website": "https://github.com/SpunkyAmbassador/Custom-Cursor",
+	"version": "1.1.0"
+}
