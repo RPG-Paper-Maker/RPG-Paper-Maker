@@ -97,6 +97,7 @@ function DialogDLCs({ setIsOpen }: Props) {
 			onClose={handleReject}
 			isLoading={isLoading}
 			initialWidth='300px'
+			initialHeight='300px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
