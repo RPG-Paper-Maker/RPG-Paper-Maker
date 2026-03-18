@@ -13,7 +13,7 @@ import { Paths } from '../../common';
 import { checkFileExists, createFolder } from '../../common/Platform';
 import { Project } from '../../core/Project';
 
-class ProjectUpdater_3_0_35 {
+class ProjectUpdater_3_0_36 {
 	static async update() {
 		const projectPath = Project.current!.getPath();
 		const testPath = Paths.join(projectPath, 'Test');
@@ -23,4 +23,4 @@ class ProjectUpdater_3_0_35 {
 	}
 }
 
-export { ProjectUpdater_3_0_35 };
+export { ProjectUpdater_3_0_36 };
