@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosSend } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import { BUTTON_TYPE, Constants } from '../../common';
+import { BUTTON_TYPE, Constants, IO } from '../../common';
 import { Project } from '../../core/Project';
 import { RootState, setErrorDialog } from '../../store';
 import Button from '../Button';
@@ -42,6 +42,7 @@ function DialogError() {
 		setSendStatus(null);
 		setLoading(true);
 		try {
+			const platform = Constants.IS_DESKTOP ? await IO.getOS() : 'web';
 			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report', {
 				method: 'POST',
 				headers: {
@@ -49,7 +50,7 @@ function DialogError() {
 				},
 				body: JSON.stringify({
 					version: Project.VERSION ?? 'Not loaded',
-					os: Constants.IS_DESKTOP ? navigator?.userAgent : 'Web',
+					os: `${platform} | ${navigator.userAgent}`,
 					message: errorDialog.message,
 					stack: errorDialog.stack,
 					email,
