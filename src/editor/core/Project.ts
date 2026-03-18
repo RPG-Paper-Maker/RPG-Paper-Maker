@@ -154,11 +154,11 @@ class Project {
 	}
 
 	resetBackups() {
-		this.clearBakcups();
+		this.clearBackups();
 		this.addBackups();
 	}
 
-	clearBakcups() {
+	clearBackups() {
 		if (this.intervalBackupID !== null) {
 			clearInterval(this.intervalBackupID);
 			this.intervalBackupID = null;
@@ -166,7 +166,7 @@ class Project {
 	}
 
 	close() {
-		this.clearBakcups();
+		this.clearBackups();
 	}
 
 	async load() {

@@ -10,11 +10,19 @@
 */
 
 import { JSONType, Paths } from '../common';
-import { copyFolder, getFiles, getFolders, readJSON, writeJSON } from '../common/Platform';
+import {
+	checkFileExists,
+	copyFolder,
+	getFiles,
+	getFolders,
+	readJSON,
+	removeFolder,
+	writeJSON,
+} from '../common/Platform';
 import { Project } from '../core/Project';
 
 class ProjectUpdater {
-	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19', '3.0.22', '3.0.24', '3.0.26', '3.0.27', '3.0.33'];
+	static versions = ['3.0.0', '3.0.1', '3.0.4', '3.0.19', '3.0.22', '3.0.24', '3.0.26', '3.0.27', '3.0.33', '3.0.34'];
 
 	static isIncompatibleVersion(version: string) {
 		return this.checkVersion(version, this.versions[this.versions.length - 1]);
@@ -64,6 +72,10 @@ class ProjectUpdater {
 				}
 			}
 			callback(1, 1);
+			const backupsPath = Paths.join(projectPath, Paths.BACKUPS);
+			if (await checkFileExists(backupsPath)) {
+				await removeFolder(backupsPath);
+			}
 			const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
 			if (json) {
 				json.pv = Project.VERSION;
