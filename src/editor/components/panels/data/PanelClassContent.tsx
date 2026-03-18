@@ -56,20 +56,20 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 	const update = () => {
 		if (selectedClass) {
 			updateExperience();
-			setInitialLevel(selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel);
-			setFinalLevel(selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel);
+			setInitialLevel(selectedClass.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass.initialLevel);
+			setFinalLevel(selectedClass.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass.finalLevel);
 			ProgressionTable.selectedClassInitialLevel =
-				selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel;
+				selectedClass.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass.initialLevel;
 			ProgressionTable.selectedClassFinalLevel =
-				selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel;
+				selectedClass.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass.finalLevel;
 			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
 			ClassSkill.selectedClassSkills = selectedClass.skills;
 			setExperienceBase(
-				selectedClass.experienceBase === -1 ? upperClass!.experienceBase : selectedClass.experienceBase,
+				selectedClass.experienceBase === -1 ? (upperClass?.experienceBase ?? 0) : selectedClass.experienceBase,
 			);
 			setExperienceInflation(
 				selectedClass.experienceInflation === -1
-					? upperClass!.experienceInflation
+					? (upperClass?.experienceInflation ?? 0)
 					: selectedClass.experienceInflation,
 			);
 			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression, false));
@@ -90,13 +90,13 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 
 	const getExperienceList = (): string[][] => {
 		const initialLevel =
-			selectedClass!.initialLevel === -1 ? upperClass!.initialLevel : selectedClass!.initialLevel;
-		const finalLevel = selectedClass!.finalLevel === -1 ? upperClass!.finalLevel : selectedClass!.finalLevel;
+			selectedClass!.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass!.initialLevel;
+		const finalLevel = selectedClass!.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass!.finalLevel;
 		const experienceBase =
-			selectedClass!.experienceBase === -1 ? upperClass!.experienceBase : selectedClass!.experienceBase;
+			selectedClass!.experienceBase === -1 ? (upperClass?.experienceBase ?? 0) : selectedClass!.experienceBase;
 		const experienceInflation =
 			selectedClass!.experienceInflation === -1
-				? upperClass!.experienceInflation
+				? (upperClass?.experienceInflation ?? 0)
 				: selectedClass!.experienceInflation;
 		const experienceTable = selectedClass!.experienceTable;
 		const expList: string[][] = new Array(finalLevel - initialLevel);
@@ -116,7 +116,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 
 	const getTotalExperienceList = (expList: string[][]): string[][] => {
 		const initialLevel =
-			selectedClass!.initialLevel === -1 ? upperClass!.initialLevel : selectedClass!.initialLevel;
+			selectedClass!.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass!.initialLevel;
 		const totalList: string[][] = new Array(expList.length + 1);
 		totalList[0] = ['' + initialLevel, '0'];
 		for (let i = 1; i < totalList.length; i++) {

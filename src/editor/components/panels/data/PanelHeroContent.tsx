@@ -66,11 +66,11 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			);
 			ProgressionTable.selectedClassInitialLevel =
 				selectedHero.classInherit.initialLevel === -1
-					? upperClass!.initialLevel
+					? (upperClass?.initialLevel ?? 1)
 					: selectedHero.classInherit.initialLevel;
 			ProgressionTable.selectedClassFinalLevel =
 				selectedHero.classInherit.finalLevel === -1
-					? upperClass!.finalLevel
+					? (upperClass?.finalLevel ?? 100)
 					: selectedHero.classInherit.finalLevel;
 		} else {
 			setClassID(1);
