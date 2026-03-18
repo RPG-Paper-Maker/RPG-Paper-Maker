@@ -27,14 +27,18 @@ function UpdateCountdown() {
 	const dispatch = useDispatch();
 
 	const tryGetDate = async () => {
-		const date = await LocalFile.readPublicFile('date');
-		if (date) {
-			setTargetDate(date);
-			setTimeLeft(calculateTimeLeft(date));
-			setInterval(() => {
+		try {
+			const date = await LocalFile.readPublicFile('date');
+			if (date) {
+				setTargetDate(date);
 				setTimeLeft(calculateTimeLeft(date));
-			}, 1000);
-		} else {
+				setInterval(() => {
+					setTimeLeft(calculateTimeLeft(date));
+				}, 1000);
+			} else {
+				setTimeout(tryGetDate, 1000 * 60);
+			}
+		} catch {
 			setTimeout(tryGetDate, 1000 * 60);
 		}
 	};
