@@ -713,7 +713,7 @@ class Map extends Base {
 	}
 
 	getBrutMapPortion(index: number): MapPortion | null {
-		return this.mapPortions[index];
+		return this.mapPortions?.[index] ?? null;
 	}
 
 	getPortionIndex(x: number, y: number, z: number): number {

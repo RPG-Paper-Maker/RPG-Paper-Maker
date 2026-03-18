@@ -179,8 +179,12 @@ function PanelMapObjectsSelection() {
 
 	const update = async () => {
 		const content = contentRef.current;
+		const mapSnapshot = Scene.Map.current;
 		if (content) {
 			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
+				if (Scene.Map.current !== mapSnapshot) {
+					return;
+				}
 				const mapObject = list[i + positionScroll.current];
 				if (mapObject) {
 					const cacheKey = getIconCacheKey(mapObject);
