@@ -5,12 +5,13 @@
 		"Deutsch",
 		"Português - Brasil",
 		"Espanol",
+		"Italiano",
 		"Polski",
-		"Русский (beta)",
-		"Українська (beta)",
-		"日本語 (beta)",
-		"中文 (beta)",
-		"한국어 (beta)"
+		"Русский",
+		"Українська",
+		"日本語",
+		"中文",
+		"한국어"
 	],
 	"shorts": ["en", "fr", "de", "br", "es", "it", "pl", "ru", "uk", "jp", "cn", "ko"]
 }
