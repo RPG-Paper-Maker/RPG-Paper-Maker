@@ -22,11 +22,11 @@ class Shapes extends Serializable {
 	}
 
 	getList(kind: CUSTOM_SHAPE_KIND): Model.Shape[] {
-		return this.list.get(kind)!;
+		return this.list.get(kind) ?? [];
 	}
 
 	getByID(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
-		return this.list.get(kind)!.find((shape) => shape.id === id)!;
+		return (this.list.get(kind) ?? []).find((shape) => shape.id === id)!;
 	}
 
 	copy(shapes: Shapes): void {
@@ -41,7 +41,7 @@ class Shapes extends Serializable {
 
 	read(json: JSONType) {
 		this.list = new Map();
-		for (const { k, v } of json.list as JSONType[]) {
+		for (const { k, v } of (json.list as JSONType[]) ?? []) {
 			const list: Model.Shape[] = [];
 			this.list.set(k as number, list);
 			for (const jsonShape of v as JSONType[]) {

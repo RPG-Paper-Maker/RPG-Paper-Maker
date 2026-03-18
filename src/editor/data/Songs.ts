@@ -22,11 +22,11 @@ class Songs extends Serializable {
 	}
 
 	getList(kind: SONG_KIND): Model.Song[] {
-		return this.list.get(kind)!;
+		return this.list.get(kind) ?? [];
 	}
 
 	getByID(kind: SONG_KIND, id: number): Model.Song {
-		return this.list.get(kind)!.find((song) => song.id === id)!;
+		return (this.list.get(kind) ?? []).find((song) => song.id === id)!;
 	}
 
 	copy(songs: Songs): void {
@@ -41,7 +41,7 @@ class Songs extends Serializable {
 
 	read(json: JSONType) {
 		this.list = new Map();
-		for (const { k, v } of json.list as JSONType[]) {
+		for (const { k, v } of (json.list as JSONType[]) ?? []) {
 			const list: Model.Song[] = [];
 			this.list.set(k as number, list);
 			for (const jsonSong of v as JSONType[]) {

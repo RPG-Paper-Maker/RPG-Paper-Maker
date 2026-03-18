@@ -118,7 +118,11 @@ class Serializable {
 				json = await readJSON(this.getPath(false)); // If no temp files found, try with not temp
 				if (json) {
 					this.read(json);
+				} else {
+					this.read({});
 				}
+			} else {
+				this.read({});
 			}
 		}
 	}

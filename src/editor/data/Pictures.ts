@@ -22,11 +22,11 @@ class Pictures extends Serializable {
 	}
 
 	getList(kind: PICTURE_KIND): Model.Picture[] {
-		return this.list.get(kind)!;
+		return this.list.get(kind) ?? [];
 	}
 
 	getByID(kind: PICTURE_KIND, id: number): Model.Picture {
-		return this.list.get(kind)!.find((picture) => picture.id === id)!;
+		return (this.list.get(kind) ?? []).find((picture) => picture.id === id)!;
 	}
 
 	copy(pictures: Pictures): void {
@@ -41,7 +41,7 @@ class Pictures extends Serializable {
 
 	read(json: JSONType) {
 		this.list = new Map();
-		for (const { k, v } of json.list as JSONType[]) {
+		for (const { k, v } of (json.list as JSONType[]) ?? []) {
 			const list: Model.Picture[] = [];
 			this.list.set(k as number, list);
 			for (const jsonPicture of v as JSONType[]) {
