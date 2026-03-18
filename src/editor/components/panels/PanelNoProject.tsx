@@ -104,17 +104,16 @@ function PanelNoProject() {
 						<FaHandsHelping />
 						{t('contribute')}
 					</Button>
-					{!Constants.IS_DESKTOP && (
-						<a
-							href={
-								'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0'
-							}
-							target='_blank'
-							rel='noreferrer'
-						>
-							{t('how.convert.project.2.0')}
-						</a>
-					)}
+					<a
+						href=''
+						onClick={async () =>
+							await openWebsite(
+								'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0',
+							)
+						}
+					>
+						{t('how.convert.project.2.0')}
+					</a>
 				</Flex>
 			</Flex>
 		</Flex>
