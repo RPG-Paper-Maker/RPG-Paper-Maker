@@ -89,10 +89,10 @@ async function extractZip(zipPath, destDir) {
 }
 
 app.commandLine.appendSwitch('high-dpi-support', 1);
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
 	app.commandLine.appendSwitch('use-angle', 'metal');
 	app.commandLine.appendSwitch('use-gl', 'angle');
-	app.commandLine.appendSwitch('ignore-gpu-blocklist');
 	app.commandLine.appendSwitch('enable-features', 'Metal');
 }
 
