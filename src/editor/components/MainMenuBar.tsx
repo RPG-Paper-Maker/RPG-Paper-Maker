@@ -259,6 +259,7 @@ function MainMenuBar() {
 	const handleOpenProject = async (project: Model.ProjectPreview, addExtraVersion?: string) => {
 		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
+		await handleCloseProject();
 		if (await checkFileExists(project.location)) {
 			Project.current = new Project(project.location);
 			let json = await readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));

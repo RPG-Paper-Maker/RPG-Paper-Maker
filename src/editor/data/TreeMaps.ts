@@ -134,7 +134,9 @@ class TreeMaps extends Serializable {
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, TreeMaps.getBindings(additionnalBinding));
-		Serializable.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
+		if (this.tree[0]) {
+			Serializable.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
+		}
 	}
 }
 
