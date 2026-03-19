@@ -78,7 +78,7 @@ function PanelMapObjectsSelection() {
 			return '';
 		}
 		const image = await Picture2D.loadImage(path);
-		if (!image.width || !image.height) {
+		if (Picture2D.isMissing(image)) {
 			return '';
 		}
 		const rows = picture.getRows();
@@ -131,7 +131,7 @@ function PanelMapObjectsSelection() {
 			return '';
 		}
 		const image = await Picture2D.loadImage(path);
-		if (!image.width || !image.height) {
+		if (Picture2D.isMissing(image)) {
 			return '';
 		}
 		const srcX = rect.x * Project.SQUARE_SIZE;

@@ -12,6 +12,10 @@
 class Picture2D {
 	static PICTURE_DIRECTION: HTMLImageElement;
 
+	static isMissing(image: HTMLImageElement): boolean {
+		return (image as HTMLImageElement & { _missing?: boolean })._missing === true;
+	}
+
 	static async loadImage(path: string): Promise<HTMLImageElement> {
 		return await new Promise((resolve) => {
 			const image = new Image();
@@ -20,9 +24,10 @@ class Picture2D {
 					resolve(image);
 				};
 				image.onerror = () => {
-					image.width = 0;
-					image.height = 0;
-					resolve(image);
+					const placeholder = new Image();
+					(placeholder as HTMLImageElement & { _missing?: boolean })._missing = true;
+					placeholder.onload = () => resolve(placeholder);
+					placeholder.src = '';
 				};
 				image.src = path;
 			} else {

@@ -67,7 +67,7 @@ class Mountains {
 
 	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
-		if (image.width === 0 || image.height === 0) {
+		if (Picture2D.isMissing(image)) {
 			return Manager.GL.loadTextureEmpty();
 		}
 		const sourceSize = 3 * Project.SQUARE_SIZE;
