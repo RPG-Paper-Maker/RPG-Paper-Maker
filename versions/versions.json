@@ -40,5 +40,6 @@
         "3.0.37",
         "3.0.38"
     ],
-    "unstable": false
+    "unstable": false,
+    "lastBRUpdateVersion": "3.0.29"
 }

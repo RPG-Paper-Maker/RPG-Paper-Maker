@@ -145,6 +145,18 @@
 					const progressText = document.getElementById('progressText');
 
 					let versionsData = null;
+					let currentEngineVersion = null;
+					let isUpdate = false;
+
+					const isVersionGTE = (a, b) => {
+						const pa = a.split('.').map(Number);
+						const pb = b.split('.').map(Number);
+						for (let i = 0; i < 3; i++) {
+							if (pa[i] > pb[i]) return true;
+							if (pa[i] < pb[i]) return false;
+						}
+						return true;
+					};
 
 					// Radio control logic
 					radioLatest.addEventListener('change', () => {
@@ -182,6 +194,12 @@
 							`${window.env.appPath}/dist`,
 						);
 						if (isEngineDownloaded) {
+							try {
+								currentEngineVersion = await window.ipcRenderer.invoke('read-file', `${window.env.appPath}/dist/version`);
+								isUpdate = true;
+							} catch (e) {
+								currentEngineVersion = null;
+							}
 							await window.ipcRenderer.invoke(
 								'change-window-title',
 								`Updating to ${data.lastVersion}...`,
@@ -225,7 +243,7 @@
 					})();
 
 					// Utility: flatten fileManifest.json
-					function collectFiles(manifest, baseVersionTag) {
+					function collectFiles(manifest, baseVersionTag, skipBR = false) {
 						const files = [];
 						const addFiles = (prefix, destPrefix, obj, baseURL) => {
 							if (obj.files) {
@@ -242,6 +260,7 @@
 									let newPrefix = newDestPrefix;
 									let urlPrefix;
 									if (newDestPrefix.startsWith('BR')) {
+										if (skipBR) continue;
 										urlPrefix = `https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/refs/tags/${baseVersionTag}/Content`;
 										newPrefix = newDestPrefix.slice(3);
 									} else if (newDestPrefix.startsWith('Scripts')) {
@@ -285,13 +304,14 @@
 						return files;
 					}
 
-					function collectFolders(manifest) {
+					function collectFolders(manifest, skipBR = false) {
 						const folders = new Set();
 
 						function addFolders(prefix, obj) {
 							for (const key in obj) {
 								if (typeof obj[key] === 'object' && key !== 'files') {
 									const newPrefix = prefix ? `${prefix}${key}/` : `${key}/`;
+									if (skipBR && newPrefix.startsWith('BR')) continue;
 									folders.add(newPrefix);
 									addFolders(newPrefix, obj[key]);
 								}
@@ -405,8 +425,12 @@
 							arrayRemoveValue(manifest.Scripts.Common.files, 'Platform.js');
 							arrayRemoveValue(manifest.files, 'index.html');
 							arrayRemoveValue(manifest.files, 'engineSettings.json');
-							const files = collectFiles(manifest, versionTag);
-							const folders = collectFolders(manifest);
+							const lastBRUpdateVersion = versionsData.lastBRUpdateVersion;
+							const skipBR = isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
+								? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
+								: false;
+							const files = collectFiles(manifest, versionTag, skipBR);
+							const folders = collectFolders(manifest, skipBR);
 							await downloadAll(files, folders);
 							await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
 						} catch (err) {

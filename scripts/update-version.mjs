@@ -1,10 +1,12 @@
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 
-const version = process.argv[2];
+const args = process.argv.slice(2);
+const version = args.find((a) => !a.startsWith('--'));
+const updateBR = args.includes('--update-br');
 
 if (!version) {
-	console.error('❌ Usage: node update-version.mjs <version>');
+	console.error('❌ Usage: node update-version.mjs <version> [--update-br]');
 	process.exit(1);
 }
 
@@ -20,6 +22,11 @@ let versionsData = JSON.parse(readFileSync(versionsJsonFile, 'utf-8'));
 
 if (!versionsData.versions.includes(version)) {
 	versionsData.versions.push(version);
+}
+
+if (updateBR) {
+	versionsData.lastBRUpdateVersion = version;
+	console.log(`✅ Updated lastBRUpdateVersion to: ${version}`);
 }
 
 writeFileSync(versionsJsonFile, JSON.stringify(versionsData, null, 4));
