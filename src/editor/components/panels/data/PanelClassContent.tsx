@@ -56,7 +56,9 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 	const update = () => {
 		if (selectedClass) {
 			updateExperience();
-			setInitialLevel(selectedClass.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass.initialLevel);
+			setInitialLevel(
+				selectedClass.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass.initialLevel,
+			);
 			setFinalLevel(selectedClass.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass.finalLevel);
 			ProgressionTable.selectedClassInitialLevel =
 				selectedClass.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass.initialLevel;
@@ -91,7 +93,8 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 	const getExperienceList = (): string[][] => {
 		const initialLevel =
 			selectedClass!.initialLevel === -1 ? (upperClass?.initialLevel ?? 1) : selectedClass!.initialLevel;
-		const finalLevel = selectedClass!.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass!.finalLevel;
+		const finalLevel =
+			selectedClass!.finalLevel === -1 ? (upperClass?.finalLevel ?? 100) : selectedClass!.finalLevel;
 		const experienceBase =
 			selectedClass!.experienceBase === -1 ? (upperClass?.experienceBase ?? 0) : selectedClass!.experienceBase;
 		const experienceInflation =
@@ -232,12 +235,14 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 	const getContentExperience = (total: boolean) => {
 		if (selectedClass) {
 			return (
-				<Table
-					values={total ? experienceTotalValues : experienceToNextLevelValues}
-					onChange={total ? undefined : handleChangeTableExperienceToNextLevel}
-					highlightedElements={total ? undefined : hightlightedElements}
-					widths={['60px', undefined]}
-				/>
+				<Flex one column zeroHeight scrollable>
+					<Table
+						values={total ? experienceTotalValues : experienceToNextLevelValues}
+						onChange={total ? undefined : handleChangeTableExperienceToNextLevel}
+						highlightedElements={total ? undefined : hightlightedElements}
+						widths={['60px', undefined]}
+					/>
+				</Flex>
 			);
 		}
 		return null;
