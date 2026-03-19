@@ -87,6 +87,9 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Language: () => Model.Language,
 	Keyboard: () => Model.Keyboard,
 	VariablesPage: () => Model.VariablesPage,
+	ElementEfficiency: () => Model.ElementEfficiency,
+	MapObjectParameter: () => Model.MapObjectParameter,
+	TroopBattleTestHeroEquipment: () => Model.TroopBattleTestHeroEquipment,
 };
 
 class Node extends Serializable {
@@ -262,21 +265,25 @@ class Node extends Serializable {
 	}
 
 	static async loadToPaste(): Promise<CopiedItemsType | null> {
-		const pathCurrentCopy = this.getCurrentCopyPath();
-		const content = await readFile(pathCurrentCopy);
-		if (content && content.length > 0) {
-			const json = JSON.parse(content);
-			const constructorClass = NODE_CONSTRUCTOR_KIND[json.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
-			const nodes = json.json.map((jsonNode: JSONType) => {
-				const node = new Node();
-				node.read(jsonNode, [], constructorClass);
-				return node;
-			});
-			return {
-				values: nodes,
-				constructorClass,
-				pathProject: json.pathProject,
-			};
+		try {
+			const pathCurrentCopy = this.getCurrentCopyPath();
+			const content = await readFile(pathCurrentCopy);
+			if (content && content.length > 0) {
+				const json = JSON.parse(content);
+				const constructorClass = NODE_CONSTRUCTOR_KIND[json.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
+				const nodes = json.json.map((jsonNode: JSONType) => {
+					const node = new Node();
+					node.read(jsonNode, [], constructorClass);
+					return node;
+				});
+				return {
+					values: nodes,
+					constructorClass,
+					pathProject: json.pathProject,
+				};
+			}
+		} catch {
+			return null;
 		}
 		return null;
 	}
