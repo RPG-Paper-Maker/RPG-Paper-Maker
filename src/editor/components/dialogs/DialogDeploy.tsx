@@ -144,7 +144,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 			);
 		}
 		if (protectData) {
-			await IO.createFile(Paths.join(path, '.protect'), '');
+			await createFile(Paths.join(path, '.protect'), '');
 		}
 	};
 
