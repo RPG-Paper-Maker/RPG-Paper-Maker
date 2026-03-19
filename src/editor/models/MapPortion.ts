@@ -62,6 +62,9 @@ class MapPortion extends Serializable {
 
 	static getBindingJsonObjects3D(json: JSONType) {
 		const data = Project.current!.specialElements.getObject3DByID(json['did'] as number);
+		if (!data) {
+			return null;
+		}
 		switch (data.shapeKind) {
 			case SHAPE_KIND.BOX:
 				return Object3DBox;
