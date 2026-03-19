@@ -142,7 +142,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 							Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
 							dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
 						} else {
-							dataURL = await Project.current!.pictures.getByID(kind, elementID).getPathOrBase64();
+							dataURL = (await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
 						}
 						urls.set(elementID, dataURL);
 						setTriggerUpdate(elementID);

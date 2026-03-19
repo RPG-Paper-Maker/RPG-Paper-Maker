@@ -60,9 +60,7 @@ console.error = (...args) => {
 		});
 	}
 	if (message.includes('EBUSY')) {
-		notifyWarning(
-			i18next.t('warning.file.busy'),
-		);
+		console.warn(i18next.t('warning.file.busy'));
 		return;
 	}
 	notifyError(<ToasterError message={message} stack={stack} />);
@@ -94,9 +92,7 @@ window.addEventListener('unhandledrejection', (event) => {
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
 	if (message.includes('EBUSY')) {
-		notifyWarning(
-			i18next.t('warning.file.busy'),
-		);
+		console.warn(i18next.t('warning.file.busy'));
 		return;
 	}
 	notifyError(<ToasterError message={message} stack={stack} />);
