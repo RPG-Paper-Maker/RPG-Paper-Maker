@@ -113,6 +113,9 @@ class Project {
 
 	async updateBackups() {
 		const path = this.getPath();
+		if (!(await checkFileExists(path))) {
+			return;
+		}
 		const backupsPath = Paths.join(path, Paths.BACKUPS);
 		if (!(await checkFileExists(backupsPath))) {
 			await createFolder(backupsPath);
