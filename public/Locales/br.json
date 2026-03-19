@@ -1922,5 +1922,6 @@
 	"formulas.utility.variance": "Valor com variância percentual aleatória +/-",
 	"formulas.game.variable": "Obter uma variável do jogo pelo seu ID",
 	"formulas.game.items": "Array de itens no inventário",
-	"formulas.game.playtime": "Tempo de jogo atual"
+	"formulas.game.playtime": "Tempo de jogo atual",
+	"warning.file.busy": "Um arquivo do projeto está bloqueado por outro processo. Certifique-se de que este projeto não está aberto em outra instância do RPG Paper Maker. Também pode ser uma ferramenta de sincronização em nuvem (OneDrive, Dropbox, etc.) bloqueando temporariamente o arquivo."
 }

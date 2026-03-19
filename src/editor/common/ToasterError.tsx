@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { ReactNode, useEffect, useRef } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
@@ -58,6 +59,12 @@ console.error = (...args) => {
 			}
 		});
 	}
+	if (message.includes('EBUSY')) {
+		notifyWarning(
+			i18next.t('warning.file.busy'),
+		);
+		return;
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	if (!isGameMode) {
 		store.dispatch(setErrorDialog({ message, stack }));
@@ -86,6 +93,12 @@ window.addEventListener('unhandledrejection', (event) => {
 	const reason = event.reason;
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
+	if (message.includes('EBUSY')) {
+		notifyWarning(
+			i18next.t('warning.file.busy'),
+		);
+		return;
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	if (!isGameMode) {
 		store.dispatch(setErrorDialog({ message, stack }));

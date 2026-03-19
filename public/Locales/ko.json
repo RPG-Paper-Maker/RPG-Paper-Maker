@@ -1923,5 +1923,6 @@
 	"formulas.utility.variance": "무작위 ±퍼센트 분산이 있는 값",
 	"formulas.game.variable": "ID로 게임 변수 가져오기",
 	"formulas.game.items": "인벤토리의 아이템 배열",
-	"formulas.game.playtime": "현재 플레이 시간"
+	"formulas.game.playtime": "현재 플레이 시간",
+	"warning.file.busy": "프로젝트 파일이 다른 프로세스에 의해 잠겨 있습니다. 이 프로젝트가 다른 RPG Paper Maker 인스턴스에서 열려 있지 않은지 확인하세요. 클라우드 동기화 도구(OneDrive, Dropbox 등)가 일시적으로 파일을 잠그고 있을 수도 있습니다."
 }

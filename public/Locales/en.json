@@ -1922,5 +1922,6 @@
 	"formulas.utility.variance": "Value with random +/- percentage variance",
 	"formulas.game.variable": "Get a game variable by its ID",
 	"formulas.game.items": "Array of items in inventory",
-	"formulas.game.playtime": "Current play time"
+	"formulas.game.playtime": "Current play time",
+	"warning.file.busy": "A project file is locked by another process. Make sure this project is not open in another instance of RPG Paper Maker. It could also be a cloud sync tool (OneDrive, Dropbox, etc.) temporarily locking the file."
 }

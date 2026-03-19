@@ -1923,5 +1923,6 @@
 	"formulas.utility.variance": "带有随机±百分比浮动的值",
 	"formulas.game.variable": "通过ID获取游戏变量",
 	"formulas.game.items": "背包中的物品数组",
-	"formulas.game.playtime": "当前游戏时间"
+	"formulas.game.playtime": "当前游戏时间",
+	"warning.file.busy": "项目文件被另一个进程锁定。请确保该项目未在另一个 RPG Paper Maker 实例中打开。也可能是云同步工具（OneDrive、Dropbox 等）暂时锁定了该文件。"
 }

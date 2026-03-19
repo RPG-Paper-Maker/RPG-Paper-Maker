@@ -1922,5 +1922,6 @@
 	"formulas.utility.variance": "ランダムな±パーセンテージ分散を持つ値",
 	"formulas.game.variable": "IDでゲーム変数を取得",
 	"formulas.game.items": "インベントリ内のアイテムの配列",
-	"formulas.game.playtime": "現在のプレイ時間"
+	"formulas.game.playtime": "現在のプレイ時間",
+	"warning.file.busy": "プロジェクトファイルが別のプロセスによってロックされています。このプロジェクトが別の RPG Paper Maker インスタンスで開かれていないことを確認してください。クラウド同期ツール（OneDrive、Dropbox など）が一時的にファイルをロックしている可能性もあります。"
 }
