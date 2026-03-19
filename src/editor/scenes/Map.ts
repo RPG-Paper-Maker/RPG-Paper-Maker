@@ -27,7 +27,7 @@ import {
 	SPRITE_WALL_TYPE,
 	Utils,
 } from '../common';
-import { copyFile, getFiles, readJSON, removeFile } from '../common/Platform';
+import { checkFileExists, copyFile, createFile, createFolder, getFiles, readJSON, removeFile } from '../common/Platform';
 import { Battler } from '../core/Battler';
 import { Cursor } from '../core/Cursor';
 import { CursorWall } from '../core/CursorWall';
@@ -246,6 +246,15 @@ class Map extends Base {
 			// Load map model
 			this.model.id = this.id;
 			await this.model.load();
+
+			// Ensure temp folders exist (may be missing for imported, tutorial, or converted projects)
+			const folderMap = this.getPath();
+			await createFolder(Paths.join(folderMap, Paths.TEMP));
+			await createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
+			const indexPath = Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX);
+			if (!(await checkFileExists(indexPath))) {
+				await createFile(indexPath, '-1');
+			}
 
 			// Tileset texture material
 			await this.loadTileset();
