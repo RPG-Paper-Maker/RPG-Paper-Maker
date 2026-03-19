@@ -767,6 +767,9 @@ class Map extends Base {
 	}
 
 	forEachMapPortions(callback: (mapPortion: MapPortion) => void) {
+		if (!this.mapPortions) {
+			return;
+		}
 		for (let i = 0; i < this.mapPortions.length; i++) {
 			const mapPortion = this.mapPortions[i];
 			if (mapPortion) {
