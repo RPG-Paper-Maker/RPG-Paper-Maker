@@ -26,12 +26,18 @@
 					-5px 0px 0 white,
 					0px -5px 0 white;
 			}
+			#progress {
+				top: auto;
+				bottom: 25px;
+				font-size: 28px;
+			}
 		</style>
 	</head>
 	<body>
 		<div>
 			<img id="splash" src="splash.png" alt="App Icon" />
 			<p id="title"></p>
+			<p id="progress"></p>
 		</div>
 		<script>
 			const params = new URLSearchParams(window.location.search);

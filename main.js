@@ -34,6 +34,15 @@ const createSplash = (title) => {
 		icon: path.join(__dirname, 'updater', 'icon.png'),
 	});
 	splash.loadURL(splashURL);
+	return new Promise((resolve) => splash.webContents.once('did-finish-load', resolve));
+};
+
+const setSplashProgress = (text) => {
+	if (splash && !splash.isDestroyed()) {
+		splash.webContents.executeJavaScript(
+			`document.getElementById('progress').textContent = ${JSON.stringify(text)};`,
+		);
+	}
 };
 
 const runRPMEngine = () => {
@@ -305,7 +314,7 @@ const init = async () => {
 			}
 		} else {
 			// Update updater
-			createSplash('Updating the updater. Please do NOT close.');
+			await createSplash('Updating. Do not close.');
 			const updaterZipName = (() => {
 				switch (process.platform) {
 					case 'win32':
@@ -321,10 +330,28 @@ const init = async () => {
 			const res = await fetchFrom(
 				`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
 			);
-			const blob = Buffer.from(await res.arrayBuffer());
+			const contentLength = res.headers.get('content-length');
+			const total = contentLength ? parseInt(contentLength, 10) : null;
+			const reader = res.body.getReader();
+			const chunks = [];
+			let received = 0;
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				chunks.push(value);
+				received += value.length;
+				if (total) {
+					setSplashProgress(`Downloading... ${Math.round((received / total) * 100)}%`);
+				} else {
+					setSplashProgress(`Downloading... ${(received / 1024 / 1024).toFixed(1)} MB`);
+				}
+			}
+			const blob = Buffer.concat(chunks);
 			await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
+			setSplashProgress('Extracting...');
 			await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
 			await fs.unlink(`${basePath}/../${updaterZipName}`);
+			setSplashProgress('Copying files...');
 			await copyFolder(
 				`${__dirname}/dist`,
 				`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
