@@ -20,7 +20,7 @@ export type BindingType = [
 	unknown, // defaulValue
 	BINDING, // type
 	(typeof Serializable | null)?, // constructorClass
-	((json: JSONType) => typeof Serializable)?, // additionalFunction
+	((json: JSONType) => typeof Serializable | null)?, // additionalFunction
 	typeof PortionBase?, // positionConstructor
 ];
 
