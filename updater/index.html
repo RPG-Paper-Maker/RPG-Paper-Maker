@@ -204,6 +204,16 @@
 								'change-window-title',
 								`Updating to ${data.lastVersion}...`,
 							);
+							const lastBRUpdateVersion = data.lastBRUpdateVersion;
+							const skipBR = isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
+								? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
+								: false;
+							const brSrc = `${window.env.appPath}/dist/BR`;
+							const brBackup = `${window.env.appPath}/BR_backup`;
+							const hasBR = skipBR && await window.ipcRenderer.invoke('check-file-exists', brSrc);
+							if (hasBR) {
+								await window.ipcRenderer.invoke('copy-folder', brSrc, brBackup);
+							}
 							if (isEngineSettings) {
 								await window.ipcRenderer.invoke(
 									'rename-file',
@@ -213,6 +223,10 @@
 							}
 							await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
 							await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
+							if (hasBR) {
+								await window.ipcRenderer.invoke('copy-folder', brBackup, brSrc);
+								await window.ipcRenderer.invoke('remove-folder', brBackup);
+							}
 							if (isEngineSettings) {
 								await window.ipcRenderer.invoke(
 									'rename-file',
