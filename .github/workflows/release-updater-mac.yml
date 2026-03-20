@@ -51,7 +51,7 @@ jobs:
 
       - name: Create universal .app
         run: |
-          npx @electron/universal \
+          ./node_modules/.bin/electron-universal \
             --x64AppPath   electron-x64/Electron.app \
             --arm64AppPath electron-arm64/Electron.app \
             --universalAppPath RPG-Paper-Maker.app
