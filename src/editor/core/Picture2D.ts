@@ -26,8 +26,8 @@ class Picture2D {
 				image.onerror = () => {
 					const placeholder = new Image();
 					(placeholder as HTMLImageElement & { _missing?: boolean })._missing = true;
-					placeholder.onload = () => resolve(placeholder);
-					placeholder.src = '';
+					resolve(placeholder);
+					console.warn('Could not load image: ' + path);
 				};
 				image.src = path;
 			} else {
