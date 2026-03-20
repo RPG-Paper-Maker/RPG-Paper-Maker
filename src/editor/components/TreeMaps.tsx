@@ -221,7 +221,7 @@ function TreeMaps({
 		setIsOpenDialogConfirm(false);
 	};
 
-	const handleDoubleClick = (node: Node | null) => {
+	const handleDoubleClick = async (node: Node | null) => {
 		if (!node) return;
 		const tag = node.content as TreeMapTag;
 		if (tag.isFolder()) {
@@ -230,11 +230,10 @@ function TreeMaps({
 			setIsOpenName(true);
 		} else {
 			const map = Model.Map.create(tag.id, tag.name);
-			map.load().then(() => {
-				setEditedMap(map);
-				setIsNew(false);
-				setIsOpenMapProperties(true);
-			});
+			await map.load();
+			setEditedMap(map);
+			setIsNew(false);
+			setIsOpenMapProperties(true);
 		}
 	};
 
