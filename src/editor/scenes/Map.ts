@@ -1240,15 +1240,15 @@ class Map extends Base {
 		if (this.selectedMesh.position.x < 0) {
 			this.selectedMesh.position.setX(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? Project.SQUARE_SIZE / 2
+					? (this.selectedElement?.getAdditionalX() ?? Math.floor(Project.SQUARE_SIZE / 2))
 					: 0,
 			);
 		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.length - 1) {
 			this.selectedMesh.position.setX(
-				this.model.length * Project.SQUARE_SIZE -
-					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-						? Project.SQUARE_SIZE / 2
-						: 1),
+				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+					? (this.model.length - 1) * Project.SQUARE_SIZE +
+							(this.selectedElement?.getAdditionalX() ?? Math.floor(Project.SQUARE_SIZE / 2))
+					: this.model.length * Project.SQUARE_SIZE - 1,
 			);
 		}
 		if (this.selectedMesh.position.y < -this.model.depth * Project.SQUARE_SIZE) {
@@ -1264,15 +1264,15 @@ class Map extends Base {
 		if (this.selectedMesh.position.z < 0) {
 			this.selectedMesh.position.setZ(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? Project.SQUARE_SIZE / 2
+					? (this.selectedElement?.getAdditionalZ() ?? Math.floor(Project.SQUARE_SIZE / 2))
 					: 0,
 			);
 		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.width - 1) {
 			this.selectedMesh.position.setZ(
-				this.model.width * Project.SQUARE_SIZE -
-					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-						? Project.SQUARE_SIZE / 2
-						: 1),
+				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+					? (this.model.width - 1) * Project.SQUARE_SIZE +
+							(this.selectedElement?.getAdditionalZ() ?? Math.floor(Project.SQUARE_SIZE / 2))
+					: this.model.width * Project.SQUARE_SIZE - 1,
 			);
 		}
 		if (this.transformControls.axis === null || this.transformControls.axis.includes('X')) {
