@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MenuItemType, Utils } from '../common';
 import { RootState } from '../store';
@@ -109,6 +109,21 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 	useEffect(() => {
 		setIsFocused(false);
 	}, [isOpeningNewDialog]);
+
+	useLayoutEffect(() => {
+		if (isOpen && refMenu.current) {
+			const menu = refMenu.current;
+			const rect = menu.getBoundingClientRect();
+			const viewport = Utils.getViewport();
+			const viewportRect = viewport.getBoundingClientRect();
+			if (rect.bottom > viewportRect.bottom) {
+				menu.style.top = `${parseFloat(menu.style.top) - (rect.bottom - viewportRect.bottom)}px`;
+			}
+			if (rect.right > viewportRect.right) {
+				menu.style.left = `${parseFloat(menu.style.left) - (rect.right - viewportRect.right)}px`;
+			}
+		}
+	}, [isOpen]);
 
 	return (
 		<Flex
