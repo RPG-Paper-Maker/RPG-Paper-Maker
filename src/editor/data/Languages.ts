@@ -145,43 +145,51 @@ class Languages extends Serializable {
 		};
 	};
 
+	private applyTranslations(tFunc: (key: string) => string, setter: (loc: Model.Localization, value: string) => void): void {
+		setter(this.loadAGame, tFunc('load.game'));
+		setter(this.loadAGameDescription, tFunc('load.game.description'));
+		setter(this.slot, tFunc('slot.name'));
+		setter(this.empty, tFunc('empty'));
+		setter(this.saveAGame, tFunc('save.game'));
+		setter(this.saveAGameDescription, tFunc('save.game.description'));
+		setter(this.keyboardAssignment, tFunc('keyboard.assignments'));
+		setter(this.keyboardAssignmentDescription, tFunc('keyboard.assignments.description'));
+		setter(this.keyboardAssignmentSelectedDescription, tFunc('keyboard.assignments.selected.description'));
+		setter(this.language, tFunc('language'));
+		setter(this.languageDescription, tFunc('language.description'));
+		setter(this.languageSelectedDescription, tFunc('language.selected.description'));
+		setter(this.confirm, tFunc('confirm.question'));
+		setter(this.ok, tFunc('ok'));
+		setter(this.yes, tFunc('yes'));
+		setter(this.no, tFunc('no'));
+		setter(this.add, tFunc('add'));
+		setter(this.remove, tFunc('remove'));
+		setter(this.shop, tFunc('shop'));
+		setter(this.buy, tFunc('buy'));
+		setter(this.sell, tFunc('sell'));
+		setter(this.owned, tFunc('owned'));
+		setter(this.selectAnAlly, tFunc('select.an.ally'));
+		setter(this.victory, tFunc('victory'));
+		setter(this.defeat, tFunc('defeat'));
+		setter(this.levelUp, tFunc('level.up'));
+		setter(this.precision, tFunc('precision'));
+		setter(this.critical, tFunc('critical'));
+		setter(this.damage, tFunc('damage'));
+		setter(this.heal, tFunc('heal'));
+		setter(this.skill, tFunc('skill'));
+		setter(this.performSkill, tFunc('perform.skill'));
+		setter(this.loading, tFunc('extra.loading'));
+		setter(this.equipQuestion, tFunc('equip.question'));
+		setter(this.pressAnyKeys, tFunc('press.any.keys'));
+		setter(this.target, tFunc('target'));
+	}
+
+	prefillTranslationsForLanguage(languageId: string, localeShort: string): void {
+		this.applyTranslations(i18next.getFixedT(localeShort), (loc, value) => loc.names.set(languageId, value));
+	}
+
 	translateDefaults(): void {
-		this.loadAGame.updateMainName(t('load.game'));
-		this.loadAGameDescription.updateMainName(t('load.game.description'));
-		this.slot.updateMainName(t('slot.name'));
-		this.empty.updateMainName(t('empty'));
-		this.saveAGame.updateMainName(t('save.game'));
-		this.saveAGameDescription.updateMainName(t('save.game.description'));
-		this.keyboardAssignment.updateMainName(t('keyboard.assignments'));
-		this.keyboardAssignmentDescription.updateMainName(t('keyboard.assignments.description'));
-		this.keyboardAssignmentSelectedDescription.updateMainName(t('keyboard.assignments.selected.description'));
-		this.language.updateMainName(t('language'));
-		this.languageDescription.updateMainName(t('language.description'));
-		this.languageSelectedDescription.updateMainName(t('language.selected.description'));
-		this.confirm.updateMainName(t('confirm.question'));
-		this.ok.updateMainName(t('ok'));
-		this.yes.updateMainName(t('yes'));
-		this.no.updateMainName(t('no'));
-		this.add.updateMainName(t('add'));
-		this.remove.updateMainName(t('remove'));
-		this.shop.updateMainName(t('shop'));
-		this.buy.updateMainName(t('buy'));
-		this.sell.updateMainName(t('sell'));
-		this.owned.updateMainName(t('owned'));
-		this.selectAnAlly.updateMainName(t('select.an.ally'));
-		this.victory.updateMainName(t('victory'));
-		this.defeat.updateMainName(t('defeat'));
-		this.levelUp.updateMainName(t('level.up'));
-		this.precision.updateMainName(t('precision'));
-		this.critical.updateMainName(t('critical'));
-		this.damage.updateMainName(t('damage'));
-		this.heal.updateMainName(t('heal'));
-		this.skill.updateMainName(t('skill'));
-		this.performSkill.updateMainName(t('perform.skill'));
-		this.loading.updateMainName(t('extra.loading'));
-		this.equipQuestion.updateMainName(t('equip.question'));
-		this.pressAnyKeys.updateMainName(t('press.any.keys'));
-		this.target.updateMainName(t('target'));
+		this.applyTranslations(t, (loc, value) => loc.updateMainName(value));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

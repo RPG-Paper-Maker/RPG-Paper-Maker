@@ -94,6 +94,7 @@ class Paths {
 	public static readonly FILE_SPECIAL_ELEMENTS = 'specialElements.json';
 	public static readonly FILE_VARIABLES = 'variables.json';
 	public static readonly FILE_SETTINGS = 'settings.json';
+	public static readonly FILE_SETTINGS_GAME = 'settings-game.json';
 	public static readonly FILE_DLCS = 'dlcs.json';
 	public static readonly FILE_ANIMATIONS = 'animations.json';
 	public static readonly FILE_STATUS = 'status.json';

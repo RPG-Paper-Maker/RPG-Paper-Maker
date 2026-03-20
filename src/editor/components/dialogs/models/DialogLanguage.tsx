@@ -14,7 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
-import { LANGUAGES_NAMES } from '../../../i18n/i18n';
+import { LANGUAGES_NAMES, LANGUAGES_SHORTS } from '../../../i18n/i18n';
+import { Project } from '../../../core/Project';
 import { Base } from '../../../models';
 import Dropdown from '../../Dropdown';
 import Form, { Label, Value } from '../../Form';
@@ -54,6 +55,9 @@ function DialogLanguage({ setIsOpen, model, onAccept, onReject }: Props) {
 	const handleAccept = async () => {
 		language.name = name;
 		language.kind = kind;
+		if (kind !== 0) {
+			Project.current!.languages.prefillTranslationsForLanguage('' + language.id, LANGUAGES_SHORTS[kind - 1]);
+		}
 		onAccept();
 		setIsOpen(false);
 	};
