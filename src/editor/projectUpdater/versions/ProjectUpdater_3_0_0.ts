@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ArrayUtils, Constants, IO, JSONType, OS_KIND, Paths } from '../../common';
+import { ArrayUtils, Constants, JSONType, Paths } from '../../common';
 import {
 	copyFolder,
 	createFile,
@@ -94,26 +94,25 @@ class ProjectUpdater_3_0_0 {
 		// If desktop, remove electron stuff and move content folder
 		let folders: string[];
 		if (Constants.IS_DESKTOP) {
-			const os = await IO.getOS();
 			folders = await getFolders(projectPath);
+			const isDarwin = folders.includes('Game.app');
 			const files = await getFiles(projectPath);
 			for (const file of files) {
 				await removeFile(Paths.join(projectPath, file));
 			}
 			for (const folder of folders) {
-				if (folder !== (os === OS_KIND.DARWIN ? 'Game.app' : 'resources')) {
+				if (folder !== (isDarwin ? 'Game.app' : 'resources')) {
 					await removeFolder(Paths.join(projectPath, folder));
 				}
 			}
-			const contentPath =
-				os === OS_KIND.DARWIN
-					? Paths.join(projectPath, 'Game.app', 'Contents', 'Resources', 'app', 'Content')
-					: Paths.join(projectPath, 'resources', 'app', 'Content');
+			const contentPath = isDarwin
+				? Paths.join(projectPath, 'Game.app', 'Contents', 'Resources', 'app', 'Content')
+				: Paths.join(projectPath, 'resources', 'app', 'Content');
 			folders = await getFolders(contentPath);
 			for (const folder of folders) {
 				await copyFolder(Paths.join(contentPath, folder), Paths.join(projectPath, folder));
 			}
-			await removeFolder(Paths.join(projectPath, os === OS_KIND.DARWIN ? 'Game.app' : 'resources'));
+			await removeFolder(Paths.join(projectPath, isDarwin ? 'Game.app' : 'resources'));
 		}
 
 		// Remove maps temp files
