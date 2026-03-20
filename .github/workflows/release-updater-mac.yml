@@ -58,7 +58,7 @@ jobs:
             makeUniversalApp({
               x64AppPath:      path.join(cwd, 'electron-x64/Electron.app'),
               arm64AppPath:    path.join(cwd, 'electron-arm64/Electron.app'),
-              universalAppPath: path.join(cwd, 'RPG-Paper-Maker.app'),
+              outAppPath: path.join(cwd, 'RPG-Paper-Maker.app'),
             }).then(() => console.log('Done')).catch(e => { console.error(e); process.exit(1); });
           "
 
