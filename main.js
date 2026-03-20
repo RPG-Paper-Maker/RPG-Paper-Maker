@@ -650,7 +650,9 @@ ipcMain.handle('unmaximize', () => {
 });
 
 ipcMain.handle('close', () => {
-	window.close();
+	if (window && !window.isDestroyed()) {
+		window.close();
+	}
 });
 
 ipcMain.handle('ready-to-close', async () => {
