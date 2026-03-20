@@ -100,9 +100,15 @@ async function extractZip(zipPath, destDir) {
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
-	app.commandLine.appendSwitch('use-angle', 'metal');
-	app.commandLine.appendSwitch('use-gl', 'angle');
-	app.commandLine.appendSwitch('enable-features', 'Metal');
+	if (process.arch === 'arm64') {
+		// Apple Silicon: Metal works well
+		app.commandLine.appendSwitch('use-angle', 'metal');
+		app.commandLine.appendSwitch('use-gl', 'angle');
+		app.commandLine.appendSwitch('enable-features', 'Metal');
+	} else {
+		// Intel Mac: Metal/ANGLE causes BindToCurrentSequence failures, fall back to OpenGL
+		app.commandLine.appendSwitch('use-angle', 'gl');
+	}
 }
 
 const MIME_TYPES = {
@@ -249,7 +255,7 @@ const init = async () => {
 				case 'linux':
 					return 'RPG Paper Maker';
 				case 'darwin':
-					return 'Contents/MacOS/RPG Paper Maker';
+					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 			}
 		})();
 		if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
