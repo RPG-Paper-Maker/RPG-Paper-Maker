@@ -787,6 +787,7 @@ class MapPortion {
 
 	updateLandsGeometries() {
 		const isPointedFloor =
+			this.map.canEdit &&
 			Scene.Map.isTransforming() &&
 			!this.map.isDraggingTransforming &&
 			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR;
