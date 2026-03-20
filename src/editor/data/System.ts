@@ -191,7 +191,9 @@ class System extends Serializable {
 		for (const face of this.fontNames) {
 			if (!face.isBasic) {
 				const font = Project.current!.fonts.getFontByID(face.customFontID);
-				fonts.push(await font.getFontFace(face.name, deployed));
+				if (font) {
+					fonts.push(await font.getFontFace(face.name, deployed));
+				}
 			}
 		}
 		return fonts.join('');
