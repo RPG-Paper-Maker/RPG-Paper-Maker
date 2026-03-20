@@ -27,7 +27,15 @@ import {
 	SPRITE_WALL_TYPE,
 	Utils,
 } from '../common';
-import { checkFileExists, copyFile, createFile, createFolder, getFiles, readJSON, removeFile } from '../common/Platform';
+import {
+	checkFileExists,
+	copyFile,
+	createFile,
+	createFolder,
+	getFiles,
+	readJSON,
+	removeFile,
+} from '../common/Platform';
 import { Battler } from '../core/Battler';
 import { Cursor } from '../core/Cursor';
 import { CursorWall } from '../core/CursorWall';
@@ -1863,7 +1871,11 @@ class Map extends Base {
 						}
 					}
 				}
-			} else if (this.canEdit && !this.transformControls.dragging && (Inputs.isPointerPressed || this.needsMouseDown)) {
+			} else if (
+				this.canEdit &&
+				!this.transformControls.dragging &&
+				(Inputs.isPointerPressed || this.needsMouseDown)
+			) {
 				this.selectedElement =
 					this.pointedMapElement === null ||
 					(Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.ROTATE &&

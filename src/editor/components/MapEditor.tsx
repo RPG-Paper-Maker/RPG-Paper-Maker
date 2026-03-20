@@ -11,8 +11,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowAltCircleUp } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
@@ -175,6 +175,9 @@ function MapEditor() {
 			canvasHUD.style.width = `${canvas.clientWidth}px`;
 			canvasHUD.style.height = `${canvas.clientHeight}px`;
 			Scene.Map.ctxHUD!.setTransform(ratio, 0, 0, ratio, 0, 0);
+			if (Scene.Map.current) {
+				Scene.Map.current.requestPaintHUD = true;
+			}
 		}
 	};
 
@@ -290,11 +293,6 @@ function MapEditor() {
 		initializeMap().catch(console.error);
 	}, [needsReloadMap]);
 
-	// Resize after rendering
-	useEffect(() => {
-		resize();
-	});
-
 	const getContextMenuItems = () => {
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
@@ -338,44 +336,48 @@ function MapEditor() {
 		<>
 			<Loader isLoading={firstLoading} />
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<div className={`mapEditor ${cursorClass()}`} onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
+				<div
+					className={`mapEditor ${cursorClass()}`}
+					onDoubleClick={handleDoubleClick}
+					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
+				>
 					<div ref={refCanvas} id='canvas-map-editor' className='fillSpace' />
-				{Constants.IS_MOBILE && (
-					<div className='mobileCursorControls'>
-						<div
-							className='mobileCursorBtn mobileCursorUp'
-							onPointerDown={handleDirectionPress('ArrowUp')}
-							onPointerUp={handleDirectionRelease('ArrowUp')}
-							onPointerLeave={handleDirectionRelease('ArrowUp')}
-						>
-							<FaArrowAltCircleUp />
+					{Constants.IS_MOBILE && (
+						<div className='mobileCursorControls'>
+							<div
+								className='mobileCursorBtn mobileCursorUp'
+								onPointerDown={handleDirectionPress('ArrowUp')}
+								onPointerUp={handleDirectionRelease('ArrowUp')}
+								onPointerLeave={handleDirectionRelease('ArrowUp')}
+							>
+								<FaArrowAltCircleUp />
+							</div>
+							<div
+								className='mobileCursorBtn mobileCursorDown'
+								onPointerDown={handleDirectionPress('ArrowDown')}
+								onPointerUp={handleDirectionRelease('ArrowDown')}
+								onPointerLeave={handleDirectionRelease('ArrowDown')}
+							>
+								<FaArrowAltCircleDown />
+							</div>
+							<div
+								className='mobileCursorBtn mobileCursorLeft'
+								onPointerDown={handleDirectionPress('ArrowLeft')}
+								onPointerUp={handleDirectionRelease('ArrowLeft')}
+								onPointerLeave={handleDirectionRelease('ArrowLeft')}
+							>
+								<FaArrowAltCircleLeft />
+							</div>
+							<div
+								className='mobileCursorBtn mobileCursorRight'
+								onPointerDown={handleDirectionPress('ArrowRight')}
+								onPointerUp={handleDirectionRelease('ArrowRight')}
+								onPointerLeave={handleDirectionRelease('ArrowRight')}
+							>
+								<FaArrowAltCircleRight />
+							</div>
 						</div>
-						<div
-							className='mobileCursorBtn mobileCursorDown'
-							onPointerDown={handleDirectionPress('ArrowDown')}
-							onPointerUp={handleDirectionRelease('ArrowDown')}
-							onPointerLeave={handleDirectionRelease('ArrowDown')}
-						>
-							<FaArrowAltCircleDown />
-						</div>
-						<div
-							className='mobileCursorBtn mobileCursorLeft'
-							onPointerDown={handleDirectionPress('ArrowLeft')}
-							onPointerUp={handleDirectionRelease('ArrowLeft')}
-							onPointerLeave={handleDirectionRelease('ArrowLeft')}
-						>
-							<FaArrowAltCircleLeft />
-						</div>
-						<div
-							className='mobileCursorBtn mobileCursorRight'
-							onPointerDown={handleDirectionPress('ArrowRight')}
-							onPointerUp={handleDirectionRelease('ArrowRight')}
-							onPointerLeave={handleDirectionRelease('ArrowRight')}
-						>
-							<FaArrowAltCircleRight />
-						</div>
-					</div>
-				)}
+					)}
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 				</div>
