@@ -56,17 +56,25 @@ jobs:
             const { makeUniversalApp } = require('@electron/universal');
             const cwd = process.cwd();
             makeUniversalApp({
-              x64AppPath:      path.join(cwd, 'electron-x64/Electron.app'),
-              arm64AppPath:    path.join(cwd, 'electron-arm64/Electron.app'),
-              outAppPath: path.join(cwd, 'RPG-Paper-Maker.app'),
+              x64AppPath:  path.join(cwd, 'electron-x64/Electron.app'),
+              arm64AppPath: path.join(cwd, 'electron-arm64/Electron.app'),
+              outAppPath:  path.join(cwd, 'RPG-Paper-Maker.app'),
             }).then(() => console.log('Done')).catch(e => { console.error(e); process.exit(1); });
           "
 
+      - name: Rename executable and update Info.plist
+        run: |
+          mv "RPG-Paper-Maker.app/Contents/MacOS/Electron" "RPG-Paper-Maker.app/Contents/MacOS/RPG Paper Maker"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleExecutableName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          mv "RPG-Paper-Maker.app" "RPG Paper Maker.app"
+
       - name: Ad-hoc sign
-        run: codesign --deep --force --sign - RPG-Paper-Maker.app
+        run: codesign --deep --force --sign - "RPG Paper Maker.app"
 
       - name: Package
-        run: zip -r RPG.Paper.Maker.Mac.zip RPG-Paper-Maker.app
+        run: zip -r RPG.Paper.Maker.Mac.zip "RPG Paper Maker.app"
 
       - name: Upload to Dependencies release (draft)
         uses: softprops/action-gh-release@v2
