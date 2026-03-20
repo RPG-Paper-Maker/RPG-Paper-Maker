@@ -114,13 +114,11 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		if (isOpen && refMenu.current) {
 			const menu = refMenu.current;
 			const rect = menu.getBoundingClientRect();
-			const viewport = Utils.getViewport();
-			const viewportRect = viewport.getBoundingClientRect();
-			if (rect.bottom > viewportRect.bottom) {
-				menu.style.top = `${parseFloat(menu.style.top) - (rect.bottom - viewportRect.bottom)}px`;
+			if (rect.bottom > window.innerHeight) {
+				menu.style.top = `${parseFloat(menu.style.top) - (rect.bottom - window.innerHeight)}px`;
 			}
-			if (rect.right > viewportRect.right) {
-				menu.style.left = `${parseFloat(menu.style.left) - (rect.right - viewportRect.right)}px`;
+			if (rect.right > window.innerWidth) {
+				menu.style.left = `${parseFloat(menu.style.left) - (rect.right - window.innerWidth)}px`;
 			}
 		}
 	}, [isOpen]);
