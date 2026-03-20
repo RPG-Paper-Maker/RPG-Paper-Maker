@@ -116,6 +116,7 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			initialHeight='500px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
