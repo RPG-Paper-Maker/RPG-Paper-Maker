@@ -24,6 +24,7 @@ class EngineSettings extends Serializable {
 	public backupsActivated!: boolean;
 	public backupsInterval!: number;
 	public backupsMax!: number;
+	public backupsIncludeAssets!: boolean;
 	public theme!: number;
 	public updaterType!: number;
 	public getUnstableVersions!: boolean;
@@ -37,6 +38,7 @@ class EngineSettings extends Serializable {
 		['backupsActivated', 'ba', true, BINDING.BOOLEAN],
 		['backupsInterval', 'bi', 60, BINDING.NUMBER],
 		['backupsMax', 'bm', 5, BINDING.NUMBER],
+		['backupsIncludeAssets', 'bia', true, BINDING.BOOLEAN],
 		['theme', 't', 0, BINDING.NUMBER],
 		['updaterType', 'ut', 0, BINDING.NUMBER],
 		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],

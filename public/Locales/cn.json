@@ -1734,6 +1734,7 @@
 	"press.any.keys": "请按任意键...",
 	"update.transformations": "更新转化",
 	"activated": "已激活",
+	"include.assets.images.shapes.songs.videos.fonts": "包含资源（图片、形状、音乐、视频、字体）",
 	"display.in.menu": "在菜单中显示",
 	"day": "天",
 	"change.battler.graphics": "更改战斗者图形",

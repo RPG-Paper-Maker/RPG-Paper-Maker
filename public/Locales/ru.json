@@ -1733,6 +1733,7 @@
 	"press.any.keys": "Нажмите любую клавишу...",
 	"update.transformations": "Изменить трансформации",
 	"activated": "Включено",
+	"include.assets.images.shapes.songs.videos.fonts": "Включить ресурсы (изображения, формы, музыка, видео, шрифты)",
 	"display.in.menu": "Показать в меню",
 	"day": "День",
 	"change.battler.graphics": "Изменить внешний вид бойца",

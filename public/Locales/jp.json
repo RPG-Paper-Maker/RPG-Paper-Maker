@@ -1733,6 +1733,7 @@
 	"press.any.keys": "何かキーを押してください...",
 	"update.transformations": "変身の更新",
 	"activated": "有効化済み",
+	"include.assets.images.shapes.songs.videos.fonts": "アセットを含める（画像、図形、曲、動画、フォント）",
 	"display.in.menu": "メニューに表示",
 	"day": "日",
 	"change.battler.graphics": "バトラーグラフィックの変更",

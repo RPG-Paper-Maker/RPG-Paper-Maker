@@ -1733,6 +1733,7 @@
 	"press.any.keys": "Press any keys...",
 	"update.transformations": "Update transformations",
 	"activated": "Activated",
+	"include.assets.images.shapes.songs.videos.fonts": "Include assets (images, shapes, songs, videos, fonts)",
 	"display.in.menu": "Display in menu",
 	"day": "Day",
 	"change.battler.graphics": "Change battler graphics",

@@ -132,8 +132,10 @@ class Project {
 		const foldersToCopy = await getFolders(path);
 		const filesToCopy = await getFiles(path);
 		await createFolder(Paths.join(backupsPath, folderBackup));
+		const assetFolders = [Paths.PICTURES, Paths.FONTS, Paths.SHAPES, Paths.SONGS, Paths.VIDEOS];
+		const includeAssets = Data.EngineSettings.current!.backupsIncludeAssets;
 		for (const f of foldersToCopy) {
-			if (f !== Paths.BACKUPS) {
+			if (f !== Paths.BACKUPS && (includeAssets || !assetFolders.includes(f))) {
 				await copyFolder(Paths.join(path, f), Paths.join(backupsPath, folderBackup, f));
 			}
 		}

@@ -34,6 +34,7 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 	const [isBackupsActivated, setIsBackupsActivated] = useState(EngineSettings.current!.backupsActivated);
 	const [backupsInterval, setIsBackupsInterval] = useState(EngineSettings.current!.backupsInterval);
 	const [backupsMax, setBackupsMax] = useState(EngineSettings.current!.backupsMax);
+	const [isBackupsIncludeAssets, setIsBackupsIncludeAssets] = useState(EngineSettings.current!.backupsIncludeAssets);
 
 	const handleAccept = async () => {
 		setIsLoading(true);
@@ -43,6 +44,7 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 		EngineSettings.current!.backupsActivated = isBackupsActivated;
 		EngineSettings.current!.backupsInterval = backupsInterval;
 		EngineSettings.current!.backupsMax = backupsMax;
+		EngineSettings.current!.backupsIncludeAssets = isBackupsIncludeAssets;
 		await EngineSettings.current!.save();
 		Project.current!.resetBackups();
 		setIsOpen(false);
@@ -73,17 +75,32 @@ function DialogDebugOptions({ setIsOpen }: Props) {
 							<Checkbox isChecked={isBackupsActivated} onChange={setIsBackupsActivated}>
 								{t('activated')}
 							</Checkbox>
+							<Checkbox
+								isChecked={isBackupsIncludeAssets}
+								onChange={setIsBackupsIncludeAssets}
+								disabled={!isBackupsActivated}
+							>
+								{t('include.assets.images.shapes.songs.videos.fonts')}
+							</Checkbox>
 							<Form>
-								<Label>{t('interval')}</Label>
-								<Value>
-									<Flex spaced>
-										<InputNumber value={backupsInterval} onChange={setIsBackupsInterval} />
+								<Label disabled={!isBackupsActivated}>{t('interval')}</Label>
+								<Value disabled={!isBackupsActivated}>
+									<Flex spaced centerV>
+										<InputNumber
+											value={backupsInterval}
+											onChange={setIsBackupsInterval}
+											disabled={!isBackupsActivated}
+										/>
 										{t('minute.s')}
 									</Flex>
 								</Value>
-								<Label>{t('max')}</Label>
+								<Label disabled={!isBackupsActivated}>{t('max')}</Label>
 								<Value>
-									<InputNumber value={backupsMax} onChange={setBackupsMax} />
+									<InputNumber
+										value={backupsMax}
+										onChange={setBackupsMax}
+										disabled={!isBackupsActivated}
+									/>
 								</Value>
 							</Form>
 						</Flex>
