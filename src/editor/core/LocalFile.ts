@@ -84,7 +84,11 @@ class LocalFile extends Serializable {
 	}
 
 	static async createFolder(path: string) {
-		await this.removeFolder(path);
+		// If folder already exists, skip creation (idempotent like fs.mkdir({ recursive: true }))
+		const existing: JSONType | null = await localforage.getItem(path);
+		if (existing) {
+			return;
+		}
 		const dirs = path.split('/');
 		// Edit parent folder names
 		if (dirs.length > 1) {
@@ -97,9 +101,11 @@ class LocalFile extends Serializable {
 				if (parentJson && newDirName) {
 					const parent = new LocalFile(false);
 					parent.read(parentJson);
-					parent.folderNames.push(newDirName);
-					parent.write(parentJson);
-					await localforage.setItem(parentPath, parentJson);
+					if (!ArrayUtils.contains(parent.folderNames, newDirName)) {
+						parent.folderNames.push(newDirName);
+						parent.write(parentJson);
+						await localforage.setItem(parentPath, parentJson);
+					}
 				}
 			} finally {
 				release(); // release lock
