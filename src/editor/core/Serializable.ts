@@ -220,6 +220,7 @@ class Serializable {
 					const jsonMappings = json[jsonName] as JSONMapping[] | undefined;
 					if (jsonMappings) {
 						for (const objHash of jsonMappings) {
+							if (!objHash) continue;
 							const p = new positionConstructor!();
 							p.read(objHash.k);
 							const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;
