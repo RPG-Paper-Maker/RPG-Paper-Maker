@@ -112,6 +112,7 @@ function MapEditor() {
 			dispatch(setUndoRedoLength(undoRedoLength));
 			setFirstLoading(false);
 			dispatch(setMapEditorLoaded(true));
+			resize();
 		}
 	};
 
