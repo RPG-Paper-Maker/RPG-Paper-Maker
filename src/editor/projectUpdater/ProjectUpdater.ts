@@ -58,48 +58,43 @@ class ProjectUpdater {
 		version: string,
 		callback: (current: number, total: number, label?: string, extraPercent?: number) => void,
 	): Promise<string | null> {
-		try {
-			const projectPath = Project.current!.getPath();
-			callback(0, 100, `Copying project to ${projectPath}_${version}...`);
-			await copyFolder(projectPath, `${projectPath}_${version}`);
-			const versions = [];
-			for (let i = this.versions.length - 1; i >= 0; i--) {
-				const newVersion = this.versions[i];
-				if (this.checkVersion(version, newVersion)) {
-					versions.unshift(newVersion);
-				}
+		const projectPath = Project.current!.getPath();
+		callback(0, 100, `Copying project to ${projectPath}_${version}...`);
+		await copyFolder(projectPath, `${projectPath}_${version}`);
+		const versions = [];
+		for (let i = this.versions.length - 1; i >= 0; i--) {
+			const newVersion = this.versions[i];
+			if (this.checkVersion(version, newVersion)) {
+				versions.unshift(newVersion);
 			}
-			for (const [index, newVersion] of versions.entries()) {
-				const className = `ProjectUpdater_${newVersion.replaceAll('.', '_')}`;
-				const module = await import(`./versions/${className}.ts`);
-				const updaterClass = module[className];
-				if (updaterClass && typeof updaterClass.update === 'function') {
-					const label = `Updating to version ${newVersion}...`;
-					callback(index, versions.length, label);
-					await updaterClass.update((percent: number) => {
-						callback(index, versions.length, label, percent);
-					});
-				} else {
-					throw new Error(`Update method not found in ${className}`);
-				}
-			}
-			callback(1, 1);
-			const backupsPath = Paths.join(projectPath, Paths.BACKUPS);
-			if (await checkFileExists(backupsPath)) {
-				await removeFolder(backupsPath);
-			}
-			const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
-			if (json) {
-				json.pv = Project.VERSION;
-				await writeJSON(Paths.join(projectPath, Paths.FILE_SETTINGS), json);
-			}
-			await Project.current!.scripts.loadSimple();
-			const localPlugins = Project.current!.scripts.getLocalPlugins();
-			return localPlugins.length > 0 ? localPlugins.join(', ') : null;
-		} catch (error) {
-			console.error('Failed to load updater:', error);
-			return null;
 		}
+		for (const [index, newVersion] of versions.entries()) {
+			const className = `ProjectUpdater_${newVersion.replaceAll('.', '_')}`;
+			const module = await import(`./versions/${className}.ts`);
+			const updaterClass = module[className];
+			if (updaterClass && typeof updaterClass.update === 'function') {
+				const label = `Updating to version ${newVersion}...`;
+				callback(index, versions.length, label);
+				await updaterClass.update((percent: number) => {
+					callback(index, versions.length, label, percent);
+				});
+			} else {
+				throw new Error(`Update method not found in ${className}`);
+			}
+		}
+		callback(1, 1);
+		const backupsPath = Paths.join(projectPath, Paths.BACKUPS);
+		if (await checkFileExists(backupsPath)) {
+			await removeFolder(backupsPath);
+		}
+		const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
+		if (json) {
+			json.pv = Project.VERSION;
+			await writeJSON(Paths.join(projectPath, Paths.FILE_SETTINGS), json);
+		}
+		await Project.current!.scripts.loadSimple();
+		const localPlugins = Project.current!.scripts.getLocalPlugins();
+		return localPlugins.length > 0 ? localPlugins.join(', ') : null;
 	}
 
 	static async updateMapFolder(folder: string, callback: (json: JSONType, mapName: string) => void) {

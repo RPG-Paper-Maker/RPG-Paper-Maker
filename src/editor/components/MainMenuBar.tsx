@@ -389,6 +389,7 @@ function MainMenuBar() {
 				);
 			}
 		} catch (error) {
+			Project.current = null;
 			dispatch(setLoadingBar(null));
 			dispatch(setLoading(false));
 			dispatch(
