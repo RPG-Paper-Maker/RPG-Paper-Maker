@@ -51,10 +51,14 @@ jobs:
 
       - name: Create universal .app
         run: |
-          ./node_modules/.bin/electron-universal \
-            --x64AppPath   electron-x64/Electron.app \
-            --arm64AppPath electron-arm64/Electron.app \
-            --universalAppPath RPG-Paper-Maker.app
+          node -e "
+            const { makeUniversalApp } = require('@electron/universal');
+            makeUniversalApp({
+              x64AppPath: 'electron-x64/Electron.app',
+              arm64AppPath: 'electron-arm64/Electron.app',
+              universalAppPath: 'RPG-Paper-Maker.app',
+            }).then(() => console.log('Done')).catch(e => { console.error(e); process.exit(1); });
+          "
 
       - name: Ad-hoc sign
         run: codesign --deep --force --sign - RPG-Paper-Maker.app
