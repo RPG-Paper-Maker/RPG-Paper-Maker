@@ -2287,9 +2287,11 @@ class Map extends Base {
 			this.materialTilesetHover.dispose();
 		}
 		for (const bundles of this.texturesAutotiles) {
-			for (const bundle of bundles) {
-				bundle.material?.map?.dispose();
-				bundle.material?.dispose();
+			if (bundles) {
+				for (const bundle of bundles) {
+					bundle?.material?.map?.dispose();
+					bundle?.material?.dispose();
+				}
 			}
 		}
 		for (const mat of this.texturesWalls) {
@@ -2313,7 +2315,7 @@ class Map extends Base {
 			mat?.dispose();
 		}
 		if (this.scene.background instanceof THREE.Texture) {
-			this.scene.background.dispose();
+			this.scene.background?.dispose();
 		}
 		if (this.isBattle) {
 			Battler.clearScene();
