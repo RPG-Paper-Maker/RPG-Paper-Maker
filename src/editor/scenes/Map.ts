@@ -364,6 +364,11 @@ class Map extends Base {
 	}
 
 	async loadTileset() {
+		if (this.materialTileset) {
+			this.materialTileset.map?.dispose();
+			this.materialTileset.dispose();
+			this.materialTilesetHover.dispose();
+		}
 		const picture = Project.current!.pictures.getByID(
 			PICTURE_KIND.TILESETS,
 			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1,
@@ -376,19 +381,45 @@ class Map extends Base {
 
 	async reloadTextures(kind?: PICTURE_KIND) {
 		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
+			for (const bundles of this.texturesAutotiles) {
+				for (const bundle of bundles) {
+					bundle.material?.map?.dispose();
+					bundle.material?.dispose();
+				}
+			}
 			this.texturesAutotiles = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.WALLS) {
+			for (const mat of this.texturesWalls) {
+				mat.map?.dispose();
+				mat.dispose();
+			}
 			this.texturesWalls = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.OBJECTS_3D) {
+			for (const mat of this.texturesObjects3D) {
+				mat.map?.dispose();
+				mat.dispose();
+			}
+			for (const mat of this.texturesObjects3DHover) {
+				mat.map?.dispose();
+				mat.dispose();
+			}
 			this.texturesObjects3D = [];
 			this.texturesObjects3DHover = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.MOUNTAINS) {
+			for (const mat of this.texturesMountains.values()) {
+				mat.map?.dispose();
+				mat.dispose();
+			}
 			this.texturesMountains = new globalThis.Map();
 		}
 		if (kind === undefined || kind === PICTURE_KIND.CHARACTERS) {
+			for (const mat of this.texturesCharacters) {
+				mat.map?.dispose();
+				mat.dispose();
+			}
 			this.texturesCharacters = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.SKYBOXES) {
@@ -483,6 +514,9 @@ class Map extends Base {
 	}
 
 	updateBackgroundImage() {
+		if (this.scene.background instanceof THREE.Texture) {
+			this.scene.background.dispose();
+		}
 		const texture = Manager.GL.textureLoader.load(
 			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath(),
 		);
@@ -492,6 +526,20 @@ class Map extends Base {
 	}
 
 	async updateBackgroundSkybox() {
+		if (this.skyboxMesh) {
+			this.scene.remove(this.skyboxMesh);
+			this.skyboxMesh.geometry.dispose();
+			if (Array.isArray(this.skyboxMesh.material)) {
+				for (const mat of this.skyboxMesh.material) {
+					(mat as THREE.MeshBasicMaterial).map?.dispose();
+					mat.dispose();
+				}
+			} else {
+				(this.skyboxMesh.material as THREE.MeshBasicMaterial).map?.dispose();
+				this.skyboxMesh.material.dispose();
+			}
+			this.skyboxMesh = null;
+		}
 		const size = 3;
 		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		this.skyboxMesh = new THREE.Mesh(
@@ -2232,6 +2280,41 @@ class Map extends Base {
 
 	close() {
 		super.close();
+		// Dispose per-map GPU resources to prevent VRAM leaks
+		if (this.materialTileset) {
+			this.materialTileset.map?.dispose();
+			this.materialTileset.dispose();
+			this.materialTilesetHover.dispose();
+		}
+		for (const bundles of this.texturesAutotiles) {
+			for (const bundle of bundles) {
+				bundle.material?.map?.dispose();
+				bundle.material?.dispose();
+			}
+		}
+		for (const mat of this.texturesWalls) {
+			mat.map?.dispose();
+			mat.dispose();
+		}
+		for (const mat of this.texturesObjects3D) {
+			mat.map?.dispose();
+			mat.dispose();
+		}
+		for (const mat of this.texturesObjects3DHover) {
+			mat.map?.dispose();
+			mat.dispose();
+		}
+		for (const mat of this.texturesMountains.values()) {
+			mat.map?.dispose();
+			mat.dispose();
+		}
+		for (const mat of this.texturesCharacters) {
+			mat.map?.dispose();
+			mat.dispose();
+		}
+		if (this.scene.background instanceof THREE.Texture) {
+			this.scene.background.dispose();
+		}
 		if (this.isBattle) {
 			Battler.clearScene();
 		}

@@ -67,6 +67,9 @@ class Base {
 			if (mesh.parent) {
 				mesh.parent.remove(mesh);
 			}
+			if (mesh instanceof THREE.Mesh) {
+				mesh.geometry?.dispose();
+			}
 		}
 		this.scene.background = null;
 	}
