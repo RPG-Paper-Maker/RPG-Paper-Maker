@@ -383,42 +383,42 @@ class Map extends Base {
 		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
 			for (const bundles of this.texturesAutotiles) {
 				for (const bundle of bundles) {
-					bundle.material?.map?.dispose();
-					bundle.material?.dispose();
+					bundle?.material?.map?.dispose();
+					bundle?.material?.dispose();
 				}
 			}
 			this.texturesAutotiles = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.WALLS) {
 			for (const mat of this.texturesWalls) {
-				mat.map?.dispose();
-				mat.dispose();
+				mat?.map?.dispose();
+				mat?.dispose();
 			}
 			this.texturesWalls = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.OBJECTS_3D) {
 			for (const mat of this.texturesObjects3D) {
-				mat.map?.dispose();
-				mat.dispose();
+				mat?.map?.dispose();
+				mat?.dispose();
 			}
 			for (const mat of this.texturesObjects3DHover) {
-				mat.map?.dispose();
-				mat.dispose();
+				mat?.map?.dispose();
+				mat?.dispose();
 			}
 			this.texturesObjects3D = [];
 			this.texturesObjects3DHover = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.MOUNTAINS) {
 			for (const mat of this.texturesMountains.values()) {
-				mat.map?.dispose();
-				mat.dispose();
+				mat?.map?.dispose();
+				mat?.dispose();
 			}
 			this.texturesMountains = new globalThis.Map();
 		}
 		if (kind === undefined || kind === PICTURE_KIND.CHARACTERS) {
 			for (const mat of this.texturesCharacters) {
-				mat.map?.dispose();
-				mat.dispose();
+				mat?.map?.dispose();
+				mat?.dispose();
 			}
 			this.texturesCharacters = [];
 		}
@@ -531,8 +531,8 @@ class Map extends Base {
 			this.skyboxMesh.geometry.dispose();
 			if (Array.isArray(this.skyboxMesh.material)) {
 				for (const mat of this.skyboxMesh.material) {
-					(mat as THREE.MeshBasicMaterial).map?.dispose();
-					mat.dispose();
+					(mat as THREE.MeshBasicMaterial)?.map?.dispose();
+					mat?.dispose();
 				}
 			} else {
 				(this.skyboxMesh.material as THREE.MeshBasicMaterial).map?.dispose();
@@ -1476,9 +1476,8 @@ class Map extends Base {
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		Manager.GL.raycaster.layers.set(RAYCASTING_LAYER.PLANE);
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
-		const meshHitGridY =
-			intersects.length > 0 ? Math.round(intersects[0].point.y / Project.SQUARE_SIZE) : -Infinity;
-		const planeGridY = Math.round(this.meshPlane!.position.y / Project.SQUARE_SIZE);
+		const meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
+		const planeGridY = this.meshPlane!.position.y;
 		const isPlane =
 			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
 		if (isPlane) {
@@ -1938,6 +1937,7 @@ class Map extends Base {
 					this.lastTransformPosition = this.selectedPosition.clone();
 					this.lastTransformKind = this.selectedElement.kind;
 				}
+				this.selectedPivotOffset.set(0, 0, 0);
 				this.transformControls.detach();
 				const mapPortion = this.selectedPosition ? this.getMapPortionByPosition(this.selectedPosition) : null;
 				if (mapPortion) {
@@ -2293,24 +2293,24 @@ class Map extends Base {
 			}
 		}
 		for (const mat of this.texturesWalls) {
-			mat.map?.dispose();
-			mat.dispose();
+			mat?.map?.dispose();
+			mat?.dispose();
 		}
 		for (const mat of this.texturesObjects3D) {
-			mat.map?.dispose();
-			mat.dispose();
+			mat?.map?.dispose();
+			mat?.dispose();
 		}
 		for (const mat of this.texturesObjects3DHover) {
-			mat.map?.dispose();
-			mat.dispose();
+			mat?.map?.dispose();
+			mat?.dispose();
 		}
 		for (const mat of this.texturesMountains.values()) {
-			mat.map?.dispose();
-			mat.dispose();
+			mat?.map?.dispose();
+			mat?.dispose();
 		}
 		for (const mat of this.texturesCharacters) {
-			mat.map?.dispose();
-			mat.dispose();
+			mat?.map?.dispose();
+			mat?.dispose();
 		}
 		if (this.scene.background instanceof THREE.Texture) {
 			this.scene.background.dispose();

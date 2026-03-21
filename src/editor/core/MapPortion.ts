@@ -370,18 +370,21 @@ class MapPortion {
 							const newPosition = position.clone();
 							newPosition.x = position.x + i;
 							newPosition.z = position.z + j;
-							this.setMapElement(
-								newPosition,
-								MapElement.Floor.create(
-									new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1),
-									floor.up,
-								),
-								ELEMENT_MAP_KIND.FLOOR,
-								this.model.lands,
-								preview,
-								removingPreview,
-								undoRedo,
-							);
+							const targetPortion = this.map.getMapPortionByPosition(newPosition);
+							if (targetPortion) {
+								targetPortion.setMapElement(
+									newPosition,
+									MapElement.Floor.create(
+										new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1),
+										floor.up,
+									),
+									ELEMENT_MAP_KIND.FLOOR,
+									targetPortion.model.lands,
+									preview,
+									removingPreview,
+									undoRedo,
+								);
+							}
 						}
 					}
 					break;
@@ -891,6 +894,7 @@ class MapPortion {
 		if (this.map.selectedElement === floor) {
 			const selectedGeometry = new CustomGeometry();
 			floor.updateGeometry(this.map, selectedGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0, true);
+			this.map.selectedPivotOffset.set(0, 0, 0);
 			this.updateSelected(
 				selectedGeometry,
 				this.map.hoveredMesh.material,
@@ -987,6 +991,7 @@ class MapPortion {
 						true,
 						new THREE.Vector3(),
 					);
+					this.map.selectedPivotOffset.set(0, 0, 0);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (
 					Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.ROTATE &&
@@ -1036,6 +1041,7 @@ class MapPortion {
 						true,
 						new THREE.Vector3(),
 					);
+					this.map.selectedPivotOffset.set(0, 0, 0);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (isPointedSprite && this.map.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometry();
@@ -1247,8 +1253,7 @@ class MapPortion {
 								),
 								0,
 							);
-							const selectedLocalPosition =
-								this.map.selectedElement.getLocalPosition(position);
+							const selectedLocalPosition = this.map.selectedElement.getLocalPosition(position);
 							// For custom OBJ models, center geometry at origin for correct
 							// rotation pivot, and track the offset for the transform system
 							if (object3D instanceof MapElement.Object3DCustom) {
