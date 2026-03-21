@@ -50,7 +50,18 @@ function DialogMapObjectState({ setIsOpen, model, isNew, onAccept, onReject }: P
 			(!isNew && state.id === stateID) ||
 			Project.current!.currentMapObjectStates.every((node) => node.content.id !== stateID)
 		) {
+			const oldID = state.id;
 			state.id = stateID;
+			if (!isNew && oldID !== stateID) {
+				for (const node of Project.current!.currentMapObjectEvents) {
+					const event = node.content as Model.MapObjectEvent;
+					const reaction = event.reactions.get('' + oldID);
+					if (reaction) {
+						event.reactions.delete('' + oldID);
+						event.reactions.set('' + stateID, reaction);
+					}
+				}
+			}
 			onAccept();
 			setIsOpen(false);
 		} else {
