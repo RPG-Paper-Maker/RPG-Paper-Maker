@@ -285,6 +285,11 @@ function MapEditor() {
 		}
 	}, []);
 
+	// Resize after rendering
+	useEffect(() => {
+		resize();
+	});
+
 	useEffect(() => {
 		clearMap();
 		initializeMap().catch(console.error);
