@@ -174,10 +174,13 @@ class MapPortion {
 					position,
 					ELEMENT_MAP_KIND.MOUNTAIN,
 				) as MapElement.Mountain | null;
+				const s = Project.current!.settings;
+				const floorPosition = position.clone();
+				floorPosition.addY(y, yPixels);
 				if (previousMountain && !previousMountain.equals(newMountain)) {
 					const previousFloorPosition = position.clone();
 					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
-					if (previousFloorPosition.y !== y || previousFloorPosition.yPixels !== yPixels) {
+					if (previousFloorPosition.y !== floorPosition.y || previousFloorPosition.yPixels !== floorPosition.yPixels) {
 						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
 						this.updateMapElement(
 							previousFloorPosition,
@@ -191,9 +194,6 @@ class MapPortion {
 						);
 					}
 				}
-				const s = Project.current!.settings;
-				const floorPosition = position.clone();
-				floorPosition.addY(y, yPixels);
 				if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
 					this.updateMapElement(
 						floorPosition,
