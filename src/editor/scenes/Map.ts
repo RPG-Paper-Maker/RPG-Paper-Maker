@@ -428,7 +428,7 @@ class Map extends Base {
 		if (kind === undefined || kind === PICTURE_KIND.TILESETS) {
 			await this.loadTileset();
 		}
-		if (kind !== PICTURE_KIND.SKYBOXES) {
+		if (kind !== PICTURE_KIND.SKYBOXES && this.mapPortions) {
 			for (const mapPortion of this.mapPortions) {
 				if (mapPortion) {
 					await mapPortion.loadTexturesAndUpdateGeometries();
