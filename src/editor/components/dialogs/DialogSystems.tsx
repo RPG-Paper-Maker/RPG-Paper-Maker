@@ -121,7 +121,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 					<PanelBattleSystem key={1} ref={panelBattleSystemRef} />,
 					<PanelTitleScreenGameOver key={2} ref={panelTitleScreenGameOverRef} />,
 					<PanelMainMenu key={3} ref={panelMainMenuRef} />,
-					<PanelEventsStates key={4} ref={panelMainMenuRef} />,
+					<PanelEventsStates key={4} ref={panelEventsStatesRef} />,
 					<PanelCommonReactions key={5} ref={panelCommonReactionsRef} />,
 					<PanelModels key={6} ref={panelModelsRef} />,
 				]}
