@@ -266,10 +266,26 @@ class System extends Serializable {
 		if (!Constants.IS_DESKTOP) {
 			this.PATH_BR = './BR';
 		}
-		this.soundCursor.kind = SONG_KIND.SOUND;
-		this.soundConfirmation.kind = SONG_KIND.SOUND;
-		this.soundCancel.kind = SONG_KIND.SOUND;
-		this.soundImpossible.kind = SONG_KIND.SOUND;
+		if (this.soundCursor) {
+			this.soundCursor.kind = SONG_KIND.SOUND;
+		} else {
+			this.soundCursor = Model.PlaySong.createPlaySong(SONG_KIND.SOUND);
+		}
+		if (this.soundConfirmation) {
+			this.soundConfirmation.kind = SONG_KIND.SOUND;
+		} else {
+			this.soundConfirmation = Model.PlaySong.createPlaySong(SONG_KIND.SOUND);
+		}
+		if (this.soundCancel) {
+			this.soundCancel.kind = SONG_KIND.SOUND;
+		} else {
+			this.soundCancel = Model.PlaySong.createPlaySong(SONG_KIND.SOUND);
+		}
+		if (this.soundImpossible) {
+			this.soundImpossible.kind = SONG_KIND.SOUND;
+		} else {
+			this.soundImpossible = Model.PlaySong.createPlaySong(SONG_KIND.SOUND);
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
