@@ -202,8 +202,8 @@ class Node extends Serializable {
 		return currentID;
 	}
 
-	static createList(list: Model.Base[], clone = true): Node[] {
-		return list.map((content) => Node.create(clone ? content.clone() : content));
+	static createList(list: Model.Base[] | undefined | null, clone = true): Node[] {
+		return (list ?? []).map((content) => Node.create(clone ? content.clone() : content));
 	}
 
 	static createListFromNodes<T>(nodes: Node[]): T[] {
