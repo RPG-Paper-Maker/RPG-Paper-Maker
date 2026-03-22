@@ -19,7 +19,6 @@ import {
 	getFiles,
 	getFolders,
 	removeFolder,
-	renameFile,
 } from '../common/Platform';
 import { Node } from './Node';
 
@@ -128,7 +127,8 @@ class Project {
 		const year = now.getFullYear();
 		const hour = Utils.formatNumber(now.getHours(), 2);
 		const minute = Utils.formatNumber(now.getMinutes(), 2);
-		const folderBackup = `${folders.length + 1}-${day}-${month}-${year}-${hour}h${minute}`;
+		const second = Utils.formatNumber(now.getSeconds(), 2);
+		const folderBackup = `${year}-${month}-${day}-${hour}h${minute}m${second}s`;
 		const foldersToCopy = await getFolders(path);
 		const filesToCopy = await getFiles(path);
 		await createFolder(Paths.join(backupsPath, folderBackup));
@@ -145,15 +145,6 @@ class Project {
 		if (folders.length >= Data.EngineSettings.current!.backupsMax) {
 			for (let i = 0; i < folders.length + 1 - Data.EngineSettings.current!.backupsMax; i++) {
 				await removeFolder(Paths.join(backupsPath, folders[i]));
-			}
-			folders.push(folderBackup);
-			for (let i = folders.length - Data.EngineSettings.current!.backupsMax; i < folders.length; i++) {
-				const folder = folders[i];
-				await renameFile(
-					backupsPath,
-					folder,
-					i - folders.length + Data.EngineSettings.current!.backupsMax + 1 + folder.substring(1),
-				);
 			}
 		}
 	}
