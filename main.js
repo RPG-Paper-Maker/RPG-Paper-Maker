@@ -45,13 +45,20 @@ const setSplashProgress = (text) => {
 	}
 };
 
-const runRPMEngine = () => {
+const runRPMEngine = async () => {
 	updater?.close();
 	updater = null;
-	createSplash();
+	await createSplash();
 	setTimeout(() => {
-		splash.close();
-		splash = null;
+		if (splash && !splash.isDestroyed()) {
+			splash.hide();
+			setImmediate(() => {
+				if (splash && !splash.isDestroyed()) {
+					splash.close();
+					splash = null;
+				}
+			});
+		}
 	}, 2000);
 	window = new BrowserWindow({
 		width: screen.getPrimaryDisplay().size.width - 100,
@@ -233,7 +240,7 @@ const init = async () => {
 	if (isEngineDownloaded) {
 		// Check internet
 		if (!(await hasInternet())) {
-			runRPMEngine();
+			await runRPMEngine();
 			return;
 		}
 		// Check if ignore update
@@ -243,7 +250,7 @@ const init = async () => {
 		const getUnstable = json?.guv ?? false;
 		// If blocking updates, run engine
 		if (updateType === 2) {
-			runRPMEngine();
+			await runRPMEngine();
 			return;
 		}
 		// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
@@ -310,12 +317,12 @@ const init = async () => {
 						message: 'Would you like to download it now? Everything is automatic and fast!',
 					});
 					if (result.response === 1) {
-						runRPMEngine();
+						await runRPMEngine();
 						return;
 					}
 				}
 			} else {
-				runRPMEngine();
+				await runRPMEngine();
 				return;
 			}
 		} else {
@@ -450,7 +457,7 @@ app.whenReady().then(() => {
 	if (app.isPackaged) {
 		init().catch(console.error);
 	} else {
-		runRPMEngine();
+		runRPMEngine().catch(console.error);
 	}
 });
 
@@ -747,7 +754,7 @@ ipcMain.handle('show-dialog-confirm-run-engine', async (event) => {
 		title: 'All files downloaded successfully.',
 		message: 'RPG Paper Maker will restart now.',
 	});
-	runRPMEngine();
+	await runRPMEngine();
 });
 
 app.on('window-all-closed', () => {
