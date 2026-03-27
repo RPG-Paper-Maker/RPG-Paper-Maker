@@ -382,9 +382,11 @@ class Map extends Base {
 	async reloadTextures(kind?: PICTURE_KIND) {
 		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
 			for (const bundles of this.texturesAutotiles) {
-				for (const bundle of bundles) {
-					bundle?.material?.map?.dispose();
-					bundle?.material?.dispose();
+				if (bundles) {
+					for (const bundle of bundles) {
+						bundle?.material?.map?.dispose();
+						bundle?.material?.dispose();
+					}
 				}
 			}
 			this.texturesAutotiles = [];
