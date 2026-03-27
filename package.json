@@ -64,6 +64,7 @@
 		"update-packages": "npx npm-check-updates -u && npm run clear-packages",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"update-version": "node scripts/update-version.mjs",
+		"update-updater-version": "node scripts/update-updater-version.mjs",
 		"deploy-web": "bash scripts/deploy-web.sh prod",
 		"countdown-web": "bash scripts/countdown-web.sh",
 		"ssh": "bash scripts/ssh.sh",
