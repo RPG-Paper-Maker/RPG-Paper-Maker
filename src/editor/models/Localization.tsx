@@ -72,7 +72,7 @@ class Localization extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Localization.getBindings(additionnalBinding));
-		this.name = this.names.get('' + Project.current?.languages?.list[0].id) ?? '';
+		this.name = this.names.get('' + Project.current?.languages?.list[0]?.id) ?? '';
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
