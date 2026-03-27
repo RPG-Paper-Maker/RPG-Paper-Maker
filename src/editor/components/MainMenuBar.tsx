@@ -1140,7 +1140,7 @@ function MainMenuBar() {
 				if (Scene.Map.current?.savePortionsTempPromise) {
 					await Scene.Map.current.savePortionsTempPromise;
 				}
-				if (Project.current) {
+				if (Project.current?.loaded) {
 					await Project.current.save();
 				}
 				await IO.invoke('ready-to-close');

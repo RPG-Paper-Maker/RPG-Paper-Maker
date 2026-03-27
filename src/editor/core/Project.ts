@@ -60,6 +60,7 @@ class Project {
 	public currentMapObjectProperties: Node[] = [];
 	public currentMapObjectParameters: Model.Base[] = [];
 	public intervalBackupID: NodeJS.Timeout | null = null;
+	public loaded = false;
 
 	constructor(location: string) {
 		this.location = location;
@@ -195,6 +196,7 @@ class Project {
 		await this.titleScreenGameOver.load();
 		await this.scripts.load();
 		await this.dlcs.load();
+		this.loaded = true;
 	}
 
 	async save() {
