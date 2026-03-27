@@ -181,8 +181,9 @@ class MapPortion {
 					const previousFloorPosition = position.clone();
 					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
 					if (previousFloorPosition.y !== floorPosition.y || previousFloorPosition.yPixels !== floorPosition.yPixels) {
-						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
-						this.updateMapElement(
+						const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition) ?? this;
+						previousFloorPortion.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+						previousFloorPortion.updateMapElement(
 							previousFloorPosition,
 							null,
 							ELEMENT_MAP_KIND.AUTOTILE,
@@ -258,7 +259,8 @@ class MapPortion {
 				const mountain = previous as MapElement.Mountain;
 				const floorPosition = position.clone();
 				floorPosition.addY(mountain.heightSquares, mountain.heightPixels);
-				this.updateMapElement(
+				const floorPortion = this.map.getMapPortionByPosition(floorPosition) ?? this;
+				floorPortion.updateMapElement(
 					floorPosition,
 					null,
 					ELEMENT_MAP_KIND.FLOOR,
