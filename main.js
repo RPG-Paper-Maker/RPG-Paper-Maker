@@ -603,7 +603,19 @@ ipcMain.handle('copy-file', async (event, src, dst) => {
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
-	await fs.rename(oldFilePath, newFilePath);
+	const maxAttempts = 5;
+	let lastError;
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		try {
+			await fs.rename(oldFilePath, newFilePath);
+			return;
+		} catch (err) {
+			lastError = err;
+			if (err.code !== 'EPERM' && err.code !== 'EBUSY') throw err;
+			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
+		}
+	}
+	throw lastError;
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
