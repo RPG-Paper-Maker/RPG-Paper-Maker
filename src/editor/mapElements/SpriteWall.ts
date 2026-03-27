@@ -87,7 +87,7 @@ class SpriteWall extends Base {
 		const texture = new THREE.Texture();
 		const w = image.width;
 		const h = image.height;
-		if (Picture2D.isMissing(image)) {
+		if (Picture2D.isMissing(image) || w === 0 || h === 0) {
 			return Manager.GL.loadTextureEmpty();
 		}
 
