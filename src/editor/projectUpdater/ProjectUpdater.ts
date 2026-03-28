@@ -132,6 +132,7 @@ class ProjectUpdater {
 	};
 
 	static updateObjectCommand(obj: JSONType, callback: (json: JSONType) => void) {
+		if (!obj) return;
 		for (const event of (obj.events ?? []) as JSONType[]) {
 			const reactions = event.r as Record<string, JSONType>;
 			for (const id in reactions) {
