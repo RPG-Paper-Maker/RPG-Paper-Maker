@@ -567,25 +567,28 @@ ipcMain.handle('remove-folder', async (event, path) => {
 	}
 });
 
-const copyFolder = async (src, dst) => {
+const copyFolder = async (src, dst, exclude = []) => {
 	if (!(await exists(dst))) {
 		await createFolder(dst);
 	}
 	const files = await fs.readdir(src);
 	for (const file of files) {
+		if (exclude.includes(file)) {
+			continue;
+		}
 		const sourcePath = path.join(src, file);
 		const destinationPath = path.join(dst, file);
 		const stats = await fs.stat(sourcePath);
 		if (stats.isDirectory()) {
-			await copyFolder(sourcePath, destinationPath);
+			await copyFolder(sourcePath, destinationPath, exclude);
 		} else {
 			await fs.copyFile(sourcePath, destinationPath);
 		}
 	}
 };
 
-ipcMain.handle('copy-folder', async (event, src, dst) => {
-	await copyFolder(src, dst);
+ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
+	await copyFolder(src, dst, exclude ?? []);
 });
 
 ipcMain.handle('create-file', async (event, path, content) => {

@@ -141,8 +141,8 @@ class IO {
 		await this.invoke('remove-folder', path);
 	}
 
-	static async copyFolder(src: string, dst: string) {
-		await this.invoke('copy-folder', src, dst);
+	static async copyFolder(src: string, dst: string, exclude?: string[]) {
+		await this.invoke('copy-folder', src, dst, exclude);
 	}
 
 	static async moveFolder(src: string, dst: string) {

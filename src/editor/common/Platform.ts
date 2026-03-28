@@ -57,11 +57,11 @@ export const removeFolder = async (path: string) => {
 	}
 };
 
-export const copyFolder = async (src: string, dst: string) => {
+export const copyFolder = async (src: string, dst: string, exclude?: string[]) => {
 	if (Constants.IS_DESKTOP) {
-		await IO.copyFolder(src, dst);
+		await IO.copyFolder(src, dst, exclude);
 	} else {
-		await LocalFile.copyFolder(src, dst);
+		await LocalFile.copyFolder(src, dst, exclude);
 	}
 };
 

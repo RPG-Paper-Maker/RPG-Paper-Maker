@@ -229,14 +229,17 @@ class LocalFile extends Serializable {
 		}
 	}
 
-	static async copyFolder(src: string, dst: string) {
+	static async copyFolder(src: string, dst: string, exclude?: string[]) {
 		const json = await localforage.getItem<JSONType>(src);
 		if (json) {
 			const folder = new LocalFile(true);
 			folder.read(json);
 			await LocalFile.createFolder(dst);
 			for (const childFolderName of folder.folderNames) {
-				await this.copyFolder(Paths.join(src, childFolderName), Paths.join(dst, childFolderName));
+				if (exclude?.includes(childFolderName)) {
+					continue;
+				}
+				await this.copyFolder(Paths.join(src, childFolderName), Paths.join(dst, childFolderName), exclude);
 			}
 			for (const childFileName of folder.fileNames) {
 				await LocalFile.copyFile(Paths.join(src, childFileName), Paths.join(dst, childFileName));
