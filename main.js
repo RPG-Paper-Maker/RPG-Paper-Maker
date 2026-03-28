@@ -561,9 +561,25 @@ ipcMain.handle('create-folder', async (event, path) => {
 	await createFolder(path);
 });
 
+const retryOnPermError = async (fn) => {
+	const maxAttempts = 5;
+	let lastError;
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		try {
+			await fn();
+			return;
+		} catch (err) {
+			lastError = err;
+			if (err.code !== 'EPERM' && err.code !== 'EBUSY') throw err;
+			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
+		}
+	}
+	throw lastError;
+};
+
 ipcMain.handle('remove-folder', async (event, path) => {
 	if (await exists(path)) {
-		await fs.rm(path, { recursive: true });
+		await retryOnPermError(() => fs.rm(path, { recursive: true }));
 	}
 });
 
@@ -606,19 +622,7 @@ ipcMain.handle('copy-file', async (event, src, dst) => {
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
-	const maxAttempts = 5;
-	let lastError;
-	for (let attempt = 0; attempt < maxAttempts; attempt++) {
-		try {
-			await fs.rename(oldFilePath, newFilePath);
-			return;
-		} catch (err) {
-			lastError = err;
-			if (err.code !== 'EPERM' && err.code !== 'EBUSY') throw err;
-			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
-		}
-	}
-	throw lastError;
+	await retryOnPermError(() => fs.rename(oldFilePath, newFilePath));
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
