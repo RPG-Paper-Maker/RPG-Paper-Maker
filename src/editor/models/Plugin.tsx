@@ -52,9 +52,9 @@ class Plugin extends Checkable {
 	public description!: string;
 	public version!: string;
 	public tutorial!: string;
-	public defaultParameters!: PluginDefaultParameter[];
-	public parameters!: PluginParameter[];
-	public commands!: PluginCommand[];
+	public defaultParameters: PluginDefaultParameter[] = [];
+	public parameters: PluginParameter[] = [];
+	public commands: PluginCommand[] = [];
 	public autoUpdate = true;
 	public code!: string;
 	public pictureBase64!: string;

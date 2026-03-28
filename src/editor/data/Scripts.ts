@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { JSONType, Paths, PLUGIN_TYPE_KIND } from '../common';
-import { createFile, readJSON, writeJSON } from '../common/Platform';
+import { createFile, createFolder, readJSON, writeJSON } from '../common/Platform';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
@@ -89,6 +89,7 @@ class Scripts extends Serializable {
 				if (!plugin.saved) {
 					const jsonPluginDetails = {};
 					plugin.writeDetails(jsonPluginDetails);
+					await createFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS, plugin.name));
 					await writeJSON(plugin.getPath(), jsonPluginDetails);
 					await createFile(plugin.getPathCode(), plugin.code);
 				}

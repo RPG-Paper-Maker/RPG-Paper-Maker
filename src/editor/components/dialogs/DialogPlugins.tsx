@@ -19,6 +19,7 @@ import {
 	checkFileExists,
 	copyFolder,
 	createFile,
+	createFolder,
 	exportFolder,
 	readFile,
 	readPublicFile,
@@ -123,10 +124,13 @@ function DialogPlugins({ setIsOpen }: Props) {
 		if (await checkFileExists(pathPluginTemp)) {
 			await removeFolder(pathPluginTemp);
 		}
-		await copyFolder(
-			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
-			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
-		);
+		const pathPlugins = Paths.join(Project.current!.getPath(), Paths.PLUGINS);
+		if (await checkFileExists(pathPlugins)) {
+			await copyFolder(pathPlugins, pathPluginTemp);
+		} else {
+			await createFolder(pathPlugins);
+			await createFolder(pathPluginTemp);
+		}
 		setPlugins(Node.createList(Project.current!.scripts.plugins, false));
 		setIsLoading(false);
 	};
@@ -144,6 +148,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 				setIsLoading(true);
 				if (plugin.code === undefined) {
 					const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
+					await createFolder(path);
 					plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 					if (Constants.IS_DESKTOP) {
 						const base64 = await IO.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE), false, true);
@@ -243,8 +248,9 @@ function DialogPlugins({ setIsOpen }: Props) {
 			return;
 		}
 		setName(s);
-		await renameFile(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP), selectedPlugin!.name, s);
+		const previousName = selectedPlugin!.name;
 		selectedPlugin!.name = s;
+		await renameFile(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP), previousName, s);
 		unsavePlugin();
 	};
 
