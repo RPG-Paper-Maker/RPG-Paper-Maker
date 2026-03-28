@@ -128,7 +128,7 @@ class TreeMaps extends Serializable {
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMaps.getBindings(additionnalBinding));
 		const root = Node.create(Model.TreeMapTag.create(-1, t('maps'), true), [], null, false);
-		this.readRoot(json[TreeMaps.JSON_TREE] as JSONType[], root);
+		this.readRoot((json[TreeMaps.JSON_TREE] as JSONType[]) ?? [], root);
 		this.tree = [root];
 	}
 
