@@ -181,7 +181,7 @@ const hasInternet = async () => {
 };
 
 const fetchFrom = async (path) => {
-	const response = await fetch(path);
+	const response = await fetch(path, { cache: 'no-store' });
 	if (!response.ok) {
 		dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
 			type: 'error',

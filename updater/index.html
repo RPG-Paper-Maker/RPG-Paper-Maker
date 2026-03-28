@@ -169,6 +169,7 @@
 					(async () => {
 						const res = await fetch(
 							'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
+							{ cache: 'no-store' },
 						);
 						const data = await res.json();
 						const isLastVersionUnstable = data.unstable;
@@ -434,7 +435,7 @@
 							const manifestURL = `https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/refs/tags/${versionTag}/dist/fileManifest.json`;
 
 							fileLabel.textContent = 'Fetching file manifest...';
-							const manifest = await fetch(manifestURL).then((r) => r.json());
+							const manifest = await fetch(manifestURL, { cache: 'no-store' }).then((r) => r.json());
 							arrayRemoveValue(manifest.Deploy.files, 'Platform.js');
 							arrayRemoveValue(manifest.Scripts.Common.files, 'Platform.js');
 							arrayRemoveValue(manifest.files, 'index.html');

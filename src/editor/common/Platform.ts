@@ -259,7 +259,7 @@ export const exportFolder = async (location: string) => {
 
 export const readOnlineFile = async (path: string): Promise<string | null> => {
 	try {
-		const response = await fetch(path);
+		const response = await fetch(path, { cache: 'no-store' });
 		if (!response.ok) {
 			return null;
 		}
@@ -271,7 +271,7 @@ export const readOnlineFile = async (path: string): Promise<string | null> => {
 
 export const readOnlineFileBlob = async (path: string): Promise<Blob | null> => {
 	try {
-		const response = await fetch(path);
+		const response = await fetch(path, { cache: 'no-store' });
 		if (!response.ok) {
 			return null;
 		}
@@ -283,7 +283,7 @@ export const readOnlineFileBlob = async (path: string): Promise<Blob | null> => 
 
 export const readOnlineFileArrayBuffer = async (url: string): Promise<ArrayBuffer | null> => {
 	try {
-		const response = await fetch(url);
+		const response = await fetch(url, { cache: 'no-store' });
 		if (!response.ok) {
 			return null;
 		}
