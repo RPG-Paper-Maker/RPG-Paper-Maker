@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrayUtils, JSONType, Paths } from '../../common';
-import { openGame, readJSON, writeJSON } from '../../common/Platform';
+import { createFolder, openGame, readJSON, writeJSON } from '../../common/Platform';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import useStateNumber from '../../hooks/useStateNumber';
@@ -123,6 +123,7 @@ function DialogTroopBattleTest({ setIsOpen, troopID }: Props) {
 		model!.battleMapID = battleMapID;
 		const json = {};
 		model!.write(json);
+		await createFolder(Paths.join(Project.current!.getPath(), Paths.TEST));
 		await writeJSON(Paths.join(Project.current!.getPath(), Paths.TEST, Paths.FILE_TEST), json);
 		await openGame(Project.current!.location, true);
 	};
