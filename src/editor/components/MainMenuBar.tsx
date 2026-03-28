@@ -459,11 +459,11 @@ function MainMenuBar() {
 		if (projectsFolders.includes(folderName)) {
 			setWarningImportPath(Paths.join(Paths.getRPMGamesFolder(), folderName));
 		} else {
-			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
 			dispatch(setLoadingBar({ percent: 0, label: '' }));
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
 			await loadZip(file, path, updateLoadingBar);
+			importFileInputRef.current.value = '';
 			dispatch(setLoadingBar({ percent: 100, label: '' }));
 			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 			await handleOpenProject(project);
@@ -479,11 +479,11 @@ function MainMenuBar() {
 		setWarningImportPath('');
 		dispatch(setLoading(true));
 		const file = Array.from(importFileInputRef.current.files || [])[0];
-		importFileInputRef.current.value = '';
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
 		const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
 		await removeFolder(path);
 		await loadZip(file, path);
+		importFileInputRef.current.value = '';
 		const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 		await handleOpenProject(project);
 		dispatch(setLoading(false));
