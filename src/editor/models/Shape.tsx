@@ -282,7 +282,12 @@ class Shape extends Asset {
 						buffer = bytes.buffer;
 					}
 				} else if (this.isBR) {
-					buffer = await (await fetch(this.getPath())).arrayBuffer();
+					const response = await fetch(this.getPath());
+					if (!response.ok) {
+						console.warn(`The shape ${this.toStringNameID()} could not be fetched (${response.status}).`);
+						return;
+					}
+					buffer = await response.arrayBuffer();
 				} else {
 					buffer = await (await LocalFile.readBase64File(this.getPath())).arrayBuffer();
 				}

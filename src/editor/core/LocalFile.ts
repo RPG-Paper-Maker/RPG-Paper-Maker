@@ -348,7 +348,11 @@ class LocalFile extends Serializable {
 
 	static async readPublicFileBlob(path: string): Promise<Blob> {
 		try {
-			return await (await fetch(path)).blob();
+			const response = await fetch(path);
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}`);
+			}
+			return await response.blob();
 		} catch (error) {
 			throw new Error(`Failed to fetch public file: ${path}`, { cause: error });
 		}
