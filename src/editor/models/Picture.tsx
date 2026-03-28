@@ -143,6 +143,7 @@ class Picture extends Asset {
 		this.collisions = new Map();
 		if (json.col) {
 			for (const obj of json.col as JSONType[]) {
+				if (!obj) continue;
 				const point = new Point();
 				point.read(obj.k as number[]);
 				const collision = new CollisionSquare();

@@ -254,7 +254,9 @@ class Serializable {
 					(this as JSONType)[name] = mapping;
 					const list = json[jsonName] as JSONMappingKeyValue[];
 					if (list) {
-						for (const { k, v } of list) {
+						for (const item of list) {
+							if (!item) continue;
+							const { k, v } = item;
 							if (constructorClass) {
 								const obj = new constructorClass() as Serializable;
 								obj.read(v);
