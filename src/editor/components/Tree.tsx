@@ -261,8 +261,8 @@ function Tree({
 		if (currentSelectedItemNode === node) {
 			return;
 		}
-		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL)) {
-			if (node.content.id !== currentSelectedItemNode!.content.id) {
+		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL) && currentSelectedItemNode) {
+			if (node.content.id !== currentSelectedItemNode.content.id) {
 				if (additionalSelectedNodes.some((n) => n.content.id === node.content.id)) {
 					setAdditionalSelectedNodes(additionalSelectedNodes.filter((n) => node.content.id !== n.content.id));
 				} else {
