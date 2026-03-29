@@ -16,11 +16,11 @@ import { Project } from '../../core/Project';
 class ProjectUpdater_3_0_45 {
 	static async update() {
 		const projectPath = Project.current!.getPath();
-		const mapFolders = await getFolders(Paths.join(projectPath, Paths.MAPS));
+		const mapFolders = await getFolders(Paths.join(projectPath, 'Maps'));
 		for (const folder of mapFolders) {
-			const folderPath = Paths.join(projectPath, Paths.MAPS, folder);
+			const folderPath = Paths.join(projectPath, 'Maps', folder);
 			await this.fixMapFolder(folderPath);
-			const tempPath = Paths.join(folderPath, Paths.TEMP);
+			const tempPath = Paths.join(folderPath, 'temp');
 			if (await checkFileExists(tempPath)) {
 				await this.fixMapFolder(tempPath);
 			}

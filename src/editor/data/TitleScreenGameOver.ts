@@ -19,12 +19,14 @@ const { t } = i18next;
 
 class TitleScreenGameOver extends Serializable {
 	public isTitleBackgroundImage!: boolean;
+	public isTitleBackgroundVideo!: boolean;
 	public titleBackgroundImageID!: number;
 	public titleBackgroundVideoID!: number;
 	public titleMusic!: PlaySong;
 	public titleCommands!: TitleCommand[];
 	public titleSettings!: Checkable[];
 	public isGameOverBackgroundImage!: boolean;
+	public isGameOverBackgroundVideo!: boolean;
 	public gameOverBackgroundImageID!: number;
 	public gameOverBackgroundVideoID!: number;
 	public gameOverMusic!: PlaySong;
@@ -32,14 +34,16 @@ class TitleScreenGameOver extends Serializable {
 
 	public static readonly bindings: BindingType[] = [
 		['isTitleBackgroundImage', 'itbi', true, BINDING.BOOLEAN],
+		['isTitleBackgroundVideo', 'itbv', false, BINDING.BOOLEAN],
 		['titleBackgroundImageID', 'tb', 1, BINDING.NUMBER],
 		['titleBackgroundVideoID', 'tbv', 1, BINDING.NUMBER],
 		['titleMusic', 'tm', undefined, BINDING.OBJECT, PlaySong],
 		['titleCommands', 'tc', [], BINDING.LIST, TitleCommand],
 		['titleSettings', 'ts', undefined, BINDING.LIST, Checkable],
 		['isGameOverBackgroundImage', 'isGameOverBackgroundImage', true, BINDING.BOOLEAN],
-		['gameOverBackgroundImageID', 'gameOverBackgroundImage', 1, BINDING.BOOLEAN],
-		['gameOverBackgroundVideoID', 'gameOverBackgroundVideo', 1, BINDING.BOOLEAN],
+		['isGameOverBackgroundVideo', 'isGameOverBackgroundVideo', false, BINDING.BOOLEAN],
+		['gameOverBackgroundImageID', 'gameOverBackgroundImage', 1, BINDING.NUMBER],
+		['gameOverBackgroundVideoID', 'gameOverBackgroundVideo', 1, BINDING.NUMBER],
 		['gameOverMusic', 'gameOverMusic', undefined, BINDING.OBJECT, PlaySong],
 		['gameOverCommands', 'gameOverCommands', [], BINDING.LIST, GameOverCommand],
 	];
