@@ -253,15 +253,15 @@ function TreeMaps({
 				element.name = editedMap.name;
 				setMapsTabsTitles?.([...mapsTabsTitles]);
 			}
-			await editedMap.resizeMap(previousModel);
 			const tag = selectedNode.content as TreeMapTag;
+			await tag.saveFiles();
+			await editedMap.resizeMap(previousModel);
 			const cursor = tag.cursorPosition;
 			if (cursor) {
 				editedMap.adjustPosition(cursor);
 			}
 			await Project.current!.treeMaps.save();
 			await editedMap.save();
-			await tag.saveFiles();
 			dispatch(setNeedsReloadMap());
 		}
 		RPM.treeCurrentForceUpdate?.();

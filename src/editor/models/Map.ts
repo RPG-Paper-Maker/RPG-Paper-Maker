@@ -313,6 +313,7 @@ class Map extends Localization {
 					await this.deleteMapElements(new Portion(newPortionMaxX, j, k));
 				}
 			}
+			this.objects = this.objects.filter((mapObject) => mapObject.position.isInMap(this));
 		}
 	}
 
