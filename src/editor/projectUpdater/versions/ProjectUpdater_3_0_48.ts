@@ -12,6 +12,7 @@
 import { Paths } from '../../common';
 import { readJSON, writeJSON } from '../../common/Platform';
 import { Project } from '../../core/Project';
+import { ProjectUpdater_3_0_45 } from './ProjectUpdater_3_0_45';
 
 class ProjectUpdater_3_0_48 {
 	static async update() {
@@ -26,6 +27,7 @@ class ProjectUpdater_3_0_48 {
 			json.isGameOverBackgroundVideo = true;
 		}
 		await writeJSON(path, json);
+		await ProjectUpdater_3_0_45.update();
 	}
 }
 

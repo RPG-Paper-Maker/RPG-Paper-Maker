@@ -195,8 +195,9 @@ class MapPortion {
 						);
 					}
 				}
+				const floorPortion = this.map.getMapPortionByPosition(floorPosition) ?? this;
 				if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
-					this.updateMapElement(
+					floorPortion.updateMapElement(
 						floorPosition,
 						MapElement.Autotile.create(
 							s.mapEditorCurrentMountainTopFloorAutotileID,
@@ -212,7 +213,7 @@ class MapPortion {
 						updateAutotiles,
 					);
 				} else {
-					this.updateMapElement(
+					floorPortion.updateMapElement(
 						floorPosition,
 						MapElement.Floor.create(
 							new Rectangle(
