@@ -172,9 +172,24 @@ let splash;
 let isReadyToClose = false;
 
 const hasInternet = async () => {
+	const urls = [
+		'https://www.google.com',
+		'https://www.baidu.com',
+		'https://www.bing.com',
+		'https://one.one.one.one',
+	];
+	const check = async (url) => {
+		const controller = new AbortController();
+		const timer = setTimeout(() => controller.abort(), 3000);
+		try {
+			const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
+			return res.ok;
+		} finally {
+			clearTimeout(timer);
+		}
+	};
 	try {
-		const res = await fetch('https://www.google.com', { method: 'HEAD', timeout: 3000 });
-		return res.ok;
+		return await Promise.any(urls.map(check));
 	} catch {
 		return false;
 	}
