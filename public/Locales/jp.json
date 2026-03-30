@@ -1805,6 +1805,7 @@
 	"starting.map": "スタートマップ",
 	"folder.name": "フォルダ名",
 	"warning.project.exist.overwrite": "このプロジェクトは既に {{path}} に存在します。上書きしますか？",
+	"warning.folder.permission": "アクセスが拒否されました：「{{path}}」にフォルダを作成できません。ドキュメントフォルダなど、別の場所を選択してください。",
 	"warning.dlcs.folder.path.wrong": "DLCsフォルダのパスが正しくありません",
 	"new.folder": "新規フォルダ",
 	"warning.delete.project": "本当に {{projectName}} を削除しますか？",

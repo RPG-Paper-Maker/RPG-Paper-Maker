@@ -43,6 +43,7 @@ import Tooltip from '../Tooltip';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterNoYes from './footers/FooterNoYes';
+import FooterOK from './footers/FooterOK';
 
 enum PROJECT_TYPE {
 	BLANK,
@@ -66,6 +67,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
 	const [projectType, setProjectType] = useState(PROJECT_TYPE.DEFAULT);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+	const [isPermissionError, setIsPermissionError] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
 
@@ -92,7 +94,17 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		setIsLoading(true);
 		setIsDialogConfirmOpen(false);
 		await removeFolder(getcompleteLocation());
-		await createProject();
+		try {
+			await createProject();
+		} catch (e) {
+			const msg = e instanceof Error ? e.message : String(e);
+			if (msg.includes('EPERM') || msg.includes('operation not permitted')) {
+				setIsLoading(false);
+				setIsPermissionError(true);
+				return;
+			}
+			throw e;
+		}
 		accept();
 	};
 
@@ -283,7 +295,17 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 
 	const handleAccept = async (): Promise<boolean> => {
 		if (await checkValidAccept()) {
-			await createProject();
+			try {
+				await createProject();
+			} catch (e) {
+				const msg = e instanceof Error ? e.message : String(e);
+				if (msg.includes('EPERM') || msg.includes('operation not permitted')) {
+					setIsLoading(false);
+					setIsPermissionError(true);
+					return false;
+				}
+				throw e;
+			}
 			accept();
 			return true;
 		}
@@ -374,6 +396,14 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 				onClose={cancelCreation}
 			>
 				<p>{t('warning.project.exist.overwrite', { path: getcompleteLocation() })}</p>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={isPermissionError}
+				footer={<FooterOK onOK={() => setIsPermissionError(false)} />}
+				onClose={() => setIsPermissionError(false)}
+			>
+				<p>{t('warning.folder.permission', { path: getcompleteLocation() })}</p>
 			</Dialog>
 		</>
 	);

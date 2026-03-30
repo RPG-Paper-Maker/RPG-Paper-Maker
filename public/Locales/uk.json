@@ -1805,6 +1805,7 @@
 	"starting.map": "Початкова карта",
 	"folder.name": "Назва папки",
 	"warning.project.exist.overwrite": "Цей проект уже існує в {{path}}. Ви хочете перезаписати його?",
+	"warning.folder.permission": "Доступ заборонено: неможливо створити папку за адресою «{{path}}». Будь ласка, виберіть інше місце, наприклад папку «Документи».",
 	"warning.dlcs.folder.path.wrong": "Шлях до папки DLC неправильний",
 	"new.folder": "Нова папка",
 	"warning.delete.project": "Ви впевнені, що хочете видалити {{projectName}}?",

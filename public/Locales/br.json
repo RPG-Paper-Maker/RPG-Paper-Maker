@@ -1805,6 +1805,7 @@
 	"starting.map": "Mapa inicial",
 	"folder.name": "Nome da pasta",
 	"warning.project.exist.overwrite": "Este projeto já existe em {{path}}. Deseja sobrescrevê-lo?",
+	"warning.folder.permission": "Permissão negada: não é possível criar uma pasta em \"{{path}}\". Por favor, escolha um local diferente, como a pasta Documentos.",
 	"warning.dlcs.folder.path.wrong": "O caminho da pasta de DLCs está incorreto",
 	"new.folder": "Nova pasta",
 	"warning.delete.project": "Tem certeza que deseja excluir {{projectName}}?",
