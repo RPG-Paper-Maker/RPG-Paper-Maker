@@ -337,25 +337,39 @@ class DynamicValue extends Serializable {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				this.customStructure = new CustomStructure();
-				this.customStructure.read(json.customStructure as JSONType);
+				if (json.customStructure) {
+					this.customStructure.read(json.customStructure as JSONType);
+				}
 				break;
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
 				this.customList = new CustomStructure();
-				this.customList.read(json.customList as JSONType);
+				if (json.customList) {
+					this.customList.read(json.customList as JSONType);
+				}
 				break;
 			case DYNAMIC_VALUE_KIND.VECTOR2:
 				this.x = new DynamicValue();
-				this.x.read(json.x as JSONType);
+				if (json.x) {
+					this.x.read(json.x as JSONType);
+				}
 				this.y = new DynamicValue();
-				this.y.read(json.y as JSONType);
+				if (json.y) {
+					this.y.read(json.y as JSONType);
+				}
 				break;
 			case DYNAMIC_VALUE_KIND.VECTOR3:
 				this.x = new DynamicValue();
-				this.x.read(json.x as JSONType);
+				if (json.x) {
+					this.x.read(json.x as JSONType);
+				}
 				this.y = new DynamicValue();
-				this.y.read(json.y as JSONType);
+				if (json.y) {
+					this.y.read(json.y as JSONType);
+				}
 				this.z = new DynamicValue();
-				this.z.read(json.z as JSONType);
+				if (json.z) {
+					this.z.read(json.z as JSONType);
+				}
 				break;
 		}
 	}

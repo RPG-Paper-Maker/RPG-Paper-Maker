@@ -91,12 +91,19 @@ class Autotiles {
 	}
 
 	static getAutotileTexture(map: Scene.Map, id: number): TextureBundle[] | null {
-		const texturesAutotile = map.texturesAutotiles[Project.current!.specialElements.getAutotileByID(id).pictureID];
+		const autotile = Project.current!.specialElements.getAutotileByID(id);
+		if (!autotile) {
+			return null;
+		}
+		const texturesAutotile = map.texturesAutotiles[autotile.pictureID];
 		return texturesAutotile || null;
 	}
 
 	static async loadAutotileTexture(map: Scene.Map | null, id: number): Promise<TextureBundle[]> {
 		const autotile = Project.current!.specialElements.getAutotileByID(id);
+		if (!autotile) {
+			return [];
+		}
 		const pictureID = autotile.pictureID;
 		let texturesAutotile = map ? map.texturesAutotiles[pictureID] : null;
 		if (!texturesAutotile) {

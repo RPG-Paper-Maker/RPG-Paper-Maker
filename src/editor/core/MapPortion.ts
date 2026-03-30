@@ -939,7 +939,11 @@ class MapPortion {
 		const texturesAutotile = MapElement.Autotiles.getAutotileTexture(this.map, autotile.autotileID);
 		let autotiles: MapElement.Autotiles | null = null;
 		if (texturesAutotile) {
-			const pictureID = Project.current!.specialElements.getAutotileByID(autotile.autotileID).pictureID;
+			const autotileModel = Project.current!.specialElements.getAutotileByID(autotile.autotileID);
+			if (!autotileModel) {
+				return;
+			}
+			const pictureID = autotileModel.pictureID;
 			for (let j = 0, m = texturesAutotile.length; j < m; j++) {
 				const textureAutotile = texturesAutotile[j];
 				if (textureAutotile.isInTexture(pictureID, autotile.texture)) {

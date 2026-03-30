@@ -193,6 +193,9 @@ class Autotile extends Land {
 		count: number,
 	) {
 		const autotile = Project.current!.specialElements.getAutotileByID(this.autotileID);
+		if (!autotile) {
+			return null;
+		}
 		return super.updateGeometryLand(
 			map,
 			geometry,

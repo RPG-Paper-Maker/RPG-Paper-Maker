@@ -38,8 +38,8 @@ class SpecialElements extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SPECIAL_ELEMENTS);
 	}
 
-	getAutotileByID(id: number): Model.Autotile {
-		return this.autotiles.find((autotile) => autotile.id === id)!;
+	getAutotileByID(id: number): Model.Autotile | undefined {
+		return this.autotiles.find((autotile) => autotile.id === id);
 	}
 
 	getWallByID(id: number): Model.SpecialElement {
