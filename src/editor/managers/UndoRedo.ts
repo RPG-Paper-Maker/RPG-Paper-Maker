@@ -11,56 +11,50 @@
 
 import { MapElement, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, JSONType, Paths } from '../common';
-import { createFile, getFiles, readFile, removeFile, renameFile } from '../common/Platform';
+import { createFile, getFiles, readFile, removeFile } from '../common/Platform';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
-	public static readonly MAX_SAVES = 150;
+	public static readonly MAX_SAVES = 5;
 	public static isProcessing = false;
 
 	private static getPathStates(): string {
 		return Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO);
 	}
 
-	private static getStateFilename(index: number): string {
-		return `${index}.json`;
-	}
-
-	private static getPathStatesAt(index: number): string {
-		return Paths.join(this.getPathStates(), this.getStateFilename(index));
-	}
-
 	private static getPathIndex() {
 		return Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO, Paths.INDEX);
 	}
 
+	private static async getSortedStateFiles(): Promise<string[]> {
+		if (!Project.current) return [];
+		const files = await getFiles(this.getPathStates());
+		return files.filter((f) => f !== Paths.INDEX).sort();
+	}
+
 	static async getStatesLength() {
-		if (Project.current) {
-			return (await getFiles(Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO))).length - 1;
-		}
-		return 0;
+		return (await this.getSortedStateFiles()).length;
 	}
 
 	static async getCurrentCurrentIndex() {
-		if (Project.current) {
-			const content = await readFile(UndoRedo.getPathIndex());
-			if (content !== null) {
-				return Number(content);
-			}
+		const currentFile = (await readFile(this.getPathIndex()))?.trim() ?? '';
+		if (currentFile !== '') {
+			const files = await this.getSortedStateFiles();
+			return files.indexOf(currentFile);
 		}
 		return -1;
 	}
 
-	private static async saveCurrentCurrentIndex(index: number) {
-		await createFile(UndoRedo.getPathIndex(), `${index}`);
+	private static async saveCurrentStateFile(filename: string) {
+		await createFile(this.getPathIndex(), filename);
 	}
 
-	private static async getStatesAt(index: number) {
+	private static async getStatesAt(filename: string) {
 		const states: UndoRedoState[] = [];
-		const content = await readFile(this.getPathStatesAt(index));
+		const content = await readFile(Paths.join(this.getPathStates(), filename));
 		if (content !== null) {
 			Serializable.readList(states, JSON.parse(content), UndoRedoState);
 		}
@@ -101,8 +95,8 @@ class UndoRedo {
 		}
 	}
 
-	private static async applyStates(index: number, before: boolean) {
-		const states = await this.getStatesAt(index);
+	private static async applyStates(filename: string, before: boolean) {
+		const states = await this.getStatesAt(filename);
 		if (before) {
 			for (let i = states.length - 1; i >= 0; i--) {
 				const state = states[i];
@@ -115,24 +109,19 @@ class UndoRedo {
 		}
 	}
 
-	private static async updateMaxFiles(index: number) {
-		const path = this.getPathStates();
-		for (let i = 1; i <= index; i++) {
-			await renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
-		}
-	}
-
 	private static async action(before: boolean, indexOffset: number) {
 		Scene.Map.current!.removeTransform();
-		const length = await this.getStatesLength();
-		let index = await this.getCurrentCurrentIndex();
-		if (before) {
-			await this.applyStates(index, true);
+		const files = await this.getSortedStateFiles();
+		const currentFile = (await readFile(this.getPathIndex()))?.trim() ?? '';
+		let pos = files.indexOf(currentFile);
+
+		if (before && pos >= 0) {
+			await this.applyStates(files[pos], true);
 		}
-		index = Math.min(Math.max(-1, index + indexOffset), length - 1);
-		await this.saveCurrentCurrentIndex(index);
-		if (!before) {
-			await this.applyStates(index, false);
+		pos = Math.min(Math.max(-1, pos + indexOffset), files.length - 1);
+		await this.saveCurrentStateFile(pos >= 0 ? files[pos] : '');
+		if (!before && pos >= 0) {
+			await this.applyStates(files[pos], false);
 		}
 		this.isProcessing = false;
 	}
@@ -158,31 +147,34 @@ class UndoRedo {
 	}
 
 	static async createStates(states: UndoRedoState[]): Promise<{ index: number; length: number }> {
-		// Update current index
-		let index = (await this.getCurrentCurrentIndex()) + 1;
-		if (index === this.MAX_SAVES) {
-			index--;
-			await this.updateMaxFiles(index);
-		} else {
-			await this.saveCurrentCurrentIndex(index);
+		const files = await this.getSortedStateFiles();
+		const currentFile = (await readFile(this.getPathIndex()))?.trim() ?? '';
+		const currentPos = files.indexOf(currentFile);
+
+		// Remove all redo states (everything after the current position)
+		for (let i = currentPos + 1; i < files.length; i++) {
+			await removeFile(Paths.join(this.getPathStates(), files[i]));
 		}
 
-		// Remove all existing states >= new index
-		const length = await this.getStatesLength();
-		for (let i = index; i < length; i++) {
-			await removeFile(this.getPathStatesAt(i));
+		// If at max capacity, remove the oldest state to make room
+		if (currentPos + 1 >= this.MAX_SAVES) {
+			await removeFile(Paths.join(this.getPathStates(), files[0]));
 		}
 
-		// Create a new file for the new state
+		// Create new state file named by current timestamp
+		const filename = `${Date.now()}.json`;
 		const arrayJson: JSONType[] = [];
 		for (const state of states) {
 			const json = {};
 			state.write(json);
 			arrayJson.push(json);
 		}
+		await createFile(Paths.join(this.getPathStates(), filename), JSON.stringify(arrayJson));
+		await this.saveCurrentStateFile(filename);
 
-		await createFile(this.getPathStatesAt(index), JSON.stringify(arrayJson));
-		return { index, length: index + 1 };
+		const newFiles = await this.getSortedStateFiles();
+		const newIndex = newFiles.indexOf(filename);
+		return { index: newIndex, length: newFiles.length };
 	}
 }
 
