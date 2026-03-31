@@ -255,7 +255,7 @@
 							}
 							stepInstallComplete.classList.remove('hidden');
 						}
-					})();
+					})().catch((err) => reportError('Error:\n' + err.stack));
 
 					// Utility: flatten fileManifest.json
 					function collectFiles(manifest, baseVersionTag, skipBR = false) {
