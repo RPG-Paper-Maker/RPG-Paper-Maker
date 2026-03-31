@@ -52,55 +52,60 @@ class ProjectUpdater_3_0_45 {
 			}
 		}
 
-		// Detect and relocate misplaced land entries
-		for (const [file, json] of portionData) {
-			const py = portionPY.get(file)!;
-			const px = portionPX.get(file)!;
-			const pz = portionPZ.get(file)!;
-			const lands = json.lands as JSONType[] | undefined;
-			if (!Array.isArray(lands)) continue;
+		// Detect and relocate misplaced entries for a given JSON array key
+		const fixElements = (arrayKey: string) => {
+			for (const [file, json] of portionData) {
+				const py = portionPY.get(file)!;
+				const px = portionPX.get(file)!;
+				const pz = portionPZ.get(file)!;
+				const entries = json[arrayKey] as JSONType[] | undefined;
+				if (!Array.isArray(entries)) continue;
 
-			const toRemove: JSONType[] = [];
-			for (const entry of lands) {
-				const k = entry.k as number[];
-				if (!Array.isArray(k) || k.length < 4) continue;
-				const x = k[0] as number;
-				const y = k[1] as number;
-				const z = k[3] as number;
-				const expectedPX = Math.floor(x / Constants.PORTION_SIZE);
-				const expectedPY = Math.floor(y / Constants.PORTION_SIZE);
-				const expectedPZ = Math.floor(z / Constants.PORTION_SIZE);
-				if (expectedPX === px && expectedPY === py && expectedPZ === pz) continue;
+				const toRemove: JSONType[] = [];
+				for (const entry of entries) {
+					const k = entry.k as number[];
+					if (!Array.isArray(k) || k.length < 4) continue;
+					const x = k[0] as number;
+					const y = k[1] as number;
+					const z = k[3] as number;
+					const expectedPX = Math.floor(x / Constants.PORTION_SIZE);
+					const expectedPY = Math.floor(y / Constants.PORTION_SIZE);
+					const expectedPZ = Math.floor(z / Constants.PORTION_SIZE);
+					if (expectedPX === px && expectedPY === py && expectedPZ === pz) continue;
 
-				// Land is in the wrong portion — move it to the correct one
-				const targetFile = `${expectedPX}_${expectedPY}_${expectedPZ}.json`;
-				let targetJson = portionData.get(targetFile);
-				if (!targetJson) {
-					targetJson = {};
-					portionData.set(targetFile, targetJson);
-				}
-				if (!Array.isArray(targetJson.lands)) {
-					targetJson.lands = [];
+					// Entry is in the wrong portion — move it to the correct one
+					const targetFile = `${expectedPX}_${expectedPY}_${expectedPZ}.json`;
+					let targetJson = portionData.get(targetFile);
+					if (!targetJson) {
+						targetJson = {};
+						portionData.set(targetFile, targetJson);
+					}
+					if (!Array.isArray(targetJson[arrayKey])) {
+						targetJson[arrayKey] = [];
+					}
+
+					// Skip if an entry for this position already exists in the target
+					const entryKey = this.getPositionKey(k);
+					const isDuplicate = (targetJson[arrayKey] as JSONType[]).some((e) => {
+						const ek = e.k as number[];
+						return Array.isArray(ek) && this.getPositionKey(ek) === entryKey;
+					});
+					if (!isDuplicate) {
+						(targetJson[arrayKey] as JSONType[]).push(entry);
+						modified.add(targetFile);
+					}
+					toRemove.push(entry);
 				}
 
-				// Skip if an entry for this position already exists in the target
-				const entryKey = this.getPositionKey(k);
-				const isDuplicate = (targetJson.lands as JSONType[]).some((e) => {
-					const ek = e.k as number[];
-					return Array.isArray(ek) && this.getPositionKey(ek) === entryKey;
-				});
-				if (!isDuplicate) {
-					(targetJson.lands as JSONType[]).push(entry);
-					modified.add(targetFile);
+				if (toRemove.length > 0) {
+					json[arrayKey] = (entries as JSONType[]).filter((e) => !toRemove.includes(e));
+					modified.add(file);
 				}
-				toRemove.push(entry);
 			}
+		};
 
-			if (toRemove.length > 0) {
-				json.lands = (lands as JSONType[]).filter((e) => !toRemove.includes(e));
-				modified.add(file);
-			}
-		}
+		fixElements('lands');
+		fixElements('objs3d');
 
 		// Write all modified portion files
 		for (const file of modified) {
