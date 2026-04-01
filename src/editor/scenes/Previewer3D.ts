@@ -271,6 +271,10 @@ class Previewer3D extends Base {
 		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM && object.gltfID !== -1 && object.pictureID === -1) {
 			const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID);
+			if (!shape) {
+				this.clear();
+				return;
+			}
 			if (!shape.isShapeLoaded()) {
 				await shape.loadShape();
 			}

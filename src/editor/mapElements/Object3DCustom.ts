@@ -117,9 +117,15 @@ class Object3DCustom extends Object3D {
 
 	async loadShape() {
 		if (this.data.gltfID !== -1) {
-			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, this.data.gltfID).loadShape();
+			const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, this.data.gltfID);
+			if (shape) {
+				await shape.loadShape();
+			}
 		} else {
-			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).loadShape();
+			const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
+			if (shape) {
+				await shape.loadShape();
+			}
 		}
 	}
 }
