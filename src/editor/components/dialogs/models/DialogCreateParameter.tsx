@@ -18,7 +18,7 @@ import useStateString from '../../../hooks/useStateString';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Form, { Label, Value } from '../../Form';
 import InputText from '../../InputText';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -63,6 +63,7 @@ function DialogCreateParameter({ setIsOpen, model, onAccept, onReject }: Props) 
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Form>
 				<Label>{t('name')}</Label>
