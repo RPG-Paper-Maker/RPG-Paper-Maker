@@ -38,27 +38,22 @@ console.error = (...args) => {
 	if (errorCount++ >= MAX_ERROR_COUNT) {
 		return;
 	}
-	let message = '';
+	let message = errorCount === MAX_ERROR_COUNT ? 'Too many errors, stopping further notifications.\n' : '';
 	let stack = '';
-	if (errorCount === MAX_ERROR_COUNT) {
-		message = 'Too many errors, stopping further notifications.';
-		stack = '';
-	} else {
-		args.forEach((arg) => {
-			if (arg instanceof Error) {
-				message += arg.message + '\n';
-				stack += arg.stack + '\n';
-			} else if (typeof arg === 'object') {
-				try {
-					message += JSON.stringify(arg) + '\n';
-				} catch {
-					message += '[object]\n';
-				}
-			} else {
-				message += String(arg) + '\n';
+	args.forEach((arg) => {
+		if (arg instanceof Error) {
+			message += arg.message + '\n';
+			stack += arg.stack + '\n';
+		} else if (typeof arg === 'object') {
+			try {
+				message += JSON.stringify(arg) + '\n';
+			} catch {
+				message += '[object]\n';
 			}
-		});
-	}
+		} else {
+			message += String(arg) + '\n';
+		}
+	});
 	if (message.includes('EBUSY')) {
 		console.warn(i18next.t('warning.file.busy'));
 		return;
