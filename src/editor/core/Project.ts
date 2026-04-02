@@ -200,36 +200,36 @@ class Project {
 	}
 
 	async save() {
-		await this.languages.save();
-		await this.variables.save();
-		await this.fonts.save();
-		await this.pictures.save();
-		await this.shapes.save();
-		await this.songs.save();
-		await this.videos.save();
-		await this.settings.save();
-		await this.systems.save();
-		await this.treeMaps.save();
-		await this.specialElements.save();
-		await this.commonEvents.save();
-		await this.keyboard.save();
-		await this.tilesets.save();
-		await this.status.save();
-		await this.animations.save();
-		await this.items.save();
-		await this.weapons.save();
-		await this.armors.save();
-		await this.skills.save();
-		await this.classes.save();
-		await this.heroes.save();
-		await this.monsters.save();
-		await this.troops.save();
-		await this.battleSystem.save();
-		await this.titleScreenGameOver.save();
-		await this.scripts.save();
-		await this.settings.save();
-		await this.fonts.save();
-		await this.dlcs.save();
+		await Promise.all([
+			this.languages.save(),
+			this.variables.save(),
+			this.fonts.save(),
+			this.pictures.save(),
+			this.shapes.save(),
+			this.songs.save(),
+			this.videos.save(),
+			this.settings.save(),
+			this.systems.save(),
+			this.treeMaps.save(),
+			this.specialElements.save(),
+			this.commonEvents.save(),
+			this.keyboard.save(),
+			this.tilesets.save(),
+			this.status.save(),
+			this.animations.save(),
+			this.items.save(),
+			this.weapons.save(),
+			this.armors.save(),
+			this.skills.save(),
+			this.classes.save(),
+			this.heroes.save(),
+			this.monsters.save(),
+			this.troops.save(),
+			this.battleSystem.save(),
+			this.titleScreenGameOver.save(),
+			this.scripts.save(),
+			this.dlcs.save(),
+		]);
 	}
 }
 

@@ -42,7 +42,21 @@ function DialogLanguages({ setIsOpen }: Props) {
 	};
 
 	const handleAccept = async () => {
-		await Project.current!.languages.save();
+		const project = Project.current!;
+		await Promise.all([
+			project.languages.save(),
+			project.titleScreenGameOver.save(),
+			project.systems.save(),
+			project.battleSystem.save(),
+			project.skills.save(),
+			project.items.save(),
+			project.weapons.save(),
+			project.armors.save(),
+			project.status.save(),
+			project.heroes.save(),
+			project.classes.save(),
+			project.monsters.save(),
+		]);
 		setIsOpen(false);
 	};
 

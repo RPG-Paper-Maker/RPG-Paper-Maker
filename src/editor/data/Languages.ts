@@ -190,6 +190,86 @@ class Languages extends Serializable {
 
 	prefillTranslationsForLanguage(languageId: string, localeShort: string): void {
 		this.applyTranslations(i18next.getFixedT(localeShort), (loc, value) => loc.names.set(languageId, value));
+		this.prefillProjectLocalizationsForLanguage(languageId, localeShort);
+	}
+
+	private buildReverseTranslationMap(localeShort: string): Map<string, string> {
+		const bundle = i18next.getResourceBundle(localeShort, 'translation') as Record<string, unknown> | null;
+		const result = new Map<string, string>();
+		if (!bundle) return result;
+		for (const [key, value] of Object.entries(bundle)) {
+			if (typeof value === 'string' && value !== '' && !result.has(value)) {
+				result.set(value, key);
+			}
+		}
+		return result;
+	}
+
+	private translateLocalization(
+		loc: Model.Localization,
+		refLangId: string,
+		reverseMap: Map<string, string>,
+		newLangId: string,
+		tNew: (key: string) => string,
+	): void {
+		const currentValue = loc.names.get(refLangId);
+		if (!currentValue) return;
+		const key = reverseMap.get(currentValue);
+		if (key === undefined) return;
+		loc.names.set(newLangId, tNew(key));
+	}
+
+	private prefillProjectLocalizationsForLanguage(languageId: string, localeShort: string): void {
+		const refLang = this.list.find((lang) => lang.kind !== 0);
+		if (!refLang) return;
+
+		const refLocaleShort = LANGUAGES_SHORTS[refLang.kind - 1];
+		const reverseMap = this.buildReverseTranslationMap(refLocaleShort);
+		const refLangId = '' + refLang.id;
+		const tNew = i18next.getFixedT(localeShort);
+		const translate = (loc: Model.Localization) =>
+			this.translateLocalization(loc, refLangId, reverseMap, languageId, tNew);
+
+		const project = Project.current!;
+
+		project.titleScreenGameOver.titleCommands.forEach(translate);
+		project.titleScreenGameOver.gameOverCommands.forEach(translate);
+
+		project.systems.currencies.forEach(translate);
+		project.systems.itemsTypes.forEach(translate);
+		project.systems.inventoryFilters.forEach(translate);
+		project.systems.mainMenuCommands.forEach(translate);
+
+		project.battleSystem.elements.forEach(translate);
+		project.battleSystem.statistics.forEach(translate);
+		project.battleSystem.equipments.forEach(translate);
+		project.battleSystem.weaponsKind.forEach(translate);
+		project.battleSystem.armorsKind.forEach(translate);
+
+		project.skills.list.forEach((skill) => {
+			translate(skill);
+			translate(skill.description);
+		});
+
+		project.items.list.forEach((item) => {
+			translate(item);
+			translate(item.description);
+		});
+
+		project.weapons.list.forEach((weapon) => {
+			translate(weapon);
+			translate(weapon.description);
+		});
+
+		project.armors.list.forEach((armor) => {
+			translate(armor);
+			translate(armor.description);
+		});
+
+		project.status.list.forEach(translate);
+		project.heroes.list.forEach(translate);
+		project.classes.list.forEach(translate);
+		project.monsters.list.forEach(translate);
 	}
 
 	translateDefaults(): void {
