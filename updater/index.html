@@ -424,7 +424,9 @@
 
 						const workers = Array(concurrency).fill(0).map(worker);
 						await Promise.all(workers);
+						if (isError) return false;
 						fileLabel.textContent = 'All files downloaded successfully.';
+						return true;
 					}
 
 					async function download() {
@@ -446,8 +448,10 @@
 								: false;
 							const files = collectFiles(manifest, versionTag, skipBR);
 							const folders = collectFolders(manifest, skipBR);
-							await downloadAll(files, folders);
-							await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
+							const success = await downloadAll(files, folders);
+							if (success) {
+								await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
+							}
 						} catch (err) {
 							reportError('Download error:\n' + err.stack);
 						}
