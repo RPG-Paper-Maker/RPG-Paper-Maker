@@ -105,6 +105,7 @@ function DialogCommandCallACommonReaction({ commandKind, setIsOpen, list, onAcce
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				initialWidth='500px'
+				initialHeight='400px'
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spacedLarge fillWidth>
