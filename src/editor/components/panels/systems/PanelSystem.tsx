@@ -191,6 +191,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.windowSkins = Node.createListFromNodes(windowSkins);
 		systems.currencies = Node.createListFromNodes(currencies);
 		systems.speeds = Node.createListFromNodes(speeds);
+		systems.frequencies = Node.createListFromNodes(frequencies);
 		systems.detections = Node.createListFromNodes(detections);
 		systems.cameraProperties = Node.createListFromNodes(cameraProperties);
 		systems.skyboxes = Node.createListFromNodes(skyboxes);
