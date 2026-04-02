@@ -54,11 +54,18 @@ abstract class Object3D extends Base {
 
 	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): THREE.MeshPhongMaterial | null {
 		const array = hovered ? map.texturesObjects3DHover : map.texturesObjects3D;
-		return array[Project.current!.specialElements.getObject3DByID(id).pictureID] || null;
+		const object3D = Project.current!.specialElements.getObject3DByID(id);
+		if (!object3D) {
+			return null;
+		}
+		return array[object3D.pictureID] || null;
 	}
 
 	static isShapeLoaded(objectID: number): boolean {
 		const object = Project.current!.specialElements.getObject3DByID(objectID);
+		if (!object) {
+			return true;
+		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
 			return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).isShapeLoaded();
 		}
@@ -67,6 +74,9 @@ abstract class Object3D extends Base {
 
 	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
+		if (!object3D) {
+			return Manager.GL.loadTextureEmpty();
+		}
 		const pictureID = object3D.pictureID;
 		if (pictureID === -1) {
 			return Manager.GL.loadTextureEmpty();
@@ -100,6 +110,9 @@ abstract class Object3D extends Base {
 
 	static async loadShapeOBJ(objectID: number) {
 		const object = Project.current!.specialElements.getObject3DByID(objectID);
+		if (!object) {
+			return;
+		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
 			if (object.gltfID !== -1) {
 				await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID).loadShape();

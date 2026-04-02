@@ -56,22 +56,25 @@ class SpriteWall extends Base {
 	}
 
 	static getWallTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
-		const textureWall = map.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
+		const wall = Project.current!.specialElements.getWallByID(id);
+		if (!wall) {
+			return null;
+		}
+		const textureWall = map.texturesWalls[wall.pictureID];
 		return textureWall || null;
 	}
 
 	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const wall = Project.current!.specialElements.getWallByID(id);
+		if (!wall) {
+			return Manager.GL.loadTextureEmpty();
+		}
 		const pictureID = wall.pictureID;
 		let textureWall = map ? map.texturesWalls[pictureID] : null;
 		if (!textureWall) {
-			if (wall) {
-				const picture = Project.current!.pictures.getByID(PICTURE_KIND.WALLS, pictureID);
-				if (picture) {
-					textureWall = await this.loadTextureWall(picture, id);
-				} else {
-					textureWall = Manager.GL.loadTextureEmpty();
-				}
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.WALLS, pictureID);
+			if (picture) {
+				textureWall = await this.loadTextureWall(picture, id);
 			} else {
 				textureWall = Manager.GL.loadTextureEmpty();
 			}
