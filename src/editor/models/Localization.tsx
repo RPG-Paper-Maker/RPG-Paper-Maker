@@ -41,7 +41,7 @@ class Localization extends Base {
 	}
 
 	initializeCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
-		const id = command[iterator.i++] as string;
+		const id = '' + command[iterator.i++];
 		const name = command[iterator.i++] as string;
 		this.names.set(id, name);
 	}
