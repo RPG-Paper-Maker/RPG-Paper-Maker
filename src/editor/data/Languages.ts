@@ -14,6 +14,7 @@ import { Model } from '../Editor';
 import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
+import { LANGUAGES_NAMES, LANGUAGES_SHORTS } from '../i18n/i18n';
 
 const { t } = i18next;
 
@@ -145,7 +146,10 @@ class Languages extends Serializable {
 		};
 	};
 
-	private applyTranslations(tFunc: (key: string) => string, setter: (loc: Model.Localization, value: string) => void): void {
+	private applyTranslations(
+		tFunc: (key: string) => string,
+		setter: (loc: Model.Localization, value: string) => void,
+	): void {
 		setter(this.loadAGame, tFunc('load.game'));
 		setter(this.loadAGameDescription, tFunc('load.game.description'));
 		setter(this.slot, tFunc('slot.name'));
@@ -189,6 +193,14 @@ class Languages extends Serializable {
 	}
 
 	translateDefaults(): void {
+		// Default language: same as current language
+		if (this.list[0]) {
+			const index = LANGUAGES_SHORTS.indexOf(i18next.language);
+			if (index !== -1) {
+				this.list[0].kind = index + 1;
+				this.list[0].name = LANGUAGES_NAMES[index];
+			}
+		}
 		this.applyTranslations(t, (loc, value) => loc.updateMainName(value));
 	}
 
