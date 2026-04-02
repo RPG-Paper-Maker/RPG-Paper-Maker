@@ -866,12 +866,12 @@ class Map extends Base {
 				if (!preview) {
 					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 					for (const p of positions) {
-						this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
+						(allowBorders ? this.getMapPortionByPositionWall(p) : this.getMapPortionByPosition(p))?.add(p, preview, removePreview, allowBorders, updateAutotiles);
 					}
 					this.lastTransformPosition = position.clone();
 					this.lastTransformKind = Map.currentSelectedMapElementKind;
 				} else {
-					this.getMapPortionByPosition(position)?.add(
+					(allowBorders ? this.getMapPortionByPositionWall(position) : this.getMapPortionByPosition(position))?.add(
 						position,
 						preview,
 						removePreview,
@@ -1746,7 +1746,7 @@ class Map extends Base {
 				];
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
-					const mapPortion = this.getMapPortionByPosition(newPosition);
+					const mapPortion = this.getMapPortionByPositionWall(newPosition);
 					if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 						const object = mapPortion?.model.objects.get(newPositionKey);
 						if (object) {
@@ -1825,7 +1825,7 @@ class Map extends Base {
 		if (
 			!Inputs.isPointerPressed &&
 			!Inputs.isMouseRightPressed &&
-			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.model))
+			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.model, true))
 		) {
 			this.forEachMapPortions((mapPortion) => {
 				mapPortion.removeLastPreview();
@@ -2241,7 +2241,7 @@ class Map extends Base {
 	}
 
 	drawPointedCoords() {
-		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.model)) {
+		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.model, true)) {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
 			let label: string;
 			if (this.pointedMapElement !== null) {
