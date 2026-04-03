@@ -20,6 +20,7 @@ import { setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
 import Button from '../Button';
+import ErrorBoundary from '../ErrorBoundary';
 import Flex from '../Flex';
 import Loader from '../Loader';
 
@@ -313,7 +314,7 @@ function Dialog({
 				</Flex>
 				<div className='dialogContent'>
 					<Loader isLoading={isLoading} />
-					{children}
+					<ErrorBoundary>{children}</ErrorBoundary>
 				</div>
 				<div className='dialogFooter'>{footer}</div>
 			</div>

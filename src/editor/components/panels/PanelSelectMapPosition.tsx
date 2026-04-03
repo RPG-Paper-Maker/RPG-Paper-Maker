@@ -57,7 +57,8 @@ const PanelSelectMapPosition = forwardRef(
 		};
 
 		const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
-			const tag = node?.content.clone() as Model.TreeMapTag;
+			if (!node) return;
+			const tag = node.content.clone() as Model.TreeMapTag;
 			if (tag.id !== currentMapTag?.id) {
 				if (isClick) {
 					tag.cursorPosition = new Position();
