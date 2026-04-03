@@ -463,12 +463,14 @@ function Tree({
 			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			const index = getNewIndex();
 			const id = currentList[index].content.id;
-			currentList[index].content.copy(nodes[0].content);
-			currentList[index].content.id = id;
+			const cloned = nodes[0].content.clone();
+			cloned.id = id;
+			currentList[index].content = cloned;
 			setCurrentName(currentList[index].content.name);
 			onPasteItem?.(currentList[index], nodes[0]);
 			pasteCutItem();
 			onListUpdated?.();
+			onSelectedItem?.(currentList[index], false);
 		}
 	};
 
