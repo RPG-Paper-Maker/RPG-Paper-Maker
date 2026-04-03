@@ -945,8 +945,16 @@ function Tree({
 		return emptyID;
 	};
 
+	const resetPreviousLinks = (nodes: Node[]) => {
+		for (const node of nodes) {
+			node.previous = null;
+			resetPreviousLinks(node.children);
+		}
+	};
+
 	const getItems = () => {
 		const items: ReactNode[] = [];
+		resetPreviousLinks(list);
 		getTreeItems(list, items);
 		return items;
 	};
