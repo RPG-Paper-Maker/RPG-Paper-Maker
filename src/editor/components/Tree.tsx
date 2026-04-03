@@ -433,7 +433,7 @@ function Tree({
 				currentList[index].content.id = id;
 				setCurrentName(currentList[index].content.name);
 			} else {
-				index++;
+				index += Math.max(1, currentSelectedItemNode.content.getSelectionNextIndexes());
 				for (const node of nodes) {
 					cloned = node.clone();
 					if (firstCloned === null) {
@@ -550,7 +550,8 @@ function Tree({
 			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			node = Node.create(model);
 			node.parent = currentSelectedItemNode.parent;
-			ArrayUtils.insertAt(currentList, getNewIndex() + 1, node);
+			const selectionIndexes = currentSelectedItemNode.content.getSelectionNextIndexes();
+			ArrayUtils.insertAt(currentList, getNewIndex() + Math.max(1, selectionIndexes), node);
 			onCreateItem?.(node);
 			onAccept?.(node, true);
 		} else {
@@ -865,7 +866,7 @@ function Tree({
 		let selectNextIndexes = 0;
 		for (const [index, node] of nodes.entries()) {
 			const nbSelectionNextIndex = node.content.getSelectionNextIndexes();
-			const nextNode = nodes[index + nbSelectionNextIndex + 1] ?? emptyNode;
+			const nextNode = nodes[index + Math.max(nbSelectionNextIndex, 1)] ?? emptyNode;
 			node.next = nextNode;
 			if (nextNode && !nextNode.previous) {
 				nextNode.previous = node;
