@@ -301,6 +301,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 			applyDefault
 			byIndex
 			cannotUpdateListSize
+			canBeEmpty
 		/>
 	);
 
@@ -344,7 +345,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							/>
 						</Flex>
 					</Flex>
-					<Flex columnMobile one>
+					<Flex columnMobile spaced one>
 						<Flex>
 							<Groupbox title={t('frames')} fillWidth disabled={isAnimationDisabled || isPlaying}>
 								<Tree
