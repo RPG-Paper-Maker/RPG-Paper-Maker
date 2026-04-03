@@ -32,6 +32,10 @@ class Asset extends Base {
 		return '';
 	}
 
+	async getPathOrBase64(): Promise<string> {
+		return this.getPath();
+	}
+
 	applyDefault(additionnalBinding: BindingType[]): void {
 		super.applyDefault(Asset.getBindings(additionnalBinding));
 	}
