@@ -1478,8 +1478,12 @@ class Map extends Base {
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		Manager.GL.raycaster.layers.set(RAYCASTING_LAYER.PLANE);
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
-		const meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
 		const planeGridY = this.meshPlane!.position.y;
+		// When layer mode is on for floors, ignore hits strictly below the grid plane to prevent cursor glitching
+		if (isLayerOn && !isSpriteOptionSelected) {
+			intersects = intersects.filter((i) => i.point.y >= planeGridY - Constants.PRECISION_POSITION);
+		}
+		const meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
 		const isPlane =
 			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
 		if (isPlane) {
