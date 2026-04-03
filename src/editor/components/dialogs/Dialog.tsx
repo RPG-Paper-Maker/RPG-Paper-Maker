@@ -139,15 +139,16 @@ function Dialog({
 		if (dialogRef.current && !isResizing) {
 			let cursor = '';
 			const rect = dialogRef.current.getBoundingClientRect();
-			const isBottom = e.clientY >= rect.y + rect.height - RESIZING_SPACE;
-			if (e.clientX >= rect.x + rect.width - RESIZING_SPACE) {
+			const isBottom =
+				e.clientY >= rect.y + rect.height - RESIZING_SPACE && e.clientY <= rect.y + rect.height;
+			if (e.clientX >= rect.x + rect.width - RESIZING_SPACE && e.clientX <= rect.x + rect.width) {
 				if (isBottom) {
 					cursor = 'nwse-resize';
 				} else {
 					cursor = 'ew-resize';
 				}
 				resizingSide.left = false;
-			} else if (e.clientX <= rect.x + RESIZING_SPACE) {
+			} else if (e.clientX >= rect.x && e.clientX <= rect.x + RESIZING_SPACE) {
 				if (isBottom) {
 					cursor = 'nesw-resize';
 				} else {
