@@ -950,6 +950,7 @@
 	"turn": "Vuelta",
 	"restrictions": "Restricciones",
 	"battler.position": "Posición de battler",
+	"release.if.dead": "Liberar si muere",
 	"release.at.end.battle": "Suelta al final de la pelea",
 	"chance.after.being.attacked": "De probabilidad después de ser atacado",
 	"release.at.start.turn": "Suelta al inicio del turno",

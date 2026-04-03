@@ -37,6 +37,7 @@ const PanelStatus = forwardRef((props, ref) => {
 	const [restrictionKind, setRestrictionKind] = useStateNumber();
 	const [priority, setPriority] = useStateDynamicValue();
 	const [battlerPosition, setBattlerPosition] = useStateDynamicValue();
+	const [isReleaseIfDead, setIsReleaseIfDead] = useStateBool();
 	const [isReleaseAtEndBattle, setIsReleaseAtEndBattle] = useStateBool();
 	const [isReleaseAfterAttacked, setIsReleaseAfterAttacked] = useStateBool();
 	const [chanceReleaseAfterAttacked, setChanceReleaseAfterAttacked] = useStateDynamicValue();
@@ -66,6 +67,7 @@ const PanelStatus = forwardRef((props, ref) => {
 			setRestrictionKind(status.restrictionKind);
 			setPriority(status.priority);
 			setBattlerPosition(status.battlerPosition);
+			setIsReleaseIfDead(status.isReleaseIfDead);
 			setIsReleaseAtEndBattle(status.isReleaseAtEndBattle);
 			setIsReleaseAfterAttacked(status.isReleaseAfterAttacked);
 			setChanceReleaseAfterAttacked(status.chanceReleaseAfterAttacked);
@@ -91,6 +93,13 @@ const PanelStatus = forwardRef((props, ref) => {
 		setRestrictionKind(n);
 		if (selectedstatus) {
 			selectedstatus.restrictionKind = n;
+		}
+	};
+
+	const handleChangeIsReleaseIfDead = (b: boolean) => {
+		setIsReleaseIfDead(b);
+		if (selectedstatus) {
+			selectedstatus.isReleaseIfDead = b;
 		}
 	};
 
@@ -209,6 +218,13 @@ const PanelStatus = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('release.conditions')} disabled={isStatusDisabled} fillWidth>
 							<Flex column spacedLarge fillHeight>
+								<Checkbox
+									isChecked={isReleaseIfDead}
+									onChange={handleChangeIsReleaseIfDead}
+									disabled={isStatusDisabled}
+								>
+									{t('release.if.dead')}
+								</Checkbox>
 								<Checkbox
 									isChecked={isReleaseAtEndBattle}
 									onChange={handleChangeIsReleaseAtEndBattle}

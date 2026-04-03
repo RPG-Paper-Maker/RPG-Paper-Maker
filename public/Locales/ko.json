@@ -951,6 +951,7 @@
 	"turn": "턴",
 	"restrictions": "제한 사항",
 	"battler.position": "전투원 위치",
+	"release.if.dead": "사망 시 해제",
 	"release.at.end.battle": "전투 종료 시 해제",
 	"chance.after.being.attacked": "피격 후 확률",
 	"release.at.start.turn": "턴 시작 시 해제",

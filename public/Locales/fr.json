@@ -950,6 +950,7 @@
 	"turn": "Tour",
 	"restrictions": "Restrictions",
 	"battler.position": "Position de battler",
+	"release.if.dead": "Libération si mort",
 	"release.at.end.battle": "Libération à la fin du combat",
 	"chance.after.being.attacked": "De chance après avoir été attaqué",
 	"release.at.start.turn": "Libération au début du tour",

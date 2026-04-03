@@ -950,6 +950,7 @@
 	"turn": "Zug",
 	"restrictions": "Einschränkungen",
 	"battler.position": "Kämpferposition",
+	"release.if.dead": "Bei Tod aufheben",
 	"release.at.end.battle": "Nach Kampfende aufheben",
 	"chance.after.being.attacked": "Ändere nach Angriff vom Feind",
 	"release.at.start.turn": "Bei Zugstart aufheben",

@@ -950,6 +950,7 @@
 	"turn": "Tura",
 	"restrictions": "Ograniczenia",
 	"battler.position": "Pozycja Battlera",
+	"release.if.dead": "Zwolnij przy śmierci",
 	"release.at.end.battle": "Zwolnij na koniec walki",
 	"chance.after.being.attacked": "Szansy po ataku",
 	"release.at.start.turn": "Zwolnij na początku tury",

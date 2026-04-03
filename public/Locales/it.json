@@ -950,6 +950,7 @@
 	"turn": "Turno",
 	"restrictions": "Restrizioni",
 	"battler.position": "Posizione battler",
+	"release.if.dead": "Rimosso se morto",
 	"release.at.end.battle": "Rimosso a fine battaglia",
 	"chance.after.being.attacked": "Probabilità dopo essere stati attaccati",
 	"release.at.start.turn": "Rimosso a inizio turno",

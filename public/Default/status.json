@@ -3,6 +3,7 @@
 		{
 			"battlerPosition": { "k": 3, "v": 8 },
 			"id": 1,
+			"isReleaseIfDead": false,
 			"names": { "1": "KO" },
 			"pictureIndexX": 2,
 			"pictureIndexY": 4,

@@ -38,6 +38,7 @@ class ProjectUpdater {
 		'3.0.45',
 		'3.0.48',
 		'3.0.49',
+		'3.0.50',
 	];
 
 	static isIncompatibleVersion(version: string) {

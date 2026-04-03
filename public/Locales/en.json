@@ -950,6 +950,7 @@
 	"turn": "Turn",
 	"restrictions": "Restrictions",
 	"battler.position": "Battler position",
+	"release.if.dead": "Release if dead",
 	"release.at.end.battle": "Release at end of battle",
 	"chance.after.being.attacked": "Chance after being attacked",
 	"release.at.start.turn": "Release at the start of turn",

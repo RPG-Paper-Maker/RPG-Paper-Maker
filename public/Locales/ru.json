@@ -950,6 +950,7 @@
 	"turn": "перемена",
 	"restrictions": "Ограничения",
 	"battler.position": "Позиция бойца",
+	"release.if.dead": "Снять при смерти",
 	"release.at.end.battle": "Отпустите в конце боя",
 	"chance.after.being.attacked": "Повезло после нападения",
 	"release.at.start.turn": "Отпустить в начале поворота",

@@ -23,6 +23,7 @@ class Status extends Icon {
 	public restrictionKind!: STATUS_RESTRICTIONS_KIND;
 	public priority!: DynamicValue;
 	public battlerPosition!: DynamicValue;
+	public isReleaseIfDead!: boolean;
 	public isReleaseAtEndBattle!: boolean;
 	public isReleaseAfterAttacked!: boolean;
 	public chanceReleaseAfterAttacked!: DynamicValue;
@@ -58,6 +59,7 @@ class Status extends Icon {
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
+		['isReleaseIfDead', 'isReleaseIfDead', true, BINDING.BOOLEAN],
 		['isReleaseAtEndBattle', 'isReleaseAtEndBattle', false, BINDING.BOOLEAN],
 		['isReleaseAfterAttacked', 'isReleaseAfterAttacked', false, BINDING.BOOLEAN],
 		[
