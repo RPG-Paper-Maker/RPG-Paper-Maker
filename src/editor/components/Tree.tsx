@@ -285,6 +285,9 @@ function Tree({
 	};
 
 	const handleDoubleClick = async () => {
+		if (disabled) {
+			return;
+		}
 		if (!hasCustomItems && (!cannotAddEditRemoveRoot || currentSelectedItemNode !== list[0])) {
 			if (isEmpty) {
 				await handleNewItem();
@@ -691,6 +694,9 @@ function Tree({
 	};
 
 	const handleSetFocus = (b: boolean) => {
+		if (b && disabled) {
+			return;
+		}
 		RPM.isFocusingTree = b;
 		setIsFocused(b);
 	};
