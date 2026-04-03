@@ -196,7 +196,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 						</Flex>
 						<Flex column spaced>
 							<div>{t('level.up')}:</div>
-							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleLevelUpSelectorRef} />
+							<PlaySongSelector songKind={SONG_KIND.MUSIC_EFFECT} ref={playBattleLevelUpSelectorRef} />
 						</Flex>
 						<Flex column spaced>
 							<div>{t('victory')}:</div>
