@@ -27,14 +27,7 @@ import {
 	SPRITE_WALL_TYPE,
 	Utils,
 } from '../common';
-import {
-	checkFileExists,
-	createFile,
-	createFolder,
-	getFiles,
-	moveFile,
-	readJSON,
-} from '../common/Platform';
+import { checkFileExists, createFile, createFolder, getFiles, moveFile, readJSON } from '../common/Platform';
 import { Battler } from '../core/Battler';
 import { Cursor } from '../core/Cursor';
 import { CursorWall } from '../core/CursorWall';
@@ -347,6 +340,7 @@ class Map extends Base {
 
 		this.loading = false;
 		this.initialized = true;
+		this.requestPaintHUD = true;
 	}
 
 	async loadBattlers() {
@@ -864,18 +858,21 @@ class Map extends Base {
 				if (!preview) {
 					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 					for (const p of positions) {
-						(allowBorders ? this.getMapPortionByPositionWall(p) : this.getMapPortionByPosition(p))?.add(p, preview, removePreview, allowBorders, updateAutotiles);
+						(allowBorders ? this.getMapPortionByPositionWall(p) : this.getMapPortionByPosition(p))?.add(
+							p,
+							preview,
+							removePreview,
+							allowBorders,
+							updateAutotiles,
+						);
 					}
 					this.lastTransformPosition = position.clone();
 					this.lastTransformKind = Map.currentSelectedMapElementKind;
 				} else {
-					(allowBorders ? this.getMapPortionByPositionWall(position) : this.getMapPortionByPosition(position))?.add(
-						position,
-						preview,
-						removePreview,
-						allowBorders,
-						updateAutotiles,
-					);
+					(allowBorders
+						? this.getMapPortionByPositionWall(position)
+						: this.getMapPortionByPosition(position)
+					)?.add(position, preview, removePreview, allowBorders, updateAutotiles);
 				}
 				break;
 			}
@@ -1854,6 +1851,7 @@ class Map extends Base {
 	onMouseDown() {
 		if (Inputs.isSHIFT) {
 			this.camera.onMouseWheelUpdate(this === Map.current);
+			this.requestPaintHUD = true;
 		} else if (
 			!Inputs.isMouseWheelPressed &&
 			(Inputs.isCTRL || (!this.canEdit && !this.isDetection)) &&
@@ -1977,6 +1975,7 @@ class Map extends Base {
 		}
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
 			this.camera.onMouseWheelUpdate(this === Map.current);
+			this.requestPaintHUD = true;
 		} else {
 			// Avoid to draw undesired new preview
 			if (!this.mouseUp) {
@@ -2003,6 +2002,7 @@ class Map extends Base {
 					this.needsUpdateRaycasting = true;
 				} else {
 					this.camera.onMouseWheelUpdate(this === Map.current);
+					this.requestPaintHUD = true;
 				}
 			}
 		}
@@ -2277,9 +2277,88 @@ class Map extends Base {
 				this.drawCursorCoords();
 				this.drawPointedCoords();
 				this.drawLayersOnCursor();
+				this.drawCompass();
 			}
 			this.requestPaintHUD = false;
 		}
+	}
+
+	drawCompass() {
+		const ctx = Map.ctxHUD!;
+		const canvasW = Map.canvasHUD!.width / window.devicePixelRatio;
+		const radius = 40;
+		const padding = 14;
+		const cx = canvasW - radius - padding;
+		const cy = radius + padding;
+
+		const angleRad = (this.camera.horizontalAngle * Math.PI) / 180;
+		const compassRot = Math.atan2(Math.cos(angleRad), -Math.sin(angleRad));
+
+		ctx.save();
+		ctx.translate(cx, cy);
+
+		// Background circle
+		ctx.beginPath();
+		ctx.arc(0, 0, radius, 0, Math.PI * 2);
+		ctx.fillStyle = 'rgba(20, 20, 40, 0.65)';
+		ctx.fill();
+		ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+		ctx.lineWidth = 1;
+		ctx.lineJoin = 'miter';
+		ctx.stroke();
+
+		// Rotate for compass direction
+		ctx.rotate(compassRot);
+
+		const arrowLen = radius * 0.7;
+		const arrowHalfW = radius * 0.18;
+
+		// North arrow (red)
+		ctx.beginPath();
+		ctx.moveTo(0, -arrowLen);
+		ctx.lineTo(arrowHalfW, 0);
+		ctx.lineTo(-arrowHalfW, 0);
+		ctx.closePath();
+		ctx.fillStyle = '#25bbb9';
+		ctx.fill();
+
+		// South arrow (light grey)
+		ctx.beginPath();
+		ctx.moveTo(0, arrowLen);
+		ctx.lineTo(arrowHalfW, 0);
+		ctx.lineTo(-arrowHalfW, 0);
+		ctx.closePath();
+		ctx.fillStyle = 'rgba(180, 180, 180, 0.8)';
+		ctx.fill();
+
+		// Center dot
+		ctx.beginPath();
+		ctx.arc(0, 0, 3, 0, Math.PI * 2);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+
+		// Cardinal direction labels (rotate with the compass)
+		ctx.font = 'bold 10px sans-serif';
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.lineJoin = 'round';
+		ctx.lineWidth = 2.5;
+		const labelDist = radius * 0.86;
+
+		const labels: [string, number, number, string][] = [
+			['N', 0, -labelDist, '#25bbb9'],
+			['S', 0, labelDist, 'rgba(220, 220, 220, 0.9)'],
+			['E', labelDist, 0, 'rgba(220, 220, 220, 0.9)'],
+			['W', -labelDist, 0, 'rgba(220, 220, 220, 0.9)'],
+		];
+		for (const [text, lx, ly, color] of labels) {
+			ctx.strokeStyle = '#29273d';
+			ctx.strokeText(text, lx, ly);
+			ctx.fillStyle = color;
+			ctx.fillText(text, lx, ly);
+		}
+
+		ctx.restore();
 	}
 
 	close() {

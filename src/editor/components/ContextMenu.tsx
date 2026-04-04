@@ -86,6 +86,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		setTimerID(undefined);
 	};
 
+
 	useEffect(() => {
 		const handleMouseDownOutside = (e: MouseEvent) => {
 			const isOutComplete = refComplete.current && !refComplete.current.contains(e.target as Node);
