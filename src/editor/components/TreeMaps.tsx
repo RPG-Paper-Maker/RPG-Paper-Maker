@@ -372,6 +372,7 @@ function TreeMaps({
 				cannotAdd
 				applyDefault
 				scrollable
+				blurOnMouseLeave
 			/>
 			{isOpenMapProperties && (
 				<DialogMapProperties

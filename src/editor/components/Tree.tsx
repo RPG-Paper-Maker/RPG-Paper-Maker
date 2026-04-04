@@ -86,6 +86,7 @@ type Props = {
 	doNotOpenDialog?: boolean;
 	inputNameWidth?: INPUT_TYPE_WIDTH;
 	hideTooltip?: boolean;
+	blurOnMouseLeave?: boolean;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -142,11 +143,13 @@ function Tree({
 	doNotOpenDialog = false,
 	inputNameWidth = INPUT_TYPE_WIDTH.SMALL,
 	hideTooltip = false,
+	blurOnMouseLeave = false,
 }: Props) {
 	const { t } = useTranslation();
 
 	const listRef = useRef<HTMLDivElement>(null);
 	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
+	const handleSetFocusRef = useRef<(b: boolean) => void>(() => {});
 
 	const createDefault = (id: number) => {
 		if (applyDefault) {
@@ -705,6 +708,16 @@ function Tree({
 		RPM.isFocusingTree = b;
 		setIsFocused(b);
 	};
+	handleSetFocusRef.current = handleSetFocus;
+
+	useEffect(() => {
+		if (!blurOnMouseLeave) return;
+		const el = listRef.current;
+		if (!el) return;
+		const handleMouseDown = () => handleSetFocusRef.current(true);
+		el.addEventListener('mousedown', handleMouseDown);
+		return () => el.removeEventListener('mousedown', handleMouseDown);
+	}, [blurOnMouseLeave]);
 
 	useLayoutEffect(() => {
 		if (
@@ -1135,6 +1148,23 @@ function Tree({
 				<div
 					onDoubleClick={handleDoubleClick}
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
+					onMouseLeave={
+						blurOnMouseLeave
+							? (e) => {
+									const rect = listRef.current?.getBoundingClientRect();
+									if (
+										rect &&
+										e.clientX >= rect.left &&
+										e.clientX <= rect.right &&
+										e.clientY >= rect.top &&
+										e.clientY <= rect.bottom
+									) {
+										return;
+									}
+									handleSetFocusRef.current(false);
+								}
+							: undefined
+					}
 					className={Utils.getClassName(
 						{ disabled, zeroHeightNoMobile: scrollable, focused: isFocused },
 						'tree',
