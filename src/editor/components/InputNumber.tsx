@@ -57,6 +57,10 @@ function InputNumber({
 		}
 	})();
 
+	const handleFocus = () => {
+		Inputs.isMapFocused = false;
+	};
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsTyping(true);
 		Inputs.isMapFocused = false;
@@ -95,14 +99,12 @@ function InputNumber({
 
 	useEffect(() => {
 		if (isTyping) {
-			const handleUp = () => {
+			const handleMouseUp = () => {
 				Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
 			};
-			document.addEventListener('mouseup', handleUp);
-			document.addEventListener('keyup', handleUp);
+			document.addEventListener('mouseup', handleMouseUp);
 			return () => {
-				document.removeEventListener('mouseup', handleUp);
-				document.removeEventListener('keyup', handleUp);
+				document.removeEventListener('mouseup', handleMouseUp);
 			};
 		}
 	}, [isTyping]);
@@ -115,7 +117,10 @@ function InputNumber({
 					min={min}
 					max={max}
 					value={displayedValue}
-					onFocus={() => setFocused(true)}
+					onFocus={() => {
+						setFocused(true);
+						handleFocus();
+					}}
 					onBlur={() => {
 						setFocused(false);
 						handleBlur();
@@ -141,6 +146,7 @@ function InputNumber({
 			min={min}
 			max={max}
 			value={displayedValue}
+			onFocus={handleFocus}
 			onBlur={handleBlur}
 			onChange={handleChange}
 			step='any'
