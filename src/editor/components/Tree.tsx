@@ -530,7 +530,7 @@ function Tree({
 				node.willBeDeleted = true;
 			}
 			getTreeItems(list, []);
-			const nextNode = nodes[nodes.length - 1].next;
+			const nextNode = nodes[nodes.length - 1].next ?? nodes[0].previous ?? null;
 			for (const node of nodes) {
 				ArrayUtils.removeElement(node.parent?.children ?? list, node);
 				onDeleteItem?.(node);
