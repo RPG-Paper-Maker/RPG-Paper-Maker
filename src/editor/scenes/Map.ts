@@ -29,12 +29,11 @@ import {
 } from '../common';
 import {
 	checkFileExists,
-	copyFile,
 	createFile,
 	createFolder,
 	getFiles,
+	moveFile,
 	readJSON,
-	removeFile,
 } from '../common/Platform';
 import { Battler } from '../core/Battler';
 import { Cursor } from '../core/Cursor';
@@ -442,11 +441,10 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.model.save();
-		const filesPaths = await getFiles(Paths.join(this.model.getPath(), Paths.TEMP));
-		for (const path of filesPaths) {
-			const list = path.split('/');
-			await copyFile(path, Paths.join(this.model.getPath(), list[list.length - 1]));
-			await removeFile(path);
+		const tempPath = Paths.join(this.model.getPath(), Paths.TEMP);
+		const fileNames = await getFiles(tempPath);
+		for (const fileName of fileNames) {
+			await moveFile(Paths.join(tempPath, fileName), Paths.join(this.model.getPath(), fileName));
 		}
 		this.loading = false;
 	}
