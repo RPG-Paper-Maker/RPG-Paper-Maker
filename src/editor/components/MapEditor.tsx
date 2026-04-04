@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowAltCircleUp } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, SPECIAL_KEY, Utils } from '../common';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, RPM, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
@@ -143,7 +143,7 @@ function MapEditor() {
 				dispatch(setNeedsUpdateMapEditor());
 				map.needsUpdateComponent = false;
 			}
-			if (Inputs.isMapFocused && !map.loading && Inputs.keys.length > 0) {
+			if (Inputs.isMapFocused && !RPM.isFocusingTree && !map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
