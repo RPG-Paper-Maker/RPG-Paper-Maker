@@ -121,6 +121,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	const handleRejectCommand = () => {
 		if (!isNew) {
 			setIsOpen(false);
+			onReject();
 		}
 		setIsOpenCommand(false);
 	};

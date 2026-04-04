@@ -562,10 +562,12 @@ function Tree({
 		setCurrentSelectedItemNode(node);
 		onSelectedItem?.(node, false);
 		onListUpdated?.();
+		handleSetFocus(true);
 	};
 
 	const handleRejectDialog = () => {
 		setNewModel(null);
+		handleSetFocus(true);
 	};
 
 	const removeDragDropClasses = (target: HTMLElement) => {
