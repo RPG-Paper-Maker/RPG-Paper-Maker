@@ -39,15 +39,17 @@ function PanelLoading({ setLoaded }: Props) {
 		Constants.IS_MOBILE = Utils.isMobile();
 		Constants.IS_DESKTOP = Utils.isDesktop();
 		Paths.DIST = Paths.join(Constants.IS_DESKTOP ? window.env.appPath : window.__dirname, 'dist');
-		IO.on('before-close', async () => {
-			if (Scene.Map.current?.savePortionsTempPromise) {
-				await Scene.Map.current.savePortionsTempPromise;
-			}
-			if (Project.current?.loaded) {
-				await Project.current.save();
-			}
-			await IO.invoke('ready-to-close');
-		});
+		if (Constants.IS_DESKTOP) {
+			IO.on('before-close', async () => {
+				if (Scene.Map.current?.savePortionsTempPromise) {
+					await Scene.Map.current.savePortionsTempPromise;
+				}
+				if (Project.current?.loaded) {
+					await Project.current.save();
+				}
+				await IO.invoke('ready-to-close');
+			});
+		}
 		await initializeLocalFiles();
 		await initializeSystemInformation();
 		await initializeEngineSettings();
