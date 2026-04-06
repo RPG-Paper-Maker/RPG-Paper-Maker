@@ -39,10 +39,26 @@ class Battler {
 					);
 			} else {
 				hero = Project.current!.monsters.getByID(this.monsters[index].monsterID);
-				localPosition = centerPosition
-					.toVector3()
-					.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
-					.add(new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE));
+				const troopMonster = this.monsters[index];
+				if (troopMonster.isSpecificPosition) {
+					try {
+						const formula = troopMonster.specificPosition.value as string;
+						const center = new Function('THREE', `return ${formula}`)(THREE) as THREE.Vector3;
+						localPosition = centerPosition.toVector3().add(center);
+					} catch {
+						localPosition = centerPosition
+							.toVector3()
+							.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
+							.add(
+								new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE),
+							);
+					}
+				} else {
+					localPosition = centerPosition
+						.toVector3()
+						.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
+						.add(new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE));
+				}
 			}
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero?.idBattler);
 			let material: THREE.MeshPhongMaterial;
