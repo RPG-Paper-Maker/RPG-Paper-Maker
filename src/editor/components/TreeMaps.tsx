@@ -13,7 +13,7 @@ import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
-import { checkFileExists, copyFolder } from '../common/Platform';
+import { checkFileExists, copyFolder, removeFolder } from '../common/Platform';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
@@ -164,7 +164,12 @@ function TreeMaps({
 				alert(t('warning.could.not.copy.map.created.empty', { path: src }));
 				await map.createNewMap();
 			} else {
-				await copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
+				const dst = Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName());
+				const dstExists = await checkFileExists(dst);
+				if (dstExists) {
+					await removeFolder(dst);
+				}
+				await copyFolder(src, dst);
 				await map.load();
 				map.id = newId;
 				await map.save();
