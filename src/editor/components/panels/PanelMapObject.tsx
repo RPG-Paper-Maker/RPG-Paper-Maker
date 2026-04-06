@@ -148,6 +148,22 @@ const PanelMapObject = forwardRef(
 
 		const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
 
+		const getDisabledModelIds = (): number[] => {
+			const commonObjects = Project.current!.commonEvents.commonObjects;
+			const disabledSet = new Set<number>([object.id]);
+			let changed = true;
+			while (changed) {
+				changed = false;
+				for (const obj of commonObjects) {
+					if (!disabledSet.has(obj.id) && disabledSet.has(obj.commonModelID)) {
+						disabledSet.add(obj.id);
+						changed = true;
+					}
+				}
+			}
+			return Array.from(disabledSet);
+		};
+
 		const handleChangeModelID = (id: number) => {
 			setModelID(id);
 			if (saveOnUpdate) {
@@ -504,6 +520,7 @@ const PanelMapObject = forwardRef(
 								selectedID={modelID}
 								onChange={handleChangeModelID}
 								options={getObjectsList()}
+								disabledIds={getDisabledModelIds()}
 								displayIDs
 							/>
 						</Flex>
