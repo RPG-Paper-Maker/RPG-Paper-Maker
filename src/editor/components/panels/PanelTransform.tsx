@@ -233,7 +233,7 @@ function PanelTransform({ kind }: Props) {
 					position.y = value;
 				} else {
 					position.y = Math.floor(value / Project.SQUARE_SIZE);
-					position.yPixels = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+					position.yPixels = (((value % Project.SQUARE_SIZE) + Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE * 100;
 				}
 				break;
 			case ACTION_KIND.ROTATE:

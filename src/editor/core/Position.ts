@@ -77,10 +77,11 @@ class Position extends Position3D {
 	}
 
 	static createFromVector3(position: THREE.Vector3, rotation?: THREE.Euler, scale?: THREE.Vector3): Position {
+		const roundedY = Math.round(position.y);
 		return new Position(
 			Math.floor(position.x / Project.SQUARE_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE),
-			((Math.round(position.y) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			(((roundedY % Project.SQUARE_SIZE) + Project.SQUARE_SIZE) % Project.SQUARE_SIZE / Project.SQUARE_SIZE) * 100,
 			Math.floor(position.z / Project.SQUARE_SIZE),
 			0,
 			(Math.round(position.x % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
