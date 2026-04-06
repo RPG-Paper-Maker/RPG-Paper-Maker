@@ -166,7 +166,7 @@ class Map extends Localization {
 	getPortionsMax(): [number, number, number, number] {
 		return [
 			Math.floor((this.length - 1) / Constants.PORTION_SIZE),
-			Math.floor((this.depth - 1) / Constants.PORTION_SIZE) + (this.depth > 0 ? 0 : 1),
+			this.depth > 0 ? Math.floor((this.depth - 1) / Constants.PORTION_SIZE) + 1 : 0,
 			Math.floor((this.height - 1) / Constants.PORTION_SIZE),
 			Math.floor((this.width - 1) / Constants.PORTION_SIZE),
 		];
