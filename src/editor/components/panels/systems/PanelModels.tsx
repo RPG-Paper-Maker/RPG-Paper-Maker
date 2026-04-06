@@ -37,6 +37,7 @@ const PanelModels = forwardRef((props, ref) => {
 	const [models, setModels] = useState<Node[]>([]);
 	const [selectedModel, setSelectedModel] = useState<Model.CommonObject | null>(null);
 	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
+	const [modelsVersion, setModelsVersion] = useState(0);
 
 	const isModelDisabled = useMemo(
 		() => selectionType === SELECTION_KIND.LIST && (selectedModel === null || selectedModel.id === -1),
@@ -81,6 +82,11 @@ const PanelModels = forwardRef((props, ref) => {
 		}
 	};
 
+	const handleModelsListUpdated = () => {
+		Project.current!.commonEvents.commonObjects = Node.createListFromNodes(models);
+		setModelsVersion((v) => v + 1);
+	};
+
 	const accept = () => {
 		const commonEvents = Project.current!.commonEvents;
 		commonEvents.commonObjects = Node.createListFromNodes(models);
@@ -118,6 +124,7 @@ const PanelModels = forwardRef((props, ref) => {
 						setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectModel}
+						onListUpdated={handleModelsListUpdated}
 						scrollable
 						showEditName
 						applyDefault
