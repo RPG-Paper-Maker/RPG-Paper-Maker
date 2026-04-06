@@ -789,7 +789,7 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='750px'
+			initialWidth='800px'
 			initialHeight='500px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
