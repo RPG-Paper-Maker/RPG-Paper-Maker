@@ -127,6 +127,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		[collisionTypes, t],
 	);
 	const cursorOffset = useMemo(() => 2 * zoomFactor, [zoomFactor]);
+	const squareSizeFactor = useMemo(() => Project.SQUARE_SIZE / 16, []);
 
 	const initialize = async () => {
 		currentState.mouseX = -1;
@@ -354,7 +355,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					hovered,
 					right,
 					90,
-					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.width + 0.5,
+					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.width * squareSizeFactor + 0.5,
 					Project.SQUARE_SIZE / 4 + 0.5,
 					i,
 					j,
@@ -366,7 +367,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					bot,
 					180,
 					Project.SQUARE_SIZE / 4,
-					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.height,
+					Project.SQUARE_SIZE - Picture2D.PICTURE_DIRECTION.height * squareSizeFactor,
 					i,
 					j,
 				);
@@ -387,8 +388,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					hovered,
 					false,
 					0,
-					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.width / 2,
-					Project.SQUARE_SIZE / 2 - Picture2D.PICTURE_DIRECTION.height / 2,
+					Project.SQUARE_SIZE / 2 - (Picture2D.PICTURE_DIRECTION.width * squareSizeFactor) / 2,
+					Project.SQUARE_SIZE / 2 - (Picture2D.PICTURE_DIRECTION.height * squareSizeFactor) / 2,
 					i,
 					j,
 				);
@@ -412,8 +413,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		if (arrow) {
 			ctx.save();
 			ctx.translate(
-				x + (Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
-				y + (Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor,
+				x + (Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor,
+				y + (Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor,
 			);
 			ctx.rotate((angle * Math.PI) / 180);
 			if (hovered && direction === currentState.hoveredDirection) {
@@ -425,20 +426,20 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				0,
 				Picture2D.PICTURE_DIRECTION.width,
 				Picture2D.PICTURE_DIRECTION.height,
-				-(Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor,
-				-(Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor,
-				Picture2D.PICTURE_DIRECTION.width * zoomFactor,
-				Picture2D.PICTURE_DIRECTION.height * zoomFactor,
+				-(Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor,
+				-(Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor,
+				Picture2D.PICTURE_DIRECTION.width * squareSizeFactor * zoomFactor,
+				Picture2D.PICTURE_DIRECTION.height * squareSizeFactor * zoomFactor,
 			);
 			ctx.restore();
 		} else {
 			ctx.strokeStyle = Constants.COLOR_HOVER_GREY;
 			ctx.lineWidth = 0.5 * zoomFactor;
 			ctx.globalAlpha = 0.5;
-			const x = (i * Project.SQUARE_SIZE + dx - 1 + Picture2D.PICTURE_DIRECTION.width / 2) * zoomFactor;
-			const y = (j * Project.SQUARE_SIZE + dy - 1 + Picture2D.PICTURE_DIRECTION.height / 2) * zoomFactor;
-			const w = 2 * zoomFactor;
-			const h = 2 * zoomFactor;
+			const x = (i * Project.SQUARE_SIZE + dx - squareSizeFactor + Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor;
+			const y = (j * Project.SQUARE_SIZE + dy - squareSizeFactor + Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor;
+			const w = 2 * squareSizeFactor * zoomFactor;
+			const h = 2 * squareSizeFactor * zoomFactor;
 			if (hovered && direction === currentState.hoveredDirection) {
 				ctx.fillStyle = 'white';
 				ctx.fillRect(x, y, w, h);
@@ -449,11 +450,11 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 	};
 
 	const drawStrokeText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color = 'white') => {
-		ctx.font = `${9 * zoomFactor}px sans-serif`;
+		ctx.font = `${9 * squareSizeFactor * zoomFactor}px sans-serif`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
-		ctx.lineWidth = 1 * zoomFactor;
+		ctx.lineWidth = 1 * squareSizeFactor * zoomFactor;
 		ctx.fillStyle = color;
 		ctx.strokeStyle = 'black';
 		ctx.strokeText(text, x, y);
@@ -615,7 +616,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				currentState.hoveredPoint = new Point(x, y).toKey();
 				if (selectedCollisionType === COLLISION_TYPE.DIRECTIONS) {
 					currentState.hoveredDirection = HOVERED_DIRECTION_TYPE.NONE;
-					const size = 6;
+					const size = 6 * squareSizeFactor;
 					const center = new Rectangle(
 						(x * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
 						(y * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - size) / 2) * zoomFactor,
