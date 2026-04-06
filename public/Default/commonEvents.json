@@ -298,7 +298,12 @@
 					{ "id": 2, "name": "Repeat", "v": { "k": 10, "v": false } },
 					{ "id": 3, "name": "Immediate Repeat", "v": { "k": 10, "v": false } }
 				],
-				"r": { "1": { "bh": false, "c": [{ "kind": 19, "command": [1, 7, 1, 1, 0, 1, 1], "children": [] }] } },
+				"r": {
+					"1": {
+						"bh": false,
+						"c": [{ "kind": 19, "command": [1, 7, 1, 1, 0, 1, 1], "children": [] }]
+					}
+				},
 				"sys": true
 			},
 			{
@@ -309,7 +314,12 @@
 					{ "id": 2, "name": "Repeat", "v": { "k": 10, "v": false } },
 					{ "id": 3, "name": "Immediate Repeat", "v": { "k": 10, "v": false } }
 				],
-				"r": { "1": { "bh": false, "c": [{ "kind": 11, "command": [], "children": [] }] } },
+				"r": {
+					"1": {
+						"bh": false,
+						"c": [{ "kind": 11, "command": [], "children": [] }]
+					}
+				},
 				"sys": true
 			},
 			{
@@ -319,7 +329,12 @@
 					{ "id": 1, "name": "Interval", "v": { "k": 2, "v": null } },
 					{ "id": 2, "name": "Repeat", "v": { "k": 2, "v": null } }
 				],
-				"r": { "1": { "bh": false, "c": [{ "kind": 19, "command": [1, 7, 2, 1, 0, 1, 3], "children": [] }] } },
+				"r": {
+					"1": {
+						"bh": false,
+						"c": [{ "kind": 19, "command": [1, 7, 2, 1, 0, 1, 3], "children": [] }]
+					}
+				},
 				"sys": true
 			},
 			{
@@ -340,53 +355,103 @@
 								"command": [
 									0,
 									7,
-									8,
-									"Core.ReactionInterpreter.currentParameters.get(1).getValue() <= (Common.ScreenResolution.CANVAS_WIDTH - Common.ScreenResolution.getScreenX(64)) / 2"
+									9,
+									"!['UpHero','DownHero','LeftHero','RightHero'].some(abr => [...Common.Inputs.keysPressed].some(k => Data.Keyboards.isKeyEqual(k, Data.Keyboards.controls[abr])))"
 								],
-								"children": [{ "kind": 21, "command": [7, -1, 1, 1, 1, 2, 1], "children": [] }]
+								"children": [
+									{
+										"kind": 8,
+										"command": [
+											0,
+											7,
+											8,
+											"Core.ReactionInterpreter.currentParameters.get(1).getValue() <= (Common.ScreenResolution.CANVAS_WIDTH - Common.ScreenResolution.getScreenX(64)) / 2"
+										],
+										"children": [
+											{
+												"kind": 21,
+												"command": [7, -1, 1, 1, 1, 2, 1],
+												"children": []
+											}
+										]
+									},
+									{ "kind": 10, "command": [], "children": [] },
+									{
+										"kind": 8,
+										"command": [
+											0,
+											7,
+											8,
+											"Core.ReactionInterpreter.currentParameters.get(1).getValue() >= (Common.ScreenResolution.CANVAS_WIDTH + Common.ScreenResolution.getScreenX(64)) / 2"
+										],
+										"children": [
+											{
+												"kind": 21,
+												"command": [7, -1, 1, 1, 1, 3, 1],
+												"children": []
+											}
+										]
+									},
+									{ "kind": 10, "command": [], "children": [] },
+									{
+										"kind": 8,
+										"command": [
+											0,
+											7,
+											8,
+											"Core.ReactionInterpreter.currentParameters.get(2).getValue() <= (Common.ScreenResolution.CANVAS_HEIGHT - Common.ScreenResolution.getScreenY(64)) / 2"
+										],
+										"children": [
+											{
+												"kind": 21,
+												"command": [7, -1, 1, 1, 1, 0, 1],
+												"children": []
+											}
+										]
+									},
+									{ "kind": 10, "command": [], "children": [] },
+									{
+										"kind": 8,
+										"command": [
+											0,
+											7,
+											8,
+											"Core.ReactionInterpreter.currentParameters.get(2).getValue() >= (Common.ScreenResolution.CANVAS_HEIGHT + Common.ScreenResolution.getScreenY(64)) / 2"
+										],
+										"children": [
+											{
+												"kind": 21,
+												"command": [7, -1, 1, 1, 1, 1, 1],
+												"children": []
+											}
+										]
+									},
+									{ "kind": 10, "command": [], "children": [] },
+									{
+										"kind": 19,
+										"command": [1, 7, 2, 1, 0, 1, 2],
+										"children": []
+									},
+									{
+										"kind": 8,
+										"command": [0, 0, 6, 2, 0, 10, true],
+										"children": [
+											{
+												"kind": 19,
+												"command": [1, 7, 1, 1, 0, 1, 1],
+												"children": []
+											}
+										]
+									},
+									{ "kind": 10, "command": [], "children": [] },
+									{
+										"kind": 30,
+										"command": [7, 2, 0, 10, false],
+										"children": []
+									}
+								]
 							},
-							{ "kind": 10, "command": [], "children": [] },
-							{
-								"kind": 8,
-								"command": [
-									0,
-									7,
-									8,
-									"Core.ReactionInterpreter.currentParameters.get(1).getValue() >= (Common.ScreenResolution.CANVAS_WIDTH + Common.ScreenResolution.getScreenX(64)) / 2"
-								],
-								"children": [{ "kind": 21, "command": [7, -1, 1, 1, 1, 3, 1], "children": [] }]
-							},
-							{ "kind": 10, "command": [], "children": [] },
-							{
-								"kind": 8,
-								"command": [
-									0,
-									7,
-									8,
-									"Core.ReactionInterpreter.currentParameters.get(2).getValue() <= (Common.ScreenResolution.CANVAS_HEIGHT - Common.ScreenResolution.getScreenY(64)) / 2"
-								],
-								"children": [{ "kind": 21, "command": [7, -1, 1, 1, 1, 0, 1], "children": [] }]
-							},
-							{ "kind": 10, "command": [], "children": [] },
-							{
-								"kind": 8,
-								"command": [
-									0,
-									7,
-									8,
-									"Core.ReactionInterpreter.currentParameters.get(2).getValue() >= (Common.ScreenResolution.CANVAS_HEIGHT + Common.ScreenResolution.getScreenY(64)) / 2"
-								],
-								"children": [{ "kind": 21, "command": [7, -1, 1, 1, 1, 1, 1], "children": [] }]
-							},
-							{ "kind": 10, "command": [], "children": [] },
-							{ "kind": 19, "command": [1, 7, 2, 1, 0, 1, 2], "children": [] },
-							{
-								"kind": 8,
-								"command": [0, 0, 6, 2, 0, 10, true],
-								"children": [{ "kind": 19, "command": [1, 7, 1, 1, 0, 1, 1], "children": [] }]
-							},
-							{ "kind": 10, "command": [], "children": [] },
-							{ "kind": 30, "command": [7, 2, 0, 10, false], "children": [] }
+							{ "kind": 10, "command": [], "children": [] }
 						]
 					}
 				},
@@ -400,7 +465,12 @@
 					{ "id": 2, "name": "y", "v": { "k": 1, "v": null } },
 					{ "id": 3, "name": "Left", "v": { "k": 2, "v": null } }
 				],
-				"r": { "1": { "bh": false, "c": [{ "kind": 30, "command": [7, 2, 0, 10, true], "children": [] }] } },
+				"r": {
+					"1": {
+						"bh": false,
+						"c": [{ "kind": 30, "command": [7, 2, 0, 10, true], "children": [] }]
+					}
+				},
 				"sys": true
 			}
 		],
