@@ -532,7 +532,12 @@ const exists = async (path) => {
 ipcMain.handle('check-file-exists', async (event, path) => await exists(path));
 
 ipcMain.handle('get-folders-files', async (event, path) => {
-	const all = await fs.readdir(path, { withFileTypes: true });
+	let all;
+	try {
+		all = await fs.readdir(path, { withFileTypes: true });
+	} catch {
+		return [[], []];
+	}
 	const folders = [];
 	const files = [];
 	for (const file of all) {
@@ -542,12 +547,22 @@ ipcMain.handle('get-folders-files', async (event, path) => {
 });
 
 ipcMain.handle('get-folders', async (event, path) => {
-	const files = await fs.readdir(path, { withFileTypes: true });
+	let files;
+	try {
+		files = await fs.readdir(path, { withFileTypes: true });
+	} catch {
+		return [];
+	}
 	return files.filter((file) => file.isDirectory()).map((folder) => folder.name);
 });
 
 ipcMain.handle('get-files', async (event, path) => {
-	const files = await fs.readdir(path, { withFileTypes: true });
+	let files;
+	try {
+		files = await fs.readdir(path, { withFileTypes: true });
+	} catch {
+		return [];
+	}
 	return files.filter((file) => !file.isDirectory()).map((folder) => folder.name);
 });
 
