@@ -178,6 +178,7 @@ function Tree({
 	const [isOpenDialog, setIsOpenDialog] = useState(false);
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);
 	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
+	const pendingSingleSelectNode = useRef<Node | null>(null);
 	const [currentName, setCurrentName] = useStateString();
 	const [needScroll, setNeedScroll] = useState(false);
 	const [isFocused, setIsFocused] = useState(false);
@@ -262,6 +263,9 @@ function Tree({
 
 	const handleMouseDownItem = (node: Node) => {
 		if (currentSelectedItemNode === node) {
+			if (multipleSelection && additionalSelectedNodes.length > 0) {
+				pendingSingleSelectNode.current = node;
+			}
 			return;
 		}
 		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL) && currentSelectedItemNode) {
@@ -277,6 +281,8 @@ function Tree({
 					setAdditionalSelectedNodes(additionalSelectedNodes.slice(1));
 				}
 			}
+		} else if (multipleSelection && additionalSelectedNodes.some((n) => n.content.id === node.content.id)) {
+			pendingSingleSelectNode.current = node;
 		} else {
 			setCurrentSelectedItemNode(node);
 			setAdditionalSelectedNodes([]);
@@ -607,7 +613,17 @@ function Tree({
 	};
 
 	const handleDragStart = (event: React.DragEvent, node: Node) => {
+		pendingSingleSelectNode.current = null;
 		setDraggedNode(node);
+	};
+
+	const isMultiDrag = () =>
+		additionalSelectedNodes.length > 0 &&
+		(draggedNode === currentSelectedItemNode || additionalSelectedNodes.some((n) => n === draggedNode));
+
+	const getDraggedNodes = (): Node[] => {
+		if (!draggedNode) return [];
+		return isMultiDrag() ? getCorrectSelectedNodes() : getCompleteNodes(draggedNode);
 	};
 
 	const handleDragOver = async (event: React.DragEvent, node: Node, onlyTop = false) => {
@@ -615,11 +631,13 @@ function Tree({
 		const target = event.currentTarget as HTMLElement;
 		if (draggedNode) {
 			event.dataTransfer.dropEffect = 'move';
-			if (
-				(byIndex || draggedNode.content.id !== node.content.id) &&
-				!checkNodeInsideNode(draggedNode, node) &&
-				!Node.checkIDExists(draggedNode.children, node.content.id)
-			) {
+			const draggedNodes = getDraggedNodes();
+			const isDraggedNode = byIndex
+				? draggedNodes.includes(node)
+				: draggedNodes.some((n) => n.content.id === node.content.id);
+			const isInsideAny = draggedNodes.some((n) => checkNodeInsideNode(n, node));
+			const isChildOfAny = draggedNodes.some((n) => Node.checkIDExists(n.children, node.content.id));
+			if (!isDraggedNode && !isInsideAny && !isChildOfAny) {
 				removeDragDropClasses(target);
 				const rect = target.getBoundingClientRect();
 				const y = event.clientY - rect.top;
@@ -652,35 +670,37 @@ function Tree({
 		event.preventDefault();
 		if (draggedNode) {
 			const target = event.currentTarget as HTMLElement;
+			const nodesToMove = getDraggedNodes();
+			const isDraggedNode = nodesToMove.some((n) => (byIndex ? n === node : n.content.id === node.content.id));
+			const isInsideAny = nodesToMove.some((n) => checkNodeInsideNode(n, node));
 			if (
-				(node !== draggedNode &&
-					!checkNodeInsideNode(draggedNode, node) &&
-					target.classList.contains('dragOverComplete')) ||
+				(!isDraggedNode && !isInsideAny && target.classList.contains('dragOverComplete')) ||
 				target.classList.contains('dragOverTop') ||
 				target.classList.contains('dragOverBot')
 			) {
-				const nodes = getCompleteNodes(draggedNode);
-				let dropList = draggedNode.parent?.children ?? list;
-				for (const n of nodes) {
-					ArrayUtils.removeElement(dropList, n);
+				// Remove all nodes from their current positions first
+				for (const n of nodesToMove) {
+					ArrayUtils.removeElement(n.parent?.children ?? list, n);
 				}
 				if (target.classList.contains('dragOverComplete')) {
-					node.children.push(draggedNode);
-					draggedNode.parent = node;
+					for (const n of nodesToMove) {
+						node.children.push(n);
+						n.parent = node;
+					}
 				} else if (target.classList.contains('dragOverTop')) {
-					dropList = node.parent?.children ?? list;
+					const dropList = node.parent?.children ?? list;
 					let index = dropList.indexOf(node);
 					if (index === -1) {
 						index = dropList.length;
 					}
-					for (const n of nodes) {
+					for (const n of nodesToMove) {
 						ArrayUtils.insertAt(dropList, index++, n);
 						n.parent = node.parent;
 					}
 				} else if (target.classList.contains('dragOverBot')) {
-					dropList = node.parent?.children ?? list;
+					const dropList = node.parent?.children ?? list;
 					let index = dropList.indexOf(node) + 1;
-					for (const n of nodes) {
+					for (const n of nodesToMove) {
 						ArrayUtils.insertAt(dropList, index++, n);
 						n.parent = node.parent;
 					}
@@ -709,6 +729,28 @@ function Tree({
 		setIsFocused(b);
 	};
 	handleSetFocusRef.current = handleSetFocus;
+
+	const handleContentMouseUp = () => {
+		if (pendingSingleSelectNode.current) {
+			setCurrentSelectedItemNode(pendingSingleSelectNode.current);
+			setAdditionalSelectedNodes([]);
+			pendingSingleSelectNode.current = null;
+		}
+	};
+
+	const handleContentMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+		const rect = listRef.current?.getBoundingClientRect();
+		if (
+			rect &&
+			e.clientX >= rect.left &&
+			e.clientX <= rect.right &&
+			e.clientY >= rect.top &&
+			e.clientY <= rect.bottom
+		) {
+			return;
+		}
+		handleSetFocusRef.current(false);
+	};
 
 	useEffect(() => {
 		if (!blurOnMouseLeave) return;
@@ -1148,23 +1190,8 @@ function Tree({
 				<div
 					onDoubleClick={handleDoubleClick}
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
-					onMouseLeave={
-						blurOnMouseLeave
-							? (e) => {
-									const rect = listRef.current?.getBoundingClientRect();
-									if (
-										rect &&
-										e.clientX >= rect.left &&
-										e.clientX <= rect.right &&
-										e.clientY >= rect.top &&
-										e.clientY <= rect.bottom
-									) {
-										return;
-									}
-									handleSetFocusRef.current(false);
-								}
-							: undefined
-					}
+					onMouseUp={handleContentMouseUp}
+					onMouseLeave={blurOnMouseLeave ? handleContentMouseLeave : undefined}
 					className={Utils.getClassName(
 						{ disabled, zeroHeightNoMobile: scrollable, focused: isFocused },
 						'tree',
