@@ -11,6 +11,7 @@
 
 import { ArrayUtils, Constants, JSONType, Paths } from '../../common';
 import {
+	checkFileExists,
 	copyFolder,
 	createFile,
 	createFolder,
@@ -136,8 +137,13 @@ class ProjectUpdater_3_0_0 {
 		callback(10);
 
 		// Move all files correctly
-		await removeFile(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins', 'path.js'));
-		await moveFolder(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins'), Paths.join(projectPath, 'Plugins'));
+		const oldPluginsPath = Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins');
+		if (await checkFileExists(oldPluginsPath)) {
+			await removeFile(Paths.join(oldPluginsPath, 'path.js'));
+			await moveFolder(oldPluginsPath, Paths.join(projectPath, 'Plugins'));
+		} else {
+			await createFolder(Paths.join(projectPath, 'Plugins'));
+		}
 		await moveFolder(Paths.join(projectPath, 'Datas', 'Maps'), Paths.join(projectPath, 'Maps'));
 		await moveFolder(Paths.join(projectPath, 'Datas', 'Saves'), Paths.join(projectPath, 'Saves'));
 		const names = [
