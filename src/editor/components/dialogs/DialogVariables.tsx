@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../common';
 import { Node } from '../../core/Node';
@@ -37,6 +37,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [forcedPageCurrentSelectedItemID, setForcedPageCurrentSelectedItemID] = useState<number | null>(null);
 	const [forcedVariableCurrentSelectedItemID, setForcedVariableCurrentSelectedItemID] = useState<number | null>(null);
 	const [selectedVariable, setSelectedVariable] = useState<Node | null>(null);
+	const currentVariablesPage = useRef<Model.VariablesPage | null>(null);
 
 	const initialize = () => {
 		const clonedPages = Project.current!.variables.pages.map((page) => page.clone());
@@ -59,12 +60,20 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 		if (node && node.content.id !== -1) {
 			const page = Node.getNodeByID(pages, node.content.id)?.content as Model.VariablesPage | undefined;
 			if (page) {
+				currentVariablesPage.current = page;
 				setVariables(Node.createList(page.list, false));
 				return;
 			}
 		}
+		currentVariablesPage.current = null;
 		setVariables([]);
 		setForcedVariableCurrentSelectedItemID(-1);
+	};
+
+	const handleVariablesListUpdated = () => {
+		if (currentVariablesPage.current) {
+			currentVariablesPage.current.list = Node.createListFromNodes<Model.Base>(variables);
+		}
 	};
 
 	const handleCreatePage = (node: Node) => {
@@ -133,6 +142,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 					setForcedCurrentSelectedItemID={setForcedVariableCurrentSelectedItemID}
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={setSelectedVariable}
+					onListUpdated={handleVariablesListUpdated}
 					cannotAdd
 					cannotDragDrop
 					cannotDelete
