@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import { BINDING, JSONType, KEY, Utils } from '../common';
+import { BINDING, JSONType, KEY, SPECIAL_KEY, Utils } from '../common';
 import DialogKeyboard from '../components/dialogs/models/DialogKeyboard';
 import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
@@ -75,6 +75,10 @@ class Keyboard extends Localization {
 	}
 
 	static toStringShortcut(shortcut: string[]): string {
+		const hasModifier = shortcut.some((sc) =>
+			(Object.values(SPECIAL_KEY) as string[]).includes(sc)
+		);
+		const separator = hasModifier ? ' + ' : ' | ';
 		return shortcut
 			.map((sc) => {
 				switch (sc) {
@@ -94,7 +98,7 @@ class Keyboard extends Localization {
 						return sc;
 				}
 			})
-			.join(' + ')
+			.join(separator)
 			.toUpperCase();
 	}
 
