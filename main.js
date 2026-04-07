@@ -172,12 +172,7 @@ let splash;
 let isReadyToClose = false;
 
 const hasInternet = async () => {
-	const urls = [
-		'https://www.google.com',
-		'https://www.baidu.com',
-		'https://www.bing.com',
-		'https://one.one.one.one',
-	];
+	const urls = ['https://www.google.com', 'https://www.baidu.com', 'https://www.bing.com', 'https://one.one.one.one'];
 	const check = async (url) => {
 		const controller = new AbortController();
 		const timer = setTimeout(() => controller.abort(), 3000);
@@ -459,14 +454,7 @@ app.whenReady().then(() => {
 		globalShortcut.register(shortcut, () => {
 			updater?.openDevTools({ mode: 'undocked' });
 			game?.openDevTools({ mode: 'undocked' });
-		});
-	}
-	shortcuts = [`CommandOrControl+Alt+E`, `CommandOrControl+Shift+E`];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			if (window && window.isFocused()) {
-				window.openDevTools({ mode: 'undocked' });
-			}
+			window.openDevTools({ mode: 'undocked' });
 		});
 	}
 	if (app.isPackaged) {
