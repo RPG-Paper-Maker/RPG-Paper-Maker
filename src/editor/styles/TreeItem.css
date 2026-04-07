@@ -34,6 +34,21 @@
 	}
 }
 
+.treeChildrenGroup {
+	position: relative;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: var(--tree-indent);
+		top: 0;
+		bottom: 0;
+		width: 1px;
+		background-color: var(--lighter-bg-color);
+		pointer-events: none;
+	}
+}
+
 .tree {
 	&:not(.disabled) {
 		.treeItem {

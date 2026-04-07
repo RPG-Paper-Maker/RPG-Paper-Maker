@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -969,15 +969,27 @@ function Tree({
 				</div>,
 			);
 			if (!node.willBeDeleted && !ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
+				const childItems: ReactNode[] = [];
 				emptyID = getTreeItems(
 					node.children,
-					items,
+					childItems,
 					node,
 					level + 1,
 					node.content.canHaveChildren(),
 					emptyID,
 					multipleLevels && selected,
 				);
+				if (childItems.length > 0) {
+					items.push(
+						<div
+							key={byIndex ? `children-${index}-${level}` : `children-${node.content.id}`}
+							className="treeChildrenGroup"
+							style={{ '--tree-indent': `${5 + level * 15 + 8}px` } as CSSProperties}
+						>
+							{childItems}
+						</div>,
+					);
+				}
 			}
 		}
 		if (canAddEmptyNode) {
