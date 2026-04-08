@@ -174,9 +174,15 @@ class DynamicValue extends Serializable {
 		this.kind = command[iterator.i++] as DYNAMIC_VALUE_KIND;
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				if (!this.customStructure) {
+					this.customStructure = new CustomStructure();
+				}
 				this.customStructure.updateCommand(command, iterator);
 				break;
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				if (!this.customList) {
+					this.customList = new CustomStructure();
+				}
 				this.customList.updateCommand(command, iterator);
 				break;
 			case DYNAMIC_VALUE_KIND.VECTOR2:

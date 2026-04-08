@@ -25,7 +25,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import InputText from '../../InputText';
 import TextArea from '../../TextArea';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -99,6 +99,7 @@ function DialogCustomStructure({ setIsOpen, model, parent, onAccept, onReject }:
 				onClose={handleReject}
 				initialWidth='600px'
 				initialHeight='400px'
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spacedLarge fillWidth>
 					<Form>
