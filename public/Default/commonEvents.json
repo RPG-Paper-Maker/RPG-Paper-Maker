@@ -338,6 +338,20 @@
 				"sys": true
 			},
 			{
+				"id": 1,
+				"p": [
+					{ "id": 1, "name": "Interval", "v": { "k": 2 } },
+					{ "id": 2, "name": "Repeat", "v": { "k": 10, "v": false } }
+				],
+				"r": {
+					"1": {
+						"bh": true,
+						"c": [{ "kind": 30, "command": [7, 1, 0, 10, false], "children": [] }]
+					}
+				},
+				"sys": true
+			},
+			{
 				"id": 5,
 				"name": "MouseDown",
 				"p": [
