@@ -98,6 +98,7 @@ function PreviewerObject3D({
 		resize();
 		return () => {
 			observer.disconnect();
+			Scene.Previewer3D.listScenes.get(sceneID)?.close();
 			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
 	}, [sceneID]);

@@ -411,8 +411,16 @@ class Previewer3D extends Base {
 		this.isRotating = true;
 		for (const mesh of this.meshes) {
 			this.scene.remove(mesh);
+			if (mesh instanceof THREE.Mesh) {
+				mesh.geometry?.dispose();
+			}
 		}
 		this.meshes = [];
+	}
+
+	close() {
+		this.clear();
+		super.close();
 	}
 
 	setPreviewMode(mode: ACTION_KIND | null) {

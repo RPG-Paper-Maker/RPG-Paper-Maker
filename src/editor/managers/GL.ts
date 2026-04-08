@@ -22,7 +22,13 @@ class GL {
 	public static layerOneContext: GL;
 	public static layerTwoContext: GL;
 	public static layerThreeContext: GL;
-	public static staticRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
+	private static _staticRender: THREE.WebGLRenderer | null = null;
+	public static get staticRender(): THREE.WebGLRenderer {
+		if (!GL._staticRender) {
+			GL._staticRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
+		}
+		return GL._staticRender;
+	}
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -163,6 +169,7 @@ class GL {
 			this.parent = parent;
 			this.renderer = new THREE.WebGLRenderer({
 				alpha: true,
+				powerPreference: 'high-performance',
 			});
 			this.renderer.setPixelRatio(window.devicePixelRatio);
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -173,6 +180,17 @@ class GL {
 			this.renderer.setClearColor(0x000000, 0);
 			this.renderer.clear(true, true);
 			this.renderer.setScissorTest(true);
+			this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
+				event.preventDefault();
+			});
+			this.renderer.domElement.addEventListener('webglcontextrestored', () => {
+				this.renderer.setPixelRatio(window.devicePixelRatio);
+				this.renderer.setSize(this.canvasWidth || window.innerWidth, this.canvasHeight || window.innerHeight);
+				this.renderer.shadowMap.enabled = true;
+				this.renderer.autoClear = false;
+				this.renderer.setScissorTest(true);
+				this.renderer.setClearColor(0x000000, 0);
+			});
 		}
 		this.parent.appendChild(this.renderer.domElement);
 	}

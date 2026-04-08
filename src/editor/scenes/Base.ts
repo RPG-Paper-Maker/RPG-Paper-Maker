@@ -69,6 +69,14 @@ class Base {
 			}
 			if (mesh instanceof THREE.Mesh) {
 				mesh.geometry?.dispose();
+				const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+				for (const material of materials) {
+					if (material instanceof THREE.Material) {
+						const mat = material as THREE.MeshPhongMaterial;
+						mat.map?.dispose();
+						mat.dispose();
+					}
+				}
 			}
 		}
 		this.scene.background = null;

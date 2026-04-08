@@ -286,6 +286,7 @@ function MainPreviewer3D({ id, onPreviewModeChange, onTransformVersionChange }: 
 		window.addEventListener('resize', resize);
 		return () => {
 			window.removeEventListener('resize', resize);
+			Scene.Previewer3D.mainPreviewerScene?.close();
 			Scene.Previewer3D.mainPreviewerScene = null;
 		};
 	}, []);
