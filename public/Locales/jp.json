@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "この反応が発動すると、ヒーローは移動できません。",
 	"tooltip.only.one.event.per.frame": "このオブジェクトはフレームごとに1つのイベントにのみ反応します（1秒 = 60フレーム）。",
 	"tooltip.can.be.triggered.another.object": "このオブジェクトは他のオブジェクトからイベントを受け取ることができます。チェックを外すと、自分自身が送ったイベントのみを受け取ります（自身が送信者です）。",
+	"tooltip.damages.minimum": "最小可能ダメージ値。回復（負のダメージ）の場合は負の値を使用し、minは最も小さい（最も負の）数にする必要があります（例：3〜10 HP回復の場合、min = -10、max = -3）。",
+	"tooltip.damages.maximum": "最大可能ダメージ値。回復（負のダメージ）の場合は負の値を使用し、maxは最も大きい（最も負でない）数にする必要があります（例：3〜10 HP回復の場合、min = -10、max = -3）。",
 	"formulas.overview": "数式の概要",
 	"formulas.section.context": "コンテキスト変数",
 	"formulas.section.stats": "ステータスアクセス（ステータスの略称を使用）",

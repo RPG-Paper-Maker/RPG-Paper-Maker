@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "Le héros ne peut pas se déplacer si cette réaction est déclenchée.",
 	"tooltip.only.one.event.per.frame": "Cet objet ne réagira qu'à un seul événement par frame (1 seconde = 60 frames).",
 	"tooltip.can.be.triggered.another.object": "L'objet peut recevoir des événements d'autres objets. Si décoché, l'objet ne reçoit que ses propres événements qu'il a lui-même envoyés (il est l'expéditeur).",
+	"tooltip.damages.minimum": "La valeur de dommage minimale possible. Pour les soins (dommages négatifs), utilisez des valeurs négatives et notez que min doit être le nombre le plus négatif (ex. pour un soin entre 3 et 10 PV, définir min = -10, max = -3).",
+	"tooltip.damages.maximum": "La valeur de dommage maximale possible. Pour les soins (dommages négatifs), utilisez des valeurs négatives et notez que max doit être le nombre le moins négatif (ex. pour un soin entre 3 et 10 PV, définir min = -10, max = -3).",
 	"formulas.overview": "Aperçu des formules",
 	"formulas.section.context": "Variables de contexte",
 	"formulas.section.stats": "Accès aux statistiques (utilisez vos abréviations de stats)",

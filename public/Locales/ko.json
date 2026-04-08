@@ -1885,6 +1885,8 @@
 	"tooltip.block.hero.during.reaction": "이 반응이 발동되면 영웅이 이동할 수 없습니다.",
 	"tooltip.only.one.event.per.frame": "이 오브젝트는 프레임당 하나의 이벤트에만 반응합니다 (1초 = 60프레임).",
 	"tooltip.can.be.triggered.another.object": "오브젝트가 다른 오브젝트로부터 이벤트를 받을 수 있습니다. 체크 해제 시, 오브젝트는 자신이 보낸 이벤트만 받습니다 (발신자입니다).",
+	"tooltip.damages.minimum": "최소 피해 값. 회복(음수 피해)의 경우 음수 값을 사용하며, min은 가장 작은 음수여야 합니다 (예: 3~10 HP 회복 시 min = -10, max = -3으로 설정).",
+	"tooltip.damages.maximum": "최대 피해 값. 회복(음수 피해)의 경우 음수 값을 사용하며, max는 절댓값이 가장 작은 음수여야 합니다 (예: 3~10 HP 회복 시 min = -10, max = -3으로 설정).",
 	"formulas.overview": "공식 개요",
 	"formulas.section.context": "컨텍스트 변수",
 	"formulas.section.stats": "스탯 접근 (스탯 약어 사용)",

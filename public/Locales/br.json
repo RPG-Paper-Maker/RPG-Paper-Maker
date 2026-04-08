@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "O herói não pode se mover se esta reação for acionada.",
 	"tooltip.only.one.event.per.frame": "Este objeto reagirá a apenas um evento por frame (1 segundo = 60 frames).",
 	"tooltip.can.be.triggered.another.object": "O objeto pode receber eventos de outros objetos. Se desmarcado, o objeto só recebe seus próprios eventos que ele mesmo enviou (ele é o remetente).",
+	"tooltip.damages.minimum": "O valor mínimo possível de dano. Para cura (dano negativo), use valores negativos; min deve ser o número mais negativo (ex.: para uma cura entre 3 e 10 HP: min = -10, max = -3).",
+	"tooltip.damages.maximum": "O valor máximo possível de dano. Para cura (dano negativo), use valores negativos; max deve ser o número menos negativo (ex.: para uma cura entre 3 e 10 HP: min = -10, max = -3).",
 	"formulas.overview": "Visão geral das fórmulas",
 	"formulas.section.context": "Variáveis de contexto",
 	"formulas.section.stats": "Acesso às estatísticas (use suas abreviações de stat)",

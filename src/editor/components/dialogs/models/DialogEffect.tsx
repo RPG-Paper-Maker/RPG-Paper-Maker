@@ -26,6 +26,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import TooltipInformation from '../../TooltipInformation';
 import VariableSelector from '../../VariableSelector';
 import DialogCommandCallACommonReaction from '../commands/DialogCommandCallACommonReaction';
 import Dialog from '../Dialog';
@@ -310,7 +311,7 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 									/>
 								</Value>
 								<Label disabledColon={kind !== EFFECT_KIND.DAMAGES}>
-									<Flex centerV>
+									<Flex spaced centerV>
 										<Flex fillSmallSpace />
 										<Checkbox
 											isChecked={isDamagesMinimum}
@@ -319,6 +320,10 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 										>
 											{t('minimum')}
 										</Checkbox>
+										<TooltipInformation
+											text={t('tooltip.damages.minimum')}
+											disabled={kind !== EFFECT_KIND.DAMAGES}
+										/>
 									</Flex>
 								</Label>
 								<Value>
@@ -329,7 +334,7 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 									/>
 								</Value>
 								<Label disabledColon={kind !== EFFECT_KIND.DAMAGES}>
-									<Flex centerV>
+									<Flex spaced centerV>
 										<Flex fillSmallSpace />
 										<Checkbox
 											isChecked={isDamagesMaximum}
@@ -338,6 +343,10 @@ function DialogEffect({ setIsOpen, model, onAccept, onReject }: Props) {
 										>
 											{t('maximum')}
 										</Checkbox>
+										<TooltipInformation
+											text={t('tooltip.damages.maximum')}
+											disabled={kind !== EFFECT_KIND.DAMAGES}
+										/>
 									</Flex>
 								</Label>
 								<Value>

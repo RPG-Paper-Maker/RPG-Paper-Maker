@@ -1885,6 +1885,8 @@
 	"tooltip.block.hero.during.reaction": "如果触发此反应，英雄将无法移动。",
 	"tooltip.only.one.event.per.frame": "此对象每帧只响应一个事件（1秒 = 60帧）。",
 	"tooltip.can.be.triggered.another.object": "该对象可以接收来自其他对象的事件。如果取消选中，对象只接收自己发送的事件（它是发送者）。",
+	"tooltip.damages.minimum": "最小可能伤害值。对于治疗（负伤害），使用负数，且min应为绝对值最大的负数（例如：治疗3到10点生命值时，设置min = -10，max = -3）。",
+	"tooltip.damages.maximum": "最大可能伤害值。对于治疗（负伤害），使用负数，且max应为绝对值最小的负数（例如：治疗3到10点生命值时，设置min = -10，max = -3）。",
 	"formulas.overview": "公式概览",
 	"formulas.section.context": "上下文变量",
 	"formulas.section.stats": "属性访问（使用您的属性缩写）",

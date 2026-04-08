@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "The hero cannot move if this reaction is triggered.",
 	"tooltip.only.one.event.per.frame": "This object will react to only one event per frame (1 second = 60 frames).",
 	"tooltip.can.be.triggered.another.object": "The object can receive events from other objects. If unchecked, the object only receives its own events that it sent itself (it is the sender).",
+	"tooltip.damages.minimum": "The minimum possible damage value. For healing (negative damage), use negative values and note that min should be the most negative number (e.g. for a heal between 3 and 10 HP, set min = -10, max = -3).",
+	"tooltip.damages.maximum": "The maximum possible damage value. For healing (negative damage), use negative values and note that max should be the least negative number (e.g. for a heal between 3 and 10 HP, set min = -10, max = -3).",
 	"formulas.overview": "Formulas overview",
 	"formulas.section.context": "Context variables",
 	"formulas.section.stats": "Stat access (use your stat abbreviations)",

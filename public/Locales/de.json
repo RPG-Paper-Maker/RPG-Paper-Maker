@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "Der Held kann sich nicht bewegen, wenn diese Reaktion ausgelöst wird.",
 	"tooltip.only.one.event.per.frame": "Dieses Objekt reagiert nur auf ein Ereignis pro Frame (1 Sekunde = 60 Frames).",
 	"tooltip.can.be.triggered.another.object": "Das Objekt kann Ereignisse von anderen Objekten empfangen. Wenn deaktiviert, empfängt das Objekt nur seine eigenen Ereignisse, die es selbst gesendet hat (es ist der Absender).",
+	"tooltip.damages.minimum": "Der minimal mögliche Schadenswert. Für Heilung (negativer Schaden) negative Werte verwenden; min muss die negativste Zahl sein (z.B. für Heilung zwischen 3 und 10 KP: min = -10, max = -3).",
+	"tooltip.damages.maximum": "Der maximal mögliche Schadenswert. Für Heilung (negativer Schaden) negative Werte verwenden; max muss die am wenigsten negative Zahl sein (z.B. für Heilung zwischen 3 und 10 KP: min = -10, max = -3).",
 	"formulas.overview": "Formelübersicht",
 	"formulas.section.context": "Kontextvariablen",
 	"formulas.section.stats": "Statistikzugriff (verwenden Sie Ihre Stat-Abkürzungen)",

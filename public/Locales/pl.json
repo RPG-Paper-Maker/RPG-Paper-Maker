@@ -1884,6 +1884,8 @@
 	"tooltip.block.hero.during.reaction": "Bohater nie może się poruszać, gdy ta reakcja jest wyzwalana.",
 	"tooltip.only.one.event.per.frame": "Ten obiekt zareaguje tylko na jedno zdarzenie na klatkę (1 sekunda = 60 klatek).",
 	"tooltip.can.be.triggered.another.object": "Obiekt może odbierać zdarzenia od innych obiektów. Jeśli odznaczone, obiekt odbiera tylko własne zdarzenia, które sam wysłał (jest nadawcą).",
+	"tooltip.damages.minimum": "Minimalna możliwa wartość obrażeń. W przypadku leczenia (ujemne obrażenia) użyj wartości ujemnych; min musi być najbardziej ujemną liczbą (np. leczenie od 3 do 10 PW: min = -10, max = -3).",
+	"tooltip.damages.maximum": "Maksymalna możliwa wartość obrażeń. W przypadku leczenia (ujemne obrażenia) użyj wartości ujemnych; max musi być najmniej ujemną liczbą (np. leczenie od 3 do 10 PW: min = -10, max = -3).",
 	"formulas.overview": "Przegląd wzorów",
 	"formulas.section.context": "Zmienne kontekstowe",
 	"formulas.section.stats": "Dostęp do statystyk (użyj skrótów swoich statystyk)",
