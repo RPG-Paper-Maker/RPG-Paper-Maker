@@ -304,7 +304,7 @@
 	"hero": "Held",
 	"monster.id": "Monster ID",
 	"of": "von",
-	"stock.instance.id.in": "Bestand Instanz ID in",
+	"stock.instance.id.in": "Bestand Instanz ID in Variable mit ID",
 	"camera.target": "Kameraziel",
 	"unchanged": "Ungeändert",
 	"object.id": "Objekt ID",

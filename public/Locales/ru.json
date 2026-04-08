@@ -304,7 +304,7 @@
 	"hero": "Герой",
 	"monster.id": "ID монстра",
 	"of": "из",
-	"stock.instance.id.in": "Идентификатор фондового экземпляра в",
+	"stock.instance.id.in": "Идентификатор экземпляра в переменной с ID",
 	"camera.target": "Цель камеры",
 	"unchanged": "Без изменений",
 	"object.id": "ID объекта",

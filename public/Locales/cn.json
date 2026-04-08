@@ -304,7 +304,7 @@
 	"hero": "主角",
 	"monster.id": "怪物 ID",
 	"of": "属于",
-	"stock.instance.id.in": "将实例 ID 存储在",
+	"stock.instance.id.in": "将实例 ID 存储在变量 ID 中",
 	"camera.target": "摄像机目标",
 	"unchanged": "保持不变",
 	"object.id": "物体 ID",

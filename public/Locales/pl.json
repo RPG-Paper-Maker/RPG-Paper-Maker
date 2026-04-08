@@ -304,7 +304,7 @@
 	"hero": "Bohater",
 	"monster.id": "Przeciwnik ID",
 	"of": "od",
-	"stock.instance.id.in": "Zapisz ID istancji",
+	"stock.instance.id.in": "Zapisz ID instancji w zmiennej o ID",
 	"camera.target": "Ustawienie kamery",
 	"unchanged": "Bez zmian",
 	"object.id": "Obiekt ID",

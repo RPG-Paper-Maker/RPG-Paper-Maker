@@ -304,7 +304,7 @@
 	"hero": "Héroe",
 	"monster.id": "ID de monstruo",
 	"of": "de",
-	"stock.instance.id.in": "ID de instancia de stock en",
+	"stock.instance.id.in": "ID de instancia de stock en variable con ID",
 	"camera.target": "Objetivo de cámara",
 	"unchanged": "Sin cambiar",
 	"object.id": "ID de objeto",

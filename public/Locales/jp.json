@@ -304,7 +304,7 @@
 	"hero": "ヒーロー",
 	"monster.id": "モンスターID",
 	"of": "の",
-	"stock.instance.id.in": "インスタンスIDを保存:",
+	"stock.instance.id.in": "インスタンスIDを変数IDに保存:",
 	"camera.target": "カメラのターゲット",
 	"unchanged": "変更なし",
 	"object.id": "オブジェクトID",

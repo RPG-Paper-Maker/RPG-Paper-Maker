@@ -304,7 +304,7 @@
 	"hero": "Eroe",
 	"monster.id": "ID Mostro",
 	"of": "di",
-	"stock.instance.id.in": "Salva ID istanza in",
+	"stock.instance.id.in": "Salva ID istanza nella variabile con ID",
 	"camera.target": "Bersaglio camera",
 	"unchanged": "Invariato",
 	"object.id": "ID Oggetto",

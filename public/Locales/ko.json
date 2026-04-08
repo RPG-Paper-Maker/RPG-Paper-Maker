@@ -304,7 +304,7 @@
 	"hero": "영웅",
 	"monster.id": "몬스터 ID",
 	"of": "~의",
-	"stock.instance.id.in": "인스턴스 ID 저장 위치",
+	"stock.instance.id.in": "변수 ID에 인스턴스 ID 저장",
 	"camera.target": "카메라 대상",
 	"unchanged": "변경 없음",
 	"object.id": "오브젝트 ID",

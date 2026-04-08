@@ -304,7 +304,7 @@
 	"hero": "Герой",
 	"monster.id": "№ монстра",
 	"of": "з",
-	"stock.instance.id.in": "Записати № примірника в",
+	"stock.instance.id.in": "Записати № примірника в змінну з ID",
 	"camera.target": "Ціль камери",
 	"unchanged": "Не міняти",
 	"object.id": "№ об'єкту",
