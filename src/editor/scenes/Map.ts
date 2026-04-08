@@ -1478,7 +1478,27 @@ class Map extends Base {
 		if (isLayerOn && !isSpriteOptionSelected) {
 			intersects = intersects.filter((i) => i.point.y >= planeGridY - Constants.PRECISION_POSITION);
 		}
-		const meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
+		let meshHitGridY: number;
+		if (this.canEdit && !Map.isRemoving()) {
+			meshHitGridY = -Infinity;
+			for (const obj of intersects) {
+				const faceKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+					obj.faceIndex ?? 0
+				];
+				if (faceKey) {
+					const newPos = Position.fromKey(faceKey);
+					const floorEl = this.getMapPortionByPosition(newPos)?.model.getMapElement(
+						newPos,
+						ELEMENT_MAP_KIND.FLOOR,
+					);
+					if (floorEl?.isPreview) continue;
+				}
+				meshHitGridY = obj.point.y;
+				break;
+			}
+		} else {
+			meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
+		}
 		const isPlane =
 			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
 		if (isPlane) {
@@ -1518,7 +1538,9 @@ class Map extends Base {
 								Map.currentSelectedMapElementKind,
 							);
 							if (element && element.isPreview) {
-								continue;
+								if (!Map.isRemoving() || (this.lastPosition && newPosition.equals(this.lastPosition))) {
+									continue;
+								}
 							}
 						}
 						if (layer === RAYCASTING_LAYER.LANDS) {
@@ -1527,7 +1549,9 @@ class Map extends Base {
 								ELEMENT_MAP_KIND.FLOOR,
 							);
 							if (element && element.isPreview) {
-								continue;
+								if (!Map.isRemoving() || (this.lastPosition && newPosition.equals(this.lastPosition))) {
+									continue;
+								}
 							}
 						} else if (
 							this.lockedY !== null &&
@@ -2075,6 +2099,21 @@ class Map extends Base {
 					);
 				}
 				mapPortion.lastPreviewRemove = [];
+				for (const element of mapPortion.model.lands.values()) {
+					if (element.isPreview) element.isPreview = false;
+				}
+				for (const element of mapPortion.model.sprites.values()) {
+					if (element.isPreview) element.isPreview = false;
+				}
+				for (const element of mapPortion.model.walls.values()) {
+					if (element.isPreview) element.isPreview = false;
+				}
+				for (const element of mapPortion.model.mountains.values()) {
+					if (element.isPreview) element.isPreview = false;
+				}
+				for (const element of mapPortion.model.objects3D.values()) {
+					if (element.isPreview) element.isPreview = false;
+				}
 				this.portionsToSave.add(mapPortion);
 			});
 		}

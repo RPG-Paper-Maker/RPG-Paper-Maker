@@ -52,9 +52,7 @@ class Inputs {
 	static initialize(canvas: HTMLDivElement, canvasOnly = false) {
 		Inputs.keys = [];
 
-		const getMap = canvasOnly
-			? () => Scene.Map.currentpositionSelector
-			: () => Scene.Map.current;
+		const getMap = canvasOnly ? () => Scene.Map.currentpositionSelector : () => Scene.Map.current;
 
 		if (Constants.IS_MOBILE) {
 			// Pointer down
@@ -226,7 +224,12 @@ class Inputs {
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
 				const isOutsideCanvas = x < 0 || y < 0 || x > rect.width || y > rect.height;
-				if (!isOutsideCanvas || Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed) {
+				if (
+					!isOutsideCanvas ||
+					Inputs.isPointerPressed ||
+					Inputs.isMouseRightPressed ||
+					Inputs.isMouseWheelPressed
+				) {
 					(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseMove();
 				}
 				Inputs.previousMouseX = Inputs.mouseX;
@@ -257,7 +260,6 @@ class Inputs {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
 				switch (e.button) {
 					case 0:
 						Inputs.isPointerPressed = false;
@@ -271,6 +273,7 @@ class Inputs {
 					default:
 						break;
 				}
+				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
 			};
 			if (!canvasOnly) {
 				document.addEventListener('mouseup', handleMouseUp, false);
