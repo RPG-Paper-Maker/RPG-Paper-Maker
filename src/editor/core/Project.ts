@@ -175,6 +175,9 @@ class Project {
 			}
 		}
 		for (const f of filesToCopy) {
+			if (f.includes('.tmp')) {
+				continue;
+			}
 			await copyFile(Paths.join(path, f), Paths.join(backupsPath, folderBackup, f));
 		}
 		if (folders.length >= Data.EngineSettings.current!.backupsMax) {
