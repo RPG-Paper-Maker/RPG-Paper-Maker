@@ -13,6 +13,7 @@ import { Data, Model } from '../Editor';
 import { Paths, Utils } from '../common';
 import {
 	checkFileExists,
+	cleanupTmpFiles,
 	copyFile,
 	copyFolder,
 	createFolder,
@@ -101,14 +102,47 @@ class Project {
 		this.weapons.translateDefaults();
 	}
 
-	addBackups() {
-		if (Data.EngineSettings.current!.backupsActivated) {
-			this.updateBackups().catch(console.error);
-			this.intervalBackupID = setInterval(
-				this.updateBackups.bind(this),
-				Data.EngineSettings.current!.backupsInterval * 60 * 1000,
-			);
+	parseBackupDate(folderName: string): Date | null {
+		// Format: YYYY-MM-DD-HHhMMmSSs
+		const match = folderName.match(/^(\d{4})-(\d{2})-(\d{2})-(\d{2})h(\d{2})m(\d{2})s$/);
+		if (!match) {
+			return null;
 		}
+		return new Date(
+			parseInt(match[1]),
+			parseInt(match[2]) - 1,
+			parseInt(match[3]),
+			parseInt(match[4]),
+			parseInt(match[5]),
+			parseInt(match[6]),
+		);
+	}
+
+	async addBackups() {
+		if (!Data.EngineSettings.current!.backupsActivated) {
+			return;
+		}
+		const intervalMs = Data.EngineSettings.current!.backupsInterval * 60 * 1000;
+		const backupsPath = Paths.join(this.getPath(), Paths.BACKUPS);
+		let skipFirst = false;
+		if (await checkFileExists(backupsPath)) {
+			const folders = await getFolders(backupsPath);
+			folders.sort();
+			const lastFolder = folders[folders.length - 1];
+			if (lastFolder) {
+				const lastDate = this.parseBackupDate(lastFolder);
+				if (lastDate && Date.now() - lastDate.getTime() < intervalMs) {
+					skipFirst = true;
+				}
+			}
+		}
+		if (!skipFirst) {
+			this.updateBackups().catch(console.error);
+		}
+		this.intervalBackupID = setInterval(
+			this.updateBackups.bind(this),
+			intervalMs,
+		);
 	}
 
 	async updateBackups() {
@@ -152,7 +186,7 @@ class Project {
 
 	resetBackups() {
 		this.clearBackups();
-		this.addBackups();
+		this.addBackups().catch(console.error);
 	}
 
 	clearBackups() {
@@ -167,6 +201,7 @@ class Project {
 	}
 
 	async load() {
+		await cleanupTmpFiles(this.location);
 		await this.languages.load();
 		await this.variables.load();
 		await this.fonts.load();

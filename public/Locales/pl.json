@@ -1928,5 +1928,10 @@
 	"formulas.game.variable": "Pobierz zmienną gry na podstawie jej ID",
 	"formulas.game.items": "Tablica przedmiotów w ekwipunku",
 	"formulas.game.playtime": "Aktualny czas gry",
-	"warning.file.busy": "Plik projektu jest zablokowany przez inny proces. Upewnij się, że ten projekt nie jest otwarty w innej instancji RPG Paper Maker. Może to być również narzędzie do synchronizacji z chmurą (OneDrive, Dropbox itp.) tymczasowo blokujące plik."
+	"warning.file.busy": "Plik projektu jest zablokowany przez inny proces. Upewnij się, że ten projekt nie jest otwarty w innej instancji RPG Paper Maker. Może to być również narzędzie do synchronizacji z chmurą (OneDrive, Dropbox itp.) tymczasowo blokujące plik.",
+	"manage.backups": "Zarządzaj kopiami zapasowymi",
+	"restore": "Przywróć",
+	"no.backups.available": "Brak dostępnych kopii zapasowych.",
+	"warning.restore.backup": "Czy na pewno chcesz przywrócić {{projectName}} do kopii zapasowej {{backupName}}? Spowoduje to nadpisanie bieżących danych projektu.",
+	"last.save": "ostatni zapis"
 }

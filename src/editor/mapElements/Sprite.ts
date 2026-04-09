@@ -346,7 +346,9 @@ class Sprite extends Base {
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Sprite.getBindings(additionnalBinding));
 		this.texture = new Rectangle();
-		this.texture.read(json.t as number[]);
+		if (json.t != null) {
+			this.texture.read(json.t as number[]);
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

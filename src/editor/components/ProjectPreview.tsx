@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiExport } from 'react-icons/bi';
 import { FaTrashAlt } from 'react-icons/fa';
+import { MdHistory } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, Utils } from '../common';
@@ -23,6 +24,7 @@ import { RootState, triggerOpenProject } from '../store';
 import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
 import '../styles/ProjectPreview.css';
 import Dialog from './dialogs/Dialog';
+import DialogManageBackups from './dialogs/DialogManageBackups';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import FooterOK from './dialogs/footers/FooterOK';
 import Flex from './Flex';
@@ -36,6 +38,7 @@ function ProjectPreview({ project }: Props) {
 
 	const [isDialogWarningLocationOpen, setIsDialogWarningLocationOpen] = useState(false);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+	const [isDialogManageBackupsOpen, setIsDialogManageBackupsOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
 
@@ -51,6 +54,11 @@ function ProjectPreview({ project }: Props) {
 		dispatch(setProjects(newList));
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
+	};
+
+	const handleClickManageBackups = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		e.stopPropagation();
+		setIsDialogManageBackupsOpen(true);
 	};
 
 	const handleClickExportProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -99,16 +107,24 @@ function ProjectPreview({ project }: Props) {
 					{project.location.length > 0 && <div className='textSmallDetail'>{project.location}</div>}
 				</Flex>
 				<Flex centerV>
+					<MdHistory onClick={handleClickManageBackups} color={Constants.COLOR_GREEN} />
 					{Constants.IS_DESKTOP ? (
-						<RxCross2 onClick={handleClickCloseProject} />
+						<>
+							<RxCross2 onClick={handleClickCloseProject} color={Constants.COLOR_RED} />
+						</>
 					) : (
 						<>
-							<BiExport onClick={handleClickExportProject} />
-							<FaTrashAlt onClick={handleClickRemoveProject} />
+							<BiExport onClick={handleClickExportProject} color={Constants.COLOR_PRIMARY} />
+							<FaTrashAlt onClick={handleClickRemoveProject} color={Constants.COLOR_RED} />
 						</>
 					)}
 				</Flex>
 			</div>
+			<DialogManageBackups
+				isOpen={isDialogManageBackupsOpen}
+				setIsOpen={setIsDialogManageBackupsOpen}
+				project={project}
+			/>
 			<Dialog
 				title={t('warning')}
 				isOpen={isDialogConfirmOpen}

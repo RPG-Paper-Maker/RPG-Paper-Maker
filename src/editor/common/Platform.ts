@@ -75,7 +75,14 @@ export const moveFolder = async (src: string, dst: string) => {
 
 export const createFile = async (path: string, content: string) => {
 	if (Constants.IS_DESKTOP) {
-		await IO.createFile(path, content);
+		const tmpPath = path + '.tmp';
+		await IO.createFile(tmpPath, content);
+		try {
+			await IO.moveFile(tmpPath, path);
+		} catch (e) {
+			await IO.removeFile(tmpPath).catch(() => {});
+			throw e;
+		}
 	} else {
 		await LocalFile.createFile(path, content);
 	}
@@ -86,6 +93,18 @@ export const removeFile = async (path: string) => {
 		await IO.removeFile(path);
 	} else {
 		await LocalFile.removeFile(path);
+	}
+};
+
+export const cleanupTmpFiles = async (path: string) => {
+	const [folders, files] = await (Constants.IS_DESKTOP ? IO.getFoldersFiles(path) : LocalFile.getFoldersFiles(path));
+	for (const file of files) {
+		if (file.endsWith('.tmp')) {
+			await removeFile(Paths.join(path, file));
+		}
+	}
+	for (const folder of folders) {
+		await cleanupTmpFiles(Paths.join(path, folder));
 	}
 };
 

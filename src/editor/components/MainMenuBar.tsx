@@ -340,7 +340,7 @@ function MainMenuBar() {
 				await addProject(project);
 			}
 			await Project.current.systems.saveStyleCSS();
-			Project.current.addBackups();
+			void Project.current.addBackups();
 			dispatch(setCurrentProject(project));
 		} else {
 			setIsDialogWarningProjectLocationExist(true);

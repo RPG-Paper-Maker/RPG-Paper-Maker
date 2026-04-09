@@ -22,10 +22,12 @@
 	svg {
 		visibility: hidden;
 		padding: 5px;
-		color: var(--lighter-bg-color);
+		transition:
+			transform 0.15s ease,
+			color 0.15s ease;
 
 		&:hover {
-			color: var(--main-color);
+			transform: scale(1.3);
 		}
 	}
 

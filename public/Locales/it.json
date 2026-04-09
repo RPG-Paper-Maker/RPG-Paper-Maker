@@ -1928,5 +1928,10 @@
 	"formulas.game.variable": "Ottenere una variabile di gioco tramite il suo ID",
 	"formulas.game.items": "Array degli oggetti nell'inventario",
 	"formulas.game.playtime": "Tempo di gioco corrente",
-	"warning.file.busy": "Un file del progetto è bloccato da un altro processo. Assicurati che questo progetto non sia aperto in un'altra istanza di RPG Paper Maker. Potrebbe anche essere uno strumento di sincronizzazione cloud (OneDrive, Dropbox, ecc.) che blocca temporaneamente il file."
+	"warning.file.busy": "Un file del progetto è bloccato da un altro processo. Assicurati che questo progetto non sia aperto in un'altra istanza di RPG Paper Maker. Potrebbe anche essere uno strumento di sincronizzazione cloud (OneDrive, Dropbox, ecc.) che blocca temporaneamente il file.",
+	"manage.backups": "Gestisci backup",
+	"restore": "Ripristina",
+	"no.backups.available": "Nessun backup disponibile.",
+	"warning.restore.backup": "Sei sicuro di voler ripristinare {{projectName}} al backup {{backupName}}? Questo sovrascriverà i dati del progetto corrente.",
+	"last.save": "ultimo salvataggio"
 }

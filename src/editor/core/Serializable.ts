@@ -188,7 +188,7 @@ class Serializable {
 				}
 				case BINDING.POSITION: {
 					const jsonObj = json[jsonName] as number[];
-					if (jsonObj === undefined) {
+					if (jsonObj == null) {
 						(this as JSONType)[name] = defaultValue;
 					} else {
 						const obj = new positionConstructor!();
@@ -220,7 +220,7 @@ class Serializable {
 					const jsonMappings = json[jsonName] as JSONMapping[] | undefined;
 					if (jsonMappings) {
 						for (const objHash of jsonMappings) {
-							if (!objHash) continue;
+							if (!objHash || objHash.k == null) continue;
 							const p = new positionConstructor!();
 							p.read(objHash.k);
 							const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;

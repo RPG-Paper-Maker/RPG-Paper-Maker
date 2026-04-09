@@ -36,8 +36,8 @@ class EngineSettings extends Serializable {
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 		['keyboardControls', 'kc', [], BINDING.LIST, Keyboard],
 		['backupsActivated', 'ba', true, BINDING.BOOLEAN],
-		['backupsInterval', 'bi', 60, BINDING.NUMBER],
-		['backupsMax', 'bm', 5, BINDING.NUMBER],
+		['backupsInterval', 'bi', 30, BINDING.NUMBER],
+		['backupsMax', 'bm', 10, BINDING.NUMBER],
 		['backupsIncludeAssets', 'bia', true, BINDING.BOOLEAN],
 		['theme', 't', 0, BINDING.NUMBER],
 		['updaterType', 'ut', 0, BINDING.NUMBER],
@@ -101,7 +101,8 @@ class EngineSettings extends Serializable {
 const AZERTY_LOCALES = ['fr-FR', 'fr-BE', 'fr-LU', 'fr-MC', 'nl-BE'];
 
 export async function detectMovementKeys(): Promise<[string, string, string, string]> {
-	const keyboard = (navigator as Navigator & { keyboard?: { getLayoutMap(): Promise<Map<string, string>> } }).keyboard;
+	const keyboard = (navigator as Navigator & { keyboard?: { getLayoutMap(): Promise<Map<string, string>> } })
+		.keyboard;
 	if (keyboard) {
 		try {
 			const map = await keyboard.getLayoutMap();

@@ -1928,5 +1928,10 @@
 	"formulas.game.variable": "Get a game variable by its ID",
 	"formulas.game.items": "Array of items in inventory",
 	"formulas.game.playtime": "Current play time",
-	"warning.file.busy": "A project file is locked by another process. Make sure this project is not open in another instance of RPG Paper Maker. It could also be a cloud sync tool (OneDrive, Dropbox, etc.) temporarily locking the file."
+	"warning.file.busy": "A project file is locked by another process. Make sure this project is not open in another instance of RPG Paper Maker. It could also be a cloud sync tool (OneDrive, Dropbox, etc.) temporarily locking the file.",
+	"manage.backups": "Manage backups",
+	"last.save": "last save",
+	"restore": "Restore",
+	"no.backups.available": "No backups available.",
+	"warning.restore.backup": "Are you sure you want to restore {{projectName}} to backup {{backupName}}? This will overwrite the current project data."
 }
