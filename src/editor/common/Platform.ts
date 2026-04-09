@@ -37,8 +37,8 @@ export const getFiles = async (path: string): Promise<string[]> => {
 	return await (Constants.IS_DESKTOP ? IO.getFiles(path) : LocalFile.getFiles(path));
 };
 
-export const readFile = async (path: string): Promise<string | null> => {
-	return (await (Constants.IS_DESKTOP ? IO.readFile(path) : LocalFile.readFile(path))) as string | null;
+export const readFile = async (path: string, asBase64 = false): Promise<string | null> => {
+	return (await (Constants.IS_DESKTOP ? IO.readFile(path, false, asBase64) : LocalFile.readFile(path))) as string | null;
 };
 
 export const createFolder = async (path: string) => {
@@ -75,7 +75,7 @@ export const moveFolder = async (src: string, dst: string) => {
 
 export const createFile = async (path: string, content: string) => {
 	if (Constants.IS_DESKTOP) {
-		const tmpPath = path + '.tmp';
+		const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
 		await IO.createFile(tmpPath, content);
 		try {
 			await IO.moveFile(tmpPath, path);

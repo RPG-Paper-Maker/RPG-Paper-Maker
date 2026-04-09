@@ -22,6 +22,7 @@ import {
 	createFolder,
 	exportFolder,
 	getFolders,
+	readFile,
 	removeFile,
 	removeFolder,
 	writeJSON,
@@ -200,7 +201,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 		for (const list of assets.values()) {
 			for (const asset of list) {
 				if (protectData && shouldProtect) {
-					asset.base64 = (await IO.readFile(asset.getPath(), false, true)) ?? '';
+					asset.base64 = (await readFile(asset.getPath(), true)) ?? '';
 				} else {
 					if ((asset.isBR || !!asset.dlc) && asset.id >= 1) {
 						promises.push(
