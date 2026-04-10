@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { CUSTOM_SHAPE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Manager, Model } from '../../Editor';
+import { Model } from '../../Editor';
 import { showWarning } from '../../store';
 import Flex from '../Flex';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
@@ -156,7 +156,6 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 						<PreviewerObject3D
 							sceneID='dialog-shape-preview'
 							shape={selectedShape}
-							GL={Manager.GL.layerThreeContext}
 						/>
 					);
 				default:

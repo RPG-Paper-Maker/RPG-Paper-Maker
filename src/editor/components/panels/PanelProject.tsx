@@ -122,15 +122,11 @@ function PanelProject() {
 
 	useEffect(() => {
 		Manager.GL.mainContext.initialize();
-		Manager.GL.layerOneContext.initialize(1);
-		Manager.GL.layerTwoContext.initialize(2);
-		Manager.GL.layerThreeContext.initialize(3);
+		Manager.GL.dialogContext.initialize(1);
 		const observer = new ResizeObserver(() => {
 			for (const GL of [
 				Manager.GL.mainContext,
-				Manager.GL.layerOneContext,
-				Manager.GL.layerTwoContext,
-				Manager.GL.layerThreeContext,
+				Manager.GL.dialogContext,
 			]) {
 				GL.renderer.setPixelRatio(window.devicePixelRatio);
 				GL.renderer.setSize(window.innerWidth, window.innerHeight);

@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { VscChromeClose } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE } from '../../common';
 import { Utils } from '../../common/Utils';
-import { Inputs } from '../../managers';
+import { DialogGL, Inputs } from '../../managers';
 import { setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
@@ -73,6 +73,9 @@ function Dialog({
 	const [resizingSide] = useState({ left: true });
 
 	const dialogRef = useRef<HTMLDivElement>(null);
+	const dialogGLIdRef = useRef(`dialog-barrier-${Math.random().toString(36).slice(2)}`);
+	const dialogGLSavedPushCountRef = useRef(0);
+	const dialogGLBarrierPushedRef = useRef(false);
 
 	const dispatch = useDispatch();
 
@@ -140,8 +143,7 @@ function Dialog({
 		if (dialogRef.current && !isResizing) {
 			let cursor = '';
 			const rect = dialogRef.current.getBoundingClientRect();
-			const isBottom =
-				e.clientY >= rect.y + rect.height - RESIZING_SPACE && e.clientY <= rect.y + rect.height;
+			const isBottom = e.clientY >= rect.y + rect.height - RESIZING_SPACE && e.clientY <= rect.y + rect.height;
 			if (e.clientX >= rect.x + rect.width - RESIZING_SPACE && e.clientX <= rect.x + rect.width) {
 				if (isBottom) {
 					cursor = 'nwse-resize';
@@ -239,6 +241,30 @@ function Dialog({
 			};
 		}
 	});
+
+	useLayoutEffect(() => {
+		if (isOpen) {
+			dialogGLSavedPushCountRef.current = DialogGL.getPushCount();
+		}
+	}, [isOpen]);
+
+	useEffect(() => {
+		if (!isOpen) return;
+		if (DialogGL.getPushCount() === dialogGLSavedPushCountRef.current) {
+			DialogGL.push(
+				dialogGLIdRef.current,
+				() => {},
+				() => {},
+			);
+			dialogGLBarrierPushedRef.current = true;
+		}
+		return () => {
+			if (dialogGLBarrierPushedRef.current) {
+				DialogGL.pop(dialogGLIdRef.current);
+				dialogGLBarrierPushedRef.current = false;
+			}
+		};
+	}, [isOpen]);
 
 	useEffect(() => {
 		const dialogs = document.getElementsByClassName('dialog');

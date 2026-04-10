@@ -62,10 +62,10 @@ function MapEditorDetection({
 			Scene.Map.currentpositionSelector.needsClose = true;
 			Scene.Map.currentpositionSelector.close();
 			Scene.Map.currentpositionSelector = null;
-			Manager.GL.layerTwoContext.renderer.setScissorTest(false);
-			Manager.GL.layerTwoContext.renderer.setClearColor(0x000000, 0);
-			Manager.GL.layerTwoContext.renderer.clear(true, true);
-			Manager.GL.layerTwoContext.renderer.setScissorTest(true);
+			Manager.GL.dialogContext.renderer.setScissorTest(false);
+			Manager.GL.dialogContext.renderer.setClearColor(0x000000, 0);
+			Manager.GL.dialogContext.renderer.clear(true, true);
+			Manager.GL.dialogContext.renderer.setScissorTest(true);
 		}
 	};
 
@@ -89,7 +89,7 @@ function MapEditorDetection({
 				map.update();
 			}
 			if (map.initialized) {
-				map.draw3D(Manager.GL.layerTwoContext);
+				map.draw3D(Manager.GL.dialogContext);
 			}
 		}
 		Scene.Map.positionSelectorAnimationFrameID = requestAnimationFrame(loop);
@@ -100,7 +100,7 @@ function MapEditorDetection({
 		if (canvas) {
 			if (Scene.Map.currentpositionSelector) {
 				Scene.Map.currentpositionSelector.camera.resizeGL(
-					Manager.GL.layerTwoContext,
+					Manager.GL.dialogContext,
 					canvas.clientWidth,
 					canvas.clientHeight,
 				);

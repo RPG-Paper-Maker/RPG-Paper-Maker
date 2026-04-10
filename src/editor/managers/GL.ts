@@ -19,16 +19,7 @@ class GL {
 	public static textureLoader = new THREE.TextureLoader();
 	public static raycaster = new THREE.Raycaster();
 	public static mainContext: GL;
-	public static layerOneContext: GL;
-	public static layerTwoContext: GL;
-	public static layerThreeContext: GL;
-	private static _staticRender: THREE.WebGLRenderer | null = null;
-	public static get staticRender(): THREE.WebGLRenderer {
-		if (!GL._staticRender) {
-			GL._staticRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
-		}
-		return GL._staticRender;
-	}
+	public static dialogContext: GL;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -70,6 +61,56 @@ class GL {
 	static async initializeShaders() {
 		this.SHADER_DEFAULT_VERTEX = await readPublicFile(Paths.join('Scripts', 'Shaders', 'default.vert'));
 		this.SHADER_DEFAULT_FRAGMENT = await readPublicFile(Paths.join('Scripts', 'Shaders', 'default.frag'));
+	}
+
+	static renderToDataURL(
+		renders: { scene: THREE.Scene; camera: THREE.Camera; clearDepth?: boolean }[],
+		width: number,
+		height: number,
+	): string {
+		const renderer = GL.dialogContext?.renderer;
+		if (!renderer) return '';
+		const target = new THREE.WebGLRenderTarget(width, height);
+		const prevScissorTest = renderer.getScissorTest();
+		const prevAutoClear = renderer.autoClear;
+		const prevShadowMap = renderer.shadowMap.enabled;
+		renderer.setScissorTest(false);
+		renderer.autoClear = false;
+		renderer.shadowMap.enabled = true;
+		renderer.setRenderTarget(target);
+		renderer.clear(true, true, true);
+		for (const { scene, camera, clearDepth } of renders) {
+			if (clearDepth) renderer.clearDepth();
+			renderer.render(scene, camera);
+		}
+		const pixels = new Uint8Array(width * height * 4);
+		renderer.readRenderTargetPixels(target, 0, 0, width, height, pixels);
+		renderer.setRenderTarget(null);
+		renderer.setScissorTest(prevScissorTest);
+		renderer.autoClear = prevAutoClear;
+		renderer.shadowMap.enabled = prevShadowMap;
+		target.dispose();
+		const canvas2d = document.createElement('canvas');
+		canvas2d.width = width;
+		canvas2d.height = height;
+		const ctx = canvas2d.getContext('2d')!;
+		const imageData = ctx.createImageData(width, height);
+		for (let y = 0; y < height; y++) {
+			const srcRow = (height - 1 - y) * width * 4;
+			const dstRow = y * width * 4;
+			for (let x = 0; x < width; x++) {
+				const s = srcRow + x * 4;
+				const d = dstRow + x * 4;
+				for (let c = 0; c < 3; c++) {
+					const linear = pixels[s + c] / 255;
+					const srgb = linear <= 0.0031308 ? linear * 12.92 : 1.055 * Math.pow(linear, 1 / 2.4) - 0.055;
+					imageData.data[d + c] = Math.round(Math.min(1, srgb) * 255);
+				}
+				imageData.data[d + 3] = pixels[s + 3]; // alpha unchanged
+			}
+		}
+		ctx.putImageData(imageData, 0, 0);
+		return canvas2d.toDataURL('image/png');
 	}
 
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
@@ -170,6 +211,9 @@ class GL {
 			this.renderer = new THREE.WebGLRenderer({
 				alpha: true,
 				powerPreference: 'high-performance',
+				// preserveDrawingBuffer is needed on the dialog context (layer 1) so that
+				// toDataURL() can capture a screenshot for frozen-dialog previews.
+				preserveDrawingBuffer: layer === 1,
 			});
 			this.renderer.setPixelRatio(window.devicePixelRatio);
 			this.renderer.setSize(window.innerWidth, window.innerHeight);

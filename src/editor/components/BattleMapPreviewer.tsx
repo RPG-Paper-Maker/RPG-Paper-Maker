@@ -49,8 +49,6 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 
 	const initializeMap = async () => {
 		setFirstLoading(true);
-		Manager.GL.staticRender.shadowMap.enabled = true;
-		Manager.GL.staticRender.setSize(WIDTH, HEIGHT);
 		const battleMap = Project.current!.battleSystem.battleMaps[0];
 		const tag = Model.TreeMapTag.create(battleMap.idMap, '');
 		tag.cursorPosition = battleMap.position.clone();
@@ -92,21 +90,22 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 
 	const render = () => {
 		Scene.Map.currentBattle!.update();
-		Manager.GL.staticRender.render(
-			Scene.Map.currentBattle!.scene,
-			Scene.Map.currentBattle!.camera.perspectiveCamera,
-		);
 		const overlayScene = new THREE.Scene();
 		const overlayCamera = new THREE.OrthographicCamera(-WIDTH / 2, WIDTH / 2, HEIGHT / 2, -HEIGHT / 2, 0, 10);
 		const hLine = createOverlayLine(-WIDTH / 2, 0, WIDTH / 2, 0, 0xff0000);
 		const vLine = createOverlayLine(0, -HEIGHT / 2, 0, HEIGHT / 2, 0x00ff00);
 		overlayScene.add(hLine);
 		overlayScene.add(vLine);
-		Manager.GL.staticRender.autoClear = false;
-		Manager.GL.staticRender.clearDepth();
-		Manager.GL.staticRender.render(overlayScene, overlayCamera);
-		Manager.GL.staticRender.autoClear = true;
-		setDataURL(Manager.GL.staticRender.domElement.toDataURL('image/png'));
+		setDataURL(
+			Manager.GL.renderToDataURL(
+				[
+					{ scene: Scene.Map.currentBattle!.scene, camera: Scene.Map.currentBattle!.camera.perspectiveCamera },
+					{ scene: overlayScene, camera: overlayCamera, clearDepth: true },
+				],
+				WIDTH,
+				HEIGHT,
+			),
+		);
 	};
 
 	useEffect(() => {

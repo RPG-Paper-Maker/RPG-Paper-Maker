@@ -62,8 +62,6 @@ function PanelMapObjectsSelection() {
 	const initialize = async () => {
 		const content = contentRef.current;
 		if (content) {
-			Manager.GL.staticRender.shadowMap.enabled = true;
-			Manager.GL.staticRender.setSize(300, 300);
 			await update();
 		}
 	};
@@ -173,8 +171,7 @@ function PanelMapObjectsSelection() {
 		scene.camera.perspectiveCamera.updateProjectionMatrix();
 		await scene.loadObject3D(graphicsID);
 		await scene.load();
-		Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
-		return Manager.GL.staticRender.domElement.toDataURL('image/png');
+		return Manager.GL.renderToDataURL([{ scene: scene.scene, camera: scene.camera.perspectiveCamera }], 300, 300);
 	};
 
 	const update = async () => {

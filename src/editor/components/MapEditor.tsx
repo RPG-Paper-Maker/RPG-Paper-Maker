@@ -22,6 +22,7 @@ import {
 	RootState,
 	setCopiedItems,
 	setMapEditorLoaded,
+	setNeedsReloadMap,
 	setNeedsUpdateMapEditor,
 	setSelectedMapElement,
 	setSelectedPosition,
@@ -276,11 +277,18 @@ function MapEditor() {
 			resize();
 			const removeInputs = Inputs.initialize(canvas);
 			loop();
+			const glDomElement = Manager.GL.mainContext.renderer?.domElement;
+			const handleContextRestored = () => {
+				clearMap();
+				dispatch(setNeedsReloadMap());
+			};
+			glDomElement?.addEventListener('webglcontextrestored', handleContextRestored);
 			return () => {
 				observer.disconnect();
 				clearMap();
 				removeInputs();
 				cancelAnimationFrame(Scene.Map.animationFrameID);
+				glDomElement?.removeEventListener('webglcontextrestored', handleContextRestored);
 			};
 		}
 	}, []);

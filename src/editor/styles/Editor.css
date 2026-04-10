@@ -339,29 +339,7 @@ a {
 	position: fixed;
 	left: 0;
 	top: 0;
-	z-index: 1000;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
-	pointer-events: none;
-}
-
-.canvasRenderer2 {
-	position: fixed;
-	left: 0;
-	top: 0;
-	z-index: 2001;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
-	pointer-events: none;
-}
-
-.canvasRenderer3 {
-	position: fixed;
-	left: 0;
-	top: 0;
-	z-index: 2002;
+	z-index: 9999;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;

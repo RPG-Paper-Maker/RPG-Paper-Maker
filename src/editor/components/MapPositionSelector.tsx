@@ -15,8 +15,8 @@ import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaAr
 import { Constants, MOBILE_ACTION } from '../common';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import Loader from './Loader';
 import '../styles/MapEditor.css';
+import Loader from './Loader';
 
 type Props = {
 	currentMapTag?: Model.TreeMapTag;
@@ -36,10 +36,10 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 			Scene.Map.currentpositionSelector.needsClose = true;
 			Scene.Map.currentpositionSelector.close();
 			Scene.Map.currentpositionSelector = null;
-			Manager.GL.layerTwoContext.renderer.setScissorTest(false);
-			Manager.GL.layerTwoContext.renderer.setClearColor(0x000000, 0);
-			Manager.GL.layerTwoContext.renderer.clear(true, true);
-			Manager.GL.layerTwoContext.renderer.setScissorTest(true);
+			Manager.GL.dialogContext.renderer.setScissorTest(false);
+			Manager.GL.dialogContext.renderer.setClearColor(0x000000, 0);
+			Manager.GL.dialogContext.renderer.clear(true, true);
+			Manager.GL.dialogContext.renderer.setScissorTest(true);
 		}
 	};
 
@@ -81,7 +81,7 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 				map.update();
 			}
 			if (map.initialized) {
-				map.draw3D(Manager.GL.layerTwoContext);
+				map.draw3D(Manager.GL.dialogContext);
 			}
 		}
 		if (Constants.IS_MOBILE) {
@@ -95,7 +95,7 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 		if (canvas) {
 			if (Scene.Map.currentpositionSelector) {
 				Scene.Map.currentpositionSelector.camera.resizeGL(
-					Manager.GL.layerTwoContext,
+					Manager.GL.dialogContext,
 					canvas.clientWidth,
 					canvas.clientHeight,
 				);

@@ -12,7 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Manager, Model, Scene } from '../Editor';
+import { Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Picture2D } from '../core/Picture2D';
@@ -40,17 +40,9 @@ type Props = {
 	hidden?: boolean;
 	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean, kind: number) => void;
 	onChangeGraphicsKind: (kind: number) => void;
-	GL?: Manager.GL;
 };
 
-function GraphicsSelector({
-	sceneID,
-	options,
-	hidden = false,
-	onChangeGraphicsKind,
-	onUpdateGraphics,
-	GL = Manager.GL.layerOneContext,
-}: Props) {
+function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKind, onUpdateGraphics }: Props) {
 	const { t } = useTranslation();
 
 	const [isOpenDialogPictures, setIsOpenDialogPictures] = useState(false);
@@ -179,7 +171,6 @@ function GraphicsSelector({
 	};
 
 	useEffect(() => {
-		GL.renderer.clear();
 		if (isCharacter) {
 			const isTileset = options.graphicsID === 0;
 			updatePicture(
@@ -198,12 +189,6 @@ function GraphicsSelector({
 			}
 		}
 	}, [options]);
-
-	useEffect(() => {
-		if (isOpenDialogObjects3D || hidden) {
-			GL.renderer.clear();
-		}
-	}, [isOpenDialogObjects3D, hidden]);
 
 	useEffect(() => {
 		if (isObject3D && !isOpenDialogObjects3D && !hidden) {
@@ -232,7 +217,7 @@ function GraphicsSelector({
 					{!isObject3D && <div ref={refBorder} className='border' />}
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !isOpenDialogObjects3D && !hidden && (
-						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} GL={GL} />
+						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} />
 					)}
 				</div>
 				<Dropdown

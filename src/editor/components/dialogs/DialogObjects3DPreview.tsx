@@ -17,7 +17,7 @@ import * as THREE from 'three';
 import { BUTTON_TYPE, CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Manager, Model, Scene } from '../../Editor';
+import { Model, Scene } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { setNeedsReloadMap, showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
@@ -339,7 +339,6 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 					objectID={selectedObject3D.id}
 					triggerUpdate={triggerUpdate}
 					setTriggerUpdate={setTriggerUpdate}
-					GL={Manager.GL.layerTwoContext}
 				/>
 			);
 		}

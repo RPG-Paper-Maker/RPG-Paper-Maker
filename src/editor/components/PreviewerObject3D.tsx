@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Manager, Model, Scene } from '../Editor';
 import Flex from './Flex';
 
@@ -17,25 +17,30 @@ type Props = {
 	sceneID: string;
 	objectID?: number;
 	shape?: Model.Shape;
-	GL?: Manager.GL;
 	triggerUpdate?: boolean;
 	setTriggerUpdate?: (b: boolean) => void;
 };
 
-function PreviewerObject3D({
-	sceneID,
-	objectID,
-	shape,
-	triggerUpdate,
-	setTriggerUpdate,
-	GL = Manager.GL.layerOneContext,
-}: Props) {
+function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTriggerUpdate }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
+	const isActiveRef = useRef(false);
+	const lastCanvasRectRef = useRef<DOMRect | null>(null);
+	const hasRenderedSinceActivateRef = useRef(false);
+	const [isActive, setIsActive] = useState(false);
+	const [screenshot, setScreenshot] = useState<string | null>(null);
+
+	const GL = Manager.GL.dialogContext;
 
 	const loop = () => {
+		if (!isActiveRef.current) return;
+		hasRenderedSinceActivateRef.current = true;
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		GL.renderer.clear();
 		if (scene) {
+			const canvas = refCanvas.current;
+			if (canvas) {
+				lastCanvasRectRef.current = canvas.getBoundingClientRect();
+			}
 			requestAnimationFrame(loop);
 			scene.update();
 			scene.draw3D(GL);
@@ -46,9 +51,12 @@ function PreviewerObject3D({
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		const canvas = refCanvas.current;
 		if (scene && canvas) {
+			lastCanvasRectRef.current = canvas.getBoundingClientRect();
 			scene.camera.resizeGL(GL, canvas.clientWidth, canvas.clientHeight);
 			scene.update();
-			scene.draw3D(GL);
+			if (isActiveRef.current) {
+				scene.draw3D(GL);
+			}
 		}
 	};
 
@@ -70,7 +78,9 @@ function PreviewerObject3D({
 			await scene.load();
 			await update();
 			resize();
-			loop();
+			if (isActiveRef.current) {
+				loop();
+			}
 		}
 	};
 
@@ -85,19 +95,79 @@ function PreviewerObject3D({
 		}
 	}, [triggerUpdate]);
 
+	// When re-activated (scene already loaded), restart the render loop.
 	useEffect(() => {
-		initialize().catch(console.error);
-		const container = refCanvas.current?.parentElement;
-		if (!container) {
-			return;
+		if (isActive) {
+			loop();
 		}
-		const observer = new ResizeObserver(() => {
-			resize();
-		});
-		observer.observe(container);
+	}, [isActive]);
+
+	useEffect(() => {
+		const onActivate = () => {
+			isActiveRef.current = true;
+			hasRenderedSinceActivateRef.current = false;
+			setIsActive(true);
+		};
+
+		const onDeactivate = () => {
+			const canvas = refCanvas.current;
+			const renderer = GL?.renderer;
+			const canvasRect = canvas?.getBoundingClientRect() ?? lastCanvasRectRef.current;
+			if (renderer && canvasRect && canvasRect.width > 0 && canvasRect.height > 0) {
+				if (canvas && hasRenderedSinceActivateRef.current) {
+					const tmp = document.createElement('canvas');
+					tmp.width = canvasRect.width;
+					tmp.height = canvasRect.height;
+					const ctx = tmp.getContext('2d');
+					if (ctx) {
+						ctx.drawImage(
+							renderer.domElement,
+							canvasRect.left,
+							canvasRect.top,
+							canvasRect.width,
+							canvasRect.height,
+							0,
+							0,
+							canvasRect.width,
+							canvasRect.height,
+						);
+						setScreenshot(tmp.toDataURL('image/png'));
+					}
+				}
+				const domRect = renderer.domElement.getBoundingClientRect();
+				renderer.setViewport(
+					canvasRect.left,
+					domRect.height - canvasRect.bottom,
+					canvasRect.width,
+					canvasRect.height,
+				);
+				renderer.setScissor(
+					canvasRect.left,
+					domRect.height - canvasRect.bottom,
+					canvasRect.width,
+					canvasRect.height,
+				);
+				renderer.setScissorTest(true);
+				renderer.clear();
+			}
+			isActiveRef.current = false;
+			setIsActive(false);
+		};
+
+		Manager.DialogGL.push(sceneID, onActivate, onDeactivate);
+		initialize().catch(console.error);
+
+		const container = refCanvas.current?.parentElement;
+		let observer: ResizeObserver | null = null;
+		if (container) {
+			observer = new ResizeObserver(() => resize());
+			observer.observe(container);
+		}
 		resize();
+
 		return () => {
-			observer.disconnect();
+			observer?.disconnect();
+			Manager.DialogGL.pop(sceneID);
 			Scene.Previewer3D.listScenes.get(sceneID)?.close();
 			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
@@ -105,7 +175,15 @@ function PreviewerObject3D({
 
 	return (
 		<Flex one fillWidth fillHeight centerV>
-			<div className='fillWidth fillHeight' ref={refCanvas} />
+			<div className='fillWidth fillHeight' ref={refCanvas}>
+				{!isActive && screenshot && (
+					<img
+						src={screenshot}
+						style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+						alt=''
+					/>
+				)}
+			</div>
 		</Flex>
 	);
 }

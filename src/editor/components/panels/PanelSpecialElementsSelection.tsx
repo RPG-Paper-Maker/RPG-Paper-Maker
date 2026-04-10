@@ -114,10 +114,6 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	const initialize = async () => {
 		const content = contentRef.current;
 		if (content) {
-			if (displayCanvas) {
-				Manager.GL.staticRender.shadowMap.enabled = true;
-				Manager.GL.staticRender.setSize(300, 300);
-			}
 			await update();
 		}
 	};
@@ -139,8 +135,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 							scene.camera.perspectiveCamera.updateProjectionMatrix();
 							await scene.loadObject3D(elementID);
 							await scene.load();
-							Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
-							dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
+							dataURL = Manager.GL.renderToDataURL([{ scene: scene.scene, camera: scene.camera.perspectiveCamera }], 300, 300);
 						} else {
 							dataURL = (await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
 						}

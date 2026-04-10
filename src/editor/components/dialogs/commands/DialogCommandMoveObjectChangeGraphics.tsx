@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { COMMAND_MOVE_KIND, ELEMENT_MAP_KIND, Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Rectangle } from '../../../core/Rectangle';
-import { Manager, Model } from '../../../Editor';
+import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
@@ -177,8 +177,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 					options={graphicOptions}
 					onChangeGraphicsKind={handleChangeGraphicsKind}
 					onUpdateGraphics={handleUpdateGraphics}
-					GL={Manager.GL.layerTwoContext}
-				/>
+					/>
 				<Checkbox isChecked={isDontChangeOrientation} onChange={setIsDontChangeOrientation}>
 					{t('dont.change.orientation')}
 				</Checkbox>
