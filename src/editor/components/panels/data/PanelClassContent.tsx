@@ -362,6 +362,8 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 							scrollable
 							canBeEmpty
 							cannotUpdateListSize
+							byIndex
+							doNotGenerateIDOnPaste
 						/>
 					</Groupbox>
 				</Flex>
