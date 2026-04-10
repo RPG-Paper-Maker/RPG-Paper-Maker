@@ -18,8 +18,9 @@ import { Serializable } from '../core/Serializable';
 import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
-	public static readonly MAX_SAVES = 5;
+	public static readonly MAX_SAVES = 100;
 	public static isProcessing = false;
+	public static pendingSave: Promise<void> | null = null;
 
 	private static getPathStates(): string {
 		return Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO);
@@ -123,13 +124,19 @@ class UndoRedo {
 		if (!before && pos >= 0) {
 			await this.applyStates(files[pos], false);
 		}
-		this.isProcessing = false;
 	}
 
 	static async undo() {
 		if (!this.isProcessing) {
 			this.isProcessing = true;
-			await this.action(true, -1);
+			try {
+				if (this.pendingSave) await this.pendingSave;
+				await this.action(true, -1);
+			} catch (e) {
+				console.error('Undo failed:', e);
+			} finally {
+				this.isProcessing = false;
+			}
 			return true;
 		} else {
 			return false;
@@ -139,7 +146,14 @@ class UndoRedo {
 	static async redo() {
 		if (!this.isProcessing) {
 			this.isProcessing = true;
-			await this.action(false, 1);
+			try {
+				if (this.pendingSave) await this.pendingSave;
+				await this.action(false, 1);
+			} catch (e) {
+				console.error('Redo failed:', e);
+			} finally {
+				this.isProcessing = false;
+			}
 			return true;
 		} else {
 			return false;

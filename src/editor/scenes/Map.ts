@@ -444,12 +444,15 @@ class Map extends Base {
 	}
 
 	async savePortionsTemp() {
-		if (this.portionsSaving.size > 0) {
-			for (const mapPortion of this.portionsSaving) {
-				await mapPortion.model.save(true);
+		try {
+			if (this.portionsSaving.size > 0) {
+				for (const mapPortion of this.portionsSaving) {
+					await mapPortion.model.save(true);
+				}
 			}
+		} finally {
+			this.portionsSaving.clear();
 		}
-		this.portionsSaving.clear();
 		if (this.tag?.saved) {
 			this.tag.saved = false;
 			this.needsTreeMapUpdate = true;
@@ -460,10 +463,19 @@ class Map extends Base {
 	}
 
 	async saveUndoRedoStates() {
-		const { index, length } = await Manager.UndoRedo.createStates(this.undoRedoStatesSaving);
-		this.undoRedoStatesSaving = [];
-		this.needsUpdateIndex = index;
-		this.needsUpdateLength = length;
+		const savePromise = Manager.UndoRedo.createStates(this.undoRedoStatesSaving);
+		Manager.UndoRedo.pendingSave = savePromise.then(() => {}).catch(() => {});
+		try {
+			const { index, length } = await savePromise;
+			this.undoRedoStatesSaving = [];
+			this.needsUpdateIndex = index;
+			this.needsUpdateLength = length;
+		} catch (e) {
+			console.error('Failed to save undo/redo states:', e);
+			this.undoRedoStatesSaving = [];
+		} finally {
+			Manager.UndoRedo.pendingSave = null;
+		}
 	}
 
 	initializeSunLight() {
@@ -1261,6 +1273,14 @@ class Map extends Base {
 			this.getMapPortionByPosition(this.selectedPosition)?.removeSelected();
 			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
 			this.getMapPortionByPosition(Position.createFromVector3(worldPos))?.addSelected();
+			// Update selectedPosition to match the new transform so subsequent operations
+			const newPosition = this.selectedElement.getPositionFromVec3(
+				this.selectedMesh.position,
+				this.selectedMesh.rotation,
+				this.selectedMesh.scale,
+			);
+			newPosition.layer = this.selectedPosition.layer;
+			this.selectedPosition = newPosition;
 		}
 	}
 
