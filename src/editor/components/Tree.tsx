@@ -761,6 +761,19 @@ function Tree({
 		return () => el.removeEventListener('mousedown', handleMouseDown);
 	}, [blurOnMouseLeave]);
 
+	useEffect(() => {
+		if (!blurOnMouseLeave || !isFocused) return;
+		const handleDocumentMouseMove = (e: MouseEvent) => {
+			const rect = listRef.current?.getBoundingClientRect();
+			if (!rect) return;
+			if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+				handleSetFocusRef.current(false);
+			}
+		};
+		document.addEventListener('mousemove', handleDocumentMouseMove);
+		return () => document.removeEventListener('mousemove', handleDocumentMouseMove);
+	}, [blurOnMouseLeave, isFocused]);
+
 	useLayoutEffect(() => {
 		if (
 			forcedCurrentSelectedItemID !== undefined &&
