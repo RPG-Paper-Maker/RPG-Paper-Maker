@@ -2331,7 +2331,7 @@ class Map extends Base {
 		const cy = radius + padding;
 
 		const angleRad = (this.camera.horizontalAngle * Math.PI) / 180;
-		const compassRot = Math.atan2(Math.cos(angleRad), -Math.sin(angleRad));
+		const compassRot = -(angleRad + Math.PI / 2);
 
 		ctx.save();
 		ctx.translate(cx, cy);
