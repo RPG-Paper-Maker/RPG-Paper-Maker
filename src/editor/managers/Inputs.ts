@@ -292,6 +292,17 @@ class Inputs {
 			};
 			canvas.addEventListener('wheel', handleWheel);
 
+			const handleWindowBlur = async () => {
+				const wasPressed = Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed;
+				Inputs.isPointerPressed = false;
+				Inputs.isMouseRightPressed = false;
+				Inputs.isMouseWheelPressed = false;
+				if (wasPressed && Scene.Map.current && !Scene.Map.current.loading) {
+					await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
+				}
+			};
+			window.addEventListener('blur', handleWindowBlur);
+
 			return () => {
 				if (!canvasOnly) {
 					window.removeEventListener('keydown', handleKeyDown);
@@ -302,6 +313,7 @@ class Inputs {
 				canvas.removeEventListener('mousedown', handleMouseDown, false);
 				canvas.removeEventListener('mouseleave', handleMouseLeave, false);
 				canvas.removeEventListener('wheel', handleWheel);
+				window.removeEventListener('blur', handleWindowBlur);
 			};
 		}
 	}
