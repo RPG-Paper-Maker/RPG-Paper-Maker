@@ -22,6 +22,7 @@ class CursorWall {
 	public positionStart: Position | null = null;
 	public positionEnd: Position | null = null;
 	public isMouseDown = false;
+	public isAdding = true;
 
 	initialize() {
 		this.material = new THREE.LineBasicMaterial({
@@ -101,6 +102,7 @@ class CursorWall {
 
 	onMouseDown(position: Position) {
 		this.isMouseDown = true;
+		this.isAdding = Scene.Map.isAdding();
 		if (Constants.IS_MOBILE) {
 			this.positionStart = position;
 		}
@@ -108,11 +110,7 @@ class CursorWall {
 
 	onMouseUp() {
 		if (this.positionStart !== null && this.positionEnd !== null) {
-			if (Scene.Map.isAdding()) {
-				Scene.Map.current!.updateWallFromCursor(true, false, true);
-			} else if (Scene.Map.isRemoving()) {
-				Scene.Map.current!.updateWallFromCursor(false, false, true);
-			}
+			Scene.Map.current!.updateWallFromCursor(this.isAdding, false, true);
 		}
 		this.isMouseDown = false;
 		this.positionEnd = null;
