@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE, Paths } from '../../common';
-import { checkFileExists, copyFile, copyFolder, getFiles, getFolders } from '../../common/Platform';
+import { checkFileExists, copyFile, copyFolder, getFiles, getFolders, removeFolder } from '../../common/Platform';
 import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import { triggerOpenProject } from '../../store';
@@ -80,6 +80,7 @@ function DialogManageBackups({ isOpen, setIsOpen, project, onAfterRestore }: Pro
 		const folders = await getFolders(backupPath);
 		const files = await getFiles(backupPath);
 		for (const folder of folders) {
+			await removeFolder(Paths.join(projectLocation, folder));
 			await copyFolder(Paths.join(backupPath, folder), Paths.join(projectLocation, folder));
 		}
 		for (const file of files) {
