@@ -54,6 +54,9 @@ class Mathf {
 			return [current];
 		}
 		const positions: Position[] = [];
+		const base = current.clone();
+		base.centerX = 50;
+		base.centerZ = 50;
 		let x1 = previous.x;
 		const x2 = current.x;
 		const y = current.y;
@@ -73,7 +76,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								x1++;
 								if (x1 === x2) {
 									break;
@@ -90,7 +93,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								z1++;
 								if (z1 === z2) {
 									break;
@@ -109,7 +112,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								x1++;
 								if (x1 === x2) {
 									break;
@@ -126,7 +129,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								z1--;
 								if (z1 === z2) {
 									break;
@@ -141,7 +144,7 @@ class Mathf {
 					}
 				} else {
 					while (x1 !== x2) {
-						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 						x1++;
 					}
 				}
@@ -155,7 +158,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								x1--;
 								if (x1 === x2) {
 									break;
@@ -172,7 +175,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								z1++;
 								if (z1 === z2) {
 									break;
@@ -191,7 +194,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								x1--;
 								if (x1 === x2) break;
 								e -= dz;
@@ -206,7 +209,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+								positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 								z1--;
 								if (z1 === z2) break;
 								e -= dx;
@@ -219,7 +222,7 @@ class Mathf {
 					}
 				} else {
 					while (x1 !== x2) {
-						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 						x1--;
 					}
 				}
@@ -229,12 +232,12 @@ class Mathf {
 			if (dz !== 0) {
 				if (dz > 0) {
 					while (z1 !== z2) {
-						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 						z1++;
 					}
 				} else {
 					while (z1 !== z2) {
-						positions.push(current.clone().setCoords(x1, y, yPlus, z1));
+						positions.push(base.clone().setCoords(x1, y, yPlus, z1));
 						z1--;
 					}
 				}
