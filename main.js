@@ -630,7 +630,7 @@ ipcMain.handle('create-file', async (event, path, content) => {
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
-	await fs.unlink(path, content).catch((e) => {
+	await retryOnPermError(() => fs.unlink(path, content)).catch((e) => {
 		if (e.code !== 'ENOENT') throw e;
 	});
 });
