@@ -57,10 +57,12 @@ class MapPortion extends Serializable {
 	}
 
 	static getBindingJsonLands(json: JSONType) {
+		if (!json) return null;
 		return json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile;
 	}
 
 	static getBindingJsonObjects3D(json: JSONType) {
+		if (!json) return null;
 		const data = Project.current!.specialElements.getObject3DByID(json['did'] as number);
 		if (!data) {
 			return null;
