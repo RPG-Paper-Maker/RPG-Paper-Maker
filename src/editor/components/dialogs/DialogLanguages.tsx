@@ -56,6 +56,7 @@ function DialogLanguages({ setIsOpen }: Props) {
 			project.heroes.save(),
 			project.classes.save(),
 			project.monsters.save(),
+			project.keyboard.save(),
 		]);
 		setIsOpen(false);
 	};

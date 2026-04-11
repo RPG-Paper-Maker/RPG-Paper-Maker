@@ -229,43 +229,35 @@ class Languages extends Serializable {
 		const tNew = i18next.getFixedT(localeShort);
 		const translate = (loc: Model.Localization) =>
 			this.translateLocalization(loc, refLangId, reverseMap, languageId, tNew);
-
 		const project = Project.current!;
-
 		project.titleScreenGameOver.titleCommands.forEach(translate);
 		project.titleScreenGameOver.gameOverCommands.forEach(translate);
-
 		project.systems.currencies.forEach(translate);
 		project.systems.itemsTypes.forEach(translate);
 		project.systems.inventoryFilters.forEach(translate);
 		project.systems.mainMenuCommands.forEach(translate);
-
 		project.battleSystem.elements.forEach(translate);
 		project.battleSystem.statistics.forEach(translate);
 		project.battleSystem.equipments.forEach(translate);
 		project.battleSystem.weaponsKind.forEach(translate);
 		project.battleSystem.armorsKind.forEach(translate);
-
 		project.skills.list.forEach((skill) => {
 			translate(skill);
 			translate(skill.description);
 		});
-
 		project.items.list.forEach((item) => {
 			translate(item);
 			translate(item.description);
 		});
-
 		project.weapons.list.forEach((weapon) => {
 			translate(weapon);
 			translate(weapon.description);
 		});
-
 		project.armors.list.forEach((armor) => {
 			translate(armor);
 			translate(armor.description);
 		});
-
+		project.keyboard.list.forEach(translate);
 		project.status.list.forEach(translate);
 		project.heroes.list.forEach(translate);
 		project.classes.list.forEach(translate);
