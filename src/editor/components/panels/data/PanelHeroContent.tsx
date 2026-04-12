@@ -169,22 +169,37 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 				</Flex>
 				<Flex one>
 					<Groupbox title={t('battler')} disabled={disabled} fillWidth>
-						<AssetSelector
-							selectedID={battlerID}
-							onChange={handleBattlerChange}
-							selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-							kind={PICTURE_KIND.BATTLERS}
-							disabled={disabled}
-						/>
-						{battlerTexture && (
-							<Flex centerH>
-								<TexturePreviewer
-									texture={battlerTexture}
-									base64={!Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID)?.isBR}
-									scale={1}
+						<Flex column spaced fillHeight>
+							<Flex>
+								<AssetSelector
+									selectedID={battlerID}
+									onChange={handleBattlerChange}
+									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+									kind={PICTURE_KIND.BATTLERS}
+									disabled={disabled}
 								/>
 							</Flex>
-						)}
+							{battlerTexture && (
+								<Flex one scrollable>
+									<Flex one zeroWidth>
+										<Flex column one>
+											<Flex one zeroHeight centerH centerV>
+												<TexturePreviewer
+													texture={battlerTexture}
+													base64={
+														!Project.current!.pictures.getByID(
+															PICTURE_KIND.BATTLERS,
+															battlerID,
+														)?.isBR
+													}
+													scale={1}
+												/>
+											</Flex>
+										</Flex>
+									</Flex>
+								</Flex>
+							)}
+						</Flex>
 					</Groupbox>
 				</Flex>
 			</Flex>
