@@ -170,22 +170,16 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 								/>
 							</Flex>
 							{battlerTexture && (
-								<Flex one scrollable>
-									<Flex one zeroWidth>
-										<Flex column one>
-											<Flex one zeroHeight centerH centerV>
-												<TexturePreviewer
-													texture={battlerTexture}
-													base64={
-														!Project.current!.pictures.getByID(
-															PICTURE_KIND.BATTLERS,
-															battlerID,
-														)?.isBR
-													}
-													scale={1}
-												/>
-											</Flex>
-										</Flex>
+								<Flex one scrollable style={{ minHeight: '300px' }}>
+									<Flex one zeroWidth centerH>
+										<TexturePreviewer
+											texture={battlerTexture}
+											base64={
+												!Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID)
+													?.isBR
+											}
+											scale={1}
+										/>
 									</Flex>
 								</Flex>
 							)}
