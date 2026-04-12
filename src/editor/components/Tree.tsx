@@ -927,8 +927,10 @@ function Tree({
 	): number => {
 		const canAddEmptyNode =
 			!cannotAdd && ((multipleLevels && addEmpty) || (level === 0 && !cannotAddEditRemoveRoot));
+		const canDropAtEnd =
+			cannotAdd && !cannotDragDrop && ((multipleLevels && addEmpty) || (level === 0 && !cannotAddEditRemoveRoot));
 		let emptyNode: Node | null = null;
-		if (canAddEmptyNode) {
+		if (canAddEmptyNode || canDropAtEnd) {
 			emptyNode = Node.create(createDefault(emptyID));
 			emptyNode.parent = parent;
 			emptyID--;
@@ -996,7 +998,7 @@ function Tree({
 					items.push(
 						<div
 							key={byIndex ? `children-${index}-${level}` : `children-${node.content.id}`}
-							className="treeChildrenGroup"
+							className='treeChildrenGroup'
 							style={{ '--tree-indent': `${5 + level * 15 + 8}px` } as CSSProperties}
 						>
 							{childItems}
@@ -1025,6 +1027,17 @@ function Tree({
 						hideTooltip={hideTooltip}
 					/>
 				</div>,
+			);
+		} else if (canDropAtEnd) {
+			items.push(
+				<div
+					key='drop-target-end'
+					className='treeItem treeDropTarget'
+					style={{ height: 0 }}
+					onDragOver={!disabled ? (e) => handleDragOver(e, emptyNode!, true) : undefined}
+					onDragLeave={!disabled ? handleDragLeave : undefined}
+					onDrop={!disabled ? (e) => handleDrop(e, emptyNode!) : undefined}
+				/>,
 			);
 		}
 		return emptyID;
