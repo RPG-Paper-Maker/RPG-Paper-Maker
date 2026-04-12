@@ -44,7 +44,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 
 	const upperClass = useMemo(() => Project.current!.classes.getByID(selectedHero?.class ?? 1), [selectedHero]);
 
-	const update = async () => {
+	const update = () => {
 		if (selectedHero) {
 			setClassID(selectedHero.class);
 			setDescription(selectedHero.description);
@@ -52,17 +52,11 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			setFacesetIndexX(selectedHero.indexXFaceset);
 			setFacesetIndexY(selectedHero.indexYFaceset);
 			setFacesetTexture(
-				(await Project.current!.pictures.getByID(
-					PICTURE_KIND.FACESETS,
-					selectedHero.idFaceset,
-				)?.getPathOrBase64()) ?? '',
+				Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, selectedHero.idFaceset)?.getPath() ?? '',
 			);
 			setBattlerID(selectedHero.idBattler);
 			setBattlerTexture(
-				(await Project.current!.pictures.getByID(
-					PICTURE_KIND.BATTLERS,
-					selectedHero.idBattler,
-				)?.getPathOrBase64()) ?? '',
+				Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, selectedHero.idBattler)?.getPath() ?? '',
 			);
 			ProgressionTable.selectedClassInitialLevel =
 				selectedHero.classInherit.initialLevel === -1
@@ -91,7 +85,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 		setClassID(id);
 	};
 
-	const handleFacesetChange = async (id: number, indexX: number, indexY: number) => {
+	const handleFacesetChange = (id: number, indexX: number, indexY: number) => {
 		if (selectedHero) {
 			selectedHero.idFaceset = id;
 			selectedHero.indexXFaceset = indexX;
@@ -101,24 +95,20 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 		setFacesetIndexX(indexX);
 		setFacesetIndexY(indexY);
 		setFacesetTexture('');
-		setFacesetTexture(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, id)?.getPathOrBase64()) ?? '',
-		);
+		setFacesetTexture(Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, id)?.getPath() ?? '');
 	};
 
-	const handleBattlerChange = async (id: number) => {
+	const handleBattlerChange = (id: number) => {
 		if (selectedHero) {
 			selectedHero.idBattler = id;
 		}
 		setBattlerID(id);
 		setBattlerTexture('');
-		setBattlerTexture(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, id)?.getPathOrBase64()) ?? '',
-		);
+		setBattlerTexture(Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, id)?.getPath() ?? '');
 	};
 
 	useLayoutEffect(() => {
-		update().catch(console.error);
+		update();
 	}, [selectedHero]);
 
 	return (
