@@ -21,6 +21,7 @@ class Hero extends Localization {
 	public idFaceset!: number;
 	public indexXFaceset!: number;
 	public indexYFaceset!: number;
+	public idCharacter!: number;
 	public classInherit!: Class;
 	public description!: Localization;
 
@@ -28,6 +29,7 @@ class Hero extends Localization {
 		['class', 'class', undefined, BINDING.NUMBER],
 		['idBattler', 'bid', -1, BINDING.NUMBER],
 		['idFaceset', 'fid', -1, BINDING.NUMBER],
+		['idCharacter', 'cid', -1, BINDING.NUMBER],
 		['indexXFaceset', 'indexXFaceset', 0, BINDING.NUMBER],
 		['indexYFaceset', 'indexYFaceset', 0, BINDING.NUMBER],
 		['classInherit', 'ci', undefined, BINDING.OBJECT, Class],

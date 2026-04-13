@@ -34,6 +34,8 @@ class System extends Serializable {
 	public mountainCollisionAngle!: DynamicValue;
 	public climbingSpeed!: DynamicValue;
 	public moveCameraOnBlockView!: DynamicValue;
+	public caterpillarMaxPartyMembers!: DynamicValue;
+	public caterpillarFirstIndex!: DynamicValue;
 	public mapFrameDuration!: DynamicValue;
 	public FRAMES!: number;
 	public battlersFrames!: number;
@@ -111,6 +113,20 @@ class System extends Serializable {
 			'moveCameraOnBlockView',
 			'mcobv',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, true),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'caterpillarMaxPartyMembers',
+			'cmpb',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'caterpillarFirstIndex',
+			'cfi',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],

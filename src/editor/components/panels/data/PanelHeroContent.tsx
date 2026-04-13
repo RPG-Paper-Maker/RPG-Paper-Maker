@@ -39,6 +39,8 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 	const [facesetIndexX, setFacesetIndexX] = useStateNumber();
 	const [facesetIndexY, setFacesetIndexY] = useStateNumber();
 	const [facesetTexture, setFacesetTexture] = useStateString();
+	const [characterID, setCharacterID] = useStateNumber();
+	const [characterTexture, setCharacterTexture] = useStateString();
 	const [battlerID, setBattlerID] = useStateNumber();
 	const [battlerTexture, setBattlerTexture] = useStateString();
 
@@ -53,6 +55,10 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			setFacesetIndexY(selectedHero.indexYFaceset);
 			setFacesetTexture(
 				Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, selectedHero.idFaceset)?.getPath() ?? '',
+			);
+			setCharacterID(selectedHero.idCharacter);
+			setCharacterTexture(
+				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, selectedHero.idCharacter)?.getPath() ?? '',
 			);
 			setBattlerID(selectedHero.idBattler);
 			setBattlerTexture(
@@ -73,6 +79,8 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			setFacesetIndexX(0);
 			setFacesetIndexY(0);
 			setFacesetTexture('');
+			setCharacterID(-1);
+			setCharacterTexture('');
 			setBattlerID(-1);
 			setBattlerTexture('');
 		}
@@ -96,6 +104,15 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 		setFacesetIndexY(indexY);
 		setFacesetTexture('');
 		setFacesetTexture(Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, id)?.getPath() ?? '');
+	};
+
+	const handleCharacterChange = (id: number) => {
+		if (selectedHero) {
+			selectedHero.idCharacter = id;
+		}
+		setCharacterID(id);
+		setCharacterTexture('');
+		setCharacterTexture(Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id)?.getPath() ?? '');
 	};
 
 	const handleBattlerChange = (id: number) => {
@@ -158,6 +175,35 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 					</Groupbox>
 				</Flex>
 				<Flex one>
+					<Groupbox title={t('character')} disabled={disabled} fillWidth>
+						<Flex column spaced fillHeight>
+							<Flex>
+								<AssetSelector
+									selectedID={characterID}
+									onChange={handleCharacterChange}
+									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+									kind={PICTURE_KIND.CHARACTERS}
+									disabled={disabled}
+								/>
+							</Flex>
+							{characterTexture && (
+								<Flex one scrollable style={{ minHeight: '200px' }}>
+									<Flex one zeroWidth centerH>
+										<TexturePreviewer
+											texture={characterTexture}
+											base64={
+												!Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, characterID)
+													?.isBR
+											}
+											scale={1}
+										/>
+									</Flex>
+								</Flex>
+							)}
+						</Flex>
+					</Groupbox>
+				</Flex>
+				<Flex one>
 					<Groupbox title={t('battler')} disabled={disabled} fillWidth>
 						<Flex column spaced fillHeight>
 							<Flex>
@@ -170,7 +216,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 								/>
 							</Flex>
 							{battlerTexture && (
-								<Flex one scrollable style={{ minHeight: '300px' }}>
+								<Flex one scrollable style={{ minHeight: '200px' }}>
 									<Flex one zeroWidth centerH>
 										<TexturePreviewer
 											texture={battlerTexture}

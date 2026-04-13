@@ -24,6 +24,7 @@ import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
+import TooltipInformation from '../../TooltipInformation';
 import Groupbox from '../../Groupbox';
 import InputLocalization from '../../InputLocalization';
 import InputNumber from '../../InputNumber';
@@ -57,6 +58,8 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [mountainCollisionAngle] = useStateDynamicValue();
 	const [climbingSpeed] = useStateDynamicValue();
 	const [moveCameraOnBlockView] = useStateDynamicValue();
+	const [caterpillarMaxPartyMembers] = useStateDynamicValue();
+	const [caterpillarFirstIndex] = useStateDynamicValue();
 	const [mapFrameDuration] = useStateDynamicValue();
 	const [frames, setFrames] = useStateNumber();
 	const [battlersFrames, setBattlersFrames] = useStateNumber();
@@ -101,6 +104,8 @@ const PanelSystem = forwardRef((props, ref) => {
 		mountainCollisionAngle.copy(systems.mountainCollisionAngle);
 		climbingSpeed.copy(systems.climbingSpeed);
 		moveCameraOnBlockView.copy(systems.moveCameraOnBlockView);
+		caterpillarMaxPartyMembers.copy(systems.caterpillarMaxPartyMembers);
+		caterpillarFirstIndex.copy(systems.caterpillarFirstIndex);
 		mapFrameDuration.copy(systems.mapFrameDuration);
 		setFrames(systems.FRAMES);
 		setBattlersFrames(systems.battlersFrames);
@@ -165,6 +170,8 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.mountainCollisionAngle.copy(mountainCollisionAngle);
 		systems.climbingSpeed.copy(climbingSpeed);
 		systems.moveCameraOnBlockView.copy(moveCameraOnBlockView);
+		systems.caterpillarMaxPartyMembers.copy(caterpillarMaxPartyMembers);
+		systems.caterpillarFirstIndex.copy(caterpillarFirstIndex);
 		systems.mapFrameDuration.copy(mapFrameDuration);
 		systems.FRAMES = frames;
 		systems.battlersFrames = battlersFrames;
@@ -310,6 +317,28 @@ const PanelSystem = forwardRef((props, ref) => {
 								<DynamicValueSelector
 									value={moveCameraOnBlockView}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH}
+								/>
+							</Flex>
+							<Flex column spaced>
+								<Flex spaced centerV>
+									<div>{t('caterpillar.max.party.members')}:</div>
+									<TooltipInformation text={t('tooltip.caterpillar.max.party.members')} />
+								</Flex>
+								<DynamicValueSelector
+									value={caterpillarMaxPartyMembers}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									min={0}
+								/>
+							</Flex>
+							<Flex column spaced>
+								<Flex spaced centerV>
+									<div>{t('caterpillar.first.index')}:</div>
+									<TooltipInformation text={t('tooltip.caterpillar.first.index')} />
+								</Flex>
+								<DynamicValueSelector
+									value={caterpillarFirstIndex}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									min={0}
 								/>
 							</Flex>
 						</Flex>
