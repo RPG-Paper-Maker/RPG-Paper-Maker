@@ -38,8 +38,9 @@ class Battler {
 						),
 					);
 			} else {
-				hero = Project.current!.monsters.getByID(this.monsters[index].monsterID);
 				const troopMonster = this.monsters[index];
+				if (!troopMonster) return;
+				hero = Project.current!.monsters.getByID(troopMonster.monsterID);
 				if (troopMonster.isSpecificPosition) {
 					try {
 						const formula = troopMonster.specificPosition.value as string;
