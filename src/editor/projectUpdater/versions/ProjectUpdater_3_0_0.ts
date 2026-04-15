@@ -331,9 +331,11 @@ class ProjectUpdater_3_0_0 {
 			for (const command of jsonTitle.tc as JSONType[]) {
 				command.id = id++;
 			}
-			id = 1;
-			for (const command of jsonTitle.gameOverCommands as JSONType[]) {
-				command.id = id++;
+			if (jsonTitle.gameOverCommands) {
+				id = 1;
+				for (const command of jsonTitle.gameOverCommands as JSONType[]) {
+					command.id = id++;
+				}
 			}
 			await writeJSON(Paths.join(projectPath, 'titlescreenGameover.json'), jsonTitle);
 		}
