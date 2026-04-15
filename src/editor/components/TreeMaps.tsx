@@ -97,8 +97,9 @@ function TreeMaps({
 	const handleAcceptNewMap = async () => {
 		if (editedMap && selectedNode) {
 			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
+			const folder = await editedMap.createNewMap();
+			if (!folder) return;
 			selectedNode.children.push(node);
-			await editedMap.createNewMap();
 			RPM.treeCurrentSetSelectedItem(node);
 		}
 	};
