@@ -37,7 +37,7 @@ const PanelModels = forwardRef((props, ref) => {
 	const [models, setModels] = useState<Node[]>([]);
 	const [selectedModel, setSelectedModel] = useState<Model.CommonObject | null>(null);
 	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
-	const [modelsVersion, setModelsVersion] = useState(0);
+	const [_modelsVersion, setModelsVersion] = useState(0);
 
 	const isModelDisabled = useMemo(
 		() => selectionType === SELECTION_KIND.LIST && (selectedModel === null || selectedModel.id === -1),

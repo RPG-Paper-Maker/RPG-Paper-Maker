@@ -214,7 +214,7 @@ class Shape extends Asset {
 		let minVertex = new THREE.Vector3();
 		let maxVertex = new THREE.Vector3();
 		let firstVertex = true;
-		gltf.scene.traverse((child) => {
+		gltf.scene.traverse((child: THREE.Object3D) => {
 			if (!(child instanceof THREE.Mesh)) {
 				return;
 			}

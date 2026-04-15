@@ -1,7 +1,19 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
+import { defineConfig } from 'vite';
 import pluginChecker from 'vite-plugin-checker';
+import svgr from 'vite-plugin-svgr';
+
+const chunkMap = [
+	{ name: 'vendor', deps: ['react', 'react-dom'] },
+	{ name: 'audio', deps: ['howler'] },
+	{ name: 'three', deps: ['three'] },
+	{ name: 'redux', deps: ['@reduxjs', 'react-redux'] },
+	{ name: 'i18n', deps: ['i18next'] },
+	{ name: 'zip', deps: ['jszip'] },
+	{ name: 'icons', deps: ['react-icons'] },
+	{ name: 'storage', deps: ['localforage'] },
+	{ name: 'toastify', deps: ['react-toastify'] },
+];
 
 export default defineConfig({
 	base: './',
@@ -15,16 +27,16 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					vendor: ['react', 'react-dom'],
-					audio: ['howler'],
-					three: ['three'],
-					redux: ['@reduxjs/toolkit', 'react-redux'],
-					i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
-					zip: ['jszip'],
-					icons: ['react-icons'],
-					storage: ['localforage'],
-					toastify: ['react-toastify'],
+				manualChunks(id) {
+					if (!id.includes('node_modules')) return;
+
+					for (const chunk of chunkMap) {
+						if (chunk.deps.some((dep) => id.includes(dep))) {
+							return chunk.name;
+						}
+					}
+
+					return 'vendor';
 				},
 			},
 		},

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ES2022",
     "lib": [
       "dom",
       "dom.iterable",
@@ -14,12 +14,15 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
-    "downlevelIteration": true,
     "jsx": "react-jsx",
+    "paths": {
+      "three/examples/jsm/*": ["./node_modules/@types/three/examples/jsm/*"],
+      "three/addons/*": ["./node_modules/@types/three/examples/jsm/*"]
+    }
   },
   "include": [
     "src",
