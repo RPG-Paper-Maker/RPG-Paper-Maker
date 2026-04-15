@@ -79,11 +79,15 @@ class MapPortion extends Serializable {
 		}
 	}
 
-	static removeElementsOut(map: Model.Map, mapping: Map<string, Base | Model.CommonObject>) {
+	static removeElementsOut(
+		map: Model.Map,
+		mapping: Map<string, Base | Model.CommonObject>,
+		globalPortion?: Portion,
+	) {
 		const keysToDelete: string[] = [];
 		for (const [key] of mapping.entries()) {
 			const position = Position.fromKey(key);
-			if (!position.isInMap(map)) {
+			if (!position.isInMap(map) || (globalPortion && !position.getGlobalPortion().equals(globalPortion))) {
 				keysToDelete.push(key);
 			}
 		}
@@ -93,12 +97,12 @@ class MapPortion extends Serializable {
 	}
 
 	removeAllElementsOut(map: Model.Map) {
-		MapPortion.removeElementsOut(map, this.lands);
-		MapPortion.removeElementsOut(map, this.sprites);
-		MapPortion.removeElementsOut(map, this.walls);
-		MapPortion.removeElementsOut(map, this.mountains);
-		MapPortion.removeElementsOut(map, this.objects3D);
-		MapPortion.removeElementsOut(map, this.objects);
+		MapPortion.removeElementsOut(map, this.lands, this.globalPortion);
+		MapPortion.removeElementsOut(map, this.sprites, this.globalPortion);
+		MapPortion.removeElementsOut(map, this.walls, this.globalPortion);
+		MapPortion.removeElementsOut(map, this.mountains, this.globalPortion);
+		MapPortion.removeElementsOut(map, this.objects3D, this.globalPortion);
+		MapPortion.removeElementsOut(map, this.objects, this.globalPortion);
 	}
 
 	getModelsByKind(kind: ELEMENT_MAP_KIND): Map<string, Base | Model.CommonObject> | null {

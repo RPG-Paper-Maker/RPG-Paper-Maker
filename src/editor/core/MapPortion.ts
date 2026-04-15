@@ -367,7 +367,7 @@ class MapPortion {
 		undoRedo = false,
 		updateAutotiles = true,
 	) {
-		if (floor === null || undoRedo) {
+		if (floor === null || undoRedo || removingPreview) {
 			this.setMapElement(
 				position,
 				floor,

@@ -373,6 +373,9 @@ class Serializable {
 					const mapping = (this as JSONType)[name] as Map<string, Serializable>;
 					const jsonTab: JSONType[] = [];
 					for (const [positionKey, element] of mapping) {
+						if ((element as { isPreview?: boolean }).isPreview) {
+							continue;
+						}
 						const objMap: KeyValue = {};
 						const tabKey: number[] = [];
 						const p = new positionConstructor!();

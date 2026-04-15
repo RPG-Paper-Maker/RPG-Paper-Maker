@@ -722,6 +722,7 @@ class Map extends Base {
 			this.setMapPortion(x, y, z, mapPortion, move);
 			if (json?.['lands']) {
 				mapPortion.model.read(json);
+				mapPortion.model.removeAllElementsOut(this.model);
 				await mapPortion.loadTexturesAndUpdateGeometries(false);
 			}
 		} else {
@@ -2199,6 +2200,12 @@ class Map extends Base {
 
 			this.camera.update(this);
 
+			if (this.updateCurrentPortion()) {
+				this.loadPortions(true).catch(console.error);
+				this.loading = true;
+			}
+
+			// Update portions
 			if (this.needsUpdateRaycasting) {
 				this.updateRaycasting();
 				this.needsUpdateRaycasting = false;
@@ -2271,12 +2278,6 @@ class Map extends Base {
 					(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
 						Constants.MAX_PICTURE_SIZE,
 				);
-			}
-
-			// Update portions
-			if (this.updateCurrentPortion()) {
-				this.loadPortions(true).catch(console.error);
-				this.loading = true;
 			}
 
 			Map.elapsedTime = new Date().getTime() - Map.lastUpdateTime;
