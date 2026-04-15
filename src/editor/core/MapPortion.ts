@@ -180,12 +180,42 @@ class MapPortion {
 				if (previousMountain && !previousMountain.equals(newMountain)) {
 					const previousFloorPosition = position.clone();
 					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
-					if (previousFloorPosition.y !== floorPosition.y || previousFloorPosition.yPixels !== floorPosition.yPixels) {
-						const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition) ?? this;
-						previousFloorPortion.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
-						previousFloorPortion.updateMapElement(
-							previousFloorPosition,
-							null,
+					if (
+						previousFloorPosition.y !== floorPosition.y ||
+						previousFloorPosition.yPixels !== floorPosition.yPixels
+					) {
+						const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition);
+						if (previousFloorPortion) {
+							previousFloorPortion.updateMapElement(
+								previousFloorPosition,
+								null,
+								ELEMENT_MAP_KIND.FLOOR,
+								preview,
+							);
+							previousFloorPortion.updateMapElement(
+								previousFloorPosition,
+								null,
+								ELEMENT_MAP_KIND.AUTOTILE,
+								preview,
+								false,
+								false,
+								false,
+								updateAutotiles,
+							);
+						}
+					}
+				}
+				const floorPortion = this.map.getMapPortionByPosition(floorPosition);
+				if (floorPortion) {
+					if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
+						floorPortion.updateMapElement(
+							floorPosition,
+							MapElement.Autotile.create(
+								s.mapEditorCurrentMountainTopFloorAutotileID,
+								MapElement.Autotiles.PREVIEW_TILE,
+								s.mapEditorCurrentMountainTopFloorAutotileRect,
+								this.map.camera.getUp(),
+							),
 							ELEMENT_MAP_KIND.AUTOTILE,
 							preview,
 							false,
@@ -193,37 +223,19 @@ class MapPortion {
 							false,
 							updateAutotiles,
 						);
-					}
-				}
-				const floorPortion = this.map.getMapPortionByPosition(floorPosition) ?? this;
-				if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
-					floorPortion.updateMapElement(
-						floorPosition,
-						MapElement.Autotile.create(
-							s.mapEditorCurrentMountainTopFloorAutotileID,
-							MapElement.Autotiles.PREVIEW_TILE,
-							s.mapEditorCurrentMountainTopFloorAutotileRect,
-							this.map.camera.getUp(),
-						),
-						ELEMENT_MAP_KIND.AUTOTILE,
-						preview,
-						false,
-						false,
-						false,
-						updateAutotiles,
-					);
-				} else {
-					floorPortion.updateMapElement(
-						floorPosition,
-						MapElement.Floor.create(
-							new Rectangle(
-								s.mapEditorCurrentMountainTopFloorTilesetRect.x,
-								s.mapEditorCurrentMountainTopFloorTilesetRect.y,
+					} else {
+						floorPortion.updateMapElement(
+							floorPosition,
+							MapElement.Floor.create(
+								new Rectangle(
+									s.mapEditorCurrentMountainTopFloorTilesetRect.x,
+									s.mapEditorCurrentMountainTopFloorTilesetRect.y,
+								),
 							),
-						),
-						ELEMENT_MAP_KIND.FLOOR,
-						preview,
-					);
+							ELEMENT_MAP_KIND.FLOOR,
+							preview,
+						);
+					}
 				}
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
@@ -260,8 +272,8 @@ class MapPortion {
 				const mountain = previous as MapElement.Mountain;
 				const floorPosition = position.clone();
 				floorPosition.addY(mountain.heightSquares, mountain.heightPixels);
-				const floorPortion = this.map.getMapPortionByPosition(floorPosition) ?? this;
-				floorPortion.updateMapElement(
+				const floorPortion = this.map.getMapPortionByPosition(floorPosition);
+				floorPortion?.updateMapElement(
 					floorPosition,
 					null,
 					ELEMENT_MAP_KIND.FLOOR,

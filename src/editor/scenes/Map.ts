@@ -1928,6 +1928,9 @@ class Map extends Base {
 										this.add(this.lastPosition);
 										break;
 									case ACTION_KIND.RECTANGLE:
+										this.forEachMapPortions((mapPortion) => {
+											mapPortion.removeLastPreview();
+										});
 										this.rectangleStartPosition = this.lastPosition.clone();
 										this.lastRectangleEndPosition = this.lastPosition.clone();
 										break;
