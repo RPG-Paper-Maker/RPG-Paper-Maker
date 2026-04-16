@@ -447,6 +447,10 @@ class Map extends Base {
 		try {
 			if (this.portionsSaving.size > 0) {
 				for (const mapPortion of this.portionsSaving) {
+					if (mapPortion.lastPreviewRemove.length > 0) {
+						this.portionsToSave.add(mapPortion);
+						continue;
+					}
 					await mapPortion.model.save(true);
 				}
 			}

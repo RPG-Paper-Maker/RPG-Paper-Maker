@@ -440,7 +440,7 @@ class MapPortion {
 			}
 		}
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(this.map, position);
+			MapElement.Autotiles.updateAround(this.map, position, preview && !removingPreview);
 		}
 	}
 
@@ -462,7 +462,7 @@ class MapPortion {
 			undoRedo,
 		);
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(this.map, position);
+			MapElement.Autotiles.updateAround(this.map, position, preview && !removingPreview);
 		}
 	}
 
@@ -560,7 +560,7 @@ class MapPortion {
 		const key = position.toKey();
 		let changed = false;
 		const previous = elements.get(key) || null;
-		if (element && preview && !removingPreview && previous === null) {
+		if (element && preview && !removingPreview) {
 			element.isPreview = true;
 		}
 		if (
@@ -594,8 +594,11 @@ class MapPortion {
 				}
 			}
 		}
-		if (preview && changed) {
+		if (preview && !removingPreview && (changed || (previous !== null && !previous.isPreview))) {
 			this.lastPreviewRemove.push([position, previous, previous === null ? kind : previous.kind]);
+			if (!changed && this.map) {
+				this.map.portionsToUpdate.add(this);
+			}
 		}
 		return previous;
 	}

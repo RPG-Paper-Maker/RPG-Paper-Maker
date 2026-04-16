@@ -399,7 +399,7 @@ class Autotiles {
 		);
 	}
 
-	static updateAround(map: Scene.Map, position: Position) {
+	static updateAround(map: Scene.Map, position: Position, preview = false) {
 		const globalPortion = position.getGlobalPortion();
 		for (let i = -1; i <= 1; i++) {
 			for (let j = -1; j <= 1; j++) {
@@ -420,7 +420,9 @@ class Autotiles {
 							const mapPortion = map.getMapPortionFromGlobalPortion(newGlobalPortion);
 							if (mapPortion) {
 								map.portionsToUpdate.add(mapPortion);
-								map.portionsToSave.add(mapPortion);
+								if (!preview) {
+									map.portionsToSave.add(mapPortion);
+								}
 							}
 						}
 					}
