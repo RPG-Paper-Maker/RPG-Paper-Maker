@@ -722,7 +722,6 @@ class Map extends Base {
 			this.setMapPortion(x, y, z, mapPortion, move);
 			if (json?.['lands']) {
 				mapPortion.model.read(json);
-				mapPortion.model.removeAllElementsOut(this.model);
 				await mapPortion.loadTexturesAndUpdateGeometries(false);
 			}
 		} else {
