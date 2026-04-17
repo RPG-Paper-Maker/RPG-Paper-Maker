@@ -249,6 +249,10 @@ class ProjectUpdater_3_0_0 {
 			}
 		}
 		await createFile(Paths.join(projectPath, 'game.rpmg'), '');
+		const stylesPath = Paths.join(projectPath, 'Styles');
+		if (!(await checkFileExists(stylesPath))) {
+			await createFolder(stylesPath);
+		}
 		callback(60);
 
 		// Common events default and hero objects
