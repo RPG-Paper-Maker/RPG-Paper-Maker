@@ -150,6 +150,7 @@ function Tree({
 	const listRef = useRef<HTMLDivElement>(null);
 	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
 	const handleSetFocusRef = useRef<(b: boolean) => void>(() => {});
+	const treeId = useRef(Math.random());
 
 	const createDefault = (id: number) => {
 		if (applyDefault) {
@@ -725,6 +726,9 @@ function Tree({
 		if (b && disabled) {
 			return;
 		}
+		if (b) {
+			window.dispatchEvent(new CustomEvent('tree-focus-claimed', { detail: { id: treeId.current } }));
+		}
 		RPM.isFocusingTree = b;
 		setIsFocused(b);
 	};
@@ -760,6 +764,17 @@ function Tree({
 		el.addEventListener('mousedown', handleMouseDown);
 		return () => el.removeEventListener('mousedown', handleMouseDown);
 	}, [blurOnMouseLeave]);
+
+	useEffect(() => {
+		const handleFocusClaimed = (e: Event) => {
+			const event = e as CustomEvent<{ id: number }>;
+			if (event.detail.id !== treeId.current) {
+				handleSetFocusRef.current(false);
+			}
+		};
+		window.addEventListener('tree-focus-claimed', handleFocusClaimed);
+		return () => window.removeEventListener('tree-focus-claimed', handleFocusClaimed);
+	}, []);
 
 	useEffect(() => {
 		if (!blurOnMouseLeave || !isFocused) return;
