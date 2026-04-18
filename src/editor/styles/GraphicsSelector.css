@@ -23,7 +23,7 @@
 
 .graphicsSelector-border-overlay {
 	position: fixed;
-	z-index: 1001;
+	z-index: 10000;
 	border: 2px dashed var(--primary-color);
 	pointer-events: none;
 }

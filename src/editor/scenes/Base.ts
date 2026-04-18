@@ -50,8 +50,14 @@ class Base {
 			if (this.canvas) {
 				const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
 				const domRect = GL.renderer.domElement.getBoundingClientRect();
-				GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
-				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
+				const dpr = GL.renderer.getPixelRatio();
+				const rawY = domRect.height - bottom + domRect.top;
+				const snappedLeft = Math.ceil(left * dpr) / dpr;
+				const snappedY = Math.ceil(rawY * dpr) / dpr;
+				const snappedWidth = Math.max(0, Math.floor((left + width) * dpr) / dpr - snappedLeft);
+				const snappedHeight = Math.max(0, Math.floor((rawY + height) * dpr) / dpr - snappedY);
+				GL.renderer.setViewport(snappedLeft, snappedY, snappedWidth, snappedHeight);
+				GL.renderer.setScissor(snappedLeft, snappedY, snappedWidth, snappedHeight);
 				GL.renderer.clear();
 				GL.renderer.render(this.scene, this.camera.getThreeCamera());
 			}

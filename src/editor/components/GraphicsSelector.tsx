@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Model, Scene } from '../Editor';
@@ -190,6 +190,17 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		}
 	}, [options]);
 
+	useLayoutEffect(() => {
+		if (isObject3D && !isOpenDialogObjects3D && !hidden && refContainer.current && refPortalBorder.current) {
+			const rect = refContainer.current.getBoundingClientRect();
+			const s = refPortalBorder.current.style;
+			s.top = `${rect.top + 5}px`;
+			s.left = `${rect.left + 5}px`;
+			s.width = `${rect.width - 14}px`;
+			s.height = `${rect.height - 14}px`;
+		}
+	}, [isObject3D, isOpenDialogObjects3D, hidden]);
+
 	useEffect(() => {
 		if (isObject3D && !isOpenDialogObjects3D && !hidden) {
 			let rafId: number;
@@ -216,7 +227,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 				<div ref={refContainer} className='graphicsSelector' onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
 					{!isObject3D && <div ref={refBorder} className='border' />}
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
-					{isObject3D && !isOpenDialogObjects3D && !hidden && (
+					{isObject3D && !hidden && (
 						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} />
 					)}
 				</div>
