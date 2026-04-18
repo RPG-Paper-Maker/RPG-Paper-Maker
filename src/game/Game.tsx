@@ -45,6 +45,7 @@ function Game({ location, battleTest = false }: Props) {
 		const style = document.createElement('style');
 		const link = document.createElement('link');
 		editHiDPICanvas(document.getElementById('hud') as HTMLCanvasElement, window.innerWidth, window.innerHeight);
+		editHiDPICanvas(document.getElementById('hud-below') as HTMLCanvasElement, window.innerWidth, window.innerHeight);
 		Constants.IS_DESKTOP = Utils.isDesktop();
 
 		if (Constants.IS_DESKTOP) {
@@ -84,6 +85,7 @@ function Game({ location, battleTest = false }: Props) {
 	return (
 		<>
 			<div id='three-d'></div>
+			<canvas id='hud-below' />
 			<video id='video-container' className='hidden' height='480px' />
 			<canvas id='hud' />
 			<canvas id='rendering' width='4096px' height='4096px' />
