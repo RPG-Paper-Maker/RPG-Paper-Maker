@@ -65,9 +65,11 @@ jobs:
       - name: Rename executable and update Info.plist
         run: |
           mv "RPG-Paper-Maker.app/Contents/MacOS/Electron" "RPG-Paper-Maker.app/Contents/MacOS/RPG Paper Maker"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleExecutableName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          PLIST="RPG-Paper-Maker.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Delete :CFBundleExecutableName" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :CFBundleExecutableName string RPG Paper Maker" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName RPG Paper Maker" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName RPG Paper Maker" "$PLIST"
           mv "RPG-Paper-Maker.app" "RPG Paper Maker.app"
 
       - name: Ad-hoc sign
