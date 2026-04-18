@@ -1,0 +1,187 @@
+name: Release Updater
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g. 3.0.52)'
+        required: true
+        type: string
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Get Electron version
+        id: electron
+        run: |
+          VERSION=$(node -p "require('./package.json').devDependencies.electron.replace(/[\^~>=<]*/g, '')")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set updater/version
+        run: echo "updater/${{ inputs.version }}" > updater/version
+
+      - name: Download Electron x64 and arm64
+        run: |
+          V=${{ steps.electron.outputs.version }}
+          curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-x64.zip"   -o electron-x64.zip
+          curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-arm64.zip" -o electron-arm64.zip
+          unzip -q electron-x64.zip   -d electron-x64
+          unzip -q electron-arm64.zip -d electron-arm64
+
+      - name: Inject app into both builds
+        run: |
+          for ARCH in x64 arm64; do
+            RESOURCES="electron-${ARCH}/Electron.app/Contents/Resources"
+            rm -f "${RESOURCES}/default_app.asar"
+            mkdir -p "${RESOURCES}/app"
+            cp main.js package.json preload.js "${RESOURCES}/app/"
+            cp -r updater "${RESOURCES}/app/updater"
+            mkdir "${RESOURCES}/app/DLCs"
+          done
+
+      - name: Install @electron/universal
+        run: npm install --no-save @electron/universal
+
+      - name: Create universal .app
+        run: |
+          node -e "
+            const path = require('path');
+            const { makeUniversalApp } = require('@electron/universal');
+            const cwd = process.cwd();
+            makeUniversalApp({
+              x64AppPath:  path.join(cwd, 'electron-x64/Electron.app'),
+              arm64AppPath: path.join(cwd, 'electron-arm64/Electron.app'),
+              outAppPath:  path.join(cwd, 'RPG-Paper-Maker.app'),
+            }).then(() => console.log('Done')).catch(e => { console.error(e); process.exit(1); });
+          "
+
+      - name: Rename executable and update Info.plist
+        run: |
+          mv "RPG-Paper-Maker.app/Contents/MacOS/Electron" "RPG-Paper-Maker.app/Contents/MacOS/RPG Paper Maker"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleExecutableName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName RPG Paper Maker" "RPG-Paper-Maker.app/Contents/Info.plist"
+          mv "RPG-Paper-Maker.app" "RPG Paper Maker.app"
+
+      - name: Ad-hoc sign
+        run: codesign --deep --force --sign - "RPG Paper Maker.app"
+
+      - name: Package
+        run: |
+          mkdir "RPG Paper Maker"
+          cp -r "RPG Paper Maker.app" "RPG Paper Maker/"
+          zip -r RPG.Paper.Maker.Mac.zip "RPG Paper Maker"
+
+      - name: Upload to release (draft)
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: RPG-Paper-Maker/RPG-Paper-Maker
+          token: ${{ secrets.RELEASE_PAT }}
+          tag_name: ${{ inputs.version }}
+          name: "Updater ${{ inputs.version }}"
+          draft: true
+          files: RPG.Paper.Maker.Mac.zip
+
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Get Electron version
+        id: electron
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').devDependencies.electron.replace(/[\^~>=<]*/g, '')")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set updater/version
+        shell: bash
+        run: echo "updater/${{ inputs.version }}" > updater/version
+
+      - name: Download Electron x64
+        shell: bash
+        run: |
+          V=${{ steps.electron.outputs.version }}
+          curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-win32-x64.zip" -o electron-x64.zip
+          unzip -q electron-x64.zip -d electron-x64
+
+      - name: Inject app
+        shell: bash
+        run: |
+          RESOURCES="electron-x64/resources"
+          rm -f "${RESOURCES}/default_app.asar"
+          mkdir -p "${RESOURCES}/app"
+          cp main.js package.json preload.js "${RESOURCES}/app/"
+          cp -r updater "${RESOURCES}/app/updater"
+          mkdir "${RESOURCES}/app/DLCs"
+
+      - name: Rename executable
+        shell: bash
+        run: mv "electron-x64/electron.exe" "electron-x64/RPG Paper Maker.exe"
+
+      - name: Build installer
+        shell: cmd
+        run: iscc /DMyAppVersion=${{ inputs.version }} /DSourceDir=electron-x64 installer\install.iss
+
+      - name: Upload to release (draft)
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: RPG-Paper-Maker/RPG-Paper-Maker
+          token: ${{ secrets.RELEASE_PAT }}
+          tag_name: ${{ inputs.version }}
+          name: "Updater ${{ inputs.version }}"
+          draft: true
+          files: installer-output/RPG.Paper.Maker.Windows.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Get Electron version
+        id: electron
+        run: |
+          VERSION=$(node -p "require('./package.json').devDependencies.electron.replace(/[\^~>=<]*/g, '')")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set updater/version
+        run: echo "updater/${{ inputs.version }}" > updater/version
+
+      - name: Download Electron x64
+        run: |
+          V=${{ steps.electron.outputs.version }}
+          curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-linux-x64.zip" -o electron-x64.zip
+          unzip -q electron-x64.zip -d electron-x64
+
+      - name: Inject app
+        run: |
+          RESOURCES="electron-x64/resources"
+          rm -f "${RESOURCES}/default_app.asar"
+          mkdir -p "${RESOURCES}/app"
+          cp main.js package.json preload.js "${RESOURCES}/app/"
+          cp -r updater "${RESOURCES}/app/updater"
+          mkdir "${RESOURCES}/app/DLCs"
+
+      - name: Package
+        run: |
+          mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
+          zip -r RPG.Paper.Maker.Linux.zip electron-x64
+
+      - name: Upload to release (draft)
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: RPG-Paper-Maker/RPG-Paper-Maker
+          token: ${{ secrets.RELEASE_PAT }}
+          tag_name: ${{ inputs.version }}
+          name: "Updater ${{ inputs.version }}"
+          draft: true
+          files: RPG.Paper.Maker.Linux.zip
