@@ -132,10 +132,8 @@ jobs:
               run: mv "electron-x64/electron.exe" "electron-x64/RPG Paper Maker.exe"
 
             - name: Set icon
-              shell: pwsh
-              run: |
-                  npm install --no-save rcedit
-                  node_modules\.bin\rcedit "electron-x64\RPG Paper Maker.exe" --set-icon public\favicon.ico
+              shell: bash
+              run: npx --yes rcedit "electron-x64/RPG Paper Maker.exe" --set-icon public/favicon.ico
 
             - name: Package zip
               shell: pwsh
