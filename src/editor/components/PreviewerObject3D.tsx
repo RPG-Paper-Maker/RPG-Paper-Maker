@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Manager, Model, Scene } from '../Editor';
 import Flex from './Flex';
 
@@ -39,7 +39,10 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 		if (scene) {
 			const canvas = refCanvas.current;
 			if (canvas) {
-				lastCanvasRectRef.current = canvas.getBoundingClientRect();
+				const r = canvas.getBoundingClientRect();
+				if (r.width > 0 && r.height > 0) {
+					lastCanvasRectRef.current = r;
+				}
 			}
 			requestAnimationFrame(loop);
 			scene.update();
@@ -51,10 +54,29 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		const canvas = refCanvas.current;
 		if (scene && canvas) {
-			lastCanvasRectRef.current = canvas.getBoundingClientRect();
+			const oldRect = lastCanvasRectRef.current;
 			scene.camera.resizeGL(GL, canvas.clientWidth, canvas.clientHeight);
 			scene.update();
 			if (isActiveRef.current) {
+				// Clear the old area before drawing with the new dimensions so leftover
+				// pixels outside the new (smaller) bounds are erased.
+				if (oldRect && GL?.renderer) {
+					const domRect = GL.renderer.domElement.getBoundingClientRect();
+					GL.renderer.setViewport(
+						oldRect.left,
+						domRect.height - oldRect.bottom + domRect.top,
+						oldRect.width,
+						oldRect.height,
+					);
+					GL.renderer.setScissor(
+						oldRect.left,
+						domRect.height - oldRect.bottom + domRect.top,
+						oldRect.width,
+						oldRect.height,
+					);
+					GL.renderer.setScissorTest(true);
+					GL.renderer.clear();
+				}
 				scene.draw3D(GL);
 			}
 		}
@@ -102,17 +124,46 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 		}
 	}, [isActive]);
 
+	// Synchronous cleanup: runs before the browser paints the frame that shows this
+	// component being removed. Stops the loop and clears the WebGL area immediately
+	// so no leftover pixels bleed through during dialog transitions.
+	useLayoutEffect(() => {
+		return () => {
+			isActiveRef.current = false;
+			const canvasRect = lastCanvasRectRef.current;
+			const renderer = GL?.renderer;
+			if (renderer && canvasRect && canvasRect.width > 0 && canvasRect.height > 0) {
+				const domRect = renderer.domElement.getBoundingClientRect();
+				renderer.setViewport(
+					canvasRect.left,
+					domRect.height - canvasRect.bottom,
+					canvasRect.width,
+					canvasRect.height,
+				);
+				renderer.setScissor(
+					canvasRect.left,
+					domRect.height - canvasRect.bottom,
+					canvasRect.width,
+					canvasRect.height,
+				);
+				renderer.setScissorTest(true);
+				renderer.clear();
+			}
+		};
+	}, []);
+
 	useEffect(() => {
 		const onActivate = () => {
 			isActiveRef.current = true;
 			hasRenderedSinceActivateRef.current = false;
+			resize();
 			setIsActive(true);
 		};
 
 		const onDeactivate = () => {
 			const canvas = refCanvas.current;
 			const renderer = GL?.renderer;
-			const canvasRect = canvas?.getBoundingClientRect() ?? lastCanvasRectRef.current;
+			const canvasRect = lastCanvasRectRef.current ?? canvas?.getBoundingClientRect();
 			if (renderer && canvasRect && canvasRect.width > 0 && canvasRect.height > 0) {
 				if (canvas && hasRenderedSinceActivateRef.current) {
 					const tmp = document.createElement('canvas');

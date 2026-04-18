@@ -67,7 +67,10 @@ abstract class Object3D extends Base {
 			return true;
 		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
-			return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).isShapeLoaded();
+			if (object.gltfID !== -1) {
+				return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID)?.isShapeLoaded() ?? true;
+			}
+			return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID)?.isShapeLoaded() ?? true;
 		}
 		return true;
 	}

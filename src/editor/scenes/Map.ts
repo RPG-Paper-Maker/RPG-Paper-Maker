@@ -137,6 +137,8 @@ class Map extends Base {
 		frames: Project.current!.systems.autotilesFrames,
 	});
 	public selectedMesh!: THREE.Mesh;
+	public selectedGltfClone: THREE.Group | null = null;
+	public gltfClones: globalThis.Map<MapElement.Base, THREE.Group> = new globalThis.Map();
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
 	public lastTransformPosition: Position | null = null;
@@ -1261,11 +1263,28 @@ class Map extends Base {
 		if (this.isDraggingTransforming) {
 			if (this.selectedElement && this.selectedPosition) {
 				this.updateTransformPosition();
-				this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
-					this.selectedMesh.position,
-					this.selectedMesh.rotation,
-					this.selectedMesh.scale,
-				);
+				if (this.selectedGltfClone && this.selectedElement instanceof MapElement.Object3DCustom) {
+					const s = Project.SQUARE_SIZE * this.selectedElement.data.scale;
+					this.selectedGltfClone.position.copy(this.selectedMesh.position);
+					this.selectedGltfClone.rotation.copy(this.selectedMesh.rotation);
+					this.selectedGltfClone.scale.set(
+						this.selectedMesh.scale.x * s,
+						this.selectedMesh.scale.y * s,
+						this.selectedMesh.scale.z * s,
+					);
+					const posScale = this.selectedGltfClone.scale.clone().divideScalar(s);
+					this.needsUpdateSelectedPosition = Position.createFromVector3(
+						this.selectedGltfClone.position,
+						this.selectedGltfClone.rotation,
+						posScale,
+					);
+				} else {
+					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
+						this.selectedMesh.position,
+						this.selectedMesh.rotation,
+						this.selectedMesh.scale,
+					);
+				}
 				this.needsUpdateSelectedPosition.layer = this.selectedPosition.layer;
 			}
 		}
@@ -1277,14 +1296,17 @@ class Map extends Base {
 			this.getMapPortionByPosition(this.selectedPosition)?.removeSelected();
 			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
 			this.getMapPortionByPosition(Position.createFromVector3(worldPos))?.addSelected();
-			// Update selectedPosition to match the new transform so subsequent operations
-			const newPosition = this.selectedElement.getPositionFromVec3(
-				this.selectedMesh.position,
-				this.selectedMesh.rotation,
-				this.selectedMesh.scale,
-			);
-			newPosition.layer = this.selectedPosition.layer;
-			this.selectedPosition = newPosition;
+			if (this.selectedGltfClone && this.selectedElement instanceof MapElement.Object3DCustom) {
+				// selectedPosition is already updated by addSelected via clone position
+			} else {
+				const newPosition = this.selectedElement.getPositionFromVec3(
+					this.selectedMesh.position,
+					this.selectedMesh.rotation,
+					this.selectedMesh.scale,
+				);
+				newPosition.layer = this.selectedPosition.layer;
+				this.selectedPosition = newPosition;
+			}
 		}
 	}
 
@@ -1373,6 +1395,7 @@ class Map extends Base {
 			}
 			this.selectedPosition = null;
 			this.selectedElement = null;
+			this.selectedGltfClone = null;
 			this.selectedPivotOffset.set(0, 0, 0);
 			this.scene.remove(this.selectedMesh);
 			this.needsUpdateSelectedPosition = null;
@@ -1546,9 +1569,9 @@ class Map extends Base {
 				(Map.isRemoving() ||
 					(this.lockedY === null && this.lockedYPixels === null && this.lockedLayer === null))
 			) {
-				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
-					obj.faceIndex ?? 0
-				];
+				const newPositionKey =
+					((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[obj.faceIndex ?? 0] ??
+					(obj.object.userData.gltfPositionKey as string | undefined);
 				if (newPositionKey && (Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = Position.fromKey(newPositionKey);
 					if (this.isDetection) {
@@ -1788,9 +1811,9 @@ class Map extends Base {
 		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
-				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
-					obj.faceIndex ?? 0
-				];
+				const newPositionKey =
+					((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[obj.faceIndex ?? 0] ??
+					(obj.object.userData.gltfPositionKey as string | undefined);
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
 					const mapPortion = this.getMapPortionByPositionWall(newPosition);
@@ -1849,17 +1872,51 @@ class Map extends Base {
 			this.requestPaintHUD = true;
 			if (Map.isTransforming()) {
 				if (this.pointedMapElementPosition !== null || previousPointedMapElementPosition !== null) {
-					if (previousPointedMapElementPosition) {
-						const mapPortion = this.getMapPortionByPosition(previousPointedMapElementPosition);
-						if (mapPortion) {
-							this.portionsToUpdate.add(mapPortion);
-						}
+					const isGltfObj = (el: MapElement.Base | null): el is MapElement.Object3DCustom =>
+						el instanceof MapElement.Object3DCustom &&
+						el.data?.gltfID !== -1 &&
+						el.data?.pictureID === -1;
+					const gltfRemoveHoverOverlays = (clone: THREE.Group) => {
+						const toRemove: THREE.Object3D[] = [];
+						clone.traverse((child) => {
+							if (child.userData.isHoverOverlay) toRemove.push(child);
+						});
+						for (const o of toRemove) o.parent?.remove(o);
+					};
+					const gltfAddHoverOverlays = (clone: THREE.Group) => {
+						const overlapMat = new THREE.MeshBasicMaterial({
+							color: 0xffffff,
+							transparent: true,
+							opacity: 0.35,
+							depthWrite: false,
+							side: THREE.FrontSide,
+						});
+						clone.traverse((child) => {
+							if (child instanceof THREE.Mesh && !child.userData.isHoverOverlay) {
+								const overlay = new THREE.Mesh(child.geometry, overlapMat);
+								overlay.userData.isHoverOverlay = true;
+								overlay.renderOrder = 1;
+								child.add(overlay);
+							}
+						});
+					};
+					const wasGltf = isGltfObj(previousPointedMapElement);
+					const isGltf = isGltfObj(this.pointedMapElement);
+					if (wasGltf && previousPointedMapElement !== this.pointedMapElement) {
+						const oldClone = this.gltfClones.get(previousPointedMapElement);
+						if (oldClone) gltfRemoveHoverOverlays(oldClone);
 					}
-					if (this.pointedMapElementPosition) {
+					if (isGltf && this.pointedMapElement !== previousPointedMapElement) {
+						const newClone = this.gltfClones.get(this.pointedMapElement!);
+						if (newClone) gltfAddHoverOverlays(newClone);
+					}
+					if (!wasGltf && previousPointedMapElementPosition) {
+						const mapPortion = this.getMapPortionByPosition(previousPointedMapElementPosition);
+						if (mapPortion) this.portionsToUpdate.add(mapPortion);
+					}
+					if (!isGltf && this.pointedMapElementPosition) {
 						const mapPortion = this.getMapPortionByPosition(this.pointedMapElementPosition);
-						if (mapPortion) {
-							this.portionsToUpdate.add(mapPortion);
-						}
+						if (mapPortion) this.portionsToUpdate.add(mapPortion);
 					}
 				}
 			}

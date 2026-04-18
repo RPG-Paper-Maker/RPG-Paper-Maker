@@ -623,11 +623,22 @@ class MapPortion {
 
 	addSelected() {
 		if (this.map.selectedElement && this.map.selectedPosition) {
-			const position = this.map.selectedElement.getPositionFromVec3(
-				this.map.selectedMesh.position,
-				this.map.selectedMesh.rotation,
-				this.map.selectedMesh.scale,
-			);
+			let position: Position;
+			if (this.map.selectedGltfClone && this.map.selectedElement instanceof MapElement.Object3DCustom) {
+				const s = Project.SQUARE_SIZE * this.map.selectedElement.data.scale;
+				const posScale = this.map.selectedGltfClone.scale.clone().divideScalar(s);
+				position = Position.createFromVector3(
+					this.map.selectedGltfClone.position,
+					this.map.selectedGltfClone.rotation,
+					posScale,
+				);
+			} else {
+				position = this.map.selectedElement.getPositionFromVec3(
+					this.map.selectedMesh.position,
+					this.map.selectedMesh.rotation,
+					this.map.selectedMesh.scale,
+				);
+			}
 			position.layer = this.map.selectedPosition.layer;
 			const models = this.model.getModelsByKind(this.map.selectedElement.kind);
 			if (models) {
@@ -714,6 +725,10 @@ class MapPortion {
 			}
 		}
 		for (const [, object3D] of this.model.objects3D) {
+			const objectData = Project.current!.specialElements.getObject3DByID(object3D.id);
+			if (objectData?.shapeKind === SHAPE_KIND.CUSTOM && objectData.gltfID !== -1 && objectData.pictureID === -1) {
+				continue; // GLTF: no pictureID texture; skip texture check
+			}
 			const textureObject3D = MapElement.Object3D.getObject3DTexture(this.map, object3D.id);
 			if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(object3D.id)) {
 				this.map.loading = true;
@@ -1212,6 +1227,9 @@ class MapPortion {
 			this.map.scene.remove(mesh);
 		}
 		this.objects3DMeshes = [];
+		for (const [, object3D] of this.model.objects3D) {
+			this.map.gltfClones.delete(object3D);
+		}
 		const hash = new Map<number, GeometryMaterialType>();
 		for (const [positionKey, object3D] of this.model.objects3D) {
 			const position = Position.fromKey(positionKey);
@@ -1240,12 +1258,63 @@ class MapPortion {
 							if (child instanceof THREE.Mesh) {
 								child.receiveShadow = true;
 								child.castShadow = true;
+								child.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
+								child.userData.gltfPositionKey = positionKey;
 							}
 						});
 						clone.renderOrder = 999;
 						clone.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
+						this.map.gltfClones.set(object3D, clone);
 						this.objects3DMeshes.push(clone as unknown as THREE.Mesh);
 						this.map.scene.add(clone);
+						if (this.map.selectedElement === object3D) {
+							this.map.selectedGltfClone = clone;
+							this.map.selectedPivotOffset.set(0, 0, 0);
+							const selectedLocalPosition = object3D.getLocalPosition(position);
+							this.updateSelected(new CustomGeometry(), this.map.materialTilesetHover, selectedLocalPosition, position);
+							const selectedOverlayMat = new THREE.MeshBasicMaterial({
+								color: 0xffffff,
+								transparent: true,
+								opacity: 0.5,
+								depthWrite: false,
+								side: THREE.FrontSide,
+							});
+							clone.traverse((child) => {
+								if (child instanceof THREE.Mesh && !child.userData.isHoverOverlay) {
+									const overlay = new THREE.Mesh(child.geometry, selectedOverlayMat);
+									overlay.userData.isHoverOverlay = true;
+									overlay.renderOrder = 1;
+									child.add(overlay);
+								}
+							});
+							if (this.map.isDraggingTransforming) {
+								const s = Project.SQUARE_SIZE * object3D.data.scale;
+								clone.position.copy(this.map.selectedMesh.position);
+								clone.rotation.copy(this.map.selectedMesh.rotation);
+								clone.scale.set(
+									this.map.selectedMesh.scale.x * s,
+									this.map.selectedMesh.scale.y * s,
+									this.map.selectedMesh.scale.z * s,
+								);
+							}
+						} else if (isPointedObject3D && this.map.pointedMapElement === object3D) {
+							// Re-apply hover overlays if portion rebuilt while this clone was already hovered
+							const overlapMat = new THREE.MeshBasicMaterial({
+								color: 0xffffff,
+								transparent: true,
+								opacity: 0.35,
+								depthWrite: false,
+								side: THREE.FrontSide,
+							});
+							clone.traverse((child) => {
+								if (child instanceof THREE.Mesh && !child.userData.isHoverOverlay) {
+									const overlay = new THREE.Mesh(child.geometry, overlapMat);
+									overlay.userData.isHoverOverlay = true;
+									overlay.renderOrder = 1;
+									child.add(overlay);
+								}
+							});
+						}
 					}
 					continue;
 				}
