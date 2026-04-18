@@ -1029,7 +1029,7 @@ class Map extends Base {
 	}
 
 	moveObject(previousPosition: Position, position: Position) {
-		if (this.movingObject !== null) {
+		if (this.movingObject !== null && position.isInMap(this.model)) {
 			const previousPortion = this.getMapPortionByPosition(previousPosition);
 			const newPortion = this.getMapPortionByPosition(position);
 			if (previousPortion && newPortion) {
