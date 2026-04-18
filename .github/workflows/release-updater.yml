@@ -65,11 +65,13 @@ jobs:
             - name: Rename executable and update Info.plist
               run: |
                   mv "RPG-Paper-Maker.app/Contents/MacOS/Electron" "RPG-Paper-Maker.app/Contents/MacOS/RPG Paper Maker"
+                  cp public/icon.icns "RPG-Paper-Maker.app/Contents/Resources/electron.icns"
                   PLIST="RPG-Paper-Maker.app/Contents/Info.plist"
                   /usr/libexec/PlistBuddy -c "Delete :CFBundleExecutableName" "$PLIST" 2>/dev/null || true
                   /usr/libexec/PlistBuddy -c "Add :CFBundleExecutableName string RPG Paper Maker" "$PLIST"
                   /usr/libexec/PlistBuddy -c "Set :CFBundleName RPG Paper Maker" "$PLIST"
                   /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName RPG Paper Maker" "$PLIST"
+                  /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile electron.icns" "$PLIST"
                   mv "RPG-Paper-Maker.app" "RPG Paper Maker.app"
 
             - name: Ad-hoc sign
@@ -129,6 +131,12 @@ jobs:
               shell: bash
               run: mv "electron-x64/electron.exe" "electron-x64/RPG Paper Maker.exe"
 
+            - name: Package zip
+              shell: bash
+              run: |
+                  cp -r electron-x64 "RPG Paper Maker"
+                  zip -r RPG.Paper.Maker.Windows.zip "RPG Paper Maker"
+
             - name: Build installer
               shell: cmd
               run: iscc /DMyAppVersion=${{ inputs.version }} "/DSourceDir=${{ github.workspace }}\electron-x64" installer\install.iss
@@ -141,7 +149,9 @@ jobs:
                   tag_name: ${{ inputs.version }}
                   name: 'Updater ${{ inputs.version }}'
                   draft: true
-                  files: installer-output/RPG.Paper.Maker.Installer.exe
+                  files: |
+                      RPG.Paper.Maker.Windows.zip
+                      installer-output/RPG.Paper.Maker.Installer.exe
 
     build-linux:
         runs-on: ubuntu-latest
@@ -176,7 +186,8 @@ jobs:
             - name: Package
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
-                  zip -r RPG.Paper.Maker.Linux.zip electron-x64
+                  mv electron-x64 "RPG Paper Maker"
+                  zip -r RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
 
             - name: Upload to release (draft)
               uses: softprops/action-gh-release@v2

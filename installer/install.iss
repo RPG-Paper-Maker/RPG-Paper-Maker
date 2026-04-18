@@ -29,7 +29,7 @@ InfoBeforeFile=README.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=lowest
 OutputDir=..\installer-output
-OutputBaseFilename=RPG.Paper.Maker.Windows
+OutputBaseFilename=RPG.Paper.Maker.Installer
 SetupIconFile=..\public\favicon.ico
 Compression=lzma
 SolidCompression=yes
