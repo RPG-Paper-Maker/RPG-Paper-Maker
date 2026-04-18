@@ -133,7 +133,9 @@ jobs:
 
             - name: Set icon
               shell: bash
-              run: npx --yes rcedit "electron-x64/RPG Paper Maker.exe" --set-icon public/favicon.ico
+              run: |
+                  curl -fL "https://github.com/electron/rcedit/releases/latest/download/rcedit-x64.exe" -o rcedit.exe
+                  ./rcedit.exe "electron-x64/RPG Paper Maker.exe" --set-icon public/favicon.ico
 
             - name: Package zip
               shell: pwsh
