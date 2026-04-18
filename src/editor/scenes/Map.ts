@@ -671,25 +671,47 @@ class Map extends Base {
 				}
 			}
 		}
-		// Move / Load
+		// Move (synchronous)
 		for (let i = -limit; i <= limit; i++) {
 			for (let j = -limit; j <= limit; j++) {
 				for (let k = -limit; k <= limit; k++) {
-					const x = this.currentPortion.x + i;
-					const y = this.currentPortion.y + j;
-					const z = this.currentPortion.z + k;
-					let oi = i - offsetX;
-					let oj = j - offsetY;
-					let ok = k - offsetZ;
+					const oi = i - offsetX;
+					const oj = j - offsetY;
+					const ok = k - offsetZ;
 					// If with negative offset, in ray boundaries, move
 					if (oi >= -limit && oi <= limit && oj >= -limit && oj <= limit && ok >= -limit && ok <= limit) {
 						const previousIndex = this.getPortionIndex(i, j, k);
 						const newIndex = this.getPortionIndex(oi, oj, ok);
 						this.mapPortions[newIndex] = temp[previousIndex];
 					}
-					oi = i + offsetX;
-					oj = j + offsetY;
-					ok = k + offsetZ;
+				}
+			}
+		}
+		// Synchronous sweep: after remove+move (before any await), recalculate tileIDs for border
+		// autotiles that lost or gained neighbors so portionsToUpdate is correct this frame
+		this.forEachMapPortions((mapPortion) => {
+			let changed = false;
+			for (const [key, land] of mapPortion.model.lands) {
+				if (land instanceof MapElement.Autotile && !land.isPreview) {
+					if (land.update(this, Position.fromKey(key))) {
+						changed = true;
+					}
+				}
+			}
+			if (changed) {
+				this.portionsToUpdate.add(mapPortion);
+			}
+		});
+		// Load (async)
+		for (let i = -limit; i <= limit; i++) {
+			for (let j = -limit; j <= limit; j++) {
+				for (let k = -limit; k <= limit; k++) {
+					const x = this.currentPortion.x + i;
+					const y = this.currentPortion.y + j;
+					const z = this.currentPortion.z + k;
+					const oi = i + offsetX;
+					const oj = j + offsetY;
+					const ok = k + offsetZ;
 					// If with positive offset, out of ray boundaries, load
 					if (oi < -limit || oi > limit || oj < -limit || oj > limit || ok < -limit || ok > limit) {
 						await this.loadPortion(x, y, z, i, j, k, true);
@@ -701,6 +723,21 @@ class Map extends Base {
 			this.needsUpdateComponent = true;
 		}
 		this.loading = false;
+		// After all portions are loaded, recalculate autotile borders that may be stale
+		// due to an active preview in a neighboring portion
+		this.forEachMapPortions((mapPortion) => {
+			let changed = false;
+			for (const [key, land] of mapPortion.model.lands) {
+				if (land instanceof MapElement.Autotile && !land.isPreview) {
+					if (land.update(this, Position.fromKey(key))) {
+						changed = true;
+					}
+				}
+			}
+			if (changed) {
+				this.portionsToUpdate.add(mapPortion);
+			}
+		});
 	}
 
 	async loadPortion(

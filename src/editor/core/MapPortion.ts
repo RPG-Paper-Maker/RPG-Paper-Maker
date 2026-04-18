@@ -82,6 +82,12 @@ class MapPortion {
 		}
 		this.lastPreviewRemove = [];
 		if (needUpdate) {
+			// Full-portion sweep: recalculate every autotile's tileID so no stale borders remain
+			for (const [key, land] of this.model.lands) {
+				if (land instanceof MapElement.Autotile) {
+					land.update(this.map, Position.fromKey(key));
+				}
+			}
 			this.map.portionsToUpdate.add(this);
 		}
 	}
