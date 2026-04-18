@@ -43,7 +43,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
 			newValue.updateCommand(list, iterator);
 		} else {
-			propertyID.updateToDefaultDatabase();
+			propertyID.updateToDefaultDatabase(properties);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.EQUALS);
 			newValue.updateToDefaultNumber(0, true);
 		}

@@ -242,8 +242,8 @@ class DynamicValue extends Serializable {
 		this.update(DYNAMIC_VALUE_KIND.VARIABLE, n);
 	}
 
-	updateToDefaultDatabase(db = 1) {
-		this.update(DYNAMIC_VALUE_KIND.DATABASE, db);
+	updateToDefaultDatabase(db: number | Model.Base[] = 1) {
+		this.update(DYNAMIC_VALUE_KIND.DATABASE, Array.isArray(db) ? (db[0]?.id ?? 1) : db);
 	}
 
 	updateToDefaultSwitch(b = true) {

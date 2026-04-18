@@ -51,7 +51,7 @@ function DialogCommandChangeStatus({ commandKind, setIsOpen, list, onAccept, onR
 		} else {
 			panelSelectionHeroRef.current?.initialize();
 			setSelectionOperationType(OPERATION_KIND.EQUAL_TO);
-			statusID.updateToDefaultDatabase();
+			statusID.updateToDefaultDatabase(Project.current!.status.list);
 		}
 		setTrigger((v) => !v);
 	};

@@ -56,7 +56,7 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 			setObjectsList(Scene.Map.getCurrentMapObjectsList());
 			mapID.updateToDefaultDatabase(-1);
 			objectID.updateToDefaultDatabase(-1);
-			stateID.updateToDefaultDatabase();
+			stateID.updateToDefaultDatabase(Project.current!.commonEvents.states);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.REPLACE);
 		}
 		setTrigger((v) => !v);

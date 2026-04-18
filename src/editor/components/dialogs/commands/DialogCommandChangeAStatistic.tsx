@@ -76,7 +76,7 @@ function DialogCommandChangeAStatistic({ commandKind, setIsOpen, list, onAccept,
 			setIsCanGoAboveMaximumValue(Utils.initializeBoolCommand(list, iterator));
 			setIsApplyChangeMaximumValue(Utils.initializeBoolCommand(list, iterator));
 		} else {
-			statisticID.updateToDefaultDatabase();
+			statisticID.updateToDefaultDatabase(Project.current!.battleSystem.statistics);
 			panelSelectionHeroRef.current?.initialize();
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.PLUS);
 			setSelectionValueType(SELECTION_VALUE_TYPE.NUMBER);

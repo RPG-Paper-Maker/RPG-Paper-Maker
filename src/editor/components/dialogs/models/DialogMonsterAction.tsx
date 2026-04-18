@@ -104,8 +104,8 @@ function DialogMonsterAction({ setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	const updateDefault = () => {
-		skillID.updateToDefaultDatabase();
-		itemID.updateToDefaultDatabase();
+		skillID.updateToDefaultDatabase(Project.current!.skills.list);
+		itemID.updateToDefaultDatabase(Project.current!.items.list);
 		itemNumberMax.updateToDefaultNumber(1);
 	};
 

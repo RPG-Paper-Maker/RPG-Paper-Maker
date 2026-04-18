@@ -41,7 +41,7 @@ function DialogCommandModifyCurrency({ commandKind, setIsOpen, list, onAccept, o
 			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
 			value.updateCommand(list, iterator);
 		} else {
-			currencyID.updateToDefaultDatabase();
+			currencyID.updateToDefaultDatabase(Project.current!.systems.currencies);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.PLUS);
 			value.updateToDefaultNumber(1);
 		}

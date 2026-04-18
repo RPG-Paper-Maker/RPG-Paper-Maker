@@ -43,7 +43,7 @@ function DialogCommandDisplayAnAnimation({ commandKind, setIsOpen, list, onAccep
 			setIsWaitingEndCommand(Utils.initializeBoolCommand(list, iterator));
 		} else {
 			objectID.updateToDefaultDatabase(-1);
-			animationID.updateToDefaultDatabase();
+			animationID.updateToDefaultDatabase(Project.current!.animations.list);
 			setIsWaitingEndCommand(true);
 		}
 		setTrigger((v) => !v);

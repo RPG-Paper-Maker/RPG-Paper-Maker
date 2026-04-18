@@ -39,7 +39,7 @@ function DialogCommandChangeClass({ commandKind, setIsOpen, list, onAccept, onRe
 			classID.updateCommand(list, iterator);
 			panelSelectionHeroRef.current?.initialize(list, iterator);
 		} else {
-			classID.updateToDefaultDatabase();
+			classID.updateToDefaultDatabase(Project.current!.classes.list);
 			panelSelectionHeroRef.current?.initialize();
 		}
 		setTrigger((v) => !v);

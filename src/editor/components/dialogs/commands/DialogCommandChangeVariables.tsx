@@ -101,11 +101,11 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		valueText.updateToDefaultText();
 		valueSwitch.updateToDefaultSwitch();
 		setValueNumberItemIndex(ITEM_KIND.ITEM);
-		valueNumberItemID.updateToDefaultDatabase();
+		valueNumberItemID.updateToDefaultDatabase(Project.current!.items.list);
 		setValueTotalCurrencyIndex(0);
-		valueTotalCurrency.updateToDefaultDatabase();
+		valueTotalCurrency.updateToDefaultDatabase(Project.current!.systems.currencies);
 		valueHeroEnemyInstanceID.updateToDefaultVariable();
-		valueStatisticID.updateToDefaultDatabase();
+		valueStatisticID.updateToDefaultDatabase(Project.current!.battleSystem.statistics);
 		valueObjectID.updateToDefaultDatabase(-1);
 		setValueObjectCharacteristicIndex(0);
 		setValueEnemyID(TroopMonster.currentMonsters[0]?.id ?? -1);

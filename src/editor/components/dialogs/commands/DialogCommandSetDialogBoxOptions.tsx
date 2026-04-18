@@ -96,7 +96,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
-			initializeCheck(list, iterator, setIsWindowSkinID, windowSkinID, DYNAMIC_VALUE_KIND.DATABASE, 1);
+			initializeCheck(list, iterator, setIsWindowSkinID, windowSkinID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.windowSkins[0]?.id ?? 1);
 			initializeCheck(list, iterator, setIsTransformX, transformX, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 			initializeCheck(list, iterator, setIsTransformY, transformY, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 			initializeCheck(list, iterator, setIsTransformWidth, transformWidth, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
@@ -136,7 +136,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				colorTextID.updateCommand(list, iterator);
 			} else {
 				setIsColorText(false);
-				colorTextID.updateToDefaultDatabase();
+				colorTextID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
 			checked = Utils.initializeBoolCommand(list, iterator);
 			if (checked) {
@@ -145,7 +145,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				colorOutlineID.updateCommand(list, iterator);
 			} else {
 				setIsColorOutline(false);
-				colorOutlineID.updateToDefaultDatabase();
+				colorOutlineID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
 			checked = Utils.initializeBoolCommand(list, iterator);
 			if (checked) {
@@ -154,13 +154,13 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				colorBackgroundID.updateCommand(list, iterator);
 			} else {
 				setIsColorBackground(false);
-				colorBackgroundID.updateToDefaultDatabase();
+				colorBackgroundID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
-			initializeCheck(list, iterator, setIsSizeID, sizeID, DYNAMIC_VALUE_KIND.DATABASE, 1);
-			initializeCheck(list, iterator, setIsFontID, fontID, DYNAMIC_VALUE_KIND.DATABASE, 1);
+			initializeCheck(list, iterator, setIsSizeID, sizeID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.fontSizes[0]?.id ?? 1);
+			initializeCheck(list, iterator, setIsFontID, fontID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.fontNames[0]?.id ?? 1);
 		} else {
 			setIsWindowSkinID(false);
-			windowSkinID.updateToDefaultDatabase();
+			windowSkinID.updateToDefaultDatabase(Project.current!.systems.windowSkins);
 			setIsTransformX(false);
 			transformX.updateToDefaultNumber(0, true);
 			setIsTransformY(false);
@@ -187,15 +187,15 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			setOutlineIndex(0);
 			setIsColorID(false);
 			setIsColorText(false);
-			colorTextID.updateToDefaultDatabase();
+			colorTextID.updateToDefaultDatabase(Project.current!.systems.colors);
 			setIsColorOutline(false);
-			colorOutlineID.updateToDefaultDatabase();
+			colorOutlineID.updateToDefaultDatabase(Project.current!.systems.colors);
 			setIsColorBackground(false);
-			colorBackgroundID.updateToDefaultDatabase();
+			colorBackgroundID.updateToDefaultDatabase(Project.current!.systems.colors);
 			setIsSizeID(false);
-			sizeID.updateToDefaultDatabase();
+			sizeID.updateToDefaultDatabase(Project.current!.systems.fontSizes);
 			setIsFontID(false);
-			fontID.updateToDefaultDatabase();
+			fontID.updateToDefaultDatabase(Project.current!.systems.fontNames);
 		}
 		setTrigger((v) => !v);
 	};

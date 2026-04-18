@@ -54,12 +54,12 @@ function DialogCommandChangeMapProperties({ commandKind, setIsOpen, list, onAcce
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		tilesetID.updateToDefaultDatabase();
+		tilesetID.updateToDefaultDatabase(Project.current!.tilesets.list);
 		music.updateToDefaultNumber(-1);
 		backgroundSound.updateToDefaultNumber(-1);
-		cameraPropertiesID.updateToDefaultDatabase();
-		colorID.updateToDefaultDatabase();
-		skyboxID.updateToDefaultDatabase();
+		cameraPropertiesID.updateToDefaultDatabase(Project.current!.systems.cameraProperties);
+		colorID.updateToDefaultDatabase(Project.current!.systems.colors);
+		skyboxID.updateToDefaultDatabase(Project.current!.systems.skyboxes);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			mapID.updateCommand(list, iterator);
@@ -100,17 +100,17 @@ function DialogCommandChangeMapProperties({ commandKind, setIsOpen, list, onAcce
 		} else {
 			mapID.updateToDefaultDatabase(-1);
 			setIsTilesetID(false);
-			tilesetID.updateToDefaultDatabase();
+			tilesetID.updateToDefaultDatabase(Project.current!.tilesets.list);
 			setIsMusic(false);
 			music.updateToDefaultNumber(-1);
 			setIsBackgroundSound(false);
 			backgroundSound.updateToDefaultNumber(-1);
 			setIsCameraPropertiesID(false);
-			cameraPropertiesID.updateToDefaultDatabase();
+			cameraPropertiesID.updateToDefaultDatabase(Project.current!.systems.cameraProperties);
 			setIsSky(false);
 			setSelectionSkyType(SELECTION_SKY_TYPE.COLOR);
-			colorID.updateToDefaultDatabase();
-			skyboxID.updateToDefaultDatabase();
+			colorID.updateToDefaultDatabase(Project.current!.systems.colors);
+			skyboxID.updateToDefaultDatabase(Project.current!.systems.skyboxes);
 		}
 		setTrigger((v) => !v);
 	};

@@ -42,7 +42,7 @@ function DialogCommandTransformABattler({ commandKind, setIsOpen, list, onAccept
 			level.updateCommand(list, iterator);
 		} else {
 			panelSelectionHeroRef.current?.initialize();
-			monsterID.updateToDefaultDatabase();
+			monsterID.updateToDefaultDatabase(Project.current!.monsters.list);
 			level.updateToDefaultNumber(1);
 		}
 		setTrigger((v) => !v);

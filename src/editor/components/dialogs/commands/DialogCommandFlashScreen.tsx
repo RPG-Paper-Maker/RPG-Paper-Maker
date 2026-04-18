@@ -33,7 +33,7 @@ function DialogCommandFlashScreen({ commandKind, setIsOpen, list, onAccept, onRe
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		colorID.updateToDefaultDatabase();
+		colorID.updateToDefaultDatabase(Project.current!.systems.colors);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			colorID.updateCommand(list, iterator);

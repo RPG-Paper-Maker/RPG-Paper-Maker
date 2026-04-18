@@ -100,7 +100,7 @@ function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, on
 
 	const handleClickRain = () => {
 		setSelectionTextureType(SELECTION_TEXTURE_TYPE.IMAGE);
-		textureColorID.updateToDefaultDatabase();
+		textureColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 		textureImageID.updateToDefaultNumber(1);
 		numberPerPortion.updateToDefaultNumber(300);
 		rayPortions.updateToDefaultNumber(1);
@@ -116,7 +116,7 @@ function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, on
 
 	const handleClickSnow = () => {
 		setSelectionTextureType(SELECTION_TEXTURE_TYPE.IMAGE);
-		textureColorID.updateToDefaultDatabase();
+		textureColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 		textureImageID.updateToDefaultDatabase(2);
 		numberPerPortion.updateToDefaultNumber(200);
 		rayPortions.updateToDefaultNumber(2);

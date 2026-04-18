@@ -37,7 +37,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		modelID.updateToDefaultDatabase();
+		modelID.updateToDefaultDatabase(Project.current!.commonEvents.commonObjects);
 		stockCurrentValueVariableID.updateToDefaultVariable(1);
 		if (list) {
 			const iterator = Utils.generateIterator();

@@ -56,7 +56,7 @@ function DialogInventoryFilter({ setIsOpen, model, onAccept, onReject }: Props) 
 		if (kind === INVENTORY_FILTER_KIND.CUSTOM) {
 			inventoryFilter.itemTypeID.copy(itemTypeID);
 		} else {
-			inventoryFilter.itemTypeID.updateToDefaultDatabase();
+			inventoryFilter.itemTypeID.updateToDefaultDatabase(Project.current!.systems.itemsTypes);
 		}
 		inventoryFilter.script = kind === INVENTORY_FILTER_KIND.SCRIPT ? script : '';
 		onAccept();

@@ -55,7 +55,7 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 	const isObject = selectionTargetType === SELECTION_TARGET_TYPE.OBJECT;
 
 	const initialize = () => {
-		detectionID.updateToDefaultDatabase();
+		detectionID.updateToDefaultDatabase(Project.current!.systems.detections);
 		objectID.updateToDefaultDatabase(-1);
 		let scr = true;
 		let otc = false;

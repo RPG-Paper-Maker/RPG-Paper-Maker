@@ -78,7 +78,7 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 	const isObject = selectionType === SELECTION_TYPE.OBJECT;
 
 	const initialize = (list?: MapObjectCommandType[], iterator?: ITERATOR) => {
-		battleMapID.updateToDefaultDatabase();
+		battleMapID.updateToDefaultDatabase(Project.current!.battleSystem.battleMaps);
 		enterMapID.updateToDefaultNumber(1);
 		enterX.updateToDefaultNumber(0);
 		enterY.updateToDefaultNumber(0);

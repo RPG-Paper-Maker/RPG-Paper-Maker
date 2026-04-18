@@ -62,7 +62,7 @@ function DialogCommandChangeScreenTone({ commandKind, setIsOpen, list, onAccept,
 			} else {
 				setIsAddingColorID(false);
 				setAddingColorIndex(0);
-				addingColorID.updateToDefaultDatabase();
+				addingColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
 			panelWaitTimeRef.current?.initialize(list, iterator);
 		} else {
@@ -72,7 +72,7 @@ function DialogCommandChangeScreenTone({ commandKind, setIsOpen, list, onAccept,
 			grey.updateToDefaultNumber();
 			setIsAddingColorID(false);
 			setAddingColorIndex(0);
-			addingColorID.updateToDefaultDatabase();
+			addingColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 			panelWaitTimeRef.current?.initialize();
 		}
 		setTrigger((v) => !v);

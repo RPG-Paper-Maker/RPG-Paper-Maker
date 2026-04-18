@@ -42,7 +42,7 @@ function DialogCommandMoveObjectChangeSpeedFrequency({ setIsOpen, model, isNew, 
 
 	const initialize = () => {
 		if (isNew) {
-			value.updateToDefaultDatabase();
+			value.updateToDefaultDatabase(isSpeed ? Project.current!.systems.speeds : Project.current!.systems.frequencies);
 		} else {
 			const iterator = Utils.generateIterator();
 			iterator.i += 2;

@@ -44,8 +44,8 @@ function DialogCommandTeleportObject({ commandKind, setIsOpen, list, onAccept, o
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
 	const initialize = () => {
-		startColor.updateToDefaultDatabase();
-		endColor.updateToDefaultDatabase();
+		startColor.updateToDefaultDatabase(Project.current!.systems.colors);
+		endColor.updateToDefaultDatabase(Project.current!.systems.colors);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			objectID.updateCommand(list, iterator);

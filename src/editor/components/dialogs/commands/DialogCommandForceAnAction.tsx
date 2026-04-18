@@ -56,8 +56,8 @@ function DialogCommandForceAndAction({ commandKind, setIsOpen, list, onAccept, o
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		skillID.updateToDefaultDatabase();
-		itemID.updateToDefaultDatabase();
+		skillID.updateToDefaultDatabase(Project.current!.skills.list);
+		itemID.updateToDefaultDatabase(Project.current!.items.list);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			panelSelectionHeroRef.current?.initialize(list, iterator);

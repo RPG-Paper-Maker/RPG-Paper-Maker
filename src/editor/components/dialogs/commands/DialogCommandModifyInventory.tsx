@@ -41,9 +41,9 @@ function DialogCommandModifyInventory({ commandKind, setIsOpen, list, onAccept, 
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		itemID.updateToDefaultDatabase();
-		weaponID.updateToDefaultDatabase();
-		armorID.updateToDefaultDatabase();
+		itemID.updateToDefaultDatabase(Project.current!.items.list);
+		weaponID.updateToDefaultDatabase(Project.current!.weapons.list);
+		armorID.updateToDefaultDatabase(Project.current!.armors.list);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			const selection = list[iterator.i++] as ITEM_KIND;

@@ -57,10 +57,10 @@ function DialogInitialPartyMember({ setIsOpen, model, onAccept, onReject }: Prop
 		);
 		if (initialPartyMember.isHero) {
 			heroID.copy(initialPartyMember.heroID);
-			monsterID.updateToDefaultDatabase();
+			monsterID.updateToDefaultDatabase(Project.current!.monsters.list);
 		} else {
 			monsterID.copy(initialPartyMember.heroID);
-			heroID.updateToDefaultDatabase();
+			heroID.updateToDefaultDatabase(Project.current!.heroes.list);
 		}
 		variableInstanceID.copy(initialPartyMember.variableInstanceID);
 	};

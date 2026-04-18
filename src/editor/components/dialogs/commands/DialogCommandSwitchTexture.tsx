@@ -47,15 +47,15 @@ function DialogCommandSwitchTexture({ commandKind, setIsOpen, list, onAccept, on
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		tilesetID.updateToDefaultDatabase();
+		tilesetID.updateToDefaultDatabase(Project.current!.tilesets.list);
 		newTilesetID.updateToDefaultNumber(-1);
-		autotileID.updateToDefaultDatabase();
+		autotileID.updateToDefaultDatabase(Project.current!.specialElements.autotiles);
 		newAutotileID.updateToDefaultNumber(-1);
-		wallID.updateToDefaultDatabase();
+		wallID.updateToDefaultDatabase(Project.current!.specialElements.walls);
 		newWallID.updateToDefaultNumber(-1);
-		object3DID.updateToDefaultDatabase();
+		object3DID.updateToDefaultDatabase(Project.current!.specialElements.objects3D);
 		newObject3DID.updateToDefaultNumber(-1);
-		mountainID.updateToDefaultDatabase();
+		mountainID.updateToDefaultDatabase(Project.current!.specialElements.mountains);
 		newMountainID.updateToDefaultNumber(-1);
 		if (list) {
 			const iterator = Utils.generateIterator();

@@ -49,7 +49,7 @@ function DialogCommandChangeASkill({ commandKind, setIsOpen, list, onAccept, onR
 			panelSelectionHeroRef.current?.initialize(list, iterator);
 			setSelectionOperationType(list[iterator.i++] as OPERATION_KIND);
 		} else {
-			skillID.updateToDefaultDatabase();
+			skillID.updateToDefaultDatabase(Project.current!.skills.list);
 			panelSelectionHeroRef.current?.initialize();
 			setSelectionOperationType(OPERATION_KIND.EQUAL_TO);
 		}

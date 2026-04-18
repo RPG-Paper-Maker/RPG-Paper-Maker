@@ -116,7 +116,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept }: Props) {
 		if (model.isSkyColor) {
 			model.skyColorID.copy(skyColorID);
 		} else {
-			model.skyColorID.updateToDefaultDatabase();
+			model.skyColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 		}
 		model.isSkyImage = skySelection === SELECTION_SKY_TYPE.IMAGE;
 		if (model.isSkyImage) {
@@ -127,7 +127,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept }: Props) {
 		if (skySelection === SELECTION_SKY_TYPE.SKYBOX) {
 			model.skyboxID.copy(skyboxID);
 		} else {
-			model.skyboxID.updateToDefaultDatabase();
+			model.skyboxID.updateToDefaultDatabase(Project.current!.systems.skyboxes);
 		}
 		panelMapObjectRef.current?.accept();
 		model.startupObject.copy(startupObject);

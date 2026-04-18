@@ -54,9 +54,9 @@ function DialogCommandStartBattle({ commandKind, setIsOpen, list, onAccept, onRe
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		troopID.updateToDefaultDatabase();
-		startColor.updateToDefaultDatabase();
-		endColor.updateToDefaultDatabase();
+		troopID.updateToDefaultDatabase(Project.current!.troops.list);
+		startColor.updateToDefaultDatabase(Project.current!.systems.colors);
+		endColor.updateToDefaultDatabase(Project.current!.systems.colors);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			setIsAllowEscape(Utils.initializeBoolCommand(list, iterator));

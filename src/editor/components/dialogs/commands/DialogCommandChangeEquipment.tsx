@@ -48,8 +48,8 @@ function DialogCommandChangeEquipment({ commandKind, setIsOpen, list, onAccept, 
 		Project.current!.battleSystem.getWeaponsArmorsByEquipmentID(equipmentID, (kind ?? weaponArmorKind) === 0);
 
 	const initialize = () => {
-		weaponID.updateToDefaultDatabase();
-		armorID.updateToDefaultDatabase();
+		weaponID.updateToDefaultDatabase(Project.current!.weapons.list);
+		armorID.updateToDefaultDatabase(Project.current!.armors.list);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			equipmentID.updateCommand(list, iterator);
@@ -59,7 +59,7 @@ function DialogCommandChangeEquipment({ commandKind, setIsOpen, list, onAccept, 
 			panelSelectionHeroRef.current?.initialize(list, iterator);
 			setIsApplyOnlyIfInInventory(Utils.initializeBoolCommand(list, iterator));
 		} else {
-			equipmentID.updateToDefaultDatabase();
+			equipmentID.updateToDefaultDatabase(Project.current!.battleSystem.equipments);
 			panelSelectionHeroRef.current?.initialize();
 			setIsApplyOnlyIfInInventory(false);
 		}
@@ -80,7 +80,7 @@ function DialogCommandChangeEquipment({ commandKind, setIsOpen, list, onAccept, 
 				) {
 					setWeaponArmorKind(0);
 					const db = getWeaponArmorDatabase(0);
-					weaponID.updateToDefaultDatabase(db[0]?.id);
+					weaponID.updateToDefaultDatabase(db);
 				} else if (
 					Project.current!.battleSystem.armorsKind.some(
 						(kind) => kind.equipments[equipmentID.value as number],
@@ -88,7 +88,7 @@ function DialogCommandChangeEquipment({ commandKind, setIsOpen, list, onAccept, 
 				) {
 					setWeaponArmorKind(1);
 					const db = getWeaponArmorDatabase(1);
-					armorID.updateToDefaultDatabase(db[0]?.id);
+					armorID.updateToDefaultDatabase(db);
 				}
 			}
 			setTrigger((v) => !v);

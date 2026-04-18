@@ -50,9 +50,9 @@ function DialogMonsterLoot({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	const initialize = () => {
 		setKind(monsterLoot.kind);
-		itemID.updateToDefaultDatabase();
-		weaponID.updateToDefaultDatabase();
-		armorID.updateToDefaultDatabase();
+		itemID.updateToDefaultDatabase(Project.current!.items.list);
+		weaponID.updateToDefaultDatabase(Project.current!.weapons.list);
+		armorID.updateToDefaultDatabase(Project.current!.armors.list);
 		switch (monsterLoot.kind) {
 			case ITEM_KIND.ITEM: {
 				itemID.copy(monsterLoot.lootID);

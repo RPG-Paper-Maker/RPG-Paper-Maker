@@ -65,8 +65,8 @@ function DialogCommandModifyTeam({ commandKind, setIsOpen, list, onAccept, onRej
 
 	const initialize = () => {
 		createInstanceLevel.updateToDefaultNumber(1);
-		heroID.updateToDefaultDatabase();
-		monsterID.updateToDefaultDatabase();
+		heroID.updateToDefaultDatabase(Project.current!.heroes.list);
+		monsterID.updateToDefaultDatabase(Project.current!.monsters.list);
 		createStockInstanceID.updateToDefaultVariable();
 		enemyInstanceID.updateToDefaultVariable();
 		modifyInstanceID.updateToDefaultVariable();
