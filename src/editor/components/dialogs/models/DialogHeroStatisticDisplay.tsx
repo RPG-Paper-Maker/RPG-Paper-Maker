@@ -39,7 +39,7 @@ function DialogHeroStatisticDisplay({ setIsOpen, model, onAccept, onReject }: Pr
 	};
 
 	const handleAccept = async () => {
-		statisticID.copy(statisticID);
+		heroStatisticDisplay.statisticID.copy(statisticID);
 		onAccept();
 		setIsOpen(false);
 	};
