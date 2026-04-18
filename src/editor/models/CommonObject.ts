@@ -48,7 +48,7 @@ class CommonObject extends Base {
 		object.canBeTriggeredAnotherObject = true;
 		object.onlyOneEventPerFrame = false;
 		object.properties = [];
-		const firstState = Base.getByIDOrFirst(Project.current!.commonEvents.states, 1);
+		const firstState = Project.current!.commonEvents.states[0];
 		const state = new MapObjectState();
 		state.applyDefault();
 		state.id = firstState.id;

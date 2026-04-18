@@ -38,9 +38,16 @@ function DialogMapObjectState({ setIsOpen, model, isNew, onAccept, onReject }: P
 
 	const dispatch = useDispatch();
 
+	const usedStateIDs = Project.current!.currentMapObjectStates
+		.filter((node) => !isNew || node.content.id !== state.id)
+		.map((node) => node.content.id);
+
 	const initialize = () => {
 		if (isNew) {
-			state.id = 1;
+			const firstAvailable = Project.current!.commonEvents.states.find(
+				(s) => !usedStateIDs.includes(s.id),
+			);
+			state.id = firstAvailable?.id ?? Project.current!.commonEvents.states[0]?.id ?? 1;
 		}
 		setStateID(state.id);
 	};
@@ -99,6 +106,7 @@ function DialogMapObjectState({ setIsOpen, model, isNew, onAccept, onReject }: P
 					selectedID={stateID}
 					onChange={setStateID}
 					options={Project.current!.commonEvents.states}
+					disabledIds={usedStateIDs}
 					displayIDs
 				/>
 			</Flex>
