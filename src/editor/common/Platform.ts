@@ -80,8 +80,14 @@ export const createFile = async (path: string, content: string) => {
 		try {
 			await IO.moveFile(tmpPath, path);
 		} catch (e) {
-			await IO.removeFile(tmpPath).catch(() => {});
-			throw e;
+			try {
+				// Fallback for Windows antivirus holding the tmp file: copy then delete
+				await IO.copyFile(tmpPath, path);
+				await IO.removeFile(tmpPath).catch(() => {});
+			} catch {
+				await IO.removeFile(tmpPath).catch(() => {});
+				throw e;
+			}
 		}
 	} else {
 		await LocalFile.createFile(path, content);
