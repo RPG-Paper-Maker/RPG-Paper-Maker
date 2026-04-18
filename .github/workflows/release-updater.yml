@@ -132,10 +132,10 @@ jobs:
               run: mv "electron-x64/electron.exe" "electron-x64/RPG Paper Maker.exe"
 
             - name: Package zip
-              shell: bash
+              shell: pwsh
               run: |
-                  cp -r electron-x64 "RPG Paper Maker"
-                  zip -r RPG.Paper.Maker.Windows.zip "RPG Paper Maker"
+                  Copy-Item -Recurse electron-x64 "RPG Paper Maker"
+                  Compress-Archive -Path "RPG Paper Maker" -DestinationPath RPG.Paper.Maker.Windows.zip
 
             - name: Build installer
               shell: cmd
