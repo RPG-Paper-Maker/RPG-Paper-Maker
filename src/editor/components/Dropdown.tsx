@@ -187,8 +187,10 @@ function Dropdown({
 						setPreSelectedID((id) => (index <= 0 ? id : options[index - 1].id));
 						break;
 					case KEY.ENTER:
-						handleClickOption(options[index]);
-						setIsOpen(false);
+						if (index >= 0) {
+							handleClickOption(options[index]);
+							setIsOpen(false);
+						}
 						break;
 				}
 			};
