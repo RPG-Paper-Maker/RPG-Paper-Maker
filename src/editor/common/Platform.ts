@@ -78,16 +78,11 @@ export const createFile = async (path: string, content: string) => {
 		const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
 		await IO.createFile(tmpPath, content);
 		try {
-			await IO.moveFile(tmpPath, path);
+			await IO.copyFile(tmpPath, path);
+			await IO.removeFile(tmpPath).catch(() => {});
 		} catch (e) {
-			try {
-				// Fallback for Windows antivirus holding the tmp file: copy then delete
-				await IO.copyFile(tmpPath, path);
-				await IO.removeFile(tmpPath).catch(() => {});
-			} catch {
-				await IO.removeFile(tmpPath).catch(() => {});
-				throw e;
-			}
+			await IO.removeFile(tmpPath).catch(() => {});
+			throw e;
 		}
 	} else {
 		await LocalFile.createFile(path, content);
