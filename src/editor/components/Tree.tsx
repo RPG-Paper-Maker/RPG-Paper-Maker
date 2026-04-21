@@ -939,7 +939,7 @@ function Tree({
 		addEmpty = false,
 		emptyID = -1,
 		parentSelected = false,
-	): number => {
+	): { emptyID: number; firstNavNode: Node | null; lastNavNode: Node | null } => {
 		const canAddEmptyNode =
 			!cannotAdd && ((multipleLevels && addEmpty) || (level === 0 && !cannotAddEditRemoveRoot));
 		const canDropAtEnd =
@@ -950,10 +950,13 @@ function Tree({
 			emptyNode.parent = parent;
 			emptyID--;
 		}
+		let firstNavNode: Node | null = null;
+		let lastNavNode: Node | null = null;
 		let selectNextIndexes = 0;
 		for (const [index, node] of nodes.entries()) {
+			if (firstNavNode === null) firstNavNode = node;
 			const nbSelectionNextIndex = node.content.getSelectionNextIndexes();
-			const nextNode = nodes[index + Math.max(nbSelectionNextIndex, 1)] ?? emptyNode;
+			const nextNode = nodes[index + 1] ?? emptyNode;
 			node.next = nextNode;
 			if (nextNode && !nextNode.previous) {
 				nextNode.previous = node;
@@ -1000,7 +1003,7 @@ function Tree({
 			);
 			if (!node.willBeDeleted && !ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
 				const childItems: ReactNode[] = [];
-				emptyID = getTreeItems(
+				const childResult = getTreeItems(
 					node.children,
 					childItems,
 					node,
@@ -1009,6 +1012,18 @@ function Tree({
 					emptyID,
 					multipleLevels && selected,
 				);
+				emptyID = childResult.emptyID;
+				if (childResult.firstNavNode !== null) {
+					node.next = childResult.firstNavNode;
+					childResult.firstNavNode.previous = node;
+					childResult.lastNavNode!.next = nextNode;
+					if (nextNode) {
+						nextNode.previous = childResult.lastNavNode!;
+					}
+					lastNavNode = childResult.lastNavNode;
+				} else {
+					lastNavNode = node;
+				}
 				if (childItems.length > 0) {
 					items.push(
 						<div
@@ -1020,6 +1035,8 @@ function Tree({
 						</div>,
 					);
 				}
+			} else {
+				lastNavNode = node;
 			}
 		}
 		if (canAddEmptyNode) {
@@ -1043,6 +1060,8 @@ function Tree({
 					/>
 				</div>,
 			);
+			if (firstNavNode === null) firstNavNode = emptyNode;
+			lastNavNode = emptyNode;
 		} else if (canDropAtEnd) {
 			items.push(
 				<div
@@ -1055,7 +1074,7 @@ function Tree({
 				/>,
 			);
 		}
-		return emptyID;
+		return { emptyID, firstNavNode, lastNavNode };
 	};
 
 	const resetPreviousLinks = (nodes: Node[]) => {
