@@ -253,6 +253,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 
 	const handleChangeIsTopLeft = (id: number) => {
 		selectedObject3D!.isTopLeft = id === 1;
+		setTriggerUpdate(true);
 	};
 
 	const handleChangeStretch = (id: number) => {
