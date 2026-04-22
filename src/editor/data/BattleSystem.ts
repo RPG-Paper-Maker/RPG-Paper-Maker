@@ -21,6 +21,7 @@ const { t } = i18next;
 class BattleSystem extends Serializable {
 	public levelStatisticID!: number;
 	public expStatisticID!: number;
+	public allyDeadWinExp!: DynamicValue;
 	public formulaIsDead!: DynamicValue;
 	public formulaCrit!: DynamicValue;
 	public heroesBattlersCenterOffset!: DynamicValue;
@@ -43,6 +44,13 @@ class BattleSystem extends Serializable {
 	public static readonly bindings: BindingType[] = [
 		['levelStatisticID', 'lv', undefined, BINDING.NUMBER],
 		['expStatisticID', 'xp', undefined, BINDING.NUMBER],
+		[
+			'allyDeadWinExp',
+			'adwe',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, false),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
 		['formulaIsDead', 'fisdead', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
 		['formulaCrit', 'fc', DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
 		[

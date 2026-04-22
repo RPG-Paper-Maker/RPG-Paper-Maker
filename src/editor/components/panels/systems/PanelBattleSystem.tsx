@@ -37,6 +37,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 
 	const [levelStatisticID, setLevelStatisticID] = useStateNumber();
 	const [expStatisticID, setExpStatisticID] = useStateNumber();
+	const [allyDeadWinExp] = useStateDynamicValue();
 	const [formulaIsDead] = useStateDynamicValue();
 	const [formulaCrit] = useStateDynamicValue();
 	const [heroesBattlersCenterOffset] = useStateDynamicValue();
@@ -56,6 +57,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		const battleSystem = Project.current!.battleSystem;
 		setLevelStatisticID(battleSystem.levelStatisticID);
 		setExpStatisticID(battleSystem.expStatisticID);
+		allyDeadWinExp.copy(battleSystem.allyDeadWinExp);
 		formulaIsDead.copy(battleSystem.formulaIsDead);
 		formulaCrit.copy(battleSystem.formulaCrit);
 		heroesBattlersCenterOffset.copy(battleSystem.heroesBattlersCenterOffset);
@@ -91,6 +93,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		const battleSystem = Project.current!.battleSystem;
 		battleSystem.levelStatisticID = levelStatisticID;
 		battleSystem.expStatisticID = expStatisticID;
+		battleSystem.allyDeadWinExp.copy(allyDeadWinExp);
 		battleSystem.formulaIsDead.copy(formulaIsDead);
 		battleSystem.formulaCrit.copy(formulaCrit);
 		battleSystem.heroesBattlersCenterOffset.copy(heroesBattlersCenterOffset);
@@ -141,6 +144,10 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 						displayIDs
 						fillWidth
 					/>
+				</Flex>
+				<Flex column spaced>
+					<div>{t('ally.dead.win.exp')}:</div>
+					<DynamicValueSelector value={allyDeadWinExp} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH} />
 				</Flex>
 				<Groupbox title={t('formulas')}>
 					<Flex column spacedLarge>

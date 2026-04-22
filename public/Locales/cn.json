@@ -203,6 +203,7 @@
 	"frequencies": "频率",
 	"statistic.associated.level": "与等级关联的统计数据",
 	"statistic.associated.exp": "与经验值关联的统计数据",
+	"ally.dead.win.exp": "阵亡盟友获得经验值",
 	"formulas": "公式",
 	"is.dead": "已死亡",
 	"critical.influence": "暴击影响",

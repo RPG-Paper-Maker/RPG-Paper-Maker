@@ -203,6 +203,7 @@
 	"frequencies": "빈도",
 	"statistic.associated.level": "레벨 관련 능력치",
 	"statistic.associated.exp": "경험치 관련 능력치",
+	"ally.dead.win.exp": "사망한 아군도 경험치 획득",
 	"formulas": "공식",
 	"is.dead": "사망 여부",
 	"critical.influence": "크리티컬 영향",

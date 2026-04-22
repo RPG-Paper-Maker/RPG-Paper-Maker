@@ -203,6 +203,7 @@
 	"frequencies": "Частоты",
 	"statistic.associated.level": "Статистика, связанная с уровнем",
 	"statistic.associated.exp": "Статистика, связанная с exp",
+	"ally.dead.win.exp": "Погибший союзник получает опыт",
 	"formulas": "Формулы",
 	"is.dead": "Мертв",
 	"critical.influence": "Критическое влияние",

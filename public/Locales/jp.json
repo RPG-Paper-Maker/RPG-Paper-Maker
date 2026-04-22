@@ -203,6 +203,7 @@
 	"frequencies": "頻度",
 	"statistic.associated.level": "レベルに関連付けられたステータス",
 	"statistic.associated.exp": "経験値に関連付けられたステータス",
+	"ally.dead.win.exp": "死亡した仲間も経験値を獲得",
 	"formulas": "計算式",
 	"is.dead": "戦闘不能",
 	"critical.influence": "クリティカルの影響",
