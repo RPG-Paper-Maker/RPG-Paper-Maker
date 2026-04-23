@@ -129,6 +129,7 @@
 	"show.collisions.bb": "Mostrar cajas de colisión",
 	"type.export": "Tipo de exportación",
 	"deploy.desktop": "Aplicar para aplicación de Escritorio",
+	"deploy.internet.required": "Se requerirá conexión a Internet para esta opción.",
 	"protect.data": "Protejer datos",
 	"deploy.web": "Aplicar para navegador",
 	"version": "Versión",

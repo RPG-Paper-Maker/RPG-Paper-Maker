@@ -129,6 +129,7 @@
 	"show.collisions.bb": "Mostra bounding box collisioni",
 	"type.export": "Tipo di esportazione",
 	"deploy.desktop": "Esporta come applicazione desktop",
+	"deploy.internet.required": "Sarà necessaria una connessione Internet per questa opzione.",
 	"protect.data": "Proteggi dati",
 	"deploy.web": "Esporta per browser web",
 	"version": "Versione",

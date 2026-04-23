@@ -129,6 +129,7 @@
 	"show.collisions.bb": "显示碰撞边界框",
 	"type.export": "导出类型",
 	"deploy.desktop": "部署桌面应用程序",
+	"deploy.internet.required": "此选项需要互联网连接。",
 	"protect.data": "保护数据",
 	"deploy.web": "部署网页浏览器版",
 	"version": "版本",

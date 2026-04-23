@@ -129,6 +129,7 @@
 	"show.collisions.bb": "Wyświetl pola określające kolizję",
 	"type.export": "Ustawienie eksportu",
 	"deploy.desktop": "Przystosowanie dla komputerów",
+	"deploy.internet.required": "Ta opcja wymaga połączenia z Internetem.",
 	"protect.data": "Szyfrowanie projektu",
 	"deploy.web": "Przystosowanie dla przeglądarek internetowych",
 	"version": "Określenie wersji gry",

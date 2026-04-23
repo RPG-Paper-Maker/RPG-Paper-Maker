@@ -129,6 +129,7 @@
 	"show.collisions.bb": "Zeige Kollisionsboxen",
 	"type.export": "Typ des Exports",
 	"deploy.desktop": "Erstelle Desktop-Anwendung",
+	"deploy.internet.required": "Für diese Option ist eine Internetverbindung erforderlich.",
 	"protect.data": "Schütze Daten",
 	"deploy.web": "Erstelle Browser-Anwendung",
 	"version": "Version",

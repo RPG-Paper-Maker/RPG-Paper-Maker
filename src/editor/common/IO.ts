@@ -216,6 +216,20 @@ class IO {
 	static async copyAndExclude(src: string, dst: string, exclude: string): Promise<void> {
 		(await this.invoke('copy-and-exclude', src, dst, exclude)) as string;
 	}
+
+	static async downloadDeployEngine(targetOS: OS_KIND): Promise<{ enginePath: string; tempDir: string }> {
+		return (await this.invoke('download-deploy-engine', targetOS)) as { enginePath: string; tempDir: string };
+	}
+
+	static onDownloadDeployEngineProgress(callback: (percent: number | null, received: number) => void) {
+		this.on('download-deploy-engine-progress', (percent, received) => {
+			callback(percent as number | null, received as number);
+		});
+	}
+
+	static removeListeners(channel: string) {
+		window.ipcRenderer.removeAllListeners(channel);
+	}
 }
 
 export { IO };

@@ -12,6 +12,7 @@
 import { exec, spawn } from 'child_process';
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
+import https from 'node:https';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
@@ -189,6 +190,26 @@ const hasInternet = async () => {
 		return false;
 	}
 };
+
+const httpsDownload = (url, onChunk) =>
+	new Promise((resolve, reject) => {
+		const follow = (currentUrl, hops = 0) => {
+			if (hops > 10) { reject(new Error('Too many redirects')); return; }
+			https.get(currentUrl, { headers: { 'User-Agent': 'RPG-Paper-Maker-Editor' } }, (res) => {
+				if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+					res.resume();
+					follow(res.headers.location, hops + 1);
+					return;
+				}
+				const total = parseInt(res.headers['content-length'], 10) || null;
+				const chunks = [];
+				res.on('data', (chunk) => { chunks.push(chunk); onChunk(chunk, total); });
+				res.on('end', () => resolve(Buffer.concat(chunks)));
+				res.on('error', reject);
+			}).on('error', reject);
+		};
+		follow(url);
+	});
 
 const fetchFrom = async (path) => {
 	const response = await fetch(path, { cache: 'no-store' });
@@ -774,6 +795,31 @@ async function copyDir(srcDir, destDir, excludePath) {
 
 ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 	await copyDir(src, dst, excludePath);
+});
+
+ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
+	const zipNames = {
+		win32: 'RPG.Paper.Maker.Windows.zip',
+		linux: 'RPG.Paper.Maker.Linux.zip',
+		darwin: 'RPG.Paper.Maker.Mac.zip',
+	};
+	const zipName = zipNames[targetOS];
+	const apiRes = await fetchFrom('https://api.github.com/repos/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest');
+	const { tag_name: version } = await apiRes.json();
+	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${version}/${zipName}`;
+	let received = 0;
+	const buffer = await httpsDownload(url, (chunk, total) => {
+		received += chunk.length;
+		const percent = total ? Math.round((received / total) * 100) : null;
+		event.sender.send('download-deploy-engine-progress', null, percent, received);
+	});
+	const tempDir = path.join(os.tmpdir(), `rpm-deploy-${Date.now()}`);
+	await fs.mkdir(tempDir, { recursive: true });
+	const zipPath = path.join(tempDir, zipName);
+	await fs.writeFile(zipPath, buffer);
+	await extractZip(zipPath, tempDir);
+	await fs.unlink(zipPath);
+	return { enginePath: path.join(tempDir, 'RPG Paper Maker'), tempDir };
 });
 
 ipcMain.handle('show-error', async (event, message) => {

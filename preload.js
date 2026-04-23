@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 	on: (channel, func) => {
 		ipcRenderer.on(channel, (event, ...args) => func(...args));
 	},
+	removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
 });
 
 const args = process.argv;

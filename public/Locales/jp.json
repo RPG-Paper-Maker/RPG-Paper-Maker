@@ -129,6 +129,7 @@
 	"show.collisions.bb": "当たり判定ボックスを表示",
 	"type.export": "出力形式",
 	"deploy.desktop": "デスクトップアプリとして出力",
+	"deploy.internet.required": "このオプションにはインターネット接続が必要です。",
 	"protect.data": "データの保護",
 	"deploy.web": "ブラウザ向けに出力",
 	"version": "バージョン",

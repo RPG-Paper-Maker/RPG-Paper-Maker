@@ -10,7 +10,7 @@ if (!version) {
 }
 
 const versionFile = 'updater/version';
-writeFileSync(versionFile, `updater/${version}`);
+writeFileSync(versionFile, version);
 console.log(`✅ Updated ${versionFile} with: ${version}`);
 
 execSync(`git add ${versionFile}`, { stdio: 'inherit' });

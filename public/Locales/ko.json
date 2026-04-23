@@ -129,6 +129,7 @@
 	"show.collisions.bb": "충돌 경계 상자(BB) 표시",
 	"type.export": "내보내기 유형",
 	"deploy.desktop": "데스크톱 애플리케이션으로 배포",
+	"deploy.internet.required": "이 옵션에는 인터넷 연결이 필요합니다.",
 	"protect.data": "데이터 보호",
 	"deploy.web": "웹 브라우저용 배포",
 	"version": "버전",

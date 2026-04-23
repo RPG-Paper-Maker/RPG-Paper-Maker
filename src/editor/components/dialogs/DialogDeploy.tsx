@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Constants, INPUT_TYPE_WIDTH, IO, OS_KIND, Paths } from '../../common';
@@ -62,64 +62,119 @@ function DialogDeploy({ setIsOpen }: Props) {
 	const [major, setMajor] = useState(Project.current!.settings.lastMajorVersion);
 	const [minor, setMinor] = useState(Project.current!.settings.lastMinorVersion);
 	const [protectData, setProtectData] = useState(true);
+	const OS_KINDS = [OS_KIND.WIN32, OS_KIND.LINUX, OS_KIND.DARWIN];
+	const [targetOSIndex, setTargetOSIndex] = useState(0);
+	const [currentOSIndex, setCurrentOSIndex] = useState(0);
 
 	const dispatch = useDispatch();
 
+	useEffect(() => {
+		if (Constants.IS_DESKTOP) {
+			void IO.getOS()
+				.then((os) => {
+					const index = Math.max(0, OS_KINDS.indexOf(os));
+					setTargetOSIndex(index);
+					setCurrentOSIndex(index);
+				})
+				.catch(console.error);
+		}
+	}, []);
+
+	const OS_SUFFIXES = ['Windows', 'Linux', 'Mac'];
+
 	const getPathProject = () => {
-		return Paths.join(
-			location,
-			`${Paths.getFileName(Project.current!.getPath())}-${exportType === EXPORT_TYPE.WEB ? 'BROWSER-' : ''}${major}.${minor}`,
-		);
+		const suffix = exportType === EXPORT_TYPE.WEB ? '-Browser' : `-${OS_SUFFIXES[targetOSIndex]}`;
+		return Paths.join(location, `${Paths.getFileName(Project.current!.getPath())}-${major}.${minor}${suffix}`);
 	};
 
 	const deploy = async () => {
 		dispatch(setLoading(true));
-		dispatch(setLoadingBar({ percent: 0, label: 'Copy dependencies...' }));
-		const path = getPathProject();
-		const os = Constants.IS_DESKTOP ? await IO.getOS() : OS_KIND.WEB;
-		await createFolder(path);
+		const targetOS = OS_KINDS[targetOSIndex];
+		const outputPath = getPathProject();
 		const localAppPath =
 			exportType === EXPORT_TYPE.APPLICATION
-				? os === OS_KIND.DARWIN
+				? targetOS === OS_KIND.DARWIN
 					? Paths.join('Game.app', 'Contents', Paths.RESOURCES_DARWIN, Paths.APP)
 					: Paths.join(Paths.RESOURCES, Paths.APP)
 				: null;
-		const appPath = localAppPath === null ? path : Paths.join(path, localAppPath);
-		await copyDependencies(path, appPath, localAppPath, os);
-		dispatch(setLoadingBar({ percent: 20, label: 'Copy project...' }));
+		const appPath = localAppPath === null ? outputPath : Paths.join(outputPath, localAppPath);
+
+		let enginePath = '';
+		let downloadedTempDir: string | null = null;
+
+		if (exportType === EXPORT_TYPE.APPLICATION && Constants.IS_DESKTOP) {
+			const currentOS = await IO.getOS();
+			if (targetOS !== currentOS) {
+				IO.onDownloadDeployEngineProgress((percent, received) => {
+					dispatch(
+						setLoadingBar({
+							percent: percent !== null ? Math.round(percent * 0.2) : 0,
+							label:
+								percent !== null
+									? `Downloading game for ${targetOS}... ${percent}%`
+									: `Downloading game for ${targetOS}... ${(received / 1024 / 1024).toFixed(1)} MB`,
+						}),
+					);
+				});
+				const result = await IO.downloadDeployEngine(targetOS);
+				IO.removeListeners('download-deploy-engine-progress');
+				enginePath = result.enginePath;
+				downloadedTempDir = result.tempDir;
+			} else {
+				enginePath = await IO.getEngineFolder();
+			}
+		}
+
+		dispatch(setLoadingBar({ percent: 20, label: 'Copy dependencies...' }));
+		await createFolder(outputPath);
+		await copyDependencies(outputPath, appPath, localAppPath, enginePath);
+		dispatch(setLoadingBar({ percent: 30, label: 'Copy project...' }));
 		await copyAllProject(appPath);
 		dispatch(setLoadingBar({ percent: 40, label: 'Copying BR...' }));
 		await copyBRDLC(appPath);
-		dispatch(setLoadingBar({ percent: 80, label: 'Removing useless content...' }));
+		dispatch(setLoadingBar({ percent: 80, label: 'Cleaning useless content...' }));
 		await removeUselessContent(appPath);
 		dispatch(setLoadingBar({ percent: 100, label: 'Finished!' }));
-		if (Constants.IS_DESKTOP) {
-			await IO.openFolder(path);
-		} else {
-			await exportFolder(path);
+
+		if (downloadedTempDir) {
+			await IO.removeFolder(downloadedTempDir);
 		}
-		dispatch(setLoading(false));
-		dispatch(setLoadingBar(null));
-		setIsOpen(false);
+
+		try {
+			if (Constants.IS_DESKTOP) {
+				await IO.openFolder(outputPath);
+			} else {
+				try {
+					await exportFolder(outputPath);
+				} finally {
+					await removeFolder(outputPath);
+				}
+			}
+			setIsOpen(false);
+		} finally {
+			dispatch(setLoading(false));
+			dispatch(setLoadingBar(null));
+		}
 	};
 
-	const copyDependencies = async (path: string, appPath: string, localAppPath: string | null, os: OS_KIND) => {
+	const copyDependencies = async (path: string, appPath: string, localAppPath: string | null, enginePath: string) => {
 		if (exportType === EXPORT_TYPE.APPLICATION) {
-			const enginePath = await IO.getEngineFolder();
-			await IO.copyAndExclude(enginePath, path, Paths.join(enginePath, localAppPath!));
-			let extension = '';
-			switch (os) {
-				case OS_KIND.WIN32:
-					extension = '.exe';
-					break;
-				case OS_KIND.DARWIN:
-					extension = '.app';
-					break;
-				default:
-					break;
+			if (Constants.IS_DESKTOP) {
+				await IO.copyAndExclude(enginePath, path, Paths.join(enginePath, localAppPath!));
+				let extension = '';
+				switch (OS_KINDS[targetOSIndex]) {
+					case OS_KIND.WIN32:
+						extension = '.exe';
+						break;
+					case OS_KIND.DARWIN:
+						extension = '.app';
+						break;
+					default:
+						break;
+				}
+				await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
 			}
-			await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
-			await IO.createFolder(appPath);
+			await createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');
 			await copyPublicDeploy(appPath, 'preload.js');
 			await copyPublicDeploy(appPath, 'package.json');
@@ -282,8 +337,49 @@ function DialogDeploy({ setIsOpen }: Props) {
 						<Flex column spacedLarge>
 							<RadioGroup selected={exportType} onChange={setExportType}>
 								<Flex column spacedLarge>
+									<RadioButton value={EXPORT_TYPE.APPLICATION} disabled={!Constants.IS_DESKTOP}>
+										{t('deploy.desktop')}
+									</RadioButton>
 									{Constants.IS_DESKTOP && (
-										<RadioButton value={EXPORT_TYPE.APPLICATION}>{t('deploy.desktop')}</RadioButton>
+										<>
+											<Flex>
+												<Flex fillSmallSpace />
+												<RadioGroup selected={targetOSIndex} onChange={setTargetOSIndex}>
+													<Flex spaced>
+														<RadioButton
+															value={0}
+															disabled={exportType !== EXPORT_TYPE.APPLICATION}
+														>
+															Windows
+														</RadioButton>
+														<RadioButton
+															value={1}
+															disabled={exportType !== EXPORT_TYPE.APPLICATION}
+														>
+															Linux
+														</RadioButton>
+														<RadioButton
+															value={2}
+															disabled={exportType !== EXPORT_TYPE.APPLICATION}
+														>
+															macOS
+														</RadioButton>
+													</Flex>
+												</RadioGroup>
+											</Flex>
+											<Flex
+												className='textSmallDetail'
+												style={{
+													visibility:
+														exportType === EXPORT_TYPE.APPLICATION &&
+														targetOSIndex !== currentOSIndex
+															? 'visible'
+															: 'hidden',
+												}}
+											>
+												⚠ {t('deploy.internet.required')}
+											</Flex>
+										</>
 									)}
 									<RadioButton value={EXPORT_TYPE.WEB}>{t('deploy.web')}</RadioButton>
 								</Flex>
