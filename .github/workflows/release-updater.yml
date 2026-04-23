@@ -25,7 +25,7 @@ jobs:
                   echo "version=$VERSION" >> $GITHUB_OUTPUT
 
             - name: Set updater/version
-              run: echo "updater/${{ inputs.version }}" > updater/version
+              run: echo -n "updater/${{ inputs.version }}" > updater/version
 
             - name: Download Electron x64 and arm64
               run: |
@@ -108,7 +108,7 @@ jobs:
 
             - name: Set updater/version
               shell: bash
-              run: echo "updater/${{ inputs.version }}" > updater/version
+              run: echo -n "updater/${{ inputs.version }}" > updater/version
 
             - name: Download Electron x64
               shell: bash
@@ -172,7 +172,7 @@ jobs:
                   echo "version=$VERSION" >> $GITHUB_OUTPUT
 
             - name: Set updater/version
-              run: echo "updater/${{ inputs.version }}" > updater/version
+              run: echo -n "updater/${{ inputs.version }}" > updater/version
 
             - name: Download Electron x64
               run: |
