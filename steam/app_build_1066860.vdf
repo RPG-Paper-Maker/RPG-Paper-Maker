@@ -1,0 +1,17 @@
+"appbuild"
+{
+	"appid"	"1066860"
+	"desc" "Your build description here" // description for this build
+	"buildoutput" "../steam-output/" // build output folder for .log, .csm & .csd files, relative to location of this file
+	"contentroot" "../content/" // root content folder, relative to location of this file
+	"setlive"	"" // branch to set live after successful build, non if empty
+	"preview" "0" // to enable preview builds
+	"local"	""	// set to flie path of local content server 
+	
+	"depots"
+	{
+		"1066861" "depot_build_1066861.vdf"
+		"1066862" "depot_build_1066862.vdf"
+		"1066863" "depot_build_1066863.vdf"
+	}
+}

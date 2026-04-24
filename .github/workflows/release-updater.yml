@@ -93,6 +93,13 @@ jobs:
                   draft: true
                   files: RPG.Paper.Maker.Mac.zip
 
+            - name: Upload artifact for Steam deploy
+              uses: actions/upload-artifact@v4
+              with:
+                  name: mac-build
+                  path: RPG.Paper.Maker.Mac.zip
+                  retention-days: 1
+
     build-win:
         runs-on: windows-latest
 
@@ -159,6 +166,13 @@ jobs:
                       RPG.Paper.Maker.Windows.zip
                       installer-output/RPG.Paper.Maker.Installer.exe
 
+            - name: Upload artifact for Steam deploy
+              uses: actions/upload-artifact@v4
+              with:
+                  name: win-build
+                  path: RPG.Paper.Maker.Windows.zip
+                  retention-days: 1
+
     build-linux:
         runs-on: ubuntu-latest
 
@@ -204,3 +218,67 @@ jobs:
                   name: 'Updater ${{ inputs.version }}'
                   draft: true
                   files: RPG.Paper.Maker.Linux.zip
+
+            - name: Upload artifact for Steam deploy
+              uses: actions/upload-artifact@v4
+              with:
+                  name: linux-build
+                  path: RPG.Paper.Maker.Linux.zip
+                  retention-days: 1
+
+    deploy-steam:
+        needs: [build-mac, build-win, build-linux]
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v5
+
+            - name: Download Mac build
+              uses: actions/download-artifact@v4
+              with:
+                  name: mac-build
+                  path: artifacts/
+
+            - name: Download Windows build
+              uses: actions/download-artifact@v4
+              with:
+                  name: win-build
+                  path: artifacts/
+
+            - name: Download Linux build
+              uses: actions/download-artifact@v4
+              with:
+                  name: linux-build
+                  path: artifacts/
+
+            - name: Extract builds into Steam content folders
+              run: |
+                  mkdir -p content/linux content/windows content/mac
+                  unzip -q "artifacts/RPG.Paper.Maker.Linux.zip" -d content/linux_tmp/
+                  mv "content/linux_tmp/RPG Paper Maker/"* content/linux/
+                  unzip -q "artifacts/RPG.Paper.Maker.Windows.zip" -d content/win_tmp/
+                  mv "content/win_tmp/RPG Paper Maker/"* content/windows/
+                  unzip -q "artifacts/RPG.Paper.Maker.Mac.zip" -d content/mac_tmp/
+                  mv "content/mac_tmp/RPG Paper Maker/"* content/mac/
+
+            - name: Install steamcmd
+              run: |
+                  sudo apt-get update -q
+                  sudo apt-get install -y lib32gcc-s1
+                  mkdir -p ~/steamcmd
+                  curl -sqL https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz | tar xvzf - -C ~/steamcmd
+
+            - name: Set build description
+              run: |
+                  sed -i 's/Your build description here/Updater ${{ inputs.version }}/' steam/app_build_1066860.vdf
+
+            - name: Deploy to Steam
+              env:
+                  STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+                  STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+              run: |
+                  mkdir -p steam-output
+                  ~/steamcmd/steamcmd.sh \
+                    +login "$STEAM_USERNAME" "$STEAM_PASSWORD" \
+                    +run_app_build "${{ github.workspace }}/steam/app_build_1066860.vdf" \
+                    +quit
