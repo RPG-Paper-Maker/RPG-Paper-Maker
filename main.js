@@ -600,7 +600,7 @@ ipcMain.handle('create-folder', async (event, path) => {
 	await createFolder(path);
 });
 
-const retryOnPermError = async (fn) => {
+const retryOnPermError = async (fn, extraCodes = []) => {
 	const maxAttempts = 5;
 	let lastError;
 	for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -609,7 +609,7 @@ const retryOnPermError = async (fn) => {
 			return;
 		} catch (err) {
 			lastError = err;
-			if (err.code !== 'EPERM' && err.code !== 'EBUSY') throw err;
+			if (err.code !== 'EPERM' && err.code !== 'EBUSY' && !extraCodes.includes(err.code)) throw err;
 			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
 		}
 	}
@@ -646,8 +646,8 @@ ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
 	await copyFolder(src, dst, exclude ?? []);
 });
 
-ipcMain.handle('create-file', async (event, path, content) => {
-	await fs.writeFile(path, content);
+ipcMain.handle('create-file', async (event, filePath, content) => {
+	await retryOnPermError(() => fs.writeFile(filePath, content), ['ENOENT']);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
