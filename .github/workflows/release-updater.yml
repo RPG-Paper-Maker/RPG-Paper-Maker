@@ -272,6 +272,11 @@ jobs:
               run: |
                   sed -i 's/Your build description here/Updater ${{ inputs.version }}/' steam/app_build_1066860.vdf
 
+            - name: Restore Steam config
+              run: |
+                  mkdir -p ~/Steam/config
+                  echo "${{ secrets.STEAM_CONFIG_VDF }}" | base64 -d > ~/Steam/config/config.vdf
+
             - name: Deploy to Steam
               env:
                   STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
