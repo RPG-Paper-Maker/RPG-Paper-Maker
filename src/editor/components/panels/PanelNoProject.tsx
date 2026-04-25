@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
@@ -18,11 +18,64 @@ import { MdOutlineAddchart } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
 import { openWebsite } from '../../common/Platform';
+import { Project } from '../../core/Project';
 import { Manager } from '../../Editor';
 import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
+import '../../styles/ChangelogPreview.css';
 import Button from '../Button';
 import Flex from '../Flex';
 import ProjectPreview from '../ProjectPreview';
+
+function escInline(s: string): string {
+	return s
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+		.replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function markdownToHtml(md: string): string {
+	const parts: string[] = [];
+	let inList = false;
+	for (const line of md.split('\n')) {
+		const t = line.trim();
+		if (!t) {
+			if (inList) {
+				parts.push('</ul>');
+				inList = false;
+			}
+			continue;
+		}
+		if (t.startsWith('## ')) {
+			if (inList) {
+				parts.push('</ul>');
+				inList = false;
+			}
+			parts.push(`<h3>${escInline(t.slice(3))}</h3>`);
+		} else if (t.startsWith('### ')) {
+			if (inList) {
+				parts.push('</ul>');
+				inList = false;
+			}
+			parts.push(`<h4>${escInline(t.slice(4))}</h4>`);
+		} else if (t.startsWith('- ') || t.startsWith('* ')) {
+			if (!inList) {
+				parts.push('<ul>');
+				inList = true;
+			}
+			parts.push(`<li>${escInline(t.slice(2))}</li>`);
+		} else {
+			if (inList) {
+				parts.push('</ul>');
+				inList = false;
+			}
+			parts.push(`<p>${escInline(t)}</p>`);
+		}
+	}
+	if (inList) parts.push('</ul>');
+	return parts.join('');
+}
 
 function PanelNoProject() {
 	const { t } = useTranslation();
@@ -30,6 +83,8 @@ function PanelNoProject() {
 	const dispatch = useDispatch();
 
 	const projects = useSelector((state: RootState) => state.projects.list);
+
+	const [changelogHtml, setChangelogHtml] = useState<string | null>(null);
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
@@ -59,8 +114,22 @@ function PanelNoProject() {
 		);
 	};
 
+	const fetchChangelog = async () => {
+		try {
+			const response = await fetch(
+				`https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/changelogs/${Project.VERSION}.md`,
+			);
+			if (response.ok) {
+				setChangelogHtml(markdownToHtml(await response.text()));
+			}
+		} catch {
+			// No internet: show nothing
+		}
+	};
+
 	useEffect(() => {
 		Manager.GL.mainContext.remove();
+		void fetchChangelog();
 	}, []);
 
 	return (
@@ -114,6 +183,15 @@ function PanelNoProject() {
 					>
 						{t('how.convert.project.2.0')}
 					</a>
+					{changelogHtml !== null && (
+						<div className='changelogPreview'>
+							<div className='changelogPreviewTitle'>{t('last.update.changes')}</div>
+							<div
+								className='changelogPreviewContent'
+								dangerouslySetInnerHTML={{ __html: changelogHtml }}
+							/>
+						</div>
+					)}
 				</Flex>
 			</Flex>
 		</Flex>

@@ -1942,5 +1942,6 @@
 	"restore": "恢复",
 	"no.backups.available": "没有可用的备份。",
 	"warning.restore.backup": "您确定要将 {{projectName}} 恢复到备份 {{backupName}} 吗？这将覆盖当前项目数据。",
-	"last.save": "最后保存"
+	"last.save": "最后保存",
+	"last.update.changes": "最新更新内容："
 }

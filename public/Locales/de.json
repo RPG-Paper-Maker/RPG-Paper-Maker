@@ -1941,5 +1941,6 @@
 	"restore": "Wiederherstellen",
 	"no.backups.available": "Keine Backups verfügbar.",
 	"warning.restore.backup": "Möchten Sie {{projectName}} wirklich auf das Backup {{backupName}} zurücksetzen? Dadurch werden die aktuellen Projektdaten überschrieben.",
-	"last.save": "letzter Speicherstand"
+	"last.save": "letzter Speicherstand",
+	"last.update.changes": "Letzte Änderungen:"
 }

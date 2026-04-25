@@ -1941,5 +1941,6 @@
 	"restore": "Restaurar",
 	"no.backups.available": "No hay copias de seguridad disponibles.",
 	"warning.restore.backup": "¿Estás seguro de que deseas restaurar {{projectName}} al backup {{backupName}}? Esto sobrescribirá los datos actuales del proyecto.",
-	"last.save": "último guardado"
+	"last.save": "último guardado",
+	"last.update.changes": "Últimas actualizaciones:"
 }

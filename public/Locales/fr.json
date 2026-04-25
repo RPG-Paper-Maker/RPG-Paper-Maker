@@ -1814,7 +1814,7 @@
 	"starting.map": "Carte de départ",
 	"folder.name": "Nom du dossier",
 	"warning.project.exist.overwrite": "Ce projet existe déjà dans {{path}}. Souhaitez vous l'écraser ?",
-	"warning.folder.permission": "Permission refusée : impossible de créer un dossier à «\u00a0{{path}}\u00a0». Veuillez choisir un autre emplacement, par exemple votre dossier Documents.",
+	"warning.folder.permission": "Permission refusée : impossible de créer un dossier à « {{path}} ». Veuillez choisir un autre emplacement, par exemple votre dossier Documents.",
 	"warning.dlcs.folder.path.wrong": "Le chemin du dossier DLCs est incorrect",
 	"new.folder": "Nouveau dossier",
 	"warning.delete.project": "Etes vous sûr de vouloir supprimer {{projectName}} ?",
@@ -1941,5 +1941,6 @@
 	"last.save": "dernière sauvegarde",
 	"restore": "Restaurer",
 	"no.backups.available": "Aucune sauvegarde disponible.",
-	"warning.restore.backup": "Êtes-vous sûr de vouloir restaurer {{projectName}} à la sauvegarde {{backupName}} ? Cela écrasera les données actuelles du projet."
+	"warning.restore.backup": "Êtes-vous sûr de vouloir restaurer {{projectName}} à la sauvegarde {{backupName}} ? Cela écrasera les données actuelles du projet.",
+	"last.update.changes": "Dernières modifications :"
 }

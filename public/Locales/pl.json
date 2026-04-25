@@ -1941,5 +1941,6 @@
 	"restore": "Przywróć",
 	"no.backups.available": "Brak dostępnych kopii zapasowych.",
 	"warning.restore.backup": "Czy na pewno chcesz przywrócić {{projectName}} do kopii zapasowej {{backupName}}? Spowoduje to nadpisanie bieżących danych projektu.",
-	"last.save": "ostatni zapis"
+	"last.save": "ostatni zapis",
+	"last.update.changes": "Ostatnie zmiany:"
 }

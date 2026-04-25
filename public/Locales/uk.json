@@ -1941,5 +1941,6 @@
 	"restore": "Відновити",
 	"no.backups.available": "Резервні копії недоступні.",
 	"warning.restore.backup": "Ви впевнені, що хочете відновити {{projectName}} з резервної копії {{backupName}}? Це перезапише поточні дані проєкту.",
-	"last.save": "останнє збереження"
+	"last.save": "останнє збереження",
+	"last.update.changes": "Останні зміни:"
 }
