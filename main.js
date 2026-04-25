@@ -628,12 +628,18 @@ const copyFolder = async (src, dst, exclude = []) => {
 	}
 	const files = await fs.readdir(src);
 	for (const file of files) {
-		if (exclude.includes(file)) {
+		if (exclude.includes(file) || file.match(/\.\w+\.tmp$/)) {
 			continue;
 		}
 		const sourcePath = path.join(src, file);
 		const destinationPath = path.join(dst, file);
-		const stats = await fs.stat(sourcePath);
+		let stats;
+		try {
+			stats = await fs.stat(sourcePath);
+		} catch (err) {
+			if (err.code === 'ENOENT') continue;
+			throw err;
+		}
 		if (stats.isDirectory()) {
 			await copyFolder(sourcePath, destinationPath, exclude);
 		} else {
