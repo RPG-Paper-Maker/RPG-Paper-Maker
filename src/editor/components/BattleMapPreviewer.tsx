@@ -18,8 +18,8 @@ import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
 import Loader from './Loader';
 
-const WIDTH = 640;
-const HEIGHT = 480;
+const WIDTH = 1280;
+const HEIGHT = 720;
 
 const createOverlayLine = (x1: number, y1: number, x2: number, y2: number, color = 0xffffff) => {
 	const material = new THREE.LineBasicMaterial({ color });
