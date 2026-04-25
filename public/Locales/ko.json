@@ -136,6 +136,7 @@
 	"major": "메이저",
 	"minor": "마이너",
 	"theme": "테마",
+	"engine.font.size": "엔진 글꼴 크기",
 	"dark": "다크",
 	"white": "화이트",
 	"engine.controls": "엔진 컨트롤",

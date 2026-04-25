@@ -136,6 +136,7 @@
 	"major": "Major (nr główny)",
 	"minor": "Minor (nr dodatkowy)",
 	"theme": "Motyw programu\n",
+	"engine.font.size": "Rozmiar czcionki silnika",
 	"dark": "Ciemny (czarny)",
 	"white": "Jasny (biały)",
 	"engine.controls": "Sterowanie silnik",

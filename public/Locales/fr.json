@@ -136,6 +136,7 @@
 	"major": "Majeure",
 	"minor": "Mineure",
 	"theme": "Thème",
+	"engine.font.size": "Taille de police du moteur",
 	"dark": "Sombre",
 	"white": "Blanc",
 	"engine.controls": "Contrôles du logiciel",

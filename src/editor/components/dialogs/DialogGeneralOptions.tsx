@@ -15,11 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../../common';
 import { EngineSettings } from '../../data';
 import { Model } from '../../Editor';
-import { RootState, setTheme } from '../../store';
+import { RootState, setEngineFontSize, setTheme } from '../../store';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
+import InputNumber from '../InputNumber';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
@@ -35,6 +36,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 	const [getUnstableVersions, setGetUnstableVersions] = useState(EngineSettings.current!.getUnstableVersions);
 
 	const theme = useSelector((state: RootState) => state.settings.theme);
+	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
 
 	const dispatch = useDispatch();
 
@@ -44,9 +46,14 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 		dispatch(setTheme(Constants.THEMES[t]));
 	};
 
+	const handleChangeEngineFontSize = (v: number) => {
+		dispatch(setEngineFontSize(v));
+	};
+
 	const handleAccept = async () => {
 		setIsLoading(true);
 		EngineSettings.current!.theme = themeID;
+		EngineSettings.current!.engineFontSize = engineFontSize;
 		EngineSettings.current!.updaterType = updaterType;
 		EngineSettings.current!.getUnstableVersions = getUnstableVersions;
 		await EngineSettings.current!.save();
@@ -55,6 +62,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 
 	const handleReject = async () => {
 		handleChangeTheme(EngineSettings.current!.theme);
+		dispatch(setEngineFontSize(EngineSettings.current!.engineFontSize));
 		setIsOpen(false);
 	};
 
@@ -76,6 +84,16 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 								onChange={handleChangeTheme}
 								options={Model.Base.mapListIndex(['Dark', 'White'])}
 								translateOptions
+							/>
+						</Value>
+						<Label>{t('engine.font.size')}</Label>
+						<Value>
+							<InputNumber
+								value={engineFontSize}
+								onChange={handleChangeEngineFontSize}
+								min={8}
+								max={24}
+								suffixPlaceholder='px'
 							/>
 						</Value>
 						{Constants.IS_DESKTOP && (

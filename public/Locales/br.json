@@ -136,6 +136,7 @@
 	"major": "Principal",
 	"minor": "Secundária",
 	"theme": "Tema",
+	"engine.font.size": "Tamanho da fonte do motor",
 	"dark": "Escuro",
 	"white": "Claro",
 	"engine.controls": "Controles do motor",

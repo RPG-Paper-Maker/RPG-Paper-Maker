@@ -136,6 +136,7 @@
 	"major": "Major",
 	"minor": "Minor",
 	"theme": "Schema",
+	"engine.font.size": "Engine-Schriftgröße",
 	"dark": "Dunkel",
 	"white": "Hell",
 	"engine.controls": "Engine-Steuerungen",

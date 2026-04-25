@@ -31,6 +31,7 @@ function Editor() {
 	const [loaded, setLoaded] = useState(false);
 
 	const theme = useSelector((state: RootState) => state.settings.theme);
+	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
 
 	useEffect(() => {
 		const handleKeyDown = (e: globalThis.KeyboardEvent) => {
@@ -55,6 +56,10 @@ function Editor() {
 		document.documentElement.className = '';
 		document.documentElement.classList.add(theme);
 	}, [theme]);
+
+	useLayoutEffect(() => {
+		document.documentElement.style.setProperty('--engine-font-size', `${engineFontSize}px`);
+	}, [engineFontSize]);
 
 	return (
 		<I18nextProvider i18n={i18n}>

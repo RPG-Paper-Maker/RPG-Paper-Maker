@@ -16,13 +16,17 @@ const SettingsSlice = createSlice({
 	name: 'settings',
 	initialState: {
 		theme: 'darkTheme',
+		engineFontSize: 12,
 	},
 	reducers: {
 		setTheme(state, action: PayloadAction<string>) {
 			state.theme = action.payload;
 		},
+		setEngineFontSize(state, action: PayloadAction<number>) {
+			state.engineFontSize = action.payload;
+		},
 	},
 });
 
-export const { setTheme } = SettingsSlice.actions;
+export const { setTheme, setEngineFontSize } = SettingsSlice.actions;
 export const SettingsReducer = SettingsSlice.reducer;

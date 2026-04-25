@@ -60,7 +60,7 @@ import {
 	setProjects,
 	showWarning,
 } from './slices/ProjectsReducer';
-import { setTheme, SettingsReducer } from './slices/SettingsReducer';
+import { setEngineFontSize, setTheme, SettingsReducer } from './slices/SettingsReducer';
 import {
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
@@ -154,6 +154,7 @@ export {
 	setProjects,
 	setSelectedMapElement,
 	setSelectedPosition,
+	setEngineFontSize,
 	setTheme,
 	setUndoRedoIndex,
 	setUndoRedoLength,

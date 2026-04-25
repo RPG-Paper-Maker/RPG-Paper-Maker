@@ -26,6 +26,7 @@ class EngineSettings extends Serializable {
 	public backupsMax!: number;
 	public backupsIncludeAssets!: boolean;
 	public theme!: number;
+	public engineFontSize!: number;
 	public updaterType!: number;
 	public getUnstableVersions!: boolean;
 
@@ -40,6 +41,7 @@ class EngineSettings extends Serializable {
 		['backupsMax', 'bm', 10, BINDING.NUMBER],
 		['backupsIncludeAssets', 'bia', true, BINDING.BOOLEAN],
 		['theme', 't', 0, BINDING.NUMBER],
+		['engineFontSize', 'efs', 12, BINDING.NUMBER],
 		['updaterType', 'ut', 0, BINDING.NUMBER],
 		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],
 	];

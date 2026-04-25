@@ -30,6 +30,7 @@
 	--hover-patreon-color: #fe7765;
 	--special-elements-size: 30px;
 	--green-color: #78ad51;
+	--engine-font-size: 12px;
 }
 
 @keyframes fadeIn {
@@ -51,7 +52,7 @@ body {
 	padding: 0;
 	background-color: var(--main-bg-color);
 	color: var(--main-color);
-	font-size: 12px;
+	font-size: var(--engine-font-size);
 	touch-action: none;
 	image-rendering: pixelated;
 }

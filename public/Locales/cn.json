@@ -136,6 +136,7 @@
 	"major": "主版本",
 	"minor": "次版本",
 	"theme": "主题",
+	"engine.font.size": "引擎字体大小",
 	"dark": "深色",
 	"white": "白色",
 	"engine.controls": "编辑器控制",

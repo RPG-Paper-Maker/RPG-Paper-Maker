@@ -136,6 +136,7 @@
 	"major": "メジャー",
 	"minor": "マイナー",
 	"theme": "テーマ",
+	"engine.font.size": "エンジンフォントサイズ",
 	"dark": "ダーク",
 	"white": "ホワイト",
 	"engine.controls": "エンジンの操作",
