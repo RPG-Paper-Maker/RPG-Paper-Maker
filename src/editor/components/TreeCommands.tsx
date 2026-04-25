@@ -36,11 +36,11 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 					for (let i = 1; i <= nb; i++) {
 						const choice = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHOICE, [i]);
 						choice.id = Node.getNewID(list);
-						ArrayUtils.insertAt(currentList, index++, Node.create(choice));
+						ArrayUtils.insertAt(currentList, index++, Node.create(choice, [], node.parent));
 					}
 					const endChoice = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_CHOICE);
 					endChoice.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(endChoice));
+					ArrayUtils.insertAt(currentList, index++, Node.create(endChoice, [], node.parent));
 				} else {
 					let previousNb = 0;
 					let i = 0;
@@ -58,7 +58,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 						for (let i = previousNb; i < nb; i++) {
 							const choice = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHOICE, [i + 1]);
 							choice.id = Node.getNewID(list);
-							ArrayUtils.insertAt(currentList, index + i, Node.create(choice));
+							ArrayUtils.insertAt(currentList, index + i, Node.create(choice, [], node.parent));
 						}
 					}
 				}
@@ -71,13 +71,13 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 				if ((isNew && isNoGameOver) || (!isNew && !previousIsNoGameOver && isNoGameOver)) {
 					const ifWin = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF_WIN);
 					ifWin.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(ifWin));
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifWin, [], node.parent));
 					const ifLose = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF_LOSE);
 					ifLose.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(ifLose));
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifLose, [], node.parent));
 					const endIf = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_IF);
 					endIf.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(endIf));
+					ArrayUtils.insertAt(currentList, index++, Node.create(endIf, [], node.parent));
 				} else if (!isNew && previousIsNoGameOver && !isNoGameOver) {
 					ArrayUtils.removeAt(currentList, index);
 					ArrayUtils.removeAt(currentList, index);
@@ -92,14 +92,14 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 				if ((isNew && isElse) || (!isNew && !previousIsElse && isElse)) {
 					const ifElse = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.ELSE);
 					ifElse.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(ifElse));
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifElse, [], node.parent));
 				} else if (!isNew && previousIsElse && !isElse) {
 					ArrayUtils.removeAt(currentList, index);
 				}
 				if (isNew) {
 					const endIf = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_IF);
 					endIf.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(endIf));
+					ArrayUtils.insertAt(currentList, index++, Node.create(endIf, [], node.parent));
 				}
 				break;
 			}
@@ -107,7 +107,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 				if (isNew) {
 					const endWhile = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_WHILE);
 					endWhile.id = Node.getNewID(list);
-					ArrayUtils.insertAt(currentList, index++, Node.create(endWhile));
+					ArrayUtils.insertAt(currentList, index++, Node.create(endWhile, [], node.parent));
 				}
 				break;
 			}
