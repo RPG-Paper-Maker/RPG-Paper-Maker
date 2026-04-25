@@ -194,19 +194,27 @@ const hasInternet = async () => {
 const httpsDownload = (url, onChunk) =>
 	new Promise((resolve, reject) => {
 		const follow = (currentUrl, hops = 0) => {
-			if (hops > 10) { reject(new Error('Too many redirects')); return; }
-			https.get(currentUrl, { headers: { 'User-Agent': 'RPG-Paper-Maker-Editor' } }, (res) => {
-				if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-					res.resume();
-					follow(res.headers.location, hops + 1);
-					return;
-				}
-				const total = parseInt(res.headers['content-length'], 10) || null;
-				const chunks = [];
-				res.on('data', (chunk) => { chunks.push(chunk); onChunk(chunk, total); });
-				res.on('end', () => resolve(Buffer.concat(chunks)));
-				res.on('error', reject);
-			}).on('error', reject);
+			if (hops > 10) {
+				reject(new Error('Too many redirects'));
+				return;
+			}
+			https
+				.get(currentUrl, { headers: { 'User-Agent': 'RPG-Paper-Maker-Editor' } }, (res) => {
+					if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+						res.resume();
+						follow(res.headers.location, hops + 1);
+						return;
+					}
+					const total = parseInt(res.headers['content-length'], 10) || null;
+					const chunks = [];
+					res.on('data', (chunk) => {
+						chunks.push(chunk);
+						onChunk(chunk, total);
+					});
+					res.on('end', () => resolve(Buffer.concat(chunks)));
+					res.on('error', reject);
+				})
+				.on('error', reject);
 		};
 		follow(url);
 	});
@@ -810,9 +818,7 @@ ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
 		darwin: 'RPG.Paper.Maker.Mac.zip',
 	};
 	const zipName = zipNames[targetOS];
-	const apiRes = await fetchFrom('https://api.github.com/repos/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest');
-	const { tag_name: version } = await apiRes.json();
-	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${version}/${zipName}`;
+	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest/download/${zipName}`;
 	let received = 0;
 	const buffer = await httpsDownload(url, (chunk, total) => {
 		received += chunk.length;
