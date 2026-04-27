@@ -81,7 +81,7 @@ jobs:
               run: |
                   mkdir "RPG Paper Maker"
                   cp -r "RPG Paper Maker.app" "RPG Paper Maker/"
-                  zip -r RPG.Paper.Maker.Mac.zip "RPG Paper Maker"
+                  zip -ry RPG.Paper.Maker.Mac.zip "RPG Paper Maker"
 
             - name: Upload to release (draft)
               uses: softprops/action-gh-release@v2
@@ -207,7 +207,7 @@ jobs:
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
                   mv electron-x64 "RPG Paper Maker"
-                  zip -r RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
+                  zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
 
             - name: Upload to release (draft)
               uses: softprops/action-gh-release@v2
