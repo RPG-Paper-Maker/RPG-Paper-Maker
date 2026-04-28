@@ -207,7 +207,7 @@ jobs:
             - name: Package
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
-                  printf '#!/bin/bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nexec "$DIR/RPG Paper Maker" --no-sandbox "$@"\n' > "electron-x64/launch.sh"
+                  printf '#!/bin/bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nunset LD_LIBRARY_PATH\nexec "$DIR/RPG Paper Maker" --no-sandbox --ozone-platform=x11 "$@"\n' > "electron-x64/launch.sh"
                   chmod +x "electron-x64/launch.sh"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
