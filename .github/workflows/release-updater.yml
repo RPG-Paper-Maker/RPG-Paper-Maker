@@ -204,6 +204,10 @@ jobs:
                   cp -r updater "${RESOURCES}/app/updater"
                   mkdir "${RESOURCES}/app/DLCs"
 
+            - name: Set icon
+              run: |
+                  convert public/favicon.ico -resize 256x256 "electron-x64/resources/app/icon.png"
+
             - name: Package
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"

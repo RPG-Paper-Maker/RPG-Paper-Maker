@@ -20,6 +20,9 @@ import { promisify } from 'util';
 const run = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const appIconPath = process.platform === 'linux'
+	? path.join(__dirname, 'icon.png')
+	: path.join(__dirname, 'dist', 'icon.png');
 
 const createSplash = (title) => {
 	const splashPath = path.join(__dirname, 'updater', 'splash.html');
@@ -71,7 +74,7 @@ const runRPMEngine = async () => {
 			preload: path.join(__dirname, 'preload.js'),
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
-		icon: path.join(__dirname, 'dist', 'icon.png'),
+		icon: appIconPath,
 		frame: false,
 	});
 	window.removeMenu();
@@ -467,7 +470,7 @@ const init = async () => {
 			preload: path.join(__dirname, 'preload.js'),
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
-		icon: path.join(__dirname, 'dist', 'icon.png'),
+		icon: appIconPath,
 		frame: true,
 	});
 	updater.removeMenu();
@@ -494,7 +497,12 @@ app.whenReady().then(() => {
 });
 
 ipcMain.handle('get-system-information', () => {
-	const documentsFolder = app.getPath('documents');
+	let documentsFolder;
+	try {
+		documentsFolder = app.getPath('documents');
+	} catch {
+		documentsFolder = path.join(os.homedir(), 'Documents');
+	}
 	return {
 		documentsFolder,
 		gamesFolder: path.join(documentsFolder, 'RPG Paper Maker Games'),
@@ -690,7 +698,7 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 			preload: path.join(__dirname, 'preload.js'),
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
-		icon: path.join(__dirname, 'dist', 'icon.png'),
+		icon: appIconPath,
 		frame: true,
 	});
 	game.removeMenu();
