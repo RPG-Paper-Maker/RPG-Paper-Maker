@@ -450,6 +450,7 @@
 							const folders = collectFolders(manifest, skipBR);
 							const success = await downloadAll(files, folders);
 							if (success) {
+								await window.ipcRenderer.invoke('create-file', `${window.env.appPath}/dist/.complete`, '');
 								await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
 							}
 						} catch (err) {

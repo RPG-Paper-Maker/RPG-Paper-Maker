@@ -20,9 +20,8 @@ import { promisify } from 'util';
 const run = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const appIconPath = process.platform === 'linux'
-	? path.join(__dirname, 'icon.png')
-	: path.join(__dirname, 'dist', 'icon.png');
+const appIconPath =
+	process.platform === 'linux' ? path.join(__dirname, 'icon.png') : path.join(__dirname, 'dist', 'icon.png');
 
 const createSplash = (title) => {
 	const splashPath = path.join(__dirname, 'updater', 'splash.html');
@@ -105,6 +104,10 @@ async function extractZip(zipPath, destDir) {
 	} else {
 		// macOS / Linux have unzip
 		await run(`unzip -o "${zipPath}" -d "${destDir}"`);
+		if (process.platform === 'darwin') {
+			// Strip quarantine so Gatekeeper doesn't block the extracted app
+			await run(`xattr -r -d com.apple.quarantine "${destDir}"`).catch(() => {});
+		}
 	}
 }
 
@@ -277,8 +280,13 @@ const displayErrorUpdater = () => {
 
 const init = async () => {
 	let isEngineDownloaded = false;
-	// Check if dist exists
-	isEngineDownloaded = await exists(path.join(__dirname, 'dist'));
+	// Check if dist was fully downloaded (sentinel file created at end of download)
+	const distPath = path.join(__dirname, 'dist');
+	const sentinelPath = path.join(__dirname, 'dist', '.complete');
+	isEngineDownloaded = await exists(sentinelPath);
+	if (!isEngineDownloaded && (await exists(distPath))) {
+		await fs.rm(distPath, { recursive: true, force: true }).catch(() => {});
+	}
 	if (isEngineDownloaded) {
 		// Check internet
 		if (!(await hasInternet())) {

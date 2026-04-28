@@ -18,12 +18,18 @@ jobs:
         steps:
             - uses: actions/checkout@v5
 
+            - name: Get Electron version
+              id: electron
+              run: |
+                  VERSION=$(node -p "require('./package.json').devDependencies.electron.replace(/[\^~>=<]*/g, '')")
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+
             - name: Set updater/version
               run: echo -n "updater/${{ inputs.version }}" > updater/version
 
             - name: Download Electron x64 and arm64
               run: |
-                  V=40.6.1
+                  V=${{ steps.electron.outputs.version }}
                   curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-x64.zip"   -o electron-x64.zip
                   curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-arm64.zip" -o electron-arm64.zip
                   unzip -q electron-x64.zip   -d electron-x64
