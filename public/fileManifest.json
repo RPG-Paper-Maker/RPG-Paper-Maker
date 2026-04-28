@@ -1078,6 +1078,7 @@
     "Saves": {},
     "Shapes": {
       "Collisions": {},
+      "GLTF": {},
       "MTL": {},
       "OBJ": {}
     },
@@ -1092,6 +1093,7 @@
         "fonts.css"
       ]
     },
+    "Test": {},
     "Videos": {}
   }
 }
