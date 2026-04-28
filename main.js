@@ -726,7 +726,9 @@ ipcMain.handle('change-window-size', function (event, w, h, f) {
 });
 
 ipcMain.handle('close-game', () => {
-	game.close();
+	if (game && !game.isDestroyed()) {
+		game.close();
+	}
 	game = null;
 });
 

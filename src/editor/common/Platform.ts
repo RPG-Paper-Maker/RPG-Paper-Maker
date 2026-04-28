@@ -246,6 +246,12 @@ export const getAllFilesFromFolder = async (path: string): Promise<string[]> => 
 	}
 };
 
+export const closeGame = async () => {
+	if (Constants.IS_DESKTOP) {
+		await IO.closeGame();
+	}
+};
+
 export const openGame = async (location: string, isBattleTest?: boolean) => {
 	if (Constants.IS_DESKTOP) {
 		await IO.openGame(location, isBattleTest);

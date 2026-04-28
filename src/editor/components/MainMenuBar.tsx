@@ -51,6 +51,7 @@ import {
 import {
 	checkFileExists,
 	exportFolder,
+	closeGame,
 	getFolders,
 	loadZip,
 	openGame,
@@ -503,6 +504,7 @@ function MainMenuBar() {
 	};
 
 	const handleCloseProject = async () => {
+		await closeGame();
 		if (Scene.Map.current) {
 			Scene.Map.current.close();
 			Scene.Map.current = null;

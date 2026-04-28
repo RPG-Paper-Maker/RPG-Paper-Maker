@@ -181,6 +181,10 @@ class IO {
 		await this.invoke('open-game', projectName, isBattleTest);
 	}
 
+	static async closeGame() {
+		await this.invoke('close-game');
+	}
+
 	static async minimize(): Promise<void> {
 		await this.invoke('minimize');
 	}
