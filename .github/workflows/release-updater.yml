@@ -93,7 +93,7 @@ jobs:
                   else
                     gh release create "$TAG" RPG.Paper.Maker.Mac.zip \
                       --title "Updater ${{ inputs.version }}" \
-                      --no-latest \
+                      --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
                   fi
 
@@ -169,7 +169,7 @@ jobs:
                   else
                     gh release create "$TAG" RPG.Paper.Maker.Windows.zip installer-output/RPG.Paper.Maker.Installer.exe \
                       --title "Updater ${{ inputs.version }}" \
-                      --no-latest \
+                      --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
                   fi
 
@@ -212,6 +212,7 @@ jobs:
 
             - name: Set icon
               run: |
+                  sudo apt-get install -y imagemagick
                   convert public/favicon.ico -resize 256x256 "electron-x64/resources/app/icon.png"
 
             - name: Package
@@ -232,7 +233,7 @@ jobs:
                   else
                     gh release create "$TAG" RPG.Paper.Maker.Linux.zip \
                       --title "Updater ${{ inputs.version }}" \
-                      --no-latest \
+                      --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
                   fi
 
