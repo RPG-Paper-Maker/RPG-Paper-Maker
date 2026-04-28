@@ -19,8 +19,8 @@ import { DynamicValue } from '../../core/DynamicValue';
 import { LocalFile } from '../../core/LocalFile';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
-import { Model } from '../../Editor';
-import { triggerDLCs } from '../../store';
+import { Manager, Model } from '../../Editor';
+import { showWarning, triggerDLCs } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DynamicValueSelector from '../DynamicValueSelector';
@@ -201,14 +201,36 @@ function PanelAssetsPreviewer({
 		const files = Array.from(importFileInputRef.current.files || []);
 		importFileInputRef.current.value = '';
 		try {
+			const validFiles: File[] = [];
+			for (const file of files) {
+				if (file.type.startsWith('image/')) {
+					const maxSize = Manager.GL.mainContext?.renderer?.capabilities?.maxTextureSize ?? 4096;
+					try {
+						const bitmap = await createImageBitmap(file);
+						const { width, height } = bitmap;
+						bitmap.close();
+						if (width > maxSize || height > maxSize) {
+							dispatch(
+								showWarning(
+									`"${file.name}" (${width}×${height}) exceeds the GPU maximum texture size of ${maxSize}px and cannot be imported.`,
+								),
+							);
+							continue;
+						}
+					} catch {
+						// Can't check dimensions, allow through
+					}
+				}
+				validFiles.push(file);
+			}
 			if (Constants.IS_DESKTOP) {
-				for (const file of files) {
+				for (const file of validFiles) {
 					const arrayBuffer = await file.arrayBuffer();
 					const buffer = new Uint8Array(arrayBuffer);
 					await IO.createFile(Paths.join(Project.current!.getPath(), basePath, file.name), buffer);
 				}
 			} else {
-				const filePromises = files.map((file) => {
+				const filePromises = validFiles.map((file) => {
 					return new Promise<{ base64: string; name: string }>((resolve, reject) => {
 						const reader = new FileReader();
 						reader.readAsDataURL(file);

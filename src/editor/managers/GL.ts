@@ -32,6 +32,18 @@ class GL {
 			this.textureLoader.load(
 				path,
 				(t: THREE.Texture) => {
+					const maxSize = GL.mainContext?.renderer?.capabilities?.maxTextureSize ?? 4096;
+					const img = t.image as HTMLImageElement;
+					if (img && (img.width > maxSize || img.height > maxSize)) {
+						console.warn(
+							`Texture "${path}" (${img.width}×${img.height}) exceeds the GPU maximum texture size of ${maxSize}px, loading empty texture instead.`,
+						);
+						t.dispose();
+						const empty = new THREE.Texture();
+						empty.image = new Image();
+						resolve(empty);
+						return;
+					}
 					resolve(t);
 				},
 				() => {
@@ -224,6 +236,18 @@ class GL {
 			this.renderer.setClearColor(0x000000, 0);
 			this.renderer.clear(true, true);
 			this.renderer.setScissorTest(true);
+			this.renderer.debug.onShaderError = (gl, program, vertShader, fragShader) => {
+				const programLog = gl.getProgramInfoLog(program)?.trim() ?? '';
+				const vertLog = gl.getShaderInfoLog(vertShader)?.trim() ?? '';
+				const fragLog = gl.getShaderInfoLog(fragShader)?.trim() ?? '';
+				const validateStatus = gl.getProgramParameter(program, gl.VALIDATE_STATUS);
+				const glError = gl.getError();
+				let msg = `THREE.WebGLProgram: Shader Error ${glError} - VALIDATE_STATUS ${validateStatus}\n\n`;
+				if (programLog) msg += `Program Info Log: ${programLog}\n`;
+				if (vertLog) msg += `Vertex Shader Info Log:\n${vertLog}\n`;
+				if (fragLog) msg += `Fragment Shader Info Log:\n${fragLog}\n`;
+				console.error(msg);
+			};
 			this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
 				event.preventDefault();
 			});
