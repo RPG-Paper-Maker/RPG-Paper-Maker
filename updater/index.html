@@ -457,11 +457,11 @@
 						}
 					}
 
-					function reportError(message) {
+					async function reportError(message) {
 						const box = document.getElementById('errorBox');
 						box.style.display = 'block';
 						box.textContent = message;
-						window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+						await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
 					}
 
 					continueBtn.addEventListener('click', async () => {

@@ -18,18 +18,12 @@ jobs:
         steps:
             - uses: actions/checkout@v5
 
-            - name: Get Electron version
-              id: electron
-              run: |
-                  VERSION=$(node -p "require('./package.json').devDependencies.electron.replace(/[\^~>=<]*/g, '')")
-                  echo "version=$VERSION" >> $GITHUB_OUTPUT
-
             - name: Set updater/version
               run: echo -n "updater/${{ inputs.version }}" > updater/version
 
             - name: Download Electron x64 and arm64
               run: |
-                  V=${{ steps.electron.outputs.version }}
+                  V=40.6.1
                   curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-x64.zip"   -o electron-x64.zip
                   curl -fL "https://github.com/electron/electron/releases/download/v${V}/electron-v${V}-darwin-arm64.zip" -o electron-arm64.zip
                   unzip -q electron-x64.zip   -d electron-x64
@@ -83,15 +77,19 @@ jobs:
                   cp -r "RPG Paper Maker.app" "RPG Paper Maker/"
                   zip -ry RPG.Paper.Maker.Mac.zip "RPG Paper Maker"
 
-            - name: Upload to release (draft)
-              uses: softprops/action-gh-release@v2
-              with:
-                  repository: RPG-Paper-Maker/RPG-Paper-Maker
-                  token: ${{ secrets.RELEASE_PAT }}
-                  tag_name: updater/${{ inputs.version }}
-                  name: 'Updater ${{ inputs.version }}'
-                  draft: true
-                  files: RPG.Paper.Maker.Mac.zip
+            - name: Upload to release
+              env:
+                  GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+              run: |
+                  TAG="updater/${{ inputs.version }}"
+                  if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
+                    gh release upload "$TAG" RPG.Paper.Maker.Mac.zip --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  else
+                    gh release create "$TAG" RPG.Paper.Maker.Mac.zip \
+                      --title "Updater ${{ inputs.version }}" \
+                      --no-latest \
+                      --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  fi
 
             - name: Upload artifact for Steam deploy
               uses: actions/upload-artifact@v4
@@ -154,17 +152,20 @@ jobs:
               shell: cmd
               run: iscc /DMyAppVersion=${{ inputs.version }} "/DSourceDir=${{ github.workspace }}\electron-x64" installer\install.iss
 
-            - name: Upload to release (draft)
-              uses: softprops/action-gh-release@v2
-              with:
-                  repository: RPG-Paper-Maker/RPG-Paper-Maker
-                  token: ${{ secrets.RELEASE_PAT }}
-                  tag_name: updater/${{ inputs.version }}
-                  name: 'Updater ${{ inputs.version }}'
-                  draft: true
-                  files: |
-                      RPG.Paper.Maker.Windows.zip
-                      installer-output/RPG.Paper.Maker.Installer.exe
+            - name: Upload to release
+              env:
+                  GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+              shell: bash
+              run: |
+                  TAG="updater/${{ inputs.version }}"
+                  if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
+                    gh release upload "$TAG" RPG.Paper.Maker.Windows.zip installer-output/RPG.Paper.Maker.Installer.exe --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  else
+                    gh release create "$TAG" RPG.Paper.Maker.Windows.zip installer-output/RPG.Paper.Maker.Installer.exe \
+                      --title "Updater ${{ inputs.version }}" \
+                      --no-latest \
+                      --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  fi
 
             - name: Upload artifact for Steam deploy
               uses: actions/upload-artifact@v4
@@ -206,18 +207,24 @@ jobs:
             - name: Package
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
+                  printf '#!/bin/bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nexec "$DIR/RPG Paper Maker" --no-sandbox "$@"\n' > "electron-x64/launch.sh"
+                  chmod +x "electron-x64/launch.sh"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
 
-            - name: Upload to release (draft)
-              uses: softprops/action-gh-release@v2
-              with:
-                  repository: RPG-Paper-Maker/RPG-Paper-Maker
-                  token: ${{ secrets.RELEASE_PAT }}
-                  tag_name: updater/${{ inputs.version }}
-                  name: 'Updater ${{ inputs.version }}'
-                  draft: true
-                  files: RPG.Paper.Maker.Linux.zip
+            - name: Upload to release
+              env:
+                  GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+              run: |
+                  TAG="updater/${{ inputs.version }}"
+                  if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
+                    gh release upload "$TAG" RPG.Paper.Maker.Linux.zip --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  else
+                    gh release create "$TAG" RPG.Paper.Maker.Linux.zip \
+                      --title "Updater ${{ inputs.version }}" \
+                      --no-latest \
+                      --repo RPG-Paper-Maker/RPG-Paper-Maker
+                  fi
 
             - name: Upload artifact for Steam deploy
               uses: actions/upload-artifact@v4
