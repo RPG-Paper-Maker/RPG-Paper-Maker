@@ -28,6 +28,7 @@ class Serializable {
 	static readList(list: Serializable[], json: JSONType[], constructor: typeof Serializable) {
 		if (json) {
 			for (const jsonModel of json) {
+				if (jsonModel == null) continue;
 				const model = new constructor();
 				model.read(jsonModel);
 				list.push(model);
@@ -138,6 +139,7 @@ class Serializable {
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		if (!json) return;
 		for (const [
 			name,
 			jsonName,
@@ -202,6 +204,7 @@ class Serializable {
 					const tab: Serializable[] = [];
 					if (jsonTab && constructorClass) {
 						for (const jsonElement of jsonTab) {
+							if (jsonElement == null) continue;
 							const obj = new constructorClass();
 							obj.read(jsonElement);
 							tab.push(obj);
