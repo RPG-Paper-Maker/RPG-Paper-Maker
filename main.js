@@ -697,8 +697,10 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 ipcMain.handle('open-game', async (event, location, battleTest) => {
 	game?.close();
 	game = new BrowserWindow({
+		title: '',
 		width: 640,
 		height: 480,
+		resizable: false,
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: true,
@@ -707,12 +709,11 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
 		icon: appIconPath,
-		frame: true,
 	});
-	game.removeMenu();
 	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
 		query: { project: location, battleTest: battleTest ?? false },
 	});
+	game.removeMenu();
 	game.on('close', () => {
 		game = null;
 	});
@@ -727,9 +728,9 @@ ipcMain.handle('change-window-size', function (event, w, h, f) {
 		BrowserWindow.getFocusedWindow()?.setResizable(true);
 		BrowserWindow.getFocusedWindow()?.setFullScreen(true);
 	} else {
-		BrowserWindow.getFocusedWindow()?.setFullScreen(false);
 		BrowserWindow.getFocusedWindow()?.setContentSize(w, h);
 		BrowserWindow.getFocusedWindow()?.center();
+		BrowserWindow.getFocusedWindow()?.setFullScreen(false);
 	}
 });
 
