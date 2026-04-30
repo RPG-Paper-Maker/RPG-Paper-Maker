@@ -213,6 +213,10 @@ class IO {
 		return (await this.invoke('get-os')) as OS_KIND;
 	}
 
+	static async getUpdaterVersion(): Promise<string> {
+		return (await this.invoke('get-updater-version')) as string;
+	}
+
 	static async getEngineFolder(): Promise<string> {
 		return (await this.invoke('get-engine-folder')) as string;
 	}

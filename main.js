@@ -783,6 +783,14 @@ ipcMain.handle('get-os', async () => {
 	return process.platform;
 });
 
+ipcMain.handle('get-updater-version', async () => {
+	try {
+		return (await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8')).trim();
+	} catch {
+		return 'unknown';
+	}
+});
+
 ipcMain.handle('get-engine-folder', async () => {
 	const p = path.dirname(process.execPath);
 	return os.platform() === 'darwin' ? path.join(p, '..', '..', '..') : p;

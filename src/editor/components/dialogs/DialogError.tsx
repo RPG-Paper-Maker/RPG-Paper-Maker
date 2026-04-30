@@ -46,6 +46,7 @@ function DialogError() {
 		setLoading(true);
 		try {
 			const platform = Constants.IS_DESKTOP ? await IO.getOS() : 'web';
+			const updaterVersion = Constants.IS_DESKTOP ? await IO.getUpdaterVersion() : undefined;
 			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report', {
 				method: 'POST',
 				headers: {
@@ -53,6 +54,7 @@ function DialogError() {
 				},
 				body: JSON.stringify({
 					version: Project.VERSION ?? 'Not loaded',
+					updaterVersion,
 					os: `${platform} | ${navigator.userAgent}`,
 					message: errorDialog.message,
 					stack: errorDialog.stack,
