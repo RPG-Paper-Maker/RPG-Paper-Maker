@@ -76,7 +76,11 @@ class Utils {
 	}
 
 	static formatProjectFolderName(name: string) {
-		return name.replace(/ /g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+		return name
+			.replace(/ /g, '-')
+			.replace(/[^a-zA-Z0-9-]/g, '')
+			.replace(/-+/g, '-')
+			.replace(/^-+|-+$/g, '');
 	}
 
 	static sanitizeFilename(name: string): string {
@@ -163,7 +167,9 @@ class Utils {
 
 	static sleep = (ms: number): Promise<void> => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-	static createDoubleTapHandler(threshold = 300): (e: { changedTouches: { length: number }; preventDefault: () => void }, callback: () => void) => void {
+	static createDoubleTapHandler(
+		threshold = 300,
+	): (e: { changedTouches: { length: number }; preventDefault: () => void }, callback: () => void) => void {
 		let lastTapTime = 0;
 		return (e, callback) => {
 			if (e.changedTouches.length === 1) {

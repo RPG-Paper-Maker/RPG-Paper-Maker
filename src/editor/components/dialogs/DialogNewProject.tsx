@@ -76,6 +76,9 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const getcompleteLocation = () => Paths.join(location, folderName);
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
+		if (!folderName) {
+			return false;
+		}
 		// Check if folder name already exists in this folder location
 		const projectsFolders = await getFolders(location);
 		if (projectsFolders.find((name) => folderName === name)) {
