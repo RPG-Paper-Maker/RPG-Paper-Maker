@@ -82,6 +82,7 @@ jobs:
                   mkdir "RPG Paper Maker"
                   cp -r "RPG Paper Maker.app" "RPG Paper Maker/"
                   zip -ry RPG.Paper.Maker.Mac.zip "RPG Paper Maker"
+                  tar -czf RPG.Paper.Maker.Mac.tar.gz "RPG Paper Maker"
 
             - name: Upload to release
               env:
@@ -89,9 +90,9 @@ jobs:
               run: |
                   TAG="updater/${{ inputs.version }}"
                   if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
-                    gh release upload "$TAG" RPG.Paper.Maker.Mac.zip --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                    gh release upload "$TAG" RPG.Paper.Maker.Mac.zip RPG.Paper.Maker.Mac.tar.gz --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
                   else
-                    gh release create "$TAG" RPG.Paper.Maker.Mac.zip \
+                    gh release create "$TAG" RPG.Paper.Maker.Mac.zip RPG.Paper.Maker.Mac.tar.gz \
                       --title "Updater ${{ inputs.version }}" \
                       --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
@@ -222,6 +223,7 @@ jobs:
                   chmod +x "electron-x64/launch.sh"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
+                  tar -czf RPG.Paper.Maker.Linux.tar.gz "RPG Paper Maker"
 
             - name: Upload to release
               env:
@@ -229,9 +231,9 @@ jobs:
               run: |
                   TAG="updater/${{ inputs.version }}"
                   if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
-                    gh release upload "$TAG" RPG.Paper.Maker.Linux.zip --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                    gh release upload "$TAG" RPG.Paper.Maker.Linux.zip RPG.Paper.Maker.Linux.tar.gz --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
                   else
-                    gh release create "$TAG" RPG.Paper.Maker.Linux.zip \
+                    gh release create "$TAG" RPG.Paper.Maker.Linux.zip RPG.Paper.Maker.Linux.tar.gz \
                       --title "Updater ${{ inputs.version }}" \
                       --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
