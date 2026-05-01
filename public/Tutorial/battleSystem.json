@@ -1,1 +1,281 @@
-{"armorsKind":[{"id":1,"name":"Helmet","names":{"1":"Helmet"},"equipment":[false,false,true,false,false,false,false]},{"id":2,"name":"Headgear","names":{"1":"Headgear"},"equipment":[false,false,true,false,false,false,false]},{"id":3,"name":"Mail","names":{"1":"Mail"},"equipment":[false,false,false,true,false,false,false]},{"id":4,"name":"Vest","names":{"1":"Vest"},"equipment":[false,false,false,true,false,false,false]},{"id":5,"name":"Vambraces","names":{"1":"Vambraces"},"equipment":[false,false,false,false,true,false,false]},{"id":6,"name":"Gloves","names":{"1":"Gloves"},"equipment":[false,false,false,false,true,false,false]},{"id":7,"name":"Greaves","names":{"1":"Greaves"},"equipment":[false,false,false,false,false,true,false]},{"id":8,"name":"Trousers","names":{"1":"Trousers"},"equipment":[false,false,false,false,false,true,false]},{"id":9,"name":"Ring","names":{"1":"Ring"},"equipment":[false,false,false,false,false,false,true]},{"id":10,"name":"Necklace","names":{"1":"Necklace"},"equipment":[false,false,false,false,false,false,true]},{"id":11,"name":"Bracelet","names":{"1":"Bracelet"},"equipment":[false,false,false,false,false,false,true]},{"id":12,"name":"Earring","names":{"1":"Earring"},"equipment":[false,false,false,false,false,false,true]}],"battleCommands":[{"id":1,"s":1},{"id":2,"s":2},{"id":3,"s":3},{"id":4,"s":4},{"id":5,"s":5}],"battleMaps":[{"id":1,"name":"Default","idm":2,"p":[8,0,0,7]}],"blevelup":{"id":4,"name":"Levelup.wav","v":{"k":3,"v":100},"is":false,"ie":false,"isbi":true,"vid":{"k":3,"v":4}},"bmusic":{"id":2,"name":"Battle1.mp3","v":{"k":3,"v":100},"is":true,"s":{"k":12,"v":6.4},"ie":false,"isbi":true,"vid":{"k":3,"v":2}},"bvictory":{"id":2,"name":"Battle1.mp3","v":{"k":3,"v":100},"is":true,"s":{"k":12,"v":6.4},"ie":false,"isbi":true,"vid":{"k":3,"v":2}},"elements":[{"id":1,"name":"Fire","names":{"1":"Fire"},"pid":5,"pictureIndexX":4,"pictureIndexY":2,"e":[{"k":4,"v":{"k":12,"v":0.5}},{"k":5,"v":{"k":12,"v":2}}]},{"id":2,"name":"Earth","names":{"1":"Earth"},"pid":5,"pictureIndexY":3,"e":[{"k":6,"v":{"k":12,"v":0.5}},{"k":3,"v":{"k":12,"v":2}}]},{"id":3,"name":"Thunder","names":{"1":"Thunder"},"pid":5,"pictureIndexX":3,"pictureIndexY":3,"e":[{"k":4,"v":{"k":12,"v":2}},{"k":2,"v":{"k":12,"v":0.5}}]},{"id":4,"name":"Water","names":{"1":"Water"},"pid":5,"pictureIndexX":6,"pictureIndexY":3,"e":[{"k":1,"v":{"k":12,"v":2}},{"k":3,"v":{"k":12,"v":0.5}}]},{"id":5,"name":"Ice","names":{"1":"Ice"},"pid":5,"pictureIndexX":2,"pictureIndexY":4,"e":[{"k":6,"v":{"k":12,"v":2}},{"k":1,"v":{"k":12,"v":0.5}}]},{"id":6,"name":"Wind","names":{"1":"Wind"},"pid":5,"pictureIndexX":5,"pictureIndexY":4,"e":[{"k":5,"v":{"k":12,"v":0.5}},{"k":2,"v":{"k":12,"v":2}}]},{"id":7,"name":"Darkness","names":{"1":"Darkness"},"pid":5,"pictureIndexX":1,"pictureIndexY":5,"e":[{"k":8,"v":{"k":12,"v":2}}]},{"id":8,"name":"Light","names":{"1":"Light"},"pid":5,"pictureIndexX":4,"pictureIndexY":5,"e":[{"k":7,"v":{"k":12,"v":2}}]}],"equipments":[{"id":1,"name":"Left hand","names":{"1":"Left hand"}},{"id":2,"name":"Right hand","names":{"1":"Right hand"}},{"id":3,"name":"Head","names":{"1":"Head"}},{"id":4,"name":"Chest","names":{"1":"Chest"}},{"id":5,"name":"Arms","names":{"1":"Arms"}},{"id":6,"name":"Legs","names":{"1":"Legs"}},{"id":7,"name":"Accessory","names":{"1":"Accessory"}}],"fc":{"k":8,"v":"damage * 2"},"fisdead":{"k":8,"v":"u.hp === 0"},"lv":1,"statistics":[{"id":1,"name":"Lv.","names":{"1":"Lv."},"abr":"lv","fix":true},{"id":2,"name":"Exp.","names":{"1":"Exp."},"abr":"xp","fix":false},{"id":3,"name":"HP","names":{"1":"HP"},"abr":"hp","fix":false,"pid":1},{"id":4,"name":"MP","names":{"1":"MP"},"abr":"mp","fix":false,"pid":2},{"id":5,"name":"TP","names":{"1":"TP"},"abr":"tp","fix":false,"pid":3},{"id":6,"name":"Attack","names":{"1":"Attack"},"abr":"atk","fix":true},{"id":7,"name":"Magic","names":{"1":"Magic"},"abr":"mag","fix":true},{"id":8,"name":"Strength","names":{"1":"Strength"},"abr":"str","fix":true},{"id":9,"name":"Intelligence","names":{"1":"Intelligence"},"abr":"int","fix":true},{"id":10,"name":"P. defense","names":{"1":"P. defense"},"abr":"pdef","fix":true},{"id":11,"name":"M. defense","names":{"1":"M. defense"},"abr":"mdef","fix":true},{"id":12,"name":"Agility","names":{"1":"Agility"},"abr":"agi","fix":true}],"weaponsKind":[{"id":1,"name":"Sword","names":{"1":"Sword"},"equipment":[true,true,false,false,false,false,false]},{"id":2,"name":"Axe","names":{"1":"Axe"},"equipment":[true,true,false,false,false,false,false]},{"id":3,"name":"Spear","names":{"1":"Spear"},"equipment":[true,true,false,false,false,false,false]},{"id":4,"name":"Knife","names":{"1":"Knife"},"equipment":[true,true,false,false,false,false,false]},{"id":5,"name":"Staff","names":{"1":"Staff"},"equipment":[true,true,false,false,false,false,false]},{"id":6,"name":"Rod","names":{"1":"Rod"},"equipment":[true,true,false,false,false,false,false]},{"id":7,"name":"Firearm","names":{"1":"Firearm"},"equipment":[true,true,false,false,false,false,false]},{"id":8,"name":"Bow","names":{"1":"Bow"},"equipment":[true,true,false,false,false,false,false]}],"xp":2}
+{
+	"armorsKind": [
+		{
+			"id": 1,
+			"name": "Helmet",
+			"names": { "1": "Helmet" },
+			"equipment": [false, false, true, false, false, false, false]
+		},
+		{
+			"id": 2,
+			"name": "Headgear",
+			"names": { "1": "Headgear" },
+			"equipment": [false, false, true, false, false, false, false]
+		},
+		{
+			"id": 3,
+			"name": "Mail",
+			"names": { "1": "Mail" },
+			"equipment": [false, false, false, true, false, false, false]
+		},
+		{
+			"id": 4,
+			"name": "Vest",
+			"names": { "1": "Vest" },
+			"equipment": [false, false, false, true, false, false, false]
+		},
+		{
+			"id": 5,
+			"name": "Vambraces",
+			"names": { "1": "Vambraces" },
+			"equipment": [false, false, false, false, true, false, false]
+		},
+		{
+			"id": 6,
+			"name": "Gloves",
+			"names": { "1": "Gloves" },
+			"equipment": [false, false, false, false, true, false, false]
+		},
+		{
+			"id": 7,
+			"name": "Greaves",
+			"names": { "1": "Greaves" },
+			"equipment": [false, false, false, false, false, true, false]
+		},
+		{
+			"id": 8,
+			"name": "Trousers",
+			"names": { "1": "Trousers" },
+			"equipment": [false, false, false, false, false, true, false]
+		},
+		{
+			"id": 9,
+			"name": "Ring",
+			"names": { "1": "Ring" },
+			"equipment": [false, false, false, false, false, false, true]
+		},
+		{
+			"id": 10,
+			"name": "Necklace",
+			"names": { "1": "Necklace" },
+			"equipment": [false, false, false, false, false, false, true]
+		},
+		{
+			"id": 11,
+			"name": "Bracelet",
+			"names": { "1": "Bracelet" },
+			"equipment": [false, false, false, false, false, false, true]
+		},
+		{
+			"id": 12,
+			"name": "Earring",
+			"names": { "1": "Earring" },
+			"equipment": [false, false, false, false, false, false, true]
+		}
+	],
+	"battleCommands": [
+		{ "id": 1, "s": 1 },
+		{ "id": 2, "s": 2 },
+		{ "id": 3, "s": 3 },
+		{ "id": 4, "s": 4 },
+		{ "id": 5, "s": 5 }
+	],
+	"battleMaps": [{ "id": 1, "name": "Default", "idm": 2, "p": [8, 0, 0, 7] }],
+	"blevelup": {
+		"id": 1,
+		"name": "Levelup.wav",
+		"v": { "k": 3, "v": 100 },
+		"is": false,
+		"ie": false,
+		"isbi": true,
+		"vid": { "k": 3, "v": 1 }
+	},
+	"bmusic": {
+		"id": 2,
+		"name": "Battle1.mp3",
+		"v": { "k": 3, "v": 100 },
+		"is": true,
+		"s": { "k": 12, "v": 6.4 },
+		"ie": false,
+		"isbi": true,
+		"vid": { "k": 3, "v": 2 }
+	},
+	"bvictory": {
+		"id": 2,
+		"name": "Battle1.mp3",
+		"v": { "k": 3, "v": 100 },
+		"is": true,
+		"s": { "k": 12, "v": 6.4 },
+		"ie": false,
+		"isbi": true,
+		"vid": { "k": 3, "v": 2 }
+	},
+	"elements": [
+		{
+			"id": 1,
+			"name": "Fire",
+			"names": { "1": "Fire" },
+			"pid": 5,
+			"pictureIndexX": 4,
+			"pictureIndexY": 2,
+			"e": [
+				{ "k": 4, "v": { "k": 12, "v": 0.5 } },
+				{ "k": 5, "v": { "k": 12, "v": 2 } }
+			]
+		},
+		{
+			"id": 2,
+			"name": "Earth",
+			"names": { "1": "Earth" },
+			"pid": 5,
+			"pictureIndexY": 3,
+			"e": [
+				{ "k": 6, "v": { "k": 12, "v": 0.5 } },
+				{ "k": 3, "v": { "k": 12, "v": 2 } }
+			]
+		},
+		{
+			"id": 3,
+			"name": "Thunder",
+			"names": { "1": "Thunder" },
+			"pid": 5,
+			"pictureIndexX": 3,
+			"pictureIndexY": 3,
+			"e": [
+				{ "k": 4, "v": { "k": 12, "v": 2 } },
+				{ "k": 2, "v": { "k": 12, "v": 0.5 } }
+			]
+		},
+		{
+			"id": 4,
+			"name": "Water",
+			"names": { "1": "Water" },
+			"pid": 5,
+			"pictureIndexX": 6,
+			"pictureIndexY": 3,
+			"e": [
+				{ "k": 1, "v": { "k": 12, "v": 2 } },
+				{ "k": 3, "v": { "k": 12, "v": 0.5 } }
+			]
+		},
+		{
+			"id": 5,
+			"name": "Ice",
+			"names": { "1": "Ice" },
+			"pid": 5,
+			"pictureIndexX": 2,
+			"pictureIndexY": 4,
+			"e": [
+				{ "k": 6, "v": { "k": 12, "v": 2 } },
+				{ "k": 1, "v": { "k": 12, "v": 0.5 } }
+			]
+		},
+		{
+			"id": 6,
+			"name": "Wind",
+			"names": { "1": "Wind" },
+			"pid": 5,
+			"pictureIndexX": 5,
+			"pictureIndexY": 4,
+			"e": [
+				{ "k": 5, "v": { "k": 12, "v": 0.5 } },
+				{ "k": 2, "v": { "k": 12, "v": 2 } }
+			]
+		},
+		{
+			"id": 7,
+			"name": "Darkness",
+			"names": { "1": "Darkness" },
+			"pid": 5,
+			"pictureIndexX": 1,
+			"pictureIndexY": 5,
+			"e": [{ "k": 8, "v": { "k": 12, "v": 2 } }]
+		},
+		{
+			"id": 8,
+			"name": "Light",
+			"names": { "1": "Light" },
+			"pid": 5,
+			"pictureIndexX": 4,
+			"pictureIndexY": 5,
+			"e": [{ "k": 7, "v": { "k": 12, "v": 2 } }]
+		}
+	],
+	"equipments": [
+		{ "id": 1, "name": "Left hand", "names": { "1": "Left hand" } },
+		{ "id": 2, "name": "Right hand", "names": { "1": "Right hand" } },
+		{ "id": 3, "name": "Head", "names": { "1": "Head" } },
+		{ "id": 4, "name": "Chest", "names": { "1": "Chest" } },
+		{ "id": 5, "name": "Arms", "names": { "1": "Arms" } },
+		{ "id": 6, "name": "Legs", "names": { "1": "Legs" } },
+		{ "id": 7, "name": "Accessory", "names": { "1": "Accessory" } }
+	],
+	"fc": { "k": 9, "v": "damage * 2" },
+	"fisdead": { "k": 9, "v": "u.hp === 0" },
+	"lv": 1,
+	"statistics": [
+		{ "id": 1, "name": "Lv.", "names": { "1": "Lv." }, "abr": "lv", "fix": true },
+		{ "id": 2, "name": "Exp.", "names": { "1": "Exp." }, "abr": "xp", "fix": false },
+		{ "id": 3, "name": "HP", "names": { "1": "HP" }, "abr": "hp", "fix": false, "pid": 1 },
+		{ "id": 4, "name": "MP", "names": { "1": "MP" }, "abr": "mp", "fix": false, "pid": 2 },
+		{ "id": 5, "name": "TP", "names": { "1": "TP" }, "abr": "tp", "fix": false, "pid": 3 },
+		{ "id": 6, "name": "Attack", "names": { "1": "Attack" }, "abr": "atk", "fix": true },
+		{ "id": 7, "name": "Magic", "names": { "1": "Magic" }, "abr": "mag", "fix": true },
+		{ "id": 8, "name": "Strength", "names": { "1": "Strength" }, "abr": "str", "fix": true },
+		{ "id": 9, "name": "Intelligence", "names": { "1": "Intelligence" }, "abr": "int", "fix": true },
+		{ "id": 10, "name": "P. defense", "names": { "1": "P. defense" }, "abr": "pdef", "fix": true },
+		{ "id": 11, "name": "M. defense", "names": { "1": "M. defense" }, "abr": "mdef", "fix": true },
+		{ "id": 12, "name": "Agility", "names": { "1": "Agility" }, "abr": "agi", "fix": true }
+	],
+	"weaponsKind": [
+		{
+			"id": 1,
+			"name": "Sword",
+			"names": { "1": "Sword" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 2,
+			"name": "Axe",
+			"names": { "1": "Axe" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 3,
+			"name": "Spear",
+			"names": { "1": "Spear" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 4,
+			"name": "Knife",
+			"names": { "1": "Knife" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 5,
+			"name": "Staff",
+			"names": { "1": "Staff" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 6,
+			"name": "Rod",
+			"names": { "1": "Rod" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 7,
+			"name": "Firearm",
+			"names": { "1": "Firearm" },
+			"equipment": [true, true, false, false, false, false, false]
+		},
+		{
+			"id": 8,
+			"name": "Bow",
+			"names": { "1": "Bow" },
+			"equipment": [true, true, false, false, false, false, false]
+		}
+	],
+	"xp": 2
+}
