@@ -1942,5 +1942,6 @@
 	"no.backups.available": "Резервные копии недоступны.",
 	"warning.restore.backup": "Вы уверены, что хотите восстановить {{projectName}} из резервной копии {{backupName}}? Это перезапишет текущие данные проекта.",
 	"last.save": "последнее сохранение",
-	"last.update.changes": "Последние изменения:"
+	"last.update.changes": "Последние изменения:",
+	"latest.video": "Последнее видео"
 }

@@ -12,7 +12,9 @@
 .changelogPreview {
 	padding-top: 12px;
 	border-top: 1px solid var(--lighter-bg-color);
-	max-height: 220px;
+	flex: 1 1 auto;
+	height: 0;
+	min-height: 100px;
 	overflow-y: auto;
 	min-width: 220px;
 }
@@ -54,4 +56,25 @@
 	margin: 2px 0;
 	font-size: 11px;
 	color: var(--grey-light-color);
+}
+
+.youtubePreview {
+	padding-top: 12px;
+	border-top: 1px solid var(--lighter-bg-color);
+	min-width: 220px;
+}
+
+.youtubePreviewTitle {
+	font-size: 11px;
+	color: var(--grey-color);
+	margin-bottom: 6px;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.youtubePreviewFrame {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border: none;
+	border-radius: 4px;
 }

@@ -51,7 +51,7 @@ function PanelMain() {
 
 	return (
 		<>
-			<Flex one className='relative'>
+			<Flex one scrollableMobileOnly className='relative'>
 				<Loader large isLoading={loading} percent={loadingPercent} label={loadingLabel} />
 				{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			</Flex>

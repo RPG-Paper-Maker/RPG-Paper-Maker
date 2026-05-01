@@ -1942,5 +1942,6 @@
 	"restore": "Restaurer",
 	"no.backups.available": "Aucune sauvegarde disponible.",
 	"warning.restore.backup": "Êtes-vous sûr de vouloir restaurer {{projectName}} à la sauvegarde {{backupName}} ? Cela écrasera les données actuelles du projet.",
-	"last.update.changes": "Dernières modifications :"
+	"last.update.changes": "Dernières modifications :",
+	"latest.video": "Dernière vidéo"
 }

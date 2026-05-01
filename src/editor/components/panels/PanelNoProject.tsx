@@ -85,6 +85,7 @@ function PanelNoProject() {
 	const projects = useSelector((state: RootState) => state.projects.list);
 
 	const [changelogHtml, setChangelogHtml] = useState<string | null>(null);
+	const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
@@ -127,20 +128,35 @@ function PanelNoProject() {
 		}
 	};
 
+	const fetchYoutubeVideo = async () => {
+		try {
+			const response = await fetch(
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/develop/youtube.txt',
+			);
+			if (response.ok) {
+				const id = (await response.text()).trim();
+				if (id) setYoutubeVideoId(id);
+			}
+		} catch {
+			// No internet: show nothing
+		}
+	};
+
 	useEffect(() => {
 		Manager.GL.mainContext.remove();
 		void fetchChangelog();
+		void fetchYoutubeVideo();
 	}, []);
 
 	return (
 		<Flex column one className='paddingLarge'>
 			<h2 className='mobileHidden'>{t('recent.projects')}</h2>
-			<Flex one spacedLarge className='mobileColumnReverse'>
+			<Flex one spacedLarge className='mobileColumn'>
 				<Flex column one>
 					<h2 className='mobileOnly textCenter'>{t('recent.projects')}</h2>
 					<div className='scrollableFlexOne'>{renderProjectsList()}</div>
 				</Flex>
-				<Flex column spaced>
+				<Flex column one spaced>
 					<Button buttonType={BUTTON_TYPE.PRIMARY} big onClick={handleNewProject}>
 						<AiOutlineFileAdd />
 						{`${t('new.project')}...`}
@@ -189,6 +205,17 @@ function PanelNoProject() {
 							<div
 								className='changelogPreviewContent'
 								dangerouslySetInnerHTML={{ __html: changelogHtml }}
+							/>
+						</div>
+					)}
+					{youtubeVideoId !== null && (
+						<div className='youtubePreview'>
+							<div className='youtubePreviewTitle'>{t('latest.video')}</div>
+							<iframe
+								className='youtubePreviewFrame'
+								src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+								allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+								allowFullScreen
 							/>
 						</div>
 					)}

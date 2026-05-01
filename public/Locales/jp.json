@@ -1942,5 +1942,6 @@
 	"no.backups.available": "利用可能なバックアップはありません。",
 	"warning.restore.backup": "{{projectName}} をバックアップ {{backupName}} に復元しますか？現在のプロジェクトデータが上書きされます。",
 	"last.save": "最後の保存",
-	"last.update.changes": "最新の更新内容："
+	"last.update.changes": "最新の更新内容：",
+	"latest.video": "最新動画"
 }

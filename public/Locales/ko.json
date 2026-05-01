@@ -1943,5 +1943,6 @@
 	"no.backups.available": "사용 가능한 백업이 없습니다.",
 	"warning.restore.backup": "{{projectName}}을(를) 백업 {{backupName}}으로 복원하시겠습니까? 현재 프로젝트 데이터를 덮어씁니다.",
 	"last.save": "마지막 저장",
-	"last.update.changes": "최신 업데이트 내용:"
+	"last.update.changes": "최신 업데이트 내용:",
+	"latest.video": "최신 동영상"
 }

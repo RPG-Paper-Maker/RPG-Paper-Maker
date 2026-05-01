@@ -1942,5 +1942,6 @@
 	"restore": "Restore",
 	"no.backups.available": "No backups available.",
 	"warning.restore.backup": "Are you sure you want to restore {{projectName}} to backup {{backupName}}? This will overwrite the current project data.",
-	"last.update.changes": "Last update changes:"
+	"last.update.changes": "Last update changes:",
+	"latest.video": "Latest video"
 }

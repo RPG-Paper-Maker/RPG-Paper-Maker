@@ -1942,5 +1942,6 @@
 	"no.backups.available": "Nenhum backup disponível.",
 	"warning.restore.backup": "Tem certeza de que deseja restaurar {{projectName}} para o backup {{backupName}}? Isso substituirá os dados atuais do projeto.",
 	"last.save": "último save",
-	"last.update.changes": "Últimas atualizações:"
+	"last.update.changes": "Últimas atualizações:",
+	"latest.video": "Último vídeo"
 }
