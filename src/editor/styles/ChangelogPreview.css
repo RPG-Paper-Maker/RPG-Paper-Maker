@@ -78,3 +78,37 @@
 	border: none;
 	border-radius: 4px;
 }
+
+.youtubePreviewThumbnail {
+	cursor: pointer;
+	position: relative;
+	display: block;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.youtubePreviewThumbnail .youtubePreviewFrame {
+	display: block;
+	transition: opacity 0.2s ease;
+}
+
+.youtubePreviewThumbnail:hover .youtubePreviewFrame {
+	opacity: 0.75;
+}
+
+.youtubePlayIcon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(1);
+	font-size: 48px;
+	color: rgba(255, 255, 255, 0.85);
+	pointer-events: none;
+	transition: transform 0.2s ease, color 0.2s ease;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.youtubePreviewThumbnail:hover .youtubePlayIcon {
+	transform: translate(-50%, -50%) scale(1.15);
+	color: #fff;
+}
