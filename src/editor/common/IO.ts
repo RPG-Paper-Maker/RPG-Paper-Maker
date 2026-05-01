@@ -169,6 +169,10 @@ class IO {
 		await this.invoke('rename-file', Paths.join(path, fileNameBefore), Paths.join(path, fileNameAfter));
 	}
 
+	static async chmodFile(path: string, mode: number) {
+		await this.invoke('chmod-file', path, mode);
+	}
+
 	static async readPublicFile(path: string): Promise<string> {
 		return (await IO.readFile(path, true)) as string;
 	}
@@ -227,6 +231,10 @@ class IO {
 
 	static async downloadDeployEngine(targetOS: OS_KIND): Promise<{ enginePath: string; tempDir: string }> {
 		return (await this.invoke('download-deploy-engine', targetOS)) as { enginePath: string; tempDir: string };
+	}
+
+	static async createTarGz(folderPath: string): Promise<string> {
+		return (await this.invoke('create-tar-gz', folderPath)) as string;
 	}
 
 	static onDownloadDeployEngineProgress(callback: (percent: number | null, received: number) => void) {

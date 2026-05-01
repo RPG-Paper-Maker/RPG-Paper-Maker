@@ -111,6 +111,11 @@ async function extractZip(zipPath, destDir) {
 	}
 }
 
+async function extractTarGz(tarPath, destDir) {
+	await fs.mkdir(destDir, { recursive: true });
+	await run(`tar -xzf "${tarPath}" -C "${destDir}"`);
+}
+
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
@@ -121,6 +126,14 @@ if (process.platform === 'darwin') {
 		app.commandLine.appendSwitch('enable-features', 'Metal');
 	} else {
 		// Intel Mac: Metal/ANGLE causes BindToCurrentSequence failures, fall back to OpenGL
+		app.commandLine.appendSwitch('use-angle', 'gl');
+	}
+} else if (process.platform === 'linux') {
+	app.commandLine.appendSwitch('disable-gpu-sandbox');
+	app.commandLine.appendSwitch('use-angle', 'vulkan');
+	try {
+		app.commandLine.appendSwitch('use-angle', 'vulkan');
+	} catch {
 		app.commandLine.appendSwitch('use-angle', 'gl');
 	}
 }
@@ -279,20 +292,155 @@ const displayErrorUpdater = () => {
 };
 
 const init = async () => {
-	let isEngineDownloaded = false;
 	// Check if dist was fully downloaded (sentinel file created at end of download)
 	const distPath = path.join(__dirname, 'dist');
 	const sentinelPath = path.join(__dirname, 'dist', '.complete');
-	isEngineDownloaded = await exists(sentinelPath);
+
+	let isEngineDownloaded = await exists(sentinelPath);
 	if (!isEngineDownloaded && (await exists(distPath))) {
 		await fs.rm(distPath, { recursive: true, force: true }).catch(() => {});
 	}
-	if (isEngineDownloaded) {
-		// Check internet
-		if (!(await hasInternet())) {
+
+	// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
+	const basePath = `${__dirname}/${process.platform === 'darwin' ? '../../../..' : '../..'}`;
+	if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
+		const execPath = (() => {
+			switch (process.platform) {
+				case 'win32':
+					return 'RPG Paper Maker.exe';
+				case 'linux':
+					return 'launch.sh';
+				case 'darwin':
+					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
+			}
+		})();
+		createSplash('Finishing updater update. Please do NOT close.');
+		try {
+			await emptyFolder(`${basePath}/../../RPG Paper Maker`);
+		} catch (e) {
+			displayErrorUpdater(e);
+		}
+		await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
+		const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
+		const args = ['./main.js'];
+		const child = spawn(electronPath, args, {
+			detached: true,
+			stdio: 'ignore',
+			cwd: os.tmpdir(),
+		});
+		child.unref();
+		app.quit();
+		setTimeout(() => {
+			process.exit(0);
+		}, 500);
+		return;
+	}
+	if (await exists(`${basePath}/../RPG Paper Maker temp`)) {
+		try {
+			await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
+		} catch {}
+	}
+	if (!hasInternet()) {
+		if (isEngineDownloaded) {
 			await runRPMEngine();
 			return;
+		} else {
+			dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+				type: 'warning',
+				title: 'No Internet',
+				message: 'You are currently offline.',
+				detail: 'It is needed to download RPG Paper Maker completely. Please check your network connection and try again.',
+			});
+			app.quit();
 		}
+	}
+	const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
+	const response = await fetchFrom(
+		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/updater/version',
+	);
+	const latestUpdaterVersion = await response.text();
+	if (currentUpdaterVersion !== latestUpdaterVersion) {
+		// Update updater
+		await createSplash('Updating. Do not close.');
+		const updaterZipName = (() => {
+			switch (process.platform) {
+				case 'win32':
+					return 'RPG.Paper.Maker.Windows.zip';
+				case 'darwin':
+					return 'RPG.Paper.Maker.Mac.zip';
+				case 'linux':
+					return 'RPG.Paper.Maker.Linux.zip';
+				default:
+					throw new Error(`Unsupported platform: ${process.platform}`);
+			}
+		})();
+		const res = await fetchFrom(
+			`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
+		);
+		const contentLength = res.headers.get('content-length');
+		const total = contentLength ? parseInt(contentLength, 10) : null;
+		const reader = res.body.getReader();
+		const chunks = [];
+		let received = 0;
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+			chunks.push(value);
+			received += value.length;
+			if (total) {
+				setSplashProgress(`Downloading... ${Math.round((received / total) * 100)}%`);
+			} else {
+				setSplashProgress(`Downloading... ${(received / 1024 / 1024).toFixed(1)} MB`);
+			}
+		}
+		const blob = Buffer.concat(chunks);
+		await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
+		setSplashProgress('Extracting...');
+		await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
+		await fs.unlink(`${basePath}/../${updaterZipName}`);
+		setSplashProgress('Copying files...');
+		await copyFolder(
+			`${__dirname}/dist`,
+			`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
+		);
+		if (process.platform === 'win32') {
+			if (await exists(`${basePath}/unins000.exe`)) {
+				await fs.copyFile(
+					`${basePath}/unins000.exe`,
+					`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
+				);
+			}
+			if (await exists(`${basePath}/unins000.dat`)) {
+				await fs.copyFile(
+					`${basePath}/unins000.dat`,
+					`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.dat`,
+				);
+			}
+		}
+		const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
+			switch (process.platform) {
+				case 'win32':
+					return 'RPG Paper Maker.exe';
+				case 'linux':
+					return 'launch.sh';
+				case 'darwin':
+					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
+			}
+		})()}`;
+		const args = ['./main.js'];
+		const child = spawn(electronPath, args, {
+			detached: true,
+			stdio: 'ignore',
+			cwd: os.tmpdir(),
+		});
+		child.unref();
+		app.quit();
+		setTimeout(() => {
+			process.exit(0);
+		}, 500);
+		return;
+	}
+	if (isEngineDownloaded) {
 		// Check if ignore update
 		const data = await fs.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8').catch(() => null);
 		const json = data ? JSON.parse(data) : null;
@@ -303,169 +451,32 @@ const init = async () => {
 			await runRPMEngine();
 			return;
 		}
-		// Check if root folder name is RPG Paper Maker temp, meaning updater was updated
-		const basePath = `${__dirname}/${process.platform === 'darwin' ? '../../../..' : '../..'}`;
-		const execPath = (() => {
-			switch (process.platform) {
-				case 'win32':
-					return 'RPG Paper Maker.exe';
-				case 'linux':
-					return 'RPG Paper Maker';
-				case 'darwin':
-					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
-			}
-		})();
-		if (path.basename(path.resolve(`${basePath}/..`)) === 'RPG Paper Maker temp') {
-			createSplash('Finishing updater update. Please do NOT close.');
-			try {
-				await emptyFolder(`${basePath}/../../RPG Paper Maker`);
-			} catch (e) {
-				displayErrorUpdater(e);
-			}
-			await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
-			const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
-			const args = ['./main.js'];
-			const child = spawn(electronPath, args, {
-				detached: true,
-				stdio: 'ignore',
-				cwd: os.tmpdir(),
-			});
-			child.unref();
-			app.quit();
-			setTimeout(() => {
-				process.exit(0);
-			}, 500);
-			return;
-		}
-		if (await exists(`${basePath}/../RPG Paper Maker temp`)) {
-			try {
-				await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
-			} catch {}
-		}
-		const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
 		const response = await fetchFrom(
-			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/updater/version',
+			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
 		);
-		const latestUpdaterVersion = await response.text();
-		if (currentUpdaterVersion === latestUpdaterVersion) {
-			const response = await fetchFrom(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
-			);
-			const versions = JSON.parse(await response.text());
-			const isLastVersionUnstable = versions.unstable;
-			const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
-			const latestEngineVersion =
-				versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
-			if (currentEngineVersion !== latestEngineVersion) {
-				if (updateType === 1) {
-					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-						type: 'question',
-						buttons: ['Yes', 'No'],
-						defaultId: 0,
-						cancelId: 1,
-						title: 'A new version of RPG Paper Maker is available!',
-						message: 'Would you like to download it now? Everything is automatic and fast!',
-					});
-					if (result.response === 1) {
-						await runRPMEngine();
-						return;
-					}
+		const versions = JSON.parse(await response.text());
+		const isLastVersionUnstable = versions.unstable;
+		const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
+		const latestEngineVersion =
+			versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
+		if (currentEngineVersion !== latestEngineVersion) {
+			if (updateType === 1) {
+				const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					type: 'question',
+					buttons: ['Yes', 'No'],
+					defaultId: 0,
+					cancelId: 1,
+					title: 'A new version of RPG Paper Maker is available!',
+					message: 'Would you like to download it now? Everything is automatic and fast!',
+				});
+				if (result.response === 1) {
+					await runRPMEngine();
+					return;
 				}
-			} else {
-				await runRPMEngine();
-				return;
 			}
 		} else {
-			// Update updater
-			await createSplash('Updating. Do not close.');
-			const updaterZipName = (() => {
-				switch (process.platform) {
-					case 'win32':
-						return 'RPG.Paper.Maker.Windows.zip';
-					case 'darwin':
-						return 'RPG.Paper.Maker.Mac.zip';
-					case 'linux':
-						return 'RPG.Paper.Maker.Linux.zip';
-					default:
-						throw new Error(`Unsupported platform: ${process.platform}`);
-				}
-			})();
-			const res = await fetchFrom(
-				`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
-			);
-			const contentLength = res.headers.get('content-length');
-			const total = contentLength ? parseInt(contentLength, 10) : null;
-			const reader = res.body.getReader();
-			const chunks = [];
-			let received = 0;
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-				chunks.push(value);
-				received += value.length;
-				if (total) {
-					setSplashProgress(`Downloading... ${Math.round((received / total) * 100)}%`);
-				} else {
-					setSplashProgress(`Downloading... ${(received / 1024 / 1024).toFixed(1)} MB`);
-				}
-			}
-			const blob = Buffer.concat(chunks);
-			await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
-			setSplashProgress('Extracting...');
-			await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
-			await fs.unlink(`${basePath}/../${updaterZipName}`);
-			setSplashProgress('Copying files...');
-			await copyFolder(
-				`${__dirname}/dist`,
-				`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
-			);
-			if (process.platform === 'win32') {
-				if (await exists(`${basePath}/unins000.exe`)) {
-					await fs.copyFile(
-						`${basePath}/unins000.exe`,
-						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.exe`,
-					);
-				}
-				if (await exists(`${basePath}/unins000.dat`)) {
-					await fs.copyFile(
-						`${basePath}/unins000.dat`,
-						`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/unins000.dat`,
-					);
-				}
-			}
-			const electronPath = `${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${(() => {
-				switch (process.platform) {
-					case 'win32':
-						return 'RPG Paper Maker.exe';
-					case 'linux':
-						return 'RPG Paper Maker';
-					case 'darwin':
-						return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
-				}
-			})()}`;
-			const args = ['./main.js'];
-			const child = spawn(electronPath, args, {
-				detached: true,
-				stdio: 'ignore',
-				cwd: os.tmpdir(),
-			});
-			child.unref();
-			app.quit();
-			setTimeout(() => {
-				process.exit(0);
-			}, 500);
+			await runRPMEngine();
 			return;
-		}
-	} else {
-		// Check if internet
-		if (!(await hasInternet())) {
-			dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
-				type: 'warning',
-				title: 'No Internet',
-				message: 'You are currently offline.',
-				detail: 'It is needed to download RPG Paper Maker completely. Please check your network connection and try again.',
-			});
-			app.quit();
 		}
 	}
 	updater = new BrowserWindow({
@@ -839,13 +850,13 @@ ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 });
 
 ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
-	const zipNames = {
+	const archiveNames = {
 		win32: 'RPG.Paper.Maker.Windows.zip',
 		linux: 'RPG.Paper.Maker.Linux.zip',
 		darwin: 'RPG.Paper.Maker.Mac.zip',
 	};
-	const zipName = zipNames[targetOS];
-	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest/download/${zipName}`;
+	const archiveName = archiveNames[targetOS];
+	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest/download/${archiveName}`;
 	let received = 0;
 	const buffer = await httpsDownload(url, (chunk, total) => {
 		received += chunk.length;
@@ -854,11 +865,27 @@ ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
 	});
 	const tempDir = path.join(os.tmpdir(), `rpm-deploy-${Date.now()}`);
 	await fs.mkdir(tempDir, { recursive: true });
-	const zipPath = path.join(tempDir, zipName);
-	await fs.writeFile(zipPath, buffer);
-	await extractZip(zipPath, tempDir);
-	await fs.unlink(zipPath);
+	const archivePath = path.join(tempDir, archiveName);
+	await fs.writeFile(archivePath, buffer);
+	if (archiveName.endsWith('.tar.gz')) {
+		await extractTarGz(archivePath, tempDir);
+	} else {
+		await extractZip(archivePath, tempDir);
+	}
+	await fs.unlink(archivePath);
 	return { enginePath: path.join(tempDir, 'RPG Paper Maker'), tempDir };
+});
+
+ipcMain.handle('chmod-file', async (event, filePath, mode) => {
+	await fs.chmod(filePath, mode);
+});
+
+ipcMain.handle('create-tar-gz', async (event, folderPath) => {
+	const parent = path.dirname(folderPath);
+	const name = path.basename(folderPath);
+	const tarPath = `${folderPath}.tar.gz`;
+	await run(`tar -czf "${tarPath}" -C "${parent}" "${name}"`);
+	return tarPath;
 });
 
 ipcMain.handle('show-error', async (event, message) => {

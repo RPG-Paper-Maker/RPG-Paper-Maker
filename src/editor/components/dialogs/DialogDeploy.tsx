@@ -82,6 +82,12 @@ function DialogDeploy({ setIsOpen }: Props) {
 
 	const OS_SUFFIXES = ['Windows', 'Linux', 'Mac'];
 
+	const targetOS = OS_KINDS[targetOSIndex];
+	const needsTarGz =
+		Constants.IS_DESKTOP &&
+		exportType === EXPORT_TYPE.APPLICATION &&
+		(targetOS === OS_KIND.LINUX || targetOS === OS_KIND.DARWIN);
+
 	const getPathProject = () => {
 		const suffix = exportType === EXPORT_TYPE.WEB ? '-Browser' : `-${OS_SUFFIXES[targetOSIndex]}`;
 		return Paths.join(location, `${Paths.getFileName(Project.current!.getPath())}-${major}.${minor}${suffix}`);
@@ -142,7 +148,17 @@ function DialogDeploy({ setIsOpen }: Props) {
 
 		try {
 			if (Constants.IS_DESKTOP) {
-				await IO.openFolder(outputPath);
+				const needsTarGz =
+					exportType === EXPORT_TYPE.APPLICATION &&
+					(targetOS === OS_KIND.LINUX || targetOS === OS_KIND.DARWIN);
+				if (needsTarGz) {
+					dispatch(setLoadingBar({ percent: 100, label: 'Packaging as tar.gz...' }));
+					await IO.createTarGz(outputPath);
+					await IO.removeFolder(outputPath);
+					await IO.openFolder(location);
+				} else {
+					await IO.openFolder(outputPath);
+				}
 			} else {
 				try {
 					await exportFolder(outputPath);
@@ -173,6 +189,12 @@ function DialogDeploy({ setIsOpen }: Props) {
 						break;
 				}
 				await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
+				if (OS_KINDS[targetOSIndex] === OS_KIND.LINUX) {
+					const launchScript =
+						'#!/bin/bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nunset LD_LIBRARY_PATH\nexec "$DIR/Game" --no-sandbox --ignore-gpu-blocklist --disable-gpu-sandbox --use-angle=vulkan "$@"\n';
+					await createFile(Paths.join(path, 'launch.sh'), launchScript);
+					await IO.chmodFile(Paths.join(path, 'launch.sh'), 0o755);
+				}
 			}
 			await createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');
@@ -298,12 +320,17 @@ function DialogDeploy({ setIsOpen }: Props) {
 
 	const handleWarningLocationYes = async () => {
 		setIsWarningLocationOpen(false);
-		await removeFolder(getPathProject());
+		if (needsTarGz) {
+			await removeFile(`${getPathProject()}.tar.gz`);
+		} else {
+			await removeFolder(getPathProject());
+		}
 		await deploy();
 	};
 
 	const handleAccept = async () => {
-		if (await checkFileExists(getPathProject())) {
+		const pathToCheck = needsTarGz ? `${getPathProject()}.tar.gz` : getPathProject();
+		if (await checkFileExists(pathToCheck)) {
 			setIsWarningLocationOpen(true);
 			return;
 		}
@@ -413,7 +440,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 				footer={<FooterNoYes onNo={handleWarningLocationNo} onYes={handleWarningLocationYes} />}
 				onClose={handleWarningLocationNo}
 			>
-				{t('warning.project.exist.overwrite', { path: getPathProject() })}
+				{t('warning.project.exist.overwrite', {
+					path: needsTarGz ? `${getPathProject()}.tar.gz` : getPathProject(),
+				})}
 			</Dialog>
 		</>
 	);
