@@ -32,6 +32,7 @@ function PanelLoading({ setLoaded }: Props) {
 	const { t } = useTranslation();
 
 	const [displayLoader, setDisplayLoader] = useState(false);
+	const [loadingStep, setLoadingStep] = useState('');
 
 	const dispatch = useDispatch();
 
@@ -50,14 +51,22 @@ function PanelLoading({ setLoaded }: Props) {
 				await IO.invoke('ready-to-close');
 			});
 		}
+		setLoadingStep(t('loading.step.localFiles'));
 		await initializeLocalFiles();
+		setLoadingStep(t('loading.step.systemInformation'));
 		await initializeSystemInformation();
+		setLoadingStep(t('loading.step.engineSettings'));
 		await initializeEngineSettings();
+		setLoadingStep(t('loading.step.locales'));
 		await initializeLocales();
 		setDisplayLoader(true);
+		setLoadingStep(t('loading.step.gl'));
 		await initializeGL();
+		setLoadingStep(t('loading.step.textures'));
 		await initializeTextures();
+		setLoadingStep(t('loading.step.engineVersion'));
 		await initializeEngineVersion();
+		setLoadingStep(t('loading.step.projects'));
 		await loadProjects();
 		setLoaded(true);
 	};
@@ -184,7 +193,7 @@ function PanelLoading({ setLoaded }: Props) {
 		return null;
 	}
 
-	return <Loader large isLoading />;
+	return <Loader large isLoading label={loadingStep} />;
 }
 
 export default PanelLoading;
