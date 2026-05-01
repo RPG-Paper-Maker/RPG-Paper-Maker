@@ -195,7 +195,7 @@ const PanelMapObject = forwardRef(
 			const state = node.content as Model.MapObjectState;
 			for (const n of events) {
 				const event = n.content as Model.MapObjectEvent;
-				const copiedReaction = event.reactions.get('' + originalCopyNode.content.id)?.clone();
+				const copiedReaction = event.reactions?.get('' + originalCopyNode.content.id)?.clone();
 				event.reactions.set(
 					'' + state.id,
 					copiedReaction ?? (Model.MapObjectReaction.createDefault() as Model.MapObjectReaction),
@@ -221,7 +221,7 @@ const PanelMapObject = forwardRef(
 				setTabContents(
 					nodes.map((node) => {
 						const event = node.content as Model.MapObjectEvent;
-						const reaction = event.reactions.get('' + state.id);
+						const reaction = event.reactions?.get('' + state.id);
 						return reaction ? (
 							<TreeCommands
 								key={node.content.id}
@@ -237,7 +237,7 @@ const PanelMapObject = forwardRef(
 		const handleChangeBlockingHero = (b: boolean) => {
 			setBlockingHero(b);
 			if (selectedEvent && selectedState) {
-				const reaction = selectedEvent.reactions.get('' + selectedState.id);
+				const reaction = selectedEvent.reactions?.get('' + selectedState.id);
 				if (reaction) {
 					reaction.blockingHero = b;
 					handleUpdateEvents();
