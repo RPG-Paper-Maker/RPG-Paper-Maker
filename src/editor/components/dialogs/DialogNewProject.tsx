@@ -331,31 +331,33 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			>
 				<Flex column spacedLarge>
 					<Flex spaced>
-						<div>{t('name')}:</div>
-						<InputText
-							focusFirst={focusFirst}
-							setFocustFirst={setFocustFirst}
-							value={projectName}
-							onChange={handleChangeProjectName}
-						/>
+						<Flex spaced centerV>
+							<div>{t('name')}:</div>
+							<InputText
+								focusFirst={focusFirst}
+								setFocustFirst={setFocustFirst}
+								value={projectName}
+								onChange={handleChangeProjectName}
+							/>
+						</Flex>
 						{Constants.IS_DESKTOP && (
-							<Flex column spaced>
-								<Flex spaced>
-									<div>{t('folder.name')}:</div>
-									<InputText value={folderName} onChange={handleChangeFolderName} />
-								</Flex>
-								<Flex rightH>
-									<Checkbox isChecked={isAutoGenerate} onChange={setIsAutoGenerate}>
-										{t('auto.generate')}
-									</Checkbox>
-								</Flex>
+							<Flex spaced centerV>
+								<div>{t('folder.name')}:</div>
+								<InputText value={folderName} onChange={handleChangeFolderName} />
 							</Flex>
 						)}
 					</Flex>
 					{Constants.IS_DESKTOP && (
+						<Flex rightH>
+							<Checkbox isChecked={isAutoGenerate} onChange={setIsAutoGenerate}>
+								{t('auto.generate')}
+							</Checkbox>
+						</Flex>
+					)}
+					{Constants.IS_DESKTOP && (
 						<Flex column spaced>
 							<div>{t('location')}:</div>
-							<Flex spaced>
+							<Flex spaced centerV>
 								<InputText widthType={INPUT_TYPE_WIDTH.FILL} value={location} onChange={setLocation} />
 								<Button onClick={handleClickLocation}>...</Button>
 							</Flex>
