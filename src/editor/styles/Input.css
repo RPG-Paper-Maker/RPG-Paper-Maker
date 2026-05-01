@@ -10,19 +10,57 @@
 */
 
 input {
-	background-color: var(--darkest-containers-bg-color);
-	border: 1px solid var(--lighter-bg-color);
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid var(--grey-color);
 	color: var(--main-color);
-	border-radius: 2px;
 	flex-grow: 1;
-	height: 16px;
+	height: 20px;
+	font-family: inherit;
 	font-size: var(--engine-font-size);
+	font-weight: inherit;
+	padding: 0;
+	box-sizing: border-box;
+	transition: border-bottom-color 0.15s ease;
+}
+
+input:hover:not(:focus):not(:disabled) {
+	border-bottom-color: var(--main-color);
 }
 
 input:focus {
-	border: 1px solid var(--primary-color);
-	outline-width: 0;
 	outline: none;
+}
+
+.inputWrapper {
+	position: relative;
+	display: flex;
+	flex-grow: 1;
+	align-self: flex-start;
+}
+
+.inputWrapper input {
+	min-width: 0;
+}
+
+.inputWrapper::after,
+.inputSuffixWrapper::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	padding: 0;
+	background-color: var(--primary-color);
+	transform: scaleX(0);
+	transition: transform 0.2s ease;
+	pointer-events: none;
+}
+
+.inputWrapper:focus-within::after,
+.inputSuffixWrapper:focus-within::after {
+	transform: scaleX(1);
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -41,17 +79,17 @@ input:disabled {
 
 .inputSuffixOverlay {
 	position: absolute;
-	top: 0;
+	top: 0px;
 	left: 0;
-	bottom: 0;
+	bottom: 1px;
 	right: 14px;
 	display: flex;
 	align-items: center;
-	padding: 0 2px;
+	padding: 0px;
 	gap: 1px;
 	pointer-events: none;
-	background-color: var(--darkest-containers-bg-color);
-	border: 1px solid var(--lighter-bg-color);
+	background-color: transparent;
+	border: none;
 	color: var(--main-color);
 	font-size: var(--engine-font-size);
 }

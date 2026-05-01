@@ -13,8 +13,9 @@ button {
 	border: none;
 	padding: 3px 10px 3px 10px;
 	border-radius: 3px;
-	background-color: var(--lighter-bg-color);
+	background-color: transparent;
 	color: white;
+	border: 1px solid var(--lighter-bg-color);
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -22,6 +23,10 @@ button {
 	gap: 5px;
 	font-size: var(--engine-font-size);
 	height: 20px;
+
+	&:hover:not(.disabled):not(.primary):not(.active):not(.patreon):not(.red) {
+		background-color: rgba(255, 255, 255, 0.08);
+	}
 
 	&:has(svg.close:hover) {
 		color: var(--orange-color);
@@ -35,10 +40,12 @@ button {
 
 button.primary {
 	background-color: var(--primary-dark-color);
+	border: 1px solid var(--primary-dark-color);
 }
 
 button.patreon {
 	background-color: var(--patreon-color);
+	border: 1px solid var(--patreon-color);
 }
 
 button.red {
@@ -56,14 +63,12 @@ button.backgroundOnHoverOnly {
 button.square {
 	border-radius: 0;
 	height: 100%;
-}
-
-button:hover:not(.disabled) {
-	background-color: var(--lightest-bg-color);
+	border: none;
 }
 
 button.active {
 	background-color: var(--primary-dark-color);
+	border: 1px solid var(--primary-dark-color);
 
 	&:hover:not(.disabled) {
 		background-color: var(--hover-primary-dark-color);

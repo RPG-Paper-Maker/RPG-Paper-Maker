@@ -18,6 +18,7 @@ import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
 import DialogInfoFormulas from './dialogs/DialogInfoFormulas';
 import Dropdown from './Dropdown';
+import ToggleButton from './ToggleButton';
 import Flex from './Flex';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
@@ -415,9 +416,9 @@ function DynamicValueSelector({
 		value.value = text;
 	};
 
-	const handleChangeSwitch = (id: number) => {
-		setValueSwitch(id === 0);
-		value.value = id === 0;
+	const handleChangeSwitch = (v: boolean) => {
+		setValueSwitch(v);
+		value.value = v;
 	};
 
 	const handleChangeVariable = (id: number) => {
@@ -597,15 +598,7 @@ function DynamicValueSelector({
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.SWITCH:
-				return (
-					<Dropdown
-						selectedID={valueSwitch ? 0 : 1}
-						onChange={handleChangeSwitch}
-						options={Model.Base.ON_OFF_OPTIONS}
-						disabled={disabled}
-						width={INPUT_WIDTH}
-					/>
-				);
+				return <ToggleButton value={valueSwitch} onChange={handleChangeSwitch} disabled={disabled} />;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
 				return (
 					<Dropdown

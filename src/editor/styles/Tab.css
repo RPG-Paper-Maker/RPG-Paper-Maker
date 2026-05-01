@@ -50,14 +50,26 @@
 .tab .tabItem {
 	display: flex;
 	align-items: center;
-	padding: 5px 10px 5px 10px;
+	padding: 5px 10px;
 	gap: 5px;
 	font-size: var(--engine-font-size);
-	background-color: var(--main-bg-color);
-	border-radius: 5px 5px 0px 0px;
-	background-color: var(--darker-bg-color);
 	color: var(--grey-color);
 	cursor: pointer;
+	border-bottom: 1px solid var(--lighter-bg-color);
+	position: relative;
+	transition: color 0.15s ease;
+}
+
+.tab .tabItem::after {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: var(--primary-color);
+	transform: scaleX(0);
+	transition: transform 0.2s ease;
 }
 
 .tab .tabItem:hover {
@@ -70,10 +82,13 @@
 }
 
 .tab .tabItem.selected {
-	background-color: var(--main-bg-color);
 	color: white;
 }
 
-.tab .tabItem:has(svg:hover) {
+.tab .tabItem.selected::after {
+	transform: scaleX(1);
+}
+
+.tab .tabItem svg:hover {
 	color: var(--red-color);
 }

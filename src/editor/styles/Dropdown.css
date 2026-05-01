@@ -1,22 +1,49 @@
 .dropdown {
 	display: flex;
-	background-color: var(--lighter-bg-color);
+	background-color: transparent;
 	color: var(--main-color);
-	border-radius: 5px;
+	border-bottom: 1px solid var(--grey-color);
 	height: 20px;
-	padding: 5px;
+	padding: 0;
 	cursor: pointer;
 	box-sizing: border-box;
 	white-space: nowrap;
+	position: relative;
+	transition: border-bottom-color 0.15s ease;
 }
 
-.dropdown.open {
-	border-radius: 5px 5px 0 0;
+.dropdown:hover:not(.disabled):not(.open) {
+	border-bottom-color: var(--main-color);
+}
+
+.dropdown::after {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: var(--primary-color);
+	transform: scaleX(0);
+	transition: transform 0.2s ease;
+	pointer-events: none;
+}
+
+.dropdown.open::after {
+	transform: scaleX(1);
 }
 
 .dropdown.disabled {
 	opacity: 0.4;
 	cursor: initial;
+}
+
+.dropdown .dropdownArrow svg {
+	transition: transform 0.2s ease;
+}
+
+.dropdown.open .dropdownArrow svg {
+	transform: rotate(180deg);
 }
 
 .dropdown .content {
@@ -31,20 +58,56 @@
 		rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
 		rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
 		rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
-	border-radius: 0 0 5px 5px;
+	border-radius: 4px;
 	overflow: auto;
 }
 
+.dropdown .content.opening {
+	animation: dropdownFadeIn 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dropdown .content.closing {
+	animation: dropdownFadeOut 0.14s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes dropdownFadeIn {
+	from {
+		opacity: 0;
+		transform: scaleY(0.9) translateY(-6px);
+		transform-origin: top;
+	}
+	to {
+		opacity: 1;
+		transform: scaleY(1) translateY(0);
+		transform-origin: top;
+	}
+}
+
+@keyframes dropdownFadeOut {
+	from {
+		opacity: 1;
+		transform: scaleY(1) translateY(0);
+		transform-origin: top;
+	}
+	to {
+		opacity: 0;
+		transform: scaleY(0.9) translateY(-6px);
+		transform-origin: top;
+	}
+}
+
 .dropdown .content .element {
-	padding: 5px;
+	padding: 4px 8px;
 	color: var(--main-color);
 	text-align: start;
 	flex: 1;
 	display: flex;
+	align-items: center;
+	transition: background-color 0.12s ease;
 }
 
 .dropdown .content .element:hover:not(.disabled) {
-	background-color: var(--main-bg-color);
+	background-color: var(--hover-main-bg-color);
 }
 
 .dropdown .content .element.selected {
@@ -52,14 +115,15 @@
 }
 
 .dropdown .content .element.selected:hover {
-	background-color: var(--lightest-bg-color);
+	background-color: var(--hover-main-bg-color);
 }
 
 .dropdown .content .element.disabled {
-	color: var(--lighter-bg-color);
+	color: var(--grey-color);
 	cursor: default;
+	opacity: 0.5;
 }
 
 .dropdown .content .element.preSelected {
-	background-color: var(--main-bg-color);
+	background-color: var(--hover-main-bg-color);
 }

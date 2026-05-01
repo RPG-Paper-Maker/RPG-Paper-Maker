@@ -486,6 +486,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 						contents={[getStagingContent(), getMapContent(), getBattleContent(), getStructureContent()]}
 						defaultIndex={tabIndex}
 						onCurrentIndexChanged={setTabIndex}
+						padding
 					/>
 				</Dialog>
 			)}

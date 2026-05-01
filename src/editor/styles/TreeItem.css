@@ -67,8 +67,20 @@
 			}
 
 			&.selected {
-				background-color: var(--primary-dark-color);
+				background-color: color-mix(in srgb, var(--primary-dark-color) 75%, transparent);
 			}
 		}
 	}
+}
+
+.variableSelector .tree {
+	height: 18px;
+
+	.treeItem {
+		height: 15px;
+	}
+}
+
+.variableSelector .treeItem.selected {
+	background-color: transparent !important;
 }

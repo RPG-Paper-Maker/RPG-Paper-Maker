@@ -21,6 +21,7 @@ import { MapObjectCommandType } from '../../../models';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
+import ToggleButton from '../../ToggleButton';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
@@ -364,10 +365,9 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 								<Flex column spaced>
 									<div>{t('change.object.options')}:</div>
 									<Flex spaced>
-										<Dropdown
-											selectedID={objectOptionsType}
-											onChange={setObjectOptionsType}
-											options={Model.Base.ON_OFF_OPTIONS}
+										<ToggleButton
+											value={objectOptionsType === 0}
+											onChange={(v) => setObjectOptionsType(v ? 0 : 1)}
 										/>
 										<Checkbox isChecked={isPermanent} onChange={setIsPermanent}>
 											{t('permanent')}

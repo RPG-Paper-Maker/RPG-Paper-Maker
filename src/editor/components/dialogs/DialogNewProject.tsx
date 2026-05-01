@@ -329,7 +329,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 			>
-				<Flex column spaced>
+				<Flex column spacedLarge>
 					<Flex spaced>
 						<div>{t('name')}:</div>
 						<InputText

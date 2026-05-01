@@ -89,19 +89,20 @@ function InputText({
 	}, [focusFirst, setFocustFirst]);
 
 	return (
-		<input
-			ref={refInput}
-			value={value}
-			onChange={handleChange}
-			autoComplete='off'
-			autoCorrect='off'
-			autoCapitalize='off'
-			spellCheck='false'
-			style={{ ...style, maxWidth: getMaxWidth() }}
-			disabled={disabled}
-			onFocus={onFocus}
-			placeholder={placeholder}
-		/>
+		<div className='inputWrapper' style={{ ...style, maxWidth: getMaxWidth() }}>
+			<input
+				ref={refInput}
+				value={value}
+				onChange={handleChange}
+				autoComplete='off'
+				autoCorrect='off'
+				autoCapitalize='off'
+				spellCheck='false'
+				disabled={disabled}
+				onFocus={onFocus}
+				placeholder={placeholder}
+			/>
+		</div>
 	);
 }
 

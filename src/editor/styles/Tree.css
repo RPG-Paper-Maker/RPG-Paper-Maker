@@ -18,6 +18,8 @@
 	overflow-x: overlay;
 	overflow-y: auto;
 	height: 100%;
+	position: relative;
+	transition: border-color 0.2s ease;
 
 	.treeHeader {
 		display: flex;
@@ -29,7 +31,7 @@
 	}
 
 	&.focused {
-		border: 1px solid var(--primary-color);
+		border-color: var(--primary-color);
 	}
 
 	&.disabled {

@@ -70,6 +70,8 @@ function Dropdown({
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
+	const [isAnimatingClose, setIsAnimatingClose] = useState(false);
+	const [isAnimatingOpen, setIsAnimatingOpen] = useState(false);
 	const [preSelectedID, setPreSelectedID] = useState(options[0]?.id ?? -1);
 	const [firstOpened, setFirstOpened] = useState(false);
 	const [isWidthUpdated, setIsWidthUpdated] = useState(false);
@@ -80,7 +82,7 @@ function Dropdown({
 	const preSelectedElementRef = useRef<HTMLDivElement>(null);
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 
-	const canDisplayDropdown = () => isOpen && !needForceHide() && options.length > 0;
+	const canDisplayDropdown = () => (isOpen || isAnimatingClose) && !needForceHide() && options.length > 0;
 
 	const needForceHide = () => {
 		const container = containerRef.current;
@@ -127,11 +129,24 @@ function Dropdown({
 		}
 	};
 
+	const closeDropdown = () => {
+		if (!isOpen && !isAnimatingClose) return;
+		setIsAnimatingOpen(false);
+		setIsAnimatingClose(true);
+		setIsOpen(false);
+	};
+
 	const handleClick = () => {
 		if (!disabled) {
-			setIsOpen((value) => !value);
-			if (!firstOpened) {
-				setFirstOpened(true);
+			if (isOpen) {
+				closeDropdown();
+			} else {
+				setIsAnimatingClose(false);
+				setIsAnimatingOpen(true);
+				setIsOpen(true);
+				if (!firstOpened) {
+					setFirstOpened(true);
+				}
 			}
 		}
 	};
@@ -172,7 +187,7 @@ function Dropdown({
 		const handleMouseDownOutside = (event: MouseEvent) => {
 			const container = containerRef.current;
 			if (container && !container.contains(event.target as Node)) {
-				setIsOpen(false);
+				closeDropdown();
 			}
 		};
 
@@ -189,7 +204,7 @@ function Dropdown({
 					case KEY.ENTER:
 						if (index >= 0) {
 							handleClickOption(options[index]);
-							setIsOpen(false);
+							closeDropdown();
 						}
 						break;
 				}
@@ -205,6 +220,20 @@ function Dropdown({
 	}, [isOpen, preSelectedID]);
 
 	useEffect(() => {
+		const dropdown = dropdownContainerRef.current;
+		if (!dropdown) return;
+		const handleAnimationEnd = (e: AnimationEvent) => {
+			if (e.animationName === 'dropdownFadeOut') {
+				setIsAnimatingClose(false);
+			} else if (e.animationName === 'dropdownFadeIn') {
+				setIsAnimatingOpen(false);
+			}
+		};
+		dropdown.addEventListener('animationend', handleAnimationEnd);
+		return () => dropdown.removeEventListener('animationend', handleAnimationEnd);
+	}, []);
+
+	useEffect(() => {
 		preSelectedElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 	}, [preSelectedID]);
 
@@ -214,7 +243,7 @@ function Dropdown({
 
 	useEffect(() => {
 		if (disabled) {
-			setIsOpen(false);
+			closeDropdown();
 		}
 	}, [disabled]);
 
@@ -306,12 +335,12 @@ function Dropdown({
 				>
 					{getCurrentItem()}
 				</Flex>
-				<Flex>
+				<Flex className="dropdownArrow">
 					<BsChevronDown />
 				</Flex>
 			</Flex>
 			<div
-				className={Utils.getClassName({ visibilityHidden: !canDisplayDropdown() }, 'content')}
+				className={Utils.getClassName({ visibilityHidden: !canDisplayDropdown(), closing: isAnimatingClose, opening: isAnimatingOpen }, 'content')}
 				ref={dropdownContainerRef}
 			>
 				{getDropdownItems()}

@@ -53,7 +53,7 @@ function InputNumber({
 			case INPUT_TYPE_WIDTH.NORMAL:
 				return '100px';
 			case INPUT_TYPE_WIDTH.LARGE:
-				return '195px';
+				return '200px';
 		}
 	})();
 
@@ -127,7 +127,7 @@ function InputNumber({
 					}}
 					onChange={handleChange}
 					step='any'
-					style={{ minWidth: width, maxWidth: width }}
+					style={{ minWidth: width, maxWidth: width, color: focused ? undefined : 'transparent' }}
 					disabled={disabled}
 				/>
 				{!focused && (
@@ -141,18 +141,19 @@ function InputNumber({
 	}
 
 	return (
-		<input
-			type='number'
-			min={min}
-			max={max}
-			value={displayedValue}
-			onFocus={handleFocus}
-			onBlur={handleBlur}
-			onChange={handleChange}
-			step='any'
-			style={{ minWidth: width, maxWidth: width }}
-			disabled={disabled}
-		/>
+		<div className='inputWrapper' style={{ minWidth: width, maxWidth: width }}>
+			<input
+				type='number'
+				min={min}
+				max={max}
+				value={displayedValue}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
+				onChange={handleChange}
+				step='any'
+				disabled={disabled}
+			/>
+		</div>
 	);
 }
 

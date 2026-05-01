@@ -160,7 +160,7 @@ function DialogCommandModifyTeam({ commandKind, setIsOpen, list, onAccept, onRej
 		>
 			<RadioGroup selected={selectionType} onChange={setSelectionType}>
 				<Flex column spacedLarge>
-					<Flex spaced>
+					<Flex spaced centerV>
 						<RadioButton value={SELECTION_TYPE.CREATE}>{t('create.new.instance.with.level')}</RadioButton>
 						<DynamicValueSelector
 							value={createInstanceLevel}
@@ -238,7 +238,7 @@ function DialogCommandModifyTeam({ commandKind, setIsOpen, list, onAccept, onRej
 							disabled={!isEnemy}
 						/>
 					</Flex>
-					<Flex spaced>
+					<Flex spaced centerV>
 						<RadioButton value={SELECTION_TYPE.MODIFY}>{t('Modify')}:</RadioButton>
 						<Dropdown
 							selectedID={moveRemoveSelection}
