@@ -73,7 +73,8 @@
 	}
 }
 
-.variableSelector .tree {
+.variableSelector .tree,
+.assetSelector .tree {
 	height: 18px;
 
 	.treeItem {
@@ -81,6 +82,7 @@
 	}
 }
 
-.variableSelector .treeItem.selected {
+.variableSelector .treeItem.selected,
+.assetSelector .treeItem.selected {
 	background-color: transparent !important;
 }

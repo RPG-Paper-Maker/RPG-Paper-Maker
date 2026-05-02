@@ -1,10 +1,11 @@
 .dropdown {
 	display: flex;
-	background-color: transparent;
+	background-color: var(--main-bg-color);
 	color: var(--main-color);
-	border-bottom: 1px solid var(--grey-color);
+	border: 1px solid var(--lightest-bg-color);
+	border-radius: 3px;
 	height: 20px;
-	padding: 0;
+	padding: 0 5px 0 5px;
 	cursor: pointer;
 	box-sizing: border-box;
 	white-space: nowrap;
@@ -13,7 +14,7 @@
 }
 
 .dropdown:hover:not(.disabled):not(.open) {
-	border-bottom-color: var(--main-color);
+	border-color: var(--grey-color);
 }
 
 .dropdown::after {
@@ -34,7 +35,7 @@
 }
 
 .dropdown.disabled {
-	opacity: 0.4;
+	opacity: 0.2;
 	cursor: initial;
 }
 

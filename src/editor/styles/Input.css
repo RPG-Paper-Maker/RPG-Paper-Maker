@@ -10,22 +10,22 @@
 */
 
 input {
-	background-color: transparent;
-	border: none;
-	border-bottom: 1px solid var(--grey-color);
+	background-color: var(--darkest-bg-color);
+	border: 1px solid var(--lightest-bg-color);
+	border-radius: 3px;
 	color: var(--main-color);
 	flex-grow: 1;
 	height: 20px;
 	font-family: inherit;
 	font-size: var(--engine-font-size);
 	font-weight: inherit;
-	padding: 0;
+	padding: 0 0px 0 5px;
 	box-sizing: border-box;
 	transition: border-bottom-color 0.15s ease;
 }
 
 input:hover:not(:focus):not(:disabled) {
-	border-bottom-color: var(--main-color);
+	border-color: var(--main-color);
 }
 
 input:focus {
@@ -36,7 +36,6 @@ input:focus {
 	position: relative;
 	display: flex;
 	flex-grow: 1;
-	align-self: flex-start;
 }
 
 .inputWrapper input {
@@ -69,7 +68,7 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 input:disabled {
-	opacity: 0.4;
+	opacity: 0.2;
 }
 
 .inputSuffixWrapper {

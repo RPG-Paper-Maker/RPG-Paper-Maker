@@ -22,4 +22,8 @@ textarea {
 	&.smallDefaultHeight {
 		height: 50px;
 	}
+
+	&:disabled {
+		opacity: 0.2;
+	}
 }

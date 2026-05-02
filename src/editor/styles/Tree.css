@@ -36,5 +36,6 @@
 
 	&.disabled {
 		color: var(--lighter-bg-color);
+		opacity: 0.2;
 	}
 }
