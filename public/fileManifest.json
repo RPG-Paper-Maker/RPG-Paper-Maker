@@ -600,6 +600,7 @@
         "Object3D.js",
         "Object3DBox.js",
         "Object3DCustom.js",
+        "Object3DProcedural.js",
         "Party.js",
         "Picture2D.js",
         "Player.js",
