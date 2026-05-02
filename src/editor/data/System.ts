@@ -191,7 +191,7 @@ class System extends Serializable {
 
 	static async getProjectName(path: string): Promise<string> {
 		const json = await readJSON(Paths.join(path, Paths.FILE_SYSTEM));
-		return json === null ? 'Unknown' : (json.pn as { names: string[] }).names[1];
+		return json === null ? 'Unknown' : ((json.pn as { names: string[] })?.names?.[1] ?? 'Unknown');
 	}
 
 	getPath(): string {
