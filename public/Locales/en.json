@@ -382,6 +382,7 @@
 	"texture": "Texture",
 	"scale": "Scale",
 	"size": "Size",
+	"segments": "Segments",
 	"square.s": "Square(s)",
 	"pixel.s": "Pixel(s)",
 	"square.mode.applied": "Square mode applied",

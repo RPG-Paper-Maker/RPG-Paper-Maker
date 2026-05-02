@@ -382,6 +382,7 @@
 	"texture": "Texture",
 	"scale": "Échelle",
 	"size": "Taille",
+	"segments": "Segments",
 	"square.s": "Carré(s)",
 	"pixel.s": "Pixel(s)",
 	"square.mode.applied": "Mode carré appliqué",

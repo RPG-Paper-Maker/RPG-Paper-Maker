@@ -382,6 +382,7 @@
 	"texture": "텍스처",
 	"scale": "스케일",
 	"size": "크기",
+	"segments": "세그먼트",
 	"square.s": "칸",
 	"pixel.s": "픽셀",
 	"square.mode.applied": "칸(Square) 모드 적용됨",

@@ -382,6 +382,7 @@
 	"texture": "Tekstura",
 	"scale": "Skala",
 	"size": "Rozmiar",
+	"segments": "Segmenty",
 	"square.s": "Kwadraty",
 	"pixel.s": "Pixele",
 	"square.mode.applied": "Tryb kwadrat aktywny",

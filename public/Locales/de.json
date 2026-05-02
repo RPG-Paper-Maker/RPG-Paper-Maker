@@ -382,6 +382,7 @@
 	"texture": "Textur",
 	"scale": "Skalierung",
 	"size": "Größe",
+	"segments": "Segmente",
 	"square.s": "Kachel(n)",
 	"pixel.s": "Pixel",
 	"square.mode.applied": "Kachelmodus aktiv",

@@ -80,6 +80,12 @@ abstract class Base extends Serializable {
 					case SHAPE_KIND.BOX:
 						model = MapElement.Object3DBox.create(data);
 						break;
+					case SHAPE_KIND.SPHERE:
+					case SHAPE_KIND.CYLINDER:
+					case SHAPE_KIND.CONE:
+					case SHAPE_KIND.CAPSULE:
+						model = MapElement.Object3DProcedural.create(data);
+						break;
 					case SHAPE_KIND.CUSTOM:
 						model = MapElement.Object3DCustom.create(data);
 						break;

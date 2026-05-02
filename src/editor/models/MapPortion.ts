@@ -24,6 +24,7 @@ import {
 	Object3D,
 	Object3DBox,
 	Object3DCustom,
+	Object3DProcedural,
 	Sprite,
 	SpriteWall,
 } from '../mapElements';
@@ -70,12 +71,15 @@ class MapPortion extends Serializable {
 		switch (data.shapeKind) {
 			case SHAPE_KIND.BOX:
 				return Object3DBox;
+			case SHAPE_KIND.SPHERE:
+			case SHAPE_KIND.CYLINDER:
+			case SHAPE_KIND.CONE:
+			case SHAPE_KIND.CAPSULE:
+				return Object3DProcedural;
 			case SHAPE_KIND.CUSTOM:
 				return Object3DCustom;
 			default:
-				throw new Error(
-					'Shape kind not supported yet. Remove this throw when all shape kinds are implemented.',
-				);
+				return null;
 		}
 	}
 

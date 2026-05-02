@@ -514,11 +514,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 						</RadioButton>
 						<RadioGroup selected={selectionHeroesEquipedType} onChange={setSelectionHeroesEquipedType}>
 							<Form>
-								<Label>
-									<RadioButton
-										value={SELECTION_HEROES_EQUIPED_TYPE.WEAPON}
-										disabled={!isHeroesEquipedWith}
-									>
+								<Label disabled={!isHeroesEquipedWith}>
+									<RadioButton value={SELECTION_HEROES_EQUIPED_TYPE.WEAPON}>
 										{t('weapon.id')}
 									</RadioButton>
 								</Label>
@@ -530,11 +527,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 										disabled={!isHeroesEquipedWithWeapon}
 									/>
 								</Value>
-								<Label>
-									<RadioButton
-										value={SELECTION_HEROES_EQUIPED_TYPE.ARMOR}
-										disabled={!isHeroesEquipedWith}
-									>
+								<Label disabled={!isHeroesEquipedWith}>
+									<RadioButton value={SELECTION_HEROES_EQUIPED_TYPE.ARMOR}>
 										{t('armor.id')}
 									</RadioButton>
 								</Label>

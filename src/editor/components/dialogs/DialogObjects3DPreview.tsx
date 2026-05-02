@@ -55,6 +55,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 	const [widthPixels, setWidthPixels] = useStateNumber();
 	const [heightPixels, setHeightPixels] = useStateNumber();
 	const [depthPixels, setDepthPixels] = useStateNumber();
+	const [segments, setSegments] = useStateNumber();
 
 	const dispatch = useDispatch();
 
@@ -70,6 +71,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 
 	const isCustom = selectedObject3D?.shapeKind === SHAPE_KIND.CUSTOM;
 	const isBox = selectedObject3D?.shapeKind === SHAPE_KIND.BOX;
+	const isBuiltin = selectedObject3D?.shapeKind !== undefined && !isCustom;
 	const isGLTF = customShapeFormat === CUSTOM_SHAPE_KIND.GLTF;
 	const isCustomCollision = selectedObject3D?.collisionKind === OBJECT_COLLISION_KIND.CUSTOM;
 
@@ -95,6 +97,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		setHeightPixels(Model.Object3D.convertPixelFromPercent(obj3D.heightPixel));
 		setDepthSquares(obj3D.depthSquare);
 		setDepthPixels(Model.Object3D.convertPixelFromPercent(obj3D.depthPixel));
+		setSegments(obj3D.segments);
 		if (obj3D.gltfID !== -1) {
 			loadGltfAnimations(obj3D);
 		} else {
@@ -149,6 +152,9 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		selectedObject3D!.shapeKind = id;
 		selectedObject3D!.objID = -1;
 		selectedObject3D!.gltfID = -1;
+		const defaultSeg = Model.Object3D.getDefaultSegments(id);
+		selectedObject3D!.segments = defaultSeg;
+		setSegments(defaultSeg);
 		handleChangeCollisionKind(OBJECT_COLLISION_KIND.NONE);
 		setTriggerUpdate(true);
 	};
@@ -297,6 +303,12 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		setTriggerUpdate(true);
 	};
 
+	const handleChangeSegments = (value: number) => {
+		selectedObject3D!.segments = value;
+		setSegments(value);
+		setTriggerUpdate(true);
+	};
+
 	const handleAccept = async () => {
 		if (!manager && (!selectedObject3D || selectedObject3D.id === -1)) {
 			dispatch(showWarning(t('warning.asset.selection')));
@@ -355,13 +367,6 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 						<Value>
 							<Dropdown
 								selectedID={selectedObject3D.shapeKind}
-								disabledIds={[
-									SHAPE_KIND.SPHERE,
-									SHAPE_KIND.CYLINDER,
-									SHAPE_KIND.CONE,
-									SHAPE_KIND.CONE,
-									SHAPE_KIND.CAPSULE,
-								]}
 								onChange={handleChangeShapeKind}
 								options={Model.Base.SHAPE_KIND_OPTIONS}
 								translateOptions
@@ -518,7 +523,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 							</>
 						)}
 					</Form>
-					{isBox && (
+					{isBuiltin && (
 						<Groupbox title={t('size')}>
 							<Form>
 								<Label>{t('width')}</Label>
@@ -563,6 +568,14 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 										</Flex>
 									</Flex>
 								</Value>
+								{!isBox && (
+									<>
+										<Label>{t('segments')}</Label>
+										<Value>
+											<InputNumber value={segments} onChange={handleChangeSegments} min={3} />
+										</Value>
+									</>
+								)}
 							</Form>
 						</Groupbox>
 					)}

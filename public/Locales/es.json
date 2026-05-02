@@ -382,6 +382,7 @@
 	"texture": "Textura",
 	"scale": "Escala",
 	"size": "Tamaño",
+	"segments": "Segmentos",
 	"square.s": "Cuadrado(s)",
 	"pixel.s": "píxel(es)",
 	"square.mode.applied": "Modo cuadrado aplicado",

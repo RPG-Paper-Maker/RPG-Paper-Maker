@@ -34,6 +34,7 @@ class Object3D extends SpecialElement {
 	public isTopLeft!: boolean;
 	public moveAnimationIndex!: number;
 	public stopAnimationIndex!: number;
+	public segments!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['shapeKind', 'sk', SHAPE_KIND.BOX, BINDING.NUMBER],
@@ -53,7 +54,23 @@ class Object3D extends SpecialElement {
 		['isTopLeft', 'itl', true, BINDING.BOOLEAN],
 		['moveAnimationIndex', 'mai', -1, BINDING.NUMBER],
 		['stopAnimationIndex', 'sai', -1, BINDING.NUMBER],
+		['segments', 'seg', 16, BINDING.NUMBER],
 	];
+
+	static getDefaultSegments(shapeKind: SHAPE_KIND): number {
+		switch (shapeKind) {
+			case SHAPE_KIND.CYLINDER:
+				return 32;
+			case SHAPE_KIND.SPHERE:
+				return 32;
+			case SHAPE_KIND.CONE:
+				return 32;
+			case SHAPE_KIND.CAPSULE:
+				return 16;
+			default:
+				return 16;
+		}
+	}
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...Object3D.bindings, ...additionnalBinding];

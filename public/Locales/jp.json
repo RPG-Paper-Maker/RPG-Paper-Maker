@@ -382,6 +382,7 @@
 	"texture": "テクスチャ",
 	"scale": "スケール",
 	"size": "サイズ",
+	"segments": "セグメント",
 	"square.s": "マス",
 	"pixel.s": "ピクセル",
 	"square.mode.applied": "四角形モード適用中",

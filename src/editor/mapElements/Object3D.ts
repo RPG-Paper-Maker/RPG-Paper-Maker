@@ -41,6 +41,12 @@ abstract class Object3D extends Base {
 			case SHAPE_KIND.BOX:
 				object = MapElement.Object3DBox.create(data);
 				break;
+			case SHAPE_KIND.SPHERE:
+			case SHAPE_KIND.CYLINDER:
+			case SHAPE_KIND.CONE:
+			case SHAPE_KIND.CAPSULE:
+				object = MapElement.Object3DProcedural.create(data);
+				break;
 			case SHAPE_KIND.CUSTOM:
 				object = MapElement.Object3DCustom.create(data);
 				break;
