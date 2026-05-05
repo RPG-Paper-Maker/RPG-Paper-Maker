@@ -1946,6 +1946,7 @@
 	"formulas.game.items": "インベントリ内のアイテムの配列",
 	"formulas.game.playtime": "現在のプレイ時間",
 	"warning.file.busy": "プロジェクトファイルが別のプロセスによってロックされています。このプロジェクトが別の RPG Paper Maker インスタンスで開かれていないことを確認してください。クラウド同期ツール（OneDrive、Dropbox など）が一時的にファイルをロックしている可能性もあります。",
+	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"manage.backups": "バックアップ管理",
 	"restore": "復元",
 	"no.backups.available": "利用可能なバックアップはありません。",

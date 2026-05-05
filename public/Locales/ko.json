@@ -1947,6 +1947,7 @@
 	"formulas.game.items": "인벤토리의 아이템 배열",
 	"formulas.game.playtime": "현재 플레이 시간",
 	"warning.file.busy": "프로젝트 파일이 다른 프로세스에 의해 잠겨 있습니다. 이 프로젝트가 다른 RPG Paper Maker 인스턴스에서 열려 있지 않은지 확인하세요. 클라우드 동기화 도구(OneDrive, Dropbox 등)가 일시적으로 파일을 잠그고 있을 수도 있습니다.",
+	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"manage.backups": "백업 관리",
 	"restore": "복원",
 	"no.backups.available": "사용 가능한 백업이 없습니다.",

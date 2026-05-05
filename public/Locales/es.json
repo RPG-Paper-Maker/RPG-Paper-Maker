@@ -1946,6 +1946,7 @@
 	"formulas.game.items": "Array de objetos en el inventario",
 	"formulas.game.playtime": "Tiempo de juego actual",
 	"warning.file.busy": "Un archivo del proyecto está bloqueado por otro proceso. Asegúrate de que este proyecto no esté abierto en otra instancia de RPG Paper Maker. También podría ser una herramienta de sincronización en la nube (OneDrive, Dropbox, etc.) que bloquea temporalmente el archivo.",
+	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"manage.backups": "Gestionar copias de seguridad",
 	"restore": "Restaurar",
 	"no.backups.available": "No hay copias de seguridad disponibles.",

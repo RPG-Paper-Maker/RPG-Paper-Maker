@@ -1946,6 +1946,7 @@
 	"formulas.game.items": "Массив предметов в инвентаре",
 	"formulas.game.playtime": "Текущее время игры",
 	"warning.file.busy": "Файл проекта заблокирован другим процессом. Убедитесь, что этот проект не открыт в другом экземпляре RPG Paper Maker. Это также может быть инструмент облачной синхронизации (OneDrive, Dropbox и т. д.), временно блокирующий файл.",
+	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"manage.backups": "Управление резервными копиями",
 	"restore": "Восстановить",
 	"no.backups.available": "Резервные копии недоступны.",

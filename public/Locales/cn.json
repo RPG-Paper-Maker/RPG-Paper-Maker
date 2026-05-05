@@ -1947,6 +1947,7 @@
 	"formulas.game.items": "背包中的物品数组",
 	"formulas.game.playtime": "当前游戏时间",
 	"warning.file.busy": "项目文件被另一个进程锁定。请确保该项目未在另一个 RPG Paper Maker 实例中打开。也可能是云同步工具（OneDrive、Dropbox 等）暂时锁定了该文件。",
+	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"manage.backups": "管理备份",
 	"restore": "恢复",
 	"no.backups.available": "没有可用的备份。",

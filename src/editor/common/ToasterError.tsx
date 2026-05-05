@@ -4,7 +4,7 @@ import { FaRegCopy } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
 import { toast } from 'react-toastify';
 import { LocalFile } from '../core/LocalFile';
-import { setErrorDialog, store } from '../store';
+import { setCurrentProject, setErrorDialog, store } from '../store';
 import '../styles/ToasterError.css';
 import { Constants } from './Constants';
 import { IO } from './IO';
@@ -58,6 +58,11 @@ console.error = (...args) => {
 		console.warn(i18next.t('warning.file.busy'));
 		return;
 	}
+	if (message.includes('ENOSPC')) {
+		toast.warn(i18next.t('warning.disk.full'), TOASTER_OPTIONS);
+		store.dispatch(setCurrentProject(null));
+		return;
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	if (!isGameMode) {
 		store.dispatch(setErrorDialog({ message, stack }));
@@ -88,6 +93,11 @@ window.addEventListener('unhandledrejection', (event) => {
 	const stack = reason?.stack || '';
 	if (message.includes('EBUSY')) {
 		console.warn(i18next.t('warning.file.busy'));
+		return;
+	}
+	if (message.includes('ENOSPC')) {
+		toast.warn(i18next.t('warning.disk.full'), TOASTER_OPTIONS);
+		store.dispatch(setCurrentProject(null));
 		return;
 	}
 	notifyError(<ToasterError message={message} stack={stack} />);

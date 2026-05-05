@@ -1946,6 +1946,7 @@
 	"formulas.game.items": "Tableau des objets dans l'inventaire",
 	"formulas.game.playtime": "Temps de jeu actuel",
 	"warning.file.busy": "Un fichier du projet est verrouillé par un autre processus. Assurez-vous que ce projet n'est pas ouvert dans une autre instance de RPG Paper Maker. Cela peut également venir d'un outil de synchronisation cloud (OneDrive, Dropbox, etc.) qui verrouille temporairement le fichier.",
+	"warning.disk.full": "Votre disque est plein (ENOSPC). Le projet a été fermé. Veuillez libérer de l'espace disque avant de rouvrir votre projet.",
 	"manage.backups": "Gérer les sauvegardes",
 	"last.save": "dernière sauvegarde",
 	"restore": "Restaurer",
