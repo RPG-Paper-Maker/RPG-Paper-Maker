@@ -17,11 +17,10 @@ import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { MapObjectCommandType } from '../../../models';
+import { Base, MapObjectCommandType } from '../../../models';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
-import ToggleButton from '../../ToggleButton';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
@@ -365,9 +364,10 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 								<Flex column spaced>
 									<div>{t('change.object.options')}:</div>
 									<Flex spaced>
-										<ToggleButton
-											value={objectOptionsType === 0}
-											onChange={(v) => setObjectOptionsType(v ? 0 : 1)}
+										<Dropdown
+											selectedID={objectOptionsType}
+											onChange={setObjectOptionsType}
+											options={Base.ON_OFF_OPTIONS}
 										/>
 										<Checkbox isChecked={isPermanent} onChange={setIsPermanent}>
 											{t('permanent')}
