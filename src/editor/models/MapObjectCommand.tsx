@@ -2439,6 +2439,9 @@ class MapObjectCommand extends Base {
 					Base.VARIABLE_OTHER_CHARACTERISTICS_OPTIONS[this.command[iterator.i++] as number].name,
 				).toLowerCase();
 				break;
+			case 10:
+				str += `${t('script')}: ${this.command[iterator.i++]}`;
+				break;
 		}
 		return [str];
 	}

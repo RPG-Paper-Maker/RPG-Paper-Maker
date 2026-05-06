@@ -17,6 +17,7 @@ import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
+import useStateString from '../../../hooks/useStateString';
 import { MapObjectCommandType, TroopMonster } from '../../../models';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -27,6 +28,7 @@ import InputNumber from '../../InputNumber';
 import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import TextArea from '../../TextArea';
 import VariableSelector from '../../VariableSelector';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -48,6 +50,7 @@ enum SELECTION_VALUE_TYPE {
 	OBJECT_CHARACTERISTIC = 4,
 	ENEMY_INSTANCE_ID = 8,
 	OTHER_CHARACTERISTICS = 9,
+	SCRIPT = 10,
 }
 
 function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
@@ -75,6 +78,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const [valueObjectCharacteristicIndex, setValueObjectCharacteristicIndex] = useStateNumber();
 	const [valueEnemyID, setValueEnemyID] = useStateNumber();
 	const [valueOtherCharacteristicsIndex, setValueOtherCharacteristicsIndex] = useStateNumber();
+	const [valueScript, setValueScript] = useStateString();
 	const [, setTrigger] = useStateBool();
 
 	const isOneVariable = selectionType === SELECTION_TYPE.ONE_VARIABLE;
@@ -89,6 +93,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const isObjectCharacteristic = selectionValueType === SELECTION_VALUE_TYPE.OBJECT_CHARACTERISTIC;
 	const isEnemyInstanceID = selectionValueType === SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID;
 	const isOtherCharacteristics = selectionValueType === SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS;
+	const isScript = selectionValueType === SELECTION_VALUE_TYPE.SCRIPT;
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
 	const initialize = () => {
@@ -110,6 +115,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		setValueObjectCharacteristicIndex(0);
 		setValueEnemyID(TroopMonster.currentMonsters[0]?.id ?? -1);
 		setValueOtherCharacteristicsIndex(0);
+		setValueScript('');
 		if (list) {
 			const iterator = Utils.generateIterator();
 			const selection = list[iterator.i++] as SELECTION_TYPE;
@@ -161,6 +167,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 					break;
 				case SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS:
 					setValueOtherCharacteristicsIndex(list[iterator.i++] as number);
+					break;
+				case SELECTION_VALUE_TYPE.SCRIPT:
+					setValueScript(list[iterator.i++] as string);
 					break;
 			}
 		} else {
@@ -232,6 +241,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 				break;
 			case SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS:
 				newList.push(valueOtherCharacteristicsIndex);
+				break;
+			case SELECTION_VALUE_TYPE.SCRIPT:
+				newList.push(valueScript);
 				break;
 		}
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
@@ -454,6 +466,12 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 										translateOptions
 									/>
 								</Flex>
+							</Value>
+							<Label>
+								<RadioButton value={SELECTION_VALUE_TYPE.SCRIPT}>{t('script')}</RadioButton>
+							</Label>
+							<Value>
+								<TextArea text={valueScript} onChange={setValueScript} disabled={!isScript} />
 							</Value>
 						</Form>
 					</RadioGroup>
