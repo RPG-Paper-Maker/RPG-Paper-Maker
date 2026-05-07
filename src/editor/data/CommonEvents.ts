@@ -18,6 +18,40 @@ import { BindingType, Serializable } from '../core/Serializable';
 const { t } = i18next;
 
 class CommonEvents extends Serializable {
+	public static readonly SYSTEM_EVENTS: JSONType[] = [
+		{ id: 1, name: 'Time', p: [
+			{ id: 1, name: 'Interval', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'Repeat', d: { k: 10, v: true } },
+		]},
+		{ id: 2, name: 'Chronometer finished', p: [
+			{ id: 1, name: 'ID', d: { k: 3, v: 0 } },
+		]},
+		{ id: 3, name: 'KeyPress', p: [
+			{ id: 1, name: 'ID', d: { k: 1, v: null } },
+			{ id: 2, name: 'Repeat', d: { k: 10, v: false } },
+			{ id: 3, name: 'Immediate Repeat', d: { k: 10, v: false } },
+		]},
+		{ id: 4, name: 'KeyRelease', p: [
+			{ id: 1, name: 'ID', d: { k: 1, v: null } },
+		]},
+		{ id: 5, name: 'MouseDown', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+			{ id: 3, name: 'Left', d: { k: 10, v: true } },
+			{ id: 4, name: 'Repeat', d: { k: 10, v: false } },
+		]},
+		{ id: 6, name: 'MouseUp', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+			{ id: 3, name: 'Left', d: { k: 10, v: true } },
+		]},
+		{ id: 7, name: 'MouseMove', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+		]},
+		{ id: 8, name: 'Closing main menu', p: [] },
+	];
+
 	public eventsSystem!: Model.CommonEvent[];
 	public eventsUser!: Model.CommonEvent[];
 	public states!: Model.Base[];
@@ -27,7 +61,6 @@ class CommonEvents extends Serializable {
 	public heroObject!: Model.CommonObject;
 
 	public static readonly bindings: BindingType[] = [
-		['eventsSystem', 'eventsSystem', undefined, BINDING.LIST, Model.CommonEvent],
 		['eventsUser', 'eventsUser', undefined, BINDING.LIST, Model.CommonEvent],
 		['states', 'states', undefined, BINDING.LIST, Model.Base],
 		['commonReactions', 'commonReactors', undefined, BINDING.LIST, Model.CommonReaction],
@@ -55,6 +88,11 @@ class CommonEvents extends Serializable {
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		this.eventsSystem = CommonEvents.SYSTEM_EVENTS.map((eventJson) => {
+			const event = new Model.CommonEvent();
+			event.read(eventJson);
+			return event;
+		});
 		super.read(json, CommonEvents.getBindings(additionnalBinding));
 	}
 
