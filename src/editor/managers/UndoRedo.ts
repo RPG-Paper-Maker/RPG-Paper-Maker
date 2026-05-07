@@ -68,7 +68,7 @@ class UndoRedo {
 		kind: ELEMENT_MAP_KIND,
 	) {
 		if (Scene.Map.current) {
-			const mapPortion = Scene.Map.current.getMapPortionByPosition(position);
+			const mapPortion = Scene.Map.current.getMapPortionByPositionWall(position);
 			if (mapPortion) {
 				mapPortion.removeLastPreview();
 				if (kind === ELEMENT_MAP_KIND.OBJECT) {
