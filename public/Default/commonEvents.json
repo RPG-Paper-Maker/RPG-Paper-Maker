@@ -438,6 +438,33 @@
 					}
 				},
 				"sys": true
+			},
+			{
+				"id": 8,
+				"p": [],
+				"r": {
+					"1": {
+						"bh": true,
+						"c": [
+							{
+								"kind": 2,
+								"command": [0, 101, 0, 10, "Core.Game.current.teamHeroes[0].system.idCharacter  "],
+								"children": []
+							},
+							{
+								"kind": 21,
+								"command": [7, -1, 0, 1, 0, 13, 0, 1, 2, 4, 101, 1, 0, 0, 1, 1],
+								"children": []
+							},
+							{
+								"kind": 1,
+								"command": [8, "", -1, 0, 0, 1, "[var=101]"],
+								"children": []
+							}
+						]
+					}
+				},
+				"sys": true
 			}
 		],
 		"ooepf": false,
