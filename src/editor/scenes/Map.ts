@@ -943,13 +943,25 @@ class Map extends Base {
 				this.updateObjectCursor(preview, position);
 				break;
 			default: {
+				const isSpriteKind =
+					Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+					Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
+				const spriteLayer =
+					isSpriteKind &&
+					Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
 				if (!preview) {
-					const positions = Mathf.traceLine(this.lastPosition, position);
+					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 					for (const p of positions) {
-						this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
+						(isSpriteKind
+							? this.getMapPortionByPositionWall(p)
+							: this.getMapPortionByPosition(p)
+						)?.remove(p, preview, removePreview, updateAutotiles);
 					}
 				} else {
-					this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
+					(isSpriteKind
+						? this.getMapPortionByPositionWall(position)
+						: this.getMapPortionByPosition(position)
+					)?.remove(position, preview, removePreview, updateAutotiles);
 				}
 				break;
 			}
@@ -1537,7 +1549,7 @@ class Map extends Base {
 		if (this.isDetection && Map.isRemoving()) {
 			layer = RAYCASTING_LAYER.OBJECTS3D;
 		}
-		if (isLayerOn && isSpriteOptionSelected) {
+		if (isLayerOn && isSpriteOptionSelected && !Map.isRemoving()) {
 			Manager.GL.raycaster.layers.enable(layer);
 			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
 			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
@@ -1617,7 +1629,10 @@ class Map extends Base {
 						}
 					} else {
 						if (Map.isRemoving() || isLayerOn) {
-							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
+							const element = (isSpriteOptionSelected
+								? this.getMapPortionByPositionWall(newPosition)
+								: this.getMapPortionByPosition(newPosition)
+							)?.model.getMapElement(
 								newPosition,
 								Map.currentSelectedMapElementKind,
 							);
@@ -1666,7 +1681,7 @@ class Map extends Base {
 				if (isLayerOn) {
 					position.layer =
 						(isSpriteOptionSelected
-							? this.getMapPortionByPosition(position)?.model.getLastSpriteLayerAt(position) || 0
+							? this.getMapPortionByPositionWall(position)?.model.getLastSpriteLayerAt(position) || 0
 							: (this.getMapPortionByPosition(position)?.model.getLastLandLayerAt(position) ??
 								position.layer)) + 1;
 				} else {
