@@ -1841,6 +1841,7 @@
 	"introduction": "はじめに",
 	"edit.object": "オブジェクトの編集",
 	"warning.asset.selection": "確定するには左のリストからアセットを選択してください。",
+	"warning.asset.not.found": "アセットファイルが見つからないか、読み込めませんでした。",
 	"select.by.id": "IDで選択",
 	"update.project.version": "プロジェクトのバージョンは {{currentVersion}} です。続行するには {{newVersion}} に変換する必要があります。",
 	"plugins.manager": "プラグインマネージャー",

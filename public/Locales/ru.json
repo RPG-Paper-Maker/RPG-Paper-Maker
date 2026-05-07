@@ -1841,6 +1841,7 @@
 	"introduction": "Введение",
 	"edit.object": "Редактировать объект",
 	"warning.asset.selection": "Для подтверждения выберите актив из списка слева.",
+	"warning.asset.not.found": "Файл актива не найден или не может быть загружен.",
 	"select.by.id": "Выбрать по идентификатору",
 	"update.project.version": "Текущая версия проекта — {{currentVersion}}, необходимо конвертировать в {{newVersion}}, чтобы продолжить.",
 	"plugins.manager": "Менеджер плагинов",

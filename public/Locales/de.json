@@ -1841,6 +1841,7 @@
 	"introduction": "Einführung",
 	"edit.object": "Objekt bearbeiten",
 	"warning.asset.selection": "Wählen Sie zur Bestätigung ein Asset aus der Liste links aus.",
+	"warning.asset.not.found": "Die Asset-Datei konnte nicht gefunden oder geladen werden.",
 	"select.by.id": "Nach ID auswählen",
 	"update.project.version": "Die Projektversion ist {{currentVersion}}, Sie müssen auf {{newVersion}} konvertieren, um fortzufahren.",
 	"plugins.manager": "Plugin-Manager",

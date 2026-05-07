@@ -1841,6 +1841,7 @@
 	"introduction": "Вступ",
 	"edit.object": "Редагувати o6'єкт",
 	"warning.asset.selection": "Виберіть актив зі списку ліворуч, щоб підтвердити.",
+	"warning.asset.not.found": "Файл активу не вдалося знайти або завантажити.",
 	"select.by.id": "Вибрати за ідентифікатором",
 	"update.project.version": "Версія проєкту — {{currentVersion}}, потрібно конвертувати у {{newVersion}}, щоб продовжити.",
 	"plugins.manager": "Менеджер плагінів",

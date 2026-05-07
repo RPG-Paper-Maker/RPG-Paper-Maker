@@ -1841,6 +1841,7 @@
 	"introduction": "Introducción",
 	"edit.object": "Editar objeto",
 	"warning.asset.selection": "Seleccione un activo de la lista de la izquierda para confirmar.",
+	"warning.asset.not.found": "El archivo del activo no se pudo encontrar o cargar.",
 	"select.by.id": "Seleccionar por ID",
 	"update.project.version": "La versión del proyecto es {{currentVersion}}, necesita convertirla a {{newVersion}} para continuar.",
 	"plugins.manager": "Administrador de complementos",

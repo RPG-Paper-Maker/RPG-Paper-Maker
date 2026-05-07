@@ -1841,6 +1841,7 @@
 	"introduction": "Introduzione",
 	"edit.object": "Modifica oggetto",
 	"warning.asset.selection": "Seleziona una risorsa nella lista a sinistra per confermare.",
+	"warning.asset.not.found": "Il file della risorsa non è stato trovato o non può essere caricato.",
 	"select.by.id": "Seleziona tramite ID",
 	"update.project.version": "La versione del progetto è {{currentVersion}}, devi convertirla in {{newVersion}} per continuare.",
 	"plugins.manager": "Gestore plugin",

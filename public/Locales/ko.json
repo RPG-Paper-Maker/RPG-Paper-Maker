@@ -1842,6 +1842,7 @@
 	"introduction": "소개",
 	"edit.object": "오브젝트 편집",
 	"warning.asset.selection": "확인하려면 왼쪽 목록에서 에셋을 선택하세요.",
+	"warning.asset.not.found": "에셋 파일을 찾거나 로드할 수 없습니다.",
 	"select.by.id": "ID로 선택",
 	"update.project.version": "프로젝트 버전은 {{currentVersion}}이며, 계속하려면 {{newVersion}}(으)로 변환해야 합니다.",
 	"plugins.manager": "플러그인 관리자",

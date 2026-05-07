@@ -1842,6 +1842,7 @@
 	"introduction": "介绍",
 	"edit.object": "编辑物体",
 	"warning.asset.selection": "请在左侧列表中选择一个资产以确认。",
+	"warning.asset.not.found": "找不到或无法加载资产文件。",
 	"select.by.id": "按 ID 选择",
 	"update.project.version": "项目版本为 {{currentVersion}}，你需要转换为 {{newVersion}} 才能继续。",
 	"plugins.manager": "插件管理器",

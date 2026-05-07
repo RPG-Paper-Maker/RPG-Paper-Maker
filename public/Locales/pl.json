@@ -1841,6 +1841,7 @@
 	"introduction": "wprowadzenie",
 	"edit.object": "Edytuj obiekt",
 	"warning.asset.selection": "Wybierz zasób z listy po lewej stronie, aby potwierdzić.",
+	"warning.asset.not.found": "Plik zasobu nie mógł zostać znaleziony lub załadowany.",
 	"select.by.id": "Wybierz według ID",
 	"update.project.version": "Wersja projektu to {{currentVersion}}, musisz przekonwertować na {{newVersion}}, aby kontynuować.",
 	"plugins.manager": "Menedżer wtyczek",
