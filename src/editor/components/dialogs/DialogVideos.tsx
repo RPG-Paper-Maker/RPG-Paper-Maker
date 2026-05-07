@@ -96,6 +96,10 @@ function DialogVideos({
 				playerRef.current.onloadeddata = () => {
 					setLoading(false);
 				};
+				sourceRef.current.onerror = () => {
+					setLoading(false);
+					dispatch(showWarning(t('warning.asset.not.found')));
+				};
 			}
 		} else {
 			setLoading(false);
