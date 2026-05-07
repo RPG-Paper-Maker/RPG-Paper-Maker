@@ -635,8 +635,7 @@ ipcMain.handle('create-folder', async (event, path) => {
 	await createFolder(path);
 });
 
-const retryOnPermError = async (fn, extraCodes = []) => {
-	const maxAttempts = 5;
+const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5) => {
 	let lastError;
 	for (let attempt = 0; attempt < maxAttempts; attempt++) {
 		try {
@@ -688,7 +687,7 @@ ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
 });
 
 ipcMain.handle('create-file', async (event, filePath, content) => {
-	await retryOnPermError(() => fs.writeFile(filePath, content), ['ENOENT']);
+	await retryOnPermError(() => fs.writeFile(filePath, content), ['ENOENT'], 20);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
