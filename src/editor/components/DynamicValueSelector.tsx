@@ -40,6 +40,7 @@ type Props = {
 	addNoneOption?: boolean;
 	fillWidth?: boolean;
 	isTextarea?: boolean;
+	disableParametersProperties?: boolean;
 };
 
 function DynamicValueSelector({
@@ -54,6 +55,7 @@ function DynamicValueSelector({
 	addNoneOption = false,
 	fillWidth = false,
 	isTextarea = false,
+	disableParametersProperties = false,
 }: Props) {
 	const { t } = useTranslation();
 	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
@@ -283,10 +285,10 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.VARIABLE_PARAM_PROP:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY_PARAM_PROP:
-				if (Project.current!.currentMapObjectParameters.length > 0) {
+				if (!disableParametersProperties && Project.current!.currentMapObjectParameters.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
 				}
-				if (Project.current!.currentMapObjectProperties.length > 0) {
+				if (!disableParametersProperties && Project.current!.currentMapObjectProperties.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PROPERTY);
 				}
 				break;

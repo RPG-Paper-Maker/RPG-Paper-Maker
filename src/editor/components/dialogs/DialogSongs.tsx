@@ -51,6 +51,7 @@ type Props = {
 	onAccept?: (song: Model.Song) => void;
 	onReject?: () => void;
 	active?: boolean;
+	disableParametersProperties?: boolean;
 	displayOptions?: boolean;
 	songOptions?: Model.PlaySong;
 };
@@ -64,6 +65,7 @@ function DialogSongs({
 	onAccept,
 	onReject,
 	active = false,
+	disableParametersProperties = false,
 	displayOptions = false,
 	songOptions,
 }: Props) {
@@ -423,6 +425,7 @@ function DialogSongs({
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
 						active={active}
+						disableParametersProperties={disableParametersProperties}
 						basePath={Model.Song.getLocalFolder(selectedKind)}
 						importTypes='audio/mp3, audio/ogg, audio/wav'
 					/>

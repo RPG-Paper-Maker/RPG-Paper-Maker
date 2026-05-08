@@ -48,6 +48,7 @@ type Props = {
 	content?: ReactNode;
 	options?: ReactNode;
 	active?: boolean;
+	disableParametersProperties?: boolean;
 	basePath?: string;
 	importTypes?: string;
 };
@@ -72,6 +73,7 @@ function PanelAssetsPreviewer({
 	content,
 	options,
 	active = false,
+	disableParametersProperties = false,
 	basePath,
 	importTypes,
 }: Props) {
@@ -377,6 +379,7 @@ function PanelAssetsPreviewer({
 									value={dynamicValueID}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 									disabled={!isCheckedActivated}
+									disableParametersProperties={disableParametersProperties}
 								/>
 							</Flex>
 						)}

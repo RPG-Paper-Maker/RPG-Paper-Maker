@@ -46,6 +46,7 @@ type Props = {
 	onChange?: (id: number, indexX: number, indexY: number) => void;
 	disabled?: boolean;
 	active?: boolean;
+	disableParametersProperties?: boolean;
 };
 
 const DEFAULT_PICTURE_KIND = PICTURE_KIND.PICTURES;
@@ -63,6 +64,7 @@ function AssetSelector({
 	onChange,
 	disabled = false,
 	active = false,
+	disableParametersProperties = false,
 }: Props) {
 	const getSelectedID = () =>
 		selectedDynamic && selectedDynamic.kind === DYNAMIC_VALUE_KIND.NUMBER
@@ -186,6 +188,7 @@ function AssetSelector({
 							setIsOpen={setIsOpen}
 							onAccept={handleAcceptSong}
 							active={active}
+							disableParametersProperties={disableParametersProperties}
 						/>
 					);
 				case ASSET_SELECTOR_TYPE.VIDEOS:
