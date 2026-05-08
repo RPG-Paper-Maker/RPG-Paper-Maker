@@ -226,22 +226,8 @@ const PanelSystem = forwardRef((props, ref) => {
 							setFocustFirst={setFocustFirst}
 						/>
 					</Flex>
-					<Groupbox title={t('game.native.resolution')}>
+					<Groupbox title={t('game.resolution')}>
 						<Flex column spacedLarge>
-							<Flex column spaced>
-								<Flex spaced>
-									<Flex one>{t('width')}:</Flex>
-									<Flex one>{t('height')}:</Flex>
-								</Flex>
-								<Flex spaced>
-									<Flex one>
-										<InputNumber value={windowWidth} onChange={setWindowWidth} />
-									</Flex>
-									<Flex one>
-										<InputNumber value={windowHeight} onChange={setWindowHeight} />
-									</Flex>
-								</Flex>
-							</Flex>
 							<Dropdown
 								selectedID={screenWindow}
 								onChange={setScreenWindow}
@@ -249,6 +235,26 @@ const PanelSystem = forwardRef((props, ref) => {
 								translateOptions
 								fillWidth
 							/>
+							{screenWindow !== 1 && (
+								<Flex column spaced>
+									<Flex spaced>
+										<Flex one>{t('width')}:</Flex>
+										<Flex one>{t('height')}:</Flex>
+									</Flex>
+									<Flex spaced>
+										<Flex one>
+											<InputNumber value={windowWidth} onChange={setWindowWidth} />
+										</Flex>
+										<Flex one>
+											<InputNumber value={windowHeight} onChange={setWindowHeight} />
+										</Flex>
+									</Flex>
+								</Flex>
+							)}
+							<Flex spaced centerV>
+								<div>{t('native.resolution')}: 1280x720</div>
+								<TooltipInformation text={t('tooltip.native.resolution')} />
+							</Flex>
 							<Checkbox isChecked={antialias} onChange={setAntialias}>
 								{t('antialiasing')}
 							</Checkbox>
