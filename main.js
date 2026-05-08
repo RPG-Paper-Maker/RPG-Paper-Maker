@@ -120,15 +120,9 @@ async function extractTarGz(tarPath, destDir) {
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
-	if (process.arch === 'arm64') {
-		// Apple Silicon: Metal works well
-		app.commandLine.appendSwitch('use-angle', 'metal');
-		app.commandLine.appendSwitch('use-gl', 'angle');
-		app.commandLine.appendSwitch('enable-features', 'Metal');
-	} else {
-		// Intel Mac: Metal/ANGLE causes BindToCurrentSequence failures, fall back to OpenGL
-		app.commandLine.appendSwitch('use-angle', 'gl');
-	}
+	app.commandLine.appendSwitch('use-angle', 'metal');
+	app.commandLine.appendSwitch('use-gl', 'angle');
+	app.commandLine.appendSwitch('enable-features', 'Metal');
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
 	app.commandLine.appendSwitch('use-angle', 'vulkan');
