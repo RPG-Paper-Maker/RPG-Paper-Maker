@@ -126,12 +126,12 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 			{dataURL && !disabled && (
 				<img
 					src={dataURL}
-					style={{ maxWidth: '100%', width: `${WIDTH}px`, aspectRatio: `${WIDTH} / ${HEIGHT}` }}
+					style={{ maxWidth: '100%', width: `${WIDTH / 2}px`, aspectRatio: `${WIDTH} / ${HEIGHT}` }}
 					alt='trooppreview'
 				/>
 			)}
 			{disabled && (
-				<div style={{ maxWidth: '100%', width: `${WIDTH}px`, aspectRatio: `${WIDTH} / ${HEIGHT}` }} />
+				<div style={{ maxWidth: '100%', width: `${WIDTH / 2}px`, aspectRatio: `${WIDTH} / ${HEIGHT}` }} />
 			)}
 		</>
 	);

@@ -145,7 +145,7 @@ function DialogData({ setIsOpen }: Props) {
 			isOpen
 			footer={<FooterCancelSaveClose onCancel={handleReject} onSave={handleSave} onSaveAndClose={handleAccept} />}
 			onClose={handleReject}
-			initialWidth={window.innerWidth <= 1700 ? '100%' : '1700px'}
+			initialWidth={window.innerWidth <= 1200 ? '100%' : '1200px'}
 			initialHeight='calc(100% - 50px)'
 		>
 			<Tab
