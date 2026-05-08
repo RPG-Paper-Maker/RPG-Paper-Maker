@@ -155,6 +155,8 @@
 	"depth": "깊이",
 	"music": "음악",
 	"background.sound": "배경음",
+	"keep.current": "현재 유지",
+	"keep.current.description": "맵에 입장하기 전에 마지막으로 재생된 음악을 계속 재생합니다",
 	"sky": "하늘",
 	"color": "색상",
 	"skybox.id": "스카이박스 ID",

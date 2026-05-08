@@ -155,6 +155,8 @@
 	"depth": "Tiefe",
 	"music": "Musik",
 	"background.sound": "Hintergrund-Sound",
+	"keep.current": "Aktuellen behalten",
+	"keep.current.description": "Die zuletzt gespielte Musik vor dem Betreten der Karte weiterspielen",
 	"sky": "Himmel",
 	"color": "Farbe",
 	"skybox.id": "Skybox ID",

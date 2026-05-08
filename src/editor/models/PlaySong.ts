@@ -22,6 +22,7 @@ class PlaySong extends Base {
 	public start!: DynamicValue;
 	public isEnd!: boolean;
 	public end!: DynamicValue;
+	public isKeepCurrent = false;
 
 	public static bindings: BindingType[] = [
 		['volume', 'v', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
@@ -29,6 +30,7 @@ class PlaySong extends Base {
 		['start', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isEnd', 'ie', undefined, BINDING.BOOLEAN],
 		['end', 'e', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['isKeepCurrent', 'ikc', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -52,6 +54,7 @@ class PlaySong extends Base {
 		super.copy(playSong, PlaySong.getBindings([]));
 		this.songID = playSong.songID.clone();
 		this.kind = playSong.kind;
+		this.isKeepCurrent = playSong.isKeepCurrent;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

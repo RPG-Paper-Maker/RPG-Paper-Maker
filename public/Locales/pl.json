@@ -155,6 +155,8 @@
 	"depth": "Głębokość",
 	"music": "Muzyka",
 	"background.sound": "Dźwięk otoczenia",
+	"keep.current": "Zachowaj bieżący",
+	"keep.current.description": "Kontynuuj odtwarzanie ostatnio odtwarzanej muzyki przed wejściem na mapę",
 	"sky": "Panorama",
 	"color": "Kolor",
 	"skybox.id": "Panorama ID",

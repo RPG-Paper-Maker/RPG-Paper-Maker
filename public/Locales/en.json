@@ -155,6 +155,8 @@
 	"depth": "Depth",
 	"music": "Music",
 	"background.sound": "Background sound",
+	"keep.current": "Keep current",
+	"keep.current.description": "Keep playing the last played music before entering the map",
 	"sky": "Sky",
 	"color": "Color",
 	"skybox.id": "Skybox ID",

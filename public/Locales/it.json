@@ -155,6 +155,8 @@
 	"depth": "Profondità",
 	"music": "Musica",
 	"background.sound": "Suono di sottofondo",
+	"keep.current": "Mantieni attuale",
+	"keep.current.description": "Continua a riprodurre l'ultima musica riprodotta prima di entrare nella mappa",
 	"sky": "Cielo",
 	"color": "Colore",
 	"skybox.id": "ID Skybox",

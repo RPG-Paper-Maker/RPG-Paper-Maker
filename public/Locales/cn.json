@@ -155,6 +155,8 @@
 	"depth": "深度",
 	"music": "音乐",
 	"background.sound": "背景音",
+	"keep.current": "保持当前",
+	"keep.current.description": "继续播放进入地图前最后播放的音乐",
 	"sky": "天空",
 	"color": "颜色",
 	"skybox.id": "天空盒 ID",

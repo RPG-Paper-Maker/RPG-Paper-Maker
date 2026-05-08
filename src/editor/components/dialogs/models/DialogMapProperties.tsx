@@ -254,13 +254,14 @@ function DialogMapProperties({ setIsOpen, model, onAccept }: Props) {
 					<Form>
 						<Label>{t('music')}</Label>
 						<Value>
-							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} />
+							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} showKeepCurrent />
 						</Value>
 						<Label>{t('background.sound')}</Label>
 						<Value>
 							<PlaySongSelector
 								songKind={SONG_KIND.BACKGROUND_SOUND}
 								ref={playBackgroundSoundSelectorRef}
+								showKeepCurrent
 							/>
 						</Value>
 						<Label>{t('camera.properties.id')}</Label>

@@ -155,6 +155,8 @@
 	"depth": "奥行き",
 	"music": "BGM",
 	"background.sound": "BGS",
+	"keep.current": "現在を維持",
+	"keep.current.description": "マップに入る前に最後に再生された音楽を引き続き再生します",
 	"sky": "空",
 	"color": "色",
 	"skybox.id": "スカイボックスID",

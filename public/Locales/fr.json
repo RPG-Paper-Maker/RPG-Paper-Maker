@@ -155,6 +155,8 @@
 	"depth": "Profondeur",
 	"music": "Musique",
 	"background.sound": "Fond sonore",
+	"keep.current": "Conserver l'actuel",
+	"keep.current.description": "Continuer à jouer la dernière musique jouée avant d'entrer sur la carte",
 	"sky": "Ciel",
 	"color": "Couleur",
 	"skybox.id": "Skybox d'ID",
