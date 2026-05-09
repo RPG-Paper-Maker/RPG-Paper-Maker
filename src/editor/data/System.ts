@@ -150,8 +150,8 @@ class System extends Serializable {
 		['soundImpossible', 'si', undefined, BINDING.OBJECT, Model.PlaySong],
 		['dialogBoxbOptions', 'dbo', undefined, BINDING.OBJECT, Model.MapObjectCommand],
 		['facesetsSize', 'facesetsSize', 128, BINDING.NUMBER],
-		['facesetScalingWidth', 'facesetScalingWidth', 120, BINDING.NUMBER],
-		['facesetScalingHeight', 'facesetScalingHeight', 120, BINDING.NUMBER],
+		['facesetScalingWidth', 'facesetScalingWidth', 128, BINDING.NUMBER],
+		['facesetScalingHeight', 'facesetScalingHeight', 128, BINDING.NUMBER],
 		['iconsSize', 'iconsSize', 16, BINDING.NUMBER],
 		['saveSlots', 'saveSlots', 4, BINDING.NUMBER],
 		[
