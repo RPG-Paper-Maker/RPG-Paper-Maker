@@ -1,183 +1,216 @@
 {
 	"status": [
 		{
-			"battlerPosition": { "k": 3, "v": 8 },
 			"id": 1,
-			"isReleaseIfDead": false,
+			"name": "KO",
 			"names": { "1": "KO" },
+			"pid": 2,
 			"pictureIndexX": 2,
 			"pictureIndexY": 4,
-			"pid": 2,
+			"restrictionKind": 1,
 			"priority": { "k": 3, "v": 999 },
-			"restrictionKind": 1
+			"battlerPosition": { "k": 3, "v": 8 },
+			"isReleaseIfDead": false,
+			"releaseStartTurn": [],
+			"effects": [],
+			"characteristics": []
 		},
 		{
-			"effects": [
-				{ "df": { "k": 8, "v": "5 * t.maxhp / 100" }, "dmin": { "k": 8, "v": "0" }, "dsid": { "k": 7, "v": 3 } }
-			],
 			"id": 2,
+			"name": "Poisoned",
+			"names": { "1": "Poisoned" },
+			"pid": 2,
+			"pictureIndexX": 1,
+			"pictureIndexY": 4,
+			"releaseStartTurn": [],
 			"messageAllyAffected": { "k": 8, "v": "[target] poisoned!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target] poisoned!" },
 			"messageStatusHealed": { "k": 8, "v": "Poison healed" },
-			"names": { "1": "Poisoned" },
-			"pictureIndexX": 1,
-			"pictureIndexY": 4,
-			"pid": 2
+			"effects": [{ "dsid": { "k": 7, "v": 3 }, "df": { "k": 8, "v": "5 * t.maxhp / 100" } }],
+			"characteristics": []
 		},
 		{
-			"effects": [
-				{ "df": { "k": 8, "v": "5 * t.maxhp / 100" }, "dmin": { "k": 8, "v": "0" }, "dsid": { "k": 7, "v": 3 } }
-			],
 			"id": 3,
-			"messageAllyAffected": { "k": 8, "v": "[target] burnt!" },
-			"messageEnemyAffected": { "k": 8, "v": "[target] burnt!" },
-			"messageStatusHealed": { "k": 8, "v": "Burn healed" },
+			"name": "Burnt",
 			"names": { "1": "Burnt" },
+			"pid": 2,
 			"pictureIndexX": 2,
 			"pictureIndexY": 3,
-			"pid": 2
+			"releaseStartTurn": [],
+			"messageAllyAffected": { "k": 8, "v": "[target] burnt!" },
+			"messageEnemyAffected": { "k": 8, "v": "[target] burnt!" },
+			"messageStatusHealed": { "k": 8, "v": "message.burnt.heal" },
+			"effects": [{ "dsid": { "k": 7, "v": 3 }, "df": { "k": 8, "v": "5 * t.maxhp / 100" } }],
+			"characteristics": []
 		},
 		{
 			"id": 4,
+			"name": "Paralyzed",
+			"names": { "1": "Paralyzed" },
+			"pid": 2,
+			"pictureIndexX": 4,
+			"pictureIndexY": 3,
+			"restrictionKind": 1,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "chance": { "k": 12, "v": 50 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target] paralyzed!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target] paralyzed!" },
 			"messageStatusHealed": { "k": 8, "v": "Paralyzation healed" },
-			"names": { "1": "Paralyzed" },
-			"pictureIndexX": 4,
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 50 }, "id": -1, "name": "" }],
-			"restrictionKind": 1
+			"effects": [],
+			"characteristics": []
 		},
 		{
 			"id": 5,
+			"name": "Confused",
+			"names": { "1": "Confused" },
+			"pid": 2,
+			"pictureIndexY": 4,
+			"restrictionKind": 6,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "chance": { "k": 12, "v": 50 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target]  confused!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target]  confused!" },
-			"messageStatusHealed": { "k": 8, "v": "Confusion healed" },
-			"names": { "1": "Confused" },
-			"pictureIndexY": 4,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 50 }, "id": -1, "name": "" }],
-			"restrictionKind": 6
+			"messageStatusHealed": { "k": 8, "v": "message.confused.heal" },
+			"effects": [],
+			"characteristics": []
 		},
 		{
 			"id": 6,
+			"name": "Muted",
+			"names": { "1": "Muted" },
+			"pid": 2,
+			"pictureIndexX": 3,
+			"pictureIndexY": 4,
+			"restrictionKind": 2,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "chance": { "k": 12, "v": 50 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target]  muted!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target]  muted!" },
 			"messageStatusHealed": { "k": 8, "v": "Mute healed" },
-			"names": { "1": "Muted" },
-			"pictureIndexX": 3,
-			"pictureIndexY": 4,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 50 }, "id": -1, "name": "" }],
-			"restrictionKind": 2
+			"effects": [],
+			"characteristics": []
 		},
 		{
 			"id": 7,
+			"name": "Sleeping",
+			"names": { "1": "Sleeping" },
+			"pid": 2,
+			"pictureIndexX": 3,
+			"pictureIndexY": 3,
+			"restrictionKind": 1,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "chance": { "k": 12, "v": 50 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target]  sleeping!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target]  sleeping!" },
 			"messageStatusHealed": { "k": 8, "v": "[target]  woke up" },
-			"names": { "1": "Sleeping" },
-			"pictureIndexX": 3,
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 50 }, "id": -1, "name": "" }],
-			"restrictionKind": 1
+			"effects": [],
+			"characteristics": []
 		},
 		{
-			"characteristics": [{ "iid": false, "svid": { "k": 7, "v": 12 } }],
 			"id": 8,
+			"name": "Blind",
+			"names": { "1": "Blind" },
+			"pid": 2,
+			"pictureIndexX": 4,
+			"pictureIndexY": 4,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "chance": { "k": 12, "v": 50 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target]  blind!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target]  blind!" },
 			"messageStatusHealed": { "k": 8, "v": "Blind healed" },
-			"names": { "1": "Blind" },
-			"pictureIndexX": 3,
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 50 }, "id": -1, "name": "" }]
+			"effects": [],
+			"characteristics": [{ "iid": false, "svid": { "k": 7, "v": 12 } }]
 		},
 		{
-			"characteristics": [{ "o": false, "svid": { "k": 7, "v": 8 }, "v": { "k": 3, "v": 50 } }],
 			"id": 9,
-			"isReleaseAtEndBattle": true,
-			"isReleaseStartTurn": true,
+			"name": "Power",
 			"names": { "1": "Power" },
-			"pictureIndexY": 3,
 			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 100 }, "id": -1, "name": "", "turn": { "k": 3, "v": 5 } }]
+			"pictureIndexY": 3,
+			"isReleaseAtEndBattle": true,
+			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "turn": { "k": 3, "v": 5 }, "chance": { "k": 12, "v": 100 } }],
+			"effects": [],
+			"characteristics": [{ "svid": { "k": 7, "v": 8 }, "o": false, "v": { "k": 3, "v": 50 } }]
 		},
 		{
-			"characteristics": [{ "o": false, "svid": { "k": 7, "v": 8 }, "v": { "k": 3, "v": 150 } }],
 			"id": 10,
-			"isReleaseAtEndBattle": true,
-			"isReleaseStartTurn": true,
+			"name": "War Cry",
 			"names": { "1": "War Cry" },
-			"pictureIndexY": 3,
 			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 100 }, "id": -1, "name": "", "turn": { "k": 3, "v": 3 } }]
-		},
-		{
-			"characteristics": [{ "o": false, "svid": { "k": 7, "v": 8 }, "v": { "k": 3, "v": 25 } }],
-			"id": 11,
-			"isReleaseAtEndBattle": true,
-			"names": { "1": "Concentration" },
 			"pictureIndexY": 3,
-			"pid": 2
-		},
-		{
-			"characteristics": [
-				{ "iid": false, "o": false, "svid": { "k": 7, "v": 8 }, "v": { "k": 3, "v": -20 } },
-				{ "iid": false, "o": false, "svid": { "k": 7, "v": 9 }, "v": { "k": 3, "v": -20 } }
-			],
-			"id": 12,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "turn": { "k": 3, "v": 3 }, "chance": { "k": 12, "v": 100 } }],
+			"effects": [],
+			"characteristics": [{ "svid": { "k": 7, "v": 8 }, "o": false, "v": { "k": 3, "v": 150 } }]
+		},
+		{
+			"id": 11,
+			"name": "Concentration",
+			"names": { "1": "Concentration" },
+			"pid": 2,
+			"pictureIndexY": 3,
+			"isReleaseAtEndBattle": true,
+			"releaseStartTurn": [],
+			"effects": [],
+			"characteristics": [{ "svid": { "k": 7, "v": 8 }, "o": false, "v": { "k": 3, "v": 25 } }]
+		},
+		{
+			"id": 12,
+			"name": "Weakened",
+			"names": { "1": "Weakened" },
+			"pid": 2,
+			"pictureIndexX": 1,
+			"pictureIndexY": 3,
+			"isReleaseAtEndBattle": true,
+			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "turn": { "k": 3, "v": 3 }, "chance": { "k": 12, "v": 100 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target] weakened!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target] weakened!" },
-			"names": { "1": "Weakened" },
-			"pictureIndexX": 1,
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 100 }, "id": -1, "name": "", "turn": { "k": 3, "v": 3 } }]
+			"effects": [],
+			"characteristics": [
+				{ "iid": false, "svid": { "k": 7, "v": 8 }, "o": false, "v": { "k": 3, "v": -20 } },
+				{ "iid": false, "svid": { "k": 7, "v": 9 }, "o": false, "v": { "k": 3, "v": -20 } }
+			]
 		},
 		{
-			"characteristics": [
-				{ "iid": false, "o": false, "svid": { "k": 7, "v": 10 }, "v": { "k": 3, "v": -10 } },
-				{ "iid": false, "o": false, "svid": { "k": 7, "v": 11 }, "v": { "k": 3, "v": -10 } }
-			],
 			"id": 13,
+			"name": "Broken",
+			"names": { "1": "Broken" },
+			"pid": 2,
+			"pictureIndexX": 1,
+			"pictureIndexY": 3,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
+			"releaseStartTurn": [{ "id": -1, "turn": { "k": 3, "v": 3 }, "chance": { "k": 12, "v": 100 } }],
 			"messageAllyAffected": { "k": 8, "v": "[target] broken!" },
 			"messageEnemyAffected": { "k": 8, "v": "[target] broken!" },
-			"names": { "1": "Broken" },
-			"pictureIndexX": 1,
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 100 }, "id": -1, "name": "", "turn": { "k": 3, "v": 3 } }]
+			"effects": [],
+			"characteristics": [
+				{ "iid": false, "svid": { "k": 7, "v": 10 }, "o": false, "v": { "k": 3, "v": -10 } },
+				{ "iid": false, "svid": { "k": 7, "v": 11 }, "o": false, "v": { "k": 3, "v": -10 } }
+			]
 		},
 		{
-			"characteristics": [
-				{ "o": false, "svid": { "k": 7, "v": 10 }, "v": { "k": 3, "v": 10 } },
-				{ "o": false, "svid": { "k": 7, "v": 11 }, "v": { "k": 3, "v": 10 } }
-			],
 			"id": 14,
+			"name": "Barrier",
+			"names": { "1": "Barrier" },
+			"pid": 2,
+			"pictureIndexY": 3,
 			"isReleaseAtEndBattle": true,
 			"isReleaseStartTurn": true,
-			"names": { "1": "Barrier" },
-			"pictureIndexY": 3,
-			"pid": 2,
-			"releaseStartTurn": [{ "chance": { "k": 12, "v": 100 }, "id": -1, "name": "", "turn": { "k": 3, "v": 5 } }]
+			"releaseStartTurn": [{ "id": -1, "turn": { "k": 3, "v": 5 }, "chance": { "k": 12, "v": 100 } }],
+			"effects": [],
+			"characteristics": [
+				{ "svid": { "k": 7, "v": 10 }, "o": false, "v": { "k": 3, "v": 10 } },
+				{ "svid": { "k": 7, "v": 11 }, "o": false, "v": { "k": 3, "v": 10 } }
+			]
 		}
 	]
 }
