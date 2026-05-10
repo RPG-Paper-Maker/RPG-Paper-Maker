@@ -49,7 +49,8 @@ class System extends Serializable {
 	public soundCancel!: Model.PlaySong;
 	public soundImpossible!: Model.PlaySong;
 	public dialogBoxbOptions!: Model.MapObjectCommand;
-	public facesetsSize!: number;
+	public facesetsSizeWidth!: number;
+	public facesetsSizeHeight!: number;
 	public facesetScalingWidth!: number;
 	public facesetScalingHeight!: number;
 	public iconsSize!: number;
@@ -149,7 +150,8 @@ class System extends Serializable {
 		['soundCancel', 'sca', undefined, BINDING.OBJECT, Model.PlaySong],
 		['soundImpossible', 'si', undefined, BINDING.OBJECT, Model.PlaySong],
 		['dialogBoxbOptions', 'dbo', undefined, BINDING.OBJECT, Model.MapObjectCommand],
-		['facesetsSize', 'facesetsSize', 128, BINDING.NUMBER],
+		['facesetsSizeWidth', 'facesetsSizeWidth', 128, BINDING.NUMBER],
+		['facesetsSizeHeight', 'facesetsSizeHeight', 128, BINDING.NUMBER],
 		['facesetScalingWidth', 'facesetScalingWidth', 128, BINDING.NUMBER],
 		['facesetScalingHeight', 'facesetScalingHeight', 128, BINDING.NUMBER],
 		['iconsSize', 'iconsSize', 16, BINDING.NUMBER],

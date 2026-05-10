@@ -295,15 +295,16 @@ function DialogPictures({
 					);
 				}
 				case PICTURE_KIND.FACESETS: {
-					const size = Project.current!.systems.facesetsSize / Project.SQUARE_SIZE / 2;
+					const squareW = Project.current!.systems.facesetsSizeWidth / Project.SQUARE_SIZE / 2;
+					const squareH = Project.current!.systems.facesetsSizeHeight / Project.SQUARE_SIZE / 2;
 					return (
 						<TextureSquareSelector
 							texture={path}
 							canChangeSize={false}
 							divideWidth={2}
 							divideHeight={2}
-							squareWidth={size}
-							squareHeight={size}
+							squareWidth={squareW}
+							squareHeight={squareH}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
 							base64={!selectedPicture.isBR}

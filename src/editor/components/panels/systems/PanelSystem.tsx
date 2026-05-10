@@ -24,12 +24,12 @@ import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
-import TooltipInformation from '../../TooltipInformation';
 import Groupbox from '../../Groupbox';
 import InputLocalization from '../../InputLocalization';
 import InputNumber from '../../InputNumber';
 import InputText from '../../InputText';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
+import TooltipInformation from '../../TooltipInformation';
 import Tree from '../../Tree';
 import DialogEnterNameOptions from '../../dialogs/DialogEnterNameOptions';
 import DialogCommandSetDialogBoxOptions from '../../dialogs/commands/DialogCommandSetDialogBoxOptions';
@@ -69,7 +69,8 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [autotilesFrames, setAutotilesFrames] = useStateNumber();
 	const [autotilesFrameDuration, setAutotilesFrameDuration] = useStateNumber();
 	const [dialogBoxbOptions] = useState(new Model.MapObjectCommand());
-	const [facesetsSize, setFacesetsSize] = useStateNumber();
+	const [facesetsSizeWidth, setFacesetsSizeWidth] = useStateNumber();
+	const [facesetsSizeHeight, setFacesetsSizeHeight] = useStateNumber();
 	const [facesetScalingWidth, setFacesetScalingWidth] = useStateNumber();
 	const [facesetScalingHeight, setFacesetScalingHeight] = useStateNumber();
 	const [iconsSize, setIconsSize] = useStateNumber();
@@ -119,7 +120,8 @@ const PanelSystem = forwardRef((props, ref) => {
 		playCancelSoundSelectorRef.current?.initialize(systems.soundCancel);
 		playImpossibleSoundSelectorRef.current?.initialize(systems.soundImpossible);
 		dialogBoxbOptions.copy(systems.dialogBoxbOptions);
-		setFacesetsSize(systems.facesetsSize);
+		setFacesetsSizeWidth(systems.facesetsSizeWidth);
+		setFacesetsSizeHeight(systems.facesetsSizeHeight);
 		setFacesetScalingWidth(systems.facesetScalingWidth);
 		setFacesetScalingHeight(systems.facesetScalingHeight);
 		setIconsSize(systems.iconsSize);
@@ -185,7 +187,8 @@ const PanelSystem = forwardRef((props, ref) => {
 		playCancelSoundSelectorRef.current!.accept(systems.soundCancel);
 		playImpossibleSoundSelectorRef.current!.accept(systems.soundImpossible);
 		systems.dialogBoxbOptions.copy(dialogBoxbOptions);
-		systems.facesetsSize = facesetsSize;
+		systems.facesetsSizeWidth = facesetsSizeWidth;
+		systems.facesetsSizeHeight = facesetsSizeHeight;
 		systems.facesetScalingWidth = facesetScalingWidth;
 		systems.facesetScalingHeight = facesetScalingHeight;
 		systems.iconsSize = iconsSize;
@@ -236,18 +239,14 @@ const PanelSystem = forwardRef((props, ref) => {
 								fillWidth
 							/>
 							{screenWindow !== 1 && (
-								<Flex column spaced>
-									<Flex spaced>
-										<Flex one>{t('width')}:</Flex>
-										<Flex one>{t('height')}:</Flex>
+								<Flex spacedLarge>
+									<Flex column spaced>
+										<div>{t('width')}:</div>
+										<InputNumber value={windowWidth} onChange={setWindowWidth} />
 									</Flex>
-									<Flex spaced>
-										<Flex one>
-											<InputNumber value={windowWidth} onChange={setWindowWidth} />
-										</Flex>
-										<Flex one>
-											<InputNumber value={windowHeight} onChange={setWindowHeight} />
-										</Flex>
+									<Flex column spaced>
+										<div>{t('height')}:</div>
+										<InputNumber value={windowHeight} onChange={setWindowHeight} />
 									</Flex>
 								</Flex>
 							)}
@@ -428,21 +427,33 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Flex>
 							<Flex column spaced>
 								<div>
-									{t('facesets.size')} ({t('in.px')}):
+									{t('faceset.size')} ({t('in.px')}):
 								</div>
-								<InputNumber value={facesetsSize} onChange={setFacesetsSize} />
+								<Flex spacedLarge>
+									<Flex column spaced>
+										<div>{t('width')}:</div>
+										<InputNumber value={facesetsSizeWidth} onChange={setFacesetsSizeWidth} />
+									</Flex>
+									<Flex column spaced>
+										<div>{t('height')}:</div>
+										<InputNumber value={facesetsSizeHeight} onChange={setFacesetsSizeHeight} />
+									</Flex>
+								</Flex>
 							</Flex>
 							<Flex column spaced>
 								<div>
-									{t('faceset.scaling.width')} ({t('in.px')}):
+									{t('faceset.scaling')} ({t('in.px')}):
 								</div>
-								<InputNumber value={facesetScalingWidth} onChange={setFacesetScalingWidth} />
-							</Flex>
-							<Flex column spaced>
-								<div>
-									{t('faceset.scaling.height')} ({t('in.px')}):
-								</div>
-								<InputNumber value={facesetScalingHeight} onChange={setFacesetScalingHeight} />
+								<Flex spacedLarge>
+									<Flex column spaced>
+										<div>{t('width')}:</div>
+										<InputNumber value={facesetScalingWidth} onChange={setFacesetScalingWidth} />
+									</Flex>
+									<Flex column spaced>
+										<div>{t('height')}:</div>
+										<InputNumber value={facesetScalingHeight} onChange={setFacesetScalingHeight} />
+									</Flex>
+								</Flex>
 							</Flex>
 							<Flex column spaced>
 								<div>

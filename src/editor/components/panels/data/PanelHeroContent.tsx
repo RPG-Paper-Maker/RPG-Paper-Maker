@@ -162,10 +162,10 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 									base64={!Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, facesetID)?.isBR}
 									sourceRectangle={
 										new Rectangle(
-											Project.current!.systems.facesetsSize * facesetIndexX,
-											Project.current!.systems.facesetsSize * facesetIndexY,
-											Project.current!.systems.facesetsSize,
-											Project.current!.systems.facesetsSize,
+											Project.current!.systems.facesetsSizeWidth * facesetIndexX,
+											Project.current!.systems.facesetsSizeHeight * facesetIndexY,
+											Project.current!.systems.facesetsSizeWidth,
+											Project.current!.systems.facesetsSizeHeight,
 										)
 									}
 									scale={1}
