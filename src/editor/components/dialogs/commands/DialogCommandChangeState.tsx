@@ -18,6 +18,7 @@ import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
+import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -42,6 +43,7 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 	const [objectsList, setObjectsList] = useState<Model.Base[]>([]);
 	const [stateID] = useStateDynamicValue();
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
+	const [dontChangeOrientation, setDontChangeOrientation] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = async () => {
@@ -52,12 +54,14 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 			objectID.updateCommand(list, iterator);
 			stateID.updateCommand(list, iterator);
 			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
+			setDontChangeOrientation(Utils.initializeBoolCommand(list, iterator));
 		} else {
 			setObjectsList(Scene.Map.getCurrentMapObjectsList());
 			mapID.updateToDefaultDatabase(-1);
 			objectID.updateToDefaultDatabase(-1);
 			stateID.updateToDefaultDatabase(Project.current!.commonEvents.states);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.REPLACE);
+			setDontChangeOrientation(false);
 		}
 		setTrigger((v) => !v);
 	};
@@ -100,6 +104,7 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 		objectID.getCommand(newList);
 		stateID.getCommand(newList);
 		newList.push(selectionOperationType);
+		newList.push(Utils.boolToNum(dontChangeOrientation));
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -154,13 +159,18 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 					</Flex>
 				</Groupbox>
 				<Groupbox title={t('operation')}>
-					<RadioGroup selected={selectionOperationType} onChange={setSelectionOperationType}>
-						<Flex column spacedLarge>
-							<RadioButton value={SELECTION_OPERATION_TYPE.REPLACE}>{t('replace')}</RadioButton>
-							<RadioButton value={SELECTION_OPERATION_TYPE.ADD}>{t('add')}</RadioButton>
-							<RadioButton value={SELECTION_OPERATION_TYPE.REMOVE}>{t('remove')}</RadioButton>
-						</Flex>
-					</RadioGroup>
+					<Flex column spacedLarge>
+						<RadioGroup selected={selectionOperationType} onChange={setSelectionOperationType}>
+							<Flex column spacedLarge>
+								<RadioButton value={SELECTION_OPERATION_TYPE.REPLACE}>{t('replace')}</RadioButton>
+								<RadioButton value={SELECTION_OPERATION_TYPE.ADD}>{t('add')}</RadioButton>
+								<RadioButton value={SELECTION_OPERATION_TYPE.REMOVE}>{t('remove')}</RadioButton>
+							</Flex>
+						</RadioGroup>
+						<Checkbox isChecked={dontChangeOrientation} onChange={setDontChangeOrientation}>
+							{t('dont.change.orientation')}
+						</Checkbox>
+					</Flex>
 				</Groupbox>
 			</Flex>
 		</Dialog>
