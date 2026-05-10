@@ -34,6 +34,7 @@ function TextureCharacterSelector({
 	base64 = false,
 }: Props) {
 	const divideSize = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
+	const frames = Project.current!.systems.FRAMES;
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
 
 	return (
@@ -42,7 +43,7 @@ function TextureCharacterSelector({
 			canChangeSize={false}
 			divideWidth={divideSize}
 			divideHeight={divideSize}
-			columns={4}
+			columns={frames}
 			rows={rows}
 			defaultRectangle={defaultRectangle}
 			onUpdateRectangle={onUpdateRectangle}

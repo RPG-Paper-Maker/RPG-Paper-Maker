@@ -107,7 +107,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		isTileset: boolean,
 	) => {
 		const rows = picture.getRows();
-		const columns = 4;
+		const columns = Project.current!.systems.FRAMES;
 		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : image.width / columns;
 		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : image.height / rows;
 		let width = refBorder.current?.offsetWidth ?? 0;
