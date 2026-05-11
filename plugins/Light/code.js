@@ -36,7 +36,7 @@ setInterval(function () {
 				const x = lightList[i].extraStuff.x;
 				const y = lightList[i].extraStuff.y;
 				const z = lightList[i].extraStuff.z;
-				const d = Math.max((Data.Systems.SQUARE_SIZE * Scene.Map.current.camera.distance) / 10, 400);
+				const d = Math.max(Scene.Map.current.camera.distance * 3.0, 10);
 				lightList[i].target.position.copy(Scene.Map.current.camera.targetPosition);
 				lightList[i].target.updateMatrixWorld();
 				lightList[i].position
@@ -79,8 +79,8 @@ function limitDistance(value) {
 	const z = Scene.Map.current.mapProperties.width;
 	const h1 = Math.sqrt(x * x + z * z);
 	const h2 = Math.sqrt(h1 * h1 + y * y);
-	if (value === 0) return h2 * Data.Systems.SQUARE_SIZE;
-	return Math.min(value, h2 * Data.Systems.SQUARE_SIZE);
+	if (value === 0) return h2;
+	return Math.min(value, h2);
 }
 
 Manager.Plugins.registerCommand(pluginName, 'Get local lights', (startFrom) => {
@@ -162,9 +162,9 @@ Manager.Plugins.registerCommand(pluginName, 'Add directional light', (prop, x, y
 	light.castShadow = castShadow;
 	light.shadow.mapSize.width = 2048;
 	light.shadow.mapSize.height = 2048;
-	light.shadow.camera.far = Data.Systems.SQUARE_SIZE * 350;
+	light.shadow.camera.far = 350;
 	light.shadow.bias = -0.0002;
-	light.shadow.normalBias = (0.65 * Data.Systems.SQUARE_SIZE) / 16;
+	light.shadow.normalBias = 0.65 / 16;
 	if (prop > 0) Core.ReactionInterpreter.currentObject.properties[prop] = light;
 	Scene.Map.current.scene.add(light);
 	lightList.push(light);
@@ -174,11 +174,11 @@ Manager.Plugins.registerCommand(
 	pluginName,
 	'Add point light',
 	(prop, id, x, y, z, intensity, color, radius, castShadow) => {
-		const light = new THREE.PointLight(color.color, intensity, limitDistance(radius * Data.Systems.SQUARE_SIZE));
+		const light = new THREE.PointLight(color.color, intensity, limitDistance(radius));
 		light.rpmRootScene = Scene.Map.current;
 		light.shadow.bias = -0.0001;
-		light.shadow.normalBias = (0.44 * Data.Systems.SQUARE_SIZE) / 16;
-		light.position.set(x * Data.Systems.SQUARE_SIZE, y * Data.Systems.SQUARE_SIZE, z * Data.Systems.SQUARE_SIZE);
+		light.shadow.normalBias = 0.44 / 16;
+		light.position.set(x, y, z);
 		light.castShadow = castShadow;
 		Core.MapObject.search(
 			id,
@@ -210,13 +210,13 @@ Manager.Plugins.registerCommand(
 	(prop, id, x, y, z, intensity, color, angle, distance, castShadow) => {
 		const light = new THREE.SpotLight(color.color, intensity);
 		light.rpmRootScene = Scene.Map.current;
-		light.position.set(x * Data.Systems.SQUARE_SIZE, y * Data.Systems.SQUARE_SIZE, z * Data.Systems.SQUARE_SIZE);
+		light.position.set(x, y, z);
 		light.castShadow = castShadow;
 		light.angle = (angle * Math.PI) / 180.0;
 		light.shadow.bias = -0.0000005;
-		light.shadow.normalBias = (0.75 * Data.Systems.SQUARE_SIZE) / 16;
+		light.shadow.normalBias = 0.75 / 16;
 		light.penumbra = 1.0;
-		light.distance = limitDistance(distance * Data.Systems.SQUARE_SIZE);
+		light.distance = limitDistance(distance);
 		Core.MapObject.search(
 			id,
 			(result) => {
@@ -294,7 +294,7 @@ Manager.Plugins.registerCommand(pluginName, 'Set light position', (prop, x, y, z
 	const light = Core.ReactionInterpreter.currentObject.properties[prop];
 	if (light.isHemisphereLight) return;
 	if (light.isDirectionalLight) light.extraStuff.set(x, y, z).normalize();
-	else light.position.set(x * Data.Systems.SQUARE_SIZE, y * Data.Systems.SQUARE_SIZE, z * Data.Systems.SQUARE_SIZE);
+	else light.position.set(x, y, z);
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Set spotlight target', (prop, id) => {

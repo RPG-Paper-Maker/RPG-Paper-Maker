@@ -32,7 +32,7 @@ Manager.Plugins.registerCommand(pluginName, 'Create water surface', (variable, x
 	if (length === 0) length = Scene.Map.current.mapProperties.length;
 	if (width === 0) width = Scene.Map.current.mapProperties.width;
 	const water = new Water(
-		new THREE.PlaneGeometry(length * Data.Systems.SQUARE_SIZE, width * Data.Systems.SQUARE_SIZE),
+		new THREE.PlaneGeometry(length, width),
 		{
 			textureWidth: 512,
 			textureHeight: 512,
@@ -53,9 +53,9 @@ Manager.Plugins.registerCommand(pluginName, 'Create water surface', (variable, x
 	water.material.transparent = true;
 	water.material.opacity = 0.5;
 	water.position.set(
-		(x + length / 2.0) * Data.Systems.SQUARE_SIZE,
-		y * Data.Systems.SQUARE_SIZE,
-		(z + width / 2.0) * Data.Systems.SQUARE_SIZE,
+		x + length / 2.0,
+		y,
+		z + width / 2.0,
 	);
 	waterList.push(water);
 	Scene.Map.current.scene.add(water);
@@ -64,7 +64,7 @@ Manager.Plugins.registerCommand(pluginName, 'Create water surface', (variable, x
 
 Manager.Plugins.registerCommand(pluginName, 'Move water surface', (variable, y) => {
 	if (waterList.includes(Core.Game.current.variables.get(variable)))
-		Core.Game.current.variables.get(variable).position.y = y * Data.Systems.SQUARE_SIZE;
+		Core.Game.current.variables.get(variable).position.y = y;
 });
 
 Manager.Plugins.registerCommand(pluginName, 'Initialize sky', () => {
@@ -73,8 +73,8 @@ Manager.Plugins.registerCommand(pluginName, 'Initialize sky', () => {
 		const m = Math.max(p.length, p.width, p.depth, p.height);
 		const sky = new Sky();
 		Scene.Map.current.realisticSun = sky;
-		sky.scale.setScalar(new THREE.Vector3(m, m, m).length() * 2 * Data.Systems.SQUARE_SIZE);
-		sky.position.set((p.length * Data.Systems.SQUARE_SIZE) / 2, 0, (p.width * Data.Systems.SQUARE_SIZE) / 2);
+		sky.scale.setScalar(new THREE.Vector3(m, m, m).length() * 2);
+		sky.position.set(p.length / 2, 0, p.width / 2);
 		const skyUniforms = sky.material.uniforms;
 		skyUniforms['turbidity'].value = 10;
 		skyUniforms['rayleigh'].value = 2;

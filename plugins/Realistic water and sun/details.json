@@ -63,6 +63,6 @@
 	],
 	"description": "Enables creating a realistic looking body of water (rectangular surface) from a single command and initializing a realistic sun on the horizon which affects the water reflection. It's also possible to move bodies of water up and down (i.e. for water level puzzles) and moving the sun around (i.e. for a day and night cycle).\n\nWarning! If you have downloaded this plugin directly from the engine, there might be missing files. You can download the missing files from GitHub on the provided link or from the RPG Paper Maker Discord server.",
 	"name": "Realistic water and sun",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"website": "https://github.com/yaleksander/RPM-Plugin-Realistic-water-and-sun"
 }
