@@ -1512,6 +1512,7 @@ class MapPortion {
 						);
 						geometrySprite.updateAttributes();
 						mesh = new THREE.Mesh(geometrySprite, material);
+						mesh.customDepthMaterial = material?.userData.customDepthMaterial;
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
 							this.objectsMeshes.push(mesh);
 						} else {

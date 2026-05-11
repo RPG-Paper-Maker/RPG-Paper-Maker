@@ -177,7 +177,7 @@ class GL {
 			map: opts.texture,
 			side,
 			transparent: true,
-			alphaTest: 0.5,
+			alphaTest: 0,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
 			opacity,
 			shininess: 0,
@@ -201,6 +201,7 @@ class GL {
 			shader.uniforms.offset = uniforms.offset;
 			shader.uniforms.enableShadows = { value: shadows };
 			shader.uniforms.hovered = { value: hovered };
+			shader.uniforms.alpha_threshold = { value: 0.01 };
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use
