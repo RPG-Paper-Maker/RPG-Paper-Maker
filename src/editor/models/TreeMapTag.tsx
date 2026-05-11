@@ -68,6 +68,9 @@ class TreeMapTag extends Base {
 			const pathTemp = Paths.join(path, Paths.TEMP);
 			const fileNames = await getFiles(pathTemp);
 			for (const fileName of fileNames) {
+				if (fileName.endsWith('.tmp')) {
+					continue;
+				}
 				const pathFileTemp = Paths.join(pathTemp, fileName);
 				const pathFile = Paths.join(path, fileName);
 				await copyFile(pathFileTemp, pathFile);
@@ -82,6 +85,9 @@ class TreeMapTag extends Base {
 			const pathTemp = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(this.id), Paths.TEMP);
 			const fileNames = await getFiles(pathTemp);
 			for (const fileName of fileNames) {
+				if (fileName.endsWith('.tmp')) {
+					continue;
+				}
 				await removeFile(Paths.join(pathTemp, fileName));
 			}
 		}
