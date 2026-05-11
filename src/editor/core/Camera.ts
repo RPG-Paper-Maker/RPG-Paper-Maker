@@ -17,10 +17,19 @@ import { Inputs } from '../managers';
 class Camera {
 	public static MIN_ZOOM = 20 / Constants.BASE_SQUARE_SIZE;
 	public static MAX_ZOOM = 45000 / Constants.BASE_SQUARE_SIZE;
+	public static readonly SUN_FORWARD = new THREE.Vector3(1, -1.75, -1).normalize();
+	public static readonly SUN_RIGHT = new THREE.Vector3(1, 0, 1).normalize();
+	public static readonly SUN_UP = new THREE.Vector3(
+		Math.SQRT1_2 * (1.75 / 2.25),
+		Math.SQRT1_2 * (2 / 2.25),
+		-Math.SQRT1_2 * (1.75 / 2.25)
+	);
+	private static _snapTarget = new THREE.Vector3();
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
 	public targetPosition: THREE.Vector3;
 	public distance: number;
+	private _stableD: number = 0;
 	public horizontalAngle: number;
 	public verticalAngle: number;
 	public defaultCameraPosition: THREE.Vector3;
@@ -105,12 +114,10 @@ class Camera {
 
 		// Update light
 		if (map && map.sunLight) {
-			map.sunLight.position.set(-1, 1.75, 1).multiplyScalar(10).add(this.targetPosition);
-			map.sunLight.target.position.copy(this.targetPosition);
-			map.sunLight.target.updateMatrixWorld();
 			const d = Math.max(this.distance * 3.0, 10);
 			const far = Math.max(d * 2, 350);
-			if (d !== map.sunLight.shadow.camera.right || far !== map.sunLight.shadow.camera.far) {
+			if (this._stableD === 0 || Math.abs(d - this._stableD) / this._stableD > 0.05 || far !== map.sunLight.shadow.camera.far) {
+				this._stableD = d;
 				map.sunLight.shadow.camera.left = -d;
 				map.sunLight.shadow.camera.right = d;
 				map.sunLight.shadow.camera.top = d;
@@ -119,6 +126,16 @@ class Camera {
 				map.sunLight.shadow.camera.updateProjectionMatrix();
 				map.sunLight.shadow.bias = -0.0001 * (d / 10);
 			}
+			const texelSize = (2 * this._stableD) / map.sunLight.shadow.mapSize.x;
+			const snappedR = Math.round(Camera.SUN_RIGHT.dot(this.targetPosition) / texelSize) * texelSize;
+			const snappedU = Math.round(Camera.SUN_UP.dot(this.targetPosition) / texelSize) * texelSize;
+			Camera._snapTarget.set(0, 0, 0)
+				.addScaledVector(Camera.SUN_RIGHT, snappedR)
+				.addScaledVector(Camera.SUN_UP, snappedU)
+				.addScaledVector(Camera.SUN_FORWARD, Camera.SUN_FORWARD.dot(this.targetPosition));
+			map.sunLight.target.position.copy(Camera._snapTarget);
+			map.sunLight.target.updateMatrixWorld();
+			map.sunLight.position.set(-1, 1.75, 1).multiplyScalar(10).add(Camera._snapTarget);
 		}
 	}
 
