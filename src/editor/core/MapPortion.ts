@@ -631,7 +631,7 @@ class MapPortion {
 		if (this.map.selectedElement && this.map.selectedPosition) {
 			let position: Position;
 			if (this.map.selectedGltfClone && this.map.selectedElement instanceof MapElement.Object3DCustom) {
-				const s = Project.SQUARE_SIZE * this.map.selectedElement.data.scale;
+				const s = this.map.selectedElement.data.scale;
 				const posScale = this.map.selectedGltfClone.scale.clone().divideScalar(s);
 				position = Position.createFromVector3(
 					this.map.selectedGltfClone.position,
@@ -1251,7 +1251,7 @@ class MapPortion {
 					const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object3D.data.gltfID);
 					if (shape?.gltfScene) {
 						const clone = shape.gltfScene.clone();
-						const s = Project.SQUARE_SIZE * object3D.data.scale;
+						const s = object3D.data.scale;
 						clone.scale.set(s * position.scaleX, s * position.scaleY, s * position.scaleZ);
 						const localPosition = object3D.getLocalPosition(position);
 						clone.position.copy(localPosition);
@@ -1294,7 +1294,7 @@ class MapPortion {
 								}
 							});
 							if (this.map.isDraggingTransforming) {
-								const s = Project.SQUARE_SIZE * object3D.data.scale;
+								const s = object3D.data.scale;
 								clone.position.copy(this.map.selectedMesh.position);
 								clone.rotation.copy(this.map.selectedMesh.rotation);
 								clone.scale.set(
@@ -1436,9 +1436,9 @@ class MapPortion {
 			// Object square cursor
 			const vec = position.toVector3(false);
 			const vecA = new THREE.Vector3(vec.x, vec.y, vec.z);
-			const vecB = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z);
-			const vecC = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z + Project.SQUARE_SIZE);
-			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + Project.SQUARE_SIZE);
+			const vecB = new THREE.Vector3(vec.x + 1, vec.y, vec.z);
+			const vecC = new THREE.Vector3(vec.x + 1, vec.y, vec.z + 1);
+			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + 1);
 			geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 			geometry.pushQuadIndices(count, position);
 			const coef = MapElement.Base.COEF_TEX / Project.SQUARE_SIZE;

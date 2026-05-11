@@ -145,9 +145,9 @@ class Sprite extends Base {
 		if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
 			zPlus *= -1;
 		}
-		pos.setX(this.xOffset * Project.SQUARE_SIZE);
-		pos.setY(this.yOffset * Project.SQUARE_SIZE);
-		pos.setZ(this.zOffset * Project.SQUARE_SIZE + zPlus);
+		pos.setX(this.xOffset);
+		pos.setY(this.yOffset);
+		pos.setZ(this.zOffset + zPlus);
 		vecA.multiply(size);
 		vecB.multiply(size);
 		vecC.multiply(size);
@@ -175,8 +175,8 @@ class Sprite extends Base {
 		const center = new THREE.Vector3();
 		const pos = new THREE.Vector3();
 		const size = new THREE.Vector3(
-			this.texture.width * Project.SQUARE_SIZE * position.scaleX,
-			this.texture.height * Project.SQUARE_SIZE * position.scaleY,
+			this.texture.width * position.scaleX,
+			this.texture.height * position.scaleY,
 			1.0,
 		);
 
@@ -212,8 +212,8 @@ class Sprite extends Base {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const p = new THREE.Vector3(pos.x, localPosition!.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
-			const c = new THREE.Vector3(center.x, localPosition!.y + this.yOffset * Project.SQUARE_SIZE, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition!.y + this.yOffset, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition!.y + this.yOffset, center.z);
 			geometry.pushQuadVerticesFace(
 				Sprite.MODEL[0].clone().multiply(size).add(p),
 				Sprite.MODEL[1].clone().multiply(size).add(p),
@@ -226,8 +226,8 @@ class Sprite extends Base {
 			count = count + 4;
 		} else {
 			// Simple sprite
-			center.setX(center.x + this.xOffset * Project.SQUARE_SIZE);
-			center.setZ(center.z + this.zOffset * Project.SQUARE_SIZE);
+			center.setX(center.x + this.xOffset);
+			center.setZ(center.z + this.zOffset);
 			const vecSimpleA = vecA.clone();
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();

@@ -103,14 +103,10 @@ class Land extends Base {
 		}
 
 		// Vertices
-		const vecA = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c - Project.SQUARE_SIZE / 2);
-		const vecB = new THREE.Vector3(a + (Project.SQUARE_SIZE / 2) * squareWidth, b, c - Project.SQUARE_SIZE / 2);
-		const vecC = new THREE.Vector3(
-			a + (Project.SQUARE_SIZE / 2) * squareWidth,
-			b,
-			c + (Project.SQUARE_SIZE / 2) * squareHeight,
-		);
-		const vecD = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
+		const vecA = new THREE.Vector3(a - 0.5, b, c - 0.5);
+		const vecB = new THREE.Vector3(a + 0.5 * squareWidth, b, c - 0.5);
+		const vecC = new THREE.Vector3(a + 0.5 * squareWidth, b, c + 0.5 * squareHeight);
+		const vecD = new THREE.Vector3(a - 0.5, b, c + 0.5 * squareHeight);
 		const center = new THREE.Vector3(a, b, c);
 		Base.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 

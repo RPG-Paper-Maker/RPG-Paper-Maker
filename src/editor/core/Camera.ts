@@ -10,14 +10,13 @@
 */
 
 import * as THREE from 'three';
-import { Mathf, Utils } from '../common';
+import { Constants, Mathf, Utils } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Project } from './Project';
 
 class Camera {
-	public static MIN_ZOOM = 20;
-	public static MAX_ZOOM = 45000;
+	public static MIN_ZOOM = 20 / Constants.BASE_SQUARE_SIZE;
+	public static MAX_ZOOM = 45000 / Constants.BASE_SQUARE_SIZE;
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
 	public targetPosition: THREE.Vector3;
@@ -30,16 +29,11 @@ class Camera {
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.tag = tag;
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
-		this.distance = Utils.defaultValue(
-			tag?.cameraDistance,
-			(isDetection ? 400 : 800) * Project.current!.systems.getCoefSquareSize(),
-		);
+		this.distance = Utils.defaultValue(tag?.cameraDistance, (isDetection ? 400 : 800) / Constants.BASE_SQUARE_SIZE);
 		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, isDetection ? -125 : -90);
 		this.verticalAngle = Utils.defaultValue(tag?.cameraVerticalAngle, 55);
 		this.targetPosition =
-			tag && tag.cursorPosition
-				? tag.cursorPosition.toVector3()
-				: new THREE.Vector3(Project.SQUARE_SIZE / 2, 0, Project.SQUARE_SIZE / 2);
+			tag && tag.cursorPosition ? tag.cursorPosition.toVector3() : new THREE.Vector3(0.5, 0, 0.5);
 		this.update();
 		this.defaultCameraPosition = this.getThreeCamera().position.clone();
 	}
@@ -59,7 +53,7 @@ class Camera {
 	}
 
 	getZoom(coef: number): number {
-		return (50 + this.distance / Project.SQUARE_SIZE) * coef;
+		return ((50 / Constants.BASE_SQUARE_SIZE + this.distance) * coef) / (Constants.BASE_SQUARE_SIZE / 4);
 	}
 
 	getDistance(): number {
@@ -111,19 +105,19 @@ class Camera {
 
 		// Update light
 		if (map && map.sunLight) {
-			map.sunLight.position
-				.set(-1, 1.75, 1)
-				.multiplyScalar(Project.SQUARE_SIZE * 10)
-				.add(this.targetPosition);
+			map.sunLight.position.set(-1, 1.75, 1).multiplyScalar(10).add(this.targetPosition);
 			map.sunLight.target.position.copy(this.targetPosition);
 			map.sunLight.target.updateMatrixWorld();
-			const d = Math.max((Project.SQUARE_SIZE * this.distance) / 10, 400);
-			if (d !== map.sunLight.shadow.camera.right) {
+			const d = Math.max(this.distance * 3.0, 10);
+			const far = Math.max(d * 2, 350);
+			if (d !== map.sunLight.shadow.camera.right || far !== map.sunLight.shadow.camera.far) {
 				map.sunLight.shadow.camera.left = -d;
 				map.sunLight.shadow.camera.right = d;
 				map.sunLight.shadow.camera.top = d;
 				map.sunLight.shadow.camera.bottom = -d;
+				map.sunLight.shadow.camera.far = far;
 				map.sunLight.shadow.camera.updateProjectionMatrix();
+				map.sunLight.shadow.bias = -0.0001 * (d / 10);
 			}
 		}
 	}

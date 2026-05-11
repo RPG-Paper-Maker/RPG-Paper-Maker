@@ -25,9 +25,9 @@ class Portion extends PortionBase {
 
 	static createFromVector3(position: THREE.Vector3): Portion {
 		return new Portion(
-			Math.floor(position.x / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
-			Math.floor(position.y / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
-			Math.floor(position.z / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
+			Math.floor(position.x / Constants.PORTION_SIZE),
+			Math.floor(position.y / Constants.PORTION_SIZE),
+			Math.floor(position.z / Constants.PORTION_SIZE),
 		);
 	}
 

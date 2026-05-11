@@ -272,9 +272,9 @@ class Map extends Base {
 			const material = new THREE.Material();
 			material.visible = false;
 			material.side = THREE.DoubleSide;
-			const length = Project.SQUARE_SIZE * this.model.length;
-			const width = Project.SQUARE_SIZE * this.model.width;
-			const extremeSize = Project.SQUARE_SIZE * 1000;
+			const length = this.model.length;
+			const width = this.model.width;
+			const extremeSize = 1000;
 			this.meshPlane = new THREE.Mesh(
 				new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
 				material,
@@ -288,7 +288,8 @@ class Map extends Base {
 
 		// Cursors
 		if (!this.isBattle) {
-			this.cursor.initialize(Map.materialCursor);
+			this.cursor.initialize(Map.materialCursor, 4, true, 3);
+			this.cursor.yOffsetExtra = 0.001;
 			if (this.canEdit) {
 				this.cursorObject.initialize(Map.materialObjectSquareCursor, 1, false);
 				if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
@@ -490,18 +491,18 @@ class Map extends Base {
 		if (this.model.isSunlight) {
 			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
-			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
+			this.sunLight.position.multiplyScalar(10);
 			this.sunLight.target.position.set(0, 0, 0);
 			this.scene.add(this.sunLight);
 			this.sunLight.castShadow = true;
 			this.sunLight.shadow.mapSize.width = 2048;
 			this.sunLight.shadow.mapSize.height = 2048;
-			const d = Project.SQUARE_SIZE * 10;
+			const d = 10;
 			this.sunLight.shadow.camera.left = -d;
 			this.sunLight.shadow.camera.right = d;
 			this.sunLight.shadow.camera.top = d;
 			this.sunLight.shadow.camera.bottom = -d;
-			this.sunLight.shadow.camera.far = Project.SQUARE_SIZE * 350;
+			this.sunLight.shadow.camera.far = 350;
 			this.sunLight.shadow.bias = -0.0003;
 		}
 	}
@@ -1313,7 +1314,7 @@ class Map extends Base {
 			if (this.selectedElement && this.selectedPosition) {
 				this.updateTransformPosition();
 				if (this.selectedGltfClone && this.selectedElement instanceof MapElement.Object3DCustom) {
-					const s = Project.SQUARE_SIZE * this.selectedElement.data.scale;
+					const s = this.selectedElement.data.scale;
 					this.selectedGltfClone.position.copy(this.selectedMesh.position);
 					this.selectedGltfClone.rotation.copy(this.selectedMesh.rotation);
 					this.selectedGltfClone.scale.set(
@@ -1368,17 +1369,17 @@ class Map extends Base {
 		) {
 			this.selectedMesh.position.setX(
 				this.selectedMesh.position.x -
-					(this.selectedMesh.position.x % Project.SQUARE_SIZE) +
+					(this.selectedMesh.position.x % 1) +
 					this.selectedElement.getAdditionalX(),
 			);
 			this.selectedMesh.position.setY(
 				this.selectedMesh.position.y -
-					(this.selectedMesh.position.y % Project.SQUARE_SIZE) +
+					(this.selectedMesh.position.y % 1) +
 					this.selectedElement.getAdditionalY(),
 			);
 			this.selectedMesh.position.setZ(
 				this.selectedMesh.position.z -
-					(this.selectedMesh.position.z % Project.SQUARE_SIZE) +
+					(this.selectedMesh.position.z % 1) +
 					this.selectedElement.getAdditionalZ(),
 			);
 			this.selectedMesh.scale.setX(Math.max(1, this.selectedMesh.scale.x - (this.selectedMesh.scale.x % 1)));
@@ -1388,39 +1389,37 @@ class Map extends Base {
 		if (this.selectedMesh.position.x < 0) {
 			this.selectedMesh.position.setX(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.selectedElement?.getAdditionalX() ?? Math.floor(Project.SQUARE_SIZE / 2))
+					? (this.selectedElement?.getAdditionalX() ?? 0.5)
 					: 0,
 			);
-		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.length - 1) {
+		} else if (Math.floor(this.selectedMesh.position.x) > this.model.length - 1) {
 			this.selectedMesh.position.setX(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.model.length - 1) * Project.SQUARE_SIZE +
-							(this.selectedElement?.getAdditionalX() ?? Math.floor(Project.SQUARE_SIZE / 2))
-					: this.model.length * Project.SQUARE_SIZE - 1,
+					? (this.model.length - 1) + (this.selectedElement?.getAdditionalX() ?? 0.5)
+					: this.model.length - 1 / Project.SQUARE_SIZE,
 			);
 		}
-		if (this.selectedMesh.position.y < -this.model.depth * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setY(-this.model.depth * Project.SQUARE_SIZE);
-		} else if (Math.floor(this.selectedMesh.position.y / Project.SQUARE_SIZE) > this.model.height - 1) {
+		if (this.selectedMesh.position.y < -this.model.depth) {
+			this.selectedMesh.position.setY(-this.model.depth);
+		} else if (Math.floor(this.selectedMesh.position.y) > this.model.height - 1) {
 			this.selectedMesh.position.setY(
-				(this.model.height - 1) * Project.SQUARE_SIZE +
+				(this.model.height - 1) +
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? 0
-						: Project.SQUARE_SIZE - 1),
+						: 1 - 1 / Project.SQUARE_SIZE),
 			);
 		}
 		if (this.selectedMesh.position.z < 0) {
 			this.selectedMesh.position.setZ(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.selectedElement?.getAdditionalZ() ?? Math.floor(Project.SQUARE_SIZE / 2))
+					? (this.selectedElement?.getAdditionalZ() ?? 0.5)
 					: 0,
 			);
-		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.width - 1) {
+		} else if (Math.floor(this.selectedMesh.position.z) > this.model.width - 1) {
 			this.selectedMesh.position.setZ(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.model.width - 1) * Project.SQUARE_SIZE +
-							(this.selectedElement?.getAdditionalZ() ?? Math.floor(Project.SQUARE_SIZE / 2))
-					: this.model.width * Project.SQUARE_SIZE - 1,
+					? (this.model.width - 1) + (this.selectedElement?.getAdditionalZ() ?? 0.5)
+					: this.model.width - 1 / Project.SQUARE_SIZE,
 			);
 		}
 		if (this.transformControls.axis === null || this.transformControls.axis.includes('X')) {
@@ -1468,6 +1467,7 @@ class Map extends Base {
 	setTransformMode(action: ACTION_KIND) {
 		this.transformControls.setMode(this.getTransformMode(action));
 		this.updateRotationSnap(action);
+		this.updateTranslationSnap(action);
 		if (this.selectedElement === null && this.lastTransformPosition !== null && this.lastTransformKind !== null) {
 			const mapPortion = this.getMapPortionByPosition(this.lastTransformPosition);
 			if (mapPortion) {
@@ -1488,6 +1488,14 @@ class Map extends Base {
 			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE;
 		this.transformControls.setRotationSnap(
 			action === ACTION_KIND.ROTATE && isSquare ? Mathf.degreesToRadians(45) : null,
+		);
+	}
+
+	updateTranslationSnap(action = Project.current!.settings.mapEditorCurrentActionIndex as ACTION_KIND) {
+		const isSquare =
+			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE;
+		this.transformControls.setTranslationSnap(
+			action === ACTION_KIND.TRANSLATE && !isSquare ? 1 / Project.SQUARE_SIZE : 1,
 		);
 	}
 
@@ -1562,7 +1570,7 @@ class Map extends Base {
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
 			this.meshPlane!.position.setY(
-				this.lockedY * Project.SQUARE_SIZE + Math.floor((this.lockedYPixels * Project.SQUARE_SIZE) / 100),
+				this.lockedY + this.lockedYPixels / 100,
 			);
 			this.meshPlane!.updateMatrixWorld();
 		}
@@ -1605,13 +1613,13 @@ class Map extends Base {
 		for (const obj of intersects) {
 			let position = new Position(
 				obj.point.x > 0
-					? Math.floor(obj.point.x / Project.SQUARE_SIZE)
-					: Math.ceil((obj.point.x - 1) / Project.SQUARE_SIZE),
+					? Math.floor(obj.point.x)
+					: Math.ceil(obj.point.x - 1),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
 				obj.point.z > 0
-					? Math.floor(obj.point.z / Project.SQUARE_SIZE)
-					: Math.ceil((obj.point.z - 1) / Project.SQUARE_SIZE),
+					? Math.floor(obj.point.z)
+					: Math.ceil(obj.point.z - 1),
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -1675,8 +1683,8 @@ class Map extends Base {
 					(!this.isDetection &&
 						Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL)
 				) {
-					position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
-					position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+					position.centerX = (Math.floor(obj.point.x * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE * 100;
+					position.centerZ = (Math.floor(obj.point.z * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE * 100;
 				}
 				if (isLayerOn) {
 					position.layer =
@@ -1712,9 +1720,9 @@ class Map extends Base {
 			}
 			const zPlus = position.layer * this.camera.getYOffsetDepth();
 			const newLayerRayPosition = new Portion(
-				Math.floor((obj.point.x + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
-				Math.floor((obj.point.y + Constants.PRECISION_POSITION) / Project.SQUARE_SIZE),
-				Math.floor((obj.point.z + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
+				Math.floor(obj.point.x + Constants.PRECISION_POSITION + zPlus),
+				Math.floor(obj.point.y + Constants.PRECISION_POSITION),
+				Math.floor(obj.point.z + Constants.PRECISION_POSITION + zPlus),
 			);
 			if (
 				this.canEdit &&

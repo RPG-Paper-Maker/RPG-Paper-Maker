@@ -25,17 +25,18 @@ class Cursor {
 	public frame = new Frame(200);
 	public frameMove = new Frame(Cursor.FRAME_MOVE_START);
 	public firstMove = true;
+	public yOffsetExtra = 0;
 
 	constructor(position: Position, map: Scene.Map) {
 		this.position = position;
 		this.map = map;
 	}
 
-	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true) {
+	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true, renderOrder = 2) {
 		const vecA = new THREE.Vector3(0, 0, 0);
-		const vecB = new THREE.Vector3(Project.SQUARE_SIZE, 0, 0);
-		const vecC = new THREE.Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
-		const vecD = new THREE.Vector3(0, 0, Project.SQUARE_SIZE);
+		const vecB = new THREE.Vector3(1, 0, 0);
+		const vecC = new THREE.Vector3(1, 0, 1);
+		const vecD = new THREE.Vector3(0, 0, 1);
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
@@ -57,7 +58,7 @@ class Cursor {
 		this.mesh = new THREE.Mesh(geometry, material);
 		const { x, y, z } = this.position.toVector3(false);
 		this.mesh.position.set(x, y, z);
-		this.mesh.renderOrder = 2;
+		this.mesh.renderOrder = renderOrder;
 		if (addToScene) {
 			this.map.scene.add(this.mesh);
 		}
@@ -136,7 +137,7 @@ class Cursor {
 	updateMeshPosition() {
 		if (!this.mesh) return;
 		const vector = this.position.toVector3(false);
-		this.mesh.position.set(vector.x, vector.y + this.map.camera.getYOffsetDepth(), vector.z);
+		this.mesh.position.set(vector.x, vector.y + this.map.camera.getYOffsetDepth() + this.yOffsetExtra, vector.z);
 	}
 
 	syncWithCameraTargetPosition() {

@@ -64,7 +64,7 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 			) as Model.CameraProperty | null;
 			if (cameraProperties) {
 				tag.cameraDistance =
-					cameraProperties.distance.getFixNumberValue() * (Project.SQUARE_SIZE / Constants.BASE_SQUARE_SIZE);
+					cameraProperties.distance.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
 				tag.cameraHorizontalAngle = cameraProperties.horizontalAngle.getFixNumberValue();
 				tag.cameraVerticalAngle = cameraProperties.verticalAngle.getFixNumberValue();
 			}

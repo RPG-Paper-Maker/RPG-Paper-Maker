@@ -33,8 +33,8 @@ class Battler {
 				localPosition = centerPosition
 					.toVector3()
 					.add(
-						new THREE.Vector3(2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE).add(
-							new THREE.Vector3((index * Project.SQUARE_SIZE) / 2, 0, index * Project.SQUARE_SIZE),
+						new THREE.Vector3(2, 0, -1).add(
+							new THREE.Vector3(index / 2, 0, index),
 						),
 					);
 			} else {
@@ -49,16 +49,16 @@ class Battler {
 					} catch {
 						localPosition = centerPosition
 							.toVector3()
-							.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
+							.add(new THREE.Vector3(-2, 0, -1))
 							.add(
-								new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE),
+								new THREE.Vector3((-index * 3) / 4, 0, index),
 							);
 					}
 				} else {
 					localPosition = centerPosition
 						.toVector3()
-						.add(new THREE.Vector3(-2 * Project.SQUARE_SIZE, 0, -Project.SQUARE_SIZE))
-						.add(new THREE.Vector3((-index * Project.SQUARE_SIZE * 3) / 4, 0, index * Project.SQUARE_SIZE));
+						.add(new THREE.Vector3(-2, 0, -1))
+						.add(new THREE.Vector3((-index * 3) / 4, 0, index));
 				}
 			}
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero?.idBattler);
@@ -79,8 +79,8 @@ class Battler {
 				new Rectangle(
 					0,
 					0,
-					Math.floor(width / Project.current!.systems.battlersFrames / Project.SQUARE_SIZE),
-					Math.floor(height / Project.current!.systems.battlersRows / Project.SQUARE_SIZE),
+					width / Project.current!.systems.battlersFrames / Project.SQUARE_SIZE,
+					height / Project.current!.systems.battlersRows / Project.SQUARE_SIZE,
 				),
 			);
 			const geometry = sprite.createGeometry(

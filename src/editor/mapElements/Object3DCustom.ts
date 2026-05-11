@@ -68,11 +68,11 @@ class Object3DCustom extends Object3D {
 	}
 
 	getAdditionalX(): number {
-		return Math.floor(Project.SQUARE_SIZE / 2);
+		return 0.5;
 	}
 
 	getAdditionalZ(): number {
-		return Math.floor(Project.SQUARE_SIZE / 2);
+		return 0.5;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {

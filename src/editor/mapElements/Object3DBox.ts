@@ -170,10 +170,10 @@ class Object3DBox extends Object3D {
 		const localPosition = position.toVector3(false);
 		if (this.data.isTopLeft) {
 			localPosition.setX(
-				localPosition.x - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterX() + Object3DBox.COEF,
+				localPosition.x - 0.5 + position.getPixelsCenterX() + Object3DBox.COEF,
 			);
 			localPosition.setZ(
-				localPosition.z - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + Object3DBox.COEF,
+				localPosition.z - 0.5 + position.getPixelsCenterZ() + Object3DBox.COEF,
 			);
 		} else {
 			localPosition.setX(localPosition.x + position.getPixelsCenterX() + Object3DBox.COEF);
@@ -186,18 +186,18 @@ class Object3DBox extends Object3D {
 	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
 		const v = vec.clone();
 		if (this.data.isTopLeft) {
-			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2));
-			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2));
+			v.setX(v.x + 0.5);
+			v.setZ(v.z + 0.5);
 		}
 		return Position.createFromVector3(v, rotation, scale);
 	}
 
 	getAdditionalX(): number {
-		return this.data.isTopLeft ? 0 : Math.floor(Project.SQUARE_SIZE / 2);
+		return this.data.isTopLeft ? 0 : 0.5;
 	}
 
 	getAdditionalZ(): number {
-		return this.data.isTopLeft ? 0 : Math.floor(Project.SQUARE_SIZE / 2);
+		return this.data.isTopLeft ? 0 : 0.5;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {

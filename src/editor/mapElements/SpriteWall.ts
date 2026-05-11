@@ -186,7 +186,7 @@ class SpriteWall extends Base {
 		const vecC = new THREE.Vector3(0.5, 0.0, 0.0);
 		const vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
 		const center = new THREE.Vector3();
-		const size = new THREE.Vector3(Project.SQUARE_SIZE, height, 0);
+		const size = new THREE.Vector3(1, height / Project.SQUARE_SIZE, 0);
 		const angle = position.angleY;
 		const localPosition = position.toVector3();
 

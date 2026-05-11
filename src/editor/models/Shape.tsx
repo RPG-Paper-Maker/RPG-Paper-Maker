@@ -83,9 +83,9 @@ class Shape extends Asset {
 			if (result !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 				const temp3D = new THREE.Vector3(
-					parseFloat(result[1]) * Project.SQUARE_SIZE,
-					parseFloat(result[2]) * Project.SQUARE_SIZE,
-					parseFloat(result[3]) * Project.SQUARE_SIZE,
+					parseFloat(result[1]),
+					parseFloat(result[2]),
+					parseFloat(result[3]),
 				);
 				v.push(temp3D);
 				if (firstVertex) {
@@ -292,7 +292,7 @@ class Shape extends Asset {
 					buffer = await (await LocalFile.readBase64File(this.getPath())).arrayBuffer();
 				}
 				if (buffer && buffer.byteLength > 0) {
-					const result = await Shape.parseGLTF(buffer, Project.SQUARE_SIZE);
+					const result = await Shape.parseGLTF(buffer, 1);
 					this.geometryData = result.geometryData;
 					this.gltfScene = result.scene;
 					this.gltfAnimations = result.animations;

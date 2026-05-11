@@ -324,6 +324,7 @@ function MapEditorMenuBar() {
 		Project.current!.settings.mapEditorCurrentElementPositionIndex = kind;
 		await Project.current!.settings.save();
 		Scene.Map.current?.updateRotationSnap();
+		Scene.Map.current?.updateTranslationSnap();
 	};
 
 	const handleSquare = async () => {

@@ -77,15 +77,14 @@ class Position extends Position3D {
 	}
 
 	static createFromVector3(position: THREE.Vector3, rotation?: THREE.Euler, scale?: THREE.Vector3): Position {
-		const roundedY = Math.round(position.y);
 		return new Position(
-			Math.floor(position.x / Project.SQUARE_SIZE),
-			Math.floor(position.y / Project.SQUARE_SIZE),
-			(((roundedY % Project.SQUARE_SIZE) + Project.SQUARE_SIZE) % Project.SQUARE_SIZE / Project.SQUARE_SIZE) * 100,
-			Math.floor(position.z / Project.SQUARE_SIZE),
+			Math.floor(position.x),
+			Math.floor(position.y),
+			(position.y - Math.floor(position.y)) * 100,
+			Math.floor(position.z),
 			0,
-			(Math.round(position.x % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
-			(Math.round(position.z % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			(Math.round((position.x % 1) * Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			(Math.round((position.z % 1) * Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.y)) : undefined,
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.x)) : undefined,
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.z)) : undefined,
@@ -96,27 +95,27 @@ class Position extends Position3D {
 	}
 
 	getTotalX(): number {
-		return this.x * Project.SQUARE_SIZE + this.getPixelsCenterX();
+		return this.x + this.getPixelsCenterX();
 	}
 
 	getTotalY(): number {
-		return this.y * Project.SQUARE_SIZE + this.getTotalYPixels();
+		return this.y + this.getTotalYPixels();
 	}
 
 	getTotalZ(): number {
-		return this.z * Project.SQUARE_SIZE + this.getPixelsCenterZ();
+		return this.z + this.getPixelsCenterZ();
 	}
 
 	getTotalYPixels(): number {
-		return Math.round((this.yPixels * Project.SQUARE_SIZE) / 100);
+		return this.yPixels / 100;
 	}
 
 	getPixelsCenterX(): number {
-		return Math.floor((this.centerX * Project.SQUARE_SIZE) / 100);
+		return this.centerX / 100;
 	}
 
 	getPixelsCenterZ(): number {
-		return Math.floor((this.centerZ * Project.SQUARE_SIZE) / 100);
+		return this.centerZ / 100;
 	}
 
 	getGlobalPortion(): Portion {
@@ -311,14 +310,14 @@ class Position extends Position3D {
 			this.angleY
 		}, ${this.angleZ}]\n${t('scales')} = [${this.scaleX}, ${this.scaleY}, ${this.scaleZ}]\n${t(
 			'center',
-		)} = [X = ${this.getPixelsCenterX()}px, Z = ${this.getPixelsCenterZ()}px]`;
+		)} = [X = ${Math.round(this.centerX * Project.SQUARE_SIZE / 100)}px, Z = ${Math.round(this.centerZ * Project.SQUARE_SIZE / 100)}px]`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
-			this.x * Project.SQUARE_SIZE + (center ? this.getPixelsCenterX() : 0),
-			this.y * Project.SQUARE_SIZE + this.getTotalYPixels(),
-			this.z * Project.SQUARE_SIZE + (center ? this.getPixelsCenterZ() : 0),
+			this.x + (center ? this.getPixelsCenterX() : 0),
+			this.y + this.getTotalYPixels(),
+			this.z + (center ? this.getPixelsCenterZ() : 0),
 		);
 	}
 

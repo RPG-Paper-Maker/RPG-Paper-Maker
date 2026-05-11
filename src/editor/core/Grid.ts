@@ -31,12 +31,12 @@ class Grid {
 	initialize(map: Scene.Map) {
 		const points = [];
 		for (let i = 0, l = map.model.length; i <= l; i++) {
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, 0));
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, map.model.width * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(i, 0, 0));
+			points.push(new THREE.Vector3(i, 0, map.model.width));
 		}
 		for (let i = 0, l = map.model.width; i <= l; i++) {
-			points.push(new THREE.Vector3(0, 0, i * Project.SQUARE_SIZE));
-			points.push(new THREE.Vector3(map.model.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(0, 0, i));
+			points.push(new THREE.Vector3(map.model.length, 0, i));
 		}
 		this.createLine(map);
 		this.line.geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -48,12 +48,12 @@ class Grid {
 		}
 		const points = [];
 		for (let i = -left, l = right + 1; i <= l; i++) {
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, -top * Project.SQUARE_SIZE));
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, (bot + 1) * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(i, 0, -top));
+			points.push(new THREE.Vector3(i, 0, bot + 1));
 		}
 		for (let i = -top, l = bot + 1; i <= l; i++) {
-			points.push(new THREE.Vector3(-left * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
-			points.push(new THREE.Vector3((right + 1) * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(-left, 0, i));
+			points.push(new THREE.Vector3(right + 1, 0, i));
 		}
 		this.line.geometry = new THREE.BufferGeometry().setFromPoints(points);
 	}

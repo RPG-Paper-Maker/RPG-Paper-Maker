@@ -203,14 +203,14 @@ class Previewer3D extends Base {
 			mountainElement.updateGeometry(geometry, new Position(), 0);
 			this.addToScene(geometry, textureMountain);
 			const floorPosition = new Position(0, hs, hpercent);
-			const widthLeft = wsl * Project.SQUARE_SIZE + wpl;
-			const widthRight = wsr * Project.SQUARE_SIZE + wpr;
-			const widthTop = wst * Project.SQUARE_SIZE + wpt;
-			const widthBot = wsb * Project.SQUARE_SIZE + wpb;
+			const widthLeft = wsl + wpl / Project.SQUARE_SIZE;
+			const widthRight = wsr + wpr / Project.SQUARE_SIZE;
+			const widthTop = wst + wpt / Project.SQUARE_SIZE;
+			const widthBot = wsb + wpb / Project.SQUARE_SIZE;
 			const offset = new THREE.Vector3(
-				(widthLeft - widthRight) * (Project.SQUARE_SIZE / 2),
-				(floorPosition.getTotalY() / 2) * Project.SQUARE_SIZE,
-				(widthTop - widthBot) * (Project.SQUARE_SIZE / 2),
+				(widthLeft - widthRight) / 2,
+				floorPosition.getTotalY() / 2,
+				(widthTop - widthBot) / 2,
 			);
 			if (topFloorIsAutotile) {
 				const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(
@@ -321,8 +321,7 @@ class Previewer3D extends Base {
 		this.clear();
 		this.gltfAnimations = animations;
 		const clone = gltfScene.clone(true);
-		const resize = Project.SQUARE_SIZE;
-		let s = resize * scale;
+		let s = scale;
 		clone.scale.set(s, s, s);
 		clone.rotation.y = this.currentRotation;
 		const box = new THREE.Box3().setFromObject(clone);
@@ -336,7 +335,7 @@ class Previewer3D extends Base {
 		const size = box.getSize(new THREE.Vector3());
 		this.camera.distance = Math.max(size.x, size.y, size.z) + (size.x + size.y + size.z) / 3;
 		if (this.isCut) {
-			s = resize * ((resize * resize * 2) / this.camera.distance);
+			s = 2 / this.camera.distance;
 			clone.scale.set(s, s, s);
 			const cutBox = new THREE.Box3().setFromObject(clone);
 			const cutCenter = cutBox.getCenter(new THREE.Vector3());
@@ -362,8 +361,7 @@ class Previewer3D extends Base {
 			mesh.rotation.y = this.currentRotation;
 			mesh.geometry.center();
 			if (position) {
-				const s = Project.SQUARE_SIZE;
-				mesh.geometry.translate(position.x / s, position.y / s, position.z / s);
+				mesh.geometry.translate(position.x, position.y, position.z);
 				mesh.geometry.computeBoundingBox();
 			}
 			this.meshes.push(mesh);
@@ -448,7 +446,7 @@ class Previewer3D extends Base {
 					box.expandByObject(mesh);
 				}
 				const size = box.getSize(new THREE.Vector3());
-				const gridSize = Math.max(size.x, size.z, Project.SQUARE_SIZE) * 2;
+				const gridSize = Math.max(size.x, size.z, 1) * 2;
 				this.previewGrid = new THREE.GridHelper(gridSize, 10, 0x888888, 0x444444);
 				const center = box.getCenter(new THREE.Vector3());
 				this.previewGrid.position.set(center.x, box.min.y, center.z);
@@ -471,7 +469,7 @@ class Previewer3D extends Base {
 								ELEMENT_POSITION_KIND.SQUARE
 						) {
 							const mesh = this.meshes[0];
-							const s = Project.SQUARE_SIZE;
+							const s = 1;
 							mesh.scale.setX(Math.max(s, mesh.scale.x - (mesh.scale.x % s)));
 							mesh.scale.setY(Math.max(s, mesh.scale.y - (mesh.scale.y % s)));
 							mesh.scale.setZ(Math.max(s, mesh.scale.z - (mesh.scale.z % s)));
@@ -487,7 +485,7 @@ class Previewer3D extends Base {
 			this.camera.horizontalAngle = -90;
 			for (const mesh of this.meshes) {
 				mesh.rotation.set(0, this.currentRotation, 0);
-				mesh.scale.set(Project.SQUARE_SIZE, Project.SQUARE_SIZE, Project.SQUARE_SIZE);
+				mesh.scale.set(1, 1, 1);
 			}
 		}
 		this.syncPreviewTransform();
@@ -502,8 +500,7 @@ class Previewer3D extends Base {
 			const toDeg = (r: number) => (r * 180) / Math.PI;
 			return { x: toDeg(mesh.rotation.x), y: toDeg(mesh.rotation.y), z: toDeg(mesh.rotation.z) };
 		} else if (this.previewMode === ACTION_KIND.SCALE) {
-			const base = Project.SQUARE_SIZE;
-			return { x: mesh.scale.x / base, y: mesh.scale.y / base, z: mesh.scale.z / base };
+			return { x: mesh.scale.x, y: mesh.scale.y, z: mesh.scale.z };
 		}
 		return { x: 0, y: 0, z: 0 };
 	}
@@ -516,7 +513,7 @@ class Previewer3D extends Base {
 		if (this.previewMode === ACTION_KIND.ROTATE) {
 			mesh.rotation[axis as AXIS] = (value * Math.PI) / 180;
 		} else if (this.previewMode === ACTION_KIND.SCALE) {
-			mesh.scale[axis as AXIS] = value * Project.SQUARE_SIZE;
+			mesh.scale[axis as AXIS] = value;
 		}
 		this.syncPreviewTransform();
 		this.onTransformChange?.();
@@ -531,10 +528,9 @@ class Previewer3D extends Base {
 			this.previewRotateZ = toDeg(mesh.rotation.z);
 		} else if (this.previewMode === ACTION_KIND.SCALE && this.meshes.length > 0) {
 			const mesh = this.meshes[0];
-			const base = Project.SQUARE_SIZE;
-			this.previewScaleX = mesh.scale.x / base;
-			this.previewScaleY = mesh.scale.y / base;
-			this.previewScaleZ = mesh.scale.z / base;
+			this.previewScaleX = mesh.scale.x;
+			this.previewScaleY = mesh.scale.y;
+			this.previewScaleZ = mesh.scale.z;
 		} else {
 			this.previewRotateX = 0;
 			this.previewRotateY = 0;
@@ -554,7 +550,7 @@ class Previewer3D extends Base {
 		let w = 0;
 		let h = 0;
 		let d = 0;
-		const resize = Project.SQUARE_SIZE;
+		const resize = 1;
 		for (const mesh of this.meshes) {
 			mesh.scale.set(resize, resize, resize);
 			let bb = mesh.geometry.boundingBox;

@@ -89,15 +89,15 @@ class Object3D extends SpecialElement {
 	}
 
 	getTotalWidthPixels(): number {
-		return this.widthSquare * Project.SQUARE_SIZE + (this.widthPixel * Project.SQUARE_SIZE) / 100;
+		return this.widthSquare + this.widthPixel / 100;
 	}
 
 	getTotalHeightPixels(): number {
-		return this.heightSquare * Project.SQUARE_SIZE + (this.heightPixel * Project.SQUARE_SIZE) / 100;
+		return this.heightSquare + this.heightPixel / 100;
 	}
 
 	getTotalDepthPixels(): number {
-		return this.depthSquare * Project.SQUARE_SIZE + (this.depthPixel * Project.SQUARE_SIZE) / 100;
+		return this.depthSquare + this.depthPixel / 100;
 	}
 
 	getSizeVector(): THREE.Vector3 {
