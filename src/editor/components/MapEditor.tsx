@@ -271,7 +271,7 @@ function MapEditor() {
 				return;
 			}
 			const observer = new ResizeObserver(() => {
-				resize();
+				requestAnimationFrame(() => resize());
 			});
 			observer.observe(container);
 			resize();

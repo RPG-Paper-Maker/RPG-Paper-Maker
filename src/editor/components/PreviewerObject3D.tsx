@@ -211,7 +211,7 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 		const container = refCanvas.current?.parentElement;
 		let observer: ResizeObserver | null = null;
 		if (container) {
-			observer = new ResizeObserver(() => resize());
+			observer = new ResizeObserver(() => requestAnimationFrame(() => resize()));
 			observer.observe(container);
 		}
 		resize();

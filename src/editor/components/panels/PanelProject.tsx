@@ -124,13 +124,15 @@ function PanelProject() {
 		Manager.GL.mainContext.initialize();
 		Manager.GL.dialogContext.initialize(1);
 		const observer = new ResizeObserver(() => {
-			for (const GL of [
-				Manager.GL.mainContext,
-				Manager.GL.dialogContext,
-			]) {
-				GL.renderer.setPixelRatio(window.devicePixelRatio);
-				GL.renderer.setSize(window.innerWidth, window.innerHeight);
-			}
+			requestAnimationFrame(() => {
+				for (const GL of [
+					Manager.GL.mainContext,
+					Manager.GL.dialogContext,
+				]) {
+					GL.renderer.setPixelRatio(window.devicePixelRatio);
+					GL.renderer.setSize(window.innerWidth, window.innerHeight);
+				}
+			});
 		});
 		observer.observe(document.body);
 		return () => {
