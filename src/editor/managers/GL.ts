@@ -177,7 +177,7 @@ class GL {
 			map: opts.texture,
 			side,
 			transparent: true,
-			alphaTest: 0,
+			alphaTest: 0.01,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
 			opacity,
 			shininess: 0,
