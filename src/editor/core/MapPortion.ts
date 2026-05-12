@@ -1268,7 +1268,7 @@ class MapPortion {
 								child.userData.gltfPositionKey = positionKey;
 							}
 						});
-						clone.renderOrder = 999;
+						clone.renderOrder = 3;
 						clone.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
 						this.map.gltfClones.set(object3D, clone);
 						this.objects3DMeshes.push(clone as unknown as THREE.Mesh);
@@ -1405,7 +1405,7 @@ class MapPortion {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
 				this.objects3DMeshes.push(mesh);
-				mesh.renderOrder = 999;
+				mesh.renderOrder = 3;
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
@@ -1538,7 +1538,7 @@ class MapPortion {
 				if (mesh) {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
-					mesh.renderOrder = state.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D ? 999 : 3;
+					mesh.renderOrder = 4;
 					this.map.scene.add(mesh);
 				}
 			}
