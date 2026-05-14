@@ -47,6 +47,7 @@ type Props = {
 	disabled?: boolean;
 	active?: boolean;
 	disableParametersProperties?: boolean;
+	noDynamic?: boolean;
 };
 
 const DEFAULT_PICTURE_KIND = PICTURE_KIND.PICTURES;
@@ -65,6 +66,7 @@ function AssetSelector({
 	disabled = false,
 	active = false,
 	disableParametersProperties = false,
+	noDynamic = false,
 }: Props) {
 	const getSelectedID = () =>
 		selectedDynamic && selectedDynamic.kind === DYNAMIC_VALUE_KIND.NUMBER
@@ -133,7 +135,7 @@ function AssetSelector({
 
 	useEffect(() => {
 		setList([
-			selectedDynamic && selectedDynamic.kind !== DYNAMIC_VALUE_KIND.NUMBER
+			active && selectedDynamic && selectedDynamic.kind !== DYNAMIC_VALUE_KIND.NUMBER
 				? Node.create(Model.Base.create(-1, selectedDynamic.toString()))
 				: getSelectedItem(),
 		]);
@@ -189,6 +191,7 @@ function AssetSelector({
 							onAccept={handleAcceptSong}
 							active={active}
 							disableParametersProperties={disableParametersProperties}
+							noDynamic={noDynamic}
 						/>
 					);
 				case ASSET_SELECTOR_TYPE.VIDEOS:

@@ -41,6 +41,7 @@ type Props = {
 	fillWidth?: boolean;
 	isTextarea?: boolean;
 	disableParametersProperties?: boolean;
+	disableDynamic?: boolean;
 };
 
 function DynamicValueSelector({
@@ -56,6 +57,7 @@ function DynamicValueSelector({
 	fillWidth = false,
 	isTextarea = false,
 	disableParametersProperties = false,
+	disableDynamic = false,
 }: Props) {
 	const { t } = useTranslation();
 	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
@@ -704,13 +706,15 @@ function DynamicValueSelector({
 	return (
 		<>
 			<div className={Utils.getClassName({ fillWidth }, 'dynamicValueSelector')}>
-				<Dropdown
-					selectedID={kind}
-					onChange={handleChangeKind}
-					options={getOptions()}
-					disabled={disabled}
-					translateOptions
-				/>
+				{!disableDynamic && (
+					<Dropdown
+						selectedID={kind}
+						onChange={handleChangeKind}
+						options={getOptions()}
+						disabled={disabled}
+						translateOptions
+					/>
+				)}
 				<Flex one spaced>
 					{getValueDisplay()}
 					{kind === DYNAMIC_VALUE_KIND.FORMULA && (

@@ -24,9 +24,10 @@ type Props = {
 	step?: number;
 	isVertical?: boolean;
 	unit?: string;
+	disableDynamic?: boolean;
 };
 
-function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit }: Props) {
+function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit, disableDynamic = false }: Props) {
 	const [valueSlide, setValueSlide] = useStateNumber();
 	const [disabled, setDisabled] = useStateBool();
 
@@ -66,6 +67,7 @@ function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit }: Pr
 					onChangeValue={handleChangeValue}
 					min={min}
 					max={max}
+					disableDynamic={disableDynamic}
 				/>
 				{unit}
 			</Flex>

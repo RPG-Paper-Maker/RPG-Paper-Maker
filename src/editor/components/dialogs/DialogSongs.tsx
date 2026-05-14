@@ -54,6 +54,7 @@ type Props = {
 	disableParametersProperties?: boolean;
 	displayOptions?: boolean;
 	songOptions?: Model.PlaySong;
+	noDynamic?: boolean;
 };
 
 function DialogSongs({
@@ -68,6 +69,7 @@ function DialogSongs({
 	disableParametersProperties = false,
 	displayOptions = false,
 	songOptions,
+	noDynamic = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -134,6 +136,17 @@ function DialogSongs({
 			setIsEnd(songOptions.isEnd);
 			if (songOptions.isEnd) {
 				end.copy(songOptions.end);
+			}
+			if (noDynamic) {
+				if (volume.kind !== DYNAMIC_VALUE_KIND.NUMBER) {
+					volume.updateToDefaultNumber(100);
+				}
+				if (start.kind !== DYNAMIC_VALUE_KIND.NUMBER_DECIMAL) {
+					start.updateToDefaultNumber(0, true);
+				}
+				if (end.kind !== DYNAMIC_VALUE_KIND.NUMBER_DECIMAL) {
+					end.updateToDefaultNumber(0, true);
+				}
 			}
 		} else {
 			volume.updateToDefaultNumber(100);
@@ -337,7 +350,7 @@ function DialogSongs({
 						<Label>{t('volume')}</Label>
 						<Value>
 							<Flex spaced centerV>
-								<SliderDynamic dynamic={volume} min={0} max={100} unit='%' isVertical />
+								<SliderDynamic dynamic={volume} min={0} max={100} unit='%' isVertical disableDynamic={noDynamic} />
 							</Flex>
 						</Value>
 						{displayOptionsStartEnd && (
@@ -353,6 +366,7 @@ function DialogSongs({
 											value={start}
 											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
 											disabled={!isStart}
+											disableDynamic={noDynamic}
 										/>
 										<div className={Utils.getClassName({ disabledLabel: !isStart })}>s</div>
 									</Flex>
@@ -368,6 +382,7 @@ function DialogSongs({
 											value={end}
 											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
 											disabled={!isEnd}
+											disableDynamic={noDynamic}
 										/>
 										<div className={Utils.getClassName({ disabledLabel: !isEnd })}>s</div>
 									</Flex>

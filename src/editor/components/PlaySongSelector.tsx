@@ -33,10 +33,11 @@ type Props = {
 	disabled?: boolean;
 	dynamicUpdate?: boolean;
 	showKeepCurrent?: boolean;
+	noDynamic?: boolean;
 };
 
 const PlaySongSelector = forwardRef(
-	({ songKind, disabled = false, dynamicUpdate = false, showKeepCurrent = false }: Props, ref) => {
+	({ songKind, disabled = false, dynamicUpdate = false, showKeepCurrent = false, noDynamic = false }: Props, ref) => {
 		const { t } = useTranslation();
 
 		const [id, setID] = useStateNumber();
@@ -83,8 +84,9 @@ const PlaySongSelector = forwardRef(
 				selectedDynamic={dynamicID}
 				songOptions={songOptions}
 				disabled={disabled || (showKeepCurrent && songSelection === SELECTION_SONG.KEEP_CURRENT)}
-				active
+				active={!noDynamic}
 				disableParametersProperties
+				noDynamic={noDynamic}
 			/>
 		);
 

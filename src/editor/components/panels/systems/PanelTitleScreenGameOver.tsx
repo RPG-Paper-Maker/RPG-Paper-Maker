@@ -130,7 +130,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 							</Groupbox>
 							<Flex column spaced>
 								<div>{t('music')}:</div>
-								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playTitleMusicSelectorRef} />
+								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playTitleMusicSelectorRef} noDynamic />
 							</Flex>
 						</Flex>
 						<Flex one>
