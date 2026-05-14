@@ -671,7 +671,7 @@ const copyFolder = async (src, dst, exclude = []) => {
 		if (stats.isDirectory()) {
 			await copyFolder(sourcePath, destinationPath, exclude);
 		} else {
-			await fs.copyFile(sourcePath, destinationPath);
+			await retryOnPermError(() => fs.copyFile(sourcePath, destinationPath));
 		}
 	}
 };
