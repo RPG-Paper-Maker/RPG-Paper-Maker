@@ -206,9 +206,10 @@ class Shape extends Asset {
 	static async parseGLTF(
 		buffer: ArrayBuffer,
 		squareSize: number,
+		resourcePath: string = '',
 	): Promise<{ geometryData: GeometryDataType; scene: THREE.Group; animations: THREE.AnimationClip[] }> {
 		const loader = new GLTFLoader();
-		const gltf = await loader.parseAsync(buffer, '');
+		const gltf = await loader.parseAsync(buffer, resourcePath);
 		const vertices: THREE.Vector3[] = [];
 		const uvs: THREE.Vector2[] = [];
 		let minVertex = new THREE.Vector3();
@@ -292,7 +293,9 @@ class Shape extends Asset {
 					buffer = await (await LocalFile.readBase64File(this.getPath())).arrayBuffer();
 				}
 				if (buffer && buffer.byteLength > 0) {
-					const result = await Shape.parseGLTF(buffer, 1);
+					const folder = Shape.getFolder(this.kind, this.isBR, this.dlc);
+					const resourcePath = (Constants.IS_DESKTOP ? Paths.FILES : '') + folder + '/';
+					const result = await Shape.parseGLTF(buffer, 1, resourcePath);
 					this.geometryData = result.geometryData;
 					this.gltfScene = result.scene;
 					this.gltfAnimations = result.animations;
