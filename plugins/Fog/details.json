@@ -4,7 +4,7 @@
 	"commands": [
 		{
 			"defaultParameters": [
-				{ "defaultValue": { "k": 12, "v": 0.004 }, "id": -1, "name": "intensity" },
+				{ "defaultValue": { "k": 12, "v": 0.06 }, "id": -1, "name": "intensity" },
 				{ "defaultValue": { "k": 27, "v": 2 }, "id": -1, "name": "color" }
 			],
 			"id": 1,
@@ -13,5 +13,5 @@
 	],
 	"description": "You can add very simple fog to your current map by using a command.\n\nGo to the commands list, in last page, use \"Plugin...\". Select this Fog plugin, and the command \"Add fog\". You can choose the intensity and color.",
 	"name": "Fog",
-	"version": "1.1.0"
+	"version": "1.1.1"
 }
