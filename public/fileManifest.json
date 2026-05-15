@@ -58,7 +58,8 @@
         "TitleScreen": {
           "files": [
             "background-logo.png",
-            "background.png"
+            "background.png",
+            "logo.png"
           ]
         },
         "WindowSkins": {
@@ -468,7 +469,11 @@
         ]
       }
     },
-    "Videos": {}
+    "Videos": {
+      "files": [
+        "titlescreen.mov"
+      ]
+    }
   },
   "files": [
     "date",
