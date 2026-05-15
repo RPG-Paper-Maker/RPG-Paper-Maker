@@ -16,7 +16,6 @@ import { Constants, RPM } from './common';
 import DialogError from './components/dialogs/DialogError';
 import Flex from './components/Flex';
 import UpdateCountdown from './components/UpdateCountdown';
-import UpdateVersionWarning from './components/UpdateVersionWarning';
 import i18n from './i18n/i18n';
 import { Inputs } from './managers/Inputs';
 import { RootState } from './store';
@@ -72,7 +71,7 @@ function Editor() {
 					onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}
 				>
 					<MainMenuBar />
-					{Constants.IS_DESKTOP ? <UpdateVersionWarning /> : <UpdateCountdown />}
+					{!Constants.IS_DESKTOP && <UpdateCountdown />}
 					<PanelMain />
 				</Flex>
 			) : (
