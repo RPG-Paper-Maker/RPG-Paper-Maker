@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core/Project';
@@ -44,7 +44,8 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 	const [stateID] = useStateDynamicValue();
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
 	const [dontChangeOrientation, setDontChangeOrientation] = useStateBool();
-	const [, setTrigger] = useStateBool();
+	const [trigger, setTrigger] = useStateBool();
+	const isInitializing = useRef(true);
 
 	const initialize = async () => {
 		if (list) {
@@ -97,6 +98,12 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 		}
 	};
 
+	useLayoutEffect(() => {
+		if (trigger) {
+			isInitializing.current = false;
+		}
+	}, [trigger]);
+
 	const handleAccept = async () => {
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
@@ -134,8 +141,8 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 								value={mapID}
 								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 								databaseOptions={Project.current!.treeMaps.getAllMapsList()}
-								onChangeKind={() => handleChangeMap()}
-								onChangeValue={() => handleChangeMap()}
+								onChangeKind={() => !isInitializing.current && handleChangeMap()}
+								onChangeValue={() => !isInitializing.current && handleChangeMap()}
 							/>
 						</Value>
 						<Label>{t('object.id')}</Label>
