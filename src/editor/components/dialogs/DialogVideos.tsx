@@ -87,8 +87,8 @@ function DialogVideos({
 
 	const updateVideo = async (video: Model.Video | null) => {
 		setSelectedVideo(video);
-		if (video) {
-			setLoading(video.id !== -1);
+		if (video && video.id !== -1) {
+			setLoading(true);
 			if (playerRef.current && sourceRef.current) {
 				const path = video.getPath();
 				sourceRef.current.src = Constants.IS_DESKTOP ? path : ((await LocalFile.readFile(path)) ?? '');
