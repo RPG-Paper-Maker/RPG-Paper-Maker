@@ -1260,7 +1260,7 @@ class Map extends Base {
 				this.cursor.position.y = newY;
 			}
 		} else {
-			this.cursor.position.updateYPixels(this.cursor.position.getTotalYPixels() + addition);
+			this.cursor.position.updateYPixels(this.cursor.position.getYPixelCount() + addition);
 		}
 		this.syncCursorGrid();
 		this.requestPaintHUD = true;

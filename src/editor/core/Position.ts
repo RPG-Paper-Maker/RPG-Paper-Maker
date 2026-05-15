@@ -110,6 +110,10 @@ class Position extends Position3D {
 		return this.yPixels / 100;
 	}
 
+	getYPixelCount(): number {
+		return Math.round(this.yPixels * Project.SQUARE_SIZE / 100);
+	}
+
 	getPixelsCenterX(): number {
 		return this.centerX / 100;
 	}
@@ -301,7 +305,7 @@ class Position extends Position3D {
 	}
 
 	toStringCoords() {
-		const yPixels = this.getTotalYPixels();
+		const yPixels = this.getYPixelCount();
 		return `[X = ${this.x}, Y = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}, Z = ${this.z}]`;
 	}
 
