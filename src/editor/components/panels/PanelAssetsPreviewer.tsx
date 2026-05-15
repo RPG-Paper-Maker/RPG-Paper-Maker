@@ -328,6 +328,7 @@ function PanelAssetsPreviewer({
 										onDeleteItem={handleDeleteRight}
 										doNotShowID
 										noFirstSelection
+										canBeEmpty
 									/>
 								</Flex>
 								<Flex spaced>
