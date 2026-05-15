@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "确定",
 	"cancel": "取消",
 	"new.project": "新建项目",
@@ -853,6 +853,7 @@
 	"south.west": "西南",
 	"south.east": "东南",
 	"loop": "循环",
+	"loop.at.ms": "循环于 (ms)",
 	"end.loop": "结束循环",
 	"break.loop": "中断循环",
 	"and.stock.in.variable": "并存储在变量中",

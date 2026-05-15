@@ -22,6 +22,8 @@ class TitleScreenGameOver extends Serializable {
 	public isTitleBackgroundVideo!: boolean;
 	public titleBackgroundImageID!: number;
 	public titleBackgroundVideoID!: number;
+	public titleVideoLoop!: boolean;
+	public titleVideoLoopMs!: number;
 	public titleMusic!: PlaySong;
 	public titleCommands!: TitleCommand[];
 	public titleSettings!: Checkable[];
@@ -37,6 +39,8 @@ class TitleScreenGameOver extends Serializable {
 		['isTitleBackgroundVideo', 'itbv', false, BINDING.BOOLEAN],
 		['titleBackgroundImageID', 'tb', 1, BINDING.NUMBER],
 		['titleBackgroundVideoID', 'tbv', 1, BINDING.NUMBER],
+		['titleVideoLoop', 'tvl', true, BINDING.BOOLEAN],
+		['titleVideoLoopMs', 'tvlms', 0, BINDING.NUMBER],
 		['titleMusic', 'tm', undefined, BINDING.OBJECT, PlaySong],
 		['titleCommands', 'tc', [], BINDING.LIST, TitleCommand],
 		['titleSettings', 'ts', undefined, BINDING.LIST, Checkable],

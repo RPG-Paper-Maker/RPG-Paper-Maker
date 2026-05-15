@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "OK",
 	"cancel": "Cancelar",
 	"new.project": "Nuevo Proyecto",
@@ -852,6 +852,7 @@
 	"south.west": "Sudoeste",
 	"south.east": "Sudeste",
 	"loop": "Bucle",
+	"loop.at.ms": "Bucle en (ms)",
 	"end.loop": "Terminar bucle",
 	"break.loop": "Romper bucle",
 	"and.stock.in.variable": "y stock en variable",

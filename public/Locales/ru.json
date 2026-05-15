@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "ОК",
 	"cancel": "Отмена",
 	"new.project": "Новый проект",
@@ -852,6 +852,7 @@
 	"south.west": "Юго-Запад",
 	"south.east": "Юго-Восток",
 	"loop": "Цикл",
+	"loop.at.ms": "Цикл при (ms)",
 	"end.loop": "Конец цикла",
 	"break.loop": "Разрыв цикла",
 	"and.stock.in.variable": "и запасы в переменной",

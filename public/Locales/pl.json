@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "OK",
 	"cancel": "Anuluj",
 	"new.project": "Nowy projekt",
@@ -852,6 +852,7 @@
 	"south.west": "dół-lewo",
 	"south.east": "dół-prawo",
 	"loop": "Pętla",
+	"loop.at.ms": "Pętla od (ms)",
 	"end.loop": "Koniec pętli",
 	"break.loop": "Złam pętle",
 	"and.stock.in.variable": "i zapisz do zmiennej",

@@ -21,6 +21,7 @@ import Checkbox from '../../Checkbox';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import InputNumber from '../../InputNumber';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import Tree from '../../Tree';
 
@@ -34,6 +35,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const [isTitleBackgroundVideo, setIsTitleBackgroundVideo] = useState<boolean>(false);
 	const [titleBackgroundImageID, setTitleBackgroundImageID] = useStateNumber();
 	const [titleBackgroundVideoID, setTitleBackgroundVideoID] = useStateNumber();
+	const [titleVideoLoop, setTitleVideoLoop] = useState<boolean>(true);
+	const [titleVideoLoopMs, setTitleVideoLoopMs] = useStateNumber();
 	const [titleCommands, setTitleCommands] = useState<Node[]>([]);
 	const [settingsConfiguration, setSettingsConfiguration] = useState<Node[]>([]);
 	const [isGameOverBackgroundImage, setIsGameOverBackgroundImage] = useState<boolean>(true);
@@ -48,6 +51,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setIsTitleBackgroundVideo(titleScreenGameOver.isTitleBackgroundVideo);
 		setTitleBackgroundImageID(titleScreenGameOver.titleBackgroundImageID);
 		setTitleBackgroundVideoID(titleScreenGameOver.titleBackgroundVideoID);
+		setTitleVideoLoop(titleScreenGameOver.titleVideoLoop);
+		setTitleVideoLoopMs(titleScreenGameOver.titleVideoLoopMs);
 		playTitleMusicSelectorRef.current!.initialize(titleScreenGameOver.titleMusic);
 		setTitleCommands(Node.createList(titleScreenGameOver.titleCommands));
 		setSettingsConfiguration(Node.createList(titleScreenGameOver.titleSettings));
@@ -65,6 +70,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		titleScreenGameOver.isTitleBackgroundVideo = isTitleBackgroundVideo;
 		titleScreenGameOver.titleBackgroundImageID = titleBackgroundImageID;
 		titleScreenGameOver.titleBackgroundVideoID = titleBackgroundVideoID;
+		titleScreenGameOver.titleVideoLoop = titleVideoLoop;
+		titleScreenGameOver.titleVideoLoopMs = titleVideoLoopMs;
 		playTitleMusicSelectorRef.current!.accept(titleScreenGameOver.titleMusic);
 		titleScreenGameOver.titleCommands = Node.createListFromNodes(titleCommands);
 		titleScreenGameOver.titleSettings = Node.createListFromNodes(settingsConfiguration);
@@ -119,18 +126,39 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 										</Checkbox>
 									</Label>
 									<Value>
-										<AssetSelector
-											selectionType={ASSET_SELECTOR_TYPE.VIDEOS}
-											selectedID={titleBackgroundVideoID}
-											onChange={setTitleBackgroundVideoID}
-											disabled={!isTitleBackgroundVideo}
-										/>
+										<Flex column spaced>
+											<AssetSelector
+												selectionType={ASSET_SELECTOR_TYPE.VIDEOS}
+												selectedID={titleBackgroundVideoID}
+												onChange={setTitleBackgroundVideoID}
+												disabled={!isTitleBackgroundVideo}
+											/>
+											<Flex spaced centerV>
+												<Checkbox
+													isChecked={titleVideoLoop}
+													onChange={setTitleVideoLoop}
+													disabled={!isTitleBackgroundVideo}
+												>
+													{t('loop.at.ms')}
+												</Checkbox>
+												<InputNumber
+													value={titleVideoLoopMs}
+													onChange={setTitleVideoLoopMs}
+													min={0}
+													disabled={!isTitleBackgroundVideo || !titleVideoLoop}
+												/>
+											</Flex>
+										</Flex>
 									</Value>
 								</Form>
 							</Groupbox>
 							<Flex column spaced>
 								<div>{t('music')}:</div>
-								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playTitleMusicSelectorRef} noDynamic />
+								<PlaySongSelector
+									songKind={SONG_KIND.MUSIC}
+									ref={playTitleMusicSelectorRef}
+									noDynamic
+								/>
 							</Flex>
 						</Flex>
 						<Flex one>

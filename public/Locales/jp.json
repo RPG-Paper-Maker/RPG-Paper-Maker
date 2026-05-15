@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "OK",
 	"cancel": "キャンセル",
 	"new.project": "新規プロジェクト",
@@ -852,6 +852,7 @@
 	"south.west": "南西",
 	"south.east": "南東",
 	"loop": "ループ",
+	"loop.at.ms": "ループ位置 (ms)",
 	"end.loop": "ループ終了",
 	"break.loop": "ループ中断",
 	"and.stock.in.variable": "を変数に格納",

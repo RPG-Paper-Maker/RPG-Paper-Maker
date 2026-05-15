@@ -109,7 +109,6 @@ const downloadOrCopyRepo = async (source, destination, localSource, branch) => {
 
 const createEmptyBRFolder = async (path) => {
 	// Because git won't create empty dirs...
-	await fs.mkdir(`${path}/Videos`);
 	await fs.mkdir(`${path}/Shapes/MTL`);
 	await fs.mkdir(`${path}/Shapes/GLTF`);
 	await fs.mkdir(`${path}/Shapes/Collisions`);

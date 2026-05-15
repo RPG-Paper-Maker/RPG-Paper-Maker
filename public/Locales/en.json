@@ -852,6 +852,7 @@
 	"south.west": "South-West",
 	"south.east": "South-East",
 	"loop": "Loop",
+	"loop.at.ms": "Loop at (ms)",
 	"end.loop": "End loop",
 	"break.loop": "Break loop",
 	"and.stock.in.variable": "and stock in variable",

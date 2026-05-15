@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "확인",
 	"cancel": "취소",
 	"new.project": "새 프로젝트",
@@ -853,6 +853,7 @@
 	"south.west": "남서",
 	"south.east": "남동",
 	"loop": "반복",
+	"loop.at.ms": "반복 위치 (ms)",
 	"end.loop": "반복 종료",
 	"break.loop": "반복 중단",
 	"and.stock.in.variable": "및 변수에 저장",

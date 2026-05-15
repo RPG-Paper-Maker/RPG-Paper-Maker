@@ -1,4 +1,4 @@
-{
+﻿{
 	"ok": "OK",
 	"cancel": "Abbrechen",
 	"new.project": "Neues Projekt",
@@ -852,6 +852,7 @@
 	"south.west": "Süd-West",
 	"south.east": "Süd-Ost",
 	"loop": "Schleife",
+	"loop.at.ms": "Schleife bei (ms)",
 	"end.loop": "Beende Schleife",
 	"break.loop": "Pausiere Schleife",
 	"and.stock.in.variable": "und Bestand in Variable",
