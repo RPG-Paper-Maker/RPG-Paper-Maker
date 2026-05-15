@@ -70,8 +70,9 @@
         "3.1.1",
         "3.1.2",
         "3.1.3",
-        "3.1.4"
+        "3.1.4",
+        "3.1.5"
     ],
     "unstable": false,
-    "lastBRUpdateVersion": "3.0.39"
+    "lastBRUpdateVersion": "3.1.5"
 }
