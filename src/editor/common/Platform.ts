@@ -198,16 +198,17 @@ export const getFolderZip = async (zip: ZipType, path: string) => {
 export const readJSON = async (path: string): Promise<JSONType | null> => {
 	const content = await readFile(path);
 	if (content) {
+		const stripped = content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
 		try {
-			return JSON.parse(content);
+			return JSON.parse(stripped);
 		} catch (e) {
 			const match = (e as Error).message.match(/at position (\d+)/);
 			if (match) {
 				try {
-					return JSON.parse(content.slice(0, parseInt(match[1])));
+					return JSON.parse(stripped.slice(0, parseInt(match[1])));
 				} catch (e) {
 					console.error(e);
-					console.error('Error for JSON: ' + content + '----------' + content.slice(0, parseInt(match[1])));
+					console.error('Error for JSON: ' + stripped + '----------' + stripped.slice(0, parseInt(match[1])));
 					return null;
 				}
 			}

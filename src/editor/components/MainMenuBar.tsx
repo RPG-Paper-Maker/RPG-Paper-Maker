@@ -335,8 +335,8 @@ function MainMenuBar() {
 					await Project.current.systems.save();
 				}
 			}
-			const newName = Project.current.systems.projectName.getName();
-			if (project.name !== newName) {
+			const newName = Project.current.systems.projectName?.getName();
+			if (newName && project.name !== newName) {
 				project.name = newName;
 				await addProject(project);
 			}
