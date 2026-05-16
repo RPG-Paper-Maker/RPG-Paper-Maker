@@ -344,6 +344,7 @@ class Previewer3D extends Base {
 		}
 		this.camera.verticalAngle = 55;
 		this.camera.targetPosition.set(0, 0, 0);
+		this.camera.update();
 	}
 
 	addToScene(
@@ -571,13 +572,15 @@ class Previewer3D extends Base {
 		}
 		this.camera.distance = Math.max(Math.max(w, h), d) + resize + (w + h + d) / 3;
 		if (this.isCut) {
-			const s = resize * ((resize * resize * 2) / this.camera.distance);
+			const maxDim = Math.max(Math.max(w, h), d);
+			const s = (0.55 * 2 * this.camera.distance * Math.tan(Math.PI / 8)) / maxDim;
 			for (const mesh of this.meshes) {
 				mesh.scale.set(s, s, s);
 			}
 		}
 		this.camera.verticalAngle = 55;
 		this.camera.targetPosition.set(w / 2 + min.x, h / 2 + min.y, d / 2 + min.z);
+		this.camera.update();
 	}
 
 	update() {
