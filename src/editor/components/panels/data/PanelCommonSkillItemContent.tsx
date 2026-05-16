@@ -35,6 +35,7 @@ import Groupbox from '../../Groupbox';
 import InputLocalization from '../../InputLocalization';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import TextureIconPreviewer from '../../TextureIconPreviewer';
+import TooltipInformation from '../../TooltipInformation';
 import Tree from '../../Tree';
 
 type Props = {
@@ -320,7 +321,12 @@ function PanelCommonSkillItemContent({ selectedElement, kind, disabled = false }
 						)}
 						{(kind === COMMON_SKILL_ITEM_KIND.ITEM || kind === COMMON_SKILL_ITEM_KIND.SKILL) && (
 							<>
-								<Label disabled={disabled}>{t('battle.message')}</Label>
+								<Label disabled={disabled}>
+									<Flex spaced centerV>
+										{t('battle.message')}
+										<TooltipInformation text={t('tooltip.battle.message')} />
+									</Flex>
+								</Label>
 								<Value>
 									<InputLocalization
 										localization={battleMessage}

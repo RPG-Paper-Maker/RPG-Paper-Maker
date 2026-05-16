@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Mudar o game over command",
 	"play.a.video": "Reproduza um vídeo",
 	"battle.message": "Mensagem de Combate",
+	"tooltip.battle.message": "Placeholders disponíveis: [user] (nome do usuário), [skill] (nome da habilidade), [item] (nome do item), [target] (nome(s) do(s) alvo(s), separados por vírgula se múltiplos).",
+	"tooltip.status.message": "Placeholder disponível: [target] (nome do alvo).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

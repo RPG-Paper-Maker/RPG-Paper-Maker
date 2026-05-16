@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "ゲームオーバー時の設定",
 	"play.a.video": "動画の再生",
 	"battle.message": "戦闘メッセージ",
+	"tooltip.battle.message": "使用可能なプレースホルダー：[user]（使用者名）、[skill]（スキル名）、[item]（アイテム名）、[target]（対象名、複数の場合はカンマ区切り）。",
+	"tooltip.status.message": "使用可能なプレースホルダー：[target]（対象名）。",
 	"off": "オフ",
 	"antialiasing": "アンチエイリアス",
 	"skyboxes": "スカイボックス",

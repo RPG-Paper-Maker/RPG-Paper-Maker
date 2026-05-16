@@ -1137,6 +1137,8 @@
 	"set.game.over.command": "게임 오버 명령어 설정",
 	"play.a.video": "비디오 재생",
 	"battle.message": "전투 메시지",
+	"tooltip.battle.message": "사용 가능한 플레이스홀더: [user] (사용자 이름), [skill] (스킬 이름), [item] (아이템 이름), [target] (대상 이름, 여러 명일 경우 쉼표로 구분).",
+	"tooltip.status.message": "사용 가능한 플레이스홀더: [target] (대상 이름).",
 	"off": "꺼짐",
 	"antialiasing": "안티앨리어싱",
 	"skyboxes": "스카이박스",

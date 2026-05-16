@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Setze Spielende-Befehl",
 	"play.a.video": "Spiele ein Video",
 	"battle.message": "Kampfnachrichten",
+	"tooltip.battle.message": "Verfügbare Platzhalter: [user] (Benutzername), [skill] (Fähigkeitsname), [item] (Gegenstandsname), [target] (Zielname(n), durch Komma getrennt bei mehreren).",
+	"tooltip.status.message": "Verfügbarer Platzhalter: [target] (Zielname).",
 	"off": "AUS",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxen",

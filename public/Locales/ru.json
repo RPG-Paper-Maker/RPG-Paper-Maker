@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Установить команду конца игры",
 	"play.a.video": "Проиграть видео",
 	"battle.message": "Боевое сообщение",
+	"tooltip.battle.message": "Доступные заполнители: [user] (имя пользователя), [skill] (название навыка), [item] (название предмета), [target] (имя цели/целей, через запятую если несколько).",
+	"tooltip.status.message": "Доступный заполнитель: [target] (имя цели).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Скайбокс",

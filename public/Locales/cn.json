@@ -1137,6 +1137,8 @@
 	"set.game.over.command": "设置游戏结束命令",
 	"play.a.video": "播放视频",
 	"battle.message": "战斗消息",
+	"tooltip.battle.message": "可用占位符：[user]（使用者名称），[skill]（技能名称），[item]（道具名称），[target]（目标名称，多个目标以逗号分隔）。",
+	"tooltip.status.message": "可用占位符：[target]（目标名称）。",
 	"off": "关闭",
 	"antialiasing": "抗锯齿",
 	"skyboxes": "天空盒",

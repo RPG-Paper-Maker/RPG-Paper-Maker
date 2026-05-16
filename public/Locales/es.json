@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Cambiar el Game Over comando",
 	"play.a.video": "Reproducir un video",
 	"battle.message": "Mensaje de combate",
+	"tooltip.battle.message": "Marcadores disponibles: [user] (nombre del usuario), [skill] (nombre de la habilidad), [item] (nombre del objeto), [target] (nombre(s) del objetivo, separados por comas si hay varios).",
+	"tooltip.status.message": "Marcador disponible: [target] (nombre del objetivo).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

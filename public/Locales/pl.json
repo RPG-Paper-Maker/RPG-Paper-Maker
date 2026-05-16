@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Ustaw polecenia dla końca gry",
 	"play.a.video": "Odtwórz film",
 	"battle.message": "Wiadomość podczas walki",
+	"tooltip.battle.message": "Dostępne symbole zastępcze: [user] (imię użytkownika), [skill] (nazwa umiejętności), [item] (nazwa przedmiotu), [target] (imię celu/celów, oddzielone przecinkami jeśli wiele).",
+	"tooltip.status.message": "Dostępny symbol zastępczy: [target] (imię celu).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

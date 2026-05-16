@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Встановити команду кінця гри",
 	"play.a.video": "Програти відео",
 	"battle.message": "Бойове повідомлення",
+	"tooltip.battle.message": "Доступні заповнювачі: [user] (ім'я користувача), [skill] (назва навички), [item] (назва предмету), [target] (ім'я цілі/цілей, через кому якщо кілька).",
+	"tooltip.status.message": "Доступний заповнювач: [target] (ім'я цілі).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

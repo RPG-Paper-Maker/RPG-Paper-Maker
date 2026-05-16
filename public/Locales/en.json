@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Set game over command",
 	"play.a.video": "Play a video",
 	"battle.message": "Battle message",
+	"tooltip.battle.message": "Available placeholders: [user] (user name), [skill] (skill name), [item] (item name), [target] (target name(s), comma-separated if multiple).",
+	"tooltip.status.message": "Available placeholder: [target] (target name).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

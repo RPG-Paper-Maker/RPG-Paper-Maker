@@ -1136,6 +1136,8 @@
 	"set.game.over.command": "Modifier la commande de game over",
 	"play.a.video": "Jouer une vidéo",
 	"battle.message": "Message de combat",
+	"tooltip.battle.message": "Balises disponibles : [user] (nom de l'utilisateur), [skill] (nom de la compétence), [item] (nom de l'objet), [target] (nom(s) de la/des cible(s), séparés par des virgules si plusieurs).",
+	"tooltip.status.message": "Balise disponible : [target] (nom de la cible).",
 	"off": "OFF",
 	"antialiasing": "Antialiasing",
 	"skyboxes": "Skyboxes",

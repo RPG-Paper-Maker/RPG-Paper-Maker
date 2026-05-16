@@ -26,6 +26,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import TextureIconPreviewer from '../../TextureIconPreviewer';
+import TooltipInformation from '../../TooltipInformation';
 import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
 
 const PanelStatus = forwardRef((props, ref) => {
@@ -276,7 +277,15 @@ const PanelStatus = forwardRef((props, ref) => {
 							</Flex>
 						</Groupbox>
 					</Flex>
-					<Groupbox title={t('messages')} disabled={isStatusDisabled}>
+					<Groupbox
+						title={
+							<Flex spaced centerV>
+								{t('messages')}
+								<TooltipInformation text={t('tooltip.status.message')} />
+							</Flex>
+						}
+						disabled={isStatusDisabled}
+					>
 						<Flex column spacedLarge>
 							<Flex column spaced>
 								<Flex disabledLabel={isStatusDisabled}>{t('ally.affected')}:</Flex>
