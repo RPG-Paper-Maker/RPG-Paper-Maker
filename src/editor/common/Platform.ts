@@ -101,7 +101,27 @@ export const cleanupTmpFiles = async (path: string) => {
 	const [folders, files] = await (Constants.IS_DESKTOP ? IO.getFoldersFiles(path) : LocalFile.getFoldersFiles(path));
 	for (const file of files) {
 		if (file.endsWith('.tmp')) {
-			await removeFile(Paths.join(path, file));
+			const tmpPath = Paths.join(path, file);
+			const originalName = file.replace(/\.[a-z0-9]+\.tmp$/, '');
+			const originalPath = Paths.join(path, originalName);
+			let isCorrupted = !(await checkFileExists(originalPath));
+			if (!isCorrupted) {
+				const content = await readFile(originalPath);
+				if (!content) {
+					isCorrupted = true;
+				} else if (originalName.endsWith('.json')) {
+					const stripped = content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+					try {
+						JSON.parse(stripped);
+					} catch {
+						isCorrupted = true;
+					}
+				}
+			}
+			if (isCorrupted) {
+				await copyFile(tmpPath, originalPath);
+			}
+			await removeFile(tmpPath);
 		}
 	}
 	for (const folder of folders) {
