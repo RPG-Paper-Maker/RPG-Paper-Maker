@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { DragEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,7 @@ import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Manager, Model } from '../../Editor';
 import { showWarning, triggerDLCs } from '../../store';
+import '../../styles/PanelAssetsPreviewer.css';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DynamicValueSelector from '../DynamicValueSelector';
@@ -83,8 +84,10 @@ function PanelAssetsPreviewer({
 	const [forcedCurrentSelectedItemIDLeft, setForcedCurrentSelectedItemIDLeft] = useState<number | null>(null);
 	const [forcedCurrentSelectedItemIDRight, setForcedCurrentSelectedItemIDRight] = useState<number | null>(null);
 	const [isCheckedActivated, setIsCheckedActivated] = useState(dynamicValueID?.isActivated);
+	const [isDraggingOver, setIsDraggingOver] = useState(false);
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
+	const dragCounterRef = useRef(0);
 
 	const dispatch = useDispatch();
 
@@ -196,15 +199,27 @@ function PanelAssetsPreviewer({
 		importFileInputRef.current?.click();
 	};
 
-	const handleImportFileChange = async () => {
-		if (!importFileInputRef.current) {
-			return;
+	const fileMatchesImportTypes = (file: File): boolean => {
+		if (!importTypes) {
+			return true;
 		}
-		const files = Array.from(importFileInputRef.current.files || []);
-		importFileInputRef.current.value = '';
+		return importTypes.split(',').some((token) => {
+			const t = token.trim();
+			if (t.startsWith('.')) {
+				return file.name.toLowerCase().endsWith(t.toLowerCase());
+			}
+			if (t.endsWith('/*')) {
+				return file.type.startsWith(t.slice(0, -1));
+			}
+			return file.type === t;
+		});
+	};
+
+	const processImportFiles = async (files: File[]) => {
+		const matchingFiles = files.filter(fileMatchesImportTypes);
 		try {
 			const validFiles: File[] = [];
-			for (const file of files) {
+			for (const file of matchingFiles) {
 				if (file.type.startsWith('image/')) {
 					const maxSize = Manager.GL.mainContext?.renderer?.capabilities?.maxTextureSize ?? 4096;
 					try {
@@ -248,6 +263,68 @@ function PanelAssetsPreviewer({
 			await handleRefresh();
 		} catch (error) {
 			console.error('Error reading files:', error);
+		}
+	};
+
+	const handleImportFileChange = async () => {
+		if (!importFileInputRef.current) {
+			return;
+		}
+		const files = Array.from(importFileInputRef.current.files || []);
+		importFileInputRef.current.value = '';
+		await processImportFiles(files);
+	};
+
+	const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		dragCounterRef.current++;
+		if (e.dataTransfer.types.includes('Files')) {
+			setIsDraggingOver(true);
+		}
+	};
+
+	const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		dragCounterRef.current--;
+		if (dragCounterRef.current === 0) {
+			setIsDraggingOver(false);
+		}
+	};
+
+	const dragItemsMatchImportTypes = (e: DragEvent<HTMLDivElement>): boolean => {
+		if (!importTypes) {
+			return true;
+		}
+		const items = Array.from(e.dataTransfer.items).filter((item) => item.kind === 'file');
+		if (items.length === 0) {
+			return false;
+		}
+		const tokens = importTypes.split(',').map((t) => t.trim());
+		return items.some((item) =>
+			tokens.some((token) => {
+				if (token.startsWith('.')) {
+					return true; // filename not accessible during drag, allow optimistically
+				}
+				if (token.endsWith('/*')) {
+					return item.type.startsWith(token.slice(0, -1));
+				}
+				return item.type === token;
+			}),
+		);
+	};
+
+	const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = dragItemsMatchImportTypes(e) ? 'copy' : 'none';
+	};
+
+	const handleDrop = async (e: DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		dragCounterRef.current = 0;
+		setIsDraggingOver(false);
+		const files = Array.from(e.dataTransfer.files);
+		if (files.length > 0) {
+			await processImportFiles(files);
 		}
 	};
 
@@ -310,8 +387,46 @@ function PanelAssetsPreviewer({
 									onClick={handleClickMoveLeft}
 								/>
 							</Flex>
-							<Flex column spaced>
-								<Flex one zeroHeight>
+							<Flex
+								column
+								spaced
+								className='assetDropZone'
+								onDragEnter={handleDragEnter}
+								onDragLeave={handleDragLeave}
+								onDragOver={handleDragOver}
+								onDrop={handleDrop}
+							>
+								<Flex className='textSmallDetail' spaced>
+									{t('drop.custom.assets.here')}
+									{importTypes && (
+										<div className='textSmallDetail'>
+											{` (${importTypes
+												.split(',')
+												.map((token) => {
+													const t = token.trim();
+													if (t.startsWith('.')) return t;
+													if (t.includes('/') && !t.endsWith('/*')) {
+														return '.' + t.split('/')[1].replace(/^x-/, '');
+													}
+													return null;
+												})
+												.filter(Boolean)
+												.join(', ')})`}
+										</div>
+									)}
+									:
+								</Flex>
+								<Flex one zeroHeight className='assetDropTree'>
+									{isDraggingOver && (
+										<div
+											className='assetDropOverlay'
+											onDragOver={handleDragOver}
+											onDrop={(e) => {
+												e.stopPropagation();
+												void handleDrop(e);
+											}}
+										/>
+									)}
 									<Tree
 										list={itemsAvailable}
 										onSelectedItem={handleChangeSelectedItemRight}
@@ -347,13 +462,14 @@ function PanelAssetsPreviewer({
 										</Button>
 									</Flex>
 									<Flex one>
-										<Button fillWidth buttonType={BUTTON_TYPE.PRIMARY} onClick={handleClickPlus}>
-											+
+										<Button fillWidth onClick={handleClickPlus}>
+											{t('import')}...
 										</Button>
 									</Flex>
 									<input
 										ref={importFileInputRef}
 										type='file'
+										multiple
 										hidden
 										onChange={handleImportFileChange}
 										accept={importTypes}

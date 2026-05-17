@@ -924,6 +924,7 @@
 	"change.graphics": "그래픽 변경",
 	"map.frame.duration": "맵 프레임 지속 시간",
 	"export": "내보내기",
+	"drop.custom.assets.here": "사용자 정의 에셋을 여기에 놓으세요",
 	"open.project.folder": "프로젝트 폴더 열기",
 	"folder": "폴더",
 	"plugin": "플러그인",

@@ -924,6 +924,7 @@
 	"change.graphics": "更改图形",
 	"map.frame.duration": "地图帧持续时间",
 	"export": "导出",
+	"drop.custom.assets.here": "在此处放置自定义资源",
 	"open.project.folder": "打开项目文件夹",
 	"folder": "文件夹",
 	"plugin": "插件",

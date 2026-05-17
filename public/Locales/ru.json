@@ -923,6 +923,7 @@
 	"change.graphics": "Изменить графику",
 	"map.frame.duration": "Длительн. кадра карты",
 	"export": "Экспорт",
+	"drop.custom.assets.here": "Перетащите ресурсы сюда",
 	"open.project.folder": "Открыть папку проекта",
 	"folder": "Папка",
 	"plugin": "Плагин",

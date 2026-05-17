@@ -923,6 +923,7 @@
 	"change.graphics": "Ustaw grafikę",
 	"map.frame.duration": "[Charset] czas trwania klatki (mapa)",
 	"export": "Eksport",
+	"drop.custom.assets.here": "Upuść własne zasoby tutaj",
 	"open.project.folder": "Otwórz folder projektu",
 	"folder": "Folder",
 	"plugin": "Wtyczka",

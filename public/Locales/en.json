@@ -923,6 +923,7 @@
 	"change.graphics": "Change graphics",
 	"map.frame.duration": "Map frame duration",
 	"export": "Export",
+	"drop.custom.assets.here": "Drop custom assets here",
 	"open.project.folder": "Open project folder",
 	"folder": "Folder",
 	"plugin": "Plugin",

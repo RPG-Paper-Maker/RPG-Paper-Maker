@@ -923,6 +923,7 @@
 	"change.graphics": "Змінити графіку",
 	"map.frame.duration": "Тривалість кадру карти",
 	"export": "Експорт",
+	"drop.custom.assets.here": "Перетягніть власні ресурси сюди",
 	"open.project.folder": "Відкрити директорію проєкту",
 	"folder": "Директорія",
 	"plugin": "Плагін",

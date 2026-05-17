@@ -923,6 +923,7 @@
 	"change.graphics": "Changer l'apparence",
 	"map.frame.duration": "Durée d'une frame (carte)",
 	"export": "Exporter",
+	"drop.custom.assets.here": "Déposez des ressources personnalisées ici",
 	"open.project.folder": "Ouvrir le dossier du projet",
 	"folder": "Dossier",
 	"plugin": "Plugin",

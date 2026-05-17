@@ -923,6 +923,7 @@
 	"change.graphics": "グラフィックの変更",
 	"map.frame.duration": "マップフレーム持続時間",
 	"export": "エクスポート",
+	"drop.custom.assets.here": "カスタムアセットをここにドロップ",
 	"open.project.folder": "プロジェクトフォルダを開く",
 	"folder": "フォルダ",
 	"plugin": "プラグイン",

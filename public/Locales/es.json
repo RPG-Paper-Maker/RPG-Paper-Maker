@@ -923,6 +923,7 @@
 	"change.graphics": "Cambiar la apariencia",
 	"map.frame.duration": "Duración de una frame (mapa)",
 	"export": "Exportar",
+	"drop.custom.assets.here": "Suelta activos personalizados aquí",
 	"open.project.folder": "Abra la carpeta del proyecto",
 	"folder": "Carpeta",
 	"plugin": "Plugin",
