@@ -215,6 +215,23 @@ function PanelAssetsPreviewer({
 		});
 	};
 
+	const getImportTypesLabel = (): string => {
+		if (!importTypes) {
+			return '';
+		}
+		const extensions = importTypes
+			.split(',')
+			.map((token) => {
+				const t = token.trim();
+				if (t.startsWith('.')) {
+					return t.toLowerCase();
+				}
+				return '';
+			})
+			.filter((extension, index, list) => extension && list.indexOf(extension) === index);
+		return extensions.length > 0 ? ` (${extensions.join(', ')})` : '';
+	};
+
 	const processImportFiles = async (files: File[]) => {
 		const matchingFiles = files.filter(fileMatchesImportTypes);
 		try {
@@ -334,6 +351,8 @@ function PanelAssetsPreviewer({
 		}
 	}, [isInitiating]);
 
+	const importTypesLabel = getImportTypesLabel();
+
 	return (
 		<Flex column spacedLarge fillWidth fillHeight>
 			{itemsAvailable && (
@@ -398,22 +417,7 @@ function PanelAssetsPreviewer({
 							>
 								<Flex className='textSmallDetail' spaced>
 									{t('drop.custom.assets.here')}
-									{importTypes && (
-										<div className='textSmallDetail'>
-											{` (${importTypes
-												.split(',')
-												.map((token) => {
-													const t = token.trim();
-													if (t.startsWith('.')) return t;
-													if (t.includes('/') && !t.endsWith('/*')) {
-														return '.' + t.split('/')[1].replace(/^x-/, '');
-													}
-													return null;
-												})
-												.filter(Boolean)
-												.join(', ')})`}
-										</div>
-									)}
+									{importTypesLabel && <div className='textSmallDetail'>{importTypesLabel}</div>}
 									:
 								</Flex>
 								<Flex one zeroHeight className='assetDropTree'>

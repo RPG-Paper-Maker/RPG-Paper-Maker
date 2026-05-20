@@ -442,7 +442,7 @@ function DialogSongs({
 						active={active}
 						disableParametersProperties={disableParametersProperties}
 						basePath={Model.Song.getLocalFolder(selectedKind)}
-						importTypes='audio/mp3, audio/ogg, audio/wav'
+						importTypes='.mp3, .ogg, .wav'
 					/>
 				) : (
 					<Flex one />

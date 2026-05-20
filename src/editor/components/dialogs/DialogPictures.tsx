@@ -386,7 +386,7 @@ function DialogPictures({
 						options={getPreviewerOptionsContent()}
 						active={active}
 						basePath={Model.Picture.getLocalFolder(selectedKind)}
-						importTypes='image/png, image/jpeg'
+						importTypes='.png, .jpg, .jpeg'
 					/>
 				) : (
 					<Flex one />
