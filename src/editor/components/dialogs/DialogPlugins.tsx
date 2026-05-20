@@ -558,6 +558,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 							byIndex
 							doNotShowID
 							cannotUpdateListSize
+							canBeEmpty
 						/>
 					</Flex>
 				</Groupbox>
@@ -568,6 +569,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 							list={commands}
 							onListUpdated={handleCommandsUpdated}
 							cannotUpdateListSize
+							canBeEmpty
 						/>
 					</Flex>
 				</Groupbox>
