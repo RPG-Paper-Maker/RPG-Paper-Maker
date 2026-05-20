@@ -281,21 +281,23 @@ function DialogDeploy({ setIsOpen }: Props) {
 					asset.base64 = (await readFile(asset.getPath(), true)) ?? '';
 				} else {
 					if ((asset.isBR || !!asset.dlc) && asset.id >= 1) {
-						promises.push(
-							Constants.IS_DESKTOP
-								? IO.copyFile(asset.getPath(), Paths.join(path, Paths.BUILD, asset.getPath(true)))
-								: LocalFile.copyPublicFile(
-										asset.getPath(),
-										Paths.join(path, Paths.BUILD, asset.getPath(true)),
-										isBlob,
-									)
-										.then(() => {
-											dispatch(
-												setLoadingBar({ percent: 30, label: `Copying BR (${asset.getPath()}` }),
-											);
-										})
-										.catch(console.error),
-						);
+						const src = asset.getPath();
+						const dst = Paths.join(path, Paths.BUILD, asset.getPath(true));
+						if (Constants.IS_DESKTOP) {
+							promises.push(
+								IO.checkFileExists(src).then((exists) => {
+									if (exists) return IO.copyFile(src, dst);
+								}),
+							);
+						} else {
+							promises.push(
+								LocalFile.copyPublicFile(src, dst, isBlob)
+									.then(() => {
+										dispatch(setLoadingBar({ percent: 30, label: `Copying BR (${src}` }));
+									})
+									.catch(console.error),
+							);
+						}
 						asset.isBR = false;
 						asset.dlc = '';
 					}

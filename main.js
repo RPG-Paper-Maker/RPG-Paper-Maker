@@ -691,7 +691,7 @@ ipcMain.handle('remove-file', async (event, path, content) => {
 });
 
 ipcMain.handle('copy-file', async (event, src, dst) => {
-	await fs.copyFile(src, dst);
+	await retryOnPermError(() => fs.copyFile(src, dst), ['ENOENT']);
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
