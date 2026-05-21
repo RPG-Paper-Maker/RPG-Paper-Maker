@@ -22,21 +22,52 @@ class Battler {
 	public static monsters: TroopMonster[] = [];
 	public static monstersMeshes: THREE.Mesh[] = [];
 
+	private static getFormulaContext() {
+		return {
+			Systems: Project.current!.systems,
+			BattleSystems: Project.current!.battleSystem,
+		};
+	}
+
+	private static evaluatePositionFormula(formula: string, index?: number): THREE.Vector3 | null {
+		const data = this.getFormulaContext();
+		const names = ['THREE', 'Data'];
+		const values: unknown[] = [THREE, data];
+		if (index !== undefined) {
+			names.push('i');
+			values.push(index);
+		}
+		const vector = new Function(...names, `return ${formula}`)(...values) as unknown;
+		return vector instanceof THREE.Vector3 ? vector.divideScalar(Project.SQUARE_SIZE) : null;
+	}
+
+	private static getDefaultHeroPositionOffset(index: number): THREE.Vector3 {
+		return new THREE.Vector3(2, 0, -1).add(new THREE.Vector3(index / 2, 0, index));
+	}
+
+	private static getDefaultMonsterPositionOffset(index: number): THREE.Vector3 {
+		return new THREE.Vector3(-2, 0, -1).add(new THREE.Vector3((-index * 3) / 4, 0, index));
+	}
+
 	static async addToScene(centerPosition: Position, index: number, isHero: boolean = true): Promise<void> {
 		if (Scene.Map.currentBattle) {
 			let hero: Hero;
 			let localPosition: THREE.Vector3;
+			const battleSystem = Project.current!.battleSystem;
 			if (isHero) {
 				hero = Project.current!.heroes.getByID(
 					Project.current!.systems.initialPartyMembers[index].heroID.getFixNumberValue(),
 				);
-				localPosition = centerPosition
-					.toVector3()
-					.add(
-						new THREE.Vector3(2, 0, -1).add(
-							new THREE.Vector3(index / 2, 0, index),
-						),
-					);
+				try {
+					const center = this.evaluatePositionFormula(battleSystem.heroesBattlersCenterOffset.value as string);
+					const offset = this.evaluatePositionFormula(battleSystem.heroesBattlersOffset.value as string, index);
+					localPosition =
+						center && offset
+							? centerPosition.toVector3().add(center).add(offset)
+							: centerPosition.toVector3().add(this.getDefaultHeroPositionOffset(index));
+				} catch {
+					localPosition = centerPosition.toVector3().add(this.getDefaultHeroPositionOffset(index));
+				}
 			} else {
 				const troopMonster = this.monsters[index];
 				if (!troopMonster) return;
@@ -44,21 +75,24 @@ class Battler {
 				if (troopMonster.isSpecificPosition) {
 					try {
 						const formula = troopMonster.specificPosition.value as string;
-						const center = new Function('THREE', `return ${formula}`)(THREE) as THREE.Vector3;
-						localPosition = centerPosition.toVector3().add(center);
+						const center = this.evaluatePositionFormula(formula);
+						localPosition = center
+							? centerPosition.toVector3().add(center)
+							: centerPosition.toVector3().add(this.getDefaultMonsterPositionOffset(index));
 					} catch {
-						localPosition = centerPosition
-							.toVector3()
-							.add(new THREE.Vector3(-2, 0, -1))
-							.add(
-								new THREE.Vector3((-index * 3) / 4, 0, index),
-							);
+						localPosition = centerPosition.toVector3().add(this.getDefaultMonsterPositionOffset(index));
 					}
 				} else {
-					localPosition = centerPosition
-						.toVector3()
-						.add(new THREE.Vector3(-2, 0, -1))
-						.add(new THREE.Vector3((-index * 3) / 4, 0, index));
+					try {
+						const center = this.evaluatePositionFormula(battleSystem.troopsBattlersCenterOffset.value as string);
+						const offset = this.evaluatePositionFormula(battleSystem.troopsBattlersOffset.value as string, index);
+						localPosition =
+							center && offset
+								? centerPosition.toVector3().add(center).add(offset)
+								: centerPosition.toVector3().add(this.getDefaultMonsterPositionOffset(index));
+					} catch {
+						localPosition = centerPosition.toVector3().add(this.getDefaultMonsterPositionOffset(index));
+					}
 				}
 			}
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, hero?.idBattler);
