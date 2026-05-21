@@ -1073,7 +1073,9 @@ class Map extends Base {
 	updateObjectCursor(preview: boolean, position: Position) {
 		if (!preview && position.isInMap(this.model)) {
 			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
-			this.needsUpdateComponent = true;
+			if (this.movingObject === null) {
+				this.needsUpdateComponent = true;
+			}
 			this.cursorObject.updateMeshPosition();
 		}
 	}
@@ -1089,7 +1091,6 @@ class Map extends Base {
 				}
 				this.previewDeletedMovingObject = newPortion.model.objects.get(position.toKey()) ?? null;
 				newPortion.model.objects.set(position.toKey(), this.movingObject);
-				this.model.moveObject(previousPosition, position);
 				this.portionsToUpdate.add(previousPortion);
 				this.portionsToUpdate.add(newPortion);
 			}
@@ -2194,8 +2195,11 @@ class Map extends Base {
 			const previousPortion = this.getMapPortionByPosition(this.movingObjectInitialPosition);
 			const newPortion = this.getMapPortionByPosition(this.cursorObject.position);
 			if (previousPortion && newPortion) {
+				const newPosition = this.cursorObject.position.clone();
 				this.portionsToSave.add(previousPortion);
 				this.portionsToSave.add(newPortion);
+				this.model.moveObject(this.movingObjectInitialPosition, newPosition);
+				this.needsUpdateComponent = true;
 				this.undoRedoStates.push(
 					UndoRedoState.create(
 						this.movingObjectInitialPosition,
@@ -2207,7 +2211,7 @@ class Map extends Base {
 				);
 				this.undoRedoStates.push(
 					UndoRedoState.create(
-						this.cursorObject.position,
+						newPosition,
 						this.previewDeletedMovingObject,
 						ELEMENT_MAP_KIND.OBJECT,
 						this.movingObject,

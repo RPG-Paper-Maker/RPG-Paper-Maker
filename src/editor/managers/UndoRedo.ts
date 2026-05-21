@@ -74,6 +74,7 @@ class UndoRedo {
 				if (kind === ELEMENT_MAP_KIND.OBJECT) {
 					mapPortion.updateObject(position, element as Model.CommonObject, true);
 					await Scene.Map.current.model.updateObject(position, element as Model.CommonObject);
+					Scene.Map.current.needsUpdateComponent = true;
 				} else {
 					mapPortion.updateMapElement(position, element as MapElement.Base, kind, false, false, true, true);
 				}
@@ -90,6 +91,7 @@ class UndoRedo {
 					await model.save();
 					if (kind === ELEMENT_MAP_KIND.OBJECT) {
 						await Scene.Map.current.model.updateObject(position, element as Model.CommonObject | null);
+						Scene.Map.current.needsUpdateComponent = true;
 					}
 				}
 			}

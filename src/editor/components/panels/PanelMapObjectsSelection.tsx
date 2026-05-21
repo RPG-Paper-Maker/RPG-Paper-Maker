@@ -27,6 +27,10 @@ import DialogMapObject from '../dialogs/models/DialogMapObject';
 
 const ELEMENT_HEIGHT = 30;
 const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
+type IconCacheEntry = {
+	signature: string;
+	url: string | null;
+};
 
 function PanelMapObjectsSelection() {
 	const { t } = useTranslation();
@@ -36,13 +40,15 @@ function PanelMapObjectsSelection() {
 	const [minToDisplay, setMinToDisplay] = useState(0);
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
 	const [positionScroll] = useState({ current: 0 });
-	const [urls] = useState<Map<string, string | null>>(new Map());
+	const [urls] = useState<Map<string, IconCacheEntry>>(new Map());
 	const [, setTriggerUpdate] = useStateString();
 	const [isFocused, setIsFocused] = useState(false);
 	const [isOpenMapObject, setIsOpenMapObject] = useState(false);
 	const [currentMapObject, setCurrentMapObject] = useState<Model.CommonObject | null>(null);
 	const [rightClickedObject, setRightClickedObject] = useState<Model.MapObject | null>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
+	const loadingIcons = useRef<Set<string>>(new Set());
+	const pendingUpdateTimeout = useRef<number | null>(null);
 
 	const needsUpdate = useSelector((state: RootState) => state.mapEditor.needsUpdate);
 	const isFirstRender = useRef(true);
@@ -56,13 +62,37 @@ function PanelMapObjectsSelection() {
 	};
 
 	const getIconCacheKey = (mapObject: Model.MapObject): string => {
-		return mapObject.position.toKey();
+		return String(mapObject.id);
 	};
 
-	const initialize = async () => {
-		const content = contentRef.current;
-		if (content) {
-			await update();
+	const getIconSignature = (state: Model.MapObjectState): string => {
+		const rect = state.rectTileset;
+		return [
+			state.graphicsKind,
+			state.graphicsID,
+			state.graphicsIndexX,
+			state.graphicsIndexY,
+			rect?.x ?? 0,
+			rect?.y ?? 0,
+			rect?.width ?? 0,
+			rect?.height ?? 0,
+			Scene.Map.current?.model.getTileset()?.pictureID ?? 0,
+		].join(':');
+	};
+
+	const scheduleUpdate = (delay = 0) => {
+		if (pendingUpdateTimeout.current !== null) {
+			window.clearTimeout(pendingUpdateTimeout.current);
+		}
+		pendingUpdateTimeout.current = window.setTimeout(() => {
+			pendingUpdateTimeout.current = null;
+			update().catch(console.error);
+		}, delay);
+	};
+
+	const initialize = () => {
+		if (contentRef.current) {
+			scheduleUpdate();
 		}
 	};
 
@@ -177,42 +207,59 @@ function PanelMapObjectsSelection() {
 	const update = async () => {
 		const content = contentRef.current;
 		const mapSnapshot = Scene.Map.current;
-		if (content) {
-			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
-				if (Scene.Map.current !== mapSnapshot) {
-					return;
-				}
-				const mapObject = list[i + positionScroll.current];
-				if (mapObject) {
+		if (!content || !mapSnapshot || mapSnapshot.loading || mapSnapshot.movingObject !== null) {
+			if (content && mapSnapshot) {
+				scheduleUpdate(50);
+			}
+			return;
+		}
+		const currentList = mapSnapshot.model?.objects ?? [];
+		for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
+			if (Scene.Map.current !== mapSnapshot || mapSnapshot.loading || mapSnapshot.movingObject !== null) {
+				scheduleUpdate(50);
+				return;
+			}
+			const mapObject = currentList[i + positionScroll.current];
+			if (mapObject) {
+				const commonObject = getCommonObject(mapObject);
+				if (!commonObject) {
 					const cacheKey = getIconCacheKey(mapObject);
-					if (urls.get(cacheKey) === undefined) {
-						urls.set(cacheKey, '');
-						let dataURL: string | null = '';
-						const commonObject = getCommonObject(mapObject);
-						if (commonObject) {
-							const state = commonObject.getFirstState();
-							if (state) {
-								switch (state.graphicsKind) {
-									case ELEMENT_MAP_KIND.SPRITE_FIX:
-									case ELEMENT_MAP_KIND.SPRITE_FACE:
-										if (state.graphicsID !== 0) {
-											dataURL = await generateCharacterIcon(state);
-										} else {
-											dataURL = await generateTilesetIcon(state);
-										}
-										break;
-									case ELEMENT_MAP_KIND.OBJECT3D:
-										if (state.graphicsID > 0) {
-											dataURL = await generateObject3DIcon(state.graphicsID);
-										}
-										break;
-								}
+					if (!urls.has(cacheKey)) {
+						urls.set(cacheKey, { signature: 'unloaded', url: null });
+						setTriggerUpdate(String(i));
+					}
+					continue;
+				}
+				const cacheKey = getIconCacheKey(mapObject);
+				const state = commonObject.getFirstState();
+				const signature = state ? getIconSignature(state) : 'empty';
+				if (urls.get(cacheKey)?.signature !== signature && !loadingIcons.current.has(cacheKey)) {
+					loadingIcons.current.add(cacheKey);
+					let dataURL: string | null = '';
+					try {
+						if (state) {
+							switch (state.graphicsKind) {
+								case ELEMENT_MAP_KIND.SPRITE_FIX:
+								case ELEMENT_MAP_KIND.SPRITE_FACE:
+									if (state.graphicsID !== 0) {
+										dataURL = await generateCharacterIcon(state);
+									} else {
+										dataURL = await generateTilesetIcon(state);
+									}
+									break;
+								case ELEMENT_MAP_KIND.OBJECT3D:
+									if (state.graphicsID > 0) {
+										dataURL = await generateObject3DIcon(state.graphicsID);
+									}
+									break;
 							}
-						} else {
-							dataURL = null;
 						}
-						urls.set(cacheKey, dataURL);
-						setTriggerUpdate(String(i) + dataURL);
+						if (Scene.Map.current === mapSnapshot && !mapSnapshot.loading) {
+							urls.set(cacheKey, { signature, url: dataURL });
+							setTriggerUpdate(String(i) + dataURL);
+						}
+					} finally {
+						loadingIcons.current.delete(cacheKey);
 					}
 				}
 			}
@@ -312,12 +359,17 @@ function PanelMapObjectsSelection() {
 			if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
 				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
 			}
-			await update();
+			scheduleUpdate();
 		}
 	};
 
 	useEffect(() => {
-		initialize().catch(console.error);
+		initialize();
+		return () => {
+			if (pendingUpdateTimeout.current !== null) {
+				window.clearTimeout(pendingUpdateTimeout.current);
+			}
+		};
 	}, []);
 
 	useEffect(() => {
@@ -325,8 +377,10 @@ function PanelMapObjectsSelection() {
 			isFirstRender.current = false;
 			return;
 		}
-		urls.clear();
-		update().catch(console.error);
+		if (Scene.Map.current?.movingObject !== null) {
+			return;
+		}
+		scheduleUpdate();
 	}, [needsUpdate]);
 
 	useEffect(() => {
@@ -349,7 +403,7 @@ function PanelMapObjectsSelection() {
 	}, [minToDisplay, previousMinToDisplay]);
 
 	const getIcon = (mapObject: Model.MapObject) => {
-		const url = urls.get(getIconCacheKey(mapObject));
+		const url = urls.get(getIconCacheKey(mapObject))?.url;
 		return url === null ? <FaQuestion /> : url ? <img src={url} alt='icon' /> : <FaRegSquare />;
 	};
 
@@ -362,11 +416,10 @@ function PanelMapObjectsSelection() {
 	}
 
 	const listElements = filteredList.map((mapObject) => {
-		const posKey = mapObject.position.toKey();
 		return (
 			<div
 				className='element'
-				key={posKey}
+				key={mapObject.id}
 				onClick={() => handleClick(mapObject)}
 				onDoubleClick={() => handleEditMapObject(mapObject)}
 				onMouseDown={(e) => handleElementMouseDown(e, mapObject)}

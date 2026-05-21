@@ -348,7 +348,11 @@ class Map extends Localization {
 	moveObject(previousPosition: Position, newPosition: Position) {
 		const object = this.objects.find((mapObject) => mapObject.position.equals(previousPosition));
 		if (object) {
+			this.objects = this.objects.filter(
+				(mapObject) => mapObject === object || !mapObject.position.equals(newPosition),
+			);
 			object.position = newPosition;
+			this.objects.sort((a: Model.MapObject, b: Model.MapObject) => a.id - b.id);
 		}
 	}
 

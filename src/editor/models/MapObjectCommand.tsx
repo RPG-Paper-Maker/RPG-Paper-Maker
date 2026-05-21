@@ -86,6 +86,7 @@ class MapObjectCommand extends Base {
 	public static COLOR_YELLOW = '#e8dd48';
 	public static COLOR_PURPLE = '#dd9eff';
 	public static COLOR_COMMENT = '#ffffff';
+	private static mapObjectsCache = new Map<number, Base[]>();
 	public kind!: EVENT_COMMAND_KIND;
 	public command!: MapObjectCommandType[];
 	public disabled!: boolean;
@@ -105,6 +106,10 @@ class MapObjectCommand extends Base {
 		mapObjectCommand.kind = kind;
 		mapObjectCommand.command = command;
 		return mapObjectCommand;
+	}
+
+	static cacheMapObjects(mapID: number, objects: Base[]) {
+		MapObjectCommand.mapObjectsCache.set(mapID, objects);
 	}
 
 	static isNotOpeningCommand(kind: EVENT_COMMAND_KIND): boolean {
@@ -861,6 +866,21 @@ class MapObjectCommand extends Base {
 
 	toStringDynamicObject(iterator: ITERATOR, properties: Base[] = [], parameters: Base[] = []): string {
 		const objectsList = Scene.Map.getCurrentMapObjectsList();
+		return this.toStringDynamicValue(iterator, properties, parameters, objectsList);
+	}
+
+	toStringDynamicObjectInMap(
+		iterator: ITERATOR,
+		properties: Base[] = [],
+		parameters: Base[] = [],
+		mapID: number | null = null,
+	): string {
+		let objectsList: Base[] = [];
+		if (mapID === -1 || mapID === Scene.Map.current?.id) {
+			objectsList = Scene.Map.getCurrentMapObjectsList();
+		} else if (mapID !== null) {
+			objectsList = MapObjectCommand.mapObjectsCache.get(mapID) ?? [];
+		}
 		return this.toStringDynamicValue(iterator, properties, parameters, objectsList);
 	}
 
@@ -1786,16 +1806,27 @@ class MapObjectCommand extends Base {
 
 	toStringChangeState(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		let mapID = '';
+		let mapIDValue: number | null = null;
 		switch (this.command[iterator.i + 1]) {
 			case -1:
 				mapID = t('this.map');
+				mapIDValue = -1;
 				iterator.i += 2;
 				break;
-			default:
+			default: {
+				const kind = this.command[iterator.i] as DYNAMIC_VALUE_KIND;
+				const value = this.command[iterator.i + 1];
+				if (
+					(kind === DYNAMIC_VALUE_KIND.DATABASE || kind === DYNAMIC_VALUE_KIND.NUMBER) &&
+					typeof value === 'number'
+				) {
+					mapIDValue = value;
+				}
 				mapID = this.toStringDynamicValue(iterator, properties, parameters);
 				break;
+			}
 		}
-		const objectID = this.toStringDynamicObject(iterator, properties, parameters);
+		const objectID = this.toStringDynamicObjectInMap(iterator, properties, parameters, mapIDValue);
 		const stateID = this.toStringDynamicValue(
 			iterator,
 			properties,
