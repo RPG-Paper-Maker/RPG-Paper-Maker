@@ -57,7 +57,11 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
 			setDontChangeOrientation(Utils.initializeBoolCommand(list, iterator));
 		} else {
-			setObjectsList(Scene.Map.getCurrentMapObjectsList());
+			const objects = Scene.Map.getCurrentMapObjectsList();
+			if (Scene.Map.current) {
+				Model.MapObjectCommand.cacheMapObjects(Scene.Map.current.id, objects);
+			}
+			setObjectsList(objects);
 			mapID.updateToDefaultDatabase(-1);
 			objectID.updateToDefaultDatabase(-1);
 			stateID.updateToDefaultDatabase(Project.current!.commonEvents.states);
@@ -78,7 +82,11 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 			if (updateObjectID) {
 				objectID.updateToDefaultDatabase(-1);
 			}
-			setObjectsList(Scene.Map.getCurrentMapObjectsList());
+			const objects = Scene.Map.getCurrentMapObjectsList();
+			if (Scene.Map.current) {
+				Model.MapObjectCommand.cacheMapObjects(Scene.Map.current.id, objects);
+			}
+			setObjectsList(objects);
 		} else if (id === 0) {
 			if (updateObjectID) {
 				objectID.updateToDefaultNumber(-1);
@@ -94,6 +102,7 @@ function DialogCommandChangeState({ commandKind, setIsOpen, list, onAccept, onRe
 					objectID.updateToDefaultNumber(-1);
 				}
 			}
+			Model.MapObjectCommand.cacheMapObjects(id, map.objects ?? []);
 			setObjectsList(map.objects ?? []);
 		}
 	};
