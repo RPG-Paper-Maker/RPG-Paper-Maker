@@ -47,6 +47,10 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		if (disabled) {
 			return;
 		}
+		if (e.button === 2) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
 		setIsFocused(true);
 		switch (e.button) {
 			case 0:
@@ -62,6 +66,11 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 				}, 100);
 				break;
 		}
+	};
+
+	const handleContextMenu = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
@@ -132,6 +141,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 			fillHeight
 			ref={refComplete}
 			onMouseDown={handleMouseDown}
+			onContextMenu={handleContextMenu}
 			onTouchStart={handleTouchStart}
 			onTouchMove={handleTouchMove}
 			onTouchEnd={handleTouchEnd}

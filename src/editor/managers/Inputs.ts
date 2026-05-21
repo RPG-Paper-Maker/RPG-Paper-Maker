@@ -203,11 +203,11 @@ class Inputs {
 				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseDown();
 				Inputs.mouseX = x;
 				Inputs.mouseY = y;
 				Inputs.previousMouseX = x;
 				Inputs.previousMouseY = y;
+				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseDown();
 			};
 			canvas.addEventListener('mousedown', handleMouseDown, false);
 
