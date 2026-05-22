@@ -13,18 +13,20 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Constants, KEY, PICTURE_KIND } from '../common';
 import { CollisionSquare } from '../core/CollisionSquare';
+import { Node } from '../core/Node';
 import { Picture2D } from '../core/Picture2D';
 import { Point } from '../core/Point';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import useStateBool from '../hooks/useStateBool';
-import { Base, Picture } from '../models';
+import { Base, Picture, TerrainSound } from '../models';
 import Checkbox from './Checkbox';
 import ContextMenu from './ContextMenu';
 import Flex from './Flex';
 import Groupbox from './Groupbox';
 import Slider from './Slider';
 import Tab from './Tab';
+import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from './Tree';
 import DialogRectangle from './dialogs/DialogRectangle';
 
 export enum COLLISION_TYPE {
@@ -93,6 +95,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 	const [isFocused, setIsFocused] = useState(false);
 	const [editingRectangle, setEditingRectangle] = useState<Rectangle | null>(null);
 	const [repeat, setRepeat] = useStateBool();
+	const [terrainSounds, setTerrainSounds] = useState<Node[]>([]);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -138,6 +141,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			Project.current!.pictures.getByID(pictureKind, pictureID) ??
 			Project.current!.pictures.getByID(pictureKind, -1);
 		setRepeat(currentState.pictureModel.collisionsRepeat);
+		setTerrainSounds(Node.createList(currentState.pictureModel.terrainSounds));
 		const path = await currentState.pictureModel.getPathOrBase64();
 		currentState.picture = await Picture2D.loadImage(path);
 		resize();
@@ -413,8 +417,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		if (arrow) {
 			ctx.save();
 			ctx.translate(
-				x + (Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor,
-				y + (Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor,
+				x + ((Picture2D.PICTURE_DIRECTION.width * squareSizeFactor) / 2) * zoomFactor,
+				y + ((Picture2D.PICTURE_DIRECTION.height * squareSizeFactor) / 2) * zoomFactor,
 			);
 			ctx.rotate((angle * Math.PI) / 180);
 			if (hovered && direction === currentState.hoveredDirection) {
@@ -426,8 +430,8 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 				0,
 				Picture2D.PICTURE_DIRECTION.width,
 				Picture2D.PICTURE_DIRECTION.height,
-				-(Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor,
-				-(Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor,
+				-((Picture2D.PICTURE_DIRECTION.width * squareSizeFactor) / 2) * zoomFactor,
+				-((Picture2D.PICTURE_DIRECTION.height * squareSizeFactor) / 2) * zoomFactor,
 				Picture2D.PICTURE_DIRECTION.width * squareSizeFactor * zoomFactor,
 				Picture2D.PICTURE_DIRECTION.height * squareSizeFactor * zoomFactor,
 			);
@@ -436,8 +440,18 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			ctx.strokeStyle = Constants.COLOR_HOVER_GREY;
 			ctx.lineWidth = 0.5 * zoomFactor;
 			ctx.globalAlpha = 0.5;
-			const x = (i * Project.SQUARE_SIZE + dx - squareSizeFactor + Picture2D.PICTURE_DIRECTION.width * squareSizeFactor / 2) * zoomFactor;
-			const y = (j * Project.SQUARE_SIZE + dy - squareSizeFactor + Picture2D.PICTURE_DIRECTION.height * squareSizeFactor / 2) * zoomFactor;
+			const x =
+				(i * Project.SQUARE_SIZE +
+					dx -
+					squareSizeFactor +
+					(Picture2D.PICTURE_DIRECTION.width * squareSizeFactor) / 2) *
+				zoomFactor;
+			const y =
+				(j * Project.SQUARE_SIZE +
+					dy -
+					squareSizeFactor +
+					(Picture2D.PICTURE_DIRECTION.height * squareSizeFactor) / 2) *
+				zoomFactor;
 			const w = 2 * squareSizeFactor * zoomFactor;
 			const h = 2 * squareSizeFactor * zoomFactor;
 			if (hovered && direction === currentState.hoveredDirection) {
@@ -589,6 +603,12 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			}
 		}
 		draw();
+	};
+
+	const handleTerrainSoundsUpdated = () => {
+		if (currentState.pictureModel) {
+			currentState.pictureModel.terrainSounds = Node.createListFromNodes(terrainSounds);
+		}
 	};
 
 	useEffect(() => {
@@ -889,7 +909,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 						hideScroll
 					/>
 				</Flex>
-				<Flex one scrollableNoMobile>
+				<Flex one scrollableNoMobile spacedLarge>
 					<Flex one zeroWidth scrollableMobileOnly>
 						<Flex column one>
 							<Flex one zeroHeightNoMobile>
@@ -899,7 +919,25 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 									setIsFocused={setIsFocused}
 									disabled={disabled}
 								>
-									<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
+									<Flex spacedLarge>
+										<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
+										{selectedCollisionType === COLLISION_TYPE.TERRAIN &&
+											pictureKind === PICTURE_KIND.TILESETS && (
+												<Groupbox title={t('footsteps')} disabled={disabled} fillWidth>
+													<Tree
+														constructorType={TerrainSound}
+														list={terrainSounds}
+														minWidth={TREES_MIN_WIDTH}
+														minHeight={TREES_MIN_HEIGHT}
+														onListUpdated={handleTerrainSoundsUpdated}
+														scrollable
+														applyDefault
+														doNotShowID
+														disabled={disabled}
+													/>
+												</Groupbox>
+											)}
+									</Flex>
 								</ContextMenu>
 							</Flex>
 						</Flex>

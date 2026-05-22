@@ -39,6 +39,8 @@ export * from './DialogRandomBattle';
 export * from './DialogSpeed';
 export * from './DialogStatistic';
 export * from './DialogStatisticProgression';
+export * from './DialogTerrainSound';
+export * from './DialogTerrainSoundItem';
 export * from './DialogTitleCommand';
 export * from './DialogTroopBattleTestEquipment';
 export * from './DialogTroopMonster';

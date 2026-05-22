@@ -74,6 +74,8 @@ export * from './Statistic';
 export * from './StatisticProgression';
 export * from './Status';
 export * from './StatusReleaseTurn';
+export * from './TerrainSound';
+export * from './TerrainSoundItem';
 export * from './Tileset';
 export * from './TitleCommand';
 export * from './TreeMapTag';

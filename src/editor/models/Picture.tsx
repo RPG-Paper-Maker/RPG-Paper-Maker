@@ -17,11 +17,13 @@ import { Point } from '../core/Point';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Asset } from './Asset';
+import { TerrainSound } from './TerrainSound';
 
 class Picture extends Asset {
 	public kind!: PICTURE_KIND;
 	public collisionsRepeat!: boolean;
 	public collisions!: Map<string, CollisionSquare>;
+	public terrainSounds!: TerrainSound[];
 	public picture!: Picture2D;
 	public width!: number;
 	public height!: number;
@@ -35,6 +37,7 @@ class Picture extends Asset {
 
 	public static readonly bindings: BindingType[] = [
 		['collisionsRepeat', 'rcol', false, BINDING.BOOLEAN],
+		['terrainSounds', 'fts', [], BINDING.LIST, TerrainSound],
 		['isStopAnimation', 'isStopAnimation', false, BINDING.BOOLEAN],
 		['isClimbAnimation', 'ica', false, BINDING.BOOLEAN],
 	];

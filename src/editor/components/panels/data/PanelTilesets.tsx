@@ -101,7 +101,11 @@ const PanelTilesets = forwardRef((props, ref) => {
 					</Flex>
 				</Flex>
 				<Flex one fillWidth>
-					<TextureCollisionsEditor pictureID={pictureID} pictureKind={PICTURE_KIND.TILESETS} />
+					<TextureCollisionsEditor
+						pictureID={pictureID}
+						pictureKind={PICTURE_KIND.TILESETS}
+						disabled={isTilesetDisabled}
+					/>
 				</Flex>
 			</Flex>
 		</Flex>
