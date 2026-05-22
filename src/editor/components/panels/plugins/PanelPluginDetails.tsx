@@ -18,7 +18,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
 
-const TREES_STYLE_HEIGHT = { height: '100px' };
+const TREES_STYLE_HEIGHT = { height: '200px' };
 
 type Props = {
 	plugin: Model.Plugin | null;

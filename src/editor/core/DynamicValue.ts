@@ -160,6 +160,8 @@ class DynamicValue extends Serializable {
 				return Project.current!.songs.getList(SONG_KIND.SOUND);
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
 				return Project.current!.songs.getList(SONG_KIND.MUSIC_EFFECT);
+			case DYNAMIC_VALUE_KIND.VIDEOS:
+				return Project.current!.videos.list;
 			default:
 				return [];
 		}

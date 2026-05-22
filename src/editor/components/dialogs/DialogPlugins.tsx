@@ -47,8 +47,6 @@ import Tree, { TREES_LARGE_MIN_WIDTH, TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
-const TREES_STYLE_HEIGHT = { height: '100px' };
-
 const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: ITERATOR, path: string): Node[] => {
 	const nodes: Node[] = [];
 	for (const key in manifest) {
@@ -549,8 +547,8 @@ function DialogPlugins({ setIsOpen }: Props) {
 						/>
 					</Value>
 				</Form>
-				<Groupbox title={t('parameters')}>
-					<Flex one style={TREES_STYLE_HEIGHT}>
+				<Flex one>
+					<Groupbox title={t('parameters')} fillWidth>
 						<Tree
 							constructorType={Model.PluginDefaultParameter}
 							list={defaultParameters}
@@ -560,10 +558,10 @@ function DialogPlugins({ setIsOpen }: Props) {
 							cannotUpdateListSize
 							canBeEmpty
 						/>
-					</Flex>
-				</Groupbox>
-				<Groupbox title={t('commands')}>
-					<Flex one style={TREES_STYLE_HEIGHT}>
+					</Groupbox>
+				</Flex>
+				<Flex one>
+					<Groupbox title={t('commands')} fillWidth>
 						<Tree
 							constructorType={Model.PluginCommand}
 							list={commands}
@@ -571,8 +569,8 @@ function DialogPlugins({ setIsOpen }: Props) {
 							cannotUpdateListSize
 							canBeEmpty
 						/>
-					</Flex>
-				</Groupbox>
+					</Groupbox>
+				</Flex>
 			</Flex>
 		);
 	};
@@ -641,7 +639,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 			}
 			onClose={handleCancel}
 			initialWidth={window.innerWidth <= 1000 ? '100%' : '1000px'}
-			initialHeight='700px'
+			initialHeight='calc(100% - 50px)'
 			isLoading={isLoading}
 		>
 			<Tab

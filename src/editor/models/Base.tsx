@@ -121,6 +121,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.BACKGROUND_SOUND, 'BackgroundSounds'),
 		Base.create(DYNAMIC_VALUE_KIND.SOUND, 'Sounds'),
 		Base.create(DYNAMIC_VALUE_KIND.MUSIC_EFFECT, 'MusicEffects'),
+		Base.create(DYNAMIC_VALUE_KIND.VIDEOS, 'Videos'),
 	];
 	public static ON_OFF_OPTIONS = Base.mapListIndex(['ON', 'OFF']);
 	public static SHAPE_KIND_OPTIONS = [

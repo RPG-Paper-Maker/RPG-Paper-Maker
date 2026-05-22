@@ -145,6 +145,7 @@ function DynamicValueSelector({
 			DYNAMIC_VALUE_KIND.BACKGROUND_SOUND,
 			DYNAMIC_VALUE_KIND.SOUND,
 			DYNAMIC_VALUE_KIND.MUSIC_EFFECT,
+			DYNAMIC_VALUE_KIND.VIDEOS,
 		].includes(value.kind)
 			? (value.value as number)
 			: 1,
@@ -273,6 +274,7 @@ function DynamicValueSelector({
 					DYNAMIC_VALUE_KIND.BACKGROUND_SOUND,
 					DYNAMIC_VALUE_KIND.SOUND,
 					DYNAMIC_VALUE_KIND.MUSIC_EFFECT,
+					DYNAMIC_VALUE_KIND.VIDEOS,
 				];
 				break;
 			default:
@@ -399,6 +401,7 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
 			case DYNAMIC_VALUE_KIND.SOUND:
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
+			case DYNAMIC_VALUE_KIND.VIDEOS:
 				value.value = valueDatabase;
 				break;
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
@@ -542,6 +545,7 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
 			case DYNAMIC_VALUE_KIND.SOUND:
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
+			case DYNAMIC_VALUE_KIND.VIDEOS:
 				setValueDatabase(value.value as number);
 				break;
 			case DYNAMIC_VALUE_KIND.SWITCH:
@@ -688,6 +692,7 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
 			case DYNAMIC_VALUE_KIND.SOUND:
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
+			case DYNAMIC_VALUE_KIND.VIDEOS:
 				return (
 					<Dropdown
 						selectedID={valueDatabase}

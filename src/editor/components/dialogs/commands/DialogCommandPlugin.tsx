@@ -30,8 +30,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-const TREES_STYLE_HEIGHT = { height: '100px' };
-
 function DialogCommandPlugin({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
@@ -125,9 +123,10 @@ function DialogCommandPlugin({ commandKind, setIsOpen, list, onAccept, onReject 
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'
+			initialHeight='600px'
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge fillWidth>
+			<Flex column spacedLarge fillWidth fillHeight>
 				<Form>
 					<Label disabled={disabledPlugin}>{t('plugin')}</Label>
 					<Value>
@@ -152,8 +151,8 @@ function DialogCommandPlugin({ commandKind, setIsOpen, list, onAccept, onReject 
 						/>
 					</Value>
 				</Form>
-				<Groupbox title={t('parameters')} disabled={disabledParameters} fillWidth>
-					<Flex one style={TREES_STYLE_HEIGHT}>
+				<Flex one>
+					<Groupbox title={t('parameters')} disabled={disabledParameters} fillWidth>
 						<Tree
 							constructorType={Model.PluginParameter}
 							list={parameters}
@@ -163,8 +162,8 @@ function DialogCommandPlugin({ commandKind, setIsOpen, list, onAccept, onReject 
 							cannotDragDrop
 							byIndex
 						/>
-					</Flex>
-				</Groupbox>
+					</Groupbox>
+				</Flex>
 			</Flex>
 		</Dialog>
 	);
