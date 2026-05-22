@@ -681,7 +681,10 @@ ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
 });
 
 ipcMain.handle('create-file', async (event, filePath, content) => {
-	await retryOnPermError(() => fs.writeFile(filePath, content), ['ENOENT'], 20);
+	await retryOnPermError(async () => {
+		await fs.mkdir(path.dirname(filePath), { recursive: true });
+		await fs.writeFile(filePath, content);
+	}, ['ENOENT'], 20);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
