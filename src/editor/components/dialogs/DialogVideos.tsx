@@ -74,7 +74,7 @@ function DialogVideos({
 		setIsSelectedLeftList(true);
 		setVideos(Node.createList(Project.current!.videos.list));
 		if (videoID !== undefined) {
-			const video = Project.current!.videos.getByID(videoID);
+			const video = Project.current!.videos.getByID(videoID) ?? null;
 			await updateVideo(video);
 		}
 	};
@@ -146,7 +146,7 @@ function DialogVideos({
 			reset();
 			await Project.current!.videos.save();
 		} else {
-			if (selectedVideo === null || !isSelectedLeftList) {
+			if (!selectedVideo || !isSelectedLeftList) {
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				Project.current!.videos.list = videos.map((node) => node.content as Model.Video);
