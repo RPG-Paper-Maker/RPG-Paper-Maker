@@ -21,6 +21,31 @@ type ZipType = {
 	file: (name: string, content: Blob | string) => void;
 };
 
+const JSON_ERROR_CONTENT_LIMIT = 10000;
+
+const getErrorMessage = (error: unknown): string => {
+	return error instanceof Error ? error.message : String(error);
+};
+
+const getJSONContentForError = (content: string): string => {
+	if (content.length <= JSON_ERROR_CONTENT_LIMIT) {
+		return content;
+	}
+	return `${content.slice(0, JSON_ERROR_CONTENT_LIMIT)}\n... [truncated ${content.length - JSON_ERROR_CONTENT_LIMIT} characters]`;
+};
+
+const getInvalidJSONError = (path: string, content: string, error: unknown): Error => {
+	return new Error(
+		[
+			`Failed to parse JSON file: ${path}`,
+			`Original error: ${getErrorMessage(error)}`,
+			`Content length: ${content.length}`,
+			'Content:',
+			getJSONContentForError(content),
+		].join('\n'),
+	);
+};
+
 export const checkFileExists = async (path: string): Promise<boolean> => {
 	return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
 };
@@ -78,7 +103,7 @@ export const createFile = async (path: string, content: string) => {
 		const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
 		await IO.createFile(tmpPath, content);
 		try {
-			await IO.copyFile(tmpPath, path);
+			await IO.moveFile(tmpPath, path);
 			await IO.removeFile(tmpPath).catch(() => {});
 		} catch (e) {
 			await IO.removeFile(tmpPath).catch(() => {});
@@ -226,13 +251,12 @@ export const readJSON = async (path: string): Promise<JSONType | null> => {
 			if (match) {
 				try {
 					return JSON.parse(stripped.slice(0, parseInt(match[1])));
-				} catch (e) {
-					console.error(e);
-					console.error('Error for JSON: ' + stripped + '----------' + stripped.slice(0, parseInt(match[1])));
+				} catch {
+					console.error(getInvalidJSONError(path, stripped, e));
 					return null;
 				}
 			}
-			console.error(e);
+			console.error(getInvalidJSONError(path, stripped, e));
 			return null;
 		}
 	}
