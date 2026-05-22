@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DragEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { DragEvent, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -161,7 +161,7 @@ function PanelAssetsPreviewer({
 		}
 	};
 
-	const handleRefresh = async () => {
+	const handleRefresh = useCallback(async () => {
 		if (!getFolder || !callBackCreateAsset || !setItemsAvailable) {
 			return;
 		}
@@ -193,7 +193,7 @@ function PanelAssetsPreviewer({
 				false,
 			),
 		]);
-	};
+	}, [callBackCreateAsset, getFolder, setItemsAvailable]);
 
 	const handleClickPlus = async () => {
 		importFileInputRef.current?.click();
@@ -349,7 +349,18 @@ function PanelAssetsPreviewer({
 		if (isInitiating) {
 			handleRefresh().catch(console.error);
 		}
-	}, [isInitiating]);
+	}, [handleRefresh, isInitiating]);
+
+	useEffect(() => {
+		if (!itemsAvailable) {
+			return;
+		}
+		const handleFocus = () => {
+			void handleRefresh().catch(console.error);
+		};
+		window.addEventListener('focus', handleFocus);
+		return () => window.removeEventListener('focus', handleFocus);
+	}, [handleRefresh, itemsAvailable]);
 
 	const importTypesLabel = getImportTypesLabel();
 
