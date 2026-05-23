@@ -189,12 +189,6 @@ function DialogDeploy({ setIsOpen }: Props) {
 						break;
 				}
 				await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
-				if (OS_KINDS[targetOSIndex] === OS_KIND.LINUX) {
-					const launchScript =
-						'#!/bin/bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nunset LD_LIBRARY_PATH\nexec "$DIR/Game" --no-sandbox --ignore-gpu-blocklist --disable-gpu-sandbox --use-angle=vulkan "$@"\n';
-					await createFile(Paths.join(path, 'launch.sh'), launchScript);
-					await IO.chmodFile(Paths.join(path, 'launch.sh'), 0o755);
-				}
 			}
 			await createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');

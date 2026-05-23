@@ -303,7 +303,7 @@ const init = async () => {
 				case 'win32':
 					return 'RPG Paper Maker.exe';
 				case 'linux':
-					return 'launch.sh';
+					return 'RPG Paper Maker';
 				case 'darwin':
 					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 			}
@@ -416,7 +416,7 @@ const init = async () => {
 				case 'win32':
 					return 'RPG Paper Maker.exe';
 				case 'linux':
-					return 'launch.sh';
+					return 'RPG Paper Maker';
 				case 'darwin':
 					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 			}
