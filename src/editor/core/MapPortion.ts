@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import i18next from 'i18next';
 
 import {
 	ACTION_KIND,
@@ -60,6 +61,175 @@ class MapPortion {
 			mesh.position.setY(offset);
 		} else {
 			mesh.position.setZ(offset);
+		}
+	}
+
+	createCurrentMountain(): MapElement.Mountain {
+		const s = Project.current!.settings;
+		return MapElement.Mountain.create(
+			s.mapEditorCurrentMountainID,
+			s.mapEditorCurrentMountainWidthSquaresBot,
+			Position3D.getPercentOfPixels(s.mapEditorCurrentMountainWidthPixelsBot),
+			s.mapEditorCurrentMountainWidthSquaresTop,
+			Position3D.getPercentOfPixels(s.mapEditorCurrentMountainWidthPixelsTop),
+			s.mapEditorCurrentMountainWidthSquaresLeft,
+			Position3D.getPercentOfPixels(s.mapEditorCurrentMountainWidthPixelsLeft),
+			s.mapEditorCurrentMountainWidthSquaresRight,
+			Position3D.getPercentOfPixels(s.mapEditorCurrentMountainWidthPixelsRight),
+			s.mapEditorCurrentMountainHeightSquares,
+			Position3D.getPercentOfPixels(s.mapEditorCurrentMountainHeightPixels),
+		);
+	}
+
+	getPositionBelow(position: Position, heightSquares: number, heightPixels: number): Position {
+		const below = position.clone();
+		const diffPixels = below.yPixels - heightPixels;
+		if (diffPixels < 0) {
+			below.yPixels = diffPixels + 100;
+			below.y -= heightSquares + 1;
+		} else {
+			below.yPixels = diffPixels;
+			below.y -= heightSquares;
+		}
+		return below;
+	}
+
+	updateMountainTopFloor(
+		position: Position,
+		preview: boolean,
+		updateAutotiles: boolean,
+	): void {
+		const s = Project.current!.settings;
+		if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
+			this.updateMapElement(
+				position,
+				MapElement.Autotile.create(
+					s.mapEditorCurrentMountainTopFloorAutotileID,
+					MapElement.Autotiles.PREVIEW_TILE,
+					s.mapEditorCurrentMountainTopFloorAutotileRect,
+					this.map.camera.getUp(),
+				),
+				ELEMENT_MAP_KIND.AUTOTILE,
+				preview,
+				false,
+				false,
+				false,
+				updateAutotiles,
+			);
+		} else {
+			this.updateMapElement(
+				position,
+				MapElement.Floor.create(
+					new Rectangle(
+						s.mapEditorCurrentMountainTopFloorTilesetRect.x,
+						s.mapEditorCurrentMountainTopFloorTilesetRect.y,
+					),
+				),
+				ELEMENT_MAP_KIND.FLOOR,
+				preview,
+			);
+		}
+	}
+
+	addMountain(position: Position, preview: boolean, updateAutotiles: boolean) {
+		const newMountain = this.createCurrentMountain();
+		const previousMountain = this.model.getMapElement(
+			position,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+		) as MapElement.Mountain | null;
+		const floorPosition = position.clone();
+		floorPosition.addY(newMountain.heightSquares, newMountain.heightPixels);
+		if (previousMountain && !previousMountain.equals(newMountain)) {
+			const previousFloorPosition = position.clone();
+			previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
+			if (
+				previousFloorPosition.y !== floorPosition.y ||
+				previousFloorPosition.yPixels !== floorPosition.yPixels
+			) {
+				const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition);
+				if (previousFloorPortion) {
+					previousFloorPortion.updateMapElement(
+						previousFloorPosition,
+						null,
+						ELEMENT_MAP_KIND.FLOOR,
+						preview,
+					);
+					previousFloorPortion.updateMapElement(
+						previousFloorPosition,
+						null,
+						ELEMENT_MAP_KIND.AUTOTILE,
+						preview,
+						false,
+						false,
+						false,
+						updateAutotiles,
+					);
+				}
+			}
+		}
+		const floorPortion = this.map.getMapPortionByPosition(floorPosition);
+		if (floorPortion) {
+			floorPortion.updateMountainTopFloor(floorPosition, preview, updateAutotiles);
+		}
+		this.updateMapElement(position, newMountain, ELEMENT_MAP_KIND.MOUNTAIN, preview);
+	}
+
+	addMountainDig(position: Position, preview: boolean, updateAutotiles: boolean) {
+		const sourceLand = this.model.lands.get(position.toKey());
+		if (!sourceLand) {
+			return;
+		}
+		const mountain = this.createCurrentMountain();
+		const floorPosition = this.getPositionBelow(position, mountain.heightSquares, mountain.heightPixels);
+		if (!floorPosition.isInMap(this.map.model)) {
+			if (!preview) {
+				console.warn(i18next.t('warning.map.depth.not.high.enough'));
+			}
+			return;
+		}
+		const floorPortion = this.map.getMapPortionByPosition(floorPosition);
+		if (!floorPortion) {
+			if (!preview) {
+				console.warn(i18next.t('warning.map.depth.not.high.enough'));
+			}
+			return;
+		}
+		this.updateMapElement(position, null, ELEMENT_MAP_KIND.FLOOR, preview);
+		this.updateMapElement(
+			position,
+			null,
+			ELEMENT_MAP_KIND.AUTOTILE,
+			preview,
+			false,
+			false,
+			false,
+			updateAutotiles,
+		);
+		floorPortion.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.MOUNTAIN, preview);
+		floorPortion.updateMountainTopFloor(floorPosition, preview, updateAutotiles);
+
+		for (let x = floorPosition.x - 1; x <= floorPosition.x + 1; x++) {
+			for (let z = floorPosition.z - 1; z <= floorPosition.z + 1; z++) {
+				if (x === floorPosition.x && z === floorPosition.z) {
+					continue;
+				}
+				const mountainPosition = floorPosition.clone();
+				mountainPosition.x = x;
+				mountainPosition.z = z;
+				if (!mountainPosition.isInMap(this.map.model)) {
+					continue;
+				}
+				const mountainPortion = this.map.getMapPortionByPosition(mountainPosition);
+				const land = mountainPortion?.model.lands.get(mountainPosition.toKey());
+				if (mountainPortion && !land) {
+					mountainPortion.updateMapElement(
+						mountainPosition,
+						mountainPortion.createCurrentMountain(),
+						ELEMENT_MAP_KIND.MOUNTAIN,
+						preview,
+					);
+				}
+			}
 		}
 	}
 
@@ -159,91 +329,11 @@ class MapPortion {
 				);
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN: {
-				const y = Project.current!.settings.mapEditorCurrentMountainHeightSquares;
-				const yPixels = Position3D.getPercentOfPixels(
-					Project.current!.settings.mapEditorCurrentMountainHeightPixels,
-				);
-				const newMountain = MapElement.Mountain.create(
-					Project.current!.settings.mapEditorCurrentMountainID,
-					Project.current!.settings.mapEditorCurrentMountainWidthSquaresBot,
-					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsBot),
-					Project.current!.settings.mapEditorCurrentMountainWidthSquaresTop,
-					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsTop),
-					Project.current!.settings.mapEditorCurrentMountainWidthSquaresLeft,
-					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsLeft),
-					Project.current!.settings.mapEditorCurrentMountainWidthSquaresRight,
-					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixelsRight),
-					y,
-					yPixels,
-				);
-				const previousMountain = this.model.getMapElement(
-					position,
-					ELEMENT_MAP_KIND.MOUNTAIN,
-				) as MapElement.Mountain | null;
-				const s = Project.current!.settings;
-				const floorPosition = position.clone();
-				floorPosition.addY(y, yPixels);
-				if (previousMountain && !previousMountain.equals(newMountain)) {
-					const previousFloorPosition = position.clone();
-					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
-					if (
-						previousFloorPosition.y !== floorPosition.y ||
-						previousFloorPosition.yPixels !== floorPosition.yPixels
-					) {
-						const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition);
-						if (previousFloorPortion) {
-							previousFloorPortion.updateMapElement(
-								previousFloorPosition,
-								null,
-								ELEMENT_MAP_KIND.FLOOR,
-								preview,
-							);
-							previousFloorPortion.updateMapElement(
-								previousFloorPosition,
-								null,
-								ELEMENT_MAP_KIND.AUTOTILE,
-								preview,
-								false,
-								false,
-								false,
-								updateAutotiles,
-							);
-						}
-					}
+				if (Scene.Map.currentMountainDigMode) {
+					this.addMountainDig(position, preview, updateAutotiles);
+				} else {
+					this.addMountain(position, preview, updateAutotiles);
 				}
-				const floorPortion = this.map.getMapPortionByPosition(floorPosition);
-				if (floorPortion) {
-					if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
-						floorPortion.updateMapElement(
-							floorPosition,
-							MapElement.Autotile.create(
-								s.mapEditorCurrentMountainTopFloorAutotileID,
-								MapElement.Autotiles.PREVIEW_TILE,
-								s.mapEditorCurrentMountainTopFloorAutotileRect,
-								this.map.camera.getUp(),
-							),
-							ELEMENT_MAP_KIND.AUTOTILE,
-							preview,
-							false,
-							false,
-							false,
-							updateAutotiles,
-						);
-					} else {
-						floorPortion.updateMapElement(
-							floorPosition,
-							MapElement.Floor.create(
-								new Rectangle(
-									s.mapEditorCurrentMountainTopFloorTilesetRect.x,
-									s.mapEditorCurrentMountainTopFloorTilesetRect.y,
-								),
-							),
-							ELEMENT_MAP_KIND.FLOOR,
-							preview,
-						);
-					}
-				}
-				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
 			}
 			case ELEMENT_MAP_KIND.OBJECT3D: {

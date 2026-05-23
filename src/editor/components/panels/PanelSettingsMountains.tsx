@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PiDiamondsFour } from 'react-icons/pi';
+import { TbShovel } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, INPUT_TYPE_WIDTH, MOUNTAIN_SIDE, PICTURE_KIND } from '../../common';
 import { LocalFile } from '../../core/LocalFile';
@@ -65,6 +66,7 @@ function PanelSettingsMountains() {
 	const topFloorAutotileRect = useSelector((state: RootState) => state.mapEditor.currentMountainTopFloorAutotileRect);
 
 	const [isTopFloorDialogOpen, setIsTopFloorDialogOpen] = useState(false);
+	const [digMode, setDigMode] = useState(false);
 	const previewRef = useRef<HTMLCanvasElement>(null);
 
 	const dispatch = useDispatch();
@@ -115,6 +117,13 @@ function PanelSettingsMountains() {
 	useEffect(() => {
 		drawPreview().catch(console.error);
 	}, [topFloorIsAutotile, topFloorTilesetRect, topFloorAutotileID, topFloorAutotileRect]);
+
+	useEffect(() => {
+		Scene.Map.currentMountainDigMode = false;
+		return () => {
+			Scene.Map.currentMountainDigMode = false;
+		};
+	}, []);
 
 	const getWidthSquares = (side: MOUNTAIN_SIDE) => {
 		switch (side) {
@@ -338,6 +347,12 @@ function PanelSettingsMountains() {
 		await EngineSettings.current.save();
 	};
 
+	const handleToggleDigMode = () => {
+		const active = !digMode;
+		setDigMode(active);
+		Scene.Map.currentMountainDigMode = active;
+	};
+
 	const renderSideInputs = (side: MOUNTAIN_SIDE) => (
 		<Flex column spaced>
 			<InputNumber
@@ -364,6 +379,11 @@ function PanelSettingsMountains() {
 				<Tips onClose={handleCloseTipGridHeight}>{t('tip.grid.height')}</Tips>
 			)}
 			<Flex column spaced paddingSmall>
+				<Flex>
+					<Button activable active={digMode} icon={<TbShovel />} onClick={handleToggleDigMode} fillWidth>
+						{t('dig.mode')}
+					</Button>
+				</Flex>
 				<Form>
 					<Label>{t('top.floor')}</Label>
 					<Value>

@@ -57,6 +57,7 @@ class Map extends Base {
 	public static currentBattle: Map | null = null;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
+	public static currentMountainDigMode = false;
 	public static onStartPositionSet: (() => void) | null = null;
 	public static onSelectMapID: ((id: number) => void) | null = null;
 	public static elapsedTime = 0;
@@ -1587,6 +1588,13 @@ class Map extends Base {
 		let meshHitGridY: number;
 		if (this.canEdit && !Map.isRemoving()) {
 			meshHitGridY = -Infinity;
+			if (
+				Map.currentMountainDigMode &&
+				Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
+				this.lastPosition
+			) {
+				meshHitGridY = this.lastPosition.getTotalY();
+			}
 			for (const obj of intersects) {
 				const faceKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
@@ -1597,9 +1605,9 @@ class Map extends Base {
 						newPos,
 						ELEMENT_MAP_KIND.FLOOR,
 					);
-					if (floorEl?.isPreview) continue;
+					if (floorEl?.isPreview && (!this.lastPosition || !newPos.equals(this.lastPosition))) continue;
 				}
-				meshHitGridY = obj.point.y;
+				meshHitGridY = Math.max(meshHitGridY, obj.point.y);
 				break;
 			}
 		} else {
@@ -1610,6 +1618,22 @@ class Map extends Base {
 		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
+		}
+		if (
+			intersects.length === 0 &&
+			this.canEdit &&
+			Map.currentMountainDigMode &&
+			Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
+			!Inputs.isPointerPressed &&
+			!Inputs.isMouseRightPressed &&
+			this.lastPosition
+		) {
+			this.add(this.lastPosition, true);
+			this.pointedMapElementPosition = this.lastPosition;
+			this.pointedMapElement = null;
+			this.pointedObjectLabel = null;
+			this.meshPlane!.position.setY(previousPlaneY);
+			return;
 		}
 		// Intersection for deleting or adding stuff
 		for (const obj of intersects) {
