@@ -921,22 +921,22 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 								>
 									<Flex spacedLarge>
 										<canvas ref={refCanvas} width={'0'} height={'0'}></canvas>
-										{selectedCollisionType === COLLISION_TYPE.TERRAIN &&
-											pictureKind === PICTURE_KIND.TILESETS && (
-												<Groupbox title={t('footsteps')} disabled={disabled} fillWidth>
-													<Tree
-														constructorType={TerrainSound}
-														list={terrainSounds}
-														minWidth={TREES_MIN_WIDTH}
-														minHeight={TREES_MIN_HEIGHT}
-														onListUpdated={handleTerrainSoundsUpdated}
-														scrollable
-														applyDefault
-														doNotShowID
-														disabled={disabled}
-													/>
-												</Groupbox>
-											)}
+										{selectedCollisionType === COLLISION_TYPE.TERRAIN && (
+											<Groupbox title={t('footsteps')} disabled={disabled} fillWidth>
+												<Tree
+													constructorType={TerrainSound}
+													list={terrainSounds}
+													minWidth={TREES_MIN_WIDTH}
+													minHeight={TREES_MIN_HEIGHT}
+													onListUpdated={handleTerrainSoundsUpdated}
+													scrollable
+													applyDefault
+													doNotShowID
+													disabled={disabled}
+													canBeEmpty
+												/>
+											</Groupbox>
+										)}
 									</Flex>
 								</ContextMenu>
 							</Flex>

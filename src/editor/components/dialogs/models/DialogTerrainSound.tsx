@@ -82,6 +82,7 @@ function DialogTerrainSound({ setIsOpen, model, onAccept, onReject }: Props) {
 						scrollable
 						applyDefault
 						doNotShowID
+						canBeEmpty
 					/>
 				</Groupbox>
 			</Flex>
