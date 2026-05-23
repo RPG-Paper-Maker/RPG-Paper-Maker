@@ -146,6 +146,7 @@ class Map extends Base {
 	public hoveredMesh!: THREE.Mesh;
 	public rectangleStartPosition: Position | null = null;
 	public lastRectangleEndPosition: Position | null = null;
+	public isRectangleAdding: boolean | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public lockedLayer: number | null = null;
@@ -1740,6 +1741,7 @@ class Map extends Base {
 				) {
 					this.rectangleStartPosition = position.clone();
 					this.lastRectangleEndPosition = position.clone();
+					this.isRectangleAdding = false;
 				}
 				this.layerRayPosition = isLayerOn ? newLayerRayPosition : null;
 				if (Map.isDrawing()) {
@@ -2055,6 +2057,8 @@ class Map extends Base {
 										});
 										this.rectangleStartPosition = this.lastPosition.clone();
 										this.lastRectangleEndPosition = this.lastPosition.clone();
+										this.isRectangleAdding = true;
+										this.add(this.lastPosition, true, false);
 										break;
 									case ACTION_KIND.PIN:
 										this.paintPin(
@@ -2077,14 +2081,30 @@ class Map extends Base {
 						if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL && this.lastPosition) {
 							this.cursorWall.onMouseDown(this.lastPosition);
 						} else {
+							const keepLastPosition =
+								Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE &&
+								this.lastPosition !== null;
 							switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+								case ACTION_KIND.RECTANGLE:
+									if (this.lastPosition) {
+										this.forEachMapPortions((mapPortion) => {
+											mapPortion.removeLastPreview();
+										});
+										this.rectangleStartPosition = this.lastPosition.clone();
+										this.lastRectangleEndPosition = this.lastPosition.clone();
+										this.isRectangleAdding = false;
+										this.remove(this.lastPosition, true, false);
+									}
+									break;
 								case ACTION_KIND.PIN:
 									if (this.lastPosition) {
 										this.paintPin(this.lastPosition, ELEMENT_MAP_KIND.NONE, -1, new Rectangle());
 									}
 									break;
 							}
-							this.lastPosition = null;
+							if (!keepLastPosition) {
+								this.lastPosition = null;
+							}
 							this.needsUpdateRaycasting = true;
 						}
 					}
@@ -2230,6 +2250,21 @@ class Map extends Base {
 		}
 		this.isDraggingTransforming = false;
 		if (this.rectangleStartPosition && this.lastPosition) {
+			let hasRectanglePreview = false;
+			this.forEachMapPortions((mapPortion) => {
+				hasRectanglePreview ||= mapPortion.lastPreviewRemove.length > 0;
+			});
+			if (
+				!hasRectanglePreview &&
+				Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE &&
+				this.rectangleStartPosition.equals(this.lastPosition)
+			) {
+				if (this.isRectangleAdding === false) {
+					this.remove(this.lastPosition, true, false);
+				} else {
+					this.add(this.lastPosition, true, false);
+				}
+			}
 			this.forEachMapPortions((mapPortion) => {
 				for (const [position, previous, kind] of mapPortion.lastPreviewRemove) {
 					const element = mapPortion.model.getMapElement(position, kind);
@@ -2267,6 +2302,7 @@ class Map extends Base {
 		}
 		this.rectangleStartPosition = null;
 		this.lastRectangleEndPosition = null;
+		this.isRectangleAdding = null;
 		if (this.canEdit) {
 			this.updateUndoRedoSave();
 			await Project.current!.treeMaps.save();
