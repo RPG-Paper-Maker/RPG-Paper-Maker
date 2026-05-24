@@ -314,12 +314,12 @@ const emptyFolder = async (folderPath) => {
 	}
 };
 
-const displayErrorUpdater = () => {
+const displayErrorUpdater = (err) => {
 	dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
 		type: 'error',
 		title: 'Error',
 		message: 'An error occurred while trying to update updater. Please reinstall RPG Paper Maker.',
-		detail: err.stack || err.message,
+		detail: err ? err.stack || err.message : undefined,
 	});
 	app.quit();
 };
@@ -432,10 +432,12 @@ const init = async () => {
 		await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
 		await fs.unlink(`${basePath}/../${updaterZipName}`);
 		setSplashProgress('Copying files...');
-		await copyFolder(
-			`${__dirname}/dist`,
-			`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
-		);
+		if (await exists(distPath)) {
+			await copyFolder(
+				distPath,
+				`${basePath}/../RPG Paper Maker temp/RPG Paper Maker/${process.platform === 'darwin' ? 'RPG Paper Maker.app/Contents/Resources/app/' : 'resources/app'}/dist`,
+			);
+		}
 		if (process.platform === 'win32') {
 			if (await exists(`${basePath}/unins000.exe`)) {
 				await fs.copyFile(
@@ -544,7 +546,7 @@ app.whenReady().then(() => {
 	if (isGameTestProcess) {
 		runRPMGame(gameTestLocation, gameTestBattleTest).catch(console.error);
 	} else if (app.isPackaged) {
-		init().catch(console.error);
+		init().catch(displayErrorUpdater);
 	} else {
 		runRPMEngine().catch(console.error);
 	}
