@@ -23,6 +23,15 @@ const __dirname = path.dirname(__filename);
 const appIconPath =
 	process.platform === 'linux' ? path.join(__dirname, 'icon.png') : path.join(__dirname, 'dist', 'icon.png');
 
+const getArgValue = (name) => {
+	const prefix = `${name}=`;
+	const arg = process.argv.find((a) => a.startsWith(prefix));
+	return arg ? arg.slice(prefix.length) : null;
+};
+const isGameTestProcess = process.argv.includes('--rpm-game-test');
+const gameTestLocation = getArgValue('--rpm-game-project');
+const gameTestBattleTest = getArgValue('--rpm-game-battle') === 'true';
+
 const createSplash = (title) => {
 	const splashPath = path.join(__dirname, 'updater', 'splash.html');
 	const splashURL = `${pathToFileURL(splashPath).href}${title ? `?title=${encodeURIComponent(title)}` : ''}`;
@@ -95,6 +104,36 @@ const runRPMEngine = async () => {
 	});
 };
 
+const runRPMGame = async (location, battleTest = false) => {
+	if (!location) {
+		app.quit();
+		return;
+	}
+	game = new BrowserWindow({
+		title: '',
+		width: 640,
+		height: 480,
+		resizable: false,
+		webPreferences: {
+			nodeIntegration: false,
+			contextIsolation: true,
+			sandbox: false,
+			webSecurity: false,
+			preload: path.join(__dirname, 'preload.js'),
+			additionalArguments: [`--appPath=${app.getAppPath()}`],
+		},
+		icon: appIconPath,
+	});
+	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
+		query: { project: location, battleTest },
+	});
+	game.removeMenu();
+	game.on('close', () => {
+		game = null;
+		app.quit();
+	});
+};
+
 async function extractZip(zipPath, destDir) {
 	await fs.mkdir(destDir, { recursive: true });
 
@@ -117,7 +156,7 @@ async function extractTarGz(tarPath, destDir) {
 	await run(`tar -xzf "${tarPath}" -C "${destDir}"`);
 }
 
-app.commandLine.appendSwitch('high-dpi-support', 1);
+app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
 	app.commandLine.appendSwitch('use-angle', 'metal');
@@ -125,10 +164,9 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
 	app.commandLine.appendSwitch('use-angle', 'vulkan');
-	try {
-		app.commandLine.appendSwitch('use-angle', 'vulkan');
-	} catch {
-		app.commandLine.appendSwitch('use-angle', 'gl');
+	if (isGameTestProcess) {
+		app.commandLine.appendSwitch('no-sandbox');
+		app.commandLine.appendSwitch('force-device-scale-factor', '1');
 	}
 }
 
@@ -181,6 +219,7 @@ const getMimeType = (filePath) => {
 
 let window;
 let game;
+let gameProcess;
 let updater;
 let splash;
 let isReadyToClose = false;
@@ -499,10 +538,12 @@ app.whenReady().then(() => {
 		globalShortcut.register(shortcut, () => {
 			updater?.openDevTools({ mode: 'undocked' });
 			game?.openDevTools({ mode: 'undocked' });
-			window.openDevTools({ mode: 'undocked' });
+			window?.openDevTools({ mode: 'undocked' });
 		});
 	}
-	if (app.isPackaged) {
+	if (isGameTestProcess) {
+		runRPMGame(gameTestLocation, gameTestBattleTest).catch(console.error);
+	} else if (app.isPackaged) {
 		init().catch(console.error);
 	} else {
 		runRPMEngine().catch(console.error);
@@ -681,10 +722,14 @@ ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
 });
 
 ipcMain.handle('create-file', async (event, filePath, content) => {
-	await retryOnPermError(async () => {
-		await fs.mkdir(path.dirname(filePath), { recursive: true });
-		await fs.writeFile(filePath, content);
-	}, ['ENOENT'], 20);
+	await retryOnPermError(
+		async () => {
+			await fs.mkdir(path.dirname(filePath), { recursive: true });
+			await fs.writeFile(filePath, content);
+		},
+		['ENOENT'],
+		20,
+	);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
@@ -702,29 +747,24 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
-	game?.close();
-	game = new BrowserWindow({
-		title: '',
-		width: 640,
-		height: 480,
-		resizable: false,
-		webPreferences: {
-			nodeIntegration: false,
-			contextIsolation: true,
-			sandbox: false,
-			webSecurity: false,
-			preload: path.join(__dirname, 'preload.js'),
-			additionalArguments: [`--appPath=${app.getAppPath()}`],
-		},
-		icon: appIconPath,
+	if (gameProcess) {
+		gameProcess.kill();
+		gameProcess = null;
+	}
+	const args = process.defaultApp ? [__filename] : [];
+	args.push(
+		'--rpm-game-test',
+		`--rpm-game-project=${location}`,
+		`--rpm-game-battle=${battleTest ? 'true' : 'false'}`,
+	);
+	gameProcess = spawn(process.execPath, args, {
+		stdio: 'ignore',
+		cwd: __dirname,
 	});
-	game.loadFile(path.join(__dirname, 'dist', 'index.html'), {
-		query: { project: location, battleTest: battleTest ?? false },
+	gameProcess.on('exit', () => {
+		gameProcess = null;
 	});
-	game.removeMenu();
-	game.on('close', () => {
-		game = null;
-	});
+	gameProcess.unref();
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
@@ -745,6 +785,10 @@ ipcMain.handle('change-window-size', function (event, w, h, f) {
 ipcMain.handle('close-game', () => {
 	if (game && !game.isDestroyed()) {
 		game.close();
+	}
+	if (gameProcess) {
+		gameProcess.kill();
+		gameProcess = null;
 	}
 	game = null;
 });
