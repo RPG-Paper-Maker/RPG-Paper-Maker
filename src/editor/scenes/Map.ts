@@ -1255,6 +1255,23 @@ class Map extends Base {
 		this.camera.update();
 	}
 
+	moveCursorPixelHeight(up: boolean) {
+		const position = this.cursor.position;
+		let nextY = position.y;
+		let nextYPixels = position.getYPixelCount() + (up ? 1 : -1);
+		if (nextYPixels >= Project.SQUARE_SIZE) {
+			nextY++;
+			nextYPixels = 0;
+		} else if (nextYPixels < 0) {
+			nextY--;
+			nextYPixels = Project.SQUARE_SIZE - 1;
+		}
+		if (nextY >= -this.model.depth && nextY < this.model.height) {
+			position.y = nextY;
+			position.updateYPixels(nextYPixels);
+		}
+	}
+
 	async moveCursorHeight(square: boolean, up: boolean) {
 		const addition = up ? 1 : -1;
 		if (square) {
@@ -1263,7 +1280,7 @@ class Map extends Base {
 				this.cursor.position.y = newY;
 			}
 		} else {
-			this.cursor.position.updateYPixels(this.cursor.position.getYPixelCount() + addition);
+			this.moveCursorPixelHeight(up);
 		}
 		this.syncCursorGrid();
 		this.requestPaintHUD = true;
