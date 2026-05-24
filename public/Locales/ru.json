@@ -229,6 +229,7 @@
 	"image": "Образ",
 	"video": "Видео",
 	"menu.commands": "Команды меню",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "Конфигурация настроек",
 	"items.types": "Типы предметов",
 	"events": "События",

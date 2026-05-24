@@ -229,6 +229,7 @@
 	"image": "图像",
 	"video": "视频",
 	"menu.commands": "菜单命令",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "设置配置",
 	"items.types": "物品类型",
 	"events": "事件",

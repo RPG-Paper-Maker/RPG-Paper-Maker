@@ -37,12 +37,16 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const [titleBackgroundVideoID, setTitleBackgroundVideoID] = useStateNumber();
 	const [titleVideoLoop, setTitleVideoLoop] = useState<boolean>(true);
 	const [titleVideoLoopMs, setTitleVideoLoopMs] = useStateNumber();
+	const [titleCommandsWindowX, setTitleCommandsWindowX] = useStateNumber();
+	const [titleCommandsWindowY, setTitleCommandsWindowY] = useStateNumber();
 	const [titleCommands, setTitleCommands] = useState<Node[]>([]);
 	const [settingsConfiguration, setSettingsConfiguration] = useState<Node[]>([]);
 	const [isGameOverBackgroundImage, setIsGameOverBackgroundImage] = useState<boolean>(true);
 	const [isGameOverBackgroundVideo, setIsGameOverBackgroundVideo] = useState<boolean>(false);
 	const [gameOverBackgroundImageID, setGameOverBackgroundImageID] = useStateNumber();
 	const [gameOverBackgroundVideoID, setGameOverBackgroundVideoID] = useStateNumber();
+	const [gameOverCommandsWindowX, setGameOverCommandsWindowX] = useStateNumber();
+	const [gameOverCommandsWindowY, setGameOverCommandsWindowY] = useStateNumber();
 	const [gameOverCommands, setGameOverCommands] = useState<Node[]>([]);
 
 	const initialize = () => {
@@ -54,6 +58,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setTitleVideoLoop(titleScreenGameOver.titleVideoLoop);
 		setTitleVideoLoopMs(titleScreenGameOver.titleVideoLoopMs);
 		playTitleMusicSelectorRef.current!.initialize(titleScreenGameOver.titleMusic);
+		setTitleCommandsWindowX(titleScreenGameOver.titleCommandsWindowX);
+		setTitleCommandsWindowY(titleScreenGameOver.titleCommandsWindowY);
 		setTitleCommands(Node.createList(titleScreenGameOver.titleCommands));
 		setSettingsConfiguration(Node.createList(titleScreenGameOver.titleSettings));
 		setIsGameOverBackgroundImage(titleScreenGameOver.isGameOverBackgroundImage);
@@ -61,6 +67,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setGameOverBackgroundImageID(titleScreenGameOver.gameOverBackgroundImageID);
 		setGameOverBackgroundVideoID(titleScreenGameOver.gameOverBackgroundVideoID);
 		playGameOverMusicSelectorRef.current!.initialize(titleScreenGameOver.gameOverMusic);
+		setGameOverCommandsWindowX(titleScreenGameOver.gameOverCommandsWindowX);
+		setGameOverCommandsWindowY(titleScreenGameOver.gameOverCommandsWindowY);
 		setGameOverCommands(Node.createList(titleScreenGameOver.gameOverCommands));
 	};
 
@@ -73,6 +81,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		titleScreenGameOver.titleVideoLoop = titleVideoLoop;
 		titleScreenGameOver.titleVideoLoopMs = titleVideoLoopMs;
 		playTitleMusicSelectorRef.current!.accept(titleScreenGameOver.titleMusic);
+		titleScreenGameOver.titleCommandsWindowX = titleCommandsWindowX;
+		titleScreenGameOver.titleCommandsWindowY = titleCommandsWindowY;
 		titleScreenGameOver.titleCommands = Node.createListFromNodes(titleCommands);
 		titleScreenGameOver.titleSettings = Node.createListFromNodes(settingsConfiguration);
 		titleScreenGameOver.isGameOverBackgroundImage = isGameOverBackgroundImage;
@@ -80,6 +90,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		titleScreenGameOver.gameOverBackgroundImageID = gameOverBackgroundImageID;
 		titleScreenGameOver.gameOverBackgroundVideoID = gameOverBackgroundVideoID;
 		playGameOverMusicSelectorRef.current!.accept(titleScreenGameOver.gameOverMusic);
+		titleScreenGameOver.gameOverCommandsWindowX = gameOverCommandsWindowX;
+		titleScreenGameOver.gameOverCommandsWindowY = gameOverCommandsWindowY;
 		titleScreenGameOver.gameOverCommands = Node.createListFromNodes(gameOverCommands);
 	};
 
@@ -163,12 +175,29 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('menu.commands')} fillWidth>
-								<Tree
-									constructorType={Model.TitleCommand}
-									list={titleCommands}
-									scrollable
-									doNotShowID
-								/>
+								<Flex column spacedLarge fillHeight>
+									<Tree
+										constructorType={Model.TitleCommand}
+										list={titleCommands}
+										scrollable
+										doNotShowID
+									/>
+									<Flex column spaced>
+										<div>{t('commands.window.position')}:</div>
+										<Flex spaced centerV>
+											<div>X:</div>
+											<InputNumber
+												value={titleCommandsWindowX}
+												onChange={setTitleCommandsWindowX}
+											/>
+											<div>Y:</div>
+											<InputNumber
+												value={titleCommandsWindowY}
+												onChange={setTitleCommandsWindowY}
+											/>
+										</Flex>
+									</Flex>
+								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
@@ -233,12 +262,29 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('menu.commands')} fillWidth>
-								<Tree
-									constructorType={Model.GameOverCommand}
-									list={gameOverCommands}
-									scrollable
-									doNotShowID
-								/>
+								<Flex column spacedLarge fillHeight>
+									<Tree
+										constructorType={Model.GameOverCommand}
+										list={gameOverCommands}
+										scrollable
+										doNotShowID
+									/>
+									<Flex column spaced>
+										<div>{t('commands.window.position')}:</div>
+										<Flex spaced centerV>
+											<div>X:</div>
+											<InputNumber
+												value={gameOverCommandsWindowX}
+												onChange={setGameOverCommandsWindowX}
+											/>
+											<div>Y:</div>
+											<InputNumber
+												value={gameOverCommandsWindowY}
+												onChange={setGameOverCommandsWindowY}
+											/>
+										</Flex>
+									</Flex>
+								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>

@@ -229,6 +229,7 @@
 	"image": "Графіка",
 	"video": "Відео",
 	"menu.commands": "Команди меню",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "Доступні налаштування",
 	"items.types": "Типи речей",
 	"events": "Події",

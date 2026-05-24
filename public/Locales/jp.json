@@ -229,6 +229,7 @@
 	"image": "画像",
 	"video": "動画",
 	"menu.commands": "メニューコマンド",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "設定構成",
 	"items.types": "アイテムタイプ",
 	"events": "イベント",

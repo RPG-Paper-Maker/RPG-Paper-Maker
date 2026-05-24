@@ -229,6 +229,7 @@
 	"image": "이미지",
 	"video": "비디오",
 	"menu.commands": "메뉴 명령",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "설정 구성",
 	"items.types": "아이템 유형",
 	"events": "이벤트",

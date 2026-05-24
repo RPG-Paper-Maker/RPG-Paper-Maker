@@ -229,6 +229,7 @@
 	"image": "Imagen",
 	"video": "Video",
 	"menu.commands": "Comandos de menú",
+	"commands.window.position": "Commands window position",
 	"settings.configuration": "Configuracion de opciones",
 	"items.types": "Tipos de objetos",
 	"events": "Eventos",

@@ -27,12 +27,16 @@ class TitleScreenGameOver extends Serializable {
 	public titleMusic!: PlaySong;
 	public titleCommands!: TitleCommand[];
 	public titleSettings!: Checkable[];
+	public titleCommandsWindowX!: number;
+	public titleCommandsWindowY!: number;
 	public isGameOverBackgroundImage!: boolean;
 	public isGameOverBackgroundVideo!: boolean;
 	public gameOverBackgroundImageID!: number;
 	public gameOverBackgroundVideoID!: number;
 	public gameOverMusic!: PlaySong;
 	public gameOverCommands!: GameOverCommand[];
+	public gameOverCommandsWindowX!: number;
+	public gameOverCommandsWindowY!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['isTitleBackgroundImage', 'itbi', true, BINDING.BOOLEAN],
@@ -44,12 +48,16 @@ class TitleScreenGameOver extends Serializable {
 		['titleMusic', 'tm', undefined, BINDING.OBJECT, PlaySong],
 		['titleCommands', 'tc', [], BINDING.LIST, TitleCommand],
 		['titleSettings', 'ts', undefined, BINDING.LIST, Checkable],
+		['titleCommandsWindowX', 'tcwx', 440, BINDING.NUMBER],
+		['titleCommandsWindowY', 'tcwy', 450, BINDING.NUMBER],
 		['isGameOverBackgroundImage', 'isGameOverBackgroundImage', true, BINDING.BOOLEAN],
 		['isGameOverBackgroundVideo', 'isGameOverBackgroundVideo', false, BINDING.BOOLEAN],
 		['gameOverBackgroundImageID', 'gameOverBackgroundImage', 1, BINDING.NUMBER],
 		['gameOverBackgroundVideoID', 'gameOverBackgroundVideo', 1, BINDING.NUMBER],
 		['gameOverMusic', 'gameOverMusic', undefined, BINDING.OBJECT, PlaySong],
 		['gameOverCommands', 'gameOverCommands', [], BINDING.LIST, GameOverCommand],
+		['gameOverCommandsWindowX', 'gocwx', 440, BINDING.NUMBER],
+		['gameOverCommandsWindowY', 'gocwy', 510, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
