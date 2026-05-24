@@ -164,8 +164,8 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
 	app.commandLine.appendSwitch('use-angle', 'vulkan');
+	app.commandLine.appendSwitch('no-sandbox');
 	if (isGameTestProcess) {
-		app.commandLine.appendSwitch('no-sandbox');
 		app.commandLine.appendSwitch('force-device-scale-factor', '1');
 	}
 }

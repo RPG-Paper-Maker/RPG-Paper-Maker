@@ -219,6 +219,7 @@ jobs:
             - name: Package
               run: |
                   mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
+                  rm -f "electron-x64/chrome-sandbox"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
                   tar -czf RPG.Paper.Maker.Linux.tar.gz "RPG Paper Maker"
