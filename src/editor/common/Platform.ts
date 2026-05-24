@@ -292,12 +292,14 @@ export const getAllFilesFromFolder = async (path: string): Promise<string[]> => 
 };
 
 export const closeGame = async () => {
+	window.dispatchEvent(new Event('game-test-closed'));
 	if (Constants.IS_DESKTOP) {
 		await IO.closeGame();
 	}
 };
 
 export const openGame = async (location: string, isBattleTest?: boolean) => {
+	window.dispatchEvent(new Event('game-test-opened'));
 	if (Constants.IS_DESKTOP) {
 		await IO.openGame(location, isBattleTest);
 	} else {

@@ -20,6 +20,7 @@ class GL {
 	public static raycaster = new THREE.Raycaster();
 	public static mainContext: GL;
 	public static dialogContext: GL;
+	public static isGameTestOpen = false;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;

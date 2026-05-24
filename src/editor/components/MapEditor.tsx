@@ -42,6 +42,8 @@ function MapEditor() {
 	const [isOpenMapObject, setIsOpenMapObject] = useState(false);
 	const [currentMapObject, setCurrentMapObject] = useState(new Model.CommonObject());
 	const [isFocused, setIsFocused] = useState(false);
+	const [isWindowFocused, setIsWindowFocused] = useState(true);
+	const [isGameTestOpen, setIsGameTestOpen] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
@@ -118,7 +120,7 @@ function MapEditor() {
 	};
 
 	const loop = () => {
-		if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+		if (document.visibilityState === 'hidden' || (!document.hasFocus() && Manager.GL.isGameTestOpen)) {
 			Scene.Map.animationFrameID = requestAnimationFrame(loop);
 			return;
 		}
@@ -262,6 +264,23 @@ function MapEditor() {
 	};
 
 	useEffect(() => {
+		const handleWindowFocus = () => setIsWindowFocused(true);
+		const handleWindowBlur = () => setIsWindowFocused(false);
+		const handleGameTestOpened = () => { Manager.GL.isGameTestOpen = true; setIsGameTestOpen(true); };
+		const handleGameTestClosed = () => { Manager.GL.isGameTestOpen = false; setIsGameTestOpen(false); };
+		window.addEventListener('focus', handleWindowFocus);
+		window.addEventListener('blur', handleWindowBlur);
+		window.addEventListener('game-test-opened', handleGameTestOpened);
+		window.addEventListener('game-test-closed', handleGameTestClosed);
+		return () => {
+			window.removeEventListener('focus', handleWindowFocus);
+			window.removeEventListener('blur', handleWindowBlur);
+			window.removeEventListener('game-test-opened', handleGameTestOpened);
+			window.removeEventListener('game-test-closed', handleGameTestClosed);
+		};
+	}, []);
+
+	useEffect(() => {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
 		const canvasRendering = refCanvasRendering.current;
@@ -354,6 +373,7 @@ function MapEditor() {
 					onDoubleClick={handleDoubleClick}
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
 				>
+					{!isWindowFocused && isGameTestOpen && <div className='mapEditorUnfocusedOverlay' />}
 					<div ref={refCanvas} id='canvas-map-editor' className='fillSpace' />
 					{Constants.IS_MOBILE && (
 						<div className='mobileCursorControls'>

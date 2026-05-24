@@ -77,6 +77,14 @@
 	}
 }
 
+.mapEditorUnfocusedOverlay {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.35);
+	pointer-events: none;
+	z-index: 9999;
+}
+
 #canvas-hud {
 	position: absolute;
 	margin: 0;

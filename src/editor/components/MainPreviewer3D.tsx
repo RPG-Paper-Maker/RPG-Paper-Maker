@@ -186,7 +186,7 @@ function MainPreviewer3D({ id, onPreviewModeChange, onTransformVersionChange }: 
 		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
 			requestAnimationFrame(loop);
-			if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+			if (document.visibilityState === 'hidden' || (!document.hasFocus() && Manager.GL.isGameTestOpen)) {
 				return;
 			}
 			scene.update();

@@ -33,7 +33,7 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 
 	const loop = () => {
 		if (!isActiveRef.current) return;
-		if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+		if (document.visibilityState === 'hidden' || (!document.hasFocus() && Manager.GL.isGameTestOpen)) {
 			requestAnimationFrame(loop);
 			return;
 		}
