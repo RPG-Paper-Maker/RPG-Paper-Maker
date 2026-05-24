@@ -218,8 +218,14 @@ jobs:
 
             - name: Package
               run: |
-                  mv "electron-x64/electron" "electron-x64/RPG Paper Maker"
+                  mv "electron-x64/electron" "electron-x64/RPG Paper Maker.bin"
                   rm -f "electron-x64/chrome-sandbox"
+                  cat > "electron-x64/RPG Paper Maker" << 'SCRIPT'
+                  #!/bin/bash
+                  DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+                  exec "$DIR/RPG Paper Maker.bin" --no-sandbox "$@"
+                  SCRIPT
+                  chmod +x "electron-x64/RPG Paper Maker"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
                   tar -czf RPG.Paper.Maker.Linux.tar.gz "RPG Paper Maker"

@@ -754,6 +754,9 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 		gameProcess = null;
 	}
 	const args = process.defaultApp ? [__filename] : [];
+	if (process.platform === 'linux') {
+		args.push('--no-sandbox');
+	}
 	args.push(
 		'--rpm-game-test',
 		`--rpm-game-project=${location}`,
