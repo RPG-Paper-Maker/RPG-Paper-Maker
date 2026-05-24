@@ -180,6 +180,10 @@ class Serializable {
 					if (jsonObj === undefined) {
 						if (defaultValue !== undefined) {
 							(this as JSONType)[name] = defaultValue;
+						} else if (constructorClass) {
+							const obj = new constructorClass();
+							obj.read({});
+							(this as JSONType)[name] = obj;
 						}
 					} else if (constructorClass) {
 						const obj = new constructorClass();
