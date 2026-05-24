@@ -208,27 +208,22 @@ class MapPortion {
 		floorPortion.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.MOUNTAIN, preview);
 		floorPortion.updateMountainTopFloor(floorPosition, preview, updateAutotiles);
 
-		for (let x = floorPosition.x - 1; x <= floorPosition.x + 1; x++) {
-			for (let z = floorPosition.z - 1; z <= floorPosition.z + 1; z++) {
-				if (x === floorPosition.x && z === floorPosition.z) {
-					continue;
-				}
-				const mountainPosition = floorPosition.clone();
-				mountainPosition.x = x;
-				mountainPosition.z = z;
-				if (!mountainPosition.isInMap(this.map.model)) {
-					continue;
-				}
-				const mountainPortion = this.map.getMapPortionByPosition(mountainPosition);
-				const land = mountainPortion?.model.lands.get(mountainPosition.toKey());
-				if (mountainPortion && !land) {
-					mountainPortion.updateMapElement(
-						mountainPosition,
-						mountainPortion.createCurrentMountain(),
-						ELEMENT_MAP_KIND.MOUNTAIN,
-						preview,
-					);
-				}
+		for (const [dx, dz] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+			const mountainPosition = floorPosition.clone();
+			mountainPosition.x = floorPosition.x + dx;
+			mountainPosition.z = floorPosition.z + dz;
+			if (!mountainPosition.isInMap(this.map.model)) {
+				continue;
+			}
+			const mountainPortion = this.map.getMapPortionByPosition(mountainPosition);
+			const land = mountainPortion?.model.lands.get(mountainPosition.toKey());
+			if (mountainPortion && !land) {
+				mountainPortion.updateMapElement(
+					mountainPosition,
+					mountainPortion.createCurrentMountain(),
+					ELEMENT_MAP_KIND.MOUNTAIN,
+					preview,
+				);
 			}
 		}
 	}
