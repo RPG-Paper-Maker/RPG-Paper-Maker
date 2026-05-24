@@ -80,6 +80,10 @@ function MapEditorDetection({
 	};
 
 	const loop = () => {
+		if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+			Scene.Map.positionSelectorAnimationFrameID = requestAnimationFrame(loop);
+			return;
+		}
 		const map = Scene.Map.currentpositionSelector;
 		if (map) {
 			if (!map.loading && Inputs.keys.length > 0) {

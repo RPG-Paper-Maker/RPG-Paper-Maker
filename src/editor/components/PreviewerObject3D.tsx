@@ -33,6 +33,10 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 
 	const loop = () => {
 		if (!isActiveRef.current) return;
+		if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+			requestAnimationFrame(loop);
+			return;
+		}
 		hasRenderedSinceActivateRef.current = true;
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		GL.renderer.clear();

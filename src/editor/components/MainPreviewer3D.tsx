@@ -186,6 +186,9 @@ function MainPreviewer3D({ id, onPreviewModeChange, onTransformVersionChange }: 
 		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
 			requestAnimationFrame(loop);
+			if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+				return;
+			}
 			scene.update();
 			scene.draw3D(Manager.GL.mainContext);
 		}

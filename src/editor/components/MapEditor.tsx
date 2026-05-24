@@ -118,6 +118,10 @@ function MapEditor() {
 	};
 
 	const loop = () => {
+		if (document.visibilityState === 'hidden' || !document.hasFocus()) {
+			Scene.Map.animationFrameID = requestAnimationFrame(loop);
+			return;
+		}
 		const map = Scene.Map.current;
 		if (map) {
 			if (map.needsTreeMapUpdate) {
