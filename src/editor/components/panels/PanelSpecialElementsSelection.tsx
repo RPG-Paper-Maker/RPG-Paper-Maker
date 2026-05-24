@@ -182,6 +182,9 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 
 	const handleClick = async (id: number) => {
 		onSelect?.(id);
+		if (onSelect) {
+			return;
+		}
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				if (id !== currentAutotileID) {
