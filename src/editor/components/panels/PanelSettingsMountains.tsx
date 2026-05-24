@@ -78,7 +78,8 @@ function PanelSettingsMountains() {
 		if (!canvas || !Scene.Map.current) return;
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
-		ctx.clearRect(0, 0, 32, 32);
+		ctx.imageSmoothingEnabled = false;
+		ctx.clearRect(0, 0, Constants.BASE_SQUARE_SIZE, Constants.BASE_SQUARE_SIZE);
 		if (!topFloorIsAutotile) {
 			const tileset = Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID);
 			if (!tileset) return;
@@ -392,6 +393,7 @@ function PanelSettingsMountains() {
 								ref={previewRef}
 								width={Constants.BASE_SQUARE_SIZE}
 								height={Constants.BASE_SQUARE_SIZE}
+								style={{ imageRendering: 'pixelated' }}
 							/>
 							<Button onClick={() => setIsTopFloorDialogOpen(true)}>...</Button>
 						</Flex>
