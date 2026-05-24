@@ -536,7 +536,7 @@ class MapPortion {
 			}
 		}
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(this.map, position, preview && !removingPreview);
+			MapElement.Autotiles.updateAround(this.map, position, preview || removingPreview);
 		}
 	}
 
@@ -558,7 +558,7 @@ class MapPortion {
 			undoRedo,
 		);
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(this.map, position, preview && !removingPreview);
+			MapElement.Autotiles.updateAround(this.map, position, preview || removingPreview);
 		}
 	}
 
