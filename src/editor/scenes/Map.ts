@@ -950,15 +950,16 @@ class Map extends Base {
 					Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 					Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
 				const spriteLayer =
-					isSpriteKind &&
-					Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
+					isSpriteKind && Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
 				if (!preview) {
 					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 					for (const p of positions) {
-						(isSpriteKind
-							? this.getMapPortionByPositionWall(p)
-							: this.getMapPortionByPosition(p)
-						)?.remove(p, preview, removePreview, updateAutotiles);
+						(isSpriteKind ? this.getMapPortionByPositionWall(p) : this.getMapPortionByPosition(p))?.remove(
+							p,
+							preview,
+							removePreview,
+							updateAutotiles,
+						);
 					}
 				} else {
 					(isSpriteKind
@@ -1415,7 +1416,7 @@ class Map extends Base {
 		} else if (Math.floor(this.selectedMesh.position.x) > this.model.length - 1) {
 			this.selectedMesh.position.setX(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.model.length - 1) + (this.selectedElement?.getAdditionalX() ?? 0.5)
+					? this.model.length - 1 + (this.selectedElement?.getAdditionalX() ?? 0.5)
 					: this.model.length - 1 / Project.SQUARE_SIZE,
 			);
 		}
@@ -1423,7 +1424,8 @@ class Map extends Base {
 			this.selectedMesh.position.setY(-this.model.depth);
 		} else if (Math.floor(this.selectedMesh.position.y) > this.model.height - 1) {
 			this.selectedMesh.position.setY(
-				(this.model.height - 1) +
+				this.model.height -
+					1 +
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? 0
 						: 1 - 1 / Project.SQUARE_SIZE),
@@ -1438,7 +1440,7 @@ class Map extends Base {
 		} else if (Math.floor(this.selectedMesh.position.z) > this.model.width - 1) {
 			this.selectedMesh.position.setZ(
 				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
-					? (this.model.width - 1) + (this.selectedElement?.getAdditionalZ() ?? 0.5)
+					? this.model.width - 1 + (this.selectedElement?.getAdditionalZ() ?? 0.5)
 					: this.model.width - 1 / Project.SQUARE_SIZE,
 			);
 		}
@@ -1589,9 +1591,7 @@ class Map extends Base {
 		const previousPointedObjectLabel = this.pointedObjectLabel;
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
-			this.meshPlane!.position.setY(
-				this.lockedY + this.lockedYPixels / 100,
-			);
+			this.meshPlane!.position.setY(this.lockedY + this.lockedYPixels / 100);
 			this.meshPlane!.updateMatrixWorld();
 		}
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
@@ -1654,15 +1654,14 @@ class Map extends Base {
 		}
 		// Intersection for deleting or adding stuff
 		for (const obj of intersects) {
+			if (!isPlane && obj.point.y < meshHitGridY - Constants.PRECISION_POSITION) {
+				continue;
+			}
 			let position = new Position(
-				obj.point.x > 0
-					? Math.floor(obj.point.x)
-					: Math.ceil(obj.point.x - 1),
+				obj.point.x > 0 ? Math.floor(obj.point.x) : Math.ceil(obj.point.x - 1),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
-				obj.point.z > 0
-					? Math.floor(obj.point.z)
-					: Math.ceil(obj.point.z - 1),
+				obj.point.z > 0 ? Math.floor(obj.point.z) : Math.ceil(obj.point.z - 1),
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -1680,13 +1679,11 @@ class Map extends Base {
 						}
 					} else {
 						if (Map.isRemoving() || isLayerOn) {
-							const element = (isSpriteOptionSelected
-								? this.getMapPortionByPositionWall(newPosition)
-								: this.getMapPortionByPosition(newPosition)
-							)?.model.getMapElement(
-								newPosition,
-								Map.currentSelectedMapElementKind,
-							);
+							const element = (
+								isSpriteOptionSelected
+									? this.getMapPortionByPositionWall(newPosition)
+									: this.getMapPortionByPosition(newPosition)
+							)?.model.getMapElement(newPosition, Map.currentSelectedMapElementKind);
 							if (element && element.isPreview) {
 								if (!Map.isRemoving() || (this.lastPosition && newPosition.equals(this.lastPosition))) {
 									continue;
@@ -1726,8 +1723,12 @@ class Map extends Base {
 					(!this.isDetection &&
 						Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL)
 				) {
-					position.centerX = (Math.floor(obj.point.x * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE * 100;
-					position.centerZ = (Math.floor(obj.point.z * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE * 100;
+					position.centerX =
+						((Math.floor(obj.point.x * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) *
+						100;
+					position.centerZ =
+						((Math.floor(obj.point.z * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) *
+						100;
 				}
 				if (isLayerOn) {
 					position.layer =
@@ -1977,9 +1978,7 @@ class Map extends Base {
 			if (Map.isTransforming()) {
 				if (this.pointedMapElementPosition !== null || previousPointedMapElementPosition !== null) {
 					const isGltfObj = (el: MapElement.Base | null): el is MapElement.Object3DCustom =>
-						el instanceof MapElement.Object3DCustom &&
-						el.data?.gltfID !== -1 &&
-						el.data?.pictureID === -1;
+						el instanceof MapElement.Object3DCustom && el.data?.gltfID !== -1 && el.data?.pictureID === -1;
 					const gltfRemoveHoverOverlays = (clone: THREE.Group) => {
 						const toRemove: THREE.Object3D[] = [];
 						clone.traverse((child) => {
