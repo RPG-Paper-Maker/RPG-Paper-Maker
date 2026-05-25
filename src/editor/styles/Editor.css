@@ -101,6 +101,10 @@ a {
 	justify-content: flex-end;
 }
 
+.flexTopVertically {
+	align-items: flex-start;
+}
+
 .flexWrap {
 	flex-wrap: wrap;
 }

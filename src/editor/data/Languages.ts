@@ -56,6 +56,7 @@ class Languages extends Serializable {
 	public equipQuestion!: Model.Localization;
 	public pressAnyKeys!: Model.Localization;
 	public target!: Model.Localization;
+	public skip!: Model.Localization;
 
 	public static readonly bindings: BindingType[] = [
 		['list', 'langs', [], BINDING.LIST, Model.Language],
@@ -95,6 +96,7 @@ class Languages extends Serializable {
 		['equipQuestion', 'eq', undefined, BINDING.OBJECT, Model.Localization],
 		['pressAnyKeys', 'pak', undefined, BINDING.OBJECT, Model.Localization],
 		['target', 'ta', undefined, BINDING.OBJECT, Model.Localization],
+		['skip', 'si', undefined, BINDING.OBJECT, Model.Localization],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -143,6 +145,7 @@ class Languages extends Serializable {
 			'equip.question': this.equipQuestion,
 			'press.any.keys': this.pressAnyKeys,
 			target: this.target,
+			skip: this.skip,
 		};
 	};
 
@@ -186,6 +189,7 @@ class Languages extends Serializable {
 		setter(this.equipQuestion, tFunc('equip.question'));
 		setter(this.pressAnyKeys, tFunc('press.any.keys'));
 		setter(this.target, tFunc('target'));
+		setter(this.skip, tFunc('skip'));
 	}
 
 	prefillTranslationsForLanguage(languageId: string, localeShort: string): void {
