@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf ../Dependencies/dist/assets
 cp -r dist/assets ../Dependencies/dist/
 cp dist/fileManifest.json dist/index.html ../Dependencies/dist/
 
