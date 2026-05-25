@@ -227,6 +227,12 @@ jobs:
                   exec "$DIR/RPG Paper Maker.bin" --no-sandbox --ozone-platform=x11 "$@"
                   SCRIPT
                   chmod +x "electron-x64/RPG Paper Maker"
+                  cat > "electron-x64/launch.sh" << 'SCRIPT'
+                  #!/bin/bash
+                  DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+                  exec "$DIR/RPG Paper Maker" "$@"
+                  SCRIPT
+                  chmod +x "electron-x64/launch.sh"
                   mv electron-x64 "RPG Paper Maker"
                   zip -ry RPG.Paper.Maker.Linux.zip "RPG Paper Maker"
                   tar -czf RPG.Paper.Maker.Linux.tar.gz "RPG Paper Maker"

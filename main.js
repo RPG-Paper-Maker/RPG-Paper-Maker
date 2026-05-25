@@ -347,7 +347,7 @@ const init = async () => {
 					return 'RPG Paper Maker.app/Contents/MacOS/RPG Paper Maker';
 			}
 		})();
-		createSplash('Finishing updater update. Please do NOT close.');
+		await createSplash('');
 		try {
 			await emptyFolder(`${basePath}/../../RPG Paper Maker`);
 		} catch (e) {
@@ -373,7 +373,7 @@ const init = async () => {
 			await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
 		} catch {}
 	}
-	if (!hasInternet()) {
+	if (!(await hasInternet())) {
 		if (isEngineDownloaded) {
 			await runRPMEngine();
 			return;
@@ -394,7 +394,7 @@ const init = async () => {
 	const latestUpdaterVersion = await response.text();
 	if (currentUpdaterVersion !== latestUpdaterVersion) {
 		// Update updater
-		await createSplash('Updating. Do not close.');
+		await createSplash('Updating...');
 		const updaterZipName = (() => {
 			switch (process.platform) {
 				case 'win32':
