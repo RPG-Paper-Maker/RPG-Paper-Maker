@@ -279,7 +279,7 @@ function PanelAssetsPreviewer({
 			}
 			await handleRefresh();
 		} catch (error) {
-			console.error('Error reading files:', error);
+			dispatch(showWarning(error instanceof Error ? error.message : String(error)));
 		}
 	};
 
