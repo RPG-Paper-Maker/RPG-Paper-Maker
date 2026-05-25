@@ -100,6 +100,9 @@ window.addEventListener('unhandledrejection', (event) => {
 		store.dispatch(setCurrentProject(null));
 		return;
 	}
+	if (message.includes('interrupted by a new load request')) {
+		return;
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	if (!isGameMode) {
 		store.dispatch(setErrorDialog({ message, stack }));
