@@ -261,7 +261,7 @@ function DialogVideos({
 					options={getPreviewerOptionsContent()}
 					active={active}
 					basePath={Model.Video.getLocalFolder()}
-					importTypes='.mp4, .m4v, .webm, .ogv, .ogg'
+					importTypes='.mp4, .m4v, .webm, .ogv, .ogg, .mov'
 				/>
 			</Flex>
 		</Dialog>
