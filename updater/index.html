@@ -196,7 +196,10 @@
 						);
 						if (isEngineDownloaded) {
 							try {
-								currentEngineVersion = await window.ipcRenderer.invoke('read-file', `${window.env.appPath}/dist/version`);
+								currentEngineVersion = await window.ipcRenderer.invoke(
+									'read-file',
+									`${window.env.appPath}/dist/version`,
+								);
 								isUpdate = true;
 							} catch (e) {
 								currentEngineVersion = null;
@@ -206,12 +209,13 @@
 								`Updating to ${data.lastVersion}...`,
 							);
 							const lastBRUpdateVersion = data.lastBRUpdateVersion;
-							const skipBR = isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
-								? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
-								: false;
+							const skipBR =
+								isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
+									? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
+									: false;
 							const brSrc = `${window.env.appPath}/dist/BR`;
 							const brBackup = `${window.env.appPath}/BR_backup`;
-							const hasBR = skipBR && await window.ipcRenderer.invoke('check-file-exists', brSrc);
+							const hasBR = skipBR && (await window.ipcRenderer.invoke('check-file-exists', brSrc));
 							if (hasBR) {
 								await window.ipcRenderer.invoke('copy-folder', brSrc, brBackup);
 							}
@@ -443,14 +447,29 @@
 							arrayRemoveValue(manifest.files, 'index.html');
 							arrayRemoveValue(manifest.files, 'engineSettings.json');
 							const lastBRUpdateVersion = versionsData.lastBRUpdateVersion;
-							const skipBR = isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
-								? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
-								: false;
+							const skipBR =
+								isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
+									? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
+									: false;
 							const files = collectFiles(manifest, versionTag, skipBR);
 							const folders = collectFolders(manifest, skipBR);
 							const success = await downloadAll(files, folders);
 							if (success) {
-								await window.ipcRenderer.invoke('create-file', `${window.env.appPath}/dist/.complete`, '');
+								const mainJsRes = await fetch(
+									`https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/tags/${versionTag}/main.js`,
+									{ cache: 'no-store' },
+								);
+								const mainJsContent = await mainJsRes.text();
+								await window.ipcRenderer.invoke(
+									'create-file',
+									`${window.env.appPath}/main.js`,
+									mainJsContent,
+								);
+								await window.ipcRenderer.invoke(
+									'create-file',
+									`${window.env.appPath}/dist/.complete`,
+									'',
+								);
 								await window.ipcRenderer.invoke('show-dialog-confirm-run-engine');
 							}
 						} catch (err) {

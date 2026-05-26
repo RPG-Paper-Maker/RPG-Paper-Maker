@@ -373,6 +373,18 @@ const init = async () => {
 			await fs.rm(`${basePath}/../RPG Paper Maker temp`, { recursive: true });
 		} catch {}
 	}
+	// Read settings early so update mode is known before any update checks
+	let updateType = 1;
+	let getUnstable = false;
+	if (isEngineDownloaded) {
+		const settingsData = await fs
+			.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8')
+			.catch(() => null);
+		const settingsJson = settingsData ? JSON.parse(settingsData) : null;
+		updateType = settingsJson?.ut ?? 1;
+		getUnstable = settingsJson?.guv ?? false;
+	}
+
 	if (!(await hasInternet())) {
 		if (isEngineDownloaded) {
 			await runRPMEngine();
@@ -393,6 +405,26 @@ const init = async () => {
 	);
 	const latestUpdaterVersion = await response.text();
 	if (currentUpdaterVersion !== latestUpdaterVersion) {
+		let proceedWithUpdate = true;
+		if (updateType === 1) {
+			const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+				type: 'question',
+				buttons: ['Yes', 'No'],
+				defaultId: 0,
+				cancelId: 1,
+				title: `Update ${currentUpdaterVersion.trim()} -> ${latestUpdaterVersion.trim()}`,
+				message:
+					'A new version of the RPG Paper Maker updater is available! Would you like to update the application now?',
+			});
+			if (result.response === 1) {
+				if (isEngineDownloaded) {
+					await runRPMEngine();
+					return;
+				}
+				proceedWithUpdate = false;
+			}
+		}
+		if (proceedWithUpdate) {
 		// Update updater
 		await createSplash('Updating...');
 		const updaterZipName = (() => {
@@ -474,14 +506,9 @@ const init = async () => {
 			process.exit(0);
 		}, 500);
 		return;
+		}
 	}
 	if (isEngineDownloaded) {
-		// Check if ignore update
-		const data = await fs.readFile(path.join(__dirname, 'dist', 'engineSettings.json'), 'utf8').catch(() => null);
-		const json = data ? JSON.parse(data) : null;
-		const updateType = json?.ut ?? 0;
-		const getUnstable = json?.guv ?? false;
-		// If blocking updates, run engine
 		if (updateType === 2) {
 			await runRPMEngine();
 			return;
@@ -501,8 +528,9 @@ const init = async () => {
 					buttons: ['Yes', 'No'],
 					defaultId: 0,
 					cancelId: 1,
-					title: 'A new version of RPG Paper Maker is available!',
-					message: 'Would you like to download it now? Everything is automatic and fast!',
+					title: `Update ${currentEngineVersion.trim()} -> ${latestEngineVersion}`,
+					message:
+						'A new version of RPG Paper Maker is available! Would you like to download it now? Everything is automatic and fast!',
 				});
 				if (result.response === 1) {
 					await runRPMEngine();

@@ -42,7 +42,7 @@ class EngineSettings extends Serializable {
 		['backupsIncludeAssets', 'bia', true, BINDING.BOOLEAN],
 		['theme', 't', 0, BINDING.NUMBER],
 		['engineFontSize', 'efs', 12, BINDING.NUMBER],
-		['updaterType', 'ut', 0, BINDING.NUMBER],
+		['updaterType', 'ut', 1, BINDING.NUMBER],
 		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],
 	];
 
