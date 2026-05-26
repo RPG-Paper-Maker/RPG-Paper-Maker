@@ -114,7 +114,11 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeLocales = async () => {
-		await loadLocales();
+		try {
+			await loadLocales();
+		} catch {
+			// ignore
+		}
 		if (!EngineSettings.current.currentLanguage) {
 			if (Constants.IS_DESKTOP) {
 				if (LANGUAGES_SHORTS.includes(Constants.USER_LOCALE)) {
