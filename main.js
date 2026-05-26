@@ -773,17 +773,19 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
-	BrowserWindow.getFocusedWindow()?.setTitle(title);
+	BrowserWindow.fromWebContents(event.sender)?.setTitle(title);
 });
 
 ipcMain.handle('change-window-size', function (event, w, h, f) {
+	const win = BrowserWindow.fromWebContents(event.sender);
+	if (!win) return;
 	if (f) {
-		BrowserWindow.getFocusedWindow()?.setResizable(true);
-		BrowserWindow.getFocusedWindow()?.setFullScreen(true);
+		win.setResizable(true);
+		win.setFullScreen(true);
 	} else {
-		BrowserWindow.getFocusedWindow()?.setContentSize(w, h);
-		BrowserWindow.getFocusedWindow()?.center();
-		BrowserWindow.getFocusedWindow()?.setFullScreen(false);
+		win.setContentSize(w, h);
+		win.center();
+		win.setFullScreen(false);
 	}
 });
 
