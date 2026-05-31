@@ -96,6 +96,11 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const replaceProject = async () => {
 		setIsLoading(true);
 		setIsDialogConfirmOpen(false);
+		if (Scene.Map.current) {
+			Scene.Map.current.close();
+			Scene.Map.current = null;
+		}
+		Project.current = null;
 		await removeFolder(getcompleteLocation());
 		try {
 			await createProject();
