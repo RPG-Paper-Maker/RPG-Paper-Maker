@@ -563,19 +563,29 @@ const init = async () => {
 };
 
 app.whenReady().then(() => {
-	let shortcuts = [`CommandOrControl+Alt+I`, `CommandOrControl+Shift+I`];
-	for (const shortcut of shortcuts) {
-		globalShortcut.register(shortcut, () => {
-			updater?.openDevTools({ mode: 'undocked' });
-			game?.openDevTools({ mode: 'undocked' });
-			window?.openDevTools({ mode: 'undocked' });
-		});
-	}
 	if (isGameTestProcess) {
+		globalShortcut.register('CommandOrControl+Shift+I', () => {
+			if (game && !game.isDestroyed()) {
+				game.webContents.openDevTools({ mode: 'undocked' });
+			}
+		});
 		runRPMGame(gameTestLocation, gameTestBattleTest).catch(console.error);
 	} else if (app.isPackaged) {
+		globalShortcut.register('CommandOrControl+Alt+Shift+I', () => {
+			if (updater && !updater.isDestroyed()) {
+				updater.webContents.openDevTools({ mode: 'undocked' });
+			}
+			if (window && !window.isDestroyed()) {
+				window.webContents.openDevTools({ mode: 'undocked' });
+			}
+		});
 		init().catch(displayErrorUpdater);
 	} else {
+		globalShortcut.register('CommandOrControl+Alt+Shift+I', () => {
+			if (window && !window.isDestroyed()) {
+				window.webContents.openDevTools({ mode: 'undocked' });
+			}
+		});
 		runRPMEngine().catch(console.error);
 	}
 });
