@@ -73,6 +73,16 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 	const [sizeID] = useStateDynamicValue();
 	const [isFontID, setIsFontID] = useStateBool();
 	const [fontID] = useStateDynamicValue();
+
+	const [isInterlocutorX, setIsInterlocutorX] = useStateBool();
+	const [interlocutorX] = useStateDynamicValue();
+	const [isInterlocutorY, setIsInterlocutorY] = useStateBool();
+	const [interlocutorY] = useStateDynamicValue();
+	const [isInterlocutorW, setIsInterlocutorW] = useStateBool();
+	const [interlocutorW] = useStateDynamicValue();
+	const [isInterlocutorH, setIsInterlocutorH] = useStateBool();
+	const [interlocutorH] = useStateDynamicValue();
+
 	const [, setTrigger] = useStateBool();
 
 	const initializeCheck = (
@@ -96,7 +106,14 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
-			initializeCheck(list, iterator, setIsWindowSkinID, windowSkinID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.windowSkins[0]?.id ?? 1);
+			initializeCheck(
+				list,
+				iterator,
+				setIsWindowSkinID,
+				windowSkinID,
+				DYNAMIC_VALUE_KIND.DATABASE,
+				Project.current!.systems.windowSkins[0]?.id ?? 1,
+			);
 			initializeCheck(list, iterator, setIsTransformX, transformX, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 			initializeCheck(list, iterator, setIsTransformY, transformY, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 			initializeCheck(list, iterator, setIsTransformWidth, transformWidth, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
@@ -156,8 +173,26 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				setIsColorBackground(false);
 				colorBackgroundID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
-			initializeCheck(list, iterator, setIsSizeID, sizeID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.fontSizes[0]?.id ?? 1);
-			initializeCheck(list, iterator, setIsFontID, fontID, DYNAMIC_VALUE_KIND.DATABASE, Project.current!.systems.fontNames[0]?.id ?? 1);
+			initializeCheck(
+				list,
+				iterator,
+				setIsSizeID,
+				sizeID,
+				DYNAMIC_VALUE_KIND.DATABASE,
+				Project.current!.systems.fontSizes[0]?.id ?? 1,
+			);
+			initializeCheck(
+				list,
+				iterator,
+				setIsFontID,
+				fontID,
+				DYNAMIC_VALUE_KIND.DATABASE,
+				Project.current!.systems.fontNames[0]?.id ?? 1,
+			);
+			initializeCheck(list, iterator, setIsInterlocutorX, interlocutorX, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 30);
+			initializeCheck(list, iterator, setIsInterlocutorY, interlocutorY, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, -30);
+			initializeCheck(list, iterator, setIsInterlocutorW, interlocutorW, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 400);
+			initializeCheck(list, iterator, setIsInterlocutorH, interlocutorH, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 60);
 		} else {
 			setIsWindowSkinID(false);
 			windowSkinID.updateToDefaultDatabase(Project.current!.systems.windowSkins);
@@ -196,6 +231,14 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			sizeID.updateToDefaultDatabase(Project.current!.systems.fontSizes);
 			setIsFontID(false);
 			fontID.updateToDefaultDatabase(Project.current!.systems.fontNames);
+			setIsInterlocutorX(false);
+			interlocutorX.updateToDefaultNumber(30, true);
+			setIsInterlocutorY(false);
+			interlocutorY.updateToDefaultNumber(-30, true);
+			setIsInterlocutorW(false);
+			interlocutorW.updateToDefaultNumber(400, true);
+			setIsInterlocutorH(false);
+			interlocutorH.updateToDefaultNumber(60, true);
 		}
 		setTrigger((v) => !v);
 	};
@@ -234,6 +277,10 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 		getCommandCheck(newList, isColorBackground, colorBackgroundID);
 		getCommandCheck(newList, isSizeID, sizeID);
 		getCommandCheck(newList, isFontID, fontID);
+		getCommandCheck(newList, isInterlocutorX, interlocutorX);
+		getCommandCheck(newList, isInterlocutorY, interlocutorY);
+		getCommandCheck(newList, isInterlocutorW, interlocutorW);
+		getCommandCheck(newList, isInterlocutorH, interlocutorH);
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -368,6 +415,58 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										value={paddingBottom}
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
 										disabled={!isPaddingBottom}
+									/>
+								</Value>
+							</Form>
+						</Groupbox>
+						<Groupbox title={t('interlocutor')}>
+							<Form>
+								<Label>
+									<Checkbox isChecked={isInterlocutorX} onChange={setIsInterlocutorX}>
+										X
+									</Checkbox>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={interlocutorX}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={!isInterlocutorX}
+									/>
+								</Value>
+								<Label>
+									<Checkbox isChecked={isInterlocutorY} onChange={setIsInterlocutorY}>
+										Y
+									</Checkbox>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={interlocutorY}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={!isInterlocutorY}
+									/>
+								</Value>
+								<Label>
+									<Checkbox isChecked={isInterlocutorW} onChange={setIsInterlocutorW}>
+										{t('width')}
+									</Checkbox>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={interlocutorW}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={!isInterlocutorW}
+									/>
+								</Value>
+								<Label>
+									<Checkbox isChecked={isInterlocutorH} onChange={setIsInterlocutorH}>
+										{t('height')}
+									</Checkbox>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={interlocutorH}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={!isInterlocutorH}
 									/>
 								</Value>
 							</Form>

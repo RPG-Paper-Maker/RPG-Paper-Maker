@@ -1126,6 +1126,10 @@ class MapObjectCommand extends Base {
 			parameters,
 			Project.current!.systems.fontNames,
 		);
+		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} X`, iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} Y`, iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} ${t('width')}`, iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} ${t('height')}`, iterator, properties, parameters);
 		return texts;
 	}
 
