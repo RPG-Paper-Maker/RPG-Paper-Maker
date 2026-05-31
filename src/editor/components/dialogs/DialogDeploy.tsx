@@ -221,7 +221,6 @@ function DialogDeploy({ setIsOpen }: Props) {
 	};
 
 	const removeUselessContent = async (path: string) => {
-		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_SETTINGS));
 		if (await checkFileExists(Paths.join(path, Paths.BUILD, Paths.FILE_SETTINGS_GAME))) {
 			await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_SETTINGS_GAME));
 		}
