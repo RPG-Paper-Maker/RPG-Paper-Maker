@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	AiOutlineFileAdd,
@@ -63,6 +64,47 @@ function Toolbar() {
 	const { t } = useTranslation();
 
 	const dispatch = useDispatch();
+
+	const toolbarRef = useRef<HTMLDivElement>(null);
+	const retryRef = useRef(0);
+
+	const updateScale = useCallback(() => {
+		const toolbar = toolbarRef.current;
+		const menu = toolbar?.querySelector<HTMLElement>('.menu');
+		if (!toolbar || !menu) {
+			return;
+		}
+		const available = toolbar.clientWidth;
+		const natural = menu.scrollWidth;
+		if (available <= 0 || natural <= 0) {
+			if (retryRef.current < 30) {
+				retryRef.current += 1;
+				requestAnimationFrame(updateScale);
+			}
+			return;
+		}
+		retryRef.current = 0;
+		const scale = Math.min(1, available / natural);
+		toolbar.style.setProperty('--toolbar-scale', String(scale));
+	}, []);
+
+	useLayoutEffect(() => {
+		updateScale();
+	});
+
+	useLayoutEffect(() => {
+		const toolbar = toolbarRef.current;
+		if (!toolbar) {
+			return;
+		}
+		const frame = requestAnimationFrame(() => updateScale());
+		const observer = new ResizeObserver(() => updateScale());
+		observer.observe(toolbar);
+		return () => {
+			cancelAnimationFrame(frame);
+			observer.disconnect();
+		};
+	}, [updateScale]);
 
 	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
@@ -174,7 +216,7 @@ function Toolbar() {
 
 	return (
 		<>
-			<div className='toolbar'>
+			<div className='toolbar' ref={toolbarRef}>
 				<Menu horizontal>
 					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 						{t('new.project.tool')}

@@ -17,17 +17,22 @@
 }
 
 .toolbar {
+	--toolbar-scale: 1;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	border-bottom: 1px solid var(--main-bg-color);
+	.menu {
+		width: max-content;
+		transform: scale(var(--toolbar-scale));
+		transform-origin: left center;
+	}
 
 	.menuItem {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		font-size: 0.75em;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		padding: 10px 15px;
 		height: 36px;
 
 		svg {
@@ -38,8 +43,11 @@
 		}
 
 		&.separator {
+			padding: 0.5px;
 			height: 20px;
 			margin-top: 10px;
+			margin-left: 5px;
+			margin-right: 5px;
 		}
 	}
 }

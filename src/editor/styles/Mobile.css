@@ -10,14 +10,6 @@
 */
 
 @media (max-width: 1410px) {
-	.toolbar {
-		display: none;
-	}
-
-	.toolbarMobileSeparator {
-		border-top: 1px solid var(--darkest-bg-color);
-	}
-
 	.projectPreview {
 		background-color: var(--hover-main-bg-color);
 
@@ -28,6 +20,14 @@
 }
 
 @media (max-width: 1000px) {
+	.toolbar {
+		display: none;
+	}
+
+	.toolbarMobileSeparator {
+		border-top: 1px solid var(--darkest-bg-color);
+	}
+
 	.mobilePanel0 .panelTexturesSplitter > .mobileFillWidth {
 		display: none;
 	}
