@@ -26,17 +26,17 @@ import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
-import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, Tileset } from '../../models';
+import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, TerrainSound, Tileset } from '../../models';
 import { setNeedsReloadMap } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
+import InputNumber from '../InputNumber';
 import PreviewerObject3D from '../PreviewerObject3D';
 import Tab from '../Tab';
 import TextureCollisionsEditor from '../TextureCollisionsEditor';
-import TexturePreviewer from '../TexturePreviewer';
 import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -64,8 +64,10 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 	const [selectedMountain, setSelectedMountain] = useState<Mountain | null>(null);
 	const [mountainCollisionKind, setMountainCollisionKind] = useState(MOUNTAIN_COLLISION_KIND.DEFAULT);
 	const [mountainPictureID, setMountainPictureID] = useStateNumber();
-	const [mountainPicturePath, setMountainPicturePath] = useStateString();
-	const [mountainPictureIsBR, setMountainPictureIsBR] = useStateBool();
+	const [, setMountainPicturePath] = useStateString();
+	const [, setMountainPictureIsBR] = useStateBool();
+	const [mountainTerrain, setMountainTerrain] = useStateNumber();
+	const [mountainFootsteps, setMountainFootsteps] = useState<Node[]>([]);
 	const [objects, setObjects] = useState<Node[]>([]);
 	const [selectedObject, setSelectedObject] = useState<Object3D | null>(null);
 	const [objectCollisionKind, setObjectCollisionKind] = useState(OBJECT_COLLISION_KIND.NONE);
@@ -180,7 +182,11 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 			if (picture) {
 				setMountainPicturePath(picture.getPath());
 				setMountainPictureIsBR(picture.isBR);
+				setMountainFootsteps(Node.createList(picture.terrainSounds));
+			} else {
+				setMountainFootsteps([]);
 			}
+			setMountainTerrain(mountain.terrain ?? 0);
 		}
 	};
 
@@ -203,6 +209,25 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 			if (picture) {
 				setMountainPicturePath(picture.getPath());
 				setMountainPictureIsBR(picture.isBR);
+				setMountainFootsteps(Node.createList(picture.terrainSounds));
+			} else {
+				setMountainFootsteps([]);
+			}
+		}
+	};
+
+	const handleChangeMountainTerrain = (n: number) => {
+		if (selectedMountain) {
+			selectedMountain.terrain = n;
+			setMountainTerrain(n);
+		}
+	};
+
+	const handleMountainFootstepsUpdated = () => {
+		if (selectedMountain) {
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain.pictureID);
+			if (picture) {
+				picture.terrainSounds = Node.createListFromNodes(mountainFootsteps);
 			}
 		}
 	};
@@ -448,9 +473,30 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 							/>
 						</Flex>
 					)}
-					{!isMountainDisabled && (
-						<TexturePreviewer texture={mountainPicturePath} base64={!mountainPictureIsBR} />
-					)}
+					<Flex spaced centerV>
+						<div>{t('terrain')}:</div>
+						<InputNumber
+							value={mountainTerrain}
+							onChange={handleChangeMountainTerrain}
+							min={0}
+							widthType={INPUT_TYPE_WIDTH.SMALL}
+							disabled={isMountainDisabled}
+						/>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('footsteps')} disabled={isMountainDisabled} fillWidth>
+							<Tree
+								constructorType={TerrainSound}
+								list={mountainFootsteps}
+								onListUpdated={handleMountainFootstepsUpdated}
+								scrollable
+								applyDefault
+								doNotShowID
+								disabled={isMountainDisabled}
+								canBeEmpty
+							/>
+						</Groupbox>
+					</Flex>
 				</Flex>
 			) : null,
 			Model.Mountain,

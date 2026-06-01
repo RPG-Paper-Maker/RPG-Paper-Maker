@@ -16,9 +16,11 @@ import { SpecialElement } from './SpecialElement';
 class Mountain extends SpecialElement {
 	public static type = 'Mountain';
 	public collisionKind!: MOUNTAIN_COLLISION_KIND;
+	public terrain!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['collisionKind', 'mck', MOUNTAIN_COLLISION_KIND.DEFAULT, BINDING.NUMBER],
+		['terrain', 'ter', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
