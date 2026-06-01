@@ -273,7 +273,9 @@ function Dialog({
 			const rect = dialogRef.current.getBoundingClientRect();
 			dialogRef.current.style.width = initialWidth || `${rect.width + 2}px`;
 			dialogRef.current.style.height = initialHeight || `${rect.height + 2}px`;
-			dialogRef.current.style.minHeight = initialHeight || `${rect.height + 2}px`;
+			dialogRef.current.style.minHeight = initialHeight
+				? `min(${initialHeight}, calc(100vh - 10px))`
+				: `${rect.height + 2}px`;
 		}
 	}, [isOpen, initialWidth, initialHeight]);
 
