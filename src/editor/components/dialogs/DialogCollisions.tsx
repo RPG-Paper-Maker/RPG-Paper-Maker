@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
@@ -26,7 +26,17 @@ import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
-import { Autotile, Base, Mountain, Object3D, Picture, SpecialElement, TerrainSound, Tileset } from '../../models';
+import {
+	Autotile,
+	Base,
+	Mountain,
+	Object3D,
+	Picture,
+	SpecialElement,
+	TerrainSound,
+	TerrainSoundItem,
+	Tileset,
+} from '../../models';
 import { setNeedsReloadMap } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Checkbox from '../Checkbox';
@@ -37,6 +47,7 @@ import InputNumber from '../InputNumber';
 import PreviewerObject3D from '../PreviewerObject3D';
 import Tab from '../Tab';
 import TextureCollisionsEditor from '../TextureCollisionsEditor';
+import TexturePreviewer from '../TexturePreviewer';
 import Tree, { TREES_LARGE_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -64,8 +75,8 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 	const [selectedMountain, setSelectedMountain] = useState<Mountain | null>(null);
 	const [mountainCollisionKind, setMountainCollisionKind] = useState(MOUNTAIN_COLLISION_KIND.DEFAULT);
 	const [mountainPictureID, setMountainPictureID] = useStateNumber();
-	const [, setMountainPicturePath] = useStateString();
-	const [, setMountainPictureIsBR] = useStateBool();
+	const [mountainPicturePath, setMountainPicturePath] = useStateString();
+	const [mountainPictureIsBR, setMountainPictureIsBR] = useStateBool();
 	const [mountainTerrain, setMountainTerrain] = useStateNumber();
 	const [mountainFootsteps, setMountainFootsteps] = useState<Node[]>([]);
 	const [objects, setObjects] = useState<Node[]>([]);
@@ -172,6 +183,9 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 		Project.current!.specialElements.walls = Node.createListFromNodes(walls);
 	};
 
+	const getMountainFootstepsNodes = (picture: Picture | null) =>
+		Node.createList(picture?.terrainSounds[0]?.sounds ?? []);
+
 	const handleSelectMountain = (node: Node | null) => {
 		const mountain = (node?.content as Mountain) ?? null;
 		setSelectedMountain(mountain);
@@ -182,7 +196,7 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 			if (picture) {
 				setMountainPicturePath(picture.getPath());
 				setMountainPictureIsBR(picture.isBR);
-				setMountainFootsteps(Node.createList(picture.terrainSounds));
+				setMountainFootsteps(getMountainFootstepsNodes(picture));
 			} else {
 				setMountainFootsteps([]);
 			}
@@ -209,7 +223,7 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 			if (picture) {
 				setMountainPicturePath(picture.getPath());
 				setMountainPictureIsBR(picture.isBR);
-				setMountainFootsteps(Node.createList(picture.terrainSounds));
+				setMountainFootsteps(getMountainFootstepsNodes(picture));
 			} else {
 				setMountainFootsteps([]);
 			}
@@ -220,6 +234,11 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 		if (selectedMountain) {
 			selectedMountain.terrain = n;
 			setMountainTerrain(n);
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain.pictureID);
+			const terrainSound = picture?.terrainSounds[0];
+			if (terrainSound) {
+				terrainSound.terrain = n;
+			}
 		}
 	};
 
@@ -227,7 +246,15 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 		if (selectedMountain) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, selectedMountain.pictureID);
 			if (picture) {
-				picture.terrainSounds = Node.createListFromNodes(mountainFootsteps);
+				const sounds = Node.createListFromNodes<TerrainSoundItem>(mountainFootsteps);
+				let terrainSound = picture.terrainSounds[0];
+				if (!terrainSound) {
+					terrainSound = new TerrainSound();
+					terrainSound.applyDefault();
+					picture.terrainSounds = [terrainSound];
+				}
+				terrainSound.terrain = selectedMountain.terrain;
+				terrainSound.sounds = sounds;
 			}
 		}
 	};
@@ -473,30 +500,37 @@ function DialogCollisions({ setIsOpen, kind }: Props) {
 							/>
 						</Flex>
 					)}
-					<Flex spaced centerV>
-						<div>{t('terrain')}:</div>
-						<InputNumber
-							value={mountainTerrain}
-							onChange={handleChangeMountainTerrain}
-							min={0}
-							widthType={INPUT_TYPE_WIDTH.SMALL}
-							disabled={isMountainDisabled}
-						/>
-					</Flex>
-					<Flex one>
-						<Groupbox title={t('footsteps')} disabled={isMountainDisabled} fillWidth>
-							<Tree
-								constructorType={TerrainSound}
-								list={mountainFootsteps}
-								onListUpdated={handleMountainFootstepsUpdated}
-								scrollable
-								applyDefault
-								doNotShowID
-								disabled={isMountainDisabled}
-								canBeEmpty
-							/>
-						</Groupbox>
-					</Flex>
+					{!isMountainDisabled && (
+						<TexturePreviewer texture={mountainPicturePath} base64={!mountainPictureIsBR} />
+					)}
+					{kind === PICTURE_KIND.MOUNTAINS && (
+						<>
+							<Flex spaced centerV>
+								<div>{t('terrain')}:</div>
+								<InputNumber
+									value={mountainTerrain}
+									onChange={handleChangeMountainTerrain}
+									min={0}
+									widthType={INPUT_TYPE_WIDTH.SMALL}
+									disabled={isMountainDisabled}
+								/>
+							</Flex>
+							<Flex one>
+								<Groupbox title={t('footsteps')} disabled={isMountainDisabled} fillWidth>
+									<Tree
+										constructorType={TerrainSoundItem}
+										list={mountainFootsteps}
+										onListUpdated={handleMountainFootstepsUpdated}
+										scrollable
+										applyDefault
+										doNotShowID
+										disabled={isMountainDisabled}
+										canBeEmpty
+									/>
+								</Groupbox>
+							</Flex>
+						</>
+					)}
 				</Flex>
 			) : null,
 			Model.Mountain,
