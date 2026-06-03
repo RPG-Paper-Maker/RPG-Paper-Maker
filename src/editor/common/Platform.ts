@@ -63,7 +63,9 @@ export const getFiles = async (path: string): Promise<string[]> => {
 };
 
 export const readFile = async (path: string, asBase64 = false): Promise<string | null> => {
-	return (await (Constants.IS_DESKTOP ? IO.readFile(path, false, asBase64) : LocalFile.readFile(path))) as string | null;
+	return (await (Constants.IS_DESKTOP ? IO.readFile(path, false, asBase64) : LocalFile.readFile(path))) as
+		| string
+		| null;
 };
 
 export const createFolder = async (path: string) => {
@@ -98,16 +100,30 @@ export const moveFolder = async (src: string, dst: string) => {
 	}
 };
 
+const pendingWrites = new Set<Promise<unknown>>();
+
+export const flushPendingWrites = async () => {
+	await Promise.allSettled([...pendingWrites]);
+};
+
 export const createFile = async (path: string, content: string) => {
 	if (Constants.IS_DESKTOP) {
-		const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
-		await IO.createFile(tmpPath, content);
+		const write = (async () => {
+			const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
+			await IO.createFile(tmpPath, content);
+			try {
+				await IO.moveFile(tmpPath, path);
+				await IO.removeFile(tmpPath).catch(() => {});
+			} catch (e) {
+				await IO.removeFile(tmpPath).catch(() => {});
+				throw e;
+			}
+		})();
+		pendingWrites.add(write);
 		try {
-			await IO.moveFile(tmpPath, path);
-			await IO.removeFile(tmpPath).catch(() => {});
-		} catch (e) {
-			await IO.removeFile(tmpPath).catch(() => {});
-			throw e;
+			await write;
+		} finally {
+			pendingWrites.delete(write);
 		}
 	} else {
 		await LocalFile.createFile(path, content);

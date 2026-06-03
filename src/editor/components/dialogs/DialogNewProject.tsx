@@ -27,6 +27,7 @@ import {
 	copyPublicFolder,
 	createFile,
 	createFolder,
+	flushPendingWrites,
 	getFolders,
 	removeFolder,
 } from '../../common/Platform';
@@ -34,7 +35,7 @@ import { DynamicValue } from '../../core/DynamicValue';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Model, Scene } from '../../Editor';
-import { RootState, setProjects } from '../../store';
+import { RootState, setCurrentProject, setCurrentTreeMapTag, setProjects } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
@@ -100,7 +101,11 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			Scene.Map.current.close();
 			Scene.Map.current = null;
 		}
+		Project.current?.close();
 		Project.current = null;
+		dispatch(setCurrentTreeMapTag(null));
+		dispatch(setCurrentProject(null));
+		await flushPendingWrites();
 		await removeFolder(getcompleteLocation());
 		try {
 			await createProject();
