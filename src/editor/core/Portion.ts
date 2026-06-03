@@ -12,7 +12,6 @@
 import * as THREE from 'three';
 import { Constants } from '../common';
 import { PortionBase } from './PortionBase';
-import { Project } from './Project';
 
 class Portion extends PortionBase {
 	static getFileName(i: number, j: number, k: number): string {

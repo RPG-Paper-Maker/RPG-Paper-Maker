@@ -11,7 +11,6 @@
 
 import * as THREE from 'three';
 import { Scene } from '../Editor';
-import { Project } from './Project';
 
 class Grid {
 	public line!: THREE.LineSegments;

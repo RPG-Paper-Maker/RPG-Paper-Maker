@@ -15,7 +15,6 @@ import { Inputs } from '../managers';
 import { CustomGeometry } from './CustomGeometry';
 import { Frame } from './Frame';
 import { Position } from './Position';
-import { Project } from './Project';
 
 class Cursor {
 	public static FRAME_MOVE_START = 40;
