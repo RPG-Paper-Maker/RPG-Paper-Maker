@@ -42,9 +42,11 @@ console.error = (...args) => {
 	let stack = '';
 	args.forEach((arg) => {
 		if (arg instanceof Error) {
-			message += arg.message + '\n';
-			stack += arg.stack + '\n';
-		} else if (typeof arg === 'object') {
+			message += (arg.message || arg.toString() || 'Unknown error') + '\n';
+			if (arg.stack) {
+				stack += arg.stack + '\n';
+			}
+		} else if (typeof arg === 'object' && arg !== null) {
 			try {
 				message += JSON.stringify(arg) + '\n';
 			} catch {
@@ -54,6 +56,9 @@ console.error = (...args) => {
 			message += String(arg) + '\n';
 		}
 	});
+	if (!message.trim()) {
+		message = 'Unknown error (no message provided).\n';
+	}
 	if (message.includes('EBUSY')) {
 		console.warn(i18next.t('warning.file.busy'));
 		return;
@@ -77,9 +82,10 @@ window.onerror = function (message, source, lineno, colno, error) {
 		return;
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
-	notifyError(<ToasterError message={message as string} stack={stack} />);
+	const text = (message ? String(message) : error?.message) || 'Unknown error (no message provided).';
+	notifyError(<ToasterError message={text} stack={stack} />);
 	if (!isGameMode) {
-		store.dispatch(setErrorDialog({ message: message as string, stack }));
+		store.dispatch(setErrorDialog({ message: text, stack }));
 	}
 };
 

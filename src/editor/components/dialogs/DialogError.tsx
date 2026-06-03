@@ -53,7 +53,7 @@ function DialogError() {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					version: Project.VERSION ?? 'Not loaded',
+					version: Project.VERSION || 'Not loaded',
 					updaterVersion,
 					os: `${platform} | ${navigator.userAgent}`,
 					message: errorDialog.message,
