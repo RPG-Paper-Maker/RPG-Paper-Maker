@@ -12,6 +12,7 @@
 import { exec, spawn } from 'child_process';
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
+import { readFileSync, writeFileSync } from 'node:fs';
 import https from 'node:https';
 import os from 'os';
 import path from 'path';
@@ -156,6 +157,78 @@ async function extractTarGz(tarPath, destDir) {
 	await run(`tar -xzf "${tarPath}" -C "${destDir}"`);
 }
 
+const getBackendCachePath = () => {
+	let dir;
+	try {
+		dir = app.getPath('userData');
+	} catch {
+		dir = os.tmpdir();
+	}
+	return path.join(dir, 'gpu-backend');
+};
+
+const readBackendCache = () => {
+	try {
+		const value = readFileSync(getBackendCachePath(), 'utf8').trim();
+		if (value === 'vulkan' || value === 'gl') {
+			return value;
+		}
+	} catch {}
+	return null;
+};
+
+const getLinuxAngleBackend = () => readBackendCache() ?? 'gl';
+
+const detectGLRenderer = async () => {
+	const probe = new BrowserWindow({
+		width: 1,
+		height: 1,
+		show: false,
+		webPreferences: { nodeIntegration: false, contextIsolation: true },
+	});
+	try {
+		await probe.loadURL('about:blank');
+		const renderer = await probe.webContents.executeJavaScript(`(() => {
+			try {
+				const canvas = document.createElement('canvas');
+				const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+				if (!gl) return '';
+				const ext = gl.getExtension('WEBGL_debug_renderer_info');
+				return ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : String(gl.getParameter(gl.RENDERER));
+			} catch {
+				return '';
+			}
+		})();`);
+		return String(renderer ?? '').trim();
+	} catch {
+		return '';
+	} finally {
+		if (!probe.isDestroyed()) {
+			probe.destroy();
+		}
+	}
+};
+
+const ensureLinuxAngleBackend = async () => {
+	if (process.platform !== 'linux' || isGameTestProcess || readBackendCache() !== null) {
+		return false;
+	}
+	const renderer = await detectGLRenderer();
+	console.log(`[gpu-backend] glRenderer = "${renderer}"`);
+	if (renderer.length === 0) {
+		return false;
+	}
+	if (/llvmpipe|softpipe|swrast|software/i.test(renderer)) {
+		console.log('[gpu-backend] software GL detected, switching to Vulkan and relaunching');
+		writeFileSync(getBackendCachePath(), 'vulkan');
+		app.relaunch();
+		app.exit(0);
+		return true;
+	}
+	writeFileSync(getBackendCachePath(), 'gl');
+	return false;
+};
+
 app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling,MediaSessionService');
@@ -164,8 +237,9 @@ if (process.platform === 'darwin') {
 	app.commandLine.appendSwitch('use-gl', 'angle');
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
-	app.commandLine.appendSwitch('use-angle', 'vulkan');
 	app.commandLine.appendSwitch('no-sandbox');
+	app.commandLine.appendSwitch('use-gl', 'angle');
+	app.commandLine.appendSwitch('use-angle', getLinuxAngleBackend());
 	if (isGameTestProcess) {
 		app.commandLine.appendSwitch('force-device-scale-factor', '1');
 	}
@@ -563,7 +637,10 @@ const init = async () => {
 	});
 };
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+	if (await ensureLinuxAngleBackend()) {
+		return;
+	}
 	if (isGameTestProcess) {
 		globalShortcut.register('CommandOrControl+Shift+I', () => {
 			if (game && !game.isDestroyed()) {
