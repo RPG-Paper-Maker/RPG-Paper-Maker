@@ -112,3 +112,27 @@
 	transform: translate(-50%, -50%) scale(1.15);
 	color: #fff;
 }
+
+@media (max-height: 950px) {
+	.youtubePreviewThumbnail {
+		width: fit-content;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+
+	.youtubePreviewFrame {
+		width: auto;
+		max-width: 100%;
+		max-height: 22vh;
+	}
+}
+
+@media (max-height: 800px) {
+	.youtubePreviewFrame {
+		max-height: 130px;
+	}
+
+	.changelogPreview {
+		min-height: 70px;
+	}
+}
