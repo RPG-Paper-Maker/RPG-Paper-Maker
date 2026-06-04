@@ -30,9 +30,11 @@ type Props = {
 	isOpen: boolean;
 	initialWidth?: string;
 	initialHeight?: string;
+	initialPlacement?: 'center' | 'right';
 	isDisabled?: boolean;
 	isLoading?: boolean;
 	zIndex?: number;
+	allowMapInteraction?: boolean;
 	footer?: React.ReactNode;
 	onClose?: () => void;
 };
@@ -58,9 +60,11 @@ function Dialog({
 	isOpen,
 	initialWidth,
 	initialHeight,
+	initialPlacement = 'center',
 	isDisabled = false,
 	isLoading = false,
 	zIndex,
+	allowMapInteraction = false,
 	footer,
 	onClose,
 }: Props) {
@@ -229,8 +233,10 @@ function Dialog({
 	useEffect(() => {
 		if (isDragging) {
 			document.addEventListener('mousemove', handleMouseMoveDragging);
+			document.addEventListener('mouseup', handleMouseUpTitle);
 			return () => {
 				document.removeEventListener('mousemove', handleMouseMoveDragging);
+				document.removeEventListener('mouseup', handleMouseUpTitle);
 			};
 		} else if (isResizing) {
 			document.addEventListener('mousemove', handleMouseMoveResizing);
@@ -283,12 +289,21 @@ function Dialog({
 		if (isOpen) {
 			dispatch(setIsOpeningNewDialog());
 			setIsDragging(false);
-			setIsMoved(false);
 			setInitialPosition({ x: 0, y: 0 });
 			setIsClickedIn(false);
 			setIsResizing(false);
+			if (initialPlacement === 'right' && dialogRef.current) {
+				const rect = dialogRef.current.getBoundingClientRect();
+				const left = Math.max(0, window.innerWidth - 10 - rect.width);
+				const top = Math.max(0, (window.innerHeight - rect.height) / 2);
+				dialogRef.current.style.left = `${left}px`;
+				dialogRef.current.style.top = `${top}px`;
+				setIsMoved(true);
+			} else {
+				setIsMoved(false);
+			}
 		}
-	}, [isOpen]);
+	}, [isOpen, initialPlacement]);
 
 	useEffect(() => {
 		Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
@@ -298,6 +313,15 @@ function Dialog({
 			dispatch(setDialogsOpen(!Inputs.isMapFocused));
 		};
 	}, []);
+
+	useEffect(() => {
+		if (isOpen && allowMapInteraction) {
+			Inputs.allowMapMouseDuringDialog = true;
+			return () => {
+				Inputs.allowMapMouseDuringDialog = false;
+			};
+		}
+	}, [isOpen, allowMapInteraction]);
 
 	const root = document.getElementById('root');
 	if (!root || !isOpen) {
@@ -312,6 +336,7 @@ function Dialog({
 			onMouseUp={handleMouseUpTitle}
 			style={{
 				zIndex,
+				pointerEvents: allowMapInteraction ? 'none' : undefined,
 			}}
 		>
 			<div
@@ -322,6 +347,7 @@ function Dialog({
 				onMouseUp={handleMouseUp}
 				style={{
 					transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
+					pointerEvents: allowMapInteraction ? 'auto' : undefined,
 				}}
 			>
 				{isDisabled && <div className='dialogDisable' />}

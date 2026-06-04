@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
@@ -18,7 +18,7 @@ import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import { TreeMapTag } from '../models';
-import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
+import { RootState, setCopiedItems, setCurrentTreeMapTag, setNeedsReloadMap } from '../store';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import DialogMapProperties from './dialogs/models/DialogMapProperties';
@@ -61,9 +61,11 @@ function TreeMaps({
 
 	const isOpenLoading = useSelector((state: RootState) => state.projects.openLoading);
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
+	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	useSelector((state: RootState) => state.triggers.treeMap);
 
 	const dispatch = useDispatch();
+	const previousTagRef = useRef<Model.TreeMapTag | null>(null);
 
 	if (isOpenLoading) {
 		return null;
@@ -89,19 +91,30 @@ function TreeMaps({
 	const handleNewMap = async () => {
 		const id = Node.getNewID(RPM.treeCurrentItems);
 		const name = Model.Map.generateMapName(id);
-		setEditedMap(Model.Map.createDefaultNewMap(id, name));
+		const map = Model.Map.createDefaultNewMap(id, name);
+		const folder = await map.createNewMap();
+		if (!folder) return;
+		setEditedMap(map);
 		setIsNew(true);
+		previousTagRef.current = currentTreeMapTag;
+		dispatch(setCurrentTreeMapTag(Model.TreeMapTag.create(map.id, map.name)));
 		setIsOpenMapProperties(true);
 	};
 
-	const handleAcceptNewMap = async () => {
+	const handleAcceptNewMap = async (previousModel: Model.Map) => {
 		if (editedMap && selectedNode) {
 			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
-			const folder = await editedMap.createNewMap();
-			if (!folder) return;
 			selectedNode.children.push(node);
+			await editedMap.resizeMap(previousModel);
+			await Project.current!.treeMaps.save();
+			await editedMap.save();
 			RPM.treeCurrentSetSelectedItem(node);
 		}
+	};
+
+	const handleRejectNewMap = async () => {
+		await editedMap.deleteMap();
+		dispatch(setCurrentTreeMapTag(previousTagRef.current));
 	};
 
 	const handleNewFolder = async () => {
@@ -385,6 +398,7 @@ function TreeMaps({
 					setIsOpen={setIsOpenMapProperties}
 					model={editedMap}
 					onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
+					onReject={isNew ? handleRejectNewMap : undefined}
 				/>
 			)}
 			{isOpenName && (

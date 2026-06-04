@@ -958,6 +958,9 @@ class MapPortion {
 
 		for (const [positionKey, land] of this.model.lands) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 			if (land instanceof MapElement.Floor) {
 				this.updateFloorGeometry(position, land, width, height, isPointedFloor, floorCounts);
 			} else if (land instanceof MapElement.Autotile) {
@@ -1105,6 +1108,9 @@ class MapPortion {
 		const faceCounts: number[] = [];
 		for (const [positionKey, sprite] of this.model.sprites) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
 				if (this.map.selectedElement === sprite) {
@@ -1241,6 +1247,9 @@ class MapPortion {
 		const hash = new Map<number, GeometryMaterialType>();
 		for (const [positionKey, wall] of this.model.walls) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 			let obj = hash.get(wall.wallID);
 			let material: THREE.MeshPhongMaterial | null;
 			let geometry: CustomGeometry;
@@ -1289,6 +1298,9 @@ class MapPortion {
 		this.mountainsList = new Map();
 		for (const [positionKey, mountain] of this.model.mountains) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID)?.pictureID;
 			let mountains = this.mountainsList.get(pictureID);
 			if (!mountains) {
@@ -1324,6 +1336,9 @@ class MapPortion {
 		const hash = new Map<number, GeometryMaterialType>();
 		for (const [positionKey, object3D] of this.model.objects3D) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 			if (!object3D.data) {
 				object3D.data = Project.current!.specialElements.getObject3DByID(object3D.id);
 			}
@@ -1517,6 +1532,9 @@ class MapPortion {
 		let count = 0;
 		for (const [positionKey, object] of this.model.objects) {
 			const position = Position.fromKey(positionKey);
+			if (this.map.previewSizeActive && !position.isInMap(this.map.model, true)) {
+				continue;
+			}
 
 			// Object square cursor
 			const vec = position.toVector3(false);

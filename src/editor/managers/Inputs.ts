@@ -32,6 +32,7 @@ class Inputs {
 	public static previousTouchDistance = 0;
 	public static touchDistance = 0;
 	public static isMapFocused = true;
+	public static allowMapMouseDuringDialog = false;
 
 	static getPositionX() {
 		return Constants.IS_MOBILE ? this.pointerX : this.mouseX;
@@ -180,7 +181,7 @@ class Inputs {
 			// Mouse down
 			const handleMouseDown = (e: MouseEvent) => {
 				if (
-					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
+					(!this.isMapFocused && !Scene.Map.currentpositionSelector && !this.allowMapMouseDuringDialog) ||
 					!Scene.Map.current ||
 					Scene.Map.current.loading
 				) {
@@ -214,7 +215,7 @@ class Inputs {
 			// Mouse move
 			const handleMouseMove = (e: MouseEvent) => {
 				if (
-					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
+					(!this.isMapFocused && !Scene.Map.currentpositionSelector && !this.allowMapMouseDuringDialog) ||
 					!Scene.Map.current ||
 					Scene.Map.current.loading
 				) {
@@ -281,7 +282,7 @@ class Inputs {
 
 			// Mouse wheel
 			const handleWheel = async (e: WheelEvent) => {
-				if (!this.isMapFocused && !Scene.Map.currentpositionSelector) {
+				if (!this.isMapFocused && !Scene.Map.currentpositionSelector && !this.allowMapMouseDuringDialog) {
 					return;
 				}
 				e.preventDefault();

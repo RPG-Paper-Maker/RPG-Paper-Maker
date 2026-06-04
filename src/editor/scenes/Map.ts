@@ -106,7 +106,8 @@ class Map extends Base {
 	public cursorDetection!: Cursor;
 	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
-	public sunLight!: THREE.DirectionalLight;
+	public sunLight: THREE.DirectionalLight | null = null;
+	public ambientLight: THREE.AmbientLight | null = null;
 	public transformControls!: TransformControls;
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
@@ -164,6 +165,7 @@ class Map extends Base {
 	public movingObjectInitialPosition: Position | null = null;
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 	public skyboxMesh: THREE.Mesh | null = null;
+	public previewSizeActive = false;
 	public showCoordinates = true;
 	public pointedObjectLabel: string | null = null;
 
@@ -251,6 +253,11 @@ class Map extends Base {
 			this.model.id = this.id;
 			await this.model.load();
 
+			if (this.canEdit && this.tag && !this.tag.cursorPosition) {
+				this.cursor.position.x = Math.floor(this.model.length / 2);
+				this.cursor.position.z = Math.floor(this.model.width / 2);
+			}
+
 			// Ensure temp folders exist (may be missing for imported, tutorial, or converted projects)
 			const folderMap = this.getPath();
 			await createFolder(Paths.join(folderMap, Paths.TEMP));
@@ -306,6 +313,11 @@ class Map extends Base {
 
 		// Light
 		this.initializeSunLight();
+
+		// Fog
+		if (!this.isDetection) {
+			this.updateFog();
+		}
 
 		// Grid
 		if (!this.isDetection && !this.isBattle) {
@@ -487,9 +499,23 @@ class Map extends Base {
 		}
 	}
 
+	removeLights() {
+		if (this.ambientLight) {
+			this.scene.remove(this.ambientLight);
+			this.ambientLight.dispose();
+			this.ambientLight = null;
+		}
+		if (this.sunLight) {
+			this.scene.remove(this.sunLight);
+			this.sunLight.dispose();
+			this.sunLight = null;
+		}
+	}
+
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? Math.PI - 14 / 9 : Math.PI);
-		this.scene.add(ambient);
+		this.removeLights();
+		this.ambientLight = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? Math.PI - 14 / 9 : Math.PI);
+		this.scene.add(this.ambientLight);
 		if (this.model.isSunlight) {
 			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
@@ -509,14 +535,88 @@ class Map extends Base {
 		}
 	}
 
+	updateFog() {
+		if (this.model.isFog) {
+			const color = (
+				Model.Base.getByIDOrFirst(
+					Project.current!.systems.colors,
+					this.model.fogColorID.getFixNumberValue(),
+				) as Model.Color
+			).getTHREEColor();
+			this.scene.fog = new THREE.FogExp2(color.getHex(), this.model.fogIntensity.getFixNumberValue());
+		} else {
+			this.scene.fog = null;
+		}
+	}
+
 	async updateBackground() {
 		if (this.model.isSkyColor) {
+			this.removeSkybox();
 			this.updateBackgroundColor();
 		} else if (this.model.isSkyImage) {
+			this.removeSkybox();
 			this.updateBackgroundImage();
 		} else {
 			await this.updateBackgroundSkybox();
 		}
+	}
+
+	removeSkybox() {
+		if (this.skyboxMesh) {
+			this.scene.remove(this.skyboxMesh);
+			this.skyboxMesh.geometry.dispose();
+			if (Array.isArray(this.skyboxMesh.material)) {
+				for (const mat of this.skyboxMesh.material) {
+					(mat as THREE.MeshBasicMaterial)?.map?.dispose();
+					mat?.dispose();
+				}
+			} else {
+				(this.skyboxMesh.material as THREE.MeshBasicMaterial).map?.dispose();
+				this.skyboxMesh.material.dispose();
+			}
+			this.skyboxMesh = null;
+		}
+	}
+
+	applyCameraProperty(id: number) {
+		if (!this.camera) {
+			return;
+		}
+		const cameraProperty = Model.Base.getByIDOrFirst(
+			Project.current!.systems.cameraProperties,
+			id,
+		) as Model.CameraProperty;
+		if (!cameraProperty) {
+			return;
+		}
+		this.camera.distance = cameraProperty.distance.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
+		this.camera.horizontalAngle = cameraProperty.horizontalAngle.getFixNumberValue();
+		this.camera.verticalAngle = cameraProperty.verticalAngle.getFixNumberValue();
+		if (this.tag) {
+			this.tag.cameraDistance = this.camera.distance;
+			this.tag.cameraHorizontalAngle = this.camera.horizontalAngle;
+			this.tag.cameraVerticalAngle = this.camera.verticalAngle;
+		}
+	}
+
+	showPreviewSizeBox() {
+		this.grid.updateBox(this);
+		this.grid.setBoxVisible(this, true);
+	}
+
+	previewSize() {
+		this.previewSizeActive = true;
+		this.grid.initialize(this);
+		this.grid.updateBox(this);
+		if (this.meshPlane) {
+			this.meshPlane.position.set(Math.floor(this.model.length / 2), 0, Math.floor(this.model.width / 2));
+		}
+		this.forEachMapPortions((mapPortion) => mapPortion.updateGeometries());
+	}
+
+	clearPreviewSize() {
+		this.previewSizeActive = false;
+		this.grid.setBoxVisible(this, false);
 	}
 
 	updateBackgroundColor() {
@@ -532,32 +632,22 @@ class Map extends Base {
 		if (this.scene.background instanceof THREE.Texture) {
 			this.scene.background.dispose();
 		}
-		const texture = Manager.GL.textureLoader.load(
-			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath(),
-		);
+		const picture = Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID);
+		if (!picture) {
+			this.scene.background = new THREE.Color(0x000000);
+			return;
+		}
+		const texture = Manager.GL.textureLoader.load(picture.getPath());
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
 		this.scene.background = texture;
 	}
 
 	async updateBackgroundSkybox() {
-		if (this.skyboxMesh) {
-			this.scene.remove(this.skyboxMesh);
-			this.skyboxMesh.geometry.dispose();
-			if (Array.isArray(this.skyboxMesh.material)) {
-				for (const mat of this.skyboxMesh.material) {
-					(mat as THREE.MeshBasicMaterial)?.map?.dispose();
-					mat?.dispose();
-				}
-			} else {
-				(this.skyboxMesh.material as THREE.MeshBasicMaterial).map?.dispose();
-				this.skyboxMesh.material.dispose();
-			}
-			this.skyboxMesh = null;
-		}
+		this.removeSkybox();
 		const size = 3;
 		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-		this.skyboxMesh = new THREE.Mesh(
+		const mesh = new THREE.Mesh(
 			skyboxGeometry,
 			await (
 				Model.Base.getByIDOrFirst(
@@ -566,6 +656,8 @@ class Map extends Base {
 				) as Model.Skybox
 			)?.createTextures(),
 		);
+		this.removeSkybox();
+		this.skyboxMesh = mesh;
 		this.scene.add(this.skyboxMesh);
 	}
 

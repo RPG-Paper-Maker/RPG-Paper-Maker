@@ -25,27 +25,49 @@ type Props = {
 	isVertical?: boolean;
 	unit?: string;
 	disableDynamic?: boolean;
+	decimals?: boolean;
+	disabled?: boolean;
+	onChange?: () => void;
 };
 
-function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit, disableDynamic = false }: Props) {
+function SliderDynamic({
+	dynamic,
+	min,
+	max,
+	step,
+	isVertical = false,
+	unit,
+	disableDynamic = false,
+	decimals = false,
+	disabled = false,
+	onChange,
+}: Props) {
 	const [valueSlide, setValueSlide] = useStateNumber();
-	const [disabled, setDisabled] = useStateBool();
+	const [kindDisabled, setKindDisabled] = useStateBool();
 
-	const canDisable = (k: DYNAMIC_VALUE_KIND) => k !== DYNAMIC_VALUE_KIND.NUMBER;
+	const numberKind = decimals ? DYNAMIC_VALUE_KIND.NUMBER_DECIMAL : DYNAMIC_VALUE_KIND.NUMBER;
+	const optionsType = decimals ? DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL : DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER;
+
+	const canDisable = (k: DYNAMIC_VALUE_KIND) => k !== numberKind;
 
 	const handleChangeKind = (k: DYNAMIC_VALUE_KIND) => {
-		setDisabled(canDisable(k));
+		setKindDisabled(canDisable(k));
+		onChange?.();
 	};
 
 	const handleChangeValue = (v: unknown) => {
 		if (!canDisable(dynamic.kind)) {
 			setValueSlide(v as number);
 		}
+		onChange?.();
 	};
 
 	const handleChangeValueSlide = (v: number) => {
-		handleChangeValue(v);
+		if (!canDisable(dynamic.kind)) {
+			setValueSlide(v);
+		}
 		dynamic.value = v;
+		onChange?.();
 	};
 
 	return (
@@ -56,17 +78,18 @@ function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit, disa
 				min={min}
 				max={max}
 				step={step}
-				disabled={disabled}
+				disabled={disabled || kindDisabled}
 				fillWidth
 			/>
 			<Flex spaced centerV>
 				<DynamicValueSelector
 					value={dynamic}
-					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+					optionsType={optionsType}
 					onChangeKind={handleChangeKind}
 					onChangeValue={handleChangeValue}
 					min={min}
 					max={max}
+					disabled={disabled}
 					disableDynamic={disableDynamic}
 				/>
 				{unit}

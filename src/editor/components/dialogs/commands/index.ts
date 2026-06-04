@@ -6,6 +6,7 @@ export * from './DialogCommandChangeChronometer';
 export * from './DialogCommandChangeClass';
 export * from './DialogCommandChangeEquipment';
 export * from './DialogCommandChangeExperienceCurve';
+export * from './DialogCommandChangeFog';
 export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeName';
 export * from './DialogCommandChangeProperty';

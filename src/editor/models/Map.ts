@@ -38,6 +38,9 @@ class Map extends Localization {
 	public backgroundSound = PlaySong.createPlaySong(SONG_KIND.MUSIC);
 	public cameraPropertiesID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSunlight = true;
+	public isFog = false;
+	public fogColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
+	public fogIntensity = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0.06);
 	public isSkyColor = false;
 	public skyColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSkyImage = false;
@@ -66,6 +69,21 @@ class Map extends Localization {
 			DynamicValue,
 		],
 		['isSunlight', 'isl', true, BINDING.BOOLEAN],
+		['isFog', 'isFog', false, BINDING.BOOLEAN],
+		[
+			'fogColorID',
+			'fogColor',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'fogIntensity',
+			'fogIntensity',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0.06),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
 		['isSkyColor', 'isky', undefined, BINDING.BOOLEAN],
 		['isSkyImage', 'isi', undefined, BINDING.BOOLEAN],
 		['startupObject', 'so', undefined, BINDING.OBJECT, CommonObject],

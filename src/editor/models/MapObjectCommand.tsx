@@ -150,6 +150,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 				return <IoSettingsOutline />;
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
+			case EVENT_COMMAND_KIND.CHANGE_FOG:
 				return <IoColorPaletteOutline />;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return <GiVibratingBall />;
@@ -286,6 +287,8 @@ class MapObjectCommand extends Base {
 				return t('set.dialog.box.options');
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 				return t('change.screen.tone');
+			case EVENT_COMMAND_KIND.CHANGE_FOG:
+				return t('change.fog');
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return t('shake.screen');
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
@@ -433,6 +436,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
+			case EVENT_COMMAND_KIND.CHANGE_FOG:
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
@@ -629,6 +633,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 				texts = this.toStringChangeScreenTone(iterator, properties, parameters);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_FOG:
+				texts = this.toStringChangeFog(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				texts = this.toStringShakeScreen(iterator, properties, parameters);
@@ -1162,6 +1169,16 @@ class MapObjectCommand extends Base {
 		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
+	}
+
+	toStringChangeFog(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const enabled = Utils.initializeBoolCommand(this.command, iterator);
+		if (!enabled) {
+			return [`[${t('disabled').toLowerCase()}]`];
+		}
+		const intensity = this.toStringDynamicValue(iterator, properties, parameters);
+		const color = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.systems.colors);
+		return [`[${t('enable').toLowerCase()}] ${t('intensity')}: ${intensity}, ${t('color').toLowerCase()}: ${color}`];
 	}
 
 	toStringShakeScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

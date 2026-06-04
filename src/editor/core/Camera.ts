@@ -22,7 +22,7 @@ class Camera {
 	public static readonly SUN_UP = new THREE.Vector3(
 		Math.SQRT1_2 * (1.75 / 2.25),
 		Math.SQRT1_2 * (2 / 2.25),
-		-Math.SQRT1_2 * (1.75 / 2.25)
+		-Math.SQRT1_2 * (1.75 / 2.25),
 	);
 	private static _snapTarget = new THREE.Vector3();
 
@@ -38,7 +38,10 @@ class Camera {
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.tag = tag;
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
-		this.distance = Utils.defaultValue(tag?.cameraDistance, (isDetection ? 400 : 800) / Constants.BASE_SQUARE_SIZE);
+		this.distance = Utils.defaultValue(
+			tag?.cameraDistance,
+			(isDetection ? 400 : 1600) / Constants.BASE_SQUARE_SIZE,
+		);
 		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, isDetection ? -125 : -90);
 		this.verticalAngle = Utils.defaultValue(tag?.cameraVerticalAngle, 55);
 		this.targetPosition =
@@ -116,7 +119,11 @@ class Camera {
 		if (map && map.sunLight) {
 			const d = Math.max(this.distance * 3.0, 10);
 			const far = Math.max(d * 2, 350);
-			if (this._stableD === 0 || Math.abs(d - this._stableD) / this._stableD > 0.05 || far !== map.sunLight.shadow.camera.far) {
+			if (
+				this._stableD === 0 ||
+				Math.abs(d - this._stableD) / this._stableD > 0.05 ||
+				far !== map.sunLight.shadow.camera.far
+			) {
 				this._stableD = d;
 				map.sunLight.shadow.camera.left = -d;
 				map.sunLight.shadow.camera.right = d;
@@ -129,7 +136,8 @@ class Camera {
 			const texelSize = (2 * this._stableD) / map.sunLight.shadow.mapSize.x;
 			const snappedR = Math.round(Camera.SUN_RIGHT.dot(this.targetPosition) / texelSize) * texelSize;
 			const snappedU = Math.round(Camera.SUN_UP.dot(this.targetPosition) / texelSize) * texelSize;
-			Camera._snapTarget.set(0, 0, 0)
+			Camera._snapTarget
+				.set(0, 0, 0)
 				.addScaledVector(Camera.SUN_RIGHT, snappedR)
 				.addScaledVector(Camera.SUN_UP, snappedU)
 				.addScaledVector(Camera.SUN_FORWARD, Camera.SUN_FORWARD.dot(this.targetPosition));

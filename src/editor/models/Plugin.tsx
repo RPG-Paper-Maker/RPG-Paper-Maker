@@ -158,6 +158,12 @@ class Plugin extends Checkable {
 			const newVersion = json.version ?? '1.0.0';
 			const oldVersion = jsonOld?.version ?? '1.0.0';
 			if (newVersion !== oldVersion) {
+				const pluginManifest = manifest[json.category ?? PLUGIN_CATEGORY_KIND.BATTLE]?.find(
+					(p) => p.name === this.name,
+				);
+				if (!pluginManifest) {
+					return;
+				}
 				// Keep the old parameters + add the new ones
 				const newParameters = [] as JSONType[];
 				for (const parameter of json.parameters ?? []) {
@@ -170,16 +176,9 @@ class Plugin extends Checkable {
 				await removeFolder(
 					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name),
 				);
-				const pluginManifest = manifest[json.category ?? PLUGIN_CATEGORY_KIND.BATTLE].find(
-					(p) => p.name === this.name,
-				);
-				if (pluginManifest) {
-					await Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType, temp);
-					await writeJSON(pathDetails, json);
-					notifySuccess(
-						i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion }),
-					);
-				}
+				await Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType, temp);
+				await writeJSON(pathDetails, json);
+				notifySuccess(i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion }));
 			}
 		}
 	}
