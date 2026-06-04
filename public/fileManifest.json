@@ -668,6 +668,7 @@
         "ChangeClass.js",
         "ChangeEquipment.js",
         "ChangeExperienceCurve.js",
+        "ChangeFog.js",
         "ChangeMapProperties.js",
         "ChangeName.js",
         "ChangeProperty.js",
