@@ -187,6 +187,9 @@ class Inputs {
 				) {
 					return;
 				}
+				Inputs.isALT = e.getModifierState('Alt');
+				Inputs.isCTRL = e.getModifierState('Control');
+				Inputs.isSHIFT = e.getModifierState('Shift');
 				switch (e.button) {
 					case 0:
 						Inputs.isPointerPressed = true;
@@ -220,6 +223,18 @@ class Inputs {
 					Scene.Map.current.loading
 				) {
 					return;
+				}
+				Inputs.isALT = e.getModifierState('Alt');
+				Inputs.isCTRL = e.getModifierState('Control');
+				Inputs.isSHIFT = e.getModifierState('Shift');
+				if (Inputs.isPointerPressed && (e.buttons & 1) === 0) {
+					Inputs.isPointerPressed = false;
+				}
+				if (Inputs.isMouseRightPressed && (e.buttons & 2) === 0) {
+					Inputs.isMouseRightPressed = false;
+				}
+				if (Inputs.isMouseWheelPressed && (e.buttons & 4) === 0) {
+					Inputs.isMouseWheelPressed = false;
 				}
 				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
 				const x = e.clientX - rect.left;
