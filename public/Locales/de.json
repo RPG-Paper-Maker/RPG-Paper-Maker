@@ -651,6 +651,7 @@
 	"enable.fog": "Nebel aktivieren",
 	"fog": "Nebel",
 	"intensity": "Intensität",
+	"screen.tone": "Bildschirmfarbton",
 	"edit.map.properties": "Bearbeite Karteneigenschaften",
 	"new.map": "Neue Karte",
 	"edit.name": "Name bearbeiten",

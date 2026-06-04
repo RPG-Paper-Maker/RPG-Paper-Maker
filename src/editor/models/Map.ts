@@ -29,6 +29,11 @@ export enum SELECTION_SKY_TYPE {
 	SKYBOX,
 }
 class Map extends Localization {
+	public static readonly SCREEN_TONE_COLOR_MIN = -255;
+	public static readonly SCREEN_TONE_COLOR_MAX = 255;
+	public static readonly SCREEN_TONE_GREY_MIN = 0;
+	public static readonly SCREEN_TONE_GREY_MAX = 100;
+
 	public tilesetID = 1;
 	public length = 16;
 	public width = 16;
@@ -41,6 +46,10 @@ class Map extends Localization {
 	public isFog = false;
 	public fogColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public fogIntensity = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0.06);
+	public screenToneRed = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+	public screenToneGreen = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+	public screenToneBlue = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+	public screenToneGrey = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
 	public isSkyColor = false;
 	public skyColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSkyImage = false;
@@ -81,6 +90,34 @@ class Map extends Localization {
 			'fogIntensity',
 			'fogIntensity',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0.06),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'screenToneRed',
+			'screenToneRed',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'screenToneGreen',
+			'screenToneGreen',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'screenToneBlue',
+			'screenToneBlue',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'screenToneGrey',
+			'screenToneGrey',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],

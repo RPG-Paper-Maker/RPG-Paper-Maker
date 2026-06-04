@@ -651,6 +651,7 @@
 	"enable.fog": "Enable fog",
 	"fog": "Fog",
 	"intensity": "Intensity",
+	"screen.tone": "Screen tone",
 	"edit.map.properties": "Edit map properties",
 	"new.map": "New map",
 	"edit.name": "Edit name",

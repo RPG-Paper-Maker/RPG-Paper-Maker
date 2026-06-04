@@ -29,11 +29,6 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-const COLOR_MIN = -255;
-const COLOR_MAX = 255;
-const GREY_MIN = 0;
-const GREY_MAX = 100;
-
 function DialogCommandChangeScreenTone({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
@@ -116,19 +111,19 @@ function DialogCommandChangeScreenTone({ commandKind, setIsOpen, list, onAccept,
 				<Form>
 					<Label>{t('red')}</Label>
 					<Value>
-						<SliderDynamic dynamic={red} min={COLOR_MIN} max={COLOR_MAX} />
+						<SliderDynamic dynamic={red} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
 					</Value>
 					<Label>{t('green')}</Label>
 					<Value>
-						<SliderDynamic dynamic={green} min={COLOR_MIN} max={COLOR_MAX} />
+						<SliderDynamic dynamic={green} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
 					</Value>
 					<Label>{t('blue')}</Label>
 					<Value>
-						<SliderDynamic dynamic={blue} min={COLOR_MIN} max={COLOR_MAX} />
+						<SliderDynamic dynamic={blue} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
 					</Value>
 					<Label>{t('grey')}</Label>
 					<Value>
-						<SliderDynamic dynamic={grey} min={GREY_MIN} max={GREY_MAX} />
+						<SliderDynamic dynamic={grey} min={Model.Map.SCREEN_TONE_GREY_MIN} max={Model.Map.SCREEN_TONE_GREY_MAX} />
 					</Value>
 				</Form>
 				<Flex spaced centerV>

@@ -651,6 +651,7 @@
 	"enable.fog": "Activer le brouillard",
 	"fog": "Brouillard",
 	"intensity": "Intensité",
+	"screen.tone": "Teinte de l'écran",
 	"edit.map.properties": "Éditer les propriétés de la carte",
 	"new.map": "Nouvelle carte",
 	"edit.name": "Éditer le nom",

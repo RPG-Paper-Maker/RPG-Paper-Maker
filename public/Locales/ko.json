@@ -651,6 +651,7 @@
 	"enable.fog": "안개 활성화",
 	"fog": "안개",
 	"intensity": "강도",
+	"screen.tone": "화면 색조",
 	"edit.map.properties": "맵 속성 편집",
 	"new.map": "새 맵",
 	"edit.name": "이름 편집",

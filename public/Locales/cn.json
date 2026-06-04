@@ -651,6 +651,7 @@
 	"enable.fog": "启用雾效",
 	"fog": "雾效",
 	"intensity": "强度",
+	"screen.tone": "屏幕色调",
 	"edit.map.properties": "编辑地图属性",
 	"new.map": "新建地图",
 	"edit.name": "编辑名称",

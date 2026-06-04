@@ -68,6 +68,10 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [isFog, setIsFog] = useStateBool();
 	const [fogColorID] = useStateDynamicValue();
 	const [fogIntensity] = useStateDynamicValue();
+	const [screenToneRed] = useStateDynamicValue();
+	const [screenToneGreen] = useStateDynamicValue();
+	const [screenToneBlue] = useStateDynamicValue();
+	const [screenToneGrey] = useStateDynamicValue();
 	const [skySelection, setSkySelection] = useStateNumber();
 	const [skyColorID] = useStateDynamicValue();
 	const [skyImageID, setSkyImageID] = useStateNumber();
@@ -122,6 +126,19 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		scene.updateFog();
 	};
 
+	const previewScreenTone = () => {
+		const scene = getPreviewScene();
+		if (!scene || !readyRef.current) {
+			return;
+		}
+		previewedRef.current = true;
+		scene.model.screenToneRed.copy(screenToneRed);
+		scene.model.screenToneGreen.copy(screenToneGreen);
+		scene.model.screenToneBlue.copy(screenToneBlue);
+		scene.model.screenToneGrey.copy(screenToneGrey);
+		scene.updateScreenTone();
+	};
+
 	const previewTileset = (value: number) => {
 		const scene = getPreviewScene();
 		if (!scene || !readyRef.current) {
@@ -172,6 +189,10 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		setIsFog(model.isFog);
 		fogColorID.copy(model.fogColorID);
 		fogIntensity.copy(model.fogIntensity);
+		screenToneRed.copy(model.screenToneRed);
+		screenToneGreen.copy(model.screenToneGreen);
+		screenToneBlue.copy(model.screenToneBlue);
+		screenToneGrey.copy(model.screenToneGrey);
 		setSkySelection(model.getSkySelection());
 		skyColorID.copy(model.skyColorID);
 		setSkyImageID(model.skyImageID);
@@ -216,6 +237,10 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		model.isFog = isFog;
 		model.fogColorID.copy(fogColorID);
 		model.fogIntensity.copy(fogIntensity);
+		model.screenToneRed.copy(screenToneRed);
+		model.screenToneGreen.copy(screenToneGreen);
+		model.screenToneBlue.copy(screenToneBlue);
+		model.screenToneGrey.copy(screenToneGrey);
 		model.isSkyColor = skySelection === SELECTION_SKY_TYPE.COLOR;
 		if (model.isSkyColor) {
 			model.skyColorID.copy(skyColorID);
@@ -408,6 +433,46 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 						</Value>
 					</Form>
 				</Flex>
+			</Groupbox>
+			<Groupbox title={t('screen.tone')}>
+				<Form>
+					<Label>{t('red')}</Label>
+					<Value>
+						<SliderDynamic
+							dynamic={screenToneRed}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+							onChange={previewScreenTone}
+						/>
+					</Value>
+					<Label>{t('green')}</Label>
+					<Value>
+						<SliderDynamic
+							dynamic={screenToneGreen}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+							onChange={previewScreenTone}
+						/>
+					</Value>
+					<Label>{t('blue')}</Label>
+					<Value>
+						<SliderDynamic
+							dynamic={screenToneBlue}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+							onChange={previewScreenTone}
+						/>
+					</Value>
+					<Label>{t('grey')}</Label>
+					<Value>
+						<SliderDynamic
+							dynamic={screenToneGrey}
+							min={Model.Map.SCREEN_TONE_GREY_MIN}
+							max={Model.Map.SCREEN_TONE_GREY_MAX}
+							onChange={previewScreenTone}
+						/>
+					</Value>
+				</Form>
 			</Groupbox>
 			<Groupbox title={t('sky')}>
 				<RadioGroup

@@ -651,6 +651,7 @@
 	"enable.fog": "Ativar névoa",
 	"fog": "Névoa",
 	"intensity": "Intensidade",
+	"screen.tone": "Tom da tela",
 	"edit.map.properties": "Editar propriedades do mapa",
 	"new.map": "Novo mapa",
 	"edit.name": "Editar nome",

@@ -651,6 +651,7 @@
 	"enable.fog": "Activar niebla",
 	"fog": "Niebla",
 	"intensity": "Intensidad",
+	"screen.tone": "Tono de pantalla",
 	"edit.map.properties": "Editar propiedades del mapa",
 	"new.map": "Nuevo mapa",
 	"edit.name": "Editar nombre",

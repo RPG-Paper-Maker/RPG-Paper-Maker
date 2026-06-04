@@ -319,6 +319,11 @@ class Map extends Base {
 			this.updateFog();
 		}
 
+		// Screen tone
+		if (!this.isDetection) {
+			this.updateScreenTone();
+		}
+
 		// Grid
 		if (!this.isDetection && !this.isBattle) {
 			this.grid.initialize(this);
@@ -547,6 +552,15 @@ class Map extends Base {
 		} else {
 			this.scene.fog = null;
 		}
+	}
+
+	updateScreenTone() {
+		Manager.GL.screenTone.set(
+			Math.max(Math.min(this.model.screenToneRed.getFixNumberValue() / 255, 1), -1),
+			Math.max(Math.min(this.model.screenToneGreen.getFixNumberValue() / 255, 1), -1),
+			Math.max(Math.min(this.model.screenToneBlue.getFixNumberValue() / 255, 1), -1),
+			Math.max(Math.min(1 - this.model.screenToneGrey.getFixNumberValue() / 100, 1), -1),
+		);
 	}
 
 	async updateBackground() {

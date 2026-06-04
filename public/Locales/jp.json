@@ -651,6 +651,7 @@
 	"enable.fog": "霧を有効化",
 	"fog": "霧",
 	"intensity": "強度",
+	"screen.tone": "画面の色調",
 	"edit.map.properties": "マップ設定の編集",
 	"new.map": "新しいマップ",
 	"edit.name": "名前の編集",
