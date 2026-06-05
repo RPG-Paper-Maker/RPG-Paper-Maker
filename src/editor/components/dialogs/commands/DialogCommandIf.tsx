@@ -721,7 +721,7 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 					databaseOptions={objectsList}
 					disabled={!isObjectLooking}
 				/>
-				<Flex disabledLabel={!isKey}>{t('is.looking.at').toLowerCase()}</Flex>
+				<Flex disabledLabel={!isObjectLooking}>{t('is.looking.at').toLowerCase()}</Flex>
 				<Dropdown
 					selectedID={objectLookingOrientationSelection}
 					onChange={setObjectLookingOrientationSelection}
@@ -738,7 +738,7 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 					databaseOptions={objectsList}
 					disabled={!isObjectClimbing}
 				/>
-				<Flex disabledLabel={!isKey}>{t('is.climbing').toLowerCase()}</Flex>
+				<Flex disabledLabel={!isObjectClimbing}>{t('is.climbing').toLowerCase()}</Flex>
 			</Flex>
 			<Flex spaced centerV>
 				<RadioButton value={SELECTION_TYPE.CHRONOMETER}>{t('chronometer.id')}:</RadioButton>
