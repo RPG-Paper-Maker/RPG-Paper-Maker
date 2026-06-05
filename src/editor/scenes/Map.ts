@@ -256,6 +256,8 @@ class Map extends Base {
 			if (this.canEdit && this.tag && !this.tag.cursorPosition) {
 				this.cursor.position.x = Math.floor(this.model.length / 2);
 				this.cursor.position.z = Math.floor(this.model.width / 2);
+				this.tag.cursorPosition = this.cursor.position;
+				await Project.current!.treeMaps.save();
 			}
 
 			// Ensure temp folders exist (may be missing for imported, tutorial, or converted projects)
