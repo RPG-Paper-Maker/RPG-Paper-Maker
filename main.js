@@ -129,6 +129,12 @@ const runRPMGame = async (location, battleTest = false) => {
 		query: { project: location, battleTest },
 	});
 	game.removeMenu();
+	game.webContents.on('did-finish-load', () => {
+		if (game && !game.isDestroyed()) {
+			game.focus();
+			game.webContents.focus();
+		}
+	});
 	game.on('close', () => {
 		game = null;
 		app.quit();
@@ -805,7 +811,7 @@ const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5) => {
 
 ipcMain.handle('remove-folder', async (event, path) => {
 	if (await exists(path)) {
-		await retryOnPermError(() => fs.rm(path, { recursive: true }));
+		await retryOnPermError(() => fs.rm(path, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }));
 	}
 });
 
