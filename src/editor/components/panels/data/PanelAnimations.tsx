@@ -92,6 +92,21 @@ const PanelAnimations = forwardRef((props, ref) => {
 		selectedAnimation!.pictureID = id;
 	};
 
+	const handleChangePositionKind = (id: number) => {
+		setPositionKind(id);
+		selectedAnimation!.positionKind = id;
+	};
+
+	const handleChangeRows = (value: number) => {
+		setRows(value);
+		selectedAnimation!.rows = value;
+	};
+
+	const handleChangeColumns = (value: number) => {
+		setColumns(value);
+		selectedAnimation!.cols = value;
+	};
+
 	const handleFramesListUpdated = () => {
 		if (selectedAnimation) {
 			selectedAnimation.frames = Node.createListFromNodes(frames);
@@ -252,7 +267,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							<Value>
 								<InputNumber
 									value={rows}
-									onChange={setRows}
+									onChange={handleChangeRows}
 									widthType={INPUT_TYPE_WIDTH.SMALL}
 									disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 								/>
@@ -261,7 +276,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							<Value>
 								<InputNumber
 									value={columns}
-									onChange={setColumns}
+									onChange={handleChangeColumns}
 									widthType={INPUT_TYPE_WIDTH.SMALL}
 									disabled={isAnimationDisabled || isFrameDisabled || isPlaying}
 								/>
@@ -338,7 +353,7 @@ const PanelAnimations = forwardRef((props, ref) => {
 							<Flex disabledLabel={isAnimationDisabled || isPlaying}>{t('position')}:</Flex>
 							<Dropdown
 								selectedID={positionKind}
-								onChange={setPositionKind}
+								onChange={handleChangePositionKind}
 								options={Base.ANIMATION_POSITION_OPTIONS}
 								disabled={isAnimationDisabled || isPlaying}
 								translateOptions
