@@ -1977,6 +1977,7 @@
 	"restore": "Restaurar",
 	"no.backups.available": "No hay copias de seguridad disponibles.",
 	"warning.restore.backup": "¿Estás seguro de que deseas restaurar {{projectName}} al backup {{backupName}}? Esto sobrescribirá los datos actuales del proyecto.",
+	"warning.corrupted.files": "Algunos archivos del proyecto están dañados y no se pudieron cargar. Esto puede ocurrir tras un apagado repentino o un corte de energía. Restaura una copia de seguridad para recuperar tu proyecto.",
 	"last.save": "último guardado",
 	"last.update.changes": "Últimas actualizaciones:",
 	"latest.video": "Último vídeo"

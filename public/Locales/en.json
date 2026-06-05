@@ -1978,6 +1978,7 @@
 	"restore": "Restore",
 	"no.backups.available": "No backups available.",
 	"warning.restore.backup": "Are you sure you want to restore {{projectName}} to backup {{backupName}}? This will overwrite the current project data.",
+	"warning.corrupted.files": "Some project files are corrupted and could not be loaded. This can happen after a sudden shutdown or power loss. Please restore a backup to recover your project.",
 	"last.update.changes": "Last update changes:",
 	"latest.video": "Latest video"
 }

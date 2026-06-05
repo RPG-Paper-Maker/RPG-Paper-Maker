@@ -849,7 +849,13 @@ ipcMain.handle('create-file', async (event, filePath, content) => {
 	await retryOnPermError(
 		async () => {
 			await fs.mkdir(path.dirname(filePath), { recursive: true });
-			await fs.writeFile(filePath, content);
+			const handle = await fs.open(filePath, 'w');
+			try {
+				await handle.writeFile(content);
+				await handle.sync();
+			} finally {
+				await handle.close();
+			}
 		},
 		['ENOENT'],
 		20,
@@ -868,6 +874,16 @@ ipcMain.handle('copy-file', async (event, src, dst) => {
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 	await retryOnPermError(() => fs.rename(oldFilePath, newFilePath));
+	try {
+		const dir = await fs.open(path.dirname(newFilePath), 'r');
+		try {
+			await dir.sync();
+		} finally {
+			await dir.close();
+		}
+	} catch {
+		void 0;
+	}
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {

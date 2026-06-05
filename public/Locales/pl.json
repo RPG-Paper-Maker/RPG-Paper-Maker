@@ -1977,6 +1977,7 @@
 	"restore": "Przywróć",
 	"no.backups.available": "Brak dostępnych kopii zapasowych.",
 	"warning.restore.backup": "Czy na pewno chcesz przywrócić {{projectName}} do kopii zapasowej {{backupName}}? Spowoduje to nadpisanie bieżących danych projektu.",
+	"warning.corrupted.files": "Niektóre pliki projektu są uszkodzone i nie można ich wczytać. Może się to zdarzyć po nagłym wyłączeniu lub awarii zasilania. Przywróć kopię zapasową, aby odzyskać swój projekt.",
 	"last.save": "ostatni zapis",
 	"last.update.changes": "Ostatnie zmiany:",
 	"latest.video": "Najnowszy film"

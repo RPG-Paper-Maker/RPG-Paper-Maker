@@ -1978,6 +1978,7 @@
 	"restore": "Restaurer",
 	"no.backups.available": "Aucune sauvegarde disponible.",
 	"warning.restore.backup": "Êtes-vous sûr de vouloir restaurer {{projectName}} à la sauvegarde {{backupName}} ? Cela écrasera les données actuelles du projet.",
+	"warning.corrupted.files": "Certains fichiers du projet sont corrompus et n'ont pas pu être chargés. Cela peut arriver après un arrêt brutal ou une coupure de courant. Veuillez restaurer une sauvegarde pour récupérer votre projet.",
 	"last.update.changes": "Dernières modifications :",
 	"latest.video": "Dernière vidéo"
 }

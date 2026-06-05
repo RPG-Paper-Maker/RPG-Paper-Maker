@@ -68,6 +68,10 @@ console.error = (...args) => {
 		store.dispatch(setCurrentProject(null));
 		return;
 	}
+	if (message.includes('Failed to parse JSON file')) {
+		toast.warn(i18next.t('warning.corrupted.files'), TOASTER_OPTIONS);
+		return;
+	}
 	notifyError(<ToasterError message={message} stack={stack} />);
 	if (!isGameMode) {
 		store.dispatch(setErrorDialog({ message, stack }));

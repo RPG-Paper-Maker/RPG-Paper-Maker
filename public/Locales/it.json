@@ -1977,6 +1977,7 @@
 	"restore": "Ripristina",
 	"no.backups.available": "Nessun backup disponibile.",
 	"warning.restore.backup": "Sei sicuro di voler ripristinare {{projectName}} al backup {{backupName}}? Questo sovrascriverà i dati del progetto corrente.",
+	"warning.corrupted.files": "Alcuni file del progetto sono danneggiati e non è stato possibile caricarli. Questo può accadere dopo uno spegnimento improvviso o un'interruzione di corrente. Ripristina un backup per recuperare il tuo progetto.",
 	"last.save": "ultimo salvataggio",
 	"last.update.changes": "Ultime modifiche:",
 	"latest.video": "Ultimo video"

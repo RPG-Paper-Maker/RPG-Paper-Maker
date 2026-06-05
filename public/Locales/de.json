@@ -1977,6 +1977,7 @@
 	"restore": "Wiederherstellen",
 	"no.backups.available": "Keine Backups verfügbar.",
 	"warning.restore.backup": "Möchten Sie {{projectName}} wirklich auf das Backup {{backupName}} zurücksetzen? Dadurch werden die aktuellen Projektdaten überschrieben.",
+	"warning.corrupted.files": "Einige Projektdateien sind beschädigt und konnten nicht geladen werden. Dies kann nach einem plötzlichen Herunterfahren oder Stromausfall passieren. Bitte stellen Sie ein Backup wieder her, um Ihr Projekt zu retten.",
 	"last.save": "letzter Speicherstand",
 	"last.update.changes": "Letzte Änderungen:",
 	"latest.video": "Neuestes Video"

@@ -50,8 +50,11 @@ import {
 } from '../common';
 import {
 	checkFileExists,
+	cleanupTmpFiles,
+	clearCorruptedFiles,
 	exportFolder,
 	closeGame,
+	getCorruptedFiles,
 	getFolders,
 	loadZip,
 	openGame,
@@ -122,6 +125,7 @@ import DialogFonts from './dialogs/DialogFonts';
 import DialogGeneralOptions from './dialogs/DialogGeneralOptions';
 import DialogKeyboardControls from './dialogs/DialogKeyboardControls';
 import DialogLanguages from './dialogs/DialogLanguages';
+import DialogManageBackups from './dialogs/DialogManageBackups';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPathLocation, { LOCATION_TYPE } from './dialogs/DialogPathLocation';
@@ -180,6 +184,8 @@ function MainMenuBar() {
 	const [currentVersion, setCurrentVersion] = useState('');
 	const [warningImportPath, setWarningImportPath] = useState('');
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
+	const [corruptedProject, setCorruptedProject] = useState<Model.ProjectPreview | null>(null);
+	const [isDialogManageBackupsOpen, setIsDialogManageBackupsOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
 	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -261,93 +267,107 @@ function MainMenuBar() {
 		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
 		await handleCloseProject();
-		if (await checkFileExists(project.location)) {
-			Project.current = new Project(project.location);
-			let json = await readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));
-			if (json) {
-				const name = ((json.pn as JSONType)?.names as JSONType)?.['1'];
-				if (name !== undefined) {
-					project.name = name as string;
+		try {
+			if (await checkFileExists(project.location)) {
+				await cleanupTmpFiles(project.location);
+				clearCorruptedFiles();
+				Project.current = new Project(project.location);
+				let json = await readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));
+				if (json) {
+					const name = ((json.pn as JSONType)?.names as JSONType)?.['1'];
+					if (name !== undefined) {
+						project.name = name as string;
+					}
 				}
-			}
-			if (!Constants.IS_DESKTOP && addExtraVersion) {
-				await addProject(
-					Model.ProjectPreview.create(
-						`${project.name}_${addExtraVersion}`,
-						`${project.location}_${addExtraVersion}`,
-					),
-				);
-			}
-			await addProject(project);
-			json = await readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
-			let version = (json?.pv as string) ?? '';
-			if (version !== Project.VERSION) {
-				if (!version) {
-					version = '2.0.11';
-					if (Constants.IS_DESKTOP) {
-						const fileVersion = await IO.readFile(Paths.join(project.location, 'game.rpm'));
-						if (fileVersion !== '2.0.11') {
-							setWarningVersionMessage(t('warning.project.2.0.11.version', { version: fileVersion }));
-							setIsWarning2011(true);
+				if (!Constants.IS_DESKTOP && addExtraVersion) {
+					await addProject(
+						Model.ProjectPreview.create(
+							`${project.name}_${addExtraVersion}`,
+							`${project.location}_${addExtraVersion}`,
+						),
+					);
+				}
+				await addProject(project);
+				json = await readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
+				if (getCorruptedFiles().length === 0) {
+					let version = (json?.pv as string) ?? '';
+					if (version !== Project.VERSION) {
+						if (!version) {
+							version = '2.0.11';
+							if (Constants.IS_DESKTOP) {
+								const fileVersion = await IO.readFile(Paths.join(project.location, 'game.rpm'));
+								if (fileVersion !== '2.0.11') {
+									setWarningVersionMessage(
+										t('warning.project.2.0.11.version', { version: fileVersion }),
+									);
+									setIsWarning2011(true);
+									setIsDialogWarningProjectVersionOpen(true);
+									Project.current = null;
+									return;
+								}
+							}
+						}
+						if (version.startsWith('proto')) {
+							setWarningVersionMessage(t('warning.project.version'));
 							setIsDialogWarningProjectVersionOpen(true);
 							Project.current = null;
-							dispatch(setOpenLoading(false));
-							dispatch(setLoading(false));
+							return;
+						} else if (!ProjectUpdater.checkVersion(version, Project.VERSION)) {
+							setWarningVersionMessage(
+								`${t('version.pb.1')} ${version} ${t('version.pb.2')} ${Project.VERSION}`,
+							);
+							setIsDialogWarningProjectVersionOpen(true);
+							Project.current = null;
+							return;
+						} else if (ProjectUpdater.isIncompatibleVersion(version)) {
+							setCurrentVersion(version);
 							return;
 						}
 					}
+					await Project.current.load();
+					if (Project.current.settings.projectVersion !== Project.VERSION) {
+						Project.current.settings.projectVersion = Project.VERSION;
+						await Project.current.settings.save();
+					}
+					if (Constants.IS_DESKTOP) {
+						if (!(await IO.checkFileExists(Project.current.systems.PATH_BR))) {
+							const newBRPath = Paths.join(Paths.DIST, Paths.BR);
+							Project.current.systems.PATH_BR = newBRPath;
+							await Project.current.systems.save();
+						}
+						if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
+							const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
+							Project.current.systems.PATH_DLCS = newDLCsPath;
+							await Project.current.systems.save();
+						}
+					}
+					const newName = Project.current.systems.projectName?.getName();
+					if (newName && project.name !== newName) {
+						project.name = newName;
+						await addProject(project);
+					}
+					await Project.current.systems.saveStyleCSS();
 				}
-				if (version.startsWith('proto')) {
-					setWarningVersionMessage(t('warning.project.version'));
-					setIsDialogWarningProjectVersionOpen(true);
-					Project.current = null;
-					dispatch(setOpenLoading(false));
-					dispatch(setLoading(false));
-					return;
-				} else if (!ProjectUpdater.checkVersion(version, Project.VERSION)) {
-					setWarningVersionMessage(`${t('version.pb.1')} ${version} ${t('version.pb.2')} ${Project.VERSION}`);
-					setIsDialogWarningProjectVersionOpen(true);
-					Project.current = null;
-					dispatch(setOpenLoading(false));
-					dispatch(setLoading(false));
-					return;
-				} else if (ProjectUpdater.isIncompatibleVersion(version)) {
-					setCurrentVersion(version);
-					dispatch(setOpenLoading(false));
-					dispatch(setLoading(false));
-					return;
-				}
+			} else {
+				setIsDialogWarningProjectLocationExist(true);
 			}
-			await Project.current.load();
-			if (Project.current.settings.projectVersion !== Project.VERSION) {
-				Project.current.settings.projectVersion = Project.VERSION;
-				await Project.current.settings.save();
+		} catch (e) {
+			console.error(e);
+		} finally {
+			const corrupted = getCorruptedFiles();
+			if (corrupted.length > 0) {
+				Project.current = null;
+				setIsDialogWarningProjectVersionOpen(false);
+				setIsWarning2011(false);
+				setCurrentVersion('');
+				setCorruptedProject(project);
+			} else if (Project.current && Project.current.loaded) {
+				void Project.current.addBackups();
+				dispatch(setCurrentProject(project));
 			}
-			if (Constants.IS_DESKTOP) {
-				if (!(await IO.checkFileExists(Project.current.systems.PATH_BR))) {
-					const newBRPath = Paths.join(Paths.DIST, Paths.BR);
-					Project.current.systems.PATH_BR = newBRPath;
-					await Project.current.systems.save();
-				}
-				if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
-					const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
-					Project.current.systems.PATH_DLCS = newDLCsPath;
-					await Project.current.systems.save();
-				}
-			}
-			const newName = Project.current.systems.projectName?.getName();
-			if (newName && project.name !== newName) {
-				project.name = newName;
-				await addProject(project);
-			}
-			await Project.current.systems.saveStyleCSS();
-			void Project.current.addBackups();
-			dispatch(setCurrentProject(project));
-		} else {
-			setIsDialogWarningProjectLocationExist(true);
+			dispatch(setOpenLoading(false));
+			dispatch(setLoading(false));
 		}
-		dispatch(setOpenLoading(false));
-		dispatch(setLoading(false));
 	};
 
 	const handleCleanRecentProjects = async () => {
@@ -371,6 +391,17 @@ function MainMenuBar() {
 	const handleCloseWarningProjectVersionOpen = () => {
 		setIsDialogWarningProjectVersionOpen(false);
 		setIsWarning2011(false);
+	};
+
+	const handleAcceptCorruptedFiles = () => {
+		setIsDialogManageBackupsOpen(true);
+	};
+
+	const handleCloseManageBackups = (b: boolean) => {
+		setIsDialogManageBackupsOpen(b);
+		if (!b) {
+			setCorruptedProject(null);
+		}
 	};
 
 	const handleAcceptUpdateProjectVersion = async () => {
@@ -1337,6 +1368,23 @@ function MainMenuBar() {
 						{t('update.project.version', { currentVersion: currentVersion, newVersion: Project.VERSION })}
 					</p>
 				</Dialog>
+			)}
+			{!!corruptedProject && !isDialogManageBackupsOpen && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterOK onOK={handleAcceptCorruptedFiles} />}
+					onClose={handleAcceptCorruptedFiles}
+				>
+					<div className='warning'>{t('warning.corrupted.files')}</div>
+				</Dialog>
+			)}
+			{!!corruptedProject && (
+				<DialogManageBackups
+					isOpen={isDialogManageBackupsOpen}
+					setIsOpen={handleCloseManageBackups}
+					project={corruptedProject}
+				/>
 			)}
 			{!!warningImportPath && (
 				<Dialog

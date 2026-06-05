@@ -1978,6 +1978,7 @@
 	"restore": "복원",
 	"no.backups.available": "사용 가능한 백업이 없습니다.",
 	"warning.restore.backup": "{{projectName}}을(를) 백업 {{backupName}}으로 복원하시겠습니까? 현재 프로젝트 데이터를 덮어씁니다.",
+	"warning.corrupted.files": "일부 프로젝트 파일이 손상되어 불러올 수 없습니다. 갑작스러운 종료나 정전 후에 발생할 수 있습니다. 백업을 복원하여 프로젝트를 복구하세요.",
 	"last.save": "마지막 저장",
 	"last.update.changes": "최신 업데이트 내용:",
 	"latest.video": "최신 동영상"

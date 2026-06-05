@@ -46,6 +46,16 @@ const getInvalidJSONError = (path: string, content: string, error: unknown): Err
 	);
 };
 
+const corruptedFiles = new Set<string>();
+
+export const getCorruptedFiles = (): string[] => {
+	return [...corruptedFiles];
+};
+
+export const clearCorruptedFiles = () => {
+	corruptedFiles.clear();
+};
+
 export const checkFileExists = async (path: string): Promise<boolean> => {
 	return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
 };
@@ -269,10 +279,12 @@ export const readJSON = async (path: string): Promise<JSONType | null> => {
 					return JSON.parse(stripped.slice(0, parseInt(match[1])));
 				} catch {
 					console.error(getInvalidJSONError(path, stripped, e));
+					corruptedFiles.add(path);
 					return null;
 				}
 			}
 			console.error(getInvalidJSONError(path, stripped, e));
+			corruptedFiles.add(path);
 			return null;
 		}
 	}
