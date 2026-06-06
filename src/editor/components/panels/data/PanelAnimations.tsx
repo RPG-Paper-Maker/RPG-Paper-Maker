@@ -11,13 +11,18 @@
 
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ANIMATION_EFFECT_CONDITION_KIND, INPUT_TYPE_WIDTH, PICTURE_KIND } from '../../../common';
+import {
+	ANIMATION_EFFECT_CONDITION_KIND,
+	ANIMATION_POSITION_KIND,
+	INPUT_TYPE_WIDTH,
+	PICTURE_KIND,
+} from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Animation, AnimationFrame, AnimationFrameEffect, Base, Picture } from '../../../models';
-import AnimationPreviewer from '../../AnimationPreviewer';
+import AnimationPreviewer, { HEIGHT, WIDTH } from '../../AnimationPreviewer';
 import AnimationPreviewerTexture from '../../AnimationPreviewerTexture';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
@@ -93,8 +98,23 @@ const PanelAnimations = forwardRef((props, ref) => {
 	};
 
 	const handleChangePositionKind = (id: number) => {
+		if (selectedAnimation && selectedAnimation.positionKind !== id) {
+			const wasScreen = selectedAnimation.positionKind === ANIMATION_POSITION_KIND.SCREEN_CENTER;
+			const isScreen = id === ANIMATION_POSITION_KIND.SCREEN_CENTER;
+			if (wasScreen !== isScreen) {
+				const offsetX = (isScreen ? 1 : -1) * (WIDTH / 2);
+				const offsetY = (isScreen ? 1 : -1) * (HEIGHT / 2);
+				for (const frame of selectedAnimation.frames) {
+					for (const element of frame.elements) {
+						element.x += offsetX;
+						element.y += offsetY;
+					}
+				}
+			}
+		}
 		setPositionKind(id);
 		selectedAnimation!.positionKind = id;
+		setTriggerDraw((v) => !v);
 	};
 
 	const handleChangeRows = (value: number) => {

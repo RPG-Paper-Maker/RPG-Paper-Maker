@@ -62,8 +62,8 @@ type Props = {
 	disabled?: boolean;
 };
 
-const WIDTH = 1280;
-const HEIGHT = 720;
+export const WIDTH = 1280;
+export const HEIGHT = 720;
 const ELEMENT_INDEX_SIZE = 16;
 
 function AnimationPreviewer({
