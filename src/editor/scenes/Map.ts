@@ -166,6 +166,8 @@ class Map extends Base {
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 	public skyboxMesh: THREE.Mesh | null = null;
 	public previewSizeActive = false;
+	public previewShiftX = 0;
+	public previewShiftZ = 0;
 	public showCoordinates = true;
 	public pointedObjectLabel: string | null = null;
 
@@ -632,6 +634,8 @@ class Map extends Base {
 
 	clearPreviewSize() {
 		this.previewSizeActive = false;
+		this.previewShiftX = 0;
+		this.previewShiftZ = 0;
 		this.grid.setBoxVisible(this, false);
 	}
 

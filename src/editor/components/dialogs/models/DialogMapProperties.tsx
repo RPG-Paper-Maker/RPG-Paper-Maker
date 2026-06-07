@@ -43,11 +43,12 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 type Props = {
 	setIsOpen: (b: boolean) => void;
 	model: Model.Map;
-	onAccept: (previousModel: Model.Map) => Promise<void>;
+	onAccept: (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => Promise<void>;
 	onReject?: () => void | Promise<void>;
+	isNew?: boolean;
 };
 
-function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
+function DialogMapProperties({ setIsOpen, model, onAccept, onReject, isNew = false }: Props) {
 	const { t } = useTranslation();
 
 	const playMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
@@ -63,6 +64,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [width, setWidth] = useStateNumber();
 	const [height, setHeight] = useStateNumber();
 	const [depth, setDepth] = useStateNumber();
+	const [increaseLeft, setIncreaseLeft] = useStateNumber();
+	const [increaseTop, setIncreaseTop] = useStateNumber();
 	const [cameraPropertiesID] = useStateDynamicValue();
 	const [isSunlight, setIsSunlight] = useStateBool();
 	const [isFog, setIsFog] = useStateBool();
@@ -163,13 +166,25 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		void scene.updateBackground();
 	};
 
-	const previewSize = (dim: 'length' | 'width' | 'height' | 'depth', value: number) => {
+	const applyPreviewSize = (
+		lengthValue: number,
+		widthValue: number,
+		heightValue: number,
+		depthValue: number,
+		leftValue: number,
+		topValue: number,
+	) => {
 		const scene = getPreviewScene();
 		if (!scene || !readyRef.current) {
 			return;
 		}
 		previewedRef.current = true;
-		scene.model[dim] = value;
+		scene.previewShiftX = leftValue;
+		scene.previewShiftZ = topValue;
+		scene.model.length = lengthValue + leftValue;
+		scene.model.width = widthValue + topValue;
+		scene.model.height = heightValue;
+		scene.model.depth = depthValue;
 		scene.previewSize();
 	};
 
@@ -182,6 +197,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		setWidth(model.width);
 		setHeight(model.height);
 		setDepth(model.depth);
+		setIncreaseLeft(0);
+		setIncreaseTop(0);
 		playMusicSelectorRef.current?.initialize(model.music);
 		playBackgroundSoundSelectorRef.current?.initialize(model.backgroundSound);
 		cameraPropertiesID.copy(model.cameraPropertiesID);
@@ -265,7 +282,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 		model.randomBattleNumberStep.copy(randomBattleNumberStep);
 		model.randomBattleVariance.copy(randomBattleVariance);
 		getPreviewScene()?.clearPreviewSize();
-		await onAccept(previousModel);
+		await onAccept(previousModel, increaseLeft, increaseTop);
 		setIsLoading(false);
 		setIsOpen(false);
 	};
@@ -327,7 +344,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 							value={length}
 							onChange={(value: number) => {
 								setLength(value);
-								previewSize('length', value);
+								applyPreviewSize(value, width, height, depth, increaseLeft, increaseTop);
 							}}
 							min={1}
 						/>
@@ -338,7 +355,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 							value={width}
 							onChange={(value: number) => {
 								setWidth(value);
-								previewSize('width', value);
+								applyPreviewSize(length, value, height, depth, increaseLeft, increaseTop);
 							}}
 							min={1}
 						/>
@@ -349,7 +366,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 							value={height}
 							onChange={(value: number) => {
 								setHeight(value);
-								previewSize('height', value);
+								applyPreviewSize(length, width, value, depth, increaseLeft, increaseTop);
 							}}
 							min={1}
 						/>
@@ -360,13 +377,41 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 							value={depth}
 							onChange={(value: number) => {
 								setDepth(value);
-								previewSize('depth', value);
+								applyPreviewSize(length, width, height, value, increaseLeft, increaseTop);
 							}}
 							min={0}
 						/>
 					</Flex>
 				</Flex>
 			</Groupbox>
+			{!isNew && (
+				<Groupbox title={t('increase.left.top.of.map')}>
+					<Flex one spacedLarge wrap>
+						<Flex column spaced>
+							{t('left')}:
+							<InputNumber
+								value={increaseLeft}
+								onChange={(value: number) => {
+									setIncreaseLeft(value);
+									applyPreviewSize(length, width, height, depth, value, increaseTop);
+								}}
+								min={0}
+							/>
+						</Flex>
+						<Flex column spaced>
+							{t('top')}:
+							<InputNumber
+								value={increaseTop}
+								onChange={(value: number) => {
+									setIncreaseTop(value);
+									applyPreviewSize(length, width, height, depth, increaseLeft, value);
+								}}
+								min={0}
+							/>
+						</Flex>
+					</Flex>
+				</Groupbox>
+			)}
 			<Groupbox title={t('music')}>
 				<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} showKeepCurrent />
 			</Groupbox>

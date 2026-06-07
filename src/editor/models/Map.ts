@@ -10,7 +10,7 @@
 */
 
 import { BINDING, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND, Utils } from '../common';
-import { copyPublicFile, createFile, createFolder, removeFile, removeFolder, writeJSON } from '../common/Platform';
+import { copyPublicFile, createFile, createFolder, readJSON, removeFile, removeFolder, writeJSON } from '../common/Platform';
 import { DynamicValue } from '../core/DynamicValue';
 import { Portion } from '../core/Portion';
 import { Position } from '../core/Position';
@@ -369,6 +369,75 @@ class Map extends Localization {
 				}
 			}
 			this.objects = this.objects.filter((mapObject) => mapObject.position.isInMap(this));
+		}
+	}
+
+	async shiftMapElements(left: number, top: number) {
+		if (left <= 0 && top <= 0) {
+			return;
+		}
+		const [portionMaxX, portionMaxD, portionMaxH, portionMaxZ] = this.getPortionsMax();
+		this.length += left;
+		this.width += top;
+		const [newPortionMaxX, newPortionMaxD, newPortionMaxH, newPortionMaxZ] = this.getPortionsMax();
+
+		const newPortions = new globalThis.Map<string, Model.MapPortion>();
+		const getNewPortion = (position: Position): Model.MapPortion => {
+			const portion = position.getGlobalPortion();
+			const fileName = portion.getFileName();
+			let mapPortion = newPortions.get(fileName);
+			if (!mapPortion) {
+				mapPortion = new Model.MapPortion(portion);
+				newPortions.set(fileName, mapPortion);
+			}
+			return mapPortion;
+		};
+		const shiftElements = <T,>(
+			source: globalThis.Map<string, T>,
+			getTarget: (mapPortion: Model.MapPortion) => globalThis.Map<string, T>,
+		) => {
+			for (const [key, element] of source) {
+				const position = Position.fromKey(key);
+				position.x += left;
+				position.z += top;
+				getTarget(getNewPortion(position)).set(position.toKey(), element);
+			}
+		};
+
+		for (let i = 0; i <= portionMaxX; i++) {
+			for (let j = -portionMaxD; j <= portionMaxH; j++) {
+				for (let k = 0; k <= portionMaxZ; k++) {
+					const portion = new Portion(i, j, k);
+					const json = await readJSON(this.getMapPortionPath(portion));
+					if (!json) {
+						continue;
+					}
+					const mapPortion = new Model.MapPortion(portion);
+					mapPortion.read(json);
+					shiftElements(mapPortion.lands, (mp) => mp.lands);
+					shiftElements(mapPortion.sprites, (mp) => mp.sprites);
+					shiftElements(mapPortion.walls, (mp) => mp.walls);
+					shiftElements(mapPortion.mountains, (mp) => mp.mountains);
+					shiftElements(mapPortion.objects3D, (mp) => mp.objects3D);
+					shiftElements(mapPortion.objects, (mp) => mp.objects);
+				}
+			}
+		}
+
+		for (let i = 0; i <= newPortionMaxX; i++) {
+			for (let j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+				for (let k = 0; k <= newPortionMaxZ; k++) {
+					const portion = new Portion(i, j, k);
+					const json: JSONType = {};
+					newPortions.get(portion.getFileName())?.write(json);
+					await writeJSON(this.getMapPortionPath(portion), json);
+				}
+			}
+		}
+
+		for (const object of this.objects) {
+			object.position.x += left;
+			object.position.z += top;
 		}
 	}
 

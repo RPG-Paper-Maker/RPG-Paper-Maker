@@ -101,11 +101,12 @@ function TreeMaps({
 		setIsOpenMapProperties(true);
 	};
 
-	const handleAcceptNewMap = async (previousModel: Model.Map) => {
+	const handleAcceptNewMap = async (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => {
 		if (editedMap && selectedNode) {
 			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
 			selectedNode.children.push(node);
 			await editedMap.resizeMap(previousModel);
+			await editedMap.shiftMapElements(increaseLeft, increaseTop);
 			await Project.current!.treeMaps.save();
 			await editedMap.save();
 			RPM.treeCurrentSetSelectedItem(node);
@@ -264,7 +265,7 @@ function TreeMaps({
 		setIsOpenMapProperties(true);
 	};
 
-	const handleAcceptEditMap = async (previousModel: Model.Map) => {
+	const handleAcceptEditMap = async (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => {
 		if (selectedNode) {
 			selectedNode.content.name = editedMap.name;
 			const element = mapsTabsTitles?.find((value) => value.id === editedMap.id);
@@ -275,6 +276,7 @@ function TreeMaps({
 			const tag = selectedNode.content as TreeMapTag;
 			await tag.saveFiles();
 			await editedMap.resizeMap(previousModel);
+			await editedMap.shiftMapElements(increaseLeft, increaseTop);
 			const cursor = tag.cursorPosition;
 			if (cursor) {
 				editedMap.adjustPosition(cursor);
@@ -399,6 +401,7 @@ function TreeMaps({
 					model={editedMap}
 					onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
 					onReject={isNew ? handleRejectNewMap : undefined}
+					isNew={isNew}
 				/>
 			)}
 			{isOpenName && (
