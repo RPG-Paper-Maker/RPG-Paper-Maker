@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
@@ -18,7 +18,7 @@ import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import { TreeMapTag } from '../models';
-import { RootState, setCopiedItems, setCurrentTreeMapTag, setNeedsReloadMap } from '../store';
+import { RootState, setCopiedItems, setCurrentTreeMapTag, setNeedsReloadMap, triggerTreeMap } from '../store';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import DialogMapProperties from './dialogs/models/DialogMapProperties';
@@ -35,6 +35,8 @@ type Props = {
 	setMapsTabsContents?: (contents: (ReactNode | null)[]) => void;
 	cannotEdit?: boolean;
 	minWidth?: number;
+	triggerNewMap?: boolean;
+	triggerNewFolder?: boolean;
 };
 
 function TreeMaps({
@@ -47,6 +49,8 @@ function TreeMaps({
 	setMapsTabsContents,
 	cannotEdit = false,
 	minWidth,
+	triggerNewMap,
+	triggerNewFolder,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -66,6 +70,39 @@ function TreeMaps({
 
 	const dispatch = useDispatch();
 	const previousTagRef = useRef<Model.TreeMapTag | null>(null);
+	const isFirstTriggerNewMap = useRef(true);
+	const isFirstTriggerNewFolder = useRef(true);
+
+	const prepareTreeCurrent = () => {
+		RPM.treeCurrentItems = Project.current!.treeMaps.tree;
+		RPM.treeCurrentItem = selectedNode;
+		RPM.treeCurrentForceUpdate = () => dispatch(triggerTreeMap());
+		RPM.treeCurrentSetSelectedItem = (node: Node) => setForcedCurrentSelectedItemID?.(node.content.id);
+	};
+
+	useEffect(() => {
+		if (triggerNewMap === undefined) {
+			return;
+		}
+		if (isFirstTriggerNewMap.current) {
+			isFirstTriggerNewMap.current = false;
+			return;
+		}
+		prepareTreeCurrent();
+		handleNewMap().catch(console.error);
+	}, [triggerNewMap]);
+
+	useEffect(() => {
+		if (triggerNewFolder === undefined) {
+			return;
+		}
+		if (isFirstTriggerNewFolder.current) {
+			isFirstTriggerNewFolder.current = false;
+			return;
+		}
+		prepareTreeCurrent();
+		handleNewFolder().catch(console.error);
+	}, [triggerNewFolder]);
 
 	if (isOpenLoading) {
 		return null;

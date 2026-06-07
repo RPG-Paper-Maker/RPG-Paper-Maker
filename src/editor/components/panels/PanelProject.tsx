@@ -11,11 +11,13 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LuFolderPlus, LuMap } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
 import { Utils } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Manager, Model, Scene } from '../../Editor';
+import useStateBool from '../../hooks/useStateBool';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -42,6 +44,7 @@ import {
 	setCurrentWallID,
 	setProjectMenuIndex,
 } from '../../store';
+import Button from '../Button';
 import Flex from '../Flex';
 import Loader from '../Loader';
 import MapEditor from '../MapEditor';
@@ -58,6 +61,9 @@ function PanelProject() {
 	const [mapsTabsContents, setMapsTabsContents] = useState<(ReactNode | null)[]>([]);
 	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
 	const [mapTabForcedCurrentIndex, setMapTabForcedCurrentIndex] = useState<number | null>(null);
+	const [isFolderSelected, setIsFolderSelected] = useState(false);
+	const [triggerNewMap, setTriggerNewMap] = useStateBool();
+	const [triggerNewFolder, setTriggerNewFolder] = useStateBool();
 
 	const dispatch = useDispatch();
 
@@ -85,9 +91,11 @@ function PanelProject() {
 				} else {
 					setMapTabForcedCurrentIndex(mapsTabsTitles.findIndex((model) => model.id === id));
 				}
+				setIsFolderSelected(false);
 				dispatch(setCurrentTreeMapTag(node.content as Model.TreeMapTag));
 			} else {
 				setMapTabForcedCurrentIndex(-1);
+				setIsFolderSelected(!!node && (node.content as Model.TreeMapTag).isFolder());
 				dispatch(setCurrentTreeMapTag(null));
 			}
 		}
@@ -223,6 +231,8 @@ function PanelProject() {
 									setMapsTabsTitles={setMapsTabsTitles}
 									mapsTabsContents={mapsTabsContents}
 									setMapsTabsContents={setMapsTabsContents}
+									triggerNewMap={triggerNewMap}
+									triggerNewFolder={triggerNewFolder}
 								/>
 							}
 						/>
@@ -246,7 +256,19 @@ function PanelProject() {
 						<MapEditorMenuBar />
 						<MapEditor />
 					</Flex>
-					{!currentMapID && <Flex one centerV centerH>{`${t('select.map')}...`}</Flex>}
+					{!currentMapID &&
+						(isFolderSelected ? (
+							<Flex one centerV centerH spaced>
+								<Button icon={<LuMap />} onClick={() => setTriggerNewMap((b) => !b)}>
+									{t('new.map')}
+								</Button>
+								<Button icon={<LuFolderPlus />} onClick={() => setTriggerNewFolder((b) => !b)}>
+									{t('new.folder')}
+								</Button>
+							</Flex>
+						) : (
+							<Flex one centerV centerH>{`${t('select.map')}...`}</Flex>
+						))}
 				</Flex>
 			</Splitter>
 		</>
