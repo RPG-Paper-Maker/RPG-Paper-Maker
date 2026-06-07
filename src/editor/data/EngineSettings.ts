@@ -89,6 +89,9 @@ class EngineSettings extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, EngineSettings.getBindings(additionnalBinding));
+		if (this.keyboardControls.length === 0) {
+			this.applyDefault();
+		}
 		for (const keyboard of this.keyboardControls) {
 			keyboard.isEngine = true;
 		}

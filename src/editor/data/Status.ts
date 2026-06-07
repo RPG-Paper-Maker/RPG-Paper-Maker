@@ -41,28 +41,50 @@ class Status extends Serializable {
 			t('message.poisoned'),
 			t('message.poisoned'),
 			t('message.poisoned.heal'),
+			t('message.poisoned.still'),
 		);
-		this.list[2].setNameMessages(t('burnt'), t('message.burnt'), t('message.burnt'), t('message.burnt.heal'));
+		this.list[2].setNameMessages(
+			t('burnt'),
+			t('message.burnt'),
+			t('message.burnt'),
+			t('message.burnt.heal'),
+			t('message.burnt.still'),
+		);
 		this.list[3].setNameMessages(
 			t('paralized'),
 			t('message.paralyzed'),
 			t('message.paralyzed'),
 			t('message.paralyzed.heal'),
+			t('message.paralyzed.still'),
 		);
 		this.list[4].setNameMessages(
 			t('confused'),
 			t('message.confused'),
 			t('message.confused'),
 			t('message.confused.heal'),
+			t('message.confused.still'),
 		);
-		this.list[5].setNameMessages(t('muted'), t('message.muted'), t('message.muted'), t('message.muted.heal'));
+		this.list[5].setNameMessages(
+			t('muted'),
+			t('message.muted'),
+			t('message.muted'),
+			t('message.muted.heal'),
+			t('message.muted.still'),
+		);
 		this.list[6].setNameMessages(
 			t('sleeping'),
 			t('message.sleeping'),
 			t('message.sleeping'),
 			t('message.sleeping.heal'),
+			t('message.sleeping.still'),
 		);
-		this.list[7].setNameMessages(t('blind'), t('message.blind'), t('message.blind'), t('message.blind.heal'));
+		this.list[7].setNameMessages(
+			t('blind'),
+			t('message.blind'),
+			t('message.blind'),
+			t('message.blind.heal'),
+			t('message.blind.still'),
+		);
 		this.list[8].setNameMessages(t('power'));
 		this.list[9].setNameMessages(t('war.cry'));
 		this.list[10].setNameMessages(t('concentration'));
