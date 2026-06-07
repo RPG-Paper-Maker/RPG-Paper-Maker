@@ -37,11 +37,19 @@ type Props = {
 };
 
 const ELEMENT_HEIGHT = 30;
+const GRID_GAP = 5;
+const GRID_ROW_HEIGHT = 73;
 const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
 
 const getCanvasID = (id: number) => `canvas-${id}`;
 
-function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAutotileRect, defaultAutotileRect }: Props) {
+function PanelSpecialElementsSelection({
+	kind,
+	onSelect,
+	selectedID,
+	onUpdateAutotileRect,
+	defaultAutotileRect,
+}: Props) {
 	const [firstScroll, setFirstScroll] = useState(false);
 	const [testOffset, setTestOffset] = useState(false);
 	const [previousMinToDisplay, setPreviousMinToDisplay] = useState(0);
@@ -102,6 +110,34 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
+	const isGrid = kind !== PICTURE_KIND.AUTOTILES;
+	const getGridMetrics = () => {
+		const content = contentRef.current;
+		if (!isGrid || !content) {
+			return { columns: 1, rowHeight: ELEMENT_HEIGHT };
+		}
+		const elements = content.querySelectorAll<HTMLElement>('.element');
+		if (elements.length === 0) {
+			return { columns: 1, rowHeight: GRID_ROW_HEIGHT };
+		}
+		const firstTop = elements[0].offsetTop;
+		let columns = 1;
+		let rowHeight = elements[0].offsetHeight + GRID_GAP;
+		for (let i = 1; i < elements.length; i++) {
+			if (elements[i].offsetTop === firstTop) {
+				columns++;
+			} else {
+				rowHeight = elements[i].offsetTop - firstTop;
+				break;
+			}
+		}
+		return { columns, rowHeight };
+	};
+
+	const getDisplayIncrement = () => {
+		const { columns, rowHeight } = getGridMetrics();
+		return columns * Math.max(1, Math.ceil(window.screen.height / rowHeight));
+	};
 
 	const getChevron = (selected: boolean) => {
 		if (canExpand) {
@@ -121,7 +157,9 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	const update = async () => {
 		const content = contentRef.current;
 		if (content) {
-			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
+			const { columns, rowHeight } = getGridMetrics();
+			const visibleCount = columns * (Math.ceil(content.clientHeight / rowHeight) + 1);
+			for (let i = 0; i < visibleCount; i++) {
 				const element = list[i + positionScroll.current];
 				const elementID = displayCanvas ? element?.id : element?.pictureID;
 				if (elementID !== undefined) {
@@ -135,9 +173,14 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 							scene.camera.perspectiveCamera.updateProjectionMatrix();
 							await scene.loadObject3D(elementID);
 							await scene.load();
-							dataURL = Manager.GL.renderToDataURL([{ scene: scene.scene, camera: scene.camera.perspectiveCamera }], 300, 300);
+							dataURL = Manager.GL.renderToDataURL(
+								[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
+								300,
+								300,
+							);
 						} else {
-							dataURL = (await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
+							dataURL =
+								(await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
 						}
 						urls.set(elementID, dataURL);
 						setTriggerUpdate(elementID);
@@ -151,7 +194,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		positionScroll.current = Math.max(0, firstIndex - 1);
 		setMinToDisplay(0);
 		setPreviousMinToDisplay(0);
-		setMaxToDisplay(firstIndex + DISPLAY_INCREMENT);
+		setMaxToDisplay(firstIndex + getDisplayIncrement());
 		setTestOffset(true);
 	};
 
@@ -160,7 +203,8 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		const selected = selectedElementRef.current;
 		if (content && selected) {
 			if (content.clientHeight) {
-				content.scrollTop = selected.offsetTop - ELEMENT_HEIGHT;
+				const { rowHeight } = getGridMetrics();
+				content.scrollTop = selected.offsetTop - rowHeight;
 				// Avoid ipossible scroll up
 				if (minToDisplay > 0 && content.scrollTop === 0) {
 					content.scrollTop = 1;
@@ -222,14 +266,16 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	const handleScroll = async () => {
 		const content = contentRef.current;
 		if (content) {
+			const { columns, rowHeight } = getGridMetrics();
+			const increment = columns * Math.max(1, Math.ceil(window.screen.height / rowHeight));
 			const scrollTop = content.scrollTop;
-			positionScroll.current = Math.floor(scrollTop / ELEMENT_HEIGHT) + minToDisplay;
+			positionScroll.current = columns * Math.floor(scrollTop / rowHeight) + minToDisplay;
 
 			// When scrolling top of list
 			if (scrollTop === 0 && minToDisplay > 0) {
 				setPreviousMinToDisplay(minToDisplay);
 				setMinToDisplay((value) => {
-					return value > 0 ? value - DISPLAY_INCREMENT : 0;
+					return value > 0 ? Math.max(0, value - increment) : 0;
 				});
 			}
 
@@ -237,7 +283,7 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 			const scrollHeight = content.scrollHeight;
 			const clientHeight = content.clientHeight;
 			if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
-				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
+				setMaxToDisplay((value) => value + increment);
 			}
 			if (firstScroll) {
 				await update();
@@ -275,6 +321,9 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		const content = contentRef.current;
 		if (content) {
 			content.addEventListener('scroll', handleScroll);
+			if (firstScroll) {
+				update().catch(console.error);
+			}
 			return () => {
 				content.removeEventListener('scroll', handleScroll);
 			};
@@ -285,10 +334,22 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 		const content = contentRef.current;
 		if (content) {
 			if (previousMinToDisplay > 0 && previousMinToDisplay !== minToDisplay) {
-				content.scrollTop = DISPLAY_INCREMENT * ELEMENT_HEIGHT;
+				const { columns, rowHeight } = getGridMetrics();
+				const rowsAdded = Math.ceil((previousMinToDisplay - minToDisplay) / columns);
+				content.scrollTop = rowsAdded * rowHeight;
 			}
 		}
 	}, [minToDisplay, previousMinToDisplay]);
+
+	useEffect(() => {
+		if (!isGrid || !firstScroll) {
+			return;
+		}
+		const content = contentRef.current;
+		if (content && maxToDisplay < list.length && content.scrollHeight <= content.clientHeight) {
+			setMaxToDisplay((value) => value + getDisplayIncrement());
+		}
+	});
 
 	const getPictureOrCanvas = (element: Model.SpecialElement) => {
 		const url = urls.get(displayCanvas ? element.id : element.pictureID);
@@ -296,8 +357,24 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	};
 
 	const listElements = filteredList.map((element) => {
-		const picture = Project.current!.pictures.getByID(kind, element.pictureID);
 		const selected = currentID === element.id;
+		if (isGrid) {
+			return (
+				<div
+					ref={selected ? selectedElementRef : null}
+					className={Utils.getClassName({ selected }, 'element')}
+					key={element.id}
+					title={element.toStringNameID()}
+					onClick={() => handleClick(element.id)}
+				>
+					<div className='title'>
+						<div className='pictureContainer'>{getPictureOrCanvas(element)}</div>
+					</div>
+					<div className='elementName'>{element.getName()}</div>
+				</div>
+			);
+		}
+		const picture = Project.current!.pictures.getByID(kind, element.pictureID);
 		return (
 			<div
 				ref={selected ? selectedElementRef : null}
@@ -338,7 +415,11 @@ function PanelSpecialElementsSelection({ kind, onSelect, selectedID, onUpdateAut
 	});
 
 	return (
-		<div ref={contentRef} id='list-previewer' className={'panelSpecialElements'}>
+		<div
+			ref={contentRef}
+			id='list-previewer'
+			className={Utils.getClassName({ grid: isGrid }, 'panelSpecialElements')}
+		>
 			{listElements}
 		</div>
 	);

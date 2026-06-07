@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { FaQuestion, FaRegSquare } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
-import { ELEMENT_MAP_KIND, MenuItemType, PICTURE_KIND, Utils } from '../../common';
+import { ELEMENT_MAP_KIND, MenuItemType, PICTURE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
@@ -26,6 +26,8 @@ import Flex from '../Flex';
 import DialogMapObject from '../dialogs/models/DialogMapObject';
 
 const ELEMENT_HEIGHT = 30;
+const GRID_GAP = 5;
+const GRID_ROW_HEIGHT = 73;
 const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
 type IconCacheEntry = {
 	signature: string;
@@ -55,6 +57,34 @@ function PanelMapObjectsSelection() {
 
 	const list = Scene.Map.current?.model?.objects ?? [];
 	const filteredList = list.slice(minToDisplay, maxToDisplay);
+
+	const getGridMetrics = () => {
+		const content = contentRef.current;
+		if (!content) {
+			return { columns: 1, rowHeight: GRID_ROW_HEIGHT };
+		}
+		const elements = content.querySelectorAll<HTMLElement>('.element');
+		if (elements.length === 0) {
+			return { columns: 1, rowHeight: GRID_ROW_HEIGHT };
+		}
+		const firstTop = elements[0].offsetTop;
+		let columns = 1;
+		let rowHeight = elements[0].offsetHeight + GRID_GAP;
+		for (let i = 1; i < elements.length; i++) {
+			if (elements[i].offsetTop === firstTop) {
+				columns++;
+			} else {
+				rowHeight = elements[i].offsetTop - firstTop;
+				break;
+			}
+		}
+		return { columns, rowHeight };
+	};
+
+	const getDisplayIncrement = () => {
+		const { columns, rowHeight } = getGridMetrics();
+		return columns * Math.max(1, Math.ceil(window.screen.height / rowHeight));
+	};
 
 	const getCommonObject = (mapObject: Model.MapObject): Model.CommonObject | null => {
 		const mapPortion = Scene.Map.current?.getMapPortionByPosition(mapObject.position);
@@ -214,7 +244,9 @@ function PanelMapObjectsSelection() {
 			return;
 		}
 		const currentList = mapSnapshot.model?.objects ?? [];
-		for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
+		const { columns, rowHeight } = getGridMetrics();
+		const visibleCount = columns * (Math.ceil(content.clientHeight / rowHeight) + 1);
+		for (let i = 0; i < visibleCount; i++) {
 			if (Scene.Map.current !== mapSnapshot || mapSnapshot.loading || mapSnapshot.movingObject !== null) {
 				scheduleUpdate(50);
 				return;
@@ -346,18 +378,20 @@ function PanelMapObjectsSelection() {
 	const handleScroll = async () => {
 		const content = contentRef.current;
 		if (content) {
+			const { columns, rowHeight } = getGridMetrics();
+			const increment = columns * Math.max(1, Math.ceil(window.screen.height / rowHeight));
 			const scrollTop = content.scrollTop;
-			positionScroll.current = Math.floor(scrollTop / ELEMENT_HEIGHT) + minToDisplay;
+			positionScroll.current = columns * Math.floor(scrollTop / rowHeight) + minToDisplay;
 			if (scrollTop === 0 && minToDisplay > 0) {
 				setPreviousMinToDisplay(minToDisplay);
 				setMinToDisplay((value) => {
-					return value > 0 ? value - DISPLAY_INCREMENT : 0;
+					return value > 0 ? Math.max(0, value - increment) : 0;
 				});
 			}
 			const scrollHeight = content.scrollHeight;
 			const clientHeight = content.clientHeight;
 			if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
-				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
+				setMaxToDisplay((value) => value + increment);
 			}
 			scheduleUpdate();
 		}
@@ -387,6 +421,7 @@ function PanelMapObjectsSelection() {
 		const content = contentRef.current;
 		if (content) {
 			content.addEventListener('scroll', handleScroll);
+			scheduleUpdate();
 			return () => {
 				content.removeEventListener('scroll', handleScroll);
 			};
@@ -397,10 +432,19 @@ function PanelMapObjectsSelection() {
 		const content = contentRef.current;
 		if (content) {
 			if (previousMinToDisplay > 0 && previousMinToDisplay !== minToDisplay) {
-				content.scrollTop = DISPLAY_INCREMENT * ELEMENT_HEIGHT;
+				const { columns, rowHeight } = getGridMetrics();
+				const rowsAdded = Math.ceil((previousMinToDisplay - minToDisplay) / columns);
+				content.scrollTop = rowsAdded * rowHeight;
 			}
 		}
 	}, [minToDisplay, previousMinToDisplay]);
+
+	useEffect(() => {
+		const content = contentRef.current;
+		if (content && maxToDisplay < list.length && content.scrollHeight <= content.clientHeight) {
+			setMaxToDisplay((value) => value + getDisplayIncrement());
+		}
+	});
 
 	const getIcon = (mapObject: Model.MapObject) => {
 		const url = urls.get(getIconCacheKey(mapObject))?.url;
@@ -420,6 +464,7 @@ function PanelMapObjectsSelection() {
 			<div
 				className='element'
 				key={mapObject.id}
+				title={mapObject.toStringNameID()}
 				onClick={() => handleClick(mapObject)}
 				onDoubleClick={() => handleEditMapObject(mapObject)}
 				onMouseDown={(e) => handleElementMouseDown(e, mapObject)}
@@ -427,10 +472,8 @@ function PanelMapObjectsSelection() {
 			>
 				<div className='title'>
 					<div className='pictureContainer'>{getIcon(mapObject)}</div>
-					<Flex one className='textEllipsis'>
-						{`${Utils.formatNumberID(mapObject.id)}: ${mapObject.name}`}
-					</Flex>
 				</div>
+				<div className='elementName'>{mapObject.getName()}</div>
 			</div>
 		);
 	});
@@ -438,7 +481,7 @@ function PanelMapObjectsSelection() {
 	return (
 		<>
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<div ref={contentRef} id='list-previewer' className='panelSpecialElements'>
+				<div ref={contentRef} id='list-previewer' className='panelSpecialElements grid'>
 					{listElements}
 				</div>
 			</ContextMenu>
