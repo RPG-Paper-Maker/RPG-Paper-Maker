@@ -150,7 +150,12 @@ function MapEditor() {
 				dispatch(setNeedsUpdateMapEditor());
 				map.needsUpdateComponent = false;
 			}
-			if (Inputs.isMapFocused && !RPM.isFocusingTree && !map.loading && Inputs.keys.length > 0) {
+			if (
+				(Inputs.isMapFocused || Inputs.allowMapMouseDuringDialog) &&
+				!RPM.isFocusingTree &&
+				!map.loading &&
+				Inputs.keys.length > 0
+			) {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
@@ -205,6 +210,9 @@ function MapEditor() {
 	};
 
 	const handleDoubleClick = async () => {
+		if (Scene.Map.previewOnly) {
+			return;
+		}
 		if (Constants.IS_MOBILE && Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.MOVE) {
 			return;
 		}
@@ -326,6 +334,9 @@ function MapEditor() {
 	}, [needsReloadMap]);
 
 	const getContextMenuItems = () => {
+		if (Scene.Map.previewOnly) {
+			return [];
+		}
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
 			return [

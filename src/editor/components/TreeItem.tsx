@@ -111,7 +111,7 @@ function TreeItem({
 	return (
 		<div
 			className={Utils.getClassName({ selected }, 'treeItem noSelectText')}
-			style={{ paddingLeft: `${5 + level * 15}px`, opacity: isCutSource ? 0.5 : 1 }}
+			style={{ paddingLeft: `${5 + level * 15}px`, opacity: isCutSource || node.isPreview ? 0.5 : 1 }}
 			onMouseDown={handleMouseDown}
 			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}
 			onDragOver={(event: React.DragEvent) => onDragOver?.(event, node)}

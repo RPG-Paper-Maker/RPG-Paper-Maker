@@ -45,10 +45,11 @@ type Props = {
 	model: Model.Map;
 	onAccept: (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => Promise<void>;
 	onReject?: () => void | Promise<void>;
+	onNameChange?: (name: string) => void;
 	isNew?: boolean;
 };
 
-function DialogMapProperties({ setIsOpen, model, onAccept, onReject, isNew = false }: Props) {
+function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChange, isNew = false }: Props) {
 	const { t } = useTranslation();
 
 	const playMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
@@ -298,8 +299,10 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, isNew = fal
 	};
 
 	useLayoutEffect(() => {
+		Scene.Map.previewOnly = true;
 		initialize();
 		return () => {
+			Scene.Map.previewOnly = false;
 			if (previewBoxRafRef.current !== null) {
 				cancelAnimationFrame(previewBoxRafRef.current);
 			}
@@ -319,6 +322,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, isNew = fal
 							localization={model}
 							focusFirst={focusFirst}
 							setFocustFirst={setFocustFirst}
+							onUpdate={() => onNameChange?.(model.name)}
 						/>
 						<div>ID: {Utils.formatNumberID(id)}</div>
 					</Flex>

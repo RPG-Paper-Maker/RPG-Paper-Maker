@@ -34,6 +34,20 @@ class Inputs {
 	public static isMapFocused = true;
 	public static allowMapMouseDuringDialog = false;
 
+	static isMapKeyboardAllowed(e: globalThis.KeyboardEvent) {
+		if (this.isMapFocused || Scene.Map.currentpositionSelector) {
+			return true;
+		}
+		if (this.allowMapMouseDuringDialog) {
+			const target = (e.target as HTMLElement) ?? (document.activeElement as HTMLElement | null);
+			const tag = target?.tagName;
+			const isEditable =
+				tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target?.isContentEditable === true;
+			return !isEditable;
+		}
+		return false;
+	}
+
 	static getPositionX() {
 		return Constants.IS_MOBILE ? this.pointerX : this.mouseX;
 	}
@@ -150,7 +164,7 @@ class Inputs {
 			// Key down
 			const handleKeyDown = (e: globalThis.KeyboardEvent) => {
 				if (
-					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
+					!Inputs.isMapKeyboardAllowed(e) ||
 					(e.ctrlKey && e.key === 's') ||
 					!Scene.Map.current ||
 					Scene.Map.current.loading
@@ -168,7 +182,7 @@ class Inputs {
 
 			// Key up
 			const handleKeyUp = (e: globalThis.KeyboardEvent) => {
-				if ((!this.isMapFocused && !Scene.Map.currentpositionSelector) || !Scene.Map.current) {
+				if (!Inputs.isMapKeyboardAllowed(e) || !Scene.Map.current) {
 					return;
 				}
 				ArrayUtils.removeElement(Inputs.keys, e.key);

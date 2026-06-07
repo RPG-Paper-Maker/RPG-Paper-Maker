@@ -58,6 +58,7 @@ class Map extends Base {
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static currentMountainDigMode = false;
+	public static previewOnly = false;
 	public static onStartPositionSet: (() => void) | null = null;
 	public static onSelectMapID: ((id: number) => void) | null = null;
 	public static elapsedTime = 0;
@@ -1715,7 +1716,7 @@ class Map extends Base {
 			intersects = intersects.filter((i) => i.point.y >= planeGridY - Constants.PRECISION_POSITION);
 		}
 		let meshHitGridY: number;
-		if (this.canEdit && !Map.isRemoving()) {
+		if (this.canEdit && !Map.previewOnly && !Map.isRemoving()) {
 			meshHitGridY = -Infinity;
 			if (
 				Map.currentMountainDigMode &&
@@ -1751,6 +1752,7 @@ class Map extends Base {
 		if (
 			intersects.length === 0 &&
 			this.canEdit &&
+			!Map.previewOnly &&
 			Map.currentMountainDigMode &&
 			Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
 			!Inputs.isPointerPressed &&
@@ -1882,6 +1884,7 @@ class Map extends Base {
 			);
 			if (
 				this.canEdit &&
+				!Map.previewOnly &&
 				(this.lastPosition === null ||
 					!this.lastPosition.equals(position) ||
 					(isLayerOn &&
@@ -2180,7 +2183,7 @@ class Map extends Base {
 		) {
 			this.cursor.position = this.lastPosition.clone();
 			this.syncCursorGrid();
-		} else {
+		} else if (!Map.previewOnly) {
 			if ((this.canEdit && Map.isDrawing()) || this.isDetection) {
 				if (this.isDetection) {
 					if (Map.isAdding() && this.lastPosition) {
@@ -2293,7 +2296,7 @@ class Map extends Base {
 				this.isDraggingTransforming = true;
 			}
 		}
-		if (this.canEdit && Map.isTransforming()) {
+		if (!Map.previewOnly && this.canEdit && Map.isTransforming()) {
 			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
 			if (mapPortion) {
 				mapPortion.updateGeometriesWithoutCheck();

@@ -70,6 +70,9 @@ function TreeMaps({
 
 	const dispatch = useDispatch();
 	const previousTagRef = useRef<Model.TreeMapTag | null>(null);
+	const newMapNodeRef = useRef<Node | null>(null);
+	const newFolderNodeRef = useRef<Node | null>(null);
+	const originalMapNameRef = useRef<string>('');
 	const isFirstTriggerNewMap = useRef(true);
 	const isFirstTriggerNewFolder = useRef(true);
 
@@ -126,6 +129,8 @@ function TreeMaps({
 	};
 
 	const handleNewMap = async () => {
+		const parent = selectedNode;
+		if (!parent) return;
 		const id = Node.getNewID(RPM.treeCurrentItems);
 		const name = Model.Map.generateMapName(id);
 		const map = Model.Map.createDefaultNewMap(id, name);
@@ -134,41 +139,96 @@ function TreeMaps({
 		setEditedMap(map);
 		setIsNew(true);
 		previousTagRef.current = currentTreeMapTag;
+		const node = Node.create(Model.TreeMapTag.create(map.id, map.name), [], parent);
+		node.isPreview = true;
+		parent.children.push(node);
+		newMapNodeRef.current = node;
 		dispatch(setCurrentTreeMapTag(Model.TreeMapTag.create(map.id, map.name)));
+		dispatch(triggerTreeMap());
 		setIsOpenMapProperties(true);
 	};
 
 	const handleAcceptNewMap = async (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => {
-		if (editedMap && selectedNode) {
-			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
-			selectedNode.children.push(node);
+		const node = newMapNodeRef.current;
+		if (editedMap && node) {
+			node.isPreview = false;
+			node.content.name = editedMap.name;
 			await editedMap.resizeMap(previousModel);
 			await editedMap.shiftMapElements(increaseLeft, increaseTop);
 			await Project.current!.treeMaps.save();
 			await editedMap.save();
 			RPM.treeCurrentSetSelectedItem(node);
 		}
+		newMapNodeRef.current = null;
 	};
 
 	const handleRejectNewMap = async () => {
+		const node = newMapNodeRef.current;
+		if (node && node.parent) {
+			ArrayUtils.removeElement(node.parent.children, node);
+		}
+		newMapNodeRef.current = null;
 		await editedMap.deleteMap();
 		dispatch(setCurrentTreeMapTag(previousTagRef.current));
+		dispatch(triggerTreeMap());
+	};
+
+	const handleMapNameChange = (name: string) => {
+		const node = isNew ? newMapNodeRef.current : selectedNode;
+		if (node) {
+			node.content.name = name;
+		}
+		if (mapsTabsTitles && setMapsTabsTitles) {
+			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
+			if (element) {
+				element.name = name;
+				setMapsTabsTitles([...mapsTabsTitles]);
+			}
+		}
+		dispatch(triggerTreeMap());
 	};
 
 	const handleNewFolder = async () => {
+		const parent = selectedNode;
+		if (!parent) return;
 		const id = Node.getNewID(RPM.treeCurrentItems, false);
 		const name = t('new.folder');
 		setEditedFolder(Model.Base.create(id, name));
 		setIsNew(true);
+		const node = Node.create(Model.TreeMapTag.create(id, name), [], parent);
+		node.isPreview = true;
+		parent.children.push(node);
+		newFolderNodeRef.current = node;
+		dispatch(triggerTreeMap());
 		setIsOpenName(true);
 	};
 
 	const handleAcceptNewFolder = async () => {
-		if (editedFolder && selectedNode) {
-			const node = Node.create(Model.TreeMapTag.create(editedFolder.id, editedFolder.name), [], selectedNode);
-			selectedNode.children.push(node);
+		const node = newFolderNodeRef.current;
+		if (editedFolder && node) {
+			node.isPreview = false;
+			node.content.name = editedFolder.name;
+			await Project.current!.treeMaps.save();
 			RPM.treeCurrentSetSelectedItem(node);
 		}
+		newFolderNodeRef.current = null;
+	};
+
+	const handleRejectNewFolder = async () => {
+		const node = newFolderNodeRef.current;
+		if (node && node.parent) {
+			ArrayUtils.removeElement(node.parent.children, node);
+		}
+		newFolderNodeRef.current = null;
+		dispatch(triggerTreeMap());
+	};
+
+	const handleNewFolderNameChange = (name: string) => {
+		const node = newFolderNodeRef.current;
+		if (node) {
+			node.content.name = name;
+		}
+		dispatch(triggerTreeMap());
 	};
 
 	const handleCopy = async () => {
@@ -288,6 +348,7 @@ function TreeMaps({
 		} else {
 			const map = Model.Map.create(tag.id, tag.name);
 			await map.load();
+			originalMapNameRef.current = map.name;
 			setEditedMap(map);
 			setIsNew(false);
 			setIsOpenMapProperties(true);
@@ -297,9 +358,25 @@ function TreeMaps({
 	const handleEditMap = async () => {
 		const map = Model.Map.create(RPM.treeCurrentItem!.content.id, RPM.treeCurrentItem!.content.name);
 		await map.load();
+		originalMapNameRef.current = map.name;
 		setEditedMap(map);
 		setIsNew(false);
 		setIsOpenMapProperties(true);
+	};
+
+	const handleRejectEditMap = async () => {
+		if (selectedNode) {
+			selectedNode.content.name = originalMapNameRef.current;
+		}
+		if (mapsTabsTitles && setMapsTabsTitles) {
+			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
+			if (element) {
+				element.name = originalMapNameRef.current;
+				setMapsTabsTitles([...mapsTabsTitles]);
+			}
+		}
+		dispatch(triggerTreeMap());
+		dispatch(setNeedsReloadMap());
 	};
 
 	const handleAcceptEditMap = async (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => {
@@ -437,7 +514,8 @@ function TreeMaps({
 					setIsOpen={setIsOpenMapProperties}
 					model={editedMap}
 					onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
-					onReject={isNew ? handleRejectNewMap : undefined}
+					onReject={isNew ? handleRejectNewMap : handleRejectEditMap}
+					onNameChange={handleMapNameChange}
 					isNew={isNew}
 				/>
 			)}
@@ -446,6 +524,8 @@ function TreeMaps({
 					setIsOpen={setIsOpenName}
 					model={editedFolder}
 					onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
+					onReject={isNew ? handleRejectNewFolder : undefined}
+					onNameChange={isNew ? handleNewFolderNameChange : undefined}
 				/>
 			)}
 			{isOpenDialogConfirm && (

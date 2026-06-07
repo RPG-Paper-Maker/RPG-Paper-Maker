@@ -23,9 +23,10 @@ type Props = {
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
+	onNameChange?: (name: string) => void;
 };
 
-function DialogName({ setIsOpen, model, onAccept, onReject }: Props) {
+function DialogName({ setIsOpen, model, onAccept, onReject, onNameChange }: Props) {
 	const { t } = useTranslation();
 
 	const [focusFirst, setFocustFirst] = useState(true);
@@ -33,6 +34,11 @@ function DialogName({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	const initialize = () => {
 		setName(model.name);
+	};
+
+	const handleChange = (n: string) => {
+		setName(n);
+		onNameChange?.(n);
 	};
 
 	const handleAccept = async () => {
@@ -60,7 +66,7 @@ function DialogName({ setIsOpen, model, onAccept, onReject }: Props) {
 		>
 			<Flex spacedLarge>
 				{t('name')}:
-				<InputText value={name} onChange={setName} focusFirst={focusFirst} setFocustFirst={setFocustFirst} />
+				<InputText value={name} onChange={handleChange} focusFirst={focusFirst} setFocustFirst={setFocustFirst} />
 			</Flex>
 		</Dialog>
 	);

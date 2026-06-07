@@ -103,6 +103,7 @@ class Node extends Serializable {
 	public previous: Node | null = null;
 	public next: Node | null = null;
 	public willBeDeleted = false;
+	public isPreview = false;
 
 	public static readonly bindings: BindingType[] = [['expanded', 'e', true, BINDING.BOOLEAN]];
 

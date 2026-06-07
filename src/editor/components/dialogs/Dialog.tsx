@@ -54,6 +54,41 @@ export enum Z_INDEX_LEVEL {
 
 const RESIZING_SPACE = 10;
 
+function MapInteractionBlocker() {
+	const [rect, setRect] = useState<DOMRect | null>(null);
+
+	useEffect(() => {
+		const update = () => {
+			const el = document.getElementById('canvas-map-editor');
+			setRect(el ? el.getBoundingClientRect() : null);
+		};
+		update();
+		const el = document.getElementById('canvas-map-editor');
+		const observer = el ? new ResizeObserver(update) : null;
+		if (el && observer) {
+			observer.observe(el);
+		}
+		window.addEventListener('resize', update);
+		return () => {
+			observer?.disconnect();
+			window.removeEventListener('resize', update);
+		};
+	}, []);
+
+	const common: React.CSSProperties = { position: 'fixed', pointerEvents: 'auto', background: 'transparent' };
+	if (!rect) {
+		return <div style={{ ...common, inset: 0 }} />;
+	}
+	return (
+		<>
+			<div style={{ ...common, left: 0, top: 0, width: '100vw', height: rect.top }} />
+			<div style={{ ...common, left: 0, top: rect.bottom, width: '100vw', bottom: 0 }} />
+			<div style={{ ...common, left: 0, top: rect.top, width: rect.left, height: rect.height }} />
+			<div style={{ ...common, left: rect.right, top: rect.top, right: 0, height: rect.height }} />
+		</>
+	);
+}
+
 function Dialog({
 	children,
 	title,
@@ -339,6 +374,7 @@ function Dialog({
 				pointerEvents: allowMapInteraction ? 'none' : undefined,
 			}}
 		>
+			{allowMapInteraction && <MapInteractionBlocker />}
 			<div
 				ref={dialogRef}
 				className='dialog'
