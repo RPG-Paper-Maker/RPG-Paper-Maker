@@ -61,7 +61,7 @@ function Tab({
 
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
-	const [openedTabs, setOpenedTabs] = useState<number[]>([]);
+	const [openedTabs, setOpenedTabs] = useState<number[]>([defaultIndex]);
 
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 

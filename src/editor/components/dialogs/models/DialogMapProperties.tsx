@@ -605,6 +605,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject }: Props) {
 					contents={[getMapSettingsContent(), getMapStartupReactionsContent(), getBattlesContent()]}
 					padding
 					hideScroll
+					lazyLoadingContent
 				/>
 			</Flex>
 		</Dialog>
