@@ -271,7 +271,18 @@ class DynamicValue extends Serializable {
 	}
 
 	getFixNumberValue(): number {
-		return this.isFixNumberValue() ? (this.value as number) : 1;
+		if (this.isFixNumberValue()) {
+			return this.value as number;
+		}
+		if (this.kind === DYNAMIC_VALUE_KIND.VARIABLE) {
+			const variable = Project.current?.variables.getVariableByID(this.value as number) as
+				| Model.Variable
+				| null
+				| undefined;
+			const value = variable?.defaultValue;
+			return typeof value === 'number' ? value : 1;
+		}
+		return 1;
 	}
 
 	getBaseString(base?: Model.Base | null): string {

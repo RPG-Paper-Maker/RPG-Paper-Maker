@@ -11,12 +11,15 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INPUT_TYPE_WIDTH } from '../../common';
+import { INPUT_TYPE_WIDTH, Utils, VARIABLE_DEFAULT_VALUE_KIND } from '../../common';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Data, Model } from '../../Editor';
+import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
+import InputNumber from '../InputNumber';
+import InputText from '../InputText';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -37,7 +40,55 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [forcedPageCurrentSelectedItemID, setForcedPageCurrentSelectedItemID] = useState<number | null>(null);
 	const [forcedVariableCurrentSelectedItemID, setForcedVariableCurrentSelectedItemID] = useState<number | null>(null);
 	const [selectedVariable, setSelectedVariable] = useState<Node | null>(null);
+	const [defaultValueKind, setDefaultValueKind] = useState<VARIABLE_DEFAULT_VALUE_KIND>(
+		VARIABLE_DEFAULT_VALUE_KIND.NUMBER,
+	);
+	const [defaultValueNumber, setDefaultValueNumber] = useState(0);
+	const [defaultValueText, setDefaultValueText] = useState('');
 	const currentVariablesPage = useRef<Model.VariablesPage | null>(null);
+
+	const isDefaultValueDisabled = () => !selectedVariable || selectedVariable.content.id <= 0;
+
+	const getSelectedVariable = (): Model.Variable | null =>
+		selectedVariable && selectedVariable.content.id > 0 ? (selectedVariable.content as Model.Variable) : null;
+
+	const handleSelectVariable = (node: Node | null) => {
+		setSelectedVariable(node);
+		const variable = node?.content as Model.Variable | undefined;
+		if (variable && variable.id > 0 && typeof variable.defaultValue === 'string') {
+			setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.TEXT);
+			setDefaultValueNumber(0);
+			setDefaultValueText(variable.defaultValue);
+		} else {
+			setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.NUMBER);
+			setDefaultValueNumber(variable && variable.id > 0 ? (variable.defaultValue as number) : 0);
+			setDefaultValueText('');
+		}
+	};
+
+	const handleChangeDefaultValueKind = (kind: number) => {
+		setDefaultValueKind(kind);
+		const variable = getSelectedVariable();
+		if (variable) {
+			variable.defaultValue = kind === VARIABLE_DEFAULT_VALUE_KIND.TEXT ? defaultValueText : defaultValueNumber;
+		}
+	};
+
+	const handleChangeDefaultValueNumber = (value: number) => {
+		setDefaultValueNumber(value);
+		const variable = getSelectedVariable();
+		if (variable && defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.NUMBER) {
+			variable.defaultValue = value;
+		}
+	};
+
+	const handleChangeDefaultValueText = (value: string) => {
+		setDefaultValueText(value);
+		const variable = getSelectedVariable();
+		if (variable && defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.TEXT) {
+			variable.defaultValue = value;
+		}
+	};
 
 	const initialize = () => {
 		const clonedPages = Project.current!.variables.pages.map((page) => page.clone());
@@ -72,7 +123,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	const handleVariablesListUpdated = () => {
 		if (currentVariablesPage.current) {
-			currentVariablesPage.current.list = Node.createListFromNodes<Model.Base>(variables);
+			currentVariablesPage.current.list = Node.createListFromNodes<Model.Variable>(variables);
 		}
 	};
 
@@ -119,7 +170,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			initialWidth='700px'
-			initialHeight='630px'
+			initialHeight='640px'
 		>
 			<Flex spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('variables')}>
@@ -136,19 +187,47 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 						noFirstSelection
 					/>
 				</Groupbox>
-				<Tree
-					list={variables}
-					forcedCurrentSelectedItemID={forcedVariableCurrentSelectedItemID}
-					setForcedCurrentSelectedItemID={setForcedVariableCurrentSelectedItemID}
-					minWidth={TREES_MIN_WIDTH}
-					onSelectedItem={setSelectedVariable}
-					onListUpdated={handleVariablesListUpdated}
-					cannotAdd
-					cannotDragDrop
-					cannotDelete
-					showEditName
-					inputNameWidth={INPUT_TYPE_WIDTH.FILL}
-				/>
+				<Flex column spacedLarge fillHeight one>
+					<Tree
+						list={variables}
+						forcedCurrentSelectedItemID={forcedVariableCurrentSelectedItemID}
+						setForcedCurrentSelectedItemID={setForcedVariableCurrentSelectedItemID}
+						minWidth={TREES_MIN_WIDTH}
+						onSelectedItem={handleSelectVariable}
+						onListUpdated={handleVariablesListUpdated}
+						cannotAdd
+						cannotDragDrop
+						cannotDelete
+						showEditName
+						inputNameWidth={INPUT_TYPE_WIDTH.FILL}
+					/>
+					<Flex spaced centerV>
+						<div className={Utils.getClassName({ disabledLabel: isDefaultValueDisabled() })}>
+							{t('default.value')}:
+						</div>
+						<Dropdown
+							selectedID={defaultValueKind}
+							onChange={handleChangeDefaultValueKind}
+							options={Model.Variable.DEFAULT_VALUE_KIND_OPTIONS}
+							translateOptions
+							disabled={isDefaultValueDisabled()}
+						/>
+						{defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.TEXT ? (
+							<InputText
+								value={defaultValueText}
+								onChange={handleChangeDefaultValueText}
+								disabled={isDefaultValueDisabled()}
+							/>
+						) : (
+							<InputNumber
+								value={defaultValueNumber}
+								onChange={handleChangeDefaultValueNumber}
+								decimals
+								disabled={isDefaultValueDisabled()}
+							/>
+						)}
+					</Flex>
+				</Flex>
 			</Flex>
 		</Dialog>
 	);

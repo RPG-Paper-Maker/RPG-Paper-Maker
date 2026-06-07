@@ -45,6 +45,11 @@ export enum ELEMENT_MAP_KIND {
 	VIEW,
 }
 
+export enum VARIABLE_DEFAULT_VALUE_KIND {
+	NUMBER,
+	TEXT,
+}
+
 export enum MENU_INDEX_MAP_EDITOR {
 	LANDS,
 	SPRITES,

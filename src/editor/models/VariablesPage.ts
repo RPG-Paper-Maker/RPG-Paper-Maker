@@ -12,15 +12,16 @@
 import { BINDING, JSONType } from '../common';
 import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
+import { Variable } from './Variable';
 
 const VARIABLES_PER_PAGE = 25;
 
 class VariablesPage extends Base {
 	public static type = 'VariablesPage';
 
-	public list!: Base[];
+	public list!: Variable[];
 
-	public static bindings: BindingType[] = [['list', 'list', undefined, BINDING.LIST, Base]];
+	public static bindings: BindingType[] = [['list', 'list', undefined, BINDING.LIST, Variable]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
@@ -33,7 +34,7 @@ class VariablesPage extends Base {
 	initialize() {
 		this.list = [];
 		for (let i = 1; i <= VARIABLES_PER_PAGE; i++) {
-			this.list.push(Base.create((this.id - 1) * VARIABLES_PER_PAGE + i, ''));
+			this.list.push(Variable.create((this.id - 1) * VARIABLES_PER_PAGE + i, ''));
 		}
 	}
 
