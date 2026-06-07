@@ -1875,7 +1875,7 @@
 	"select.by.id": "Seleccionar por ID",
 	"update.project.version": "La versión del proyecto es {{currentVersion}}, necesita convertirla a {{newVersion}} para continuar.",
 	"plugins.manager": "Administrador de complementos",
-	"select.or.double.click.list": "Seleccione o haga doble clic en la lista",
+	"add.new.plugin": "Añadir un nuevo complemento",
 	"no.connexion": "Sin conexión",
 	"plugin.name.cannot.be.empty": "El nombre del complemento no puede estar vacío",
 	"plugin.name.already.exists": "Este nombre de complemento ya existe en su proyecto",

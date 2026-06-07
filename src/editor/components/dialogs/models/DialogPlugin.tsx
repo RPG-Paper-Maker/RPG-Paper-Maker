@@ -45,8 +45,6 @@ import Form, { Label, Value } from '../../Form';
 import InputText from '../../InputText';
 import Loader from '../../Loader';
 import PanelPluginDetails from '../../panels/plugins/PanelPluginDetails';
-import RadioButton from '../../RadioButton';
-import RadioGroup from '../../RadioGroup';
 import Tab from '../../Tab';
 import Tree, { TREES_MIN_WIDTH } from '../../Tree';
 import Dialog from '../Dialog';
@@ -87,7 +85,7 @@ function DialogPlugin({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	);
 
 	const initialize = () => {
-		setType(PLUGIN_TYPE_KIND.EMPTY);
+		setType(PLUGIN_TYPE_KIND.ONLINE);
 		setName('');
 		setImportFile(undefined);
 		setImportFolder(undefined);
@@ -124,7 +122,6 @@ function DialogPlugin({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 			setLoadingPlugins(false);
 		} else {
 			setConnexionIssue(true);
-			setType(0);
 			setSelectedPlugin(null);
 		}
 	};
@@ -160,7 +157,6 @@ function DialogPlugin({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 					setLoadingPlugin(false);
 				} else {
 					setConnexionIssue(true);
-					setType(0);
 					setSelectedPlugin(null);
 					return;
 				}
@@ -295,6 +291,80 @@ const inject = Manager.Plugins.inject;
 		initialize();
 	}, []);
 
+	const getNewContent = () => (
+		<Flex key={0} column spacedLarge fillWidth>
+			<Form>
+				<Label>{t('name')}</Label>
+				<Value>
+					<InputText value={name} onChange={handleChangeName} widthType={INPUT_TYPE_WIDTH.FILL} />
+				</Value>
+			</Form>
+		</Flex>
+	);
+
+	const getImportContent = () => (
+		<Flex key={1} column spacedLarge fillWidth>
+			<Flex spaced centerV>
+				<Button onClick={handleClickImport}>...</Button>
+				<Flex className='textSmallDetail'>
+					{importFile?.name ?? importFolder ?? t('no.plugin.selected')}
+				</Flex>
+				<input ref={importFileInputRef} type='file' hidden onChange={handleImportFileChange} accept='.zip' />
+			</Flex>
+		</Flex>
+	);
+
+	const getOnlineContent = () => (
+		<Flex key={2} column spacedLarge fillWidth fillHeight>
+			{connexionIssue ? (
+				<Flex spaced fillWidth fillHeight centerH centerV>
+					<MdOutlineWifiOff />
+					{t('no.connexion')}
+				</Flex>
+			) : (
+				<>
+					<Tab
+						titles={Model.Base.mapListIndex([t('battle'), t('menus'), t('map'), t('others')])}
+						contents={[null, null, null, null]}
+						disabled={pluginOnlineDisabled}
+						onCurrentIndexChanged={handleOnlineTabChanged}
+						padding
+						scrollableContent
+					/>
+					<Flex columnMobile spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
+						{loadingPlugins ? (
+							<Loader isLoading alone />
+						) : (
+							<>
+								<Flex column spacedLarge>
+									<Flex fillHeight>
+										<Tree
+											list={plugins}
+											minWidth={TREES_MIN_WIDTH}
+											onSelectedItem={handleSelectPlugin}
+											disabled={pluginOnlineDisabled}
+											scrollable
+											cannotAdd
+											cannotDelete
+											cannotDragDrop
+											cannotEdit
+											doNotShowID
+											hideCheck
+										/>
+									</Flex>
+									<Button disabled={pluginOnlineDisabled} onClick={handleClickRefresh}>
+										{t('refresh')}
+									</Button>
+								</Flex>
+								<PanelPluginDetails plugin={selectedPlugin} disabled={pluginOnlineDisabled} />
+							</>
+						)}
+					</Flex>
+				</>
+			)}
+		</Flex>
+	);
+
 	return (
 		<Dialog
 			title={`${t('set.plugin')}...`}
@@ -305,93 +375,20 @@ const inject = Manager.Plugins.inject;
 			initialHeight='600px'
 			isLoading={isLoading}
 		>
-			<RadioGroup selected={type} onChange={setType}>
-				<Flex column spacedLarge fillWidth>
-					<Form>
-						<Label>
-							<RadioButton value={PLUGIN_TYPE_KIND.EMPTY}>{t('create.empty')}</RadioButton>
-						</Label>
-						<Value>
-							<InputText
-								value={name}
-								onChange={handleChangeName}
-								widthType={INPUT_TYPE_WIDTH.FILL}
-								disabled={type !== PLUGIN_TYPE_KIND.EMPTY}
-							/>
-						</Value>
-						<Label>
-							<RadioButton value={PLUGIN_TYPE_KIND.LOCAL}>{t('import.from.local.plugin')}</RadioButton>
-						</Label>
-						<Value>
-							<Flex spaced centerV>
-								<Button disabled={type !== PLUGIN_TYPE_KIND.LOCAL} onClick={handleClickImport}>
-									...
-								</Button>
-								<Flex disabledLabel={type !== PLUGIN_TYPE_KIND.LOCAL} className='textSmallDetail'>
-									{importFile?.name ?? importFolder ?? t('no.plugin.selected')}
-								</Flex>
-								<input
-									ref={importFileInputRef}
-									type='file'
-									hidden
-									onChange={handleImportFileChange}
-									accept='.zip'
-								/>
-							</Flex>
-						</Value>
-					</Form>
-					<div className='horizontalSeparator' />
-					<RadioButton value={PLUGIN_TYPE_KIND.ONLINE} disabled={connexionIssue}>
-						{t('add.from.online.plugins.list')}:
-					</RadioButton>
-					{connexionIssue ? (
-						<Flex spaced fillWidth fillHeight centerH centerV>
-							<MdOutlineWifiOff />
-							{t('no.connexion')}
-						</Flex>
-					) : (
-						<>
-							<Tab
-								titles={Model.Base.mapListIndex([t('battle'), t('menus'), t('map'), t('others')])}
-								contents={[null, null, null, null]}
-								disabled={pluginOnlineDisabled}
-								onCurrentIndexChanged={handleOnlineTabChanged}
-								padding
-								scrollableContent
-							/>
-							<Flex columnMobile spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
-								{loadingPlugins ? (
-									<Loader isLoading alone />
-								) : (
-									<>
-										<Flex column spacedLarge>
-											<Flex fillHeight>
-												<Tree
-													list={plugins}
-													minWidth={TREES_MIN_WIDTH}
-													onSelectedItem={handleSelectPlugin}
-													disabled={pluginOnlineDisabled}
-													scrollable
-													cannotAdd
-													cannotDelete
-													cannotDragDrop
-													cannotEdit
-													doNotShowID
-													hideCheck
-												/>
-											</Flex>
-											<Button disabled={pluginOnlineDisabled} onClick={handleClickRefresh}>
-												{t('refresh')}
-											</Button>
-										</Flex>
-										<PanelPluginDetails plugin={selectedPlugin} disabled={pluginOnlineDisabled} />
-									</>
-								)}
-							</Flex>
-						</>
-					)}
-				</Flex>
-			</RadioGroup>
+			<Tab
+				titles={Model.Base.mapListIndex([
+					t('create.empty'),
+					t('import.from.local.plugin'),
+					t('add.from.online.plugins.list'),
+				])}
+				contents={[getNewContent(), getImportContent(), getOnlineContent()]}
+				defaultIndex={PLUGIN_TYPE_KIND.ONLINE}
+				onCurrentIndexChanged={(index) => setType(index)}
+				padding
+				scrollableContent
+				lazyLoadingContent
+				hideScroll
+			/>
 		</Dialog>
 	);
 }

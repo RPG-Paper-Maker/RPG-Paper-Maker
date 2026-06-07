@@ -14,6 +14,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { Constants, INPUT_TYPE_WIDTH, IO, ITERATOR, JSONType, Paths, PLUGIN_TYPE_KIND } from '../../common';
 import {
 	checkFileExists,
@@ -115,6 +116,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 	const [sourceCode, setSourceCode] = useStateString();
 	const [autoUpdate, setAutoUpdate] = useStateBool();
 	const [folders, setFolders] = useState<Node[]>([]);
+	const [triggerNewItem, setTriggerNewItem] = useStateBool();
 
 	const initialize = async () => {
 		setIsLoading(true);
@@ -418,6 +420,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 					onListUpdated={handleListUpdated}
 					onDeleteItem={handleDeletePlugin}
 					triggerUpdate={triggerUpdate}
+					triggerNewItem={triggerNewItem}
 					scrollable
 					applyDefault
 					canBeEmpty
@@ -452,7 +455,9 @@ function DialogPlugins({ setIsOpen }: Props) {
 					</Flex>
 				) : (
 					<Flex one centerV centerH>
-						{t('select.or.double.click.list')}...
+						<Button big icon={<AiOutlinePlus />} onClick={() => setTriggerNewItem((b) => !b)}>
+							{t('add.new.plugin')}
+						</Button>
 					</Flex>
 				)}
 			</Flex>

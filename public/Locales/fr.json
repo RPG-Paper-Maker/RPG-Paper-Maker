@@ -1875,7 +1875,7 @@
 	"select.by.id": "Sélectionner par ID",
 	"update.project.version": "La version du projet est {{currentVersion}}, vous devez la convertir en {{newVersion}} pour continuer.",
 	"plugins.manager": "Gestionnaire de plugins",
-	"select.or.double.click.list": "Sélectionnez ou double-cliquez dans la liste",
+	"add.new.plugin": "Ajouter un nouveau plugin",
 	"no.connexion": "Pas de connexion",
 	"plugin.name.cannot.be.empty": "Le nom du plugin ne peut pas être vide",
 	"plugin.name.already.exists": "Ce nom de plugin existe déjà dans votre projet",

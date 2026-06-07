@@ -1875,7 +1875,7 @@
 	"select.by.id": "Wybierz według ID",
 	"update.project.version": "Wersja projektu to {{currentVersion}}, musisz przekonwertować na {{newVersion}}, aby kontynuować.",
 	"plugins.manager": "Menedżer wtyczek",
-	"select.or.double.click.list": "Wybierz lub kliknij dwukrotnie na liście",
+	"add.new.plugin": "Dodaj nową wtyczkę",
 	"no.connexion": "Brak połączenia",
 	"plugin.name.cannot.be.empty": "Nazwa wtyczki nie może być pusta",
 	"plugin.name.already.exists": "Ta nazwa wtyczki już istnieje w Twoim projekcie",

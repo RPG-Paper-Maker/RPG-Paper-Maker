@@ -1876,7 +1876,7 @@
 	"select.by.id": "按 ID 选择",
 	"update.project.version": "项目版本为 {{currentVersion}}，你需要转换为 {{newVersion}} 才能继续。",
 	"plugins.manager": "插件管理器",
-	"select.or.double.click.list": "在列表中选择或双击",
+	"add.new.plugin": "添加新插件",
 	"no.connexion": "无网络连接",
 	"plugin.name.cannot.be.empty": "插件名称不能为空",
 	"plugin.name.already.exists": "此插件名称在项目中已存在",

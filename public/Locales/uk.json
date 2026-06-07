@@ -1875,7 +1875,7 @@
 	"select.by.id": "Вибрати за ідентифікатором",
 	"update.project.version": "Версія проєкту — {{currentVersion}}, потрібно конвертувати у {{newVersion}}, щоб продовжити.",
 	"plugins.manager": "Менеджер плагінів",
-	"select.or.double.click.list": "Виберіть або двічі клацніть у списку",
+	"add.new.plugin": "Додати новий плагін",
 	"no.connexion": "Немає з'єднання",
 	"plugin.name.cannot.be.empty": "Назва плагіна не може бути порожньою",
 	"plugin.name.already.exists": "Ця назва плагіна вже існує у вашому проєкті",

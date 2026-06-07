@@ -1875,7 +1875,7 @@
 	"select.by.id": "IDで選択",
 	"update.project.version": "プロジェクトのバージョンは {{currentVersion}} です。続行するには {{newVersion}} に変換する必要があります。",
 	"plugins.manager": "プラグインマネージャー",
-	"select.or.double.click.list": "リストから選択またはダブルクリック",
+	"add.new.plugin": "新しいプラグインを追加",
 	"no.connexion": "接続なし",
 	"plugin.name.cannot.be.empty": "プラグイン名を空にすることはできません",
 	"plugin.name.already.exists": "このプラグイン名は既にプロジェクト内に存在します",

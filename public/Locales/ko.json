@@ -1876,7 +1876,7 @@
 	"select.by.id": "ID로 선택",
 	"update.project.version": "프로젝트 버전은 {{currentVersion}}이며, 계속하려면 {{newVersion}}(으)로 변환해야 합니다.",
 	"plugins.manager": "플러그인 관리자",
-	"select.or.double.click.list": "목록에서 선택하거나 더블 클릭하세요",
+	"add.new.plugin": "새 플러그인 추가",
 	"no.connexion": "연결 없음",
 	"plugin.name.cannot.be.empty": "플러그인 이름은 비워둘 수 없습니다",
 	"plugin.name.already.exists": "이 플러그인 이름은 프로젝트에 이미 존재합니다",

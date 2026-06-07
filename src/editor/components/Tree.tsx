@@ -87,6 +87,7 @@ type Props = {
 	inputNameWidth?: INPUT_TYPE_WIDTH;
 	hideTooltip?: boolean;
 	blurOnMouseLeave?: boolean;
+	triggerNewItem?: boolean;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -144,6 +145,7 @@ function Tree({
 	inputNameWidth = INPUT_TYPE_WIDTH.SMALL,
 	hideTooltip = false,
 	blurOnMouseLeave = false,
+	triggerNewItem,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -151,6 +153,7 @@ function Tree({
 	const doubleTapHandler = useRef(Utils.createDoubleTapHandler()).current;
 	const handleSetFocusRef = useRef<(b: boolean) => void>(() => {});
 	const treeId = useRef(Math.random());
+	const isFirstTriggerNewItem = useRef(true);
 
 	const createDefault = (id: number) => {
 		if (applyDefault) {
@@ -849,6 +852,17 @@ function Tree({
 			setNeedScroll(false);
 		}
 	}, [needScroll, currentSelectedItemNode]);
+
+	useEffect(() => {
+		if (triggerNewItem === undefined) {
+			return;
+		}
+		if (isFirstTriggerNewItem.current) {
+			isFirstTriggerNewItem.current = false;
+			return;
+		}
+		handleNewItem().catch(console.error);
+	}, [triggerNewItem]);
 
 	useEffect(() => {
 		if (currentSelectedItemNode) {
