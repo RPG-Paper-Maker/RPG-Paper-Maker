@@ -53,6 +53,7 @@ class Settings extends Serializable {
 	public showSquareInformation!: boolean;
 	public lastTabIndexData!: number;
 	public lastTabIndexSystems!: number;
+	public mapObjectOptionsOpened!: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -93,6 +94,7 @@ class Settings extends Serializable {
 		['showSquareInformation', 'ssi', true, BINDING.BOOLEAN],
 		['lastTabIndexData', 'ltid', 0, BINDING.NUMBER],
 		['lastTabIndexSystems', 'ltis', 0, BINDING.NUMBER],
+		['mapObjectOptionsOpened', 'mooo', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

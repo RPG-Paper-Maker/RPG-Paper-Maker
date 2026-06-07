@@ -460,6 +460,11 @@ const PanelMapObject = forwardRef(
 			setIsDialogTransformationsOpen(true);
 		};
 
+		const handleChangeOptionsOpened = async (isOpen: boolean) => {
+			Project.current!.settings.mapObjectOptionsOpened = isOpen;
+			await Project.current!.settings.save();
+		};
+
 		const accept = async () => {
 			object.name = statesRef.current.name;
 			object.commonModelID = statesRef.current.modelID;
@@ -657,7 +662,13 @@ const PanelMapObject = forwardRef(
 							<Flex
 								className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}
 							>
-								<Groupbox title={t('options')} fillWidth canExpand initialClose>
+								<Groupbox
+									title={t('options')}
+									fillWidth
+									canExpand
+									initialClose={!Project.current!.settings.mapObjectOptionsOpened}
+									onChangeOpen={handleChangeOptionsOpened}
+								>
 									<Flex spacedLarge>
 										<Flex column>
 											<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>

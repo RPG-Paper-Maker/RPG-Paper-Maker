@@ -22,6 +22,7 @@ type Props = {
 	disabled?: boolean;
 	canExpand?: boolean;
 	initialClose?: boolean;
+	onChangeOpen?: (isOpen: boolean) => void;
 };
 
 function Groupbox({
@@ -31,6 +32,7 @@ function Groupbox({
 	disabled = false,
 	canExpand = false,
 	initialClose = false,
+	onChangeOpen,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(!initialClose);
 
@@ -38,7 +40,11 @@ function Groupbox({
 		if (!canExpand || disabled) {
 			return;
 		}
-		setIsOpen((v) => !v);
+		setIsOpen((v) => {
+			const newValue = !v;
+			onChangeOpen?.(newValue);
+			return newValue;
+		});
 	};
 
 	return isOpen ? (
