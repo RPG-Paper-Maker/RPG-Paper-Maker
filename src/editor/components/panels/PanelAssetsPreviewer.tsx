@@ -154,6 +154,10 @@ function PanelAssetsPreviewer({
 
 	const handleClickExport = async () => {
 		if (Constants.IS_DESKTOP) {
+			if (!(await checkFileExists(selectedItem!.getPath()))) {
+				dispatch(showWarning(t('warning.asset.not.found')));
+				return;
+			}
 			const path = await IO.openFolderDialog();
 			await IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
 		} else {
