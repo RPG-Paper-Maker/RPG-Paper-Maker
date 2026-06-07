@@ -35,6 +35,7 @@ class Object3D extends SpecialElement {
 	public moveAnimationIndex!: number;
 	public stopAnimationIndex!: number;
 	public segments!: number;
+	public categoryID!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['shapeKind', 'sk', SHAPE_KIND.BOX, BINDING.NUMBER],
@@ -55,6 +56,7 @@ class Object3D extends SpecialElement {
 		['moveAnimationIndex', 'mai', -1, BINDING.NUMBER],
 		['stopAnimationIndex', 'sai', -1, BINDING.NUMBER],
 		['segments', 'seg', 16, BINDING.NUMBER],
+		['categoryID', 'cat', 1, BINDING.NUMBER],
 	];
 
 	static getDefaultSegments(shapeKind: SHAPE_KIND): number {

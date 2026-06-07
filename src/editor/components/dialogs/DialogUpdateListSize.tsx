@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Flex from '../Flex';
 import InputNumber from '../InputNumber';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterNoYes from './footers/FooterNoYes';
 
@@ -59,6 +59,7 @@ function DialogUpdateListSize({ setIsOpen, canBeEmpty, initialSize, onAccept }: 
 				isOpen
 				footer={<FooterCancelOK onOK={handleAccept} onCancel={handleClose} />}
 				onClose={handleClose}
+				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 			>
 				<Flex spaced centerV>
 					<div>{t('size')}:</div>

@@ -134,7 +134,7 @@ class Utils {
 
 	static getViewportBottom() {
 		const viewport = Utils.getViewport();
-		return viewport === document.body ? 0 : viewport.getBoundingClientRect().bottom;
+		return viewport === document.body ? window.innerHeight : viewport.getBoundingClientRect().bottom;
 	}
 
 	static generateIterator(): ITERATOR {

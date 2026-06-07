@@ -18,16 +18,20 @@ import { BindingType, Serializable } from '../core/Serializable';
 const { t } = i18next;
 
 class SpecialElements extends Serializable {
+	public static readonly DEFAULT_CATEGORY_ID = 1;
+
 	public autotiles!: Model.Autotile[];
 	public walls!: Model.SpecialElement[];
 	public mountains!: Model.Mountain[];
 	public objects3D!: Model.Object3D[];
+	public categories!: Model.Base[];
 
 	public static readonly bindings: BindingType[] = [
 		['autotiles', 'autotiles', undefined, BINDING.LIST, Model.Autotile],
 		['walls', 'walls', undefined, BINDING.LIST, Model.SpecialElement],
 		['mountains', 'm', undefined, BINDING.LIST, Model.Mountain],
 		['objects3D', 'o', undefined, BINDING.LIST, Model.Object3D],
+		['categories', 'categories', undefined, BINDING.LIST, Model.Base],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -54,7 +58,39 @@ class SpecialElements extends Serializable {
 		return this.objects3D.find((object) => object.id === id)!;
 	}
 
+	ensureCategories(): void {
+		if (!this.categories || this.categories.length === 0) {
+			this.categories = [Model.Base.create(SpecialElements.DEFAULT_CATEGORY_ID, t('others'))];
+		}
+	}
+
+	getFallbackCategoryID(): number {
+		this.ensureCategories();
+		return this.categories[0].id;
+	}
+
+	getCategoryByID(id: number): Model.Base {
+		this.ensureCategories();
+		return this.categories.find((category) => category.id === id) ?? this.categories[0];
+	}
+
+	reassignInvalidCategories(): void {
+		this.ensureCategories();
+		const fallbackID = this.getFallbackCategoryID();
+		for (const object of this.objects3D) {
+			if (!this.categories.some((category) => category.id === object.categoryID)) {
+				object.categoryID = fallbackID;
+			}
+		}
+	}
+
 	translateDefaults(): void {
+		this.categories[0].name = t('others');
+		this.categories[1].name = t('outside');
+		this.categories[2].name = t('market');
+		this.categories[3].name = t('inside');
+		this.categories[4].name = t('houses');
+		this.categories[5].name = t('containers');
 		this.autotiles[0].name = t('general');
 		this.autotiles[1].name = t('water');
 		this.autotiles[2].name = t('haunted');
@@ -200,6 +236,8 @@ class SpecialElements extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, SpecialElements.getBindings(additionnalBinding));
+		this.ensureCategories();
+		this.reassignInvalidCategories();
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

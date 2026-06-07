@@ -10,6 +10,8 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaEdit } from 'react-icons/fa';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
@@ -25,6 +27,9 @@ import {
 	setCurrentWallID,
 } from '../../store';
 import '../../styles/PanelSpecialElementsSelection.css';
+import DialogObject3DCategories from '../dialogs/DialogObject3DCategories';
+import Button from '../Button';
+import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import TextureSquareSelector from '../TextureSquareSelector';
 
@@ -62,6 +67,11 @@ function PanelSpecialElementsSelection({
 	const contentRef = useRef<HTMLDivElement>(null);
 
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
+
+	const [categoryFilterID, setCategoryFilterID] = useState(-1);
+	const [isOpenCategories, setIsOpenCategories] = useState(false);
+	const [, setCategoriesRefresh] = useState(0);
 
 	let list: Model.SpecialElement[] = [];
 	switch (kind) {
@@ -111,6 +121,7 @@ function PanelSpecialElementsSelection({
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
 	const isGrid = kind !== PICTURE_KIND.AUTOTILES;
+	const isObjects3D = kind === PICTURE_KIND.OBJECTS_3D;
 	const getGridMetrics = () => {
 		const content = contentRef.current;
 		if (!isGrid || !content) {
@@ -156,37 +167,44 @@ function PanelSpecialElementsSelection({
 
 	const update = async () => {
 		const content = contentRef.current;
-		if (content) {
-			const { columns, rowHeight } = getGridMetrics();
-			const visibleCount = columns * (Math.ceil(content.clientHeight / rowHeight) + 1);
-			for (let i = 0; i < visibleCount; i++) {
-				const element = list[i + positionScroll.current];
-				const elementID = displayCanvas ? element?.id : element?.pictureID;
-				if (elementID !== undefined) {
-					if (urls.get(elementID) === undefined) {
-						urls.set(elementID, '');
-						let dataURL = '';
-						if (displayCanvas) {
-							const scene = new Scene.Previewer3D(getCanvasID(elementID));
-							scene.isCut = true;
-							scene.camera.perspectiveCamera.aspect = 1;
-							scene.camera.perspectiveCamera.updateProjectionMatrix();
-							await scene.loadObject3D(elementID);
-							await scene.load();
-							dataURL = Manager.GL.renderToDataURL(
-								[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
-								300,
-								300,
-							);
-						} else {
-							dataURL =
-								(await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
-						}
-						urls.set(elementID, dataURL);
-						setTriggerUpdate(elementID);
-					}
-				}
+		if (!content) {
+			return;
+		}
+		const elements = content.querySelectorAll<HTMLElement>('.element');
+		const top = content.scrollTop - content.clientHeight;
+		const bottom = content.scrollTop + content.clientHeight * 2;
+		for (let i = 0; i < elements.length; i++) {
+			const el = elements[i];
+			if (el.offsetTop + el.offsetHeight < top || el.offsetTop > bottom) {
+				continue;
 			}
+			const attr = el.dataset.genId;
+			if (attr === undefined) {
+				continue;
+			}
+			const elementID = Number(attr);
+			if (urls.get(elementID) !== undefined) {
+				continue;
+			}
+			urls.set(elementID, '');
+			let dataURL = '';
+			if (displayCanvas) {
+				const scene = new Scene.Previewer3D(getCanvasID(elementID));
+				scene.isCut = true;
+				scene.camera.perspectiveCamera.aspect = 1;
+				scene.camera.perspectiveCamera.updateProjectionMatrix();
+				await scene.loadObject3D(elementID);
+				await scene.load();
+				dataURL = Manager.GL.renderToDataURL(
+					[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
+					300,
+					300,
+				);
+			} else {
+				dataURL = (await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';
+			}
+			urls.set(elementID, dataURL);
+			setTriggerUpdate(elementID);
 		}
 	};
 
@@ -351,12 +369,57 @@ function PanelSpecialElementsSelection({
 		}
 	});
 
+	useEffect(() => {
+		if (isObjects3D) {
+			update().catch(console.error);
+		}
+	}, [categoryFilterID]);
+
+	const handleAcceptCategories = () => {
+		const categories = Project.current!.specialElements.categories;
+		if (categoryFilterID !== -1 && !categories.some((category) => category.id === categoryFilterID)) {
+			setCategoryFilterID(-1);
+		}
+		setCategoriesRefresh((value) => value + 1);
+	};
+
 	const getPictureOrCanvas = (element: Model.SpecialElement) => {
 		const url = urls.get(displayCanvas ? element.id : element.pictureID);
 		return url ? <img src={url} alt={'icon'} /> : null;
 	};
 
-	const listElements = filteredList.map((element) => {
+	const renderItems: ({ header: Model.Base } | { element: Model.SpecialElement })[] = (() => {
+		if (isObjects3D) {
+			const objects = list as Model.Object3D[];
+			if (categoryFilterID !== -1) {
+				return objects
+					.filter((object) => object.categoryID === categoryFilterID)
+					.map((element) => ({ element }));
+			}
+			const grouped: ({ header: Model.Base } | { element: Model.SpecialElement })[] = [];
+			for (const category of Project.current!.specialElements.categories) {
+				const group = objects.filter((object) => object.categoryID === category.id);
+				if (group.length > 0) {
+					grouped.push({ header: category });
+					for (const element of group) {
+						grouped.push({ element });
+					}
+				}
+			}
+			return grouped;
+		}
+		return filteredList.map((element) => ({ element }));
+	})();
+
+	const listElements = renderItems.map((item) => {
+		if ('header' in item) {
+			return (
+				<div key={`category-${item.header.id}`} className='category-header'>
+					{item.header.getName()}
+				</div>
+			);
+		}
+		const element = item.element;
 		const selected = currentID === element.id;
 		if (isGrid) {
 			return (
@@ -365,6 +428,7 @@ function PanelSpecialElementsSelection({
 					className={Utils.getClassName({ selected }, 'element')}
 					key={element.id}
 					title={element.toStringNameID()}
+					data-gen-id={displayCanvas ? element.id : element.pictureID}
 					onClick={() => handleClick(element.id)}
 				>
 					<div className='title'>
@@ -380,6 +444,7 @@ function PanelSpecialElementsSelection({
 				ref={selected ? selectedElementRef : null}
 				className={Utils.getClassName({ selected }, 'element')}
 				key={element.id}
+				data-gen-id={element.pictureID}
 				onClick={() => handleClick(element.id)}
 			>
 				<div className='title'>
@@ -413,6 +478,33 @@ function PanelSpecialElementsSelection({
 			</div>
 		);
 	});
+
+	if (isObjects3D) {
+		return (
+			<>
+				<div className='panelSpecialElementsWrapper'>
+					<Flex spaced centerV className='panelSpecialElementsToolbar'>
+						<Dropdown
+							fillWidth
+							selectedID={categoryFilterID}
+							onChange={setCategoryFilterID}
+							options={[
+								Model.Base.create(-1, t('all')),
+								...Project.current!.specialElements.categories,
+							]}
+						/>
+						<Button icon={<FaEdit />} onClick={() => setIsOpenCategories(true)} />
+					</Flex>
+					<div ref={contentRef} id='list-previewer' className='panelSpecialElements grid'>
+						{listElements}
+					</div>
+				</div>
+				{isOpenCategories && (
+					<DialogObject3DCategories setIsOpen={setIsOpenCategories} onAccept={handleAcceptCategories} />
+				)}
+			</>
+		);
+	}
 
 	return (
 		<div

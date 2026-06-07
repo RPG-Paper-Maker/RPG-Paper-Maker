@@ -126,4 +126,26 @@
 			user-select: none;
 		}
 	}
+
+	.category-header {
+		flex-basis: 100%;
+		width: 100%;
+		padding: 4px 4px 2px;
+		font-weight: bold;
+		font-size: 12px;
+		border-bottom: 1px solid var(--lighter-bg-color);
+		user-select: none;
+	}
+}
+
+.panelSpecialElementsWrapper {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	min-height: 0;
+}
+
+.panelSpecialElementsToolbar {
+	padding: 5px;
+	gap: 5px;
 }

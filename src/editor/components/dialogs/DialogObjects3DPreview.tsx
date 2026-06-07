@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaPlay } from 'react-icons/fa';
+import { FaEdit, FaPlay } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import * as THREE from 'three';
 import { BUTTON_TYPE, CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
@@ -31,6 +31,7 @@ import InputNumber from '../InputNumber';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import PreviewerObject3D from '../PreviewerObject3D';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
+import DialogObject3DCategories from './DialogObject3DCategories';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
@@ -68,6 +69,8 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 	const [stopAnimIndex, setStopAnimIndex] = useState(0);
 	const [isPlayingMoveAnim, setIsPlayingMoveAnim] = useState(false);
 	const [isPlayingStopAnim, setIsPlayingStopAnim] = useState(false);
+	const [isOpenCategories, setIsOpenCategories] = useState(false);
+	const [, setCategoriesRefresh] = useState(0);
 
 	const isCustom = selectedObject3D?.shapeKind === SHAPE_KIND.CUSTOM;
 	const isBox = selectedObject3D?.shapeKind === SHAPE_KIND.BOX;
@@ -242,6 +245,23 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 		setTriggerUpdate(true);
 	};
 
+	const handleChangeCategory = (id: number) => {
+		selectedObject3D!.categoryID = id;
+		setCategoriesRefresh((value) => value + 1);
+	};
+
+	const handleAcceptCategories = () => {
+		const categories = Project.current!.specialElements.categories;
+		const fallbackID = Project.current!.specialElements.getFallbackCategoryID();
+		for (const node of objects3D) {
+			const object3D = node.content as Model.Object3D;
+			if (!categories.some((category) => category.id === object3D.categoryID)) {
+				object3D.categoryID = fallbackID;
+			}
+		}
+		setCategoriesRefresh((value) => value + 1);
+	};
+
 	const handleChangeCollisionKind = (id: number) => {
 		selectedObject3D!.collisionKind = id;
 		selectedObject3D!.collisionCustomID = -1;
@@ -363,6 +383,17 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 			return (
 				<Groupbox title={t('options')}>
 					<Form>
+						<Label>{t('category')}</Label>
+						<Value>
+							<Flex spaced centerV>
+								<Dropdown
+									selectedID={selectedObject3D.categoryID}
+									onChange={handleChangeCategory}
+									options={Project.current!.specialElements.categories}
+								/>
+								<Button icon={<FaEdit />} onClick={() => setIsOpenCategories(true)} />
+							</Flex>
+						</Value>
 						<Label>{t('shape')}</Label>
 						<Value>
 							<Dropdown
@@ -586,27 +617,32 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 	};
 
 	return (
-		<Dialog
-			title={`${t('threed.objects')}...`}
-			isOpen
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth={window.innerWidth <= 1000 ? '100%' : '80%'}
-			initialHeight='calc(100% - 50px)'
-			onClose={handleReject}
-			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-		>
-			<PanelAssetsPreviewer
-				constructorType={Model.Object3D}
-				assetID={object3DID}
-				list={objects3D}
-				selectedItem={selectedObject3D}
-				isInitiating={isInitiating}
-				setIsInitiating={setIsInitiating}
-				onChangeSelectedItem={handleChangeSelectedObject3D}
-				content={getPreviewerContent()}
-				options={getPreviewerOptions()}
-			/>
-		</Dialog>
+		<>
+			<Dialog
+				title={`${t('threed.objects')}...`}
+				isOpen
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				initialWidth={window.innerWidth <= 1000 ? '100%' : '80%'}
+				initialHeight='calc(100% - 50px)'
+				onClose={handleReject}
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			>
+				<PanelAssetsPreviewer
+					constructorType={Model.Object3D}
+					assetID={object3DID}
+					list={objects3D}
+					selectedItem={selectedObject3D}
+					isInitiating={isInitiating}
+					setIsInitiating={setIsInitiating}
+					onChangeSelectedItem={handleChangeSelectedObject3D}
+					content={getPreviewerContent()}
+					options={getPreviewerOptions()}
+				/>
+			</Dialog>
+			{isOpenCategories && (
+				<DialogObject3DCategories setIsOpen={setIsOpenCategories} onAccept={handleAcceptCategories} />
+			)}
+		</>
 	);
 }
 
