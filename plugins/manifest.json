@@ -35,14 +35,6 @@
     ],
     [
         {
-            "name": "Fog",
-            "files": [
-                "code.js",
-                "details.json",
-                "pic.png"
-            ]
-        },
-        {
             "name": "GLTF Loader",
             "files": [
                 "code.js",
