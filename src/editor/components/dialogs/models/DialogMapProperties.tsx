@@ -399,7 +399,6 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 									setIncreaseLeft(value);
 									applyPreviewSize(length, width, height, depth, value, increaseTop);
 								}}
-								min={0}
 							/>
 						</Flex>
 						<Flex column spaced>
@@ -410,7 +409,6 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 									setIncreaseTop(value);
 									applyPreviewSize(length, width, height, depth, increaseLeft, value);
 								}}
-								min={0}
 							/>
 						</Flex>
 					</Flex>

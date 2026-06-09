@@ -373,7 +373,7 @@ class Map extends Localization {
 	}
 
 	async shiftMapElements(left: number, top: number) {
-		if (left <= 0 && top <= 0) {
+		if (left === 0 && top === 0) {
 			return;
 		}
 		const [portionMaxX, portionMaxD, portionMaxH, portionMaxZ] = this.getPortionsMax();
@@ -435,10 +435,21 @@ class Map extends Localization {
 			}
 		}
 
+		for (let i = 0; i <= portionMaxX; i++) {
+			for (let j = -portionMaxD; j <= portionMaxH; j++) {
+				for (let k = 0; k <= portionMaxZ; k++) {
+					if (i > newPortionMaxX || k > newPortionMaxZ) {
+						await this.deleteCompleteMapPortion(new Portion(i, j, k));
+					}
+				}
+			}
+		}
+
 		for (const object of this.objects) {
 			object.position.x += left;
 			object.position.z += top;
 		}
+		this.objects = this.objects.filter((mapObject) => mapObject.position.isInMap(this));
 	}
 
 	adjustPosition(position: Position) {
