@@ -434,8 +434,8 @@
 				"y": 0,
 				"rt": [0, 0],
 				"move": true,
-				"stop": false,
-				"climb": false,
+				"stop": true,
+				"climb": true,
 				"dir": false,
 				"through": false,
 				"cam": true,
@@ -696,15 +696,28 @@
 						"bh": true,
 						"c": [
 							{
-								"kind": 2,
-								"command": [0, 101, 0, 10, "Core.Game.current.teamHeroes[0].system.idCharacter  "],
-								"children": []
+								"kind": 8,
+								"command": [0, 7, 9, "Data.Systems.caterpillarMaxPartyMembers.getValue() > 0"],
+								"children": [
+									{
+										"kind": 2,
+										"command": [
+											0,
+											101,
+											0,
+											10,
+											"Core.Game.current.teamHeroes[0].system.idCharacter  "
+										],
+										"children": []
+									},
+									{
+										"kind": 21,
+										"command": [7, -1, 0, 1, 0, 13, 0, 1, 2, 4, 101, 1, 0, 0, 1, 1],
+										"children": []
+									}
+								]
 							},
-							{
-								"kind": 21,
-								"command": [7, -1, 0, 1, 0, 13, 0, 1, 2, 4, 101, 1, 0, 0, 1, 1],
-								"children": []
-							}
+							{ "kind": 10, "command": [], "children": [] }
 						]
 					}
 				},
