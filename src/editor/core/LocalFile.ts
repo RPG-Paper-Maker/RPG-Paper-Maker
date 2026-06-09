@@ -310,14 +310,23 @@ class LocalFile extends Serializable {
 	}
 
 	static base64FileToBlob(base64DataUrl: string): Blob {
-		const [prefix, base64] = base64DataUrl.split(',');
+		const commaIndex = base64DataUrl.indexOf(',');
+		const prefix = commaIndex >= 0 ? base64DataUrl.slice(0, commaIndex) : '';
+		const data = commaIndex >= 0 ? base64DataUrl.slice(commaIndex + 1) : base64DataUrl;
 		const mimeType = prefix.match(/:(.*?);/)?.[1];
-		const byteCharacters = atob(base64 ?? '');
-		const byteNumbers = new Uint8Array(byteCharacters.length);
-		for (let i = 0; i < byteCharacters.length; i++) {
-			byteNumbers[i] = byteCharacters.charCodeAt(i);
+		if (!prefix.includes('base64')) {
+			return new Blob([data], { type: mimeType });
 		}
-		return new Blob([byteNumbers], { type: mimeType });
+		try {
+			const byteCharacters = atob(data);
+			const byteNumbers = new Uint8Array(byteCharacters.length);
+			for (let i = 0; i < byteCharacters.length; i++) {
+				byteNumbers[i] = byteCharacters.charCodeAt(i);
+			}
+			return new Blob([byteNumbers], { type: mimeType });
+		} catch {
+			return new Blob([base64DataUrl], { type: mimeType });
+		}
 	}
 
 	static async download(path: string, isPublic: boolean) {
