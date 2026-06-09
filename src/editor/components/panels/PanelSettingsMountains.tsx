@@ -84,6 +84,7 @@ function PanelSettingsMountains() {
 			const tileset = Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID);
 			if (!tileset) return;
 			const pic = Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, tileset.pictureID);
+			if (!pic) return;
 			const path =
 				!pic.isBR && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(pic.getPath())) ?? '') : pic.getPath();
 			const img = await Picture2D.loadImage(path);
@@ -93,6 +94,7 @@ function PanelSettingsMountains() {
 			const autotile = Project.current!.specialElements.autotiles.find((a) => a.id === topFloorAutotileID);
 			if (!autotile) return;
 			const pic = Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, autotile.pictureID);
+			if (!pic) return;
 			const path =
 				!pic.isBR && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(pic.getPath())) ?? '') : pic.getPath();
 			const img = await Picture2D.loadImage(path);
