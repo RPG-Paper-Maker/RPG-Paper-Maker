@@ -1501,21 +1501,24 @@ class Map extends Base {
 			this.selectedElement &&
 			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 		) {
-			this.selectedMesh.position.setX(
-				this.selectedMesh.position.x -
-					(this.selectedMesh.position.x % 1) +
-					this.selectedElement.getAdditionalX(),
-			);
-			this.selectedMesh.position.setY(
-				this.selectedMesh.position.y -
-					(this.selectedMesh.position.y % 1) +
-					this.selectedElement.getAdditionalY(),
-			);
-			this.selectedMesh.position.setZ(
-				this.selectedMesh.position.z -
-					(this.selectedMesh.position.z % 1) +
-					this.selectedElement.getAdditionalZ(),
-			);
+			if (Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.TRANSLATE) {
+				this.selectedMesh.position.setX(
+					this.selectedMesh.position.x -
+						(this.selectedMesh.position.x % 1) +
+						this.selectedElement.getAdditionalX(),
+				);
+				this.selectedMesh.position.setY(
+					this.selectedMesh.position.y -
+						(this.selectedMesh.position.y % 1) +
+						this.selectedElement.getAdditionalY() +
+						(this.selectedPosition?.getTotalYPixels() ?? 0),
+				);
+				this.selectedMesh.position.setZ(
+					this.selectedMesh.position.z -
+						(this.selectedMesh.position.z % 1) +
+						this.selectedElement.getAdditionalZ(),
+				);
+			}
 			this.selectedMesh.scale.setX(Math.max(1, this.selectedMesh.scale.x - (this.selectedMesh.scale.x % 1)));
 			this.selectedMesh.scale.setY(Math.max(1, this.selectedMesh.scale.y - (this.selectedMesh.scale.y % 1)));
 			this.selectedMesh.scale.setZ(Math.max(1, this.selectedMesh.scale.z - (this.selectedMesh.scale.z % 1)));
