@@ -27,17 +27,26 @@ class Camera {
 	private static _snapTarget = new THREE.Vector3();
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
+	public orthographicCamera: THREE.OrthographicCamera | null = null;
+	public isPerspective: boolean = true;
 	public targetPosition: THREE.Vector3;
+	public targetOffset: THREE.Vector3 = new THREE.Vector3();
 	public distance: number;
 	private _stableD: number = 0;
+	private _effectiveTarget: THREE.Vector3 = new THREE.Vector3();
 	public horizontalAngle: number;
 	public verticalAngle: number;
+	public fov: number = 45;
+	public near: number = 0.1;
+	public far: number = 100000;
+	public canvasWidth: number = 1280;
+	public canvasHeight: number = 720;
 	public defaultCameraPosition: THREE.Vector3;
 	public tag?: Model.TreeMapTag;
 
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.tag = tag;
-		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
+		this.perspectiveCamera = new THREE.PerspectiveCamera(this.fov, 1, this.near, this.far);
 		this.distance = Utils.defaultValue(
 			tag?.cameraDistance,
 			(isDetection ? 400 : 1600) / Constants.BASE_SQUARE_SIZE,
@@ -77,7 +86,26 @@ class Camera {
 	}
 
 	getThreeCamera(): THREE.Camera {
+		if (!this.isPerspective) {
+			if (!this.orthographicCamera) {
+				this.orthographicCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -this.far, this.far);
+			}
+			return this.orthographicCamera;
+		}
 		return this.perspectiveCamera;
+	}
+
+	getEffectiveTarget(): THREE.Vector3 {
+		return this._effectiveTarget.copy(this.targetPosition).add(this.targetOffset);
+	}
+
+	applyProjection() {
+		if (this.isPerspective) {
+			this.perspectiveCamera.fov = this.fov;
+			this.perspectiveCamera.near = this.near;
+			this.perspectiveCamera.far = this.far;
+			this.perspectiveCamera.updateProjectionMatrix();
+		}
 	}
 
 	getYOffsetDepth() {
@@ -99,13 +127,26 @@ class Camera {
 	updateCameraPosition() {
 		const distance = this.getDistance();
 		const camera = this.getThreeCamera();
-		camera.position.x = this.targetPosition.x - distance * Math.cos((this.horizontalAngle * Math.PI) / 180.0);
-		camera.position.y = this.targetPosition.y + this.getHeight();
-		camera.position.z = this.targetPosition.z - distance * Math.sin((this.horizontalAngle * Math.PI) / 180.0);
+		const target = this.getEffectiveTarget();
+		camera.position.x = target.x - distance * Math.cos((this.horizontalAngle * Math.PI) / 180.0);
+		camera.position.y = target.y + this.getHeight();
+		camera.position.z = target.z - distance * Math.sin((this.horizontalAngle * Math.PI) / 180.0);
+		if (!this.isPerspective && this.orthographicCamera) {
+			const x = this.canvasWidth * (distance / 1000);
+			const y = this.canvasHeight * (distance / 1000);
+			const farRaw = this.far * Constants.BASE_SQUARE_SIZE;
+			this.orthographicCamera.left = -x;
+			this.orthographicCamera.right = x;
+			this.orthographicCamera.top = y;
+			this.orthographicCamera.bottom = -y;
+			this.orthographicCamera.near = -farRaw;
+			this.orthographicCamera.far = farRaw;
+			this.orthographicCamera.updateProjectionMatrix();
+		}
 	}
 
 	updateView() {
-		this.getThreeCamera().lookAt(this.targetPosition);
+		this.getThreeCamera().lookAt(this.getEffectiveTarget());
 	}
 
 	update(map?: Scene.Map) {

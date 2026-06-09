@@ -35,6 +35,7 @@ type Props = {
 	isLoading?: boolean;
 	zIndex?: number;
 	allowMapInteraction?: boolean;
+	hideOtherDialogs?: boolean;
 	footer?: React.ReactNode;
 	onClose?: () => void;
 };
@@ -100,6 +101,7 @@ function Dialog({
 	isLoading = false,
 	zIndex,
 	allowMapInteraction = false,
+	hideOtherDialogs = false,
 	footer,
 	onClose,
 }: Props) {
@@ -112,6 +114,7 @@ function Dialog({
 	const [resizingSide] = useState({ left: true });
 
 	const dialogRef = useRef<HTMLDivElement>(null);
+	const overlayRef = useRef<HTMLDivElement>(null);
 	const dialogGLIdRef = useRef(`dialog-barrier-${Math.random().toString(36).slice(2)}`);
 	const dialogGLSavedPushCountRef = useRef(0);
 	const dialogGLBarrierPushedRef = useRef(false);
@@ -358,6 +361,25 @@ function Dialog({
 		}
 	}, [isOpen, allowMapInteraction]);
 
+	useLayoutEffect(() => {
+		if (!isOpen || !hideOtherDialogs) {
+			return;
+		}
+		const overlays = Array.from(document.getElementsByClassName('dialogOverlay')) as HTMLElement[];
+		const hidden: { element: HTMLElement; previousDisplay: string }[] = [];
+		for (const element of overlays) {
+			if (element !== overlayRef.current) {
+				hidden.push({ element, previousDisplay: element.style.display });
+				element.style.display = 'none';
+			}
+		}
+		return () => {
+			for (const { element, previousDisplay } of hidden) {
+				element.style.display = previousDisplay;
+			}
+		};
+	}, [isOpen, hideOtherDialogs]);
+
 	const root = document.getElementById('root');
 	if (!root || !isOpen) {
 		return null;
@@ -365,6 +387,7 @@ function Dialog({
 
 	return ReactDOM.createPortal(
 		<div
+			ref={overlayRef}
 			className='dialogOverlay'
 			onClick={handleCloseOut}
 			onMouseDown={handleMouseDownOverlay}

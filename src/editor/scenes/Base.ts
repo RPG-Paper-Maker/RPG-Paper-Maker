@@ -49,6 +49,8 @@ class Base {
 		if (GL.renderer) {
 			if (this.canvas) {
 				const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
+				this.camera.canvasWidth = width;
+				this.camera.canvasHeight = height;
 				const domRect = GL.renderer.domElement.getBoundingClientRect();
 				const dpr = GL.renderer.getPixelRatio();
 				const rawY = domRect.height - bottom + domRect.top;

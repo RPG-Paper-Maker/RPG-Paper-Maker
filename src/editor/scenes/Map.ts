@@ -169,6 +169,16 @@ class Map extends Base {
 	public previewSizeActive = false;
 	public previewShiftX = 0;
 	public previewShiftZ = 0;
+	public cameraPreviewSnapshot: {
+		distance: number;
+		horizontalAngle: number;
+		verticalAngle: number;
+		targetOffset: THREE.Vector3;
+		isPerspective: boolean;
+		fov: number;
+		near: number;
+		far: number;
+	} | null = null;
 	public showCoordinates = true;
 	public pointedObjectLabel: string | null = null;
 
@@ -616,6 +626,69 @@ class Map extends Base {
 			this.tag.cameraHorizontalAngle = this.camera.horizontalAngle;
 			this.tag.cameraVerticalAngle = this.camera.verticalAngle;
 		}
+	}
+
+	startCameraPropertyPreview() {
+		if (!this.camera) {
+			return;
+		}
+		this.cameraPreviewSnapshot = {
+			distance: this.camera.distance,
+			horizontalAngle: this.camera.horizontalAngle,
+			verticalAngle: this.camera.verticalAngle,
+			targetOffset: this.camera.targetOffset.clone(),
+			isPerspective: this.camera.isPerspective,
+			fov: this.camera.fov,
+			near: this.camera.near,
+			far: this.camera.far,
+		};
+	}
+
+	previewCameraProperty(cameraProperty: Model.CameraProperty) {
+		if (!this.camera || !cameraProperty) {
+			return;
+		}
+		const camera = this.camera;
+		const squareSize = Project.SQUARE_SIZE;
+		camera.distance = cameraProperty.distance.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
+		camera.horizontalAngle = cameraProperty.horizontalAngle.getFixNumberValue();
+		camera.verticalAngle = cameraProperty.verticalAngle.getFixNumberValue();
+		let offsetX = cameraProperty.targetOffsetX.getFixNumberValue();
+		if (!cameraProperty.isSquareTargetOffsetX) {
+			offsetX /= squareSize;
+		}
+		let offsetY = cameraProperty.targetOffsetY.getFixNumberValue();
+		if (!cameraProperty.isSquareTargetOffsetY) {
+			offsetY /= squareSize;
+		}
+		let offsetZ = cameraProperty.targetOffsetZ.getFixNumberValue();
+		if (!cameraProperty.isSquareTargetOffsetZ) {
+			offsetZ /= squareSize;
+		}
+		camera.targetOffset.set(offsetX, offsetY, offsetZ);
+		camera.fov = cameraProperty.fov.getFixNumberValue();
+		camera.near = cameraProperty.near.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
+		camera.far = cameraProperty.far.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
+		camera.isPerspective = !cameraProperty.orthographic;
+		camera.applyProjection();
+	}
+
+	stopCameraPropertyPreview() {
+		if (!this.camera || !this.cameraPreviewSnapshot) {
+			return;
+		}
+		const camera = this.camera;
+		const snapshot = this.cameraPreviewSnapshot;
+		camera.distance = snapshot.distance;
+		camera.horizontalAngle = snapshot.horizontalAngle;
+		camera.verticalAngle = snapshot.verticalAngle;
+		camera.targetOffset.copy(snapshot.targetOffset);
+		camera.isPerspective = snapshot.isPerspective;
+		camera.fov = snapshot.fov;
+		camera.near = snapshot.near;
+		camera.far = snapshot.far;
+		camera.applyProjection();
+		this.cameraPreviewSnapshot = null;
 	}
 
 	showPreviewSizeBox() {

@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
-import { Model } from '../../../Editor';
+import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -53,6 +53,37 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [near] = useStateDynamicValue();
 	const [far] = useStateDynamicValue();
 	const [orthographic, setOrthographic] = useStateBool();
+
+	const previewPropertyRef = useRef<Model.CameraProperty | null>(null);
+
+	const getScene = (): Scene.Map | null => Scene.Map.current;
+
+	const preview = (overrides?: {
+		offsetXKind?: number;
+		offsetYKind?: number;
+		offsetZKind?: number;
+		orthographic?: boolean;
+	}) => {
+		const scene = getScene();
+		const previewProperty = previewPropertyRef.current;
+		if (!scene || !previewProperty) {
+			return;
+		}
+		previewProperty.distance.copy(distance);
+		previewProperty.horizontalAngle.copy(horizontalAngle);
+		previewProperty.verticalAngle.copy(verticalAngle);
+		previewProperty.targetOffsetX.copy(targetOffsetX);
+		previewProperty.isSquareTargetOffsetX = (overrides?.offsetXKind ?? targetOffsetXKind) === 0;
+		previewProperty.targetOffsetY.copy(targetOffsetY);
+		previewProperty.isSquareTargetOffsetY = (overrides?.offsetYKind ?? targetOffsetYKind) === 0;
+		previewProperty.targetOffsetZ.copy(targetOffsetZ);
+		previewProperty.isSquareTargetOffsetZ = (overrides?.offsetZKind ?? targetOffsetZKind) === 0;
+		previewProperty.fov.copy(fov);
+		previewProperty.near.copy(near);
+		previewProperty.far.copy(far);
+		previewProperty.orthographic = overrides?.orthographic ?? orthographic;
+		scene.previewCameraProperty(previewProperty);
+	};
 
 	const initialize = () => {
 		setName(cameraProperty.name);
@@ -95,8 +126,17 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
+		Scene.Map.previewOnly = true;
+		previewPropertyRef.current = cameraProperty.clone() as Model.CameraProperty;
 		initialize();
+		const scene = getScene();
+		scene?.startCameraPropertyPreview();
+		scene?.previewCameraProperty(cameraProperty);
+		return () => {
+			getScene()?.stopCameraPropertyPreview();
+			Scene.Map.previewOnly = false;
+		};
 	}, []);
 
 	return (
@@ -105,6 +145,8 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			initialPlacement='right'
+			hideOtherDialogs
 		>
 			<Flex column spacedLarge>
 				<Form>
@@ -117,6 +159,8 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 						<DynamicValueSelector
 							value={distance}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
 						/>
 					</Value>
 					<Label>{t('horizontal.angle')}</Label>
@@ -124,6 +168,8 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 						<DynamicValueSelector
 							value={horizontalAngle}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
 						/>
 					</Value>
 					<Label>{t('vertical.angle')}</Label>
@@ -131,6 +177,8 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 						<DynamicValueSelector
 							value={verticalAngle}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
 						/>
 					</Value>
 				</Form>
@@ -142,10 +190,15 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 								<DynamicValueSelector
 									value={targetOffsetX}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									onChangeKind={() => preview()}
+									onChangeValue={() => preview()}
 								/>
 								<Dropdown
 									selectedID={targetOffsetXKind}
-									onChange={setTargetOffsetXKind}
+									onChange={(value: number) => {
+										setTargetOffsetXKind(value);
+										preview({ offsetXKind: value });
+									}}
 									options={Model.Base.SQUARES_PIXELS_OPTIONS}
 									translateOptions
 								/>
@@ -157,10 +210,15 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 								<DynamicValueSelector
 									value={targetOffsetY}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									onChangeKind={() => preview()}
+									onChangeValue={() => preview()}
 								/>
 								<Dropdown
 									selectedID={targetOffsetYKind}
-									onChange={setTargetOffsetYKind}
+									onChange={(value: number) => {
+										setTargetOffsetYKind(value);
+										preview({ offsetYKind: value });
+									}}
 									options={Model.Base.SQUARES_PIXELS_OPTIONS}
 									translateOptions
 								/>
@@ -172,10 +230,15 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 								<DynamicValueSelector
 									value={targetOffsetZ}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									onChangeKind={() => preview()}
+									onChangeValue={() => preview()}
 								/>
 								<Dropdown
 									selectedID={targetOffsetZKind}
-									onChange={setTargetOffsetZKind}
+									onChange={(value: number) => {
+										setTargetOffsetZKind(value);
+										preview({ offsetZKind: value });
+									}}
 									options={Model.Base.SQUARES_PIXELS_OPTIONS}
 									translateOptions
 								/>
@@ -186,18 +249,39 @@ function DialogCameraProperty({ setIsOpen, model, onAccept, onReject }: Props) {
 				<Form>
 					<Label>{t('field.of.view')}</Label>
 					<Value>
-						<DynamicValueSelector value={fov} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+						<DynamicValueSelector
+							value={fov}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
+						/>
 					</Value>
 					<Label>{t('near')}</Label>
 					<Value>
-						<DynamicValueSelector value={near} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+						<DynamicValueSelector
+							value={near}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
+						/>
 					</Value>
 					<Label>{t('far')}</Label>
 					<Value>
-						<DynamicValueSelector value={far} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+						<DynamicValueSelector
+							value={far}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeKind={() => preview()}
+							onChangeValue={() => preview()}
+						/>
 					</Value>
 				</Form>
-				<Checkbox isChecked={orthographic} onChange={setOrthographic}>
+				<Checkbox
+					isChecked={orthographic}
+					onChange={(value: boolean) => {
+						setOrthographic(value);
+						preview({ orthographic: value });
+					}}
+				>
 					{t('orthographic')}
 				</Checkbox>
 			</Flex>
