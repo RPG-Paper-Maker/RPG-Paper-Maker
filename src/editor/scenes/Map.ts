@@ -618,9 +618,7 @@ class Map extends Base {
 		if (!cameraProperty) {
 			return;
 		}
-		this.camera.distance = cameraProperty.distance.getFixNumberValue() / Constants.BASE_SQUARE_SIZE;
-		this.camera.horizontalAngle = cameraProperty.horizontalAngle.getFixNumberValue();
-		this.camera.verticalAngle = cameraProperty.verticalAngle.getFixNumberValue();
+		this.previewCameraProperty(cameraProperty);
 		if (this.tag) {
 			this.tag.cameraDistance = this.camera.distance;
 			this.tag.cameraHorizontalAngle = this.camera.horizontalAngle;
