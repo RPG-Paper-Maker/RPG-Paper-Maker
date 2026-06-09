@@ -450,6 +450,12 @@ class Map extends Localization {
 			object.position.z += top;
 		}
 		this.objects = this.objects.filter((mapObject) => mapObject.position.isInMap(this));
+		if (Project.current!.systems.heroMapID === this.id) {
+			Project.current!.systems.heroMapPosition.x += left;
+			Project.current!.systems.heroMapPosition.z += top;
+			this.adjustPosition(Project.current!.systems.heroMapPosition);
+			await Project.current!.systems.save();
+		}
 	}
 
 	adjustPosition(position: Position) {

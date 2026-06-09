@@ -701,6 +701,7 @@ class Map extends Base {
 		if (this.meshPlane) {
 			this.meshPlane.position.set(Math.floor(this.model.length / 2), 0, Math.floor(this.model.width / 2));
 		}
+		this.updatePreviewStartPosition();
 		this.forEachMapPortions((mapPortion) => mapPortion.updateGeometries());
 	}
 
@@ -708,7 +709,26 @@ class Map extends Base {
 		this.previewSizeActive = false;
 		this.previewShiftX = 0;
 		this.previewShiftZ = 0;
+		this.updatePreviewStartPosition();
 		this.grid.setBoxVisible(this, false);
+	}
+
+	updatePreviewStartPosition() {
+		if (this.id !== Project.current!.systems.heroMapID) {
+			this.cursorStartPosition.mesh.visible = false;
+			return;
+		}
+		const position = Project.current!.systems.heroMapPosition.clone();
+		if (this.previewSizeActive) {
+			position.x += this.previewShiftX;
+			position.z += this.previewShiftZ;
+		}
+		this.cursorStartPosition.position = position;
+		this.cursorStartPosition.updateMeshPosition();
+		this.cursorStartPosition.mesh.visible = position.isInMap(this.model);
+		if (this.cursorStartPosition.mesh.visible) {
+			this.scene.add(this.cursorStartPosition.mesh);
+		}
 	}
 
 	updateBackgroundColor() {
