@@ -48,6 +48,8 @@ const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
 
 const getCanvasID = (id: number) => `canvas-${id}`;
 
+const yieldToBrowser = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
 function PanelSpecialElementsSelection({
 	kind,
 	onSelect,
@@ -189,6 +191,7 @@ function PanelSpecialElementsSelection({
 			urls.set(elementID, '');
 			let dataURL = '';
 			if (displayCanvas) {
+				await yieldToBrowser();
 				const scene = new Scene.Previewer3D(getCanvasID(elementID));
 				scene.isCut = true;
 				scene.camera.perspectiveCamera.aspect = 1;
