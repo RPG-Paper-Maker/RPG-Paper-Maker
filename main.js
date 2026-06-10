@@ -794,7 +794,16 @@ ipcMain.handle('create-folder', async (event, path) => {
 	await createFolder(path);
 });
 
-const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5) => {
+const clearReadOnly = async (targetPath) => {
+	if (!targetPath) return;
+	try {
+		await fs.chmod(targetPath, 0o666);
+	} catch {
+		void 0;
+	}
+};
+
+const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5, chmodPath = null) => {
 	let lastError;
 	for (let attempt = 0; attempt < maxAttempts; attempt++) {
 		try {
@@ -802,7 +811,11 @@ const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5) => {
 			return;
 		} catch (err) {
 			lastError = err;
-			if (err.code !== 'EPERM' && err.code !== 'EBUSY' && !extraCodes.includes(err.code)) throw err;
+			const isPerm = err.code === 'EPERM' || err.code === 'EACCES';
+			if (!isPerm && err.code !== 'EBUSY' && !extraCodes.includes(err.code)) throw err;
+			if (isPerm) {
+				await clearReadOnly(chmodPath);
+			}
 			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
 		}
 	}
@@ -859,21 +872,22 @@ ipcMain.handle('create-file', async (event, filePath, content) => {
 		},
 		['ENOENT'],
 		20,
+		filePath,
 	);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
-	await retryOnPermError(() => fs.unlink(path, content)).catch((e) => {
+	await retryOnPermError(() => fs.unlink(path, content), [], 5, path).catch((e) => {
 		if (e.code !== 'ENOENT') throw e;
 	});
 });
 
 ipcMain.handle('copy-file', async (event, src, dst) => {
-	await retryOnPermError(() => fs.copyFile(src, dst), ['ENOENT']);
+	await retryOnPermError(() => fs.copyFile(src, dst), ['ENOENT'], 5, dst);
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
-	await retryOnPermError(() => fs.rename(oldFilePath, newFilePath));
+	await retryOnPermError(() => fs.rename(oldFilePath, newFilePath), [], 5, newFilePath);
 	try {
 		const dir = await fs.open(path.dirname(newFilePath), 'r');
 		try {
