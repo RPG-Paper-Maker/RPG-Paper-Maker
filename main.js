@@ -1128,7 +1128,7 @@ ipcMain.handle('create-tar-gz', async (event, folderPath, executables = []) => {
 	const tarPath = `${folderPath}.tar.gz`;
 	if (process.platform === 'win32') {
 		const tarTmpPath = `${folderPath}.tar`;
-		await run(`tar -cf "${tarTmpPath}" -C "${parent}" "${name}"`);
+		await run(`tar -cf "${name}.tar" "${name}"`, { cwd: parent });
 		if (executables.length > 0) {
 			await setTarExecutables(tarTmpPath, name, executables);
 		}
