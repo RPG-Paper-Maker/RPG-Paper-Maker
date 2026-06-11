@@ -955,15 +955,21 @@ ipcMain.handle('close-game', () => {
 });
 
 ipcMain.handle('minimize', () => {
-	window.minimize();
+	if (window && !window.isDestroyed()) {
+		window.minimize();
+	}
 });
 
 ipcMain.handle('maximize', () => {
-	window.maximize();
+	if (window && !window.isDestroyed()) {
+		window.maximize();
+	}
 });
 
 ipcMain.handle('unmaximize', () => {
-	window.unmaximize();
+	if (window && !window.isDestroyed()) {
+		window.unmaximize();
+	}
 });
 
 ipcMain.handle('close', () => {
