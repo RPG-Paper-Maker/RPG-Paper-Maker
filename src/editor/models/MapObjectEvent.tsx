@@ -43,7 +43,10 @@ class MapObjectEvent extends Base {
 		initialParameters: MapObjectParameter[],
 	): MapObjectParameter[] {
 		const events = isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser;
-		const event = Base.getByID(events, eventID) as CommonEvent;
+		const event = Base.getByID(events, eventID) as CommonEvent | null;
+		if (!event) {
+			return initialParameters;
+		}
 		const parameters = [];
 		for (const createParameter of event.parameters) {
 			const value = DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT);
