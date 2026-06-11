@@ -153,7 +153,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 					(targetOS === OS_KIND.LINUX || targetOS === OS_KIND.DARWIN);
 				if (needsTarGz) {
 					dispatch(setLoadingBar({ percent: 100, label: 'Packaging as tar.gz...' }));
-					await IO.createTarGz(outputPath);
+					const executables =
+						targetOS === OS_KIND.LINUX ? ['Game', 'RPG Paper Maker.bin', 'chrome_crashpad_handler'] : [];
+					await IO.createTarGz(outputPath, executables);
 					await IO.removeFolder(outputPath);
 					await IO.openFolder(location);
 				} else {
@@ -189,6 +191,10 @@ function DialogDeploy({ setIsOpen }: Props) {
 						break;
 				}
 				await IO.renameFile(path, `RPG Paper Maker${extension}`, `Game${extension}`);
+				const launchPath = Paths.join(path, 'launch.sh');
+				if (await checkFileExists(launchPath)) {
+					await removeFile(launchPath);
+				}
 			}
 			await createFolder(appPath);
 			await copyPublicDeploy(appPath, 'main.js');

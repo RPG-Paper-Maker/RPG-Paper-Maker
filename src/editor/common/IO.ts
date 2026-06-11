@@ -233,8 +233,8 @@ class IO {
 		return (await this.invoke('download-deploy-engine', targetOS)) as { enginePath: string; tempDir: string };
 	}
 
-	static async createTarGz(folderPath: string): Promise<string> {
-		return (await this.invoke('create-tar-gz', folderPath)) as string;
+	static async createTarGz(folderPath: string, executables: string[] = []): Promise<string> {
+		return (await this.invoke('create-tar-gz', folderPath, executables)) as string;
 	}
 
 	static onDownloadDeployEngineProgress(callback: (percent: number | null, received: number) => void) {

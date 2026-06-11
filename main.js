@@ -12,8 +12,10 @@
 import { exec, spawn } from 'child_process';
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, screen, shell } from 'electron';
 import * as fs from 'node:fs/promises';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createReadStream, createWriteStream, readFileSync, writeFileSync } from 'node:fs';
 import https from 'node:https';
+import zlib from 'node:zlib';
+import { pipeline } from 'node:stream/promises';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
@@ -1080,11 +1082,62 @@ ipcMain.handle('chmod-file', async (event, filePath, mode) => {
 	await fs.chmod(filePath, mode);
 });
 
-ipcMain.handle('create-tar-gz', async (event, folderPath) => {
+const TAR_BLOCK_SIZE = 512;
+
+const writeTarChecksum = (header) => {
+	for (let i = 148; i < 156; i++) header[i] = 0x20;
+	let sum = 0;
+	for (let i = 0; i < TAR_BLOCK_SIZE; i++) sum += header[i];
+	header.write(`${sum.toString(8).padStart(6, '0')}\0 `, 148, 'ascii');
+};
+
+const setTarExecutables = async (tarPath, rootName, executables) => {
+	const targets = new Set(executables.map((rel) => `${rootName}/${rel.replaceAll('\\', '/')}`));
+	const handle = await fs.open(tarPath, 'r+');
+	try {
+		const header = Buffer.alloc(TAR_BLOCK_SIZE);
+		let offset = 0;
+		while (true) {
+			const { bytesRead } = await handle.read(header, 0, TAR_BLOCK_SIZE, offset);
+			if (bytesRead < TAR_BLOCK_SIZE || header.every((b) => b === 0)) break;
+			const name = header.toString('ascii', 0, 100).replace(/\0.*$/, '');
+			const prefix = header.toString('ascii', 345, 500).replace(/\0.*$/, '');
+			const fullName = prefix ? `${prefix}/${name}` : name;
+			const size = parseInt(header.toString('ascii', 124, 136).replace(/[^0-7]/g, '') || '0', 8);
+			if (targets.has(fullName)) {
+				header.write('0000755\0', 100, 'ascii');
+				writeTarChecksum(header);
+				await handle.write(header, 0, TAR_BLOCK_SIZE, offset);
+			}
+			offset += TAR_BLOCK_SIZE + Math.ceil(size / TAR_BLOCK_SIZE) * TAR_BLOCK_SIZE;
+		}
+	} finally {
+		await handle.close();
+	}
+};
+
+ipcMain.handle('create-tar-gz', async (event, folderPath, executables = []) => {
 	const parent = path.dirname(folderPath);
 	const name = path.basename(folderPath);
 	const tarPath = `${folderPath}.tar.gz`;
-	await run(`tar -czf "${tarPath}" -C "${parent}" "${name}"`);
+	if (process.platform === 'win32') {
+		const tarTmpPath = `${folderPath}.tar`;
+		await run(`tar -cf "${tarTmpPath}" -C "${parent}" "${name}"`);
+		if (executables.length > 0) {
+			await setTarExecutables(tarTmpPath, name, executables);
+		}
+		await pipeline(createReadStream(tarTmpPath), zlib.createGzip(), createWriteStream(tarPath));
+		await fs.unlink(tarTmpPath);
+	} else {
+		for (const rel of executables) {
+			try {
+				await fs.chmod(path.join(folderPath, rel), 0o755);
+			} catch (err) {
+				if (err.code !== 'ENOENT') throw err;
+			}
+		}
+		await run(`tar -czf "${tarPath}" -C "${parent}" "${name}"`);
+	}
 	return tarPath;
 });
 
