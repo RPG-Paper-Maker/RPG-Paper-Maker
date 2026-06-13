@@ -126,6 +126,20 @@ class GL {
 		return canvas2d.toDataURL('image/png');
 	}
 
+	static withNeutralScreenTone<T>(callback: () => T): T {
+		const tone = GL.screenTone;
+		const x = tone.x;
+		const y = tone.y;
+		const z = tone.z;
+		const w = tone.w;
+		tone.set(0, 0, 0, 1);
+		try {
+			return callback();
+		} finally {
+			tone.set(x, y, z, w);
+		}
+	}
+
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
 		return {
 			width: (material?.map?.image as HTMLImageElement)?.width ?? 0,

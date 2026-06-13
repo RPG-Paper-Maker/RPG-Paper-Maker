@@ -210,10 +210,12 @@ function PanelSpecialElementsSelection({
 				scene.camera.perspectiveCamera.updateProjectionMatrix();
 				await scene.loadObject3D(elementID);
 				await scene.load();
-				dataURL = Manager.GL.renderToDataURL(
-					[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
-					300,
-					300,
+				dataURL = Manager.GL.withNeutralScreenTone(() =>
+					Manager.GL.renderToDataURL(
+						[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
+						300,
+						300,
+					),
 				);
 			} else {
 				dataURL = (await Project.current!.pictures.getByID(kind, elementID)?.getPathOrBase64()) ?? '';

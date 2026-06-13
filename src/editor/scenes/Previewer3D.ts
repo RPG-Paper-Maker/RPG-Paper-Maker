@@ -603,7 +603,7 @@ class Previewer3D extends Base {
 	draw3D(GL: Manager.GL) {
 		if (!this.isCut) {
 			GL.renderer.setClearAlpha(0);
-			super.draw3D(GL);
+			Manager.GL.withNeutralScreenTone(() => super.draw3D(GL));
 		}
 	}
 
@@ -618,7 +618,7 @@ class Previewer3D extends Base {
 				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
 			}
 			GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
-			GL.renderer.render(this.scene, this.camera.getThreeCamera());
+			Manager.GL.withNeutralScreenTone(() => GL.renderer.render(this.scene, this.camera.getThreeCamera()));
 		}
 	}
 }

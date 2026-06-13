@@ -242,7 +242,9 @@ function PanelMapObjectsSelection() {
 		scene.camera.perspectiveCamera.updateProjectionMatrix();
 		await scene.loadObject3D(graphicsID);
 		await scene.load();
-		return Manager.GL.renderToDataURL([{ scene: scene.scene, camera: scene.camera.perspectiveCamera }], 300, 300);
+		return Manager.GL.withNeutralScreenTone(() =>
+			Manager.GL.renderToDataURL([{ scene: scene.scene, camera: scene.camera.perspectiveCamera }], 300, 300),
+		);
 	};
 
 	const update = async () => {
