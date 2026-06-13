@@ -71,6 +71,15 @@
 			background-color: var(--main-bg-color);
 		}
 	}
+
+	.category-header {
+		width: 100%;
+		padding: 4px 4px 2px;
+		font-weight: bold;
+		font-size: 12px;
+		border-bottom: 1px solid var(--lighter-bg-color);
+		user-select: none;
+	}
 }
 
 .panelSpecialElements.grid {
@@ -129,12 +138,6 @@
 
 	.category-header {
 		flex-basis: 100%;
-		width: 100%;
-		padding: 4px 4px 2px;
-		font-weight: bold;
-		font-size: 12px;
-		border-bottom: 1px solid var(--lighter-bg-color);
-		user-select: none;
 	}
 }
 

@@ -43,6 +43,7 @@ import {
 	setCurrentTreeMapTag,
 	setCurrentWallID,
 	setProjectMenuIndex,
+	setSpecialElementsGridView,
 } from '../../store';
 import Button from '../Button';
 import Flex from '../Flex';
@@ -198,6 +199,7 @@ function PanelProject() {
 				),
 			);
 			dispatch(setCurrentObject3DID(Project.current!.settings.mapEditorCurrentObject3DID));
+			dispatch(setSpecialElementsGridView(Project.current!.settings.mapEditorSpecialElementsGridView));
 		}
 	}, [openLoading]);
 

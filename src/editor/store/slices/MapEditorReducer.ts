@@ -58,6 +58,7 @@ const MapEditorSlice = createSlice({
 		},
 		needsUpdate: false,
 		loaded: false,
+		specialElementsGridView: true,
 	},
 	reducers: {
 		setCurrentTreeMapTag(state, action: PayloadAction<Model.TreeMapTag | null>) {
@@ -156,6 +157,9 @@ const MapEditorSlice = createSlice({
 		setMapEditorLoaded(state, action: PayloadAction<boolean>) {
 			state.loaded = action.payload;
 		},
+		setSpecialElementsGridView(state, action: PayloadAction<boolean>) {
+			state.specialElementsGridView = action.payload;
+		},
 	},
 });
 
@@ -192,5 +196,6 @@ export const {
 	setUndoRedoLength,
 	setNeedsUpdateMapEditor,
 	setMapEditorLoaded,
+	setSpecialElementsGridView,
 } = MapEditorSlice.actions;
 export const MapEditorReducer = MapEditorSlice.reducer;

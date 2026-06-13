@@ -42,6 +42,7 @@ import {
 	setNeedsUpdateMapEditor,
 	setSelectedMapElement,
 	setSelectedPosition,
+	setSpecialElementsGridView,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 } from './slices/MapEditorReducer';
@@ -154,6 +155,7 @@ export {
 	setProjects,
 	setSelectedMapElement,
 	setSelectedPosition,
+	setSpecialElementsGridView,
 	setEngineFontSize,
 	setTheme,
 	setUndoRedoIndex,

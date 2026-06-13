@@ -11,16 +11,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaQuestion, FaRegSquare } from 'react-icons/fa';
+import { FaList, FaQuestion, FaRegSquare, FaThLarge } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
-import { ELEMENT_MAP_KIND, MenuItemType, PICTURE_KIND } from '../../common';
+import { ELEMENT_MAP_KIND, MenuItemType, PICTURE_KIND, Utils } from '../../common';
 import { Node } from '../../core/Node';
 import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
 import useStateString from '../../hooks/useStateString';
-import { RootState, setCopiedItems } from '../../store';
+import { RootState, setCopiedItems, setSpecialElementsGridView } from '../../store';
 import '../../styles/PanelSpecialElementsSelection.css';
+import Button from '../Button';
 import ContextMenu from '../ContextMenu';
 import Flex from '../Flex';
 import DialogMapObject from '../dialogs/models/DialogMapObject';
@@ -53,7 +54,17 @@ function PanelMapObjectsSelection() {
 	const pendingUpdateTimeout = useRef<number | null>(null);
 
 	const needsUpdate = useSelector((state: RootState) => state.mapEditor.needsUpdate);
+	const isGrid = useSelector((state: RootState) => state.mapEditor.specialElementsGridView);
 	const isFirstRender = useRef(true);
+
+	const handleSetGridView = async (value: boolean) => {
+		if (value === isGrid) {
+			return;
+		}
+		dispatch(setSpecialElementsGridView(value));
+		Project.current!.settings.mapEditorSpecialElementsGridView = value;
+		await Project.current!.settings.save();
+	};
 
 	const list = Scene.Map.current?.model?.objects ?? [];
 	const filteredList = list.slice(minToDisplay, maxToDisplay);
@@ -470,10 +481,21 @@ function PanelMapObjectsSelection() {
 				onMouseDown={(e) => handleElementMouseDown(e, mapObject)}
 				onContextMenu={(e) => e.preventDefault()}
 			>
-				<div className='title'>
-					<div className='pictureContainer'>{getIcon(mapObject)}</div>
-				</div>
-				<div className='elementName'>{mapObject.getName()}</div>
+				{isGrid ? (
+					<>
+						<div className='title'>
+							<div className='pictureContainer'>{getIcon(mapObject)}</div>
+						</div>
+						<div className='elementName'>{mapObject.getName()}</div>
+					</>
+				) : (
+					<div className='title'>
+						<div className='pictureContainer'>{getIcon(mapObject)}</div>
+						<Flex one className='textEllipsis'>
+							{mapObject.toStringNameID()}
+						</Flex>
+					</div>
+				)}
 			</div>
 		);
 	});
@@ -481,7 +503,30 @@ function PanelMapObjectsSelection() {
 	return (
 		<>
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<div ref={contentRef} id='list-previewer' className='panelSpecialElements grid'>
+				<Flex spaced centerV className='panelSpecialElementsToolbar'>
+					<Flex one />
+					<Flex centerV>
+						<Button
+							icon={<FaList />}
+							square
+							small
+							active={!isGrid}
+							onClick={() => handleSetGridView(false)}
+						/>
+						<Button
+							icon={<FaThLarge />}
+							square
+							small
+							active={isGrid}
+							onClick={() => handleSetGridView(true)}
+						/>
+					</Flex>
+				</Flex>
+				<div
+					ref={contentRef}
+					id='list-previewer'
+					className={Utils.getClassName({ grid: isGrid }, 'panelSpecialElements')}
+				>
 					{listElements}
 				</div>
 			</ContextMenu>

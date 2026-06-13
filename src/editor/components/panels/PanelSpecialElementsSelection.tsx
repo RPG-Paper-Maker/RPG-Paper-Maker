@@ -11,7 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaList, FaThLarge } from 'react-icons/fa';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
@@ -25,6 +25,7 @@ import {
 	setCurrentMountainID,
 	setCurrentObject3DID,
 	setCurrentWallID,
+	setSpecialElementsGridView,
 } from '../../store';
 import '../../styles/PanelSpecialElementsSelection.css';
 import DialogObject3DCategories from '../dialogs/DialogObject3DCategories';
@@ -97,6 +98,7 @@ function PanelSpecialElementsSelection({
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
 	const currentMountainID = useSelector((state: RootState) => state.mapEditor.currentMountainID);
 	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
+	const gridView = useSelector((state: RootState) => state.mapEditor.specialElementsGridView);
 
 	const getIndex = () => {
 		switch (kind) {
@@ -122,8 +124,18 @@ function PanelSpecialElementsSelection({
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
-	const isGrid = kind !== PICTURE_KIND.AUTOTILES;
+	const canToggleView = kind !== PICTURE_KIND.AUTOTILES;
+	const isGrid = canToggleView && gridView;
 	const isObjects3D = kind === PICTURE_KIND.OBJECTS_3D;
+
+	const handleSetGridView = async (value: boolean) => {
+		if (value === gridView) {
+			return;
+		}
+		dispatch(setSpecialElementsGridView(value));
+		Project.current!.settings.mapEditorSpecialElementsGridView = value;
+		await Project.current!.settings.save();
+	};
 	const getGridMetrics = () => {
 		const content = contentRef.current;
 		if (!isGrid || !content) {
@@ -447,7 +459,8 @@ function PanelSpecialElementsSelection({
 				ref={selected ? selectedElementRef : null}
 				className={Utils.getClassName({ selected }, 'element')}
 				key={element.id}
-				data-gen-id={element.pictureID}
+				title={element.toStringNameID()}
+				data-gen-id={displayCanvas ? element.id : element.pictureID}
 				onClick={() => handleClick(element.id)}
 			>
 				<div className='title'>
@@ -482,41 +495,55 @@ function PanelSpecialElementsSelection({
 		);
 	});
 
-	if (isObjects3D) {
+	if (!canToggleView) {
 		return (
-			<>
-				<div className='panelSpecialElementsWrapper'>
-					<Flex spaced centerV className='panelSpecialElementsToolbar'>
-						<Dropdown
-							fillWidth
-							selectedID={categoryFilterID}
-							onChange={setCategoryFilterID}
-							options={[
-								Model.Base.create(-1, t('all')),
-								...Project.current!.specialElements.categories,
-							]}
-						/>
-						<Button icon={<FaEdit />} onClick={() => setIsOpenCategories(true)} />
-					</Flex>
-					<div ref={contentRef} id='list-previewer' className='panelSpecialElements grid'>
-						{listElements}
-					</div>
-				</div>
-				{isOpenCategories && (
-					<DialogObject3DCategories setIsOpen={setIsOpenCategories} onAccept={handleAcceptCategories} />
-				)}
-			</>
+			<div ref={contentRef} id='list-previewer' className='panelSpecialElements'>
+				{listElements}
+			</div>
 		);
 	}
 
+	const viewToggle = (
+		<Flex centerV>
+			<Button icon={<FaList />} square small active={!isGrid} onClick={() => handleSetGridView(false)} />
+			<Button icon={<FaThLarge />} square small active={isGrid} onClick={() => handleSetGridView(true)} />
+		</Flex>
+	);
+
 	return (
-		<div
-			ref={contentRef}
-			id='list-previewer'
-			className={Utils.getClassName({ grid: isGrid }, 'panelSpecialElements')}
-		>
-			{listElements}
-		</div>
+		<>
+			<div className='panelSpecialElementsWrapper'>
+				<Flex spaced centerV className='panelSpecialElementsToolbar'>
+					{isObjects3D ? (
+						<Flex one centerV className='gapSmall'>
+							<Dropdown
+								fillWidth
+								selectedID={categoryFilterID}
+								onChange={setCategoryFilterID}
+								options={[
+									Model.Base.create(-1, t('all')),
+									...Project.current!.specialElements.categories,
+								]}
+							/>
+							<Button icon={<FaEdit />} onClick={() => setIsOpenCategories(true)} />
+						</Flex>
+					) : (
+						<Flex one />
+					)}
+					{viewToggle}
+				</Flex>
+				<div
+					ref={contentRef}
+					id='list-previewer'
+					className={Utils.getClassName({ grid: isGrid }, 'panelSpecialElements')}
+				>
+					{listElements}
+				</div>
+			</div>
+			{isOpenCategories && (
+				<DialogObject3DCategories setIsOpen={setIsOpenCategories} onAccept={handleAcceptCategories} />
+			)}
+		</>
 	);
 }
 
