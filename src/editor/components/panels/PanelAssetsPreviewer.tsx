@@ -159,7 +159,14 @@ function PanelAssetsPreviewer({
 				return;
 			}
 			const path = await IO.openFolderDialog();
-			await IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
+			if (!path) {
+				return;
+			}
+			try {
+				await IO.copyFile(selectedItem!.getPath(), Paths.join(path, selectedItem!.name));
+			} catch {
+				dispatch(showWarning(t('warning.asset.not.found')));
+			}
 		} else {
 			await LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
 		}

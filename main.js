@@ -885,6 +885,7 @@ ipcMain.handle('remove-file', async (event, path, content) => {
 });
 
 ipcMain.handle('copy-file', async (event, src, dst) => {
+	await fs.mkdir(path.dirname(dst), { recursive: true });
 	await retryOnPermError(() => fs.copyFile(src, dst), ['ENOENT'], 5, dst);
 });
 
