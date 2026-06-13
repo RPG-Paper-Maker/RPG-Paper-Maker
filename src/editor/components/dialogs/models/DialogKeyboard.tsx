@@ -76,7 +76,7 @@ function DialogKeyboard({ setIsOpen, model, onAccept, onReject }: Props) {
 				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
-				initialWidth='400px'
+				initialWidth='500px'
 			>
 				<Form>
 					<Label>{t('abbreviation')} (JavaScript)</Label>
