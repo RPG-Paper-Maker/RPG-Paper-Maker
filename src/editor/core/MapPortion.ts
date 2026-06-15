@@ -179,6 +179,21 @@ class MapPortion {
 		if (!sourceLand) {
 			return;
 		}
+		const digDirections = [
+			[-1, 0],
+			[1, 0],
+			[0, -1],
+			[0, 1],
+		];
+		const hasTopNeighborFloor = (dx: number, dz: number): boolean => {
+			const topPosition = position.clone();
+			topPosition.x = position.x + dx;
+			topPosition.z = position.z + dz;
+			if (!topPosition.isInMap(this.map.model)) {
+				return false;
+			}
+			return !!this.map.getMapPortionByPosition(topPosition)?.model.lands.get(topPosition.toKey());
+		};
 		const mountain = this.createCurrentMountain();
 		const floorPosition = this.getPositionBelow(position, mountain.heightSquares, mountain.heightPixels);
 		if (!floorPosition.isInMap(this.map.model)) {
@@ -208,7 +223,10 @@ class MapPortion {
 		floorPortion.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.MOUNTAIN, preview);
 		floorPortion.updateMountainTopFloor(floorPosition, preview, updateAutotiles);
 
-		for (const [dx, dz] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+		for (const [dx, dz] of digDirections) {
+			if (!hasTopNeighborFloor(dx, dz)) {
+				continue;
+			}
 			const mountainPosition = floorPosition.clone();
 			mountainPosition.x = floorPosition.x + dx;
 			mountainPosition.z = floorPosition.z + dz;

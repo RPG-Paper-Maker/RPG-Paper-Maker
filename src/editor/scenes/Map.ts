@@ -1801,6 +1801,30 @@ class Map extends Base {
 			this.meshPlane!.position.setY(this.lockedY + this.lockedYPixels / 100);
 			this.meshPlane!.updateMatrixWorld();
 		}
+		if (
+			this.canEdit &&
+			!Map.previewOnly &&
+			Map.currentMountainDigMode &&
+			Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
+			!Inputs.isPointerPressed &&
+			!Inputs.isMouseRightPressed
+		) {
+			let hadDigPreview = false;
+			this.forEachMapPortions((mapPortion) => {
+				if (mapPortion && mapPortion.lastPreviewRemove.length > 0) {
+					hadDigPreview = true;
+				}
+			});
+			if (hadDigPreview) {
+				this.forEachMapPortions((mapPortion) => {
+					mapPortion?.removeLastPreview();
+				});
+				for (const mapPortion of this.portionsToUpdate) {
+					mapPortion.updateGeometries();
+				}
+				this.portionsToUpdate.clear();
+			}
+		}
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		Manager.GL.raycaster.layers.set(RAYCASTING_LAYER.PLANE);
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
@@ -1812,13 +1836,6 @@ class Map extends Base {
 		let meshHitGridY: number;
 		if (this.canEdit && !Map.previewOnly && !Map.isRemoving()) {
 			meshHitGridY = -Infinity;
-			if (
-				Map.currentMountainDigMode &&
-				Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
-				this.lastPosition
-			) {
-				meshHitGridY = this.lastPosition.getTotalY();
-			}
 			for (const obj of intersects) {
 				const faceKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
@@ -1979,7 +1996,11 @@ class Map extends Base {
 			if (
 				this.canEdit &&
 				!Map.previewOnly &&
-				(this.lastPosition === null ||
+				((Map.currentMountainDigMode &&
+					Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN &&
+					!Inputs.isPointerPressed &&
+					!Inputs.isMouseRightPressed) ||
+					this.lastPosition === null ||
 					!this.lastPosition.equals(position) ||
 					(isLayerOn &&
 						(this.layerRayPosition === null || !newLayerRayPosition.equals(this.layerRayPosition))))
