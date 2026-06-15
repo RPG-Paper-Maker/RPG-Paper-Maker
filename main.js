@@ -890,7 +890,23 @@ ipcMain.handle('copy-file', async (event, src, dst) => {
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
-	await retryOnPermError(() => fs.rename(oldFilePath, newFilePath), [], 5, newFilePath);
+	await retryOnPermError(
+		async () => {
+			try {
+				await fs.rename(oldFilePath, newFilePath);
+			} catch (err) {
+				if ((err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EACCES') && (await exists(newFilePath))) {
+					await fs.rm(newFilePath, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+					await fs.rename(oldFilePath, newFilePath);
+					return;
+				}
+				throw err;
+			}
+		},
+		['EEXIST'],
+		5,
+		newFilePath
+	);
 	try {
 		const dir = await fs.open(path.dirname(newFilePath), 'r');
 		try {
