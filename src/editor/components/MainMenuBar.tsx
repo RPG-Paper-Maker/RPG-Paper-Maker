@@ -11,6 +11,7 @@
 
 import { ReactElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import {
 	AiOutlineArrowDown,
 	AiOutlineArrowUp,
@@ -62,6 +63,7 @@ import {
 	readJSON,
 	removeFolder,
 } from '../common/Platform';
+import { TOASTER_OPTIONS } from '../common/ToasterUtils';
 import { Project } from '../core/Project';
 
 import { GiBrickWall } from 'react-icons/gi';
@@ -483,6 +485,25 @@ function MainMenuBar() {
 		importFileInputRef.current?.click();
 	};
 
+	const resetImportFileInput = () => {
+		if (importFileInputRef.current) {
+			importFileInputRef.current.value = '';
+		}
+	};
+
+	const handleInvalidImportZip = async (path?: string) => {
+		if (path && (await checkFileExists(path))) {
+			await removeFolder(path);
+		}
+		toast.warn(
+			t('warning.import.invalid.zip', {
+				defaultValue: 'This project archive could not be read. Please choose a valid, complete RPG Paper Maker ZIP export.',
+			}),
+			TOASTER_OPTIONS,
+		);
+		resetImportFileInput();
+	};
+
 	const updateLoadingBar = (current: number, total: number, label = '', extra = 0) => {
 		const stepSize = 100 / total;
 		const baseProgress = (current / total) * 100;
@@ -495,6 +516,9 @@ function MainMenuBar() {
 			return;
 		}
 		const file = Array.from(importFileInputRef.current.files || [])[0];
+		if (!file) {
+			return;
+		}
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
 		const projectsFolders = await getFolders(Paths.getRPMGamesFolder());
 		if (projectsFolders.includes(folderName)) {
@@ -503,13 +527,21 @@ function MainMenuBar() {
 			dispatch(setLoading(true));
 			dispatch(setLoadingBar({ percent: 0, label: '' }));
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
-			await loadZip(file, path, updateLoadingBar);
-			importFileInputRef.current.value = '';
-			dispatch(setLoadingBar({ percent: 100, label: '' }));
-			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
-			await handleOpenProject(project);
-			dispatch(setLoading(false));
-			dispatch(setLoadingBar(null));
+			try {
+				try {
+					await loadZip(file, path, updateLoadingBar);
+				} catch {
+					await handleInvalidImportZip(path);
+					return;
+				}
+				resetImportFileInput();
+				dispatch(setLoadingBar({ percent: 100, label: '' }));
+				const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
+				await handleOpenProject(project);
+			} finally {
+				dispatch(setLoading(false));
+				dispatch(setLoadingBar(null));
+			}
 		}
 	};
 
@@ -518,16 +550,28 @@ function MainMenuBar() {
 			return;
 		}
 		setWarningImportPath('');
-		dispatch(setLoading(true));
 		const file = Array.from(importFileInputRef.current.files || [])[0];
+		if (!file) {
+			return;
+		}
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
 		const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
-		await removeFolder(path);
-		await loadZip(file, path);
-		importFileInputRef.current.value = '';
-		const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
-		await handleOpenProject(project);
-		dispatch(setLoading(false));
+		dispatch(setLoading(true));
+		try {
+			await removeFolder(path);
+			try {
+				await loadZip(file, path);
+			} catch {
+				await handleInvalidImportZip(path);
+				return;
+			}
+			resetImportFileInput();
+			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
+			await handleOpenProject(project);
+		} finally {
+			dispatch(setLoading(false));
+			dispatch(setLoadingBar(null));
+		}
 	};
 
 	const handleRejectImport = async () => {
