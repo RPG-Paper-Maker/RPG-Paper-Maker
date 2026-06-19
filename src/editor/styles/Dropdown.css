@@ -37,6 +37,7 @@
 .dropdown.disabled {
 	opacity: 0.2;
 	cursor: initial;
+	will-change: opacity;
 }
 
 .dropdown .dropdownArrow svg {
