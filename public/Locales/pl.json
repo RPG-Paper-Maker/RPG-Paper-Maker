@@ -1993,6 +1993,7 @@
 	"no.backups.available": "Brak dostępnych kopii zapasowych.",
 	"warning.restore.backup": "Czy na pewno chcesz przywrócić {{projectName}} do kopii zapasowej {{backupName}}? Spowoduje to nadpisanie bieżących danych projektu.",
 	"warning.corrupted.files": "Niektóre pliki projektu są uszkodzone i nie można ich wczytać. Może się to zdarzyć po nagłym wyłączeniu lub awarii zasilania. Przywróć kopię zapasową, aby odzyskać swój projekt.",
+	"warning.project.portal.path": "Ten projekt został otwarty przez ograniczoną ścieżkę w piaskownicy (portal dokumentów Steam/Flatpak), więc RPG Paper Maker widzi tylko wybrany plik, a nie resztę projektu. Przenieś folder projektu do folderu „RPG Paper Maker Games” (w Dokumentach), a następnie otwórz go stamtąd.",
 	"last.save": "ostatni zapis",
 	"last.update.changes": "Ostatnie zmiany:",
 	"latest.video": "Najnowszy film"

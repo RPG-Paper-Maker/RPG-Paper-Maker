@@ -1993,6 +1993,7 @@
 	"no.backups.available": "利用可能なバックアップはありません。",
 	"warning.restore.backup": "{{projectName}} をバックアップ {{backupName}} に復元しますか？現在のプロジェクトデータが上書きされます。",
 	"warning.corrupted.files": "一部のプロジェクトファイルが破損しており、読み込めませんでした。これは突然のシャットダウンや停電の後に発生することがあります。バックアップを復元してプロジェクトを回復してください。",
+	"warning.project.portal.path": "このプロジェクトは制限されたサンドボックスのパス（Steam/Flatpak のドキュメントポータル）から開かれたため、RPG Paper Maker は選択されたファイルのみを認識でき、プロジェクトの残りの部分を読み込めません。プロジェクトフォルダーを「RPG Paper Maker Games」フォルダー（ドキュメント内）に移動してから、そこで開いてください。",
 	"last.save": "最後の保存",
 	"last.update.changes": "最新の更新内容：",
 	"latest.video": "最新動画"

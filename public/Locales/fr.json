@@ -1994,6 +1994,7 @@
 	"no.backups.available": "Aucune sauvegarde disponible.",
 	"warning.restore.backup": "Êtes-vous sûr de vouloir restaurer {{projectName}} à la sauvegarde {{backupName}} ? Cela écrasera les données actuelles du projet.",
 	"warning.corrupted.files": "Certains fichiers du projet sont corrompus et n'ont pas pu être chargés. Cela peut arriver après un arrêt brutal ou une coupure de courant. Veuillez restaurer une sauvegarde pour récupérer votre projet.",
+	"warning.project.portal.path": "Ce projet a été ouvert via un chemin restreint en bac à sable (portail de documents Steam/Flatpak), donc RPG Paper Maker ne peut voir que le fichier sélectionné et non le reste du projet. Veuillez déplacer le dossier de votre projet dans votre dossier « RPG Paper Maker Games » (dans vos Documents), puis l'ouvrir depuis cet emplacement.",
 	"last.update.changes": "Dernières modifications :",
 	"latest.video": "Dernière vidéo"
 }

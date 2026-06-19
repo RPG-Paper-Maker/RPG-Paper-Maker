@@ -184,6 +184,7 @@ function MainMenuBar() {
 	const [currentVersion, setCurrentVersion] = useState('');
 	const [warningImportPath, setWarningImportPath] = useState('');
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
+	const [isDialogWarningPortalPath, setIsDialogWarningPortalPath] = useState(false);
 	const [corruptedProject, setCorruptedProject] = useState<Model.ProjectPreview | null>(null);
 	const [isDialogManageBackupsOpen, setIsDialogManageBackupsOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
@@ -264,6 +265,10 @@ function MainMenuBar() {
 	};
 
 	const handleOpenProject = async (project: Model.ProjectPreview, addExtraVersion?: string) => {
+		if (Constants.IS_DESKTOP && /\/run\/user\/\d+\/doc\//.test(Paths.normalize(project.location))) {
+			setIsDialogWarningPortalPath(true);
+			return;
+		}
 		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
 		await handleCloseProject();
@@ -386,6 +391,10 @@ function MainMenuBar() {
 
 	const handleCloseWarningProjectLocationExist = () => {
 		setIsDialogWarningProjectLocationExist(false);
+	};
+
+	const handleCloseWarningPortalPath = () => {
+		setIsDialogWarningPortalPath(false);
 	};
 
 	const handleCloseWarningProjectVersionOpen = () => {
@@ -1432,6 +1441,16 @@ function MainMenuBar() {
 					onClose={handleCloseWarningProjectLocationExist}
 				>
 					<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
+				</Dialog>
+			)}
+			{isDialogWarningPortalPath && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterOK onOK={handleCloseWarningPortalPath} />}
+					onClose={handleCloseWarningPortalPath}
+				>
+					<p>{t('warning.project.portal.path')}</p>
 				</Dialog>
 			)}
 			{warningLocalPluginsMessage && (

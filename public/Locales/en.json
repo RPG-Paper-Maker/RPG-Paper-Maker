@@ -1994,6 +1994,7 @@
 	"no.backups.available": "No backups available.",
 	"warning.restore.backup": "Are you sure you want to restore {{projectName}} to backup {{backupName}}? This will overwrite the current project data.",
 	"warning.corrupted.files": "Some project files are corrupted and could not be loaded. This can happen after a sudden shutdown or power loss. Please restore a backup to recover your project.",
+	"warning.project.portal.path": "This project was opened through a restricted sandbox path (Steam/Flatpak document portal), so RPG Paper Maker can only see the selected file and not the rest of the project. Please move your project folder into your \"RPG Paper Maker Games\" folder (in your Documents), then open it from there.",
 	"last.update.changes": "Last update changes:",
 	"latest.video": "Latest video"
 }
