@@ -208,7 +208,7 @@ class Mountains {
 		return map.getMapPortionByPosition(position)?.model.mountains.get(position.toKey());
 	}
 
-	static updateAround(map: Scene.Map, position: Position) {
+	static updateAround(map: Scene.Map, position: Position, preview = false) {
 		const globalPortion = position.getGlobalPortion();
 		const positions = [
 			position.getSquareLeft(),
@@ -226,7 +226,9 @@ class Mountains {
 						const mapPortion = map.getMapPortionFromGlobalPortion(newGlobalPortion);
 						if (mapPortion) {
 							map.portionsToUpdate.add(mapPortion);
-							map.portionsToSave.add(mapPortion);
+							if (!preview) {
+								map.portionsToSave.add(mapPortion);
+							}
 						}
 					}
 				}

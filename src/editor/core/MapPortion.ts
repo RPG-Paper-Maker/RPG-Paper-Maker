@@ -632,7 +632,7 @@ class MapPortion {
 			removingPreview,
 			undoRedo,
 		);
-		MapElement.Mountains.updateAround(this.map, position);
+		MapElement.Mountains.updateAround(this.map, position, preview || removingPreview);
 	}
 
 	updateObject3D(
