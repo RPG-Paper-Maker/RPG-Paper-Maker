@@ -66,6 +66,14 @@ export const WIDTH = 1280;
 export const HEIGHT = 720;
 const ELEMENT_INDEX_SIZE = 16;
 
+const hasAudioExtension = (path: string) => /^data:audio\/([^;,]+);/i.test(path) || /\.([^.]+)$/.test(path.split('?', 1)[0]);
+
+const warnMissingAudioExtension = (path: string) => {
+	if (!hasAudioExtension(path)) {
+		console.warn(`No file extension was found for audio file: ${path}. Consider using the "format" property or specify an extension.`);
+	}
+};
+
 function AnimationPreviewer({
 	pictureID,
 	battlerID,
@@ -318,6 +326,7 @@ function AnimationPreviewer({
 							const song = Project.current!.songs.getByID(SONG_KIND.SOUND, effect.se.id);
 							if (song) {
 								const path = await song.getPathOrBase64();
+								warnMissingAudioExtension(song.getPath());
 								const { Howl } = await import('howler');
 								const howl = new Howl({
 									src: [path],

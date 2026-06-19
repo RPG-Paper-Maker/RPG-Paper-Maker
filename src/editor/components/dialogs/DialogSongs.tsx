@@ -57,6 +57,14 @@ type Props = {
 	noDynamic?: boolean;
 };
 
+const hasAudioExtension = (path: string) => /^data:audio\/([^;,]+);/i.test(path) || /\.([^.]+)$/.test(path.split('?', 1)[0]);
+
+const warnMissingAudioExtension = (path: string) => {
+	if (!hasAudioExtension(path)) {
+		console.warn(`No file extension was found for audio file: ${path}. Consider using the "format" property or specify an extension.`);
+	}
+};
+
 function DialogSongs({
 	title,
 	kind,
@@ -170,6 +178,7 @@ function DialogSongs({
 		const path = song?.getPath();
 		if (song && path) {
 			const { Howl } = await import('howler');
+			warnMissingAudioExtension(path);
 			if (!song.isBR) {
 				setSelectedHowl(undefined);
 				setSelectedHowl(
