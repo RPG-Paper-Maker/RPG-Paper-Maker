@@ -933,14 +933,20 @@ ipcMain.handle('open-game', async (event, location, battleTest) => {
 		`--rpm-game-project=${location}`,
 		`--rpm-game-battle=${battleTest ? 'true' : 'false'}`,
 	);
-	gameProcess = spawn(process.execPath, args, {
+	const child = spawn(process.execPath, args, {
 		stdio: 'ignore',
 		cwd: __dirname,
 	});
-	gameProcess.on('exit', () => {
-		gameProcess = null;
+	gameProcess = child;
+	child.on('exit', () => {
+		if (gameProcess === child) {
+			gameProcess = null;
+			if (window && !window.isDestroyed()) {
+				window.webContents.send('game-test-exited');
+			}
+		}
 	});
-	gameProcess.unref();
+	child.unref();
 });
 
 ipcMain.handle('change-window-title', function (event, title) {

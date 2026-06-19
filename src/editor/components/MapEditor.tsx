@@ -276,15 +276,22 @@ function MapEditor() {
 		const handleWindowBlur = () => setIsWindowFocused(false);
 		const handleGameTestOpened = () => { Manager.GL.isGameTestOpen = true; setIsGameTestOpen(true); };
 		const handleGameTestClosed = () => { Manager.GL.isGameTestOpen = false; setIsGameTestOpen(false); };
+		const handleGameTestExited = () => window.dispatchEvent(new Event('game-test-closed'));
 		window.addEventListener('focus', handleWindowFocus);
 		window.addEventListener('blur', handleWindowBlur);
 		window.addEventListener('game-test-opened', handleGameTestOpened);
 		window.addEventListener('game-test-closed', handleGameTestClosed);
+		if (Constants.IS_DESKTOP) {
+			window.ipcRenderer.on('game-test-exited', handleGameTestExited);
+		}
 		return () => {
 			window.removeEventListener('focus', handleWindowFocus);
 			window.removeEventListener('blur', handleWindowBlur);
 			window.removeEventListener('game-test-opened', handleGameTestOpened);
 			window.removeEventListener('game-test-closed', handleGameTestClosed);
+			if (Constants.IS_DESKTOP) {
+				window.ipcRenderer.removeAllListeners('game-test-exited');
+			}
 		};
 	}, []);
 
