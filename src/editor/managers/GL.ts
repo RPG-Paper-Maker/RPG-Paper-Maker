@@ -243,7 +243,7 @@ class GL {
 				// toDataURL() can capture a screenshot for frozen-dialog previews.
 				preserveDrawingBuffer: layer === 1,
 			});
-			this.renderer.setPixelRatio(window.devicePixelRatio);
+			this.renderer.setPixelRatio(Utils.getPixelRatio());
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
 			this.renderer.shadowMap.enabled = true;
 			this.renderer.domElement.classList.add(`canvasRenderer${layer}`);
@@ -268,7 +268,7 @@ class GL {
 				event.preventDefault();
 			});
 			this.renderer.domElement.addEventListener('webglcontextrestored', () => {
-				this.renderer.setPixelRatio(window.devicePixelRatio);
+				this.renderer.setPixelRatio(Utils.getPixelRatio());
 				this.renderer.setSize(this.canvasWidth || window.innerWidth, this.canvasHeight || window.innerHeight);
 				this.renderer.shadowMap.enabled = true;
 				this.renderer.autoClear = false;

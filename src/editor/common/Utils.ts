@@ -12,6 +12,12 @@
 import { Constants, ITERATOR, JSONType } from '.';
 
 class Utils {
+	public static readonly MAX_PIXEL_RATIO: number = 1.5;
+
+	public static getPixelRatio(): number {
+		return Math.min(window.devicePixelRatio || 1, Utils.MAX_PIXEL_RATIO);
+	}
+
 	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
 		return value === undefined ? defaultValue : value;
 	}

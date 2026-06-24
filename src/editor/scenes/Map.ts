@@ -2778,7 +2778,7 @@ class Map extends Base {
 
 	drawCompass() {
 		const ctx = Map.ctxHUD!;
-		const canvasW = Map.canvasHUD!.width / window.devicePixelRatio;
+		const canvasW = Map.canvasHUD!.width / Utils.getPixelRatio();
 		const radius = 40;
 		const padding = 14;
 		const cx = canvasW - radius - padding;
@@ -2902,8 +2902,8 @@ class Map extends Base {
 		Map.ctxHUD!.clearRect(
 			0,
 			0,
-			Map.canvasHUD!.width / window.devicePixelRatio,
-			Map.canvasHUD!.height / window.devicePixelRatio,
+			Map.canvasHUD!.width / Utils.getPixelRatio(),
+			Map.canvasHUD!.height / Utils.getPixelRatio(),
 		);
 		Map.ctxHUD!.imageSmoothingEnabled = false;
 		Map.ctxHUD!.font = 'bold 12px sans-serif';

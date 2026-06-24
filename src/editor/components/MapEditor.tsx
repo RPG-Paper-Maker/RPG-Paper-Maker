@@ -175,7 +175,7 @@ function MapEditor() {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
 		if (canvas && canvasHUD) {
-			const ratio = window.devicePixelRatio;
+			const ratio = Utils.getPixelRatio();
 			if (Scene.Map.current) {
 				Scene.Map.current.camera.resizeGL(
 					Manager.GL.mainContext,

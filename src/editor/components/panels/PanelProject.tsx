@@ -138,7 +138,7 @@ function PanelProject() {
 					Manager.GL.mainContext,
 					Manager.GL.dialogContext,
 				]) {
-					GL.renderer.setPixelRatio(window.devicePixelRatio);
+					GL.renderer.setPixelRatio(Utils.getPixelRatio());
 					GL.renderer.setSize(window.innerWidth, window.innerHeight);
 				}
 			});
