@@ -17,6 +17,8 @@ import { Utils } from './Utils';
 const originalConsoleError = console.error;
 const isGameMode = !!new URLSearchParams(window.location.search).get('project');
 
+const tr = (key: string): string => (typeof i18next?.t === 'function' ? (i18next.t(key) as string) : key);
+
 const notifyError = (text: string | ReactNode) => {
 	toast.error(text, TOASTER_OPTIONS);
 };
@@ -60,16 +62,16 @@ console.error = (...args) => {
 		message = 'Unknown error (no message provided).\n';
 	}
 	if (message.includes('EBUSY')) {
-		console.warn(i18next.t('warning.file.busy'));
+		console.warn(tr('warning.file.busy'));
 		return;
 	}
 	if (message.includes('ENOSPC')) {
-		toast.warn(i18next.t('warning.disk.full'), TOASTER_OPTIONS);
+		toast.warn(tr('warning.disk.full'), TOASTER_OPTIONS);
 		store.dispatch(setCurrentProject(null));
 		return;
 	}
 	if (message.includes('Failed to parse JSON file')) {
-		toast.warn(i18next.t('warning.corrupted.files'), TOASTER_OPTIONS);
+		toast.warn(tr('warning.corrupted.files'), TOASTER_OPTIONS);
 		return;
 	}
 	notifyError(<ToasterError message={message} stack={stack} />);
@@ -102,11 +104,11 @@ window.addEventListener('unhandledrejection', (event) => {
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
 	if (message.includes('EBUSY')) {
-		console.warn(i18next.t('warning.file.busy'));
+		console.warn(tr('warning.file.busy'));
 		return;
 	}
 	if (message.includes('ENOSPC')) {
-		toast.warn(i18next.t('warning.disk.full'), TOASTER_OPTIONS);
+		toast.warn(tr('warning.disk.full'), TOASTER_OPTIONS);
 		store.dispatch(setCurrentProject(null));
 		return;
 	}
