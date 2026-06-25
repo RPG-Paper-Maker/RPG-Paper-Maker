@@ -253,15 +253,61 @@ class GL {
 			this.renderer.clear(true, true);
 			this.renderer.setScissorTest(true);
 			this.renderer.debug.onShaderError = (gl, program, vertShader, fragShader) => {
+				const sourceContext = (source: string | null, errorLine: number): string => {
+					if (!source) {
+						return '';
+					}
+					const lines = source.split('\n');
+					const from = Math.max(0, errorLine - 6);
+					const to = Math.min(lines.length, errorLine + 5);
+					return lines
+						.slice(from, to)
+						.map((line, i) => {
+							const n = from + i + 1;
+							return `${n === errorLine ? '>' : ' '} ${n}: ${line}`;
+						})
+						.join('\n');
+				};
+				const formatShader = (label: string, shader: WebGLShader, log: string, compiled: boolean): string => {
+					let out = `${label}: ${compiled ? 'compiled' : 'FAILED to compile'}`;
+					if (log) {
+						out += `\n${log}`;
+					}
+					const match = /ERROR: 0:(\d+)/.exec(log);
+					if (match) {
+						const context = sourceContext(gl.getShaderSource(shader), parseInt(match[1], 10));
+						if (context) {
+							out += `\n${context}`;
+						}
+					}
+					return out;
+				};
+				const vertCompiled = gl.getShaderParameter(vertShader, gl.COMPILE_STATUS);
+				const fragCompiled = gl.getShaderParameter(fragShader, gl.COMPILE_STATUS);
+				const linkStatus = gl.getProgramParameter(program, gl.LINK_STATUS);
+				gl.validateProgram(program);
+				const validateStatus = gl.getProgramParameter(program, gl.VALIDATE_STATUS);
 				const programLog = gl.getProgramInfoLog(program)?.trim() ?? '';
 				const vertLog = gl.getShaderInfoLog(vertShader)?.trim() ?? '';
 				const fragLog = gl.getShaderInfoLog(fragShader)?.trim() ?? '';
-				const validateStatus = gl.getProgramParameter(program, gl.VALIDATE_STATUS);
 				const glError = gl.getError();
-				let msg = `THREE.WebGLProgram: Shader Error ${glError} - VALIDATE_STATUS ${validateStatus}\n\n`;
-				if (programLog) msg += `Program Info Log: ${programLog}\n`;
-				if (vertLog) msg += `Vertex Shader Info Log:\n${vertLog}\n`;
-				if (fragLog) msg += `Fragment Shader Info Log:\n${fragLog}\n`;
+				let msg = `THREE.WebGLProgram: Shader Error ${glError} - LINK_STATUS ${linkStatus} - VALIDATE_STATUS ${validateStatus}\n\n`;
+				if (programLog) {
+					msg += `Program Info Log:\n${programLog}\n\n`;
+				}
+				msg += `${formatShader('Vertex Shader', vertShader, vertLog, vertCompiled)}\n\n`;
+				msg += `${formatShader('Fragment Shader', fragShader, fragLog, fragCompiled)}\n`;
+				if (!programLog && !vertLog && !fragLog) {
+					const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
+					const maxVertUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+					const maxFragUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+					const activeAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+					const activeUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+					msg +=
+						`\nNo driver logs available. GL limits — varying vectors: ${maxVaryings}, vertex uniforms: ` +
+						`${maxVertUniforms}, fragment uniforms: ${maxFragUniforms}. Active attributes: ${activeAttributes}, ` +
+						`active uniforms: ${activeUniforms}.\n`;
+				}
 				console.error(msg);
 			};
 			this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
