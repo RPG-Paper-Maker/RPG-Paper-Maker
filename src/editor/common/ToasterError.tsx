@@ -61,7 +61,7 @@ console.error = (...args) => {
 	if (!message.trim()) {
 		message = 'Unknown error (no message provided).\n';
 	}
-	if (message.includes('EBUSY')) {
+	if (message.includes('EBUSY') || message.includes('EPERM') || message.includes('EACCES')) {
 		console.warn(tr('warning.file.busy'));
 		return;
 	}
@@ -103,7 +103,7 @@ window.addEventListener('unhandledrejection', (event) => {
 	const reason = event.reason;
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
-	if (message.includes('EBUSY')) {
+	if (message.includes('EBUSY') || message.includes('EPERM') || message.includes('EACCES')) {
 		console.warn(tr('warning.file.busy'));
 		return;
 	}

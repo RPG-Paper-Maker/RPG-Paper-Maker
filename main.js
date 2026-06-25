@@ -904,7 +904,7 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 			}
 		},
 		['EEXIST'],
-		5,
+		10,
 		newFilePath
 	);
 	try {
