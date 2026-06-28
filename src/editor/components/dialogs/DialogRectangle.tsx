@@ -16,7 +16,7 @@ import useStateNumber from '../../hooks/useStateNumber';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
 import InputNumber from '../InputNumber';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterClose from './footers/FooterClose';
 
 type Props = {
@@ -92,6 +92,7 @@ function DialogRectangle({ setIsOpen, rectangle, onChange, maxSize, keepSize = f
 			isOpen
 			footer={<FooterClose onClose={handleClose} />}
 			onClose={handleClose}
+			zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 		>
 			<Form>
 				<Label>X</Label>

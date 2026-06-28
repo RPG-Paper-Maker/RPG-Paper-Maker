@@ -43,6 +43,7 @@ type Props = {
 	onChangeSelectedItem: (node: Node | null) => void;
 	getFolder?: (isBR: boolean, dlc?: string) => string;
 	callBackCreateAsset?: (id: number, name: string, isBR?: boolean, dlc?: string) => Model.Asset;
+	onAssetAdded?: (asset: Model.Base) => void | Promise<void>;
 	onListUpdated?: () => void;
 	onDoubleClickLeftList?: () => void;
 	onKeyboardDownList?: (event: KeyboardEvent) => void;
@@ -69,6 +70,7 @@ function PanelAssetsPreviewer({
 	onChangeSelectedItem,
 	getFolder,
 	callBackCreateAsset,
+	onAssetAdded,
 	onListUpdated,
 	onDoubleClickLeftList,
 	content,
@@ -129,10 +131,13 @@ function PanelAssetsPreviewer({
 		}
 	};
 
-	const handleClickMoveLeft = () => {
+	const handleClickMoveLeft = async () => {
 		if (selectedItem) {
 			const newItem = selectedItem.clone();
 			newItem.id = Model.Base.generateNewIDfromList(list.map((node) => node.content));
+			if (onAssetAdded) {
+				await onAssetAdded(newItem);
+			}
 			const node = Node.create(newItem);
 			list.push(node);
 			setForcedCurrentSelectedItemIDLeft(newItem.id);

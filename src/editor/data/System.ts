@@ -36,6 +36,7 @@ class System extends Serializable {
 	public moveCameraOnBlockView!: DynamicValue;
 	public caterpillarMaxPartyMembers!: DynamicValue;
 	public caterpillarFirstIndex!: DynamicValue;
+	public caterpillarOffset!: DynamicValue;
 	public mapFrameDuration!: DynamicValue;
 	public FRAMES!: number;
 	public battlersFrames!: number;
@@ -128,6 +129,13 @@ class System extends Serializable {
 			'caterpillarFirstIndex',
 			'cfi',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'caterpillarOffset',
+			'cof',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],

@@ -15,6 +15,7 @@ import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Point } from '../core/Point';
 import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import { BindingType } from '../core/Serializable';
 import { Asset } from './Asset';
 import { TerrainSound } from './TerrainSound';
@@ -29,6 +30,7 @@ class Picture extends Asset {
 	public height!: number;
 	public isStopAnimation!: boolean;
 	public isClimbAnimation!: boolean;
+	public limit!: Rectangle | null;
 
 	constructor(kind: PICTURE_KIND) {
 		super();
@@ -110,6 +112,7 @@ class Picture extends Asset {
 	applyDefault(): void {
 		super.applyDefault(Picture.getBindings([]));
 		this.collisions = new Map();
+		this.limit = null;
 	}
 
 	getRows(): number {
@@ -133,16 +136,67 @@ class Picture extends Asset {
 		this.picture = await Picture2D.loadImage(this.getPath());
 	}
 
+	static computeAutoDetectLimit(image: HTMLImageElement, frameWidth: number, frameHeight: number): Rectangle | null {
+		if (!image || frameWidth === 0 || frameHeight === 0) {
+			return null;
+		}
+		const offscreen = document.createElement('canvas');
+		offscreen.width = frameWidth;
+		offscreen.height = frameHeight;
+		const ctx = offscreen.getContext('2d');
+		if (!ctx) {
+			return null;
+		}
+		ctx.drawImage(image, 0, 0, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
+		const data = ctx.getImageData(0, 0, frameWidth, frameHeight).data;
+		let minX = frameWidth,
+			minY = frameHeight,
+			maxX = -1,
+			maxY = -1;
+		for (let y = 0; y < frameHeight; y++) {
+			for (let x = 0; x < frameWidth; x++) {
+				if (data[(y * frameWidth + x) * 4 + 3] !== 0) {
+					if (x < minX) minX = x;
+					if (x > maxX) maxX = x;
+					if (y < minY) minY = y;
+					if (y > maxY) maxY = y;
+				}
+			}
+		}
+		if (maxX < 0) {
+			return null;
+		}
+		return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+	}
+
+	async applyAutoDetectLimit(frameColumns: number, frameRows: number) {
+		const path = await this.getPathOrBase64();
+		const image = await Picture2D.loadImage(path);
+		if (Picture2D.isMissing(image) || !image.width || !image.height) {
+			return;
+		}
+		const frameWidth = Math.floor(image.width / frameColumns);
+		const frameHeight = Math.floor(image.height / frameRows);
+		this.limit = Picture.computeAutoDetectLimit(image, frameWidth, frameHeight);
+	}
+
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {
 		super.copy(picture, Picture.getBindings(additionnalBinding));
 		this.kind = picture.kind;
 		this.collisions = new Map<string, CollisionSquare>(
 			[...picture.collisions.entries()].map(([point, collision]) => [point, collision.clone()]),
 		);
+		this.limit = picture.limit ? picture.limit.clone() : null;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Picture.getBindings(additionnalBinding));
+		if (json.lim) {
+			this.limit = new Rectangle();
+			this.limit.read(json.lim as number[]);
+		} else {
+			this.limit = null;
+		}
 		this.collisions = new Map();
 		if (json.col) {
 			for (const obj of json.col as JSONType[]) {
@@ -158,6 +212,11 @@ class Picture extends Asset {
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Picture.getBindings(additionnalBinding));
+		if (this.limit) {
+			const tab: number[] = [];
+			this.limit.write(tab, true);
+			json.lim = tab;
+		}
 		if (this.collisions.size > 0) {
 			const tab: JSONType[] = [];
 			for (const [key, collision] of this.collisions.entries()) {

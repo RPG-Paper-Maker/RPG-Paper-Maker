@@ -60,6 +60,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [moveCameraOnBlockView] = useStateDynamicValue();
 	const [caterpillarMaxPartyMembers] = useStateDynamicValue();
 	const [caterpillarFirstIndex] = useStateDynamicValue();
+	const [caterpillarOffset] = useStateDynamicValue();
 	const [mapFrameDuration] = useStateDynamicValue();
 	const [frames, setFrames] = useStateNumber();
 	const [battlersFrames, setBattlersFrames] = useStateNumber();
@@ -107,6 +108,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		moveCameraOnBlockView.copy(systems.moveCameraOnBlockView);
 		caterpillarMaxPartyMembers.copy(systems.caterpillarMaxPartyMembers);
 		caterpillarFirstIndex.copy(systems.caterpillarFirstIndex);
+		caterpillarOffset.copy(systems.caterpillarOffset);
 		mapFrameDuration.copy(systems.mapFrameDuration);
 		setFrames(systems.FRAMES);
 		setBattlersFrames(systems.battlersFrames);
@@ -174,6 +176,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.moveCameraOnBlockView.copy(moveCameraOnBlockView);
 		systems.caterpillarMaxPartyMembers.copy(caterpillarMaxPartyMembers);
 		systems.caterpillarFirstIndex.copy(caterpillarFirstIndex);
+		systems.caterpillarOffset.copy(caterpillarOffset);
 		systems.mapFrameDuration.copy(mapFrameDuration);
 		systems.FRAMES = frames;
 		systems.battlersFrames = battlersFrames;
@@ -344,6 +347,16 @@ const PanelSystem = forwardRef((props, ref) => {
 									value={caterpillarFirstIndex}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 									min={0}
+								/>
+							</Flex>
+							<Flex column spaced>
+								<Flex spaced centerV>
+									<div>{t('caterpillar.offset')}:</div>
+									<TooltipInformation text={t('tooltip.caterpillar.offset')} />
+								</Flex>
+								<DynamicValueSelector
+									value={caterpillarOffset}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 								/>
 							</Flex>
 						</Flex>

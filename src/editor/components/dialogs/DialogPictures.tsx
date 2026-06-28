@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { ReactNode, useLayoutEffect, useMemo, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
@@ -23,7 +23,9 @@ import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
+import Tab from '../Tab';
 import TextureCharacterSelector from '../TextureCharacterSelector';
+import TextureLimitSelector from '../TextureLimitSelector';
 import TexturePreviewer from '../TexturePreviewer';
 import TextureSquareSelector from '../TextureSquareSelector';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
@@ -69,8 +71,15 @@ function DialogPictures({
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
 	const [selectedKind, setSelectedKind] = useState(kind);
+	const [, forceUpdateLimit] = useReducer((x: number) => x + 1, 0);
+	const [activeTabIndex, setActiveTabIndex] = useState(0);
 
 	const dispatch = useDispatch();
+
+	const limitTabTitles = useMemo(
+		() => [Model.TreeMapTag.create(0, t('selection')), Model.TreeMapTag.create(1, t('limit'))],
+		[t],
+	);
 
 	const folders = useMemo(
 		() =>
@@ -162,6 +171,20 @@ function DialogPictures({
 	const callBackCreateAsset = (id: number, name: string, isBR = true, dlc = '') =>
 		Model.Picture.createPicture(selectedKind!, id, name, isBR, dlc);
 
+	const handleAssetAdded = async (asset: Model.Base) => {
+		if (selectedKind !== PICTURE_KIND.CHARACTERS && selectedKind !== PICTURE_KIND.BATTLERS) {
+			return;
+		}
+		const picture = asset as Model.Picture;
+		const systems = Project.current!.systems;
+		const isCharacter = selectedKind === PICTURE_KIND.CHARACTERS;
+		const frameColumns = isCharacter ? systems.FRAMES : systems.battlersFrames;
+		const frameRows = isCharacter
+			? 4 + (picture.isStopAnimation ? 4 : 0) + (picture.isClimbAnimation ? 4 : 0)
+			: systems.battlersRows;
+		await picture.applyAutoDetectLimit(frameColumns, frameRows);
+	};
+
 	const handleChangeSelectedPicture = (node: Node | null) => {
 		updateSelectedPicture((node?.content ?? null) as Model.Picture | null);
 	};
@@ -249,6 +272,49 @@ function DialogPictures({
 		}
 	}, [selectedKind]);
 
+	const handleChangeLimit = (rectangle: Rectangle) => {
+		if (selectedPicture) {
+			selectedPicture.limit = rectangle;
+			forceUpdateLimit();
+		}
+	};
+
+	const getLimitSelector = () => {
+		if (!selectedPicture) {
+			return null;
+		}
+		const systems = Project.current!.systems;
+		const isCharacter = selectedKind === PICTURE_KIND.CHARACTERS;
+		const frameColumns = isCharacter ? systems.FRAMES : systems.battlersFrames;
+		const frameRows = isCharacter
+			? 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0)
+			: systems.battlersRows;
+		return (
+			<TextureLimitSelector
+				texture={selectedPicture.getPath()}
+				frameColumns={frameColumns}
+				frameRows={frameRows}
+				limit={selectedPicture.limit}
+				onChangeLimit={handleChangeLimit}
+				base64={!selectedPicture.isBR}
+			/>
+		);
+	};
+
+	const wrapWithLimitTabs = (selectionContent: ReactNode) => {
+		if (!isSelectedLeftList || !selectedPicture || selectedPicture.id <= 0) {
+			return selectionContent;
+		}
+		return (
+			<Tab
+				titles={limitTabTitles}
+				contents={[selectionContent, getLimitSelector()]}
+				onCurrentIndexChanged={(index) => setActiveTabIndex(index)}
+				lazyLoadingContent
+			/>
+		);
+	};
+
 	const getPreviewerContent = () => {
 		if (selectedPicture) {
 			const path = selectedPicture.getPath();
@@ -257,18 +323,21 @@ function DialogPictures({
 					if (selectedPicture.id === -1) {
 						return null;
 					}
-					return selectedPicture.id === 0 ? (
-						<TextureSquareSelector
-							texture={Project.current!.pictures.getByID(
-								PICTURE_KIND.TILESETS,
-								Scene.Map.current!.model.getTileset().pictureID,
-							).getPath()}
-							defaultRectangle={selectedRectTileset}
-							onUpdateRectangle={setSelectedRectTileset}
-							base64={!selectedPicture.isBR}
-							doNotUpdateTexture
-						/>
-					) : (
+					if (selectedPicture.id === 0) {
+						return (
+							<TextureSquareSelector
+								texture={Project.current!.pictures.getByID(
+									PICTURE_KIND.TILESETS,
+									Scene.Map.current!.model.getTileset().pictureID,
+								).getPath()}
+								defaultRectangle={selectedRectTileset}
+								onUpdateRectangle={setSelectedRectTileset}
+								base64={!selectedPicture.isBR}
+								doNotUpdateTexture
+							/>
+						);
+					}
+					return wrapWithLimitTabs(
 						<TextureCharacterSelector
 							texture={path}
 							isStopAnimation={isStopAnimation}
@@ -277,8 +346,10 @@ function DialogPictures({
 							onUpdateRectangle={setSelectedRect}
 							base64={!selectedPicture.isBR}
 							adjustPositionSize
-						/>
+						/>,
 					);
+				case PICTURE_KIND.BATTLERS:
+					return wrapWithLimitTabs(<TexturePreviewer texture={path} base64={!selectedPicture.isBR} />);
 				case PICTURE_KIND.ICONS: {
 					const size = Project.current!.systems.iconsSize / Project.SQUARE_SIZE;
 					return (
@@ -319,7 +390,7 @@ function DialogPictures({
 	};
 
 	const getPreviewerOptionsContent = () => {
-		if (selectedPicture) {
+		if (selectedPicture && isSelectedLeftList && activeTabIndex === 0) {
 			switch (selectedKind) {
 				case PICTURE_KIND.CHARACTERS:
 					return selectedPicture.id === 0 ? null : (
@@ -381,6 +452,7 @@ function DialogPictures({
 						onChangeSelectedItem={handleChangeSelectedPicture}
 						getFolder={getFolder}
 						callBackCreateAsset={callBackCreateAsset}
+						onAssetAdded={handleAssetAdded}
 						onListUpdated={handleListUpdated}
 						content={getPreviewerContent()}
 						options={getPreviewerOptionsContent()}
