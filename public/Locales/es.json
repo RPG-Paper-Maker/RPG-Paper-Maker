@@ -1938,6 +1938,8 @@
 	"tooltip.use.dynamic": "Si está marcado, obtiene el código del script de una variable, parámetro o propiedad en lugar del texto de arriba.",
 	"tooltip.picture.index": "Número de ranura de imagen (0-99). Se pueden mostrar varias imágenes a la vez usando diferentes índices. Los índices menores aparecen detrás de los mayores.",
 	"tooltip.picture.origin": "Qué punto de la imagen se alinea con las coordenadas X/Y. Superior-izquierda: esquina superior izquierda de la imagen. Centro: centro de la imagen.",
+	"tooltip.battlers.limit": "Limita el área utilizable de la imagen del battler. Esta área se usa para alinear números de daño, animaciones, estados y otros efectos superpuestos de batalla.",
+	"tooltip.characters.limit": "Limita el área utilizable de la imagen del personaje. Esta área se usa como el desplazamiento entre seguidores en el sistema de oruga.",
 	"tooltip.stretch": "Si está marcado, estira la imagen para llenar toda la pantalla.",
 	"tooltip.shake.offset": "Distancia máxima en píxeles que la pantalla tiembla desde el centro. Valores más altos crean temblores más intensos.",
 	"tooltip.shakes.number": "Cuántas veces por segundo la pantalla tiembla.",

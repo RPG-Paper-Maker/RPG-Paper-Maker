@@ -89,6 +89,6 @@
 	transform: scaleX(1);
 }
 
-.tab .tabItem svg:hover {
+.tab .tabItem > svg:hover {
 	color: var(--red-color);
 }

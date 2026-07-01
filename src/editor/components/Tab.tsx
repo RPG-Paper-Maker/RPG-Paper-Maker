@@ -19,6 +19,7 @@ import '../styles/Tab.css';
 import Button from './Button';
 import ContextMenu from './ContextMenu';
 import Flex from './Flex';
+import TooltipInformation from './TooltipInformation';
 
 type Props = {
 	titles: Model.Base[];
@@ -158,6 +159,8 @@ function Tab({
 	const getTitles = () =>
 		titles.map((title, index) => {
 			const selected = currentIndex === index;
+			const name = title.getName();
+			const titleTooltip = title.tooltip;
 			return (
 				<div
 					ref={selected ? selectedElementRef : null}
@@ -165,7 +168,8 @@ function Tab({
 					className={Utils.getClassName({ selected: selected && !disabled, disabled }, 'tabItem')}
 					onClick={() => handleClickItem(index)}
 				>
-					{title.getName()}
+					{name}
+					{titleTooltip && <TooltipInformation text={titleTooltip} />}
 					{closable && <RxCross2 onClick={(e) => handleClickClose(e, title)} />}
 				</div>
 			);

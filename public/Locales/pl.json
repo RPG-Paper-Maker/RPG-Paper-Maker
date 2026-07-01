@@ -1938,6 +1938,8 @@
 	"tooltip.use.dynamic": "Jeśli zaznaczone, pobiera kod skryptu ze zmiennej, parametru lub właściwości zamiast tekstu powyżej.",
 	"tooltip.picture.index": "Numer slotu obrazu (0-99). Można wyświetlać wiele obrazów jednocześnie używając różnych indeksów. Niższe indeksy pojawiają się za wyższymi.",
 	"tooltip.picture.origin": "Który punkt obrazu wyrównuje się ze współrzędnymi X/Y. Lewy-górny: lewy górny róg obrazu. Środek: środek obrazu.",
+	"tooltip.battlers.limit": "Ogranicza używany obszar obrazu battlera. Ten obszar służy do wyrównania liczb obrażeń, animacji, statusów i innych nakładek walki.",
+	"tooltip.characters.limit": "Ogranicza używany obszar obrazu postaci. Ten obszar jest używany jako przesunięcie między uczestnikami w systemie gąsienicy.",
 	"tooltip.stretch": "Jeśli zaznaczone, rozciąga obraz na cały ekran.",
 	"tooltip.shake.offset": "Maksymalna odległość w pikselach trzęsienia ekranu od środka. Wyższe wartości tworzą intensywniejsze trzęsienie.",
 	"tooltip.shakes.number": "Ile razy na sekundę ekran trzęsie się w przód i w tył.",

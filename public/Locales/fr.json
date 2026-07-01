@@ -1938,6 +1938,8 @@
 	"tooltip.use.dynamic": "Si coché, récupère le code du script depuis une variable, un paramètre ou une propriété au lieu du texte ci-dessus.",
 	"tooltip.picture.index": "Numéro d'emplacement de l'image (0-99). Plusieurs images peuvent être affichées simultanément avec des index différents. Les index bas apparaissent derrière les plus hauts.",
 	"tooltip.picture.origin": "Quel point de l'image s'aligne avec les coordonnées X/Y. Haut-gauche : le coin supérieur gauche. Centre : le centre de l'image.",
+	"tooltip.battlers.limit": "Limite la zone utilisable de l'image du battler. Cette zone sert à aligner les nombres de dégâts, les animations, les statuts et les autres effets affichés en combat.",
+	"tooltip.characters.limit": "Limite la zone utilisable de l'image du personnage. Cette zone sert de décalage entre les suiveurs dans le système de chenille.",
 	"tooltip.stretch": "Si coché, étire l'image pour remplir tout l'écran.",
 	"tooltip.shake.offset": "Distance maximale en pixels du tremblement par rapport au centre. Des valeurs plus élevées créent un tremblement plus intense.",
 	"tooltip.shakes.number": "Nombre de fois par seconde que l'écran tremble.",

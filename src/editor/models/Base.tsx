@@ -290,6 +290,7 @@ class Base extends Serializable {
 
 	public id!: number;
 	public name!: string;
+	public tooltip?: string;
 
 	public static bindings: BindingType[] = [
 		['id', 'id', 0, BINDING.NUMBER],

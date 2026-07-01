@@ -76,10 +76,16 @@ function DialogPictures({
 
 	const dispatch = useDispatch();
 
-	const limitTabTitles = useMemo(
-		() => [Model.TreeMapTag.create(0, t('selection')), Model.TreeMapTag.create(1, t('limit'))],
-		[t],
-	);
+	const limitTabTitles = useMemo(() => {
+		const selection = Model.TreeMapTag.create(0, t('selection'));
+		const limit = Model.TreeMapTag.create(1, t('limit'));
+		if (selectedKind === PICTURE_KIND.BATTLERS) {
+			limit.tooltip = t('tooltip.battlers.limit');
+		} else if (selectedKind === PICTURE_KIND.CHARACTERS) {
+			limit.tooltip = t('tooltip.characters.limit');
+		}
+		return [selection, limit];
+	}, [t, selectedKind]);
 
 	const folders = useMemo(
 		() =>
