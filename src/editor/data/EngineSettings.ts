@@ -11,7 +11,8 @@
 
 import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { BindingType, Serializable } from '../core/Serializable';
-import { Keyboard, ProjectPreview } from '../models';
+import { Keyboard } from '../models/Keyboard';
+import { ProjectPreview } from '../models/ProjectPreview';
 
 class EngineSettings extends Serializable {
 	public static current: EngineSettings;

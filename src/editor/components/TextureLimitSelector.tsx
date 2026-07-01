@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Constants } from '../common';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
+import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import { Model } from '../Editor';
 import Button from './Button';
@@ -39,7 +40,7 @@ function TextureLimitSelector({ texture, frameColumns, frameRows, limit, onChang
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const [image, setImage] = useState<HTMLImageElement | null>(null);
-	const [zoom, setZoom] = useState(6);
+	const [zoom, setZoom] = useState(Project.current?.settings.picturesZoom ?? 6);
 	const [frameWidth, setFrameWidth] = useState(0);
 	const [frameHeight, setFrameHeight] = useState(0);
 	const [draftRect, setDraftRect] = useState<Rectangle | null>(null);
@@ -181,6 +182,14 @@ function TextureLimitSelector({ texture, frameColumns, frameRows, limit, onChang
 		onChangeLimit(new Rectangle(0, 0, frameWidth, frameHeight));
 	};
 
+	const handleChangeZoom = (value: number) => {
+		setZoom(value);
+		if (Project.current) {
+			Project.current.settings.picturesZoom = value;
+			void Project.current.settings.save();
+		}
+	};
+
 	// Trim the first frame to the smallest rectangle containing non-transparent pixels.
 	const handleAutoDetect = () => {
 		if (!image) {
@@ -199,7 +208,7 @@ function TextureLimitSelector({ texture, frameColumns, frameRows, limit, onChang
 					<canvas ref={refCanvas} className='crosshair' width={'0'} height={'0'} />
 				</div>
 				<Groupbox title={t('zoom')}>
-					<Slider value={zoom} onChange={setZoom} min={0} max={10} fillWidth />
+					<Slider value={zoom} onChange={handleChangeZoom} min={0} max={10} fillWidth />
 				</Groupbox>
 				<Groupbox title={t('options')}>
 					<Flex spaced>

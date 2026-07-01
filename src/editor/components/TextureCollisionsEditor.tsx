@@ -90,7 +90,10 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		hoveredDirection: HOVERED_DIRECTION_TYPE.NONE,
 		colorBackground: '',
 	})[0];
-	const [zoom, setZoom] = useState(Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)));
+	const [zoom, setZoom] = useState(
+		Project.current?.settings.picturesZoom ??
+			Math.min(10, 5 + Math.round(Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE)),
+	);
 	const [selectedCollisionType, setSelectedCollisionType] = useState(COLLISION_TYPE.PRATICABLE);
 	const [isFocused, setIsFocused] = useState(false);
 	const [editingRectangle, setEditingRectangle] = useState<Rectangle | null>(null);
@@ -611,6 +614,14 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 		}
 	};
 
+	const handleChangeZoom = (value: number) => {
+		setZoom(value);
+		if (Project.current) {
+			Project.current.settings.picturesZoom = value;
+			void Project.current.settings.save();
+		}
+	};
+
 	useEffect(() => {
 		resize();
 	}, [zoom]);
@@ -836,7 +847,14 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 			const handleWheel = (event: WheelEvent) => {
 				if (event.ctrlKey) {
 					event.preventDefault();
-					setZoom((v) => Math.min(Math.max(0, v + (event.deltaY < 0 ? 1 : -1)), 10));
+					setZoom((v) => {
+						const value = Math.min(Math.max(0, v + (event.deltaY < 0 ? 1 : -1)), 10);
+						if (Project.current) {
+							Project.current.settings.picturesZoom = value;
+							void Project.current.settings.save();
+						}
+						return value;
+					});
 				}
 			};
 			const handleTouchMove = (e: TouchEvent) => {
@@ -949,7 +967,7 @@ function TextureCollisionsEditor({ pictureID, pictureKind, isAnimated = false, d
 					</Checkbox>
 				)}
 				<Groupbox title={t('zoom')} disabled={disabled}>
-					<Slider value={zoom} onChange={setZoom} min={0} max={10} disabled={disabled} fillWidth />
+					<Slider value={zoom} onChange={handleChangeZoom} min={0} max={10} disabled={disabled} fillWidth />
 				</Groupbox>
 			</Flex>
 			{editingRectangle !== null && (

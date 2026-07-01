@@ -55,6 +55,7 @@ class Settings extends Serializable {
 	public lastTabIndexSystems!: number;
 	public mapObjectOptionsOpened!: boolean;
 	public mapEditorSpecialElementsGridView!: boolean;
+	public picturesZoom!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -97,6 +98,7 @@ class Settings extends Serializable {
 		['lastTabIndexSystems', 'ltis', 0, BINDING.NUMBER],
 		['mapObjectOptionsOpened', 'mooo', false, BINDING.BOOLEAN],
 		['mapEditorSpecialElementsGridView', 'mesegv', true, BINDING.BOOLEAN],
+		['picturesZoom', 'pz', 6, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

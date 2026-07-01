@@ -43,7 +43,7 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [isDialogRectangleOpen, setIsDialogRectangleOpen] = useState(false);
 	const [name, setName] = useState(windowSkin.name);
 	const [pictureID, setPictureID] = useState(windowSkin.pictureID);
-	const [zoom, setZoom] = useState(6);
+	const [zoom, setZoom] = useState(Project.current?.settings.picturesZoom ?? 6);
 	const [selectedRectangle, setSelectedRectangle] = useState<Rectangle>();
 	const [isSelecting, setIsSelecting] = useState(false);
 	const [selectingSetter, setSelectingSetter] = useState<{ setter: (r: Rectangle) => void }>();
@@ -91,6 +91,14 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 			setSelectedRectangle(selectedRectangle!.clone());
 		}
 		setIsSelecting(false);
+	};
+
+	const handleChangeZoom = (value: number) => {
+		setZoom(value);
+		if (Project.current) {
+			Project.current.settings.picturesZoom = value;
+			void Project.current.settings.save();
+		}
 	};
 
 	const handleAccept = async () => {
@@ -173,7 +181,7 @@ function DialogWindowSkin({ setIsOpen, model, onAccept, onReject }: Props) {
 						<Groupbox title={t('zoom')} disabled={!selectedPicture || isSelecting}>
 							<Slider
 								value={zoom}
-								onChange={setZoom}
+								onChange={handleChangeZoom}
 								min={0}
 								max={10}
 								fillWidth
