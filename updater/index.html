@@ -343,11 +343,41 @@
 						return Array.from(folders).sort((a, b) => a.localeCompare(b));
 					}
 
-					async function downloadFileWithRetry(file, retries = 3) {
-						for (let i = 0; i < retries; i++) {
+					async function downloadFileWithRetry(file, maxTotalMs = 120000) {
+						const requestTimeoutMs = 30000;
+						const baseDelayMs = 1000;
+						const maxDelayMs = 15000;
+						const start = Date.now();
+						let attempt = 0;
+						let lastError = null;
+						while (Date.now() - start < maxTotalMs) {
+							attempt++;
+							let retryAfterMs = null;
 							try {
-								const res = await fetch(file.url);
+								const controller = new AbortController();
+								const timeout = setTimeout(() => controller.abort(), requestTimeoutMs);
+								let res;
+								try {
+									res = await fetch(file.url, {
+										cache: 'no-store',
+										signal: controller.signal,
+									});
+								} finally {
+									clearTimeout(timeout);
+								}
 								if (!res.ok) {
+									if (res.status === 404) {
+										throw new Error(`HTTP 404 - Not Found (${file.url})`);
+									}
+									if (res.status === 429 || res.status === 503) {
+										const retryAfter = res.headers.get('retry-after');
+										if (retryAfter) {
+											const seconds = Number(retryAfter);
+											if (!Number.isNaN(seconds)) {
+												retryAfterMs = seconds * 1000;
+											}
+										}
+									}
 									throw new Error(`HTTP ${res.status} - ${res.statusText}`);
 								}
 								const blob = new Uint8Array(await res.arrayBuffer());
@@ -358,11 +388,22 @@
 								);
 								return;
 							} catch (e) {
-								console.warn(`Retry ${i + 1}/${retries} failed for ${file.url}:`, e);
-								if (i === retries - 1) throw e;
-								await new Promise((r) => setTimeout(r, 1000));
+								lastError = e;
+								if (e && e.message && e.message.startsWith('HTTP 404')) {
+									throw e;
+								}
+								console.warn(`Attempt ${attempt} failed for ${file.url}:`, e);
+								const remaining = maxTotalMs - (Date.now() - start);
+								if (remaining <= 0) break;
+								let delay =
+									retryAfterMs !== null
+										? retryAfterMs
+										: Math.min(baseDelayMs * 2 ** (attempt - 1), maxDelayMs);
+								delay += Math.floor(Math.random() * 1000);
+								await new Promise((r) => setTimeout(r, Math.min(delay, remaining)));
 							}
 						}
+						throw lastError || new Error(`Failed to download ${file.url}`);
 					}
 
 					// Download manager
@@ -371,7 +412,7 @@
 						progressContainer.hidden = false;
 						let completed = 0;
 						const total = files.length + folders.length;
-						const concurrency = 5;
+						const concurrency = 4;
 						let index = 0;
 						let indexFolders = 0;
 						let isError = false;
