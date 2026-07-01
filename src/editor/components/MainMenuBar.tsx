@@ -709,13 +709,13 @@ function MainMenuBar() {
 	const handleChangeShowHideGrid = async () => {
 		Project.current!.settings.showGrid = !Project.current!.settings.showGrid;
 		await Project.current!.settings.save();
-		Scene.Map.current!.showGrid(Project.current!.settings.showGrid);
+		Scene.Map.current?.showGrid(Project.current!.settings.showGrid);
 	};
 
 	const handleChangeShowHideSquareInformation = async () => {
 		Project.current!.settings.showSquareInformation = !Project.current!.settings.showSquareInformation;
 		await Project.current!.settings.save();
-		Scene.Map.current!.showSquareCoordinates(Project.current!.settings.showSquareInformation);
+		Scene.Map.current?.showSquareCoordinates(Project.current!.settings.showSquareInformation);
 	};
 
 	const play = async () => await openGame(currentProject!.location);
