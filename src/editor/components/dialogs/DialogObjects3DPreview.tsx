@@ -527,7 +527,7 @@ function DialogObjects3DPreview({ setIsOpen, object3DID, manager = false, onAcce
 							<>
 								<Label>{t('scale')}</Label>
 								<Value>
-									<InputNumber value={scale} onChange={handleChangeScale} />
+									<InputNumber value={scale} onChange={handleChangeScale} decimals />
 								</Value>
 							</>
 						)}
