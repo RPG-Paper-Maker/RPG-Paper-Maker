@@ -34,6 +34,7 @@ type CurrentStateProps = {
 	picture: HTMLImageElement | null;
 	battlerID: number;
 	battler: HTMLImageElement | null;
+	battlerLimit: Rectangle | null;
 	mouseX: number | null;
 	mouseY: number | null;
 	currentFrameID: number;
@@ -96,6 +97,7 @@ function AnimationPreviewer({
 		picture: null,
 		battlerID: -1,
 		battler: null,
+		battlerLimit: null,
 		mouseX: null,
 		mouseY: null,
 		currentFrameID: 1,
@@ -122,9 +124,9 @@ function AnimationPreviewer({
 		currentState.picture = await Picture2D.loadImage(
 			(await Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, pictureID)?.getPathOrBase64()) ?? '',
 		);
-		currentState.battler = await Picture2D.loadImage(
-			(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID)?.getPathOrBase64()) ?? '',
-		);
+		const battlerPicture = Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, battlerID);
+		currentState.battlerLimit = battlerPicture?.limit ?? null;
+		currentState.battler = await Picture2D.loadImage((await battlerPicture?.getPathOrBase64()) ?? '');
 		setLoadingState((v) => v - 1);
 	};
 
@@ -195,29 +197,27 @@ function AnimationPreviewer({
 			const w = currentState.battler!.width / Project.current!.systems.battlersFrames;
 			const h = currentState.battler!.height / Project.current!.systems.battlersRows;
 			const ratio = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
-			let offsetY = 0;
+			const limit = currentState.battlerLimit ?? new Rectangle(0, 0, w, h);
+			const fw = w * ratio;
+			const fh = h * ratio;
+			const lx = limit.x * ratio;
+			const ly = limit.y * ratio;
+			const lw = limit.width * ratio;
+			const lh = limit.height * ratio;
+			const anchorX = lx + lw / 2;
+			let anchorY = fh;
 			switch (positionKind) {
 				case ANIMATION_POSITION_KIND.TOP:
-					offsetY = h;
+					anchorY = ly;
 					break;
 				case ANIMATION_POSITION_KIND.MIDDLE:
-					offsetY = -(h / 2);
+					anchorY = ly + lh / 2;
 					break;
 				case ANIMATION_POSITION_KIND.BOTTOM:
-					offsetY = -h;
+					anchorY = fh;
 					break;
 			}
-			ctx.drawImage(
-				currentState.battler!,
-				0,
-				0,
-				w,
-				h,
-				(WIDTH - w * ratio) / 2,
-				(HEIGHT - h * ratio) / 2 + offsetY,
-				w * ratio,
-				h * ratio,
-			);
+			ctx.drawImage(currentState.battler!, 0, 0, w, h, WIDTH / 2 - anchorX, HEIGHT / 2 - anchorY, fw, fh);
 		}
 	};
 
