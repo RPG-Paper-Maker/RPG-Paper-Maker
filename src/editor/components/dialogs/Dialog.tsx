@@ -12,11 +12,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { VscChromeClose } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE } from '../../common';
 import { Utils } from '../../common/Utils';
 import { DialogGL, Inputs } from '../../managers';
-import { setDialogsOpen } from '../../store';
+import { RootState, setDialogsOpen } from '../../store';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
 import Button from '../Button';
@@ -54,6 +54,19 @@ export enum Z_INDEX_LEVEL {
 }
 
 const RESIZING_SPACE = 10;
+
+const DEFAULT_ENGINE_FONT_SIZE = 12;
+
+function scaleDimension(value: string | undefined, factor: number): string | undefined {
+	if (value === undefined || factor === 1) {
+		return value;
+	}
+	const match = value.match(/^(-?\d*\.?\d+)px$/);
+	if (!match) {
+		return value;
+	}
+	return `${parseFloat(match[1]) * factor}px`;
+}
 
 function MapInteractionBlocker() {
 	const [rect, setRect] = useState<DOMRect | null>(null);
@@ -120,6 +133,10 @@ function Dialog({
 	const dialogGLBarrierPushedRef = useRef(false);
 
 	const dispatch = useDispatch();
+	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
+	const fontSizeFactor = engineFontSize / DEFAULT_ENGINE_FONT_SIZE;
+	const scaledWidth = scaleDimension(initialWidth, fontSizeFactor);
+	const scaledHeight = scaleDimension(initialHeight, fontSizeFactor);
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {
@@ -315,13 +332,13 @@ function Dialog({
 		Inputs.isMapFocused = dialogs.length === 0;
 		if (dialogRef.current && isOpen) {
 			const rect = dialogRef.current.getBoundingClientRect();
-			dialogRef.current.style.width = initialWidth || `${rect.width + 2}px`;
-			dialogRef.current.style.height = initialHeight || `${rect.height + 2}px`;
-			dialogRef.current.style.minHeight = initialHeight
-				? `min(${initialHeight}, calc(100vh - 10px))`
+			dialogRef.current.style.width = scaledWidth || `${rect.width + 2}px`;
+			dialogRef.current.style.height = scaledHeight || `${rect.height + 2}px`;
+			dialogRef.current.style.minHeight = scaledHeight
+				? `min(${scaledHeight}, calc(100vh - 10px))`
 				: `${rect.height + 2}px`;
 		}
-	}, [isOpen, initialWidth, initialHeight]);
+	}, [isOpen, scaledWidth, scaledHeight]);
 
 	useEffect(() => {
 		if (isOpen) {
