@@ -94,7 +94,7 @@ This should open the project in [http://localhost:3000/](http://localhost:3000/)
 Make sure to build the project before:
 
 ```bash
-npm run build
+npm run build-electron
 ```
 
 Then run electron:
