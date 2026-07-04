@@ -217,7 +217,7 @@ function MapEditor() {
 			return;
 		}
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			const isNew = Scene.Map.current.isCursorObjectNew();
 			if (isNew) {
 				await handleNewMapObject();
 			} else {
@@ -345,7 +345,7 @@ function MapEditor() {
 			return [];
 		}
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			const isNew = Scene.Map.current.isCursorObjectNew();
 			return [
 				{
 					title: `${t('edit')}...`,

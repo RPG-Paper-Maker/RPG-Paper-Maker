@@ -1321,6 +1321,15 @@ class Map extends Base {
 		return null;
 	}
 
+	isCursorObjectNew(): boolean {
+		const position = this.cursorObject.position;
+		const mapPortion = this.getMapPortionByPosition(position);
+		if (mapPortion) {
+			return !mapPortion.model.objects.has(position.toKey());
+		}
+		return !this.model?.getObjectAt(position);
+	}
+
 	enableView(b: boolean) {
 		this.showGrid(!b && Project.current!.settings.showGrid);
 		this.cursorStartPosition.mesh.visible = !b;
