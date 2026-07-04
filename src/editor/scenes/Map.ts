@@ -335,7 +335,7 @@ class Map extends Base {
 		}
 
 		// Screen tone
-		if (!this.isDetection) {
+		if (!this.isDetection && !this.isBattle) {
 			this.updateScreenTone();
 		}
 

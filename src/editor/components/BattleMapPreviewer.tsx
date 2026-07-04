@@ -96,6 +96,8 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 		const vLine = createOverlayLine(0, -HEIGHT / 2, 0, HEIGHT / 2, 0x00ff00);
 		overlayScene.add(hLine);
 		overlayScene.add(vLine);
+		const previousScreenTone = Manager.GL.screenTone.clone();
+		Scene.Map.currentBattle!.updateScreenTone();
 		setDataURL(
 			Manager.GL.renderToDataURL(
 				[
@@ -106,6 +108,7 @@ function BattleMapPreviewer({ monsters, triggerUpdate, disabled = false }: Props
 				HEIGHT,
 			),
 		);
+		Manager.GL.screenTone.copy(previousScreenTone);
 	};
 
 	useEffect(() => {
