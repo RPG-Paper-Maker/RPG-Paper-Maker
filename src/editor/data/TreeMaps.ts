@@ -38,6 +38,13 @@ class TreeMaps extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_TREE_MAPS);
 	}
 
+	async save(temp = false) {
+		if (!this.tree[0]) {
+			return;
+		}
+		await super.save(temp);
+	}
+
 	translateDefaults() {
 		const root = this.tree[0];
 		const introduction = root.children[0];

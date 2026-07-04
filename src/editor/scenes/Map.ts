@@ -497,7 +497,7 @@ class Map extends Base {
 		if (this.tag?.saved) {
 			this.tag.saved = false;
 			this.needsTreeMapUpdate = true;
-			if (Project.current) {
+			if (Map.current === this && Project.current?.loaded) {
 				await Project.current.treeMaps.save();
 			}
 		}
