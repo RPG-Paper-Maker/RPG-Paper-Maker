@@ -79,6 +79,7 @@ export type CommandProps = {
 	list?: MapObjectCommandType[];
 	onAccept: (command: Model.MapObjectCommand) => void;
 	onReject: () => void;
+	onLivePreview?: (command: Model.MapObjectCommand | null) => void;
 };
 
 type Props = {
@@ -87,9 +88,10 @@ type Props = {
 	isNew: boolean;
 	onAccept: () => void;
 	onReject: () => void;
+	onLivePreview?: (command: Model.MapObjectCommand | null) => void;
 };
 
-function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, onLivePreview }: Props) {
 	const command = model as MapObjectCommand;
 
 	const { t } = useTranslation();
@@ -120,6 +122,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 	};
 
 	const handleRejectCommand = () => {
+		onLivePreview?.(isNew ? null : command);
 		if (!isNew) {
 			setIsOpen(false);
 			onReject();
@@ -334,6 +337,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject }:
 			onAccept: handleAcceptCommand,
 			onReject: handleRejectCommand,
 			list: command.command,
+			onLivePreview,
 		};
 		switch (selectedCommand) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:

@@ -84,6 +84,7 @@ class Map extends Base {
 	public canEdit = true;
 	public isDetection: boolean;
 	public isBattle: boolean;
+	public shouldUpdateScreenTone: boolean;
 	public detectionFieldLeft?: number;
 	public detectionFieldRight?: number;
 	public detectionFieldTop?: number;
@@ -124,6 +125,8 @@ class Map extends Base {
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
+	public heroPreviewPosition: Position | null = null;
+	public heroPreviewOrientation = 0;
 	public layerRayPosition: Portion | null = null;
 	public lastMapElement: MapElement.Base | null = null;
 	public pointedMapElementPosition: Position | null = null;
@@ -169,6 +172,9 @@ class Map extends Base {
 	public previewSizeActive = false;
 	public previewShiftX = 0;
 	public previewShiftZ = 0;
+	public simulationHiddenObjectKeys = new Set<string>();
+	public simulationActive = false;
+	public objectDialogActive = false;
 	public cameraPreviewSnapshot: {
 		distance: number;
 		horizontalAngle: number;
@@ -182,10 +188,17 @@ class Map extends Base {
 	public showCoordinates = true;
 	public pointedObjectLabel: string | null = null;
 
-	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false, isBattle = false) {
+	constructor(
+		tag?: Model.TreeMapTag,
+		canEdit = true,
+		isDetection = false,
+		isBattle = false,
+		shouldUpdateScreenTone = true,
+	) {
 		super(tag, isDetection);
 		this.isDetection = isDetection;
 		this.isBattle = isBattle;
+		this.shouldUpdateScreenTone = shouldUpdateScreenTone;
 		this.id = tag?.id ?? -1;
 		this.tag = tag;
 		this.canEdit = canEdit;
@@ -335,7 +348,7 @@ class Map extends Base {
 		}
 
 		// Screen tone
-		if (!this.isDetection && !this.isBattle) {
+		if (!this.isDetection && !this.isBattle && this.shouldUpdateScreenTone) {
 			this.updateScreenTone();
 		}
 
@@ -1522,7 +1535,26 @@ class Map extends Base {
 		await this.moveCursorHeight(false, false);
 	}
 
+	get isCameraCursorLocked(): boolean {
+		return this.simulationActive || this.objectDialogActive;
+	}
+
+	get isCameraRotationLocked(): boolean {
+		return this.simulationActive;
+	}
+
+	get isZoomLocked(): boolean {
+		return this.simulationActive;
+	}
+
+	centerCameraOnObject() {
+		this.cursorObject.syncWithCameraTargetPosition();
+	}
+
 	zoom(isIn: boolean, coef = 1) {
+		if (this.isZoomLocked) {
+			return;
+		}
 		this.grid.line.position.setY(this.cursor.position.getTotalY() + this.camera.getYOffsetDepth());
 		this.cursor.updateMeshPosition();
 		if (isIn) {
@@ -2282,12 +2314,18 @@ class Map extends Base {
 	onKeyDown() {}
 
 	onKeyDownImmediate() {
+		if (this.isCameraCursorLocked) {
+			return;
+		}
 		if (this.rectangleStartPosition === null && this.movingObject === null) {
 			this.needsUpdateCursor = true;
 		}
 	}
 
 	onKeyUp() {
+		if (this.isCameraCursorLocked) {
+			return;
+		}
 		this.cursor.onKeyUp();
 		if (this.canEdit && this.tag) {
 			this.tag.cursorPosition = this.cursor.position;
@@ -2296,9 +2334,14 @@ class Map extends Base {
 	}
 
 	onMouseDown() {
+		if (this.isCameraRotationLocked) {
+			return;
+		}
 		if (Inputs.isSHIFT) {
 			this.camera.onMouseWheelUpdate(this === Map.current);
 			this.requestPaintHUD = true;
+		} else if (this.isCameraCursorLocked) {
+			return;
 		} else if (
 			!Inputs.isMouseWheelPressed &&
 			(Inputs.isCTRL || (!this.canEdit && !this.isDetection)) &&
@@ -2438,12 +2481,17 @@ class Map extends Base {
 	}
 
 	onMouseMove() {
+		if (this.simulationActive) {
+			return;
+		}
 		if (Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
 			this.requestPaintHUD = true;
 		}
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
-			this.camera.onMouseWheelUpdate(this === Map.current);
-			this.requestPaintHUD = true;
+			if (!this.isCameraRotationLocked) {
+				this.camera.onMouseWheelUpdate(this === Map.current);
+				this.requestPaintHUD = true;
+			}
 		} else {
 			// Avoid to draw undesired new preview
 			if (!this.mouseUp) {
@@ -2454,6 +2502,9 @@ class Map extends Base {
 	}
 
 	onPointerMove() {
+		if (this.simulationActive) {
+			return;
+		}
 		if (Inputs.isPointerPressed) {
 			if (Inputs.previousTouchDistance !== 0) {
 				const zoomFactor = Inputs.touchDistance / Inputs.previousTouchDistance;
@@ -2468,7 +2519,7 @@ class Map extends Base {
 						this.isDraggingTransforming = true;
 					}
 					this.needsUpdateRaycasting = true;
-				} else {
+				} else if (!this.isCameraRotationLocked) {
 					this.camera.onMouseWheelUpdate(this === Map.current);
 					this.requestPaintHUD = true;
 				}
@@ -2604,6 +2655,9 @@ class Map extends Base {
 
 	async onMouseWheel(delta: number) {
 		if (Inputs.isCTRL) {
+			if (this.isCameraCursorLocked) {
+				return;
+			}
 			if (delta < 0) {
 				if (Inputs.isSHIFT) {
 					await this.moveCursorPixelUp();
@@ -2618,6 +2672,9 @@ class Map extends Base {
 				}
 			}
 		} else {
+			if (this.isZoomLocked) {
+				return;
+			}
 			if (delta < 0) {
 				this.zoomIn(0.5);
 			} else {

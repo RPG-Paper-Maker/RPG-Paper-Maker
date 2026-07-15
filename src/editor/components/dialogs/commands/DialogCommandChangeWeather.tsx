@@ -30,6 +30,7 @@ import RadioGroup from '../../RadioGroup';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
 enum SELECTION_TYPE {
 	NONE,
@@ -41,7 +42,14 @@ enum SELECTION_TEXTURE_TYPE {
 	IMAGE,
 }
 
-function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandChangeWeather({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	onLivePreview,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const [selectionType, setSelectionType] = useStateNumber();
@@ -130,8 +138,7 @@ function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, on
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		newList.push(selectionType);
 		if (selectionType === SELECTION_TYPE.CUSTOM) {
@@ -153,7 +160,14 @@ function DialogCommandChangeWeather({ commandKind, setIsOpen, list, onAccept, on
 		}
 		newList.push(Utils.boolToNum(isWaitingEndCommand));
 		time.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

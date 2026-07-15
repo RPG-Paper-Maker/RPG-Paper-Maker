@@ -11,6 +11,8 @@
 	"options": "Налаштування",
 	"display": "Показ",
 	"test": "Тест",
+	"test.command": "Тестувати цю команду",
+	"test.command.options": "Тестувати цю команду з параметрами...",
 	"help": "Допомога",
 	"open.project": "Відкрити проєкт",
 	"open.project.tool": "Відкрити",

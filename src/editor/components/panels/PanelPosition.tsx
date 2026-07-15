@@ -113,11 +113,12 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 			}
 		} else {
 			setSelectionType(isBattleMap ? SELECTION_BATTLE_MAP_TYPE.DEFAULT : SELECTION_TYPE.SELECT);
-			setMapID(1);
-			setX(0);
-			setY(0);
-			setYp(0);
-			setZ(0);
+			const cursor = Scene.Map.current?.cursorObject.position;
+			setMapID(Scene.Map.current?.id ?? 1);
+			setX(cursor?.x ?? 0);
+			setY(cursor?.y ?? 0);
+			setYp(cursor?.yPixels ?? 0);
+			setZ(cursor?.z ?? 0);
 		}
 	};
 

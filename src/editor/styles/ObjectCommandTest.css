@@ -1,0 +1,132 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+.objectCommandTestOverlay {
+	position: fixed;
+	pointer-events: none;
+	z-index: 60;
+}
+
+.objectCommandTestControls {
+	position: absolute;
+	bottom: 15px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px 12px;
+	background-color: color-mix(in srgb, var(--darker-bg-color, #14141e) 85%, transparent);
+	border: 1px solid var(--lighter-bg-color, #3c3c50);
+	border-radius: 8px;
+	pointer-events: auto;
+}
+
+.objectCommandTestHudCanvas {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.objectCommandTestHudRegion {
+	position: absolute;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
+.objectCommandTestControlsSeparator {
+	width: 1px;
+	height: 20px;
+	background-color: var(--lighter-bg-color, #3c3c50);
+	margin: 0 4px;
+}
+
+.objectCommandTestMessage {
+	position: absolute;
+	bottom: 80px;
+	left: 50%;
+	transform: translateX(-50%);
+	min-width: 45%;
+	max-width: 80%;
+	background-color: rgba(15, 15, 35, 0.88);
+	border: 2px solid rgba(255, 255, 255, 0.75);
+	border-radius: 6px;
+	padding: 14px 18px;
+	color: white;
+	white-space: pre-wrap;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
+.objectCommandTestInterlocutor {
+	position: absolute;
+	top: -14px;
+	left: 10px;
+	background-color: rgba(15, 15, 35, 0.95);
+	border: 1px solid rgba(255, 255, 255, 0.75);
+	border-radius: 4px;
+	padding: 2px 10px;
+	font-size: 12px;
+}
+
+.objectCommandTestChoices {
+	position: absolute;
+	bottom: 180px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 200px;
+	pointer-events: auto;
+}
+
+.objectCommandTestChoice {
+	background-color: rgba(15, 15, 35, 0.88);
+	border: 2px solid rgba(255, 255, 255, 0.5);
+	border-radius: 6px;
+	padding: 6px 16px;
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
+.objectCommandTestChoice:hover {
+	border-color: white;
+	background-color: rgba(60, 60, 110, 0.9);
+}
+
+.objectCommandTestOverlayPreview .objectCommandTestMessage,
+.objectCommandTestOverlayPreview .objectCommandTestChoices,
+.objectCommandTestOverlayPreview .objectCommandTestChoice {
+	pointer-events: none;
+	cursor: default;
+}
+
+.objectCommandTestWarnings {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-width: 45%;
+	pointer-events: none;
+}
+
+.objectCommandTestWarning {
+	background-color: rgba(120, 80, 0, 0.85);
+	border: 1px solid rgba(255, 200, 80, 0.8);
+	border-radius: 4px;
+	padding: 4px 8px;
+	color: white;
+	font-size: 12px;
+}

@@ -38,7 +38,16 @@ export interface PanelMapObjectRef {
 	initialize: () => void;
 	reset: () => void;
 	accept: () => void;
+	getEditedObject: () => Model.CommonObject;
 }
+
+export type PlayCommandInfo = {
+	node: Node;
+	reaction: Model.MapObjectReaction;
+	stateID: number;
+	openOptions: boolean;
+	isNewCommand?: boolean;
+};
 
 type Props = {
 	object: Model.CommonObject;
@@ -46,11 +55,25 @@ type Props = {
 	hideStateValues?: boolean;
 	saveOnDestruction?: boolean;
 	saveOnUpdate?: boolean;
+	onPlayCommand?: (info: PlayCommandInfo) => void;
+	onSelectCommand?: (info: PlayCommandInfo | null) => void;
+	onLivePreviewCommand?: (info: PlayCommandInfo, command: Model.MapObjectCommand | null) => void;
+	onUpdateStateGraphics?: (state: Model.MapObjectState) => void;
 };
 
 const PanelMapObject = forwardRef(
 	(
-		{ object, hideNameID = false, hideStateValues = false, saveOnDestruction = false, saveOnUpdate = false }: Props,
+		{
+			object,
+			hideNameID = false,
+			hideStateValues = false,
+			saveOnDestruction = false,
+			saveOnUpdate = false,
+			onPlayCommand,
+			onSelectCommand,
+			onLivePreviewCommand,
+			onUpdateStateGraphics,
+		}: Props,
 		ref,
 	) => {
 		const { t } = useTranslation();
@@ -227,6 +250,47 @@ const PanelMapObject = forwardRef(
 								key={node.content.id}
 								list={reaction.commands}
 								onListUpdated={handleUpdateEvents}
+								onPlayCommand={
+									onPlayCommand
+										? (commandNode: Node, openOptions: boolean) =>
+												onPlayCommand({
+													node: commandNode,
+													reaction,
+													stateID: state.id,
+													openOptions,
+												})
+										: undefined
+								}
+								onSelectCommand={
+									onSelectCommand
+										? (commandNode: Node | null) =>
+												onSelectCommand(
+													commandNode
+														? {
+																node: commandNode,
+																reaction,
+																stateID: state.id,
+																openOptions: false,
+															}
+														: null,
+												)
+										: undefined
+								}
+								onLivePreviewCommand={
+									onLivePreviewCommand
+									? (commandNode: Node, command: Model.MapObjectCommand | null, isNew: boolean) =>
+												onLivePreviewCommand(
+													{
+														node: commandNode,
+														reaction,
+														stateID: state.id,
+														openOptions: false,
+														isNewCommand: isNew,
+													},
+													command,
+												)
+										: undefined
+								}
 							/>
 						) : null;
 					}),
@@ -324,6 +388,7 @@ const PanelMapObject = forwardRef(
 				setPixelOffset(state.pixelOffset);
 				setKeepPosition(state.keepPosition);
 				setEventCommandDetection(state.eventCommandDetection);
+				onUpdateStateGraphics?.(state);
 			}
 			updateReactionsTab(newEvents ?? events, state);
 		};
@@ -335,6 +400,7 @@ const PanelMapObject = forwardRef(
 			});
 			selectedState!.graphicsKind = kind;
 			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState!);
 		};
 
 		const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean, kind: number) => {
@@ -354,6 +420,7 @@ const PanelMapObject = forwardRef(
 				rectTileset: selectedState!.rectTileset,
 			});
 			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState);
 		};
 
 		const handleChangeObjectMovingKind = (movingKind: OBJECT_MOVING_KIND) => {
@@ -475,10 +542,23 @@ const PanelMapObject = forwardRef(
 			object.properties = Node.createListFromNodes(statesRef.current.properties);
 		};
 
+		const getEditedObject = () => {
+			const editedObject = object.clone();
+			editedObject.name = statesRef.current.name;
+			editedObject.commonModelID = statesRef.current.modelID;
+			editedObject.canBeTriggeredAnotherObject = statesRef.current.canBeTriggeredAnotherObject;
+			editedObject.onlyOneEventPerFrame = statesRef.current.onlyOneEventPerFrame;
+			editedObject.states = Node.createListFromNodes(statesRef.current.states);
+			editedObject.events = Node.createListFromNodes(statesRef.current.events);
+			editedObject.properties = Node.createListFromNodes(statesRef.current.properties);
+			return editedObject;
+		};
+
 		useImperativeHandle(ref, () => ({
 			initialize,
 			reset,
 			accept,
+			getEditedObject,
 		}));
 
 		useEffect(() => {

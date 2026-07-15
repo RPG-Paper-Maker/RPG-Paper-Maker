@@ -46,7 +46,7 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 	const initializeMap = async () => {
 		if (currentMapTag && !currentMapTag.isFolder()) {
 			setFirstLoading(true);
-			Scene.Map.currentpositionSelector = new Scene.Map(currentMapTag, false);
+			Scene.Map.currentpositionSelector = new Scene.Map(currentMapTag, false, false, false, false);
 			Scene.Map.currentpositionSelector.loading = true;
 			Scene.Map.currentpositionSelector.canvas = refCanvas?.current;
 			await Scene.Map.currentpositionSelector.load();
@@ -85,7 +85,13 @@ function MapPositionSelector({ currentMapTag, onCursorUpdated }: Props) {
 				map.update();
 			}
 			if (map.initialized) {
-				map.draw3D(Manager.GL.dialogContext);
+				const previousScreenTone = Manager.GL.screenTone.clone();
+				try {
+					map.updateScreenTone();
+					map.draw3D(Manager.GL.dialogContext);
+				} finally {
+					Manager.GL.screenTone.copy(previousScreenTone);
+				}
 			}
 		}
 		if (Constants.IS_MOBILE) {

@@ -26,9 +26,10 @@ export interface PanelWaitTimeRef {
 
 type Props = {
 	defaultSeconds?: number;
+	onChange?: () => void;
 };
 
-const PanelWaitTime = forwardRef(({ defaultSeconds = 0 }: Props, ref) => {
+const PanelWaitTime = forwardRef(({ defaultSeconds = 0, onChange }: Props, ref) => {
 	const { t } = useTranslation();
 
 	const [isWaitingEndCommand, setIsWaitingEndCommand] = useStateBool();
@@ -56,14 +57,25 @@ const PanelWaitTime = forwardRef(({ defaultSeconds = 0 }: Props, ref) => {
 
 	return (
 		<Flex column spacedLarge>
-			<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand}>
+			<Checkbox
+				isChecked={isWaitingEndCommand}
+				onChange={(v) => {
+					setIsWaitingEndCommand(v);
+					onChange?.();
+				}}
+			>
 				{t('wait.end.change.before.next.command')}
 			</Checkbox>
 			<Flex>
 				<Flex one />
 				<Flex spaced centerV>
 					<div>{t('time')}:</div>
-					<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+					<DynamicValueSelector
+						value={time}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						onChangeValue={onChange}
+						onChangeKind={onChange}
+					/>
 					<div>{t('seconds')}</div>
 				</Flex>
 			</Flex>

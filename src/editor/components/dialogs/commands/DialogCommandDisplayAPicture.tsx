@@ -28,8 +28,16 @@ import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandDisplayAPicture({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	onLivePreview,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const [imageID] = useStateDynamicValue();
@@ -70,8 +78,7 @@ function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, 
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		imageID.getCommand(newList, true);
 		index.getCommand(newList);
@@ -82,7 +89,14 @@ function DialogCommandDisplayAPicture({ commandKind, setIsOpen, list, onAccept, 
 		opacity.getCommand(newList);
 		angle.getCommand(newList);
 		newList.push(Utils.boolToNum(isStretch));
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

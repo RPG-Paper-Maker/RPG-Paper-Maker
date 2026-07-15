@@ -108,6 +108,7 @@ class Paths {
 	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
 	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
 	public static readonly FILE_TEST = 'test.json';
+	public static readonly FILE_OBJECT_COMMAND_TESTS = 'objectCommandTests.json';
 	public static readonly FILE_VERSION = 'version';
 	public static readonly FILE_GAME_RPMG = 'game.rpmg';
 	public static readonly FILE_FONTS_CSS = 'fonts.css';

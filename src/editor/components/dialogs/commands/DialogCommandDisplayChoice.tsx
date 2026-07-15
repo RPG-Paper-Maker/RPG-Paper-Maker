@@ -24,8 +24,9 @@ import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [choices, setChoices] = useState<Node[]>([]);
@@ -70,8 +71,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 		setForcedCurrentSelectedItemIndex(0);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		cancelAutoIndex.getCommand(newList);
 		maxNumberChoicesDisplay.getCommand(newList);
@@ -80,7 +80,14 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 			newList.push('-');
 			lang.getCommand(newList);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

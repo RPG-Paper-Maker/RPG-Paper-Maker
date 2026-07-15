@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import { Utils } from '../common';
 import { Node } from '../core/Node';
@@ -18,6 +18,13 @@ import { Model } from '../Editor';
 import '../styles/TreeItem.css';
 import Checkbox from './Checkbox';
 import Flex from './Flex';
+
+export type TreeRowAction = {
+	icon: ReactNode;
+	title?: string;
+	onClick: (node: Node) => void;
+	isVisible?: (node: Node) => boolean;
+};
 
 type Props = {
 	node: Node;
@@ -36,6 +43,7 @@ type Props = {
 	hideCheck?: boolean;
 	isCutSource?: boolean;
 	hideTooltip?: boolean;
+	rowActions?: TreeRowAction[];
 };
 
 function TreeItem({
@@ -54,6 +62,7 @@ function TreeItem({
 	hideCheck = false,
 	isCutSource = false,
 	hideTooltip = false,
+	rowActions,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).checked ?? false);
@@ -128,6 +137,26 @@ function TreeItem({
 				))}
 			{node.getIcon()}
 			{getString()}
+			{rowActions && rowActions.some((action) => action.isVisible?.(node) !== false) && (
+				<div className='treeItemActions'>
+					{rowActions.map(
+						(action, index) =>
+							action.isVisible?.(node) !== false && (
+								<div
+									key={index}
+									className='treeItemAction'
+									title={action.title}
+									onMouseDown={(event: React.MouseEvent) => {
+										event.stopPropagation();
+										action.onClick(node);
+									}}
+								>
+									{action.icon}
+								</div>
+							),
+					)}
+				</div>
+			)}
 		</div>
 	);
 }

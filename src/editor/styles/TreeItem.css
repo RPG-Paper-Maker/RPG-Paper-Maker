@@ -21,6 +21,34 @@
 		margin-top: 3px;
 	}
 
+	.treeItemActions {
+		display: none;
+		align-items: center;
+		gap: 2px;
+		margin-left: auto;
+	}
+
+	.treeItemAction {
+		display: flex;
+		align-items: center;
+		padding: 0 3px;
+		color: var(--primary-color);
+
+		svg {
+			align-self: center;
+			margin-top: 0;
+		}
+
+		&:hover {
+			filter: brightness(1.4);
+			transform: scale(1.15);
+		}
+	}
+
+	&:hover .treeItemActions {
+		display: flex;
+	}
+
 	&.dragOverTop {
 		border-top: 2px solid var(--primary-color);
 	}
@@ -70,6 +98,14 @@
 				background-color: color-mix(in srgb, var(--primary-dark-color) 75%, transparent);
 			}
 		}
+	}
+}
+
+.tree.rowActionsTree:not(.disabled) .treeItem.selected:hover {
+	background-color: color-mix(in srgb, var(--primary-color) 60%, transparent);
+
+	.treeItemAction {
+		color: white;
 	}
 }
 

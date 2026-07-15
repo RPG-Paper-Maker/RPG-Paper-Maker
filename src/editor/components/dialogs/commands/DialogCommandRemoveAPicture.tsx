@@ -21,8 +21,16 @@ import Flex from '../../Flex';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandRemoveAPicture({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandRemoveAPicture({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	onLivePreview,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const [index] = useStateDynamicValue();
@@ -38,11 +46,17 @@ function DialogCommandRemoveAPicture({ commandKind, setIsOpen, list, onAccept, o
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		index.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

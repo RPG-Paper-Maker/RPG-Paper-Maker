@@ -9,14 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowAltCircleUp } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, RPM, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
-import { Manager, Model, Scene } from '../Editor';
+import { Data, Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import {
 	RootState,
@@ -24,6 +24,7 @@ import {
 	setMapEditorLoaded,
 	setNeedsReloadMap,
 	setNeedsUpdateMapEditor,
+	setMapObjectDialogOpen,
 	setSelectedMapElement,
 	setSelectedPosition,
 	setUndoRedoIndex,
@@ -31,9 +32,14 @@ import {
 	triggerTreeMap,
 } from '../store';
 import '../styles/MapEditor.css';
+import { ObjectStatePreview, SimulationHudBridge, SimulationSession } from '../core/simulation';
 import ContextMenu from './ContextMenu';
+import DialogObjectCommandTest from './dialogs/DialogObjectCommandTest';
 import DialogMapObject from './dialogs/models/DialogMapObject';
+import HeroPreviewOverlay from './HeroPreviewOverlay';
 import Loader from './Loader';
+import ObjectCommandTestOverlay from './ObjectCommandTestOverlay';
+import { PlayCommandInfo } from './panels/PanelMapObject';
 
 function MapEditor() {
 	const { t } = useTranslation();
@@ -44,6 +50,22 @@ function MapEditor() {
 	const [isFocused, setIsFocused] = useState(false);
 	const [isWindowFocused, setIsWindowFocused] = useState(true);
 	const [isGameTestOpen, setIsGameTestOpen] = useState(false);
+	const [playCommandRequest, setPlayCommandRequest] = useState<{
+		info: PlayCommandInfo;
+		editedObject: Model.CommonObject;
+	} | null>(null);
+	const [simulation, setSimulation] = useState<{
+		session: SimulationSession;
+		hud: SimulationHudBridge;
+	} | null>(null);
+	const [preview, setPreview] = useState<{
+		session: SimulationSession;
+		hud: SimulationHudBridge;
+	} | null>(null);
+	const testConfigsRef = useRef<Model.ObjectCommandTestConfig[] | null>(null);
+	const livePreviewTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const isOpenMapObjectRef = useRef(isOpenMapObject);
+	const selectedStateRef = useRef<Model.MapObjectState | null>(null);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
@@ -161,6 +183,12 @@ function MapEditor() {
 			if (!map.loading) {
 				map.update();
 			}
+			if (!map.loading && SimulationSession.current) {
+				SimulationSession.current.update(Scene.Map.elapsedTime);
+			}
+			if (!map.loading && ObjectStatePreview.current) {
+				ObjectStatePreview.current.update();
+			}
 			if (map.initialized) {
 				map.draw3D();
 			}
@@ -174,7 +202,8 @@ function MapEditor() {
 	const resize = () => {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
-		if (canvas && canvasHUD) {
+		const ctxHUD = Scene.Map.ctxHUD;
+		if (canvas && canvasHUD && ctxHUD) {
 			const ratio = Utils.getPixelRatio();
 			if (Scene.Map.current) {
 				Scene.Map.current.camera.resizeGL(
@@ -187,7 +216,7 @@ function MapEditor() {
 			canvasHUD.height = canvas.clientHeight * ratio;
 			canvasHUD.style.width = `${canvas.clientWidth}px`;
 			canvasHUD.style.height = `${canvas.clientHeight}px`;
-			Scene.Map.ctxHUD!.setTransform(ratio, 0, 0, ratio, 0, 0);
+			ctxHUD.setTransform(ratio, 0, 0, ratio, 0, 0);
 			if (Scene.Map.current) {
 				Scene.Map.current.requestPaintHUD = true;
 			}
@@ -250,6 +279,149 @@ function MapEditor() {
 		Scene.Map.current!.updateUndoRedoSave();
 	};
 
+	const startSimulation = (
+		info: PlayCommandInfo,
+		editedObject: Model.CommonObject,
+		config: Model.ObjectCommandTestConfig,
+	) => {
+		if (!Scene.Map.current) {
+			return;
+		}
+		stopPreview();
+		ObjectStatePreview.current?.remove();
+		const hud = new SimulationHudBridge();
+		const session = SimulationSession.start({
+			map: Scene.Map.current,
+			object: editedObject,
+			reaction: info.reaction,
+			stateID: info.stateID,
+			targetNode: info.node,
+			config,
+			hud,
+		});
+		setSimulation({ session, hud });
+	};
+
+	const handlePlayCommand = (info: PlayCommandInfo, editedObject: Model.CommonObject) => {
+		if (info.openOptions) {
+			setPlayCommandRequest({ info, editedObject });
+			return;
+		}
+		void (async () => {
+			startSimulation(info, editedObject, await getTestConfig());
+		})();
+	};
+
+	const handleAcceptPlayCommand = () => {
+		const request = playCommandRequest;
+		setPlayCommandRequest(null);
+		testConfigsRef.current = null;
+		if (request && preview) {
+			startSingleCommandPreview(request.info, request.editedObject);
+		}
+	};
+
+	const handleStopSimulation = () => {
+		simulation?.session.stop();
+		setSimulation(null);
+	};
+
+	const getTestConfig = async (): Promise<Model.ObjectCommandTestConfig> => {
+		if (testConfigsRef.current === null) {
+			const tests = new Data.ObjectCommandTests();
+			await tests.load();
+			testConfigsRef.current = tests.configs ?? [];
+		}
+		const configs = testConfigsRef.current;
+		if (configs.length === 0) {
+			const config = new Model.ObjectCommandTestConfig();
+			config.applyDefault();
+			return config;
+		}
+		const index = Math.max(
+			0,
+			Math.min(Project.current!.settings.lastTabIndexObjectCommandTest, configs.length - 1),
+		);
+		return configs[index];
+	};
+
+	const stopPreview = () => {
+		if (livePreviewTimeout.current !== null) {
+			clearTimeout(livePreviewTimeout.current);
+			livePreviewTimeout.current = null;
+		}
+		setPreview((current) => {
+			current?.session.stop();
+			return null;
+		});
+	};
+
+	const startSingleCommandPreview = (
+		info: PlayCommandInfo,
+		editedObject: Model.CommonObject,
+		overrideCommand?: Model.MapObjectCommand,
+	) => {
+		if (!Scene.Map.current) {
+			return;
+		}
+		if (simulation) {
+			handleStopSimulation();
+		}
+		void (async () => {
+			const config = await getTestConfig();
+			if (!Scene.Map.current || !isOpenMapObjectRef.current) {
+				return;
+			}
+			ObjectStatePreview.current?.remove();
+			const hud = new SimulationHudBridge();
+			const session = SimulationSession.start({
+				map: Scene.Map.current,
+				object: editedObject,
+				reaction: info.reaction,
+				stateID: info.stateID,
+				targetNode: info.node,
+				config,
+				hud,
+				singleCommand: true,
+				overrideCommand,
+				insertNewCommand: info.isNewCommand,
+			});
+			session.update(0);
+			setPreview({ session, hud });
+		})();
+	};
+
+	const handleSelectCommand = (info: PlayCommandInfo | null, editedObject: Model.CommonObject | null) => {
+		if (!info || !editedObject) {
+			stopPreview();
+			return;
+		}
+		startSingleCommandPreview(info, editedObject);
+	};
+
+	const handleLivePreviewCommand = (
+		info: PlayCommandInfo,
+		editedObject: Model.CommonObject,
+		command: Model.MapObjectCommand | null,
+	) => {
+		if (livePreviewTimeout.current !== null) {
+			clearTimeout(livePreviewTimeout.current);
+		}
+		if (!command) {
+			stopPreview();
+			return;
+		}
+		livePreviewTimeout.current = setTimeout(() => {
+			startSingleCommandPreview(info, editedObject, command);
+		}, 120);
+	};
+
+	const handleUpdateStateGraphics = (state: Model.MapObjectState) => {
+		selectedStateRef.current = state;
+		SimulationSession.current?.updateObjectState(state);
+		ObjectStatePreview.current?.setState(state);
+	};
+
 	const handleCopyMapObject = async () => {
 		const mapObject = Scene.Map.current!.getSelectedObject();
 		if (mapObject !== null) {
@@ -296,6 +468,44 @@ function MapEditor() {
 	}, []);
 
 	useEffect(() => {
+		isOpenMapObjectRef.current = isOpenMapObject;
+		dispatch(setMapObjectDialogOpen(isOpenMapObject));
+	}, [isOpenMapObject]);
+
+	useEffect(() => () => { dispatch(setMapObjectDialogOpen(false)); }, []);
+
+	useEffect(() => {
+		if (simulation && (needsReloadMap || !isOpenMapObject)) {
+			handleStopSimulation();
+		}
+		if (preview && (needsReloadMap || !isOpenMapObject)) {
+			stopPreview();
+		}
+	}, [needsReloadMap, currentMapTag, isOpenMapObject]);
+
+	useEffect(() => {
+		const state = selectedStateRef.current;
+		if (!isOpenMapObject || simulation || preview || !state || !Scene.Map.current) {
+			return;
+		}
+		const objectPreview = ObjectStatePreview.start(Scene.Map.current, currentMapObject, state);
+		return () => objectPreview.remove();
+	}, [isOpenMapObject, simulation, preview]);
+
+	useEffect(() => {
+		if (!isOpenMapObject) {
+			selectedStateRef.current = null;
+		}
+	}, [isOpenMapObject]);
+
+	useEffect(
+		() => () => {
+			SimulationSession.current?.stop();
+		},
+		[],
+	);
+
+	useEffect(() => {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
 		const canvasRendering = refCanvasRendering.current;
@@ -330,6 +540,53 @@ function MapEditor() {
 			};
 		}
 	}, []);
+
+	const isSplitLayout = isOpenMapObject && simulation === null;
+
+	useEffect(() => {
+		if (isOpenMapObject && simulation === null && preview === null) {
+			Scene.Map.current?.centerCameraOnObject();
+		}
+	}, [isOpenMapObject, simulation, preview]);
+
+	useLayoutEffect(() => {
+		const canvas = refCanvas.current;
+		if (!canvas) {
+			return;
+		}
+		let animationFrameID = 0;
+		let lastReserved = -1;
+		const apply = (reserved: number) => {
+			if (Math.abs(reserved - lastReserved) <= 0.5) {
+				return;
+			}
+			lastReserved = reserved;
+			canvas.style.width = reserved > 0 ? `calc(100% - ${reserved}px)` : '';
+			resize();
+		};
+		if (!isSplitLayout) {
+			apply(0);
+			return;
+		}
+		const measure = () => {
+			const container = canvas.parentElement;
+			const dialog = document.querySelector('.dialogObjectEditor') as HTMLElement | null;
+			let reserved = 0;
+			if (container && dialog && window.innerWidth > 1000) {
+				const containerRect = container.getBoundingClientRect();
+				const dialogRect = dialog.getBoundingClientRect();
+				reserved = Math.max(0, Math.min(containerRect.width - 100, containerRect.right - dialogRect.left));
+			}
+			apply(reserved);
+			animationFrameID = requestAnimationFrame(measure);
+		};
+		measure();
+		return () => {
+			cancelAnimationFrame(animationFrameID);
+			canvas.style.width = '';
+			resize();
+		};
+	}, [isSplitLayout]);
 
 	useEffect(() => {
 		clearMap();
@@ -438,6 +695,36 @@ function MapEditor() {
 					setIsOpen={setIsOpenMapObject}
 					object={currentMapObject}
 					onAccept={handleAcceptMapObject}
+					onPlayCommand={handlePlayCommand}
+					onSelectCommand={handleSelectCommand}
+					onLivePreviewCommand={handleLivePreviewCommand}
+					onUpdateStateGraphics={handleUpdateStateGraphics}
+				/>
+			)}
+			{isOpenMapObject && !simulation && !preview && <HeroPreviewOverlay />}
+			{preview && (
+				<ObjectCommandTestOverlay
+					session={preview.session}
+					hud={preview.hud}
+					onStop={stopPreview}
+					preview
+				/>
+			)}
+			{playCommandRequest && (
+				<DialogObjectCommandTest
+					setIsOpen={(b: boolean) => {
+						if (!b) {
+							setPlayCommandRequest(null);
+						}
+					}}
+					onAccept={handleAcceptPlayCommand}
+				/>
+			)}
+			{simulation && (
+				<ObjectCommandTestOverlay
+					session={simulation.session}
+					hud={simulation.hud}
+					onStop={handleStopSimulation}
 				/>
 			)}
 		</>

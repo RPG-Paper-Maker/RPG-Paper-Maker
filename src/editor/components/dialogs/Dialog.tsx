@@ -28,11 +28,13 @@ type Props = {
 	children: React.ReactNode;
 	title: string;
 	isOpen: boolean;
+	className?: string;
 	initialWidth?: string;
 	initialHeight?: string;
 	initialPlacement?: 'center' | 'right';
 	isDisabled?: boolean;
 	isLoading?: boolean;
+	movable?: boolean;
 	zIndex?: number;
 	allowMapInteraction?: boolean;
 	hideOtherDialogs?: boolean;
@@ -107,11 +109,13 @@ function Dialog({
 	children,
 	title,
 	isOpen,
+	className,
 	initialWidth,
 	initialHeight,
 	initialPlacement = 'center',
 	isDisabled = false,
 	isLoading = false,
+	movable = true,
 	zIndex,
 	allowMapInteraction = false,
 	hideOtherDialogs = false,
@@ -269,6 +273,9 @@ function Dialog({
 	};
 
 	const handleMouseDownTitle = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		if (!movable) {
+			return;
+		}
 		setIsDragging(true);
 		setIsMoved(true);
 		if (dialogRef.current) {
@@ -327,7 +334,7 @@ function Dialog({
 		};
 	}, [isOpen]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const dialogs = document.getElementsByClassName('dialog');
 		Inputs.isMapFocused = dialogs.length === 0;
 		if (dialogRef.current && isOpen) {
@@ -340,7 +347,7 @@ function Dialog({
 		}
 	}, [isOpen, scaledWidth, scaledHeight]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			dispatch(setIsOpeningNewDialog());
 			setIsDragging(false);
@@ -354,6 +361,23 @@ function Dialog({
 				dialogRef.current.style.left = `${left}px`;
 				dialogRef.current.style.top = `${top}px`;
 				setIsMoved(true);
+			} else if (dialogRef.current) {
+				const dialogs = Array.from(document.getElementsByClassName('dialog'));
+				const index = dialogs.indexOf(dialogRef.current);
+				const previous = index > 0 ? (dialogs[index - 1] as HTMLElement) : null;
+				const previousRect = previous ? previous.getBoundingClientRect() : null;
+				if (previousRect && (previousRect.width > 0 || previousRect.height > 0)) {
+					const rect = dialogRef.current.getBoundingClientRect();
+					const centerX = previousRect.left + previousRect.width / 2;
+					const centerY = previousRect.top + previousRect.height / 2;
+					const left = Math.min(Math.max(0, centerX - rect.width / 2), window.innerWidth - rect.width);
+					const top = Math.min(Math.max(0, centerY - rect.height / 2), window.innerHeight - rect.height);
+					dialogRef.current.style.left = `${left}px`;
+					dialogRef.current.style.top = `${top}px`;
+					setIsMoved(true);
+				} else {
+					setIsMoved(false);
+				}
 			} else {
 				setIsMoved(false);
 			}
@@ -417,7 +441,7 @@ function Dialog({
 			{allowMapInteraction && <MapInteractionBlocker />}
 			<div
 				ref={dialogRef}
-				className='dialog'
+				className={className ? `dialog ${className}` : 'dialog'}
 				onMouseDown={handleMouseDown}
 				onMouseMove={handleMouseMove}
 				onMouseUp={handleMouseUp}
@@ -429,7 +453,10 @@ function Dialog({
 				{isDisabled && <div className='dialogDisable' />}
 				<Flex>
 					<div
-						className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
+						className={Utils.getClassName(
+							{ dialogTitleGrabbing: isDragging && movable, dialogTitleFixed: !movable },
+							'dialogTitle',
+						)}
 						onMouseDown={handleMouseDownTitle}
 					>
 						<Flex one>{title}</Flex>

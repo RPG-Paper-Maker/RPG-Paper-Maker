@@ -24,6 +24,7 @@ import {
 import DialogName from '../components/dialogs/models/DialogName';
 import { Node } from '../core/Node';
 import { BindingType, Serializable } from '../core/Serializable';
+import type { MapObjectCommand } from './MapObjectCommand';
 
 const { t } = i18next;
 
@@ -34,6 +35,7 @@ export type DIALOG_OPTIONS = {
 	parent: Node | null;
 	onAccept: () => void;
 	onReject: () => void;
+	onLivePreview?: (command: MapObjectCommand | null) => void;
 };
 
 class Base extends Serializable {

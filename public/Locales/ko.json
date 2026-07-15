@@ -11,6 +11,8 @@
 	"options": "옵션",
 	"display": "표시",
 	"test": "테스트",
+	"test.command": "이 명령 테스트",
+	"test.command.options": "옵션으로 이 명령 테스트...",
 	"help": "도움말",
 	"open.project": "프로젝트 열기",
 	"open.project.tool": "열기",

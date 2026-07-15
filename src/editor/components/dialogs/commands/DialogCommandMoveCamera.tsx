@@ -30,13 +30,14 @@ import RadioGroup from '../../RadioGroup';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
 enum SELECTION_TARGET_TYPE {
 	UNCHANGED,
 	OBJECT,
 }
 
-function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
@@ -101,8 +102,7 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		newList.push(selectionTargetType);
 		if (selectionTargetType === SELECTION_TARGET_TYPE.OBJECT) {
@@ -122,7 +122,14 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 		vertical.getCommand(newList);
 		distance.getCommand(newList);
 		panelWaitTimeRef.current?.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {
@@ -224,20 +231,14 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 							<Label>{t('horizontal')}</Label>
 							<Value>
 								<Flex spaced centerV>
-									<DynamicValueSelector
-										value={horizontal}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
-									/>
+									<DynamicValueSelector value={horizontal} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
 									°
 								</Flex>
 							</Value>
 							<Label>{t('vertical')}</Label>
 							<Value>
 								<Flex spaced centerV>
-									<DynamicValueSelector
-										value={vertical}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
-									/>
+									<DynamicValueSelector value={vertical} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
 									°
 								</Flex>
 							</Value>

@@ -62,6 +62,10 @@
 	cursor: grabbing;
 }
 
+.dialogTitleFixed {
+	cursor: default;
+}
+
 .dialogClose {
 	cursor: pointer;
 	width: 15px;

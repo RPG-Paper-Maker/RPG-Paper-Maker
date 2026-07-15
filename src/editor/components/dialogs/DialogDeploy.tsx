@@ -230,6 +230,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 		if (await checkFileExists(Paths.join(path, Paths.BUILD, Paths.FILE_SETTINGS_GAME))) {
 			await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_SETTINGS_GAME));
 		}
+		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_OBJECT_COMMAND_TESTS));
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_TREE_MAPS));
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_GAME_RPMG));
 		await removeFile(Paths.join(path, Paths.BUILD, Paths.FILE_FONTS));

@@ -11,6 +11,8 @@
 	"options": "オプション",
 	"display": "表示",
 	"test": "テスト",
+	"test.command": "このコマンドをテスト",
+	"test.command.options": "オプション付きでこのコマンドをテスト...",
 	"help": "ヘルプ",
 	"open.project": "プロジェクトを開く",
 	"open.project.tool": "開く",

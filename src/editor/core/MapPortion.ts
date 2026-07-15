@@ -1569,6 +1569,9 @@ class MapPortion {
 		const geometry = new CustomGeometry();
 		let count = 0;
 		for (const [positionKey, object] of this.model.objects) {
+			if (this.map.simulationHiddenObjectKeys.has(positionKey)) {
+				continue;
+			}
 			const position = Position.fromKey(positionKey);
 			if (this.map.previewSizeActive) {
 				position.x += this.map.previewShiftX;

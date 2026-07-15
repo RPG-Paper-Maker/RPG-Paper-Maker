@@ -200,6 +200,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 						cannotDelete
 						showEditName
 						inputNameWidth={INPUT_TYPE_WIDTH.FILL}
+						disabled={isDefaultValueDisabled()}
 					/>
 					<Flex spaced centerV>
 						<div className={Utils.getClassName({ disabledLabel: isDefaultValueDisabled() })}>

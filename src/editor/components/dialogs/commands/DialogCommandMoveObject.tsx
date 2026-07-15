@@ -29,6 +29,7 @@ import Tree from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 import DialogCommandMoveObjectChangeGraphics from './DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from './DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from './DialogCommandMoveObjectJump';
@@ -36,7 +37,7 @@ import DialogCommandPlaySong from './DialogCommandPlaySong';
 import DialogCommandScript from './DialogCommandScript';
 import DialogCommandWait from './DialogCommandWait';
 
-function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isDialogJumpOpen, setIsDialogJumpOpen] = useState(false);
@@ -198,8 +199,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 		handleAcceptCommand(command, COMMAND_MOVE_KIND.SCRIPT);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		objectID.getCommand(newList);
 		newList.push(Utils.boolToNum(isIgnoreIfImpossible));
@@ -208,7 +208,14 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 		for (const node of commands) {
 			newList.push(...(node.content as Model.MapObjectCommandMove).command);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

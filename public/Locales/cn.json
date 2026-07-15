@@ -11,6 +11,8 @@
 	"options": "选项",
 	"display": "显示",
 	"test": "测试",
+	"test.command": "测试此命令",
+	"test.command.options": "使用选项测试此命令...",
 	"help": "帮助",
 	"open.project": "打开项目",
 	"open.project.tool": "打开",

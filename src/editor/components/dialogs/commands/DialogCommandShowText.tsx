@@ -16,6 +16,7 @@ import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '..
 import { Project } from '../../../core/Project';
 import { Rectangle } from '../../../core/Rectangle';
 import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
@@ -32,8 +33,9 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
@@ -44,6 +46,7 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
 	const [texts, setTexts] = useState<Map<number, string>>(new Map());
 	const [triggerInsertText, setTriggerInsertText] = useState<string[] | null>(null);
+	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
 		setTabTitles(Project.current!.languages.list);
@@ -146,8 +149,7 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 		setTexts(new Map(texts));
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		interlocutor.getCommand(newList);
 		newList.push(facesetID);
@@ -157,7 +159,14 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 			newList.push(id);
 			newList.push(text);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {
@@ -297,7 +306,12 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 							</Flex>
 						</Label>
 						<Value>
-							<DynamicValueSelector value={interlocutor} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT} />
+							<DynamicValueSelector
+								value={interlocutor}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+								onChangeKind={() => setTrigger((v) => !v)}
+								onChangeValue={() => setTrigger((v) => !v)}
+							/>
 						</Value>
 						<Label>
 							<Flex spaced centerV>

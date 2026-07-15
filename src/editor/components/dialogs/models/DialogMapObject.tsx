@@ -11,8 +11,9 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Model } from '../../../Editor';
-import PanelMapObject, { PanelMapObjectRef } from '../../panels/PanelMapObject';
+import { Model, Scene } from '../../../Editor';
+import { ELEMENT_MAP_KIND } from '../../../common';
+import PanelMapObject, { PanelMapObjectRef, PlayCommandInfo } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -20,9 +21,25 @@ type Props = {
 	setIsOpen: (b: boolean) => void;
 	object: Model.CommonObject;
 	onAccept: () => Promise<void>;
+	onPlayCommand?: (info: PlayCommandInfo, editedObject: Model.CommonObject) => void;
+	onSelectCommand?: (info: PlayCommandInfo | null, editedObject: Model.CommonObject | null) => void;
+	onLivePreviewCommand?: (
+		info: PlayCommandInfo,
+		editedObject: Model.CommonObject,
+		command: Model.MapObjectCommand | null,
+	) => void;
+	onUpdateStateGraphics?: (state: Model.MapObjectState) => void;
 };
 
-function DialogMapObject({ setIsOpen, object, onAccept }: Props) {
+function DialogMapObject({
+	setIsOpen,
+	object,
+	onAccept,
+	onPlayCommand,
+	onSelectCommand,
+	onLivePreviewCommand,
+	onUpdateStateGraphics,
+}: Props) {
 	const { t } = useTranslation();
 
 	const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
@@ -47,19 +64,66 @@ function DialogMapObject({ setIsOpen, object, onAccept }: Props) {
 
 	useLayoutEffect(() => {
 		reset();
+		Scene.Map.previewOnly = true;
+		if (Scene.Map.current) {
+			Scene.Map.current.objectDialogActive = true;
+		}
+		return () => {
+			Scene.Map.previewOnly = false;
+			const map = Scene.Map.current;
+			if (map) {
+				map.heroPreviewPosition = null;
+				map.objectDialogActive = false;
+				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+					map.cursorObject.addToScene();
+				} else {
+					map.cursorObject.removeFromScene();
+				}
+				map.syncCursorGrid();
+			}
+		};
 	}, []);
+
+	const handleSelectCommand = (info: PlayCommandInfo | null) => {
+		if (info) {
+			Scene.Map.current?.cursorObject.addToScene();
+		} else {
+			Scene.Map.current?.cursorObject.removeFromScene();
+		}
+		onSelectCommand?.(info, info ? panelMapObjectRef.current!.getEditedObject() : null);
+	};
 
 	return (
 		<Dialog
 			title={`${t('edit.object')}...`}
 			isOpen
+			className='dialogObjectEditor'
+			movable={false}
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth={window.innerWidth <= 1000 ? '100%' : '60%'}
-			initialHeight='calc(100% - 50px)'
+			initialWidth={window.innerWidth <= 1000 ? '100%' : '50%'}
+			initialHeight='100%'
+			initialPlacement='right'
+			allowMapInteraction
 		>
-			<PanelMapObject object={object} ref={panelMapObjectRef} />
+			<PanelMapObject
+				object={object}
+				ref={panelMapObjectRef}
+				onPlayCommand={
+					onPlayCommand
+						? (info: PlayCommandInfo) => onPlayCommand(info, panelMapObjectRef.current!.getEditedObject())
+						: undefined
+				}
+				onSelectCommand={onSelectCommand ? handleSelectCommand : undefined}
+				onLivePreviewCommand={
+					onLivePreviewCommand
+						? (info: PlayCommandInfo, command: Model.MapObjectCommand | null) =>
+								onLivePreviewCommand(info, panelMapObjectRef.current!.getEditedObject(), command)
+						: undefined
+				}
+				onUpdateStateGraphics={onUpdateStateGraphics}
+			/>
 		</Dialog>
 	);
 }

@@ -10,6 +10,8 @@
 */
 
 import { useLayoutEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaPlay, FaSlidersH } from 'react-icons/fa';
 import { ArrayUtils, EVENT_COMMAND_KIND } from '../common';
 import { Node } from '../core/Node';
 import { Model } from '../Editor';
@@ -19,9 +21,33 @@ type Props = {
 	list: Node[];
 	onListUpdated?: () => void;
 	disabled?: boolean;
+	onPlayCommand?: (node: Node, openOptions: boolean) => void;
+	onSelectCommand?: (node: Node | null) => void;
+	onLivePreviewCommand?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 };
 
-function TreeCommands({ list, onListUpdated, disabled }: Props) {
+const KINDS_WITHOUT_PLAY = [
+	EVENT_COMMAND_KIND.COMMENT,
+	EVENT_COMMAND_KIND.ELSE,
+	EVENT_COMMAND_KIND.END_IF,
+	EVENT_COMMAND_KIND.END_WHILE,
+	EVENT_COMMAND_KIND.END_CHOICE,
+	EVENT_COMMAND_KIND.IF_WIN,
+	EVENT_COMMAND_KIND.IF_LOSE,
+];
+
+function TreeCommands({
+	list,
+	onListUpdated,
+	disabled,
+	onPlayCommand,
+	onSelectCommand,
+	onLivePreviewCommand,
+}: Props) {
+	const { t } = useTranslation();
+
+	const canPlayCommand = (node: Node) =>
+		node.content.id > 0 && !KINDS_WITHOUT_PLAY.includes((node.content as Model.MapObjectCommand).kind);
 	const [updatedList, setUpdatedList] = useState<Node[] | null>(null);
 
 	const handleAcceptCommand = (node: Node, isNew: boolean) => {
@@ -127,6 +153,17 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 			constructorType={Model.MapObjectCommand}
 			onAccept={handleAcceptCommand}
 			onListUpdated={onListUpdated}
+			onSelectedItem={
+				onSelectCommand
+					? (node: Node | null, isClick: boolean) => {
+							if (isClick) {
+								onSelectCommand(node && canPlayCommand(node) ? node : null);
+							}
+						}
+					: undefined
+			}
+			onDialogLivePreview={onLivePreviewCommand}
+			deselectable={!!onSelectCommand}
 			disabled={disabled}
 			multipleLevels
 			canBeEmpty
@@ -136,6 +173,24 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 			canDisable
 			cannotClear
 			hideTooltip
+			rowActions={
+				onPlayCommand
+					? [
+							{
+								icon: <FaSlidersH />,
+								title: t('test.command.options'),
+								onClick: (node: Node) => onPlayCommand(node, true),
+								isVisible: canPlayCommand,
+							},
+							{
+								icon: <FaPlay />,
+								title: t('test.command'),
+								onClick: (node: Node) => onPlayCommand(node, false),
+								isVisible: canPlayCommand,
+							},
+						]
+					: undefined
+			}
 		/>
 	) : null;
 }

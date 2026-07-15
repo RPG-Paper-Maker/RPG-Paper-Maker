@@ -11,6 +11,8 @@
 	"options": "Параметры",
 	"display": "Дисплей",
 	"test": "Тест",
+	"test.command": "Тестировать эту команду",
+	"test.command.options": "Тестировать эту команду с параметрами...",
 	"help": "Справка",
 	"open.project": "Открыть проект",
 	"open.project.tool": "Открыть",

@@ -35,7 +35,7 @@ import DialogUpdateListSize from './dialogs/DialogUpdateListSize';
 import Flex from './Flex';
 import InputLocalization from './InputLocalization';
 import InputText from './InputText';
-import TreeItem from './TreeItem';
+import TreeItem, { TreeRowAction } from './TreeItem';
 
 type Props = {
 	list: Node[];
@@ -79,6 +79,7 @@ type Props = {
 	multipleSelection?: boolean;
 	applyDefault?: boolean;
 	noFirstSelection?: boolean;
+	deselectable?: boolean;
 	isLocalization?: boolean;
 	cannotAddEditRemoveRoot?: boolean;
 	hideCheck?: boolean;
@@ -88,6 +89,8 @@ type Props = {
 	hideTooltip?: boolean;
 	blurOnMouseLeave?: boolean;
 	triggerNewItem?: boolean;
+	rowActions?: TreeRowAction[];
+	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -138,6 +141,7 @@ function Tree({
 	multipleSelection = false,
 	applyDefault = false,
 	noFirstSelection = false,
+	deselectable = false,
 	isLocalization = false,
 	cannotAddEditRemoveRoot = false,
 	hideCheck = false,
@@ -146,6 +150,8 @@ function Tree({
 	hideTooltip = false,
 	blurOnMouseLeave = false,
 	triggerNewItem,
+	rowActions,
+	onDialogLivePreview,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -171,10 +177,11 @@ function Tree({
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
 	const defaultNotExpandedItemsList = useMemo(() => Node.getNotExpandedItemsList(list), [list]);
 
-	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(
-		() =>
-			(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
-			(cannotAdd ? null : Node.create(createDefault(-1))),
+	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(() =>
+		deselectable
+			? null
+			: ((byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
+				(cannotAdd ? null : Node.create(createDefault(-1)))),
 	);
 	const [additionalSelectedNodes, setAdditionalSelectedNodes] = useState<Node[]>([]);
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(defaultNotExpandedItemsList);
@@ -737,6 +744,11 @@ function Tree({
 	};
 	handleSetFocusRef.current = handleSetFocus;
 
+	const isOpenDialogRef = useRef(isOpenDialog);
+	isOpenDialogRef.current = isOpenDialog;
+	const onSelectedItemRef = useRef(onSelectedItem);
+	onSelectedItemRef.current = onSelectedItem;
+
 	const handleContentMouseUp = () => {
 		if (pendingSingleSelectNode.current) {
 			setCurrentSelectedItemNode(pendingSingleSelectNode.current);
@@ -834,7 +846,7 @@ function Tree({
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useLayoutEffect(() => {
-		if (!noFirstSelection) {
+		if (!noFirstSelection && !deselectable) {
 			const index =
 				defaultSelectedID === undefined ? 0 : list.findIndex((node) => node.content.id === defaultSelectedID);
 			const node = list[index] ?? Node.create(createDefault(-1));
@@ -879,6 +891,11 @@ function Tree({
 		const handleMouseDownOutside = (e: MouseEvent) => {
 			if (listRef.current && !listRef.current.contains(e.target as globalThis.Node)) {
 				handleSetFocus(false);
+				if (deselectable && !isOpenDialogRef.current) {
+					setCurrentSelectedItemNode(null);
+					setAdditionalSelectedNodes([]);
+					onSelectedItemRef.current?.(null, true);
+				}
 			}
 		};
 		const dialog = Utils.getViewport();
@@ -1012,6 +1029,7 @@ function Tree({
 						hideCheck={hideCheck}
 						isCutSource={copiedItems?.isCut === true && copiedItems.sourceNodes?.includes(node) === true}
 						hideTooltip={hideTooltip}
+						rowActions={disabled ? undefined : rowActions}
 					/>
 				</div>,
 			);
@@ -1244,14 +1262,18 @@ function Tree({
 			constructorType !== Model.Checkable &&
 			isOpenDialog
 		) {
+			const selectedNode = currentSelectedItemNode;
 			const options = {
 				isNew: newModel !== null,
 				isOpen: isOpenDialog,
 				setIsOpen: setIsOpenDialog,
-				model: newModel ?? currentSelectedItemNode.content,
-				parent: currentSelectedItemNode.parent,
+				model: newModel ?? selectedNode.content,
+				parent: selectedNode.parent,
 				onAccept: handleAcceptDialog,
 				onReject: handleRejectDialog,
+				onLivePreview: onDialogLivePreview
+					? (command: Model.MapObjectCommand | null) => onDialogLivePreview(selectedNode, command, newModel !== null)
+					: undefined,
 			};
 			return options.model.getDialog(options);
 		} else {
@@ -1279,7 +1301,12 @@ function Tree({
 					onMouseUp={handleContentMouseUp}
 					onMouseLeave={blurOnMouseLeave ? handleContentMouseLeave : undefined}
 					className={Utils.getClassName(
-						{ disabled, zeroHeightNoMobile: scrollable, focused: isFocused },
+						{
+							disabled,
+							zeroHeightNoMobile: scrollable,
+							focused: isFocused,
+							rowActionsTree: !!rowActions,
+						},
 						'tree',
 					)}
 					style={{

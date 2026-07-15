@@ -23,8 +23,9 @@ import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandFlashScreen({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandFlashScreen({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
@@ -44,12 +45,18 @@ function DialogCommandFlashScreen({ commandKind, setIsOpen, list, onAccept, onRe
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		colorID.getCommand(newList);
 		panelWaitTimeRef.current?.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

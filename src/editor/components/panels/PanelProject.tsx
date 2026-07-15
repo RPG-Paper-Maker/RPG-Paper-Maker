@@ -71,6 +71,7 @@ function PanelProject() {
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
+	const mapObjectDialogOpen = useSelector((state: RootState) => state.triggers.mapObjectDialogOpen);
 
 	const getDefaultTabTitles = () =>
 		Project.current!.treeMaps.tabs.map((id) =>
@@ -218,6 +219,7 @@ function PanelProject() {
 				defaultLeftSize={266}
 				className='flex flexOne'
 				mobileHideFirst={projectMenuIndex === 2}
+				hideFirst={mapObjectDialogOpen}
 			>
 				<Flex column one className='bgDarker scrollable'>
 					{!openLoading && (

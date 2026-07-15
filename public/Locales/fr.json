@@ -11,6 +11,8 @@
 	"options": "Options",
 	"display": "Affichage",
 	"test": "Test",
+	"test.command": "Tester cette commande",
+	"test.command.options": "Tester cette commande avec options...",
 	"help": "Aide",
 	"open.project": "Ouvrir un projet",
 	"open.project.tool": "Ouvrir",

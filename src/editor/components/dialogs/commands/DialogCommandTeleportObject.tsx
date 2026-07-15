@@ -27,8 +27,16 @@ import PanelPosition, { PanelPositionRef } from '../../panels/PanelPosition';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandTeleportObject({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandTeleportObject({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	onLivePreview,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelPositionRef = useRef<PanelPositionRef>(null);
@@ -71,8 +79,7 @@ function DialogCommandTeleportObject({ commandKind, setIsOpen, list, onAccept, o
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		objectID.getCommand(newList);
 		panelPositionRef.current?.getCommand(newList);
@@ -85,7 +92,14 @@ function DialogCommandTeleportObject({ commandKind, setIsOpen, list, onAccept, o
 		if (end === 1) {
 			endColor.getCommand(newList);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {

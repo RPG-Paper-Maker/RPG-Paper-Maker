@@ -22,9 +22,10 @@ type Props = {
 	defaultLeftSize?: number;
 	className?: string;
 	mobileHideFirst?: boolean;
+	hideFirst?: boolean;
 };
 
-function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFirst = false }: Props) {
+function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFirst = false, hideFirst = false }: Props) {
 	const [isResizing, setIsResizing] = useState(false);
 	const refLeft = useRef<HTMLDivElement>(null);
 
@@ -90,11 +91,20 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 			)}
 			onMouseMove={handleMouseMove}
 		>
-			<div className={`${mobileHideFirst ? 'mobileHidden' : 'mobileFillWidth'} flex`} ref={refLeft}>
+			<div
+				className={Utils.getClassName(
+					{ hidden: hideFirst },
+					`${mobileHideFirst ? 'mobileHidden' : 'mobileFillWidth'} flex`,
+				)}
+				ref={refLeft}
+			>
 				{children[0]}
 			</div>
 			<div
-				className={`splitterButton mobileHidden ${vertical ? 'vertical' : 'horizontal'}`}
+				className={Utils.getClassName(
+					{ hidden: hideFirst },
+					`splitterButton mobileHidden ${vertical ? 'vertical' : 'horizontal'}`,
+				)}
 				onMouseDown={handleMouseDownSplitter}
 			></div>
 			<Flex one>{children[1]}</Flex>

@@ -24,8 +24,16 @@ import Form, { Label, Value } from '../../Form';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import useLivePreview from '../../../hooks/useLivePreview';
 
-function DialogCommandDisplayAnAnimation({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandDisplayAnAnimation({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	onLivePreview,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const [objectID] = useStateDynamicValue();
@@ -49,13 +57,19 @@ function DialogCommandDisplayAnAnimation({ commandKind, setIsOpen, list, onAccep
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const buildCommand = () => {
 		const newList: MapObjectCommandType[] = [];
 		objectID.getCommand(newList);
 		animationID.getCommand(newList);
 		newList.push(Utils.boolToNum(isWaitingEndCommand));
-		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
+		return Model.MapObjectCommand.createCommand(commandKind, newList);
+	};
+
+	useLivePreview(onLivePreview, buildCommand);
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		onAccept(buildCommand());
 	};
 
 	const handleReject = async () => {
