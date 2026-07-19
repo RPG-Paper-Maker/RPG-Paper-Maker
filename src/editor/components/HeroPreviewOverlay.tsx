@@ -24,14 +24,7 @@ function HeroPreviewOverlay() {
 		}
 		const preview = new HeroPreview(map, map.cursorObject.position.clone());
 		previewRef.current = preview;
-		let frameID = 0;
-		const update = () => {
-			preview.update();
-			frameID = requestAnimationFrame(update);
-		};
-		frameID = requestAnimationFrame(update);
 		return () => {
-			cancelAnimationFrame(frameID);
 			preview.remove();
 			previewRef.current = null;
 		};

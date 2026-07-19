@@ -65,21 +65,32 @@ function DialogMapObject({
 	useLayoutEffect(() => {
 		reset();
 		Scene.Map.previewOnly = true;
-		if (Scene.Map.current) {
-			Scene.Map.current.objectDialogActive = true;
+		const map = Scene.Map.current;
+		if (map) {
+			map.objectDialogActive = true;
+			map.cursorObject.removeFromScene();
+			if (map.isCursorObjectNew()) {
+				map.previewObjectSquarePosition = map.cursorObject.position.clone();
+				map.getMapPortionByPosition(map.previewObjectSquarePosition)?.updateObjectsGeometry();
+			}
 		}
 		return () => {
 			Scene.Map.previewOnly = false;
-			const map = Scene.Map.current;
-			if (map) {
-				map.heroPreviewPosition = null;
-				map.objectDialogActive = false;
-				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-					map.cursorObject.addToScene();
-				} else {
-					map.cursorObject.removeFromScene();
+			const currentMap = Scene.Map.current;
+			if (currentMap) {
+				const previewObjectSquarePosition = currentMap.previewObjectSquarePosition;
+				currentMap.previewObjectSquarePosition = null;
+				if (previewObjectSquarePosition) {
+					currentMap.getMapPortionByPosition(previewObjectSquarePosition)?.updateObjectsGeometry();
 				}
-				map.syncCursorGrid();
+				currentMap.heroPreviewPosition = null;
+				currentMap.objectDialogActive = false;
+				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+					currentMap.cursorObject.addToScene();
+				} else {
+					currentMap.cursorObject.removeFromScene();
+				}
+				currentMap.syncCursorGrid();
 			}
 		};
 	}, []);

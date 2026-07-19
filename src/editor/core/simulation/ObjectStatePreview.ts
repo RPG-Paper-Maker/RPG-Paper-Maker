@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Model } from '../../Editor';
-import type { Map as SceneMap } from '../../scenes/Map';
+import { Map as SceneMap } from '../../scenes/Map';
 import { Position } from '../Position';
 import { SimulationObject } from './SimulationObject';
 
@@ -54,7 +54,7 @@ class ObjectStatePreview {
 		if (this.removed) {
 			return;
 		}
-		this.object.update(0, this.getFaceAngle());
+		this.object.update(SceneMap.elapsedTime, this.getFaceAngle());
 	}
 
 	remove() {

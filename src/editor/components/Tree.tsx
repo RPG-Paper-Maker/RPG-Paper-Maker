@@ -91,6 +91,7 @@ type Props = {
 	triggerNewItem?: boolean;
 	rowActions?: TreeRowAction[];
 	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
+	onDialogModelLivePreview?: (model: Model.Base | null, isNew: boolean) => void;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -152,6 +153,7 @@ function Tree({
 	triggerNewItem,
 	rowActions,
 	onDialogLivePreview,
+	onDialogModelLivePreview,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -1273,6 +1275,9 @@ function Tree({
 				onReject: handleRejectDialog,
 				onLivePreview: onDialogLivePreview
 					? (command: Model.MapObjectCommand | null) => onDialogLivePreview(selectedNode, command, newModel !== null)
+					: undefined,
+				onModelLivePreview: onDialogModelLivePreview
+					? (model: Model.Base | null) => onDialogModelLivePreview(model, newModel !== null)
 					: undefined,
 			};
 			return options.model.getDialog(options);

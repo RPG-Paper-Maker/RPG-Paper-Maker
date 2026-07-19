@@ -289,7 +289,7 @@ class SimulationSession {
 		if (this.stopped) {
 			return;
 		}
-		this.object.applyState(state);
+		this.object.applyState(state, true);
 	}
 
 	stop() {

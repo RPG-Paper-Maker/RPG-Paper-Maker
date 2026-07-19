@@ -55,6 +55,7 @@ class Settings extends Serializable {
 	public lastTabIndexSystems!: number;
 	public lastTabIndexObjectCommandTest!: number;
 	public mapObjectOptionsOpened!: boolean;
+	public mapObjectLightsOpened!: boolean;
 	public mapEditorSpecialElementsGridView!: boolean;
 	public picturesZoom!: number;
 
@@ -99,6 +100,7 @@ class Settings extends Serializable {
 		['lastTabIndexSystems', 'ltis', 0, BINDING.NUMBER],
 		['lastTabIndexObjectCommandTest', 'ltioct', 0, BINDING.NUMBER],
 		['mapObjectOptionsOpened', 'mooo', false, BINDING.BOOLEAN],
+		['mapObjectLightsOpened', 'molo', false, BINDING.BOOLEAN],
 		['mapEditorSpecialElementsGridView', 'mesegv', true, BINDING.BOOLEAN],
 		['picturesZoom', 'pz', 6, BINDING.NUMBER],
 	];

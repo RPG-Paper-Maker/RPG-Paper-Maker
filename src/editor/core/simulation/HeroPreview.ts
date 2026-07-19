@@ -12,8 +12,7 @@
 import * as THREE from 'three';
 import type { Map as SceneMap } from '../../scenes/Map';
 import { Position } from '../Position';
-import { Project } from '../Project';
-import { SIM_ORIENTATION, SIM_ORIENTATION_VECTORS, SimulationObject } from './SimulationObject';
+import { SIM_ORIENTATION, SIM_ORIENTATION_VECTORS } from './SimulationObject';
 
 export type HeroPlacement = {
 	position: Position;
@@ -34,8 +33,8 @@ class HeroPreview {
 	public position: Position;
 	public orientation: SIM_ORIENTATION;
 
-	private hero: SimulationObject;
 	private raycaster = new THREE.Raycaster();
+	private center: THREE.Mesh<THREE.CircleGeometry, THREE.MeshBasicMaterial>;
 	private arrows: { mesh: THREE.Mesh; orientation: SIM_ORIENTATION; material: THREE.MeshBasicMaterial }[] = [];
 
 	constructor(
@@ -50,9 +49,7 @@ class HeroPreview {
 			this.position = placement.position;
 			this.orientation = placement.orientation;
 		}
-		const heroObject = Project.current!.commonEvents.heroObject;
-		this.hero = new SimulationObject(map, heroObject, heroObject.states[0]?.id ?? 1, this.position, 0.5, true);
-		this.hero.setOrientation(this.orientation);
+		this.center = this.createCenterMarker();
 		this.createArrows();
 		this.save();
 	}
@@ -74,20 +71,15 @@ class HeroPreview {
 
 	moveTo(position: Position) {
 		this.position = position.clone();
-		this.hero.setWorldPosition(this.position.toVector3(false));
+		this.updateCenterTransform();
 		this.updateArrowTransforms();
 		this.save();
 	}
 
 	setOrientation(orientation: SIM_ORIENTATION) {
 		this.orientation = orientation;
-		this.hero.setOrientation(orientation);
 		this.updateArrowColors();
 		this.save();
-	}
-
-	update() {
-		this.hero.update(0, this.getFaceAngle());
 	}
 
 	pickOrientation(ndc: THREE.Vector2): SIM_ORIENTATION | null {
@@ -108,13 +100,26 @@ class HeroPreview {
 	}
 
 	remove() {
-		this.hero.remove();
+		this.map.scene.remove(this.center);
+		this.center.geometry.dispose();
+		this.center.material.dispose();
 		for (const arrow of this.arrows) {
 			this.map.scene.remove(arrow.mesh);
 			arrow.mesh.geometry.dispose();
 			arrow.material.dispose();
 		}
 		this.arrows = [];
+	}
+
+	private createCenterMarker() {
+		const geometry = new THREE.CircleGeometry(0.14, 32);
+		const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const center = new THREE.Mesh(geometry, material);
+		center.rotation.x = -Math.PI / 2;
+		center.renderOrder = 3;
+		this.map.scene.add(center);
+		this.updateCenterTransform(center);
+		return center;
 	}
 
 	private createArrows() {
@@ -141,7 +146,7 @@ class HeroPreview {
 	}
 
 	private updateArrowTransforms() {
-		const base = this.hero.worldPosition;
+		const base = this.position.toVector3(false);
 		for (const arrow of this.arrows) {
 			const direction = SIM_ORIENTATION_VECTORS[arrow.orientation];
 			arrow.mesh.position.set(
@@ -153,16 +158,16 @@ class HeroPreview {
 		}
 	}
 
+	private updateCenterTransform(center = this.center) {
+		const base = this.position.toVector3(false);
+		center.position.set(base.x + 0.5, base.y + 0.02, base.z + 0.5);
+		center.updateMatrixWorld(true);
+	}
+
 	private updateArrowColors() {
 		for (const arrow of this.arrows) {
 			arrow.material.color.copy(arrow.orientation === this.orientation ? ARROW_COLOR_ACTIVE : ARROW_COLOR);
 		}
-	}
-
-	private getFaceAngle(): number {
-		const vector = new THREE.Vector3();
-		this.map.camera.getThreeCamera().getWorldDirection(vector);
-		return Math.atan2(vector.x, vector.z) + Math.PI;
 	}
 
 	private save() {

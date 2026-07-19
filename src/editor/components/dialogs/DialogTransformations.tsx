@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
 import { DynamicValue } from '../../core/DynamicValue';
@@ -32,6 +32,7 @@ type Props = {
 	scaleY: DynamicValue;
 	scaleZ: DynamicValue;
 	onAccept?: () => void;
+	onLiveChange?: () => void;
 };
 
 function DialogTransformations({
@@ -45,6 +46,7 @@ function DialogTransformations({
 	scaleY,
 	scaleZ,
 	onAccept,
+	onLiveChange,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -56,6 +58,8 @@ function DialogTransformations({
 	const [sx] = useStateDynamicValue();
 	const [sy] = useStateDynamicValue();
 	const [sz] = useStateDynamicValue();
+	const originalValues = useRef<DynamicValue[]>([]);
+	const isInitialized = useRef(false);
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -70,7 +74,7 @@ function DialogTransformations({
 		setTrigger((v) => !v);
 	};
 
-	const handleAccept = () => {
+	const apply = () => {
 		centerX.copy(cx);
 		centerZ.copy(cz);
 		angleX.copy(ax);
@@ -79,16 +83,49 @@ function DialogTransformations({
 		scaleX.copy(sx);
 		scaleY.copy(sy);
 		scaleZ.copy(sz);
+	};
+
+	const handleLiveChange = () => {
+		if (!isInitialized.current) {
+			return;
+		}
+		apply();
+		onLiveChange?.();
+	};
+
+	const handleAccept = () => {
+		apply();
 		onAccept?.();
 		setIsOpen(false);
 	};
 
 	const handleClose = () => {
+		const [originalCenterX, originalCenterZ, originalAngleX, originalAngleY, originalAngleZ, originalScaleX, originalScaleY, originalScaleZ] = originalValues.current;
+		centerX.copy(originalCenterX);
+		centerZ.copy(originalCenterZ);
+		angleX.copy(originalAngleX);
+		angleY.copy(originalAngleY);
+		angleZ.copy(originalAngleZ);
+		scaleX.copy(originalScaleX);
+		scaleY.copy(originalScaleY);
+		scaleZ.copy(originalScaleZ);
+		onLiveChange?.();
 		setIsOpen(false);
 	};
 
 	useLayoutEffect(() => {
+		originalValues.current = [
+			centerX.clone(),
+			centerZ.clone(),
+			angleX.clone(),
+			angleY.clone(),
+			angleZ.clone(),
+			scaleX.clone(),
+			scaleY.clone(),
+			scaleZ.clone(),
+		];
 		initialize();
+		isInitialized.current = true;
 	}, []);
 
 	return (
@@ -103,44 +140,44 @@ function DialogTransformations({
 				<Label>{t('center')} X</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={cx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />%
+						<DynamicValueSelector value={cx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />%
 					</Flex>
 				</Value>
 				<Label>{t('center')} Z</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={cz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />%
+						<DynamicValueSelector value={cz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />%
 					</Flex>
 				</Value>
 				<Label>{t('angle')} X</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={ax} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />°
+						<DynamicValueSelector value={ax} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
 					</Flex>
 				</Value>
 				<Label>{t('angle')} Y</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={ay} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />°
+						<DynamicValueSelector value={ay} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
 					</Flex>
 				</Value>
 				<Label>{t('angle')} Z</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={az} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />°
+						<DynamicValueSelector value={az} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
 					</Flex>
 				</Value>
 				<Label>{t('scale')} X</Label>
 				<Value>
-					<DynamicValueSelector value={sx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+					<DynamicValueSelector value={sx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
 				</Value>
 				<Label>{t('scale')} Y</Label>
 				<Value>
-					<DynamicValueSelector value={sy} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+					<DynamicValueSelector value={sy} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
 				</Value>
 				<Label>{t('scale')} Z</Label>
 				<Value>
-					<DynamicValueSelector value={sz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+					<DynamicValueSelector value={sz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
 				</Value>
 			</Form>
 		</Dialog>

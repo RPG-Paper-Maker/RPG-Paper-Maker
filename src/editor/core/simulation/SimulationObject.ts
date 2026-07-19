@@ -18,6 +18,7 @@ import { CustomGeometryFace } from '../CustomGeometryFace';
 import { Position } from '../Position';
 import { Project } from '../Project';
 import { Rectangle } from '../Rectangle';
+import { getMapObjectLightIntensity } from '../../models/MapObjectLight';
 
 export enum SIM_ORIENTATION {
 	SOUTH,
@@ -32,8 +33,6 @@ export const SIM_ORIENTATION_VECTORS: ReadonlyArray<THREE.Vector3> = [
 	new THREE.Vector3(0, 0, -1),
 	new THREE.Vector3(1, 0, 0),
 ];
-
-const FRAME_DURATION = 150;
 
 class SimulationObject {
 	public mesh: THREE.Mesh | null = null;
@@ -65,6 +64,10 @@ class SimulationObject {
 	private previewMaterial: THREE.Material | null = null;
 	private previewMaterialSource: THREE.Material | null = null;
 	private previewFrameBounds = new THREE.Vector4(0, 0, 1, 1);
+	private lights: { light: THREE.Light; settings: Model.MapObjectLight }[] = [];
+	private standaloneLights: THREE.Group | null = null;
+	private standaloneLightsBasePosition: THREE.Vector3 | null = null;
+	private lightsStartTime = performance.now();
 
 	private static outlineFragment: string | null = null;
 
@@ -88,12 +91,15 @@ class SimulationObject {
 		this.applyState(state);
 	}
 
-	applyState(state: Model.MapObjectState) {
+	applyState(state: Model.MapObjectState, preserveLightAnimation = false) {
 		this.state = state.clone();
 		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
 		this.orientation = (this.state.graphicsIndexY % 4) as SIM_ORIENTATION;
-		this.frame = 0;
+		this.frame = this.state.graphicsIndexX % Project.current!.systems.FRAMES;
 		this.frameTick = 0;
+		if (!preserveLightAnimation) {
+			this.lightsStartTime = performance.now();
+		}
 		this.moveAnimation = this.state.moveAnimation;
 		this.stopAnimation = this.state.stopAnimation;
 		this.directionFix = this.state.directionFix;
@@ -112,6 +118,7 @@ class SimulationObject {
 		this.moveFrequencyTick = 0;
 		this.lastBuildKey = '';
 		this.build();
+		this.updateMeshOffset();
 	}
 
 	updateGraphics(kind: ELEMENT_MAP_KIND, id: number, indexX: number, indexY: number, changeOrientation: boolean) {
@@ -173,17 +180,24 @@ class SimulationObject {
 
 	getCurrentColumn(): number {
 		const frames = Project.current!.systems.FRAMES;
-		if (this.moving && this.moveAnimation) {
+		if ((this.moving && this.moveAnimation) || (!this.moving && this.stopAnimation)) {
 			return this.frame % frames;
 		}
 		return this.state.graphicsIndexX % frames;
 	}
 
 	getCurrentRow(): number {
-		if (this.directionFix) {
-			return this.state.graphicsIndexY;
+		const orientation = this.setWithCamera
+			? (this.orientation - this.map.camera.getMapOrientation() + 6) % 4
+			: this.orientation;
+		let row = this.baseRow + orientation;
+		if (!this.moving && this.stopAnimation) {
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, this.state.graphicsID);
+			if (picture?.isStopAnimation) {
+				row += 4;
+			}
 		}
-		return this.baseRow + this.orientation;
+		return row;
 	}
 
 	build() {
@@ -242,7 +256,9 @@ class SimulationObject {
 					state.graphicsID === 0 ? (state.rectTileset ?? new Rectangle()) : characterRect,
 				);
 				const geometrySprite =
-					state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ? new CustomGeometry() : new CustomGeometryFace();
+					state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX
+						? new CustomGeometry()
+						: new CustomGeometryFace();
 				const localPosition = position.toVector3();
 				sprite.updateGeometry(this.map, geometrySprite, width, height, position, 0, false, localPosition);
 				geometrySprite.updateAttributes();
@@ -277,7 +293,99 @@ class SimulationObject {
 			mesh.renderOrder = 4;
 			this.map.scene.add(mesh);
 			this.mesh = mesh;
+			this.addLights(mesh);
+			mesh.onBeforeRender = () => this.updateLights();
 			this.updateMeshOffset();
+		} else {
+			this.addLights();
+			this.updateMeshOffset();
+		}
+	}
+
+	private addLights(parent?: THREE.Object3D) {
+		if (!this.state.lights?.length) {
+			return;
+		}
+		const lights = new THREE.Group();
+		const position = this.basePosition.clone();
+		position.centerX = this.state.centerX.getFixNumberValue();
+		position.centerZ = this.state.centerZ.getFixNumberValue();
+		lights.position.copy(position.toVector3());
+		lights.rotation.set(
+			THREE.MathUtils.degToRad(this.state.angleX.getFixNumberValue()),
+			THREE.MathUtils.degToRad(this.state.angleY.getFixNumberValue()),
+			THREE.MathUtils.degToRad(this.state.angleZ.getFixNumberValue()),
+		);
+		lights.scale.set(
+			this.state.scaleX.getFixNumberValue(),
+			this.state.scaleY.getFixNumberValue(),
+			this.state.scaleZ.getFixNumberValue(),
+		);
+		if (parent) {
+			parent.add(lights);
+		} else {
+			this.map.scene.add(lights);
+			this.standaloneLights = lights;
+			this.standaloneLightsBasePosition = lights.position.clone();
+		}
+		for (const settings of this.state.lights ?? []) {
+			let light: THREE.Light;
+			let lightParent: THREE.Object3D = lights;
+			switch (settings.kind.getFixNumberValue()) {
+				case 1: {
+					const spotParent = new THREE.Group();
+					spotParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][this.orientation]);
+					lights.add(spotParent);
+					const spot = new THREE.SpotLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+						settings.distance.getFixNumberValue(),
+						THREE.MathUtils.degToRad(settings.angle.getFixNumberValue()),
+						settings.penumbra.getFixNumberValue(),
+					);
+					spot.target.position.set(
+						settings.targetX.getFixNumberValue() / Project.SQUARE_SIZE,
+						settings.targetY.getFixNumberValue() / Project.SQUARE_SIZE,
+						settings.targetZ.getFixNumberValue() / Project.SQUARE_SIZE,
+					);
+					spotParent.add(spot.target);
+					light = spot;
+					lightParent = spotParent;
+					break;
+				}
+				case 2: {
+					const directional = new THREE.DirectionalLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+					);
+					directional.target.position.set(0, 0, -1);
+					(parent ?? lights).add(directional.target);
+					light = directional;
+					break;
+				}
+				case 3:
+					light = new THREE.HemisphereLight(
+						settings.color.value as string,
+						settings.groundColor.value as string,
+						settings.intensity.getFixNumberValue(),
+					);
+					break;
+				default:
+					light = new THREE.PointLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+						settings.distance.getFixNumberValue(),
+					);
+					break;
+			}
+			light.position.set(
+				settings.x.getFixNumberValue() / Project.SQUARE_SIZE,
+				settings.y.getFixNumberValue() / Project.SQUARE_SIZE,
+				settings.z.getFixNumberValue() / Project.SQUARE_SIZE,
+			);
+			lightParent.add(light);
+			this.lights.push({ light, settings });
+			light.intensity = getMapObjectLightIntensity(settings, performance.now() - this.lightsStartTime);
 		}
 	}
 
@@ -326,12 +434,14 @@ class SimulationObject {
 	}
 
 	update(elapsedTime: number, faceAngle: number) {
+		this.updateLights();
 		if (this.moveFrequencyTick > 0) {
 			this.moveFrequencyTick = Math.max(0, this.moveFrequencyTick - elapsedTime);
 		}
-		if (this.moving && this.moveAnimation) {
+		if ((this.moving && this.moveAnimation) || (!this.moving && this.stopAnimation)) {
 			this.frameTick += elapsedTime;
-			if (this.frameTick >= FRAME_DURATION) {
+			const frameDuration = Project.current!.systems.mapFrameDuration.getFixNumberValue() / this.speedValue;
+			if (this.frameTick >= frameDuration) {
 				this.frame = (this.frame + 1) % Project.current!.systems.FRAMES;
 				this.frameTick = 0;
 				this.build();
@@ -341,8 +451,18 @@ class SimulationObject {
 			this.frameTick = 0;
 			this.build();
 		}
+		if (this.setWithCamera) {
+			this.build();
+		}
 		if (this.mesh && this.meshIsFace) {
 			(this.mesh.geometry as CustomGeometryFace).rotate(faceAngle, MapElement.Base.Y_AXIS);
+		}
+	}
+
+	private updateLights() {
+		const lightsElapsedTime = performance.now() - this.lightsStartTime;
+		for (const { light, settings } of this.lights) {
+			light.intensity = getMapObjectLightIntensity(settings, lightsElapsedTime);
 		}
 	}
 
@@ -437,11 +557,24 @@ void main() {`,
 	}
 
 	private updateMeshOffset() {
+		const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, this.state.graphicsID);
+		const pixelOffset =
+			this.pixelOffset &&
+			this.frame % 2 !== 0 &&
+			(this.moving ? this.moveAnimation : this.stopAnimation && !picture?.isStopAnimation)
+				? 1 / Project.SQUARE_SIZE
+				: 0;
 		this.mesh?.position.set(
 			this.worldPosition.x - this.baseVector.x,
-			this.worldPosition.y - this.baseVector.y,
+			this.worldPosition.y - this.baseVector.y + pixelOffset,
 			this.worldPosition.z - this.baseVector.z,
 		);
+		if (this.standaloneLights && this.standaloneLightsBasePosition) {
+			this.standaloneLights.position
+				.copy(this.standaloneLightsBasePosition)
+				.add(this.worldPosition)
+				.sub(this.baseVector);
+		}
 	}
 
 	private removeMesh() {
@@ -449,6 +582,12 @@ void main() {`,
 			this.map.scene.remove(this.mesh);
 			this.mesh = null;
 		}
+		if (this.standaloneLights) {
+			this.map.scene.remove(this.standaloneLights);
+			this.standaloneLights = null;
+			this.standaloneLightsBasePosition = null;
+		}
+		this.lights = [];
 	}
 
 	remove() {

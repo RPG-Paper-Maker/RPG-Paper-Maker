@@ -24,3 +24,8 @@ legend {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+.lightStatusEmpty {
+	color: var(--lighter-bg-color);
+	font-style: italic;
+}

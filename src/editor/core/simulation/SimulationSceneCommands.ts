@@ -575,6 +575,7 @@ class CommandMoveObject extends CommandBase {
 			case SUB_MOVE_KIND.TOGGLE:
 				if (move.flag !== null) {
 					target[move.flag] = move.onOff;
+					target.build();
 				}
 				return true;
 			case SUB_MOVE_KIND.WAIT:

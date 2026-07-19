@@ -142,6 +142,10 @@ class Map extends Base {
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
+	public objectStopAnimationFrame = new Frame(150, {
+		frames: Project.current!.systems.FRAMES,
+	});
+	private lastMapOrientation = -1;
 	public selectedMesh!: THREE.Mesh;
 	public selectedGltfClone: THREE.Group | null = null;
 	public gltfClones: globalThis.Map<MapElement.Base, THREE.Group> = new globalThis.Map();
@@ -175,6 +179,7 @@ class Map extends Base {
 	public simulationHiddenObjectKeys = new Set<string>();
 	public simulationActive = false;
 	public objectDialogActive = false;
+	public previewObjectSquarePosition: Position | null = null;
 	public cameraPreviewSnapshot: {
 		distance: number;
 		horizontalAngle: number;
@@ -2756,6 +2761,11 @@ class Map extends Base {
 			const vector = new THREE.Vector3();
 			this.camera.getThreeCamera().getWorldDirection(vector);
 			const angle = Math.atan2(vector.x, vector.z) + Math.PI;
+			const mapOrientation = this.camera.getMapOrientation();
+			if (this.lastMapOrientation !== mapOrientation) {
+				this.lastMapOrientation = mapOrientation;
+				this.forEachMapPortions((mapPortion) => mapPortion.updateObjectsGeometry(true));
+			}
 			this.forEachMapPortions((mapPortion) => {
 				mapPortion.updateFaceSprites(angle);
 			});
@@ -2779,6 +2789,14 @@ class Map extends Base {
 			Map.elapsedTime = new Date().getTime() - Map.lastUpdateTime;
 			Map.averageElapsedTime = (Map.averageElapsedTime + Map.elapsedTime) / 2;
 			Map.lastUpdateTime = new Date().getTime();
+			if (this.objectStopAnimationFrame.update()) {
+				this.forEachMapPortions((mapPortion) => {
+					if (mapPortion.hasStopAnimation) {
+						mapPortion.updateObjectsGeometry(true);
+					}
+				});
+			}
+			this.forEachMapPortions((mapPortion) => mapPortion.updateLights());
 			return true;
 		}
 		return false;

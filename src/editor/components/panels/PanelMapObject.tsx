@@ -31,7 +31,7 @@ import GraphicsSelector, { GraphicsSelectorOptions } from '../GraphicsSelector';
 import Groupbox from '../Groupbox';
 import InputText from '../InputText';
 import Tab from '../Tab';
-import Tree from '../Tree';
+import Tree, { TREES_MIN_HEIGHT } from '../Tree';
 import TreeCommands from '../TreeCommands';
 
 export interface PanelMapObjectRef {
@@ -116,6 +116,7 @@ const PanelMapObject = forwardRef(
 		const [forcedCurrentSelectedIDState, setForcedCurrentSelectedIDState] = useState<number | null>(null);
 		const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
 		const [blockingHero, setBlockingHero] = useStateBool();
+		const [lights, setLights] = useState<Node[]>([]);
 
 		const statesRef = useRef({
 			name,
@@ -232,6 +233,23 @@ const PanelMapObject = forwardRef(
 			}
 		};
 
+		const handleUpdateLights = () => {
+			if (!selectedState) return;
+			selectedState.lights = lights.map((node) => node.content as Model.MapObjectLight);
+			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState);
+		};
+
+		const handleLivePreviewLight = (light: Model.Base | null, isNew: boolean) => {
+			if (!selectedState) return;
+			selectedState.lights = [
+				...lights.map((node) => node.content as Model.MapObjectLight),
+				...(light && isNew ? [light as Model.MapObjectLight] : []),
+			];
+			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState);
+		};
+
 		const handleUpdateEvents = () => {
 			if (saveOnUpdate) {
 				object.events = Node.createListFromNodes(statesRef.current.events);
@@ -278,7 +296,7 @@ const PanelMapObject = forwardRef(
 								}
 								onLivePreviewCommand={
 									onLivePreviewCommand
-									? (commandNode: Node, command: Model.MapObjectCommand | null, isNew: boolean) =>
+										? (commandNode: Node, command: Model.MapObjectCommand | null, isNew: boolean) =>
 												onLivePreviewCommand(
 													{
 														node: commandNode,
@@ -388,7 +406,10 @@ const PanelMapObject = forwardRef(
 				setPixelOffset(state.pixelOffset);
 				setKeepPosition(state.keepPosition);
 				setEventCommandDetection(state.eventCommandDetection);
+				setLights(Node.createList(state.lights ?? []));
 				onUpdateStateGraphics?.(state);
+			} else {
+				setLights([]);
 			}
 			updateReactionsTab(newEvents ?? events, state);
 		};
@@ -465,6 +486,7 @@ const PanelMapObject = forwardRef(
 			setStopAnimation(stopAnimation);
 			selectedState!.stopAnimation = stopAnimation;
 			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState!);
 		};
 
 		const handleChangeClimbAnimation = (climbAnimation: boolean) => {
@@ -489,12 +511,14 @@ const PanelMapObject = forwardRef(
 			setSetWithCamera(setWithCamera);
 			selectedState!.setWithCamera = setWithCamera;
 			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState!);
 		};
 
 		const handleChangePixelOffset = (pixelOffset: boolean) => {
 			setPixelOffset(pixelOffset);
 			selectedState!.pixelOffset = pixelOffset;
 			handleUpdateStates();
+			onUpdateStateGraphics?.(selectedState!);
 		};
 
 		const handleChangeKeepPosition = (keepPosition: boolean) => {
@@ -529,6 +553,11 @@ const PanelMapObject = forwardRef(
 
 		const handleChangeOptionsOpened = async (isOpen: boolean) => {
 			Project.current!.settings.mapObjectOptionsOpened = isOpen;
+			await Project.current!.settings.save();
+		};
+
+		const handleChangeLightsOpened = async (isOpen: boolean) => {
+			Project.current!.settings.mapObjectLightsOpened = isOpen;
 			await Project.current!.settings.save();
 		};
 
@@ -740,11 +769,39 @@ const PanelMapObject = forwardRef(
 								</Flex>
 							</Flex>
 							<Flex
+								column
+								spaced
 								className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}
 							>
 								<Groupbox
+									canExpand
+									initialClose={!Project.current!.settings.mapObjectLightsOpened}
+									onChangeOpen={handleChangeLightsOpened}
+									title={
+										<Flex spaced>
+											Lights
+											{lights.length === 0 ? (
+												<span className='lightStatusEmpty'>(none)</span>
+											) : (
+												<span>({lights.length})</span>
+											)}
+										</Flex>
+									}
+								>
+									<Flex one>
+										<Tree
+											list={lights}
+											constructorType={Model.MapObjectLight}
+											onListUpdated={handleUpdateLights}
+											onDialogModelLivePreview={handleLivePreviewLight}
+											minHeight={TREES_MIN_HEIGHT / 2}
+											applyDefault
+											canBeEmpty
+										/>
+									</Flex>
+								</Groupbox>
+								<Groupbox
 									title={t('options')}
-									fillWidth
 									canExpand
 									initialClose={!Project.current!.settings.mapObjectOptionsOpened}
 									onChangeOpen={handleChangeOptionsOpened}
@@ -843,6 +900,10 @@ const PanelMapObject = forwardRef(
 						scaleY={selectedState.scaleY}
 						scaleZ={selectedState.scaleZ}
 						onAccept={handleUpdateStates}
+						onLiveChange={() => {
+							handleUpdateStates();
+							onUpdateStateGraphics?.(selectedState);
+						}}
 					/>
 				)}
 			</>

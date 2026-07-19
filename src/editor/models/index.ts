@@ -50,6 +50,7 @@ export * from './MapObjectParameter';
 export * from './MapObjectProperty';
 export * from './MapObjectReaction';
 export * from './MapObjectState';
+export * from './MapObjectLight';
 export * from './MapPortion';
 export * from './Monster';
 export * from './MonsterAction';

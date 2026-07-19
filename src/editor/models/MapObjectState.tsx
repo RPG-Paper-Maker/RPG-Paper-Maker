@@ -18,6 +18,7 @@ import { Rectangle } from '../core/Rectangle';
 import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommand } from './MapObjectCommand';
+import { MapObjectLight } from './MapObjectLight';
 
 class MapObjectState extends Base {
 	public static type = 'MapObjectState';
@@ -47,6 +48,7 @@ class MapObjectState extends Base {
 	public scaleX!: DynamicValue;
 	public scaleY!: DynamicValue;
 	public scaleZ!: DynamicValue;
+	public lights!: MapObjectLight[];
 
 	public static bindings: BindingType[] = [
 		['graphicsKind', 'gk', undefined, BINDING.NUMBER],
@@ -123,6 +125,7 @@ class MapObjectState extends Base {
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
+		['lights', 'l', [], BINDING.LIST, MapObjectLight],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

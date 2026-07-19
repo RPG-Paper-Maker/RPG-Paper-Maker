@@ -16,6 +16,7 @@ import {
 	DYNAMIC_VALUE_KIND,
 	ELEMENT_MAP_KIND,
 	JSONType,
+	MAP_OBJECT_LIGHT_KIND,
 	OBJECT_COLLISION_KIND,
 	OBJECT_MOVING_KIND,
 	SHAPE_KIND,
@@ -36,6 +37,7 @@ export type DIALOG_OPTIONS = {
 	onAccept: () => void;
 	onReject: () => void;
 	onLivePreview?: (command: MapObjectCommand | null) => void;
+	onModelLivePreview?: (model: Base | null) => void;
 };
 
 class Base extends Serializable {
@@ -164,6 +166,12 @@ class Base extends Serializable {
 	]);
 	public static ORIENTATION_OPTIONS = Base.mapListIndex(['south', 'west', 'north', 'east']);
 	public static ITEM_OPTIONS = Base.mapListIndex(['item', 'weapon', 'armor']);
+	public static MAP_OBJECT_LIGHT_SOURCE_OPTIONS = [
+		Base.create(MAP_OBJECT_LIGHT_KIND.POINT, 'Point'),
+		Base.create(MAP_OBJECT_LIGHT_KIND.SPOT, 'Spot'),
+		Base.create(MAP_OBJECT_LIGHT_KIND.DIRECTIONAL, 'Directional'),
+		Base.create(MAP_OBJECT_LIGHT_KIND.HEMISPHERE, 'Hemisphere'),
+	];
 	public static CURRENCY_OPTIONS = Base.mapListIndex(['owned', 'earned', 'used']);
 	public static VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS = Base.mapListIndex([
 		'x.square.position',

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
 import i18next from 'i18next';
+import * as THREE from 'three';
 
 import {
 	ACTION_KIND,
@@ -22,6 +22,7 @@ import {
 	SHAPE_KIND,
 } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
+import { getMapObjectLightIntensity } from '../models/MapObjectLight';
 import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
 import { Portion } from './Portion';
@@ -50,6 +51,10 @@ class MapPortion {
 	public objectsMesh: THREE.Mesh | null = null;
 	public objectsMeshes: THREE.Mesh[] = [];
 	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
+	public objectsLightsGroups: THREE.Group[] = [];
+	private animatedLights: { light: THREE.Light; settings: Model.MapObjectLight }[] = [];
+	public hasStopAnimation = false;
+	private lightsStartTime = performance.now();
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	static offsetMeshPositionLayer(map: Scene.Map, mesh: THREE.Mesh, side: number, layer: number, up = true) {
@@ -94,11 +99,7 @@ class MapPortion {
 		return below;
 	}
 
-	updateMountainTopFloor(
-		position: Position,
-		preview: boolean,
-		updateAutotiles: boolean,
-	): void {
+	updateMountainTopFloor(position: Position, preview: boolean, updateAutotiles: boolean): void {
 		const s = Project.current!.settings;
 		if (s.mapEditorCurrentMountainTopFloorIsAutotile) {
 			this.updateMapElement(
@@ -148,12 +149,7 @@ class MapPortion {
 			) {
 				const previousFloorPortion = this.map.getMapPortionByPosition(previousFloorPosition);
 				if (previousFloorPortion) {
-					previousFloorPortion.updateMapElement(
-						previousFloorPosition,
-						null,
-						ELEMENT_MAP_KIND.FLOOR,
-						preview,
-					);
+					previousFloorPortion.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
 					previousFloorPortion.updateMapElement(
 						previousFloorPosition,
 						null,
@@ -210,16 +206,7 @@ class MapPortion {
 			return;
 		}
 		this.updateMapElement(position, null, ELEMENT_MAP_KIND.FLOOR, preview);
-		this.updateMapElement(
-			position,
-			null,
-			ELEMENT_MAP_KIND.AUTOTILE,
-			preview,
-			false,
-			false,
-			false,
-			updateAutotiles,
-		);
+		this.updateMapElement(position, null, ELEMENT_MAP_KIND.AUTOTILE, preview, false, false, false, updateAutotiles);
 		floorPortion.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.MOUNTAIN, preview);
 		floorPortion.updateMountainTopFloor(floorPosition, preview, updateAutotiles);
 
@@ -835,7 +822,11 @@ class MapPortion {
 		}
 		for (const [, object3D] of this.model.objects3D) {
 			const objectData = Project.current!.specialElements.getObject3DByID(object3D.id);
-			if (objectData?.shapeKind === SHAPE_KIND.CUSTOM && objectData.gltfID !== -1 && objectData.pictureID === -1) {
+			if (
+				objectData?.shapeKind === SHAPE_KIND.CUSTOM &&
+				objectData.gltfID !== -1 &&
+				objectData.pictureID === -1
+			) {
 				continue; // GLTF: no pictureID texture; skip texture check
 			}
 			const textureObject3D = MapElement.Object3D.getObject3DTexture(this.map, object3D.id);
@@ -1415,7 +1406,12 @@ class MapPortion {
 							this.map.selectedGltfClone = clone;
 							this.map.selectedPivotOffset.set(0, 0, 0);
 							const selectedLocalPosition = object3D.getLocalPosition(position);
-							this.updateSelected(new CustomGeometry(), this.map.materialTilesetHover, selectedLocalPosition, position);
+							this.updateSelected(
+								new CustomGeometry(),
+								this.map.materialTilesetHover,
+								selectedLocalPosition,
+								position,
+							);
 							const selectedOverlayMat = new THREE.MeshBasicMaterial({
 								color: 0xffffff,
 								transparent: true,
@@ -1553,7 +1549,12 @@ class MapPortion {
 		}
 	}
 
-	updateObjectsGeometry() {
+	updateObjectsGeometry(preserveLightAnimation = false) {
+		this.animatedLights = [];
+		this.hasStopAnimation = false;
+		if (!preserveLightAnimation) {
+			this.lightsStartTime = performance.now();
+		}
 		if (this.objectsMesh !== null) {
 			this.map.scene.remove(this.objectsMesh);
 			this.objectsMesh = null;
@@ -1564,14 +1565,15 @@ class MapPortion {
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
 		}
+		for (const lights of this.objectsLightsGroups) {
+			this.map.scene.remove(lights);
+		}
 		this.objectsMeshes = [];
 		this.objectsSpritesFaceMeshes = [];
+		this.objectsLightsGroups = [];
 		const geometry = new CustomGeometry();
 		let count = 0;
 		for (const [positionKey, object] of this.model.objects) {
-			if (this.map.simulationHiddenObjectKeys.has(positionKey)) {
-				continue;
-			}
 			const position = Position.fromKey(positionKey);
 			if (this.map.previewSizeActive) {
 				position.x += this.map.previewShiftX;
@@ -1598,6 +1600,11 @@ class MapPortion {
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count += 4;
 
+			// Simulation replaces an object's graphic, but its map square must remain visible
+			if (this.map.simulationHiddenObjectKeys.has(positionKey)) {
+				continue;
+			}
+
 			// Apply transforms from first state for sprite geometry
 			const state = object.getFirstState();
 			if (state) {
@@ -1613,11 +1620,13 @@ class MapPortion {
 
 			if (state) {
 				let mesh: THREE.Mesh | null = null;
+				let pixelOffset = 0;
 				switch (state.graphicsKind) {
 					case ELEMENT_MAP_KIND.NONE:
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE: {
+						this.hasStopAnimation ||= state.stopAnimation;
 						const material =
 							state.graphicsID === 0
 								? this.map.materialTileset
@@ -1633,8 +1642,29 @@ class MapPortion {
 								const rows = picture.getRows();
 								const squareWidth = width / Project.SQUARE_SIZE / Project.current!.systems.FRAMES;
 								const squareHeight = height / Project.SQUARE_SIZE / rows;
-								characterRect.x = state.graphicsIndexX * squareWidth;
-								characterRect.y = state.graphicsIndexY * squareHeight;
+								const frames = Project.current!.systems.FRAMES;
+								const column = state.stopAnimation
+									? state.graphicsIndexX -
+										(state.graphicsIndexX % frames) +
+										((state.graphicsIndexX + this.map.objectStopAnimationFrame.value) % frames)
+									: state.graphicsIndexX;
+								pixelOffset =
+									state.stopAnimation &&
+									state.pixelOffset &&
+									!picture.isStopAnimation &&
+									column % 2 !== 0
+										? 1 / Project.SQUARE_SIZE
+										: 0;
+								characterRect.x = column * squareWidth;
+								const orientation = state.setWithCamera
+									? Mathf.mod(state.graphicsIndexY - this.map.camera.getMapOrientation() + 2, 4)
+									: state.graphicsIndexY % 4;
+								characterRect.y =
+									(state.graphicsIndexY -
+										(state.graphicsIndexY % 4) +
+										orientation +
+										(state.stopAnimation && picture.isStopAnimation ? 4 : 0)) *
+									squareHeight;
 								characterRect.width = squareWidth;
 								characterRect.height = squareHeight;
 							}
@@ -1648,6 +1678,7 @@ class MapPortion {
 								? new CustomGeometry()
 								: new CustomGeometryFace();
 						const localPosition = position.toVector3();
+						localPosition.y += pixelOffset;
 						sprite.updateGeometry(
 							this.map,
 							geometrySprite,
@@ -1659,6 +1690,14 @@ class MapPortion {
 							localPosition,
 						);
 						geometrySprite.updateAttributes();
+						if (geometrySprite instanceof CustomGeometryFace) {
+							const cameraDirection = new THREE.Vector3();
+							this.map.camera.getThreeCamera().getWorldDirection(cameraDirection);
+							geometrySprite.rotate(
+								Math.atan2(cameraDirection.x, cameraDirection.z) + Math.PI,
+								MapElement.Base.Y_AXIS,
+							);
+						}
 						mesh = new THREE.Mesh(geometrySprite, material);
 						mesh.customDepthMaterial = material?.userData.customDepthMaterial;
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
@@ -1687,9 +1726,30 @@ class MapPortion {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
 					mesh.renderOrder = 4;
+					this.addObjectLights(mesh, state, position.toVector3());
+					mesh.onBeforeRender = () => this.updateLights();
 					this.map.scene.add(mesh);
+				} else {
+					this.addObjectLights(undefined, state, position.toVector3());
 				}
 			}
+		}
+		const previewObjectSquarePosition = this.map.previewObjectSquarePosition;
+		if (previewObjectSquarePosition && this.map.getMapPortionByPosition(previewObjectSquarePosition) === this) {
+			const vec = previewObjectSquarePosition.toVector3(false);
+			const vecA = new THREE.Vector3(vec.x, vec.y, vec.z);
+			const vecB = new THREE.Vector3(vec.x + 1, vec.y, vec.z);
+			const vecC = new THREE.Vector3(vec.x + 1, vec.y, vec.z + 1);
+			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + 1);
+			geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
+			geometry.pushQuadIndices(count, previewObjectSquarePosition);
+			const coef = MapElement.Base.COEF_TEX / Project.SQUARE_SIZE;
+			const texA = new THREE.Vector2();
+			const texB = new THREE.Vector2();
+			const texC = new THREE.Vector2();
+			const texD = new THREE.Vector2();
+			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, coef, coef, 1 - coef, 1 - coef);
+			geometry.pushQuadUVs(texA, texB, texC, texD);
 		}
 		// Object square cursors
 		if (!geometry.isEmpty()) {
@@ -1700,6 +1760,98 @@ class MapPortion {
 			this.objectsMesh.layers.enable(RAYCASTING_LAYER.OBJECTS);
 			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
 			this.map.scene.add(this.objectsMesh);
+		}
+	}
+
+	private addObjectLights(parent: THREE.Object3D | undefined, state: Model.MapObjectState, position: THREE.Vector3) {
+		if (!state.lights?.length) {
+			return;
+		}
+		const lights = new THREE.Group();
+		lights.position.copy(position);
+		lights.rotation.set(
+			THREE.MathUtils.degToRad(state.angleX.getFixNumberValue()),
+			THREE.MathUtils.degToRad(state.angleY.getFixNumberValue()),
+			THREE.MathUtils.degToRad(state.angleZ.getFixNumberValue()),
+		);
+		lights.scale.set(
+			state.scaleX.getFixNumberValue(),
+			state.scaleY.getFixNumberValue(),
+			state.scaleZ.getFixNumberValue(),
+		);
+		if (parent) {
+			parent.add(lights);
+		} else {
+			this.map.scene.add(lights);
+			this.objectsLightsGroups.push(lights);
+		}
+		for (const settings of state.lights ?? []) {
+			let light: THREE.Light;
+			let lightParent: THREE.Object3D = lights;
+			switch (settings.kind.getFixNumberValue()) {
+				case 1: {
+					const spotParent = new THREE.Group();
+					const orientationEye = state.setWithCamera
+						? state.graphicsIndexY % 4
+						: Mathf.mod(state.graphicsIndexY + this.map.camera.getMapOrientation() - 2, 4);
+					spotParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][orientationEye]);
+					lights.add(spotParent);
+					const spot = new THREE.SpotLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+						settings.distance.getFixNumberValue(),
+						THREE.MathUtils.degToRad(settings.angle.getFixNumberValue()),
+						settings.penumbra.getFixNumberValue(),
+					);
+					spot.target.position.set(
+						settings.targetX.getFixNumberValue() / Project.SQUARE_SIZE,
+						settings.targetY.getFixNumberValue() / Project.SQUARE_SIZE,
+						settings.targetZ.getFixNumberValue() / Project.SQUARE_SIZE,
+					);
+					spotParent.add(spot.target);
+					light = spot;
+					lightParent = spotParent;
+					break;
+				}
+				case 2: {
+					const directional = new THREE.DirectionalLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+					);
+					directional.target.position.set(0, 0, -1);
+					(parent ?? lights).add(directional.target);
+					light = directional;
+					break;
+				}
+				case 3:
+					light = new THREE.HemisphereLight(
+						settings.color.value as string,
+						settings.groundColor.value as string,
+						settings.intensity.getFixNumberValue(),
+					);
+					break;
+				default:
+					light = new THREE.PointLight(
+						settings.color.value as string,
+						settings.intensity.getFixNumberValue(),
+						settings.distance.getFixNumberValue(),
+					);
+					break;
+			}
+			light.position.set(
+				settings.x.getFixNumberValue() / Project.SQUARE_SIZE,
+				settings.y.getFixNumberValue() / Project.SQUARE_SIZE,
+				settings.z.getFixNumberValue() / Project.SQUARE_SIZE,
+			);
+			lightParent.add(light);
+			this.animatedLights.push({ light, settings });
+		}
+	}
+
+	updateLights() {
+		const lightsElapsedTime = performance.now() - this.lightsStartTime;
+		for (const { light, settings } of this.animatedLights) {
+			light.intensity = getMapObjectLightIntensity(settings, lightsElapsedTime);
 		}
 	}
 
@@ -1802,6 +1954,11 @@ class MapPortion {
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
 		}
+		for (const lights of this.objectsLightsGroups) {
+			this.map.scene.remove(lights);
+		}
+		this.objectsLightsGroups = [];
+		this.animatedLights = [];
 	}
 }
 

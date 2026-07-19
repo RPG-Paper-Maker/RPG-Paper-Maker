@@ -28,6 +28,7 @@ export * from './DialogMapObjectEvent';
 export * from './DialogMapObjectParameter';
 export * from './DialogMapObjectProperty';
 export * from './DialogMapObjectState';
+export * from './DialogMapObjectLight';
 export * from './DialogMapProperties';
 export * from './DialogMonsterAction';
 export * from './DialogMonsterLoot';

@@ -116,6 +116,10 @@ class Camera {
 		return this.verticalAngle < 90;
 	}
 
+	getMapOrientation(): number {
+		return Mathf.mod(Math.round(this.horizontalAngle / 90) - 1, 4);
+	}
+
 	getFront(direction: THREE.Vector3, angle: number) {
 		const planeDirection = new THREE.Vector3(0, 0, 1);
 		const m = new THREE.Matrix4();
