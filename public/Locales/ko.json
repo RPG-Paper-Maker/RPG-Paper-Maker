@@ -1551,6 +1551,8 @@
 	"ice": "얼음",
 	"darkness": "어둠",
 	"light": "빛",
+	"light.id": "조명 ID",
+	"modify.light": "조명 변경",
 	"knife": "단검",
 	"rod": "로드",
 	"headgear": "모자",

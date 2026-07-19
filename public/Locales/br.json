@@ -1550,6 +1550,8 @@
 	"ice": "Gelo",
 	"darkness": "Trevas",
 	"light": "Leve",
+	"light.id": "ID da luz",
+	"modify.light": "Modificar luz",
 	"knife": "Faca",
 	"rod": "Grudar",
 	"headgear": "capacete",

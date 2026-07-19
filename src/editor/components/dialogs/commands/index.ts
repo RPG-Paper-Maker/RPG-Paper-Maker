@@ -26,6 +26,7 @@ export * from './DialogCommandInputNumber';
 export * from './DialogCommandLabel';
 export * from './DialogCommandModifyCurrency';
 export * from './DialogCommandModifyInventory';
+export * from './DialogCommandModifyLight';
 export * from './DialogCommandModifyTeam';
 export * from './DialogCommandMoveCamera';
 export * from './DialogCommandMoveObject';

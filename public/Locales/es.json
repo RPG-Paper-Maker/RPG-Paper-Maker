@@ -1550,6 +1550,8 @@
 	"ice": "Helado",
 	"darkness": "Oscuridad",
 	"light": "Luz",
+	"light.id": "ID de luz",
+	"modify.light": "Modificar luz",
 	"knife": "Cuchillo",
 	"rod": "Palo",
 	"headgear": "sombrerería",

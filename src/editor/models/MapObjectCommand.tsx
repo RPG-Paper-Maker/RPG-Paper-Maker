@@ -31,6 +31,7 @@ import {
 import { GiTeleport, GiVibratingBall } from 'react-icons/gi';
 import { GoSun } from 'react-icons/go';
 import { GrMoney } from 'react-icons/gr';
+import { HiOutlineLightBulb } from 'react-icons/hi2';
 import { ImFilePicture } from 'react-icons/im';
 import { IoIosStats, IoLogoJavascript, IoMdHappy, IoMdMove } from 'react-icons/io';
 import {
@@ -170,6 +171,8 @@ class MapObjectCommand extends Base {
 				return <GiTeleport />;
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
 				return <IoMdMove />;
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
+				return <HiOutlineLightBulb />;
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 				return <IoMdHappy />;
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
@@ -359,6 +362,8 @@ class MapObjectCommand extends Base {
 				return t('change.state');
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				return t('change.property');
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
+				return t('modify.light');
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 				return t('modify.currency');
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
@@ -486,6 +491,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
@@ -716,6 +722,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				texts = this.toStringChangeProperty(iterator, properties, parameters);
+				break;
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
+				texts = this.toStringModifyLight(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 				texts = this.toStringModifyCurrency(iterator, properties, parameters);
@@ -1135,8 +1144,20 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} X`, iterator, properties, parameters);
 		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} Y`, iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} ${t('width')}`, iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, `${t('interlocutor')} ${t('height')}`, iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			`${t('interlocutor')} ${t('width')}`,
+			iterator,
+			properties,
+			parameters,
+		);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			`${t('interlocutor')} ${t('height')}`,
+			iterator,
+			properties,
+			parameters,
+		);
 		return texts;
 	}
 
@@ -1178,7 +1199,9 @@ class MapObjectCommand extends Base {
 		}
 		const intensity = this.toStringDynamicValue(iterator, properties, parameters);
 		const color = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.systems.colors);
-		return [`[${t('enable').toLowerCase()}] ${t('intensity')}: ${intensity}, ${t('color').toLowerCase()}: ${color}`];
+		return [
+			`[${t('enable').toLowerCase()}] ${t('intensity')}: ${intensity}, ${t('color').toLowerCase()}: ${color}`,
+		];
 	}
 
 	toStringShakeScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -1877,6 +1900,13 @@ class MapObjectCommand extends Base {
 		const operation = this.toStringOperation(iterator);
 		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${t('property.id')} ${propertyID} ${operation} ${newValue}`];
+	}
+
+	toStringModifyLight(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const objectID = this.toStringDynamicObject(iterator, properties, parameters);
+		const action = [t('add'), t('delete'), t('edit')][this.command[iterator.i++] as number] ?? '';
+		const lightID = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${t('object.id')} ${objectID}, ${action} ${t('light.id').toLowerCase()} ${lightID}`];
 	}
 
 	toStringModifyCurrency(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

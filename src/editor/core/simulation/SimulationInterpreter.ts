@@ -42,6 +42,7 @@ export type SimulationContext = {
 	cameraTargetPosition: THREE.Vector3 | null;
 	camera: Camera | null;
 	parallelCommands: SimulationInterpreter[];
+	showObjectPreview?: (object: SimulationObject) => void;
 	createCommonReactionInterpreter?: (id: number) => SimulationInterpreter | null;
 	getElapsedTime: () => number;
 };

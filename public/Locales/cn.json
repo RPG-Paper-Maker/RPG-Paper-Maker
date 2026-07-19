@@ -1551,6 +1551,8 @@
 	"ice": "冰",
 	"darkness": "暗",
 	"light": "光",
+	"light.id": "灯光 ID",
+	"modify.light": "修改灯光",
 	"knife": "短刀",
 	"rod": "长棒",
 	"headgear": "头饰",

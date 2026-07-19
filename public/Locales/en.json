@@ -1550,6 +1550,8 @@
 	"ice": "Ice",
 	"darkness": "Darkness",
 	"light": "Light",
+	"light.id": "Light ID",
+	"modify.light": "Modify light",
 	"knife": "Knife",
 	"rod": "Rod",
 	"headgear": "Headgear",

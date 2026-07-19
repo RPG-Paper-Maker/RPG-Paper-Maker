@@ -1550,6 +1550,8 @@
 	"ice": "Лед",
 	"darkness": "Тьма",
 	"light": "Свет",
+	"light.id": "ID света",
+	"modify.light": "Изменить свет",
 	"knife": "Нож",
 	"rod": "Палочка",
 	"headgear": "Головной убор",

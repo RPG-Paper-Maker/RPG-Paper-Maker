@@ -1,6 +1,7 @@
 export * from './PanelLoading';
 export * from './PanelMain';
 export * from './PanelMapObject';
+export * from './PanelMapObjectLight';
 export * from './PanelNoProject';
 export * from './PanelOperation';
 export * from './PanelPosition';

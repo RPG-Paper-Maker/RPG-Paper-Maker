@@ -33,6 +33,30 @@ import { SimulationScreenFade } from './SimulationScreen';
 
 const SPEED_NORMAL = 0.004666;
 
+enum MODIFY_LIGHT_ACTION {
+	ADD,
+	DELETE,
+	EDIT,
+}
+
+const LIGHT_PROPERTIES: (keyof Model.MapObjectLight)[] = [
+	'kind',
+	'color',
+	'groundColor',
+	'intensity',
+	'intensityOffset',
+	'intensityTime',
+	'x',
+	'y',
+	'z',
+	'distance',
+	'angle',
+	'penumbra',
+	'targetX',
+	'targetY',
+	'targetZ',
+];
+
 enum SUB_MOVE_KIND {
 	STEP,
 	TURN,
@@ -971,6 +995,77 @@ class CommandTeleportObject extends CommandBase {
 	}
 }
 
+class CommandModifyLight extends CommandBase {
+	private objectID: DynamicValue;
+	private action: MODIFY_LIGHT_ACTION;
+	private lightID: DynamicValue;
+	private light: Model.MapObjectLight | null = null;
+	private selectedFields: boolean[] = [];
+
+	constructor(command: MapObjectCommandType[]) {
+		super();
+		const iterator = Utils.generateIterator();
+		this.objectID = DynamicValue.createCommand(command, iterator);
+		this.action = command[iterator.i++] as MODIFY_LIGHT_ACTION;
+		this.lightID = DynamicValue.createCommand(command, iterator);
+		if (this.action !== MODIFY_LIGHT_ACTION.DELETE) {
+			this.light = new Model.MapObjectLight();
+			this.light.applyDefault();
+			const hasSelectedFields =
+				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i > LIGHT_PROPERTIES.length * 2;
+			for (const property of LIGHT_PROPERTIES) {
+				this.selectedFields.push(hasSelectedFields ? Utils.initializeBoolCommand(command, iterator) : true);
+				(this.light[property] as DynamicValue).updateCommand(command, iterator);
+			}
+		}
+	}
+
+	update(_state: CommandState, ctx: SimulationContext): number {
+		const target = findObject(ctx, ctx.game.resolveNumber(this.objectID));
+		if (target === null) {
+			return 1;
+		}
+		const lightID = ctx.game.resolveNumber(this.lightID);
+		const lights = target.state.lights ?? (target.state.lights = []);
+		const index = lights.findIndex((light) => Number(light.id) === lightID);
+		switch (this.action) {
+			case MODIFY_LIGHT_ACTION.ADD:
+				if (index === -1 && this.light) {
+					const light = this.light.clone();
+					light.id = lightID;
+					lights.push(light);
+					ctx.showObjectPreview?.(target);
+					target.refreshLights();
+				}
+				break;
+			case MODIFY_LIGHT_ACTION.DELETE:
+				if (index !== -1) {
+					lights.splice(index, 1);
+					ctx.showObjectPreview?.(target);
+					target.refreshLights();
+				}
+				break;
+			case MODIFY_LIGHT_ACTION.EDIT:
+				if (index !== -1 && this.light) {
+					let hasUpdated = false;
+					for (let i = 0; i < LIGHT_PROPERTIES.length; i++) {
+						if (this.selectedFields[i]) {
+							const property = LIGHT_PROPERTIES[i];
+							(lights[index][property] as DynamicValue).copy(this.light[property] as DynamicValue);
+							hasUpdated = true;
+						}
+					}
+					if (hasUpdated) {
+						ctx.showObjectPreview?.(target);
+						target.refreshLights();
+					}
+				}
+				break;
+		}
+		return 1;
+	}
+}
+
 extraSimulationCommandFactories.set(
 	EVENT_COMMAND_KIND.MOVE_OBJECT,
 	(command: MapObjectCommandType[]) => new CommandMoveObject(command),
@@ -983,5 +1078,9 @@ extraSimulationCommandFactories.set(
 	EVENT_COMMAND_KIND.TELEPORT_OBJECT,
 	(command: MapObjectCommandType[]) => new CommandTeleportObject(command),
 );
+extraSimulationCommandFactories.set(
+	EVENT_COMMAND_KIND.MODIFY_LIGHT,
+	(command: MapObjectCommandType[]) => new CommandModifyLight(command),
+);
 
-export { CommandMoveCamera, CommandMoveObject, CommandTeleportObject };
+export { CommandModifyLight, CommandMoveCamera, CommandMoveObject, CommandTeleportObject };

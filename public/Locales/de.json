@@ -1550,6 +1550,8 @@
 	"ice": "Eis",
 	"darkness": "Dunkelheit",
 	"light": "Licht",
+	"light.id": "Licht-ID",
+	"modify.light": "Licht ändern",
 	"knife": "Messer",
 	"rod": "Stock",
 	"headgear": "Kopfbedeckung",

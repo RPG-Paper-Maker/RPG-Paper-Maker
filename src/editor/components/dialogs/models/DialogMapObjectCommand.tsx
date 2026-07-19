@@ -50,6 +50,7 @@ import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandLabel from '../commands/DialogCommandLabel';
 import DialogCommandModifyCurrency from '../commands/DialogCommandModifyCurrency';
 import DialogCommandModifyInventory from '../commands/DialogCommandModifyInventory';
+import DialogCommandModifyLight from '../commands/DialogCommandModifyLight';
 import DialogCommandModifyTeam from '../commands/DialogCommandModifyTeam';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
@@ -193,6 +194,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 						{getButton(EVENT_COMMAND_KIND.RESET_CAMERA)}
 						{getButton(EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP)}
 						{getButton(EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP)}
+						{getButton(EVENT_COMMAND_KIND.MODIFY_LIGHT)}
 					</Flex>
 				</Groupbox>
 				<Groupbox title={t('media')}>
@@ -408,6 +410,8 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 				return <DialogCommandChangeState {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				return <DialogCommandChangeProperty {...options} />;
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
+				return <DialogCommandModifyLight {...options} />;
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 				return <DialogCommandModifyCurrency {...options} />;
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:

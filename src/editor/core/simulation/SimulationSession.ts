@@ -78,8 +78,8 @@ class SimulationSession {
 	private interpreter: SimulationInterpreter;
 	private object: SimulationObject;
 	private hero: SimulationObject;
-	private hiddenKey: string;
-	private hiddenPosition: Position;
+	private hiddenObjectPositions = new Map<string, Position>();
+	private mapObjectPositions = new Map<SimulationObject, Position>();
 	private previousElementKind: ELEMENT_MAP_KIND;
 	private cameraSnapshot: CameraSnapshot;
 	private screenSnapshot: ScreenSnapshot;
@@ -94,10 +94,7 @@ class SimulationSession {
 		const position = options.map.cursorObject.position.clone();
 		this.object = new SimulationObject(options.map, options.object, options.stateID, position);
 		this.hero = this.createHero(position);
-		this.hiddenPosition = position;
-		this.hiddenKey = position.toKey();
-		options.map.simulationHiddenObjectKeys.add(this.hiddenKey);
-		options.map.getMapPortionByPosition(position)?.updateObjectsGeometry();
+		this.hideMapObject(position);
 		this.previousElementKind = Scene.Map.currentSelectedMapElementKind;
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.VIEW;
 		options.map.enableView(true);
@@ -137,6 +134,7 @@ class SimulationSession {
 			camera: options.map.camera,
 			parallelCommands: [],
 			getElapsedTime: () => this.lastElapsedTime,
+			showObjectPreview: (object) => this.showMapObjectPreview(object),
 		};
 		this.ctx.createCommonReactionInterpreter = (id: number) => {
 			// Selecting one command must not execute a called reaction. The
@@ -144,7 +142,10 @@ class SimulationSession {
 			if (options.singleCommand) {
 				return null;
 			}
-			const reaction = Model.Base.getByID(Project.current!.commonEvents.commonReactions, id) as Model.CommonReaction | null;
+			const reaction = Model.Base.getByID(
+				Project.current!.commonEvents.commonReactions,
+				id,
+			) as Model.CommonReaction | null;
 			if (!reaction) return null;
 			const tree = SimTree.create(reaction.commands);
 			return new SimulationInterpreter(this.ctx, tree);
@@ -202,30 +203,55 @@ class SimulationSession {
 					continue;
 				}
 				const position = Position.fromKey(positionKey);
-				objects.set(
-					object.id,
-					new SimulationObject(this.map, object, object.states[0]?.id ?? 1, position, 1, false, false),
+				const simulationObject = new SimulationObject(
+					this.map,
+					object,
+					object.states[0]?.id ?? 1,
+					position,
+					1,
+					false,
+					false,
 				);
+				objects.set(object.id, simulationObject);
+				this.mapObjectPositions.set(simulationObject, position);
 				positions.delete(object.id);
 			}
 		}
 		for (const [id, position] of positions) {
 			if (id !== this.object.object.id) {
-				objects.set(
-					id,
-					new SimulationObject(
-						this.map,
-						this.object.object,
-						this.object.object.states[0]?.id ?? 1,
-						position,
-						1,
-						false,
-						false,
-					),
+				const simulationObject = new SimulationObject(
+					this.map,
+					this.object.object,
+					this.object.object.states[0]?.id ?? 1,
+					position,
+					1,
+					false,
+					false,
 				);
+				objects.set(id, simulationObject);
+				this.mapObjectPositions.set(simulationObject, position);
 			}
 		}
 		return objects;
+	}
+
+	private hideMapObject(position: Position) {
+		const key = position.toKey();
+		if (this.hiddenObjectPositions.has(key)) {
+			return;
+		}
+		this.hiddenObjectPositions.set(key, position);
+		this.map.simulationHiddenObjectKeys.add(key);
+		this.map.getMapPortionByPosition(position)?.updateObjectsGeometry();
+	}
+
+	private showMapObjectPreview(object: SimulationObject) {
+		const position = this.mapObjectPositions.get(object);
+		if (!position) {
+			return;
+		}
+		this.hideMapObject(position);
+		object.show();
 	}
 
 	private updateCameraTarget() {
@@ -234,7 +260,11 @@ class SimulationSession {
 		if (position) {
 			this.map.camera.targetPosition.copy(position);
 		} else if (target) {
-			this.map.camera.targetPosition.set(target.worldPosition.x + 0.5, target.worldPosition.y, target.worldPosition.z + 0.5);
+			this.map.camera.targetPosition.set(
+				target.worldPosition.x + 0.5,
+				target.worldPosition.y,
+				target.worldPosition.z + 0.5,
+			);
 		}
 		if (position || target) {
 			this.map.camera.update(this.map);
@@ -303,8 +333,10 @@ class SimulationSession {
 		for (const object of this.ctx.mapObjects.values()) {
 			object.remove();
 		}
-		this.map.simulationHiddenObjectKeys.delete(this.hiddenKey);
-		this.map.getMapPortionByPosition(this.hiddenPosition)?.updateObjectsGeometry();
+		for (const [key, position] of this.hiddenObjectPositions) {
+			this.map.simulationHiddenObjectKeys.delete(key);
+			this.map.getMapPortionByPosition(position)?.updateObjectsGeometry();
+		}
 		Scene.Map.currentSelectedMapElementKind = this.previousElementKind;
 		this.map.enableView(this.previousElementKind === ELEMENT_MAP_KIND.VIEW);
 		this.map.camera.distance = this.cameraSnapshot.distance;

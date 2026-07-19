@@ -1550,6 +1550,8 @@
 	"ice": "Glace",
 	"darkness": "Ténèbres",
 	"light": "Lumière",
+	"light.id": "ID de la lumière",
+	"modify.light": "Modifier la lumière",
 	"knife": "Couteau",
 	"rod": "Baton",
 	"headgear": "Couvre-chef",

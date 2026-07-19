@@ -133,6 +133,21 @@ class SimulationObject {
 		this.build();
 	}
 
+	refreshLights() {
+		this.lightsStartTime = performance.now();
+		this.lastBuildKey = '';
+		this.build();
+	}
+
+	show() {
+		if (this.render) {
+			return;
+		}
+		this.render = true;
+		this.lastBuildKey = '';
+		this.build();
+	}
+
 	setOrientation(orientation: SIM_ORIENTATION) {
 		if (this.directionFix || this.orientation === orientation) {
 			return;

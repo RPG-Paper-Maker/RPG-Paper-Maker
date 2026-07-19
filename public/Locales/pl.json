@@ -1550,6 +1550,8 @@
 	"ice": "Lód",
 	"darkness": "Ciemność",
 	"light": "Światło",
+	"light.id": "ID światła",
+	"modify.light": "Zmień światło",
 	"knife": "Sztylet",
 	"rod": "Różdżka",
 	"headgear": "Nakrycie głowy",
