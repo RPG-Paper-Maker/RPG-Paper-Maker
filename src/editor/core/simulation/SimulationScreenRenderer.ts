@@ -26,8 +26,8 @@ class SimulationScreenRenderer {
 	) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.imageSmoothingEnabled = false;
-		const scale = Math.min(width / SIM_SCREEN_X, height / SIM_SCREEN_Y);
-		const offsetX = (width - SIM_SCREEN_X * scale) / 2;
+		const scale = width / SIM_SCREEN_X;
+		const offsetX = 0;
 		const offsetY = height - SIM_SCREEN_Y * scale;
 		for (const picture of screen.pictures) {
 			const isBelow = picture.index < 0;

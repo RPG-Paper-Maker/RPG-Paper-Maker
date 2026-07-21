@@ -10,7 +10,6 @@
 */
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { BUTTON_TYPE, Utils } from '../common';
 import {
@@ -211,20 +210,8 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 		);
 	};
 
-	const root = document.getElementById('root');
-	if (!root) {
-		return null;
-	}
-
-	const style: React.CSSProperties = rect
-		? { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
-		: { inset: 0 };
-
-	return ReactDOM.createPortal(
-		<div
-			className={`objectCommandTestOverlay${preview ? ' objectCommandTestOverlayPreview' : ''}`}
-			style={style}
-		>
+	return (
+		<div className={`objectCommandTestOverlay${preview ? ' objectCommandTestOverlayPreview' : ''}`}>
 			<canvas ref={refScreenCanvasBelow} className='objectCommandTestHudCanvas' />
 			<canvas ref={refHudCanvas} className='objectCommandTestHudCanvas' />
 			<canvas ref={refScreenCanvasAbove} className='objectCommandTestHudCanvas' />
@@ -257,8 +244,7 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 					/>
 				</div>
 			)}
-		</div>,
-		root,
+		</div>
 	);
 }
 

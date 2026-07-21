@@ -699,6 +699,21 @@ function MapEditor() {
 					)}
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
+					{preview && (
+						<ObjectCommandTestOverlay
+							session={preview.session}
+							hud={preview.hud}
+							onStop={stopPreview}
+							preview
+						/>
+					)}
+					{simulation && (
+						<ObjectCommandTestOverlay
+							session={simulation.session}
+							hud={simulation.hud}
+							onStop={handleStopSimulation}
+						/>
+					)}
 				</div>
 			</ContextMenu>
 			{isOpenMapObject && (
@@ -713,9 +728,6 @@ function MapEditor() {
 				/>
 			)}
 			{isOpenMapObject && !simulation && !preview && <HeroPreviewOverlay />}
-			{preview && (
-				<ObjectCommandTestOverlay session={preview.session} hud={preview.hud} onStop={stopPreview} preview />
-			)}
 			{playCommandRequest && (
 				<DialogObjectCommandTest
 					setIsOpen={(b: boolean) => {
@@ -724,13 +736,6 @@ function MapEditor() {
 						}
 					}}
 					onAccept={handleAcceptPlayCommand}
-				/>
-			)}
-			{simulation && (
-				<ObjectCommandTestOverlay
-					session={simulation.session}
-					hud={simulation.hud}
-					onStop={handleStopSimulation}
 				/>
 			)}
 		</>

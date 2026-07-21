@@ -36,14 +36,7 @@ const KINDS_WITHOUT_PLAY = [
 	EVENT_COMMAND_KIND.IF_LOSE,
 ];
 
-function TreeCommands({
-	list,
-	onListUpdated,
-	disabled,
-	onPlayCommand,
-	onSelectCommand,
-	onLivePreviewCommand,
-}: Props) {
+function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCommand, onLivePreviewCommand }: Props) {
 	const { t } = useTranslation();
 
 	const canPlayCommand = (node: Node) =>

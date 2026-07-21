@@ -23,8 +23,8 @@ import { SimulationHud } from './SimulationCommands';
 import { SimulationFastForward } from './SimulationFastForward';
 import { SimTree, SimulationContext, SimulationInterpreter } from './SimulationInterpreter';
 import { SimulationObject } from './SimulationObject';
-import { SimulationScreen } from './SimulationScreen';
 import './SimulationSceneCommands';
+import { SimulationScreen } from './SimulationScreen';
 import './SimulationScreenCommands';
 
 export type SimulationSessionOptions = {
@@ -133,7 +133,7 @@ class SimulationSession {
 			cameraTargetPosition: null,
 			camera: options.map.camera,
 			parallelCommands: [],
-			ignoreMoveBlockingCollisions: options.singleCommand ?? false,
+			ignoreMoveBlockingCollisions: true,
 			getElapsedTime: () => this.lastElapsedTime,
 			showObjectPreview: (object) => this.showMapObjectPreview(object),
 		};

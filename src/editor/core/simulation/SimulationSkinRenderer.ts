@@ -775,9 +775,9 @@ class SimulationSkinRenderer {
 		);
 		this.drawBox(ctx, rect, false);
 
-		const contentX = rect.x + options.pLeft;
+		const contentX = rect.x + options.pLeft * this.horizontalLayoutScale;
 		const contentY = rect.y + options.pTop;
-		const contentW = rect.width - 2 * options.pRight;
+		const contentW = rect.width - 2 * options.pRight * this.horizontalLayoutScale;
 		const contentH = rect.height - 2 * options.pBottom;
 
 		const hasFaceset = content.facesetID > 0;
@@ -800,7 +800,12 @@ class SimulationSkinRenderer {
 		}
 
 		if (content.interlocutor.length > 0) {
-			const interlocutorRect = new Rectangle(rect.x + options.iX, rect.y + options.iY, options.iW, options.iH);
+			const interlocutorRect = new Rectangle(
+				rect.x + options.iX * this.horizontalLayoutScale,
+				rect.y + options.iY,
+				options.iW * this.horizontalLayoutScale,
+				options.iH,
+			);
 			this.drawBox(ctx, interlocutorRect, false);
 			this.setFont(ctx, options.tSize);
 			ctx.textAlign = 'center';

@@ -1029,7 +1029,9 @@ class CommandModifyLight extends CommandBase {
 			const hasSelectedFields =
 				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i >= properties.length * 3;
 			for (const property of properties) {
-				this.selectedFields.push(hasSelectedFields ? Utils.initializeBoolCommand(command, iterator) : true);
+				this.selectedFields[LIGHT_PROPERTIES.indexOf(property)] = hasSelectedFields
+					? Utils.initializeBoolCommand(command, iterator)
+					: true;
 				(this.light[property] as DynamicValue).updateCommand(command, iterator);
 			}
 		}
