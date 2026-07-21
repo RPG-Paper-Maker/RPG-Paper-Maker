@@ -2008,6 +2008,7 @@
 	"last.update.changes": "Ultime modifiche:",
 	"latest.video": "Ultimo video",
 	"tooltip.light.source": "Seleziona il comportamento della luce. Le luci puntiformi illuminano in ogni direzione, i faretti illuminano in un cono, le luci direzionali illuminano uniformemente e le luci emisferiche mescolano i colori del cielo e del terreno.",
+	"tooltip.light.orientation": "Se selezionata, la sorgente della luce puntiforme o del faretto ruota con l'angolo e l'orientamento dell'oggetto della mappa.",
 	"tooltip.light.intensity": "Controlla la luminosità della luce. Valori più alti producono un'illuminazione più intensa.",
 	"tooltip.light.offset": "Sposta la sorgente luminosa rispetto all'oggetto della mappa. Usa gli offset X, Y e Z per posizionarla con precisione.",
 	"tooltip.light.ground.color": "Il colore emesso dal basso da una luce emisferica. Si mescola al colore principale emesso dall'alto.",

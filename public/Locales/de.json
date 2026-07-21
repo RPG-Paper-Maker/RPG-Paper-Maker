@@ -2008,6 +2008,7 @@
 	"last.update.changes": "Letzte Änderungen:",
 	"latest.video": "Neuestes Video",
 	"tooltip.light.source": "Wählt das Lichtverhalten aus. Punktlichter leuchten in alle Richtungen, Spotlichter in einem Kegel, gerichtete Lichter gleichmäßig und Hemisphärenlichter mischen Himmel- und Bodenfarben.",
+	"tooltip.light.orientation": "Wenn aktiviert, dreht sich die Punkt- oder Spotlichtquelle mit dem Winkel und der Ausrichtung des Kartenobjekts.",
 	"tooltip.light.intensity": "Steuert die Helligkeit des Lichts. Höhere Werte erzeugen eine stärkere Beleuchtung.",
 	"tooltip.light.offset": "Verschiebt die Lichtquelle relativ zum Kartenobjekt. Verwende X-, Y- und Z-Versatz, um sie genau zu platzieren.",
 	"tooltip.light.ground.color": "Die von unten ausgestrahlte Farbe eines Hemisphärenlichts. Sie wird mit der von oben ausgestrahlten Hauptfarbe gemischt.",

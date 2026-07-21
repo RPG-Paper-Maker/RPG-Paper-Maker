@@ -31,6 +31,7 @@ type Props = {
 
 const MAP_OBJECT_LIGHT_FIELDS = [
 	'kind',
+	'followOrientation',
 	'color',
 	'groundColor',
 	'intensity',
@@ -112,15 +113,38 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 						</Flex>
 					</Label>
 					<Value>
-						<Dropdown
-							selectedID={lightKind}
-							onChange={(value: number) => {
-								light.kind.updateToDefaultNumber(value);
-								onChange?.();
-							}}
-							options={kinds}
-							disabled={isDisabled('kind')}
-						/>
+						<Flex spaced centerV>
+							<Dropdown
+								selectedID={lightKind}
+								onChange={(value: number) => {
+									light.kind.updateToDefaultNumber(value);
+									if (value === MAP_OBJECT_LIGHT_KIND.SPOT) {
+										light.followOrientation.updateToDefaultNumber(1);
+									} else if (value === MAP_OBJECT_LIGHT_KIND.POINT) {
+										light.followOrientation.updateToDefaultNumber(0);
+									}
+									onChange?.();
+								}}
+								options={kinds}
+								disabled={isDisabled('kind')}
+							/>
+							{(lightKind === MAP_OBJECT_LIGHT_KIND.POINT ||
+								lightKind === MAP_OBJECT_LIGHT_KIND.SPOT) && (
+								<>
+									<Checkbox
+										isChecked={light.followOrientation.getFixNumberValue() === 1}
+										disabled={isDisabled('followOrientation')}
+										onChange={(checked) => {
+											light.followOrientation.updateToDefaultNumber(checked ? 1 : 0);
+											onChange?.();
+										}}
+									>
+										{t('orientation')}
+									</Checkbox>
+									<TooltipInformation text={t('tooltip.light.orientation')} />
+								</>
+							)}
+						</Flex>
 					</Value>
 					<Label>
 						<Flex spaced centerV>

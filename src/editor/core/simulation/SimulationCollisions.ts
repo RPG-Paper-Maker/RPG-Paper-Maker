@@ -326,12 +326,14 @@ const getTilesetCollisions = (map: SceneMap): Map<string, CollisionSquare> | nul
 	return picture?.collisions ?? null;
 };
 
-const isSolidLandSquare = (
+const blocksLandEntry = (
 	map: SceneMap,
 	sx: number,
 	sy: number,
 	sz: number,
 	tilesetCollisions: Map<string, CollisionSquare> | null,
+	directionX: number,
+	directionZ: number,
 ): boolean => {
 	const model = map.getMapPortionByPosition(new Position(sx, sy, 0, sz))?.model;
 	if (!model) {
@@ -360,8 +362,18 @@ const isSolidLandSquare = (
 						return picture?.collisions.get(`${texture.x}+${texture.y}`);
 					})()
 				: tilesetCollisions?.get(`${texture.x}+${texture.y}`);
-		if (collision && !collision.isEmpty()) {
-			return true;
+		if (collision) {
+			if (collision.rect !== null) {
+				return true;
+			}
+			if (
+				(directionX > 0 && !collision.left) ||
+				(directionX < 0 && !collision.right) ||
+				(directionZ > 0 && !collision.top) ||
+				(directionZ < 0 && !collision.bot)
+			) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -392,6 +404,8 @@ const getFloorGroundY = (map: SceneMap, sx: number, sz: number, maxY: number): n
 const entersSolidFloor = (map: SceneMap, from: THREE.Vector3, to: THREE.Vector3): boolean => {
 	const collisions = getTilesetCollisions(map);
 	const e = OBJECT_HALF_EXTENT;
+	const directionX = to.x - from.x;
+	const directionZ = to.z - from.z;
 	const sy = Math.floor(from.y);
 	const toPoint: Vector2Like = { x: to.x, y: to.z };
 	const fromPoint: Vector2Like = { x: from.x, y: from.z };
@@ -403,7 +417,7 @@ const entersSolidFloor = (map: SceneMap, from: THREE.Vector3, to: THREE.Vector3)
 			if (isBoxOnRectangle(fromPoint, sx, sx + 1, sz, sz + 1)) {
 				continue;
 			}
-			if (isSolidLandSquare(map, sx, sy, sz, collisions)) {
+			if (blocksLandEntry(map, sx, sy, sz, collisions, directionX, directionZ)) {
 				return true;
 			}
 		}
@@ -659,7 +673,13 @@ const intersectsBlockingObject3D = (map: SceneMap, position: THREE.Vector3): boo
 };
 
 class SimulationCollisions {
-	static adjustMove(map: SceneMap, from: THREE.Vector3, to: THREE.Vector3, through: boolean): THREE.Vector3 {
+	static adjustMove(
+		map: SceneMap,
+		from: THREE.Vector3,
+		to: THREE.Vector3,
+		through: boolean,
+		ignoreBlockingCollisions = false,
+	): THREE.Vector3 {
 		const position = to.clone();
 
 		position.y = from.y;
@@ -683,16 +703,26 @@ class SimulationCollisions {
 		if (blocked) {
 			return from.clone();
 		}
-		if (yMountain === null && !onMountainCore && entersSolidFloor(map, from, position)) {
+		if (
+			!ignoreBlockingCollisions &&
+			yMountain === null &&
+			!onMountainCore &&
+			entersSolidFloor(map, from, position)
+		) {
 			return from.clone();
 		}
-		if (yMountain === null && !onMountainCore && intersectsBlockingSprite(map, position)) {
+		if (
+			!ignoreBlockingCollisions &&
+			yMountain === null &&
+			!onMountainCore &&
+			intersectsBlockingSprite(map, position)
+		) {
 			return from.clone();
 		}
-		if (intersectsBlockingWall(map, position)) {
+		if (!ignoreBlockingCollisions && intersectsBlockingWall(map, position)) {
 			return from.clone();
 		}
-		if (intersectsBlockingObject3D(map, position)) {
+		if (!ignoreBlockingCollisions && intersectsBlockingObject3D(map, position)) {
 			return from.clone();
 		}
 		let targetY = yMountain;

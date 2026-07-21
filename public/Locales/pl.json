@@ -2008,6 +2008,7 @@
 	"last.update.changes": "Ostatnie zmiany:",
 	"latest.video": "Najnowszy film",
 	"tooltip.light.source": "Wybiera zachowanie światła. Światła punktowe świecą we wszystkich kierunkach, reflektory świecą w stożku, światła kierunkowe oświetlają równomiernie, a światła półkuliste łączą kolory nieba i ziemi.",
+	"tooltip.light.orientation": "Po zaznaczeniu źródło światła punktowego lub reflektora obraca się zgodnie z kątem i kierunkiem obiektu na mapie.",
 	"tooltip.light.intensity": "Steruje jasnością światła. Wyższe wartości dają silniejsze oświetlenie.",
 	"tooltip.light.offset": "Przesuwa źródło światła względem obiektu mapy. Użyj przesunięć X, Y i Z, aby dokładnie je umieścić.",
 	"tooltip.light.ground.color": "Kolor emitowany od dołu przez światło półkuliste. Miesza się z głównym kolorem emitowanym od góry.",

@@ -1954,6 +1954,7 @@
 	"tooltip.damages.minimum": "The minimum possible damage value. For healing (negative damage), use negative values and note that min should be the most negative number (e.g. for a heal between 3 and 10 HP, set min = -10, max = -3).",
 	"tooltip.damages.maximum": "The maximum possible damage value. For healing (negative damage), use negative values and note that max should be the least negative number (e.g. for a heal between 3 and 10 HP, set min = -10, max = -3).",
 	"tooltip.light.source": "Selects the light behavior. Point lights shine in every direction, spot lights shine in a cone, directional lights illuminate uniformly, and hemisphere lights blend sky and ground colors.",
+	"tooltip.light.orientation": "When checked, the point or spot-light source rotates with the map object's angle and facing.",
 	"tooltip.light.intensity": "Controls the brightness of the light. Higher values produce stronger illumination.",
 	"tooltip.light.offset": "Moves the light source relative to the map object. Use X, Y, and Z offsets to place it precisely.",
 	"tooltip.light.ground.color": "The color emitted from below by a hemisphere light. It blends with the main color emitted from above.",

@@ -1794,7 +1794,9 @@ class MapPortion {
 					const orientationEye = state.setWithCamera
 						? state.graphicsIndexY % 4
 						: Mathf.mod(state.graphicsIndexY + this.map.camera.getMapOrientation() - 2, 4);
-					spotParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][orientationEye]);
+					spotParent.rotation.y = THREE.MathUtils.degToRad(
+						settings.followOrientation.getFixNumberValue() === 1 ? [0, 270, 180, 90][orientationEye] : 0,
+					);
 					lights.add(spotParent);
 					const spot = new THREE.SpotLight(
 						settings.color.value as string,
@@ -1830,13 +1832,23 @@ class MapPortion {
 						settings.intensity.getFixNumberValue(),
 					);
 					break;
-				default:
+				default: {
 					light = new THREE.PointLight(
 						settings.color.value as string,
 						settings.intensity.getFixNumberValue(),
 						settings.distance.getFixNumberValue(),
 					);
+					if (settings.followOrientation.getFixNumberValue() === 1) {
+						const pointParent = new THREE.Group();
+						const orientationEye = state.setWithCamera
+							? state.graphicsIndexY % 4
+							: Mathf.mod(state.graphicsIndexY + this.map.camera.getMapOrientation() - 2, 4);
+						pointParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][orientationEye]);
+						lights.add(pointParent);
+						lightParent = pointParent;
+					}
 					break;
+				}
 			}
 			light.position.set(
 				settings.x.getFixNumberValue() / Project.SQUARE_SIZE,

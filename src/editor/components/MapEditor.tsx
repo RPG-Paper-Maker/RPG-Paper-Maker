@@ -446,8 +446,14 @@ function MapEditor() {
 	useEffect(() => {
 		const handleWindowFocus = () => setIsWindowFocused(true);
 		const handleWindowBlur = () => setIsWindowFocused(false);
-		const handleGameTestOpened = () => { Manager.GL.isGameTestOpen = true; setIsGameTestOpen(true); };
-		const handleGameTestClosed = () => { Manager.GL.isGameTestOpen = false; setIsGameTestOpen(false); };
+		const handleGameTestOpened = () => {
+			Manager.GL.isGameTestOpen = true;
+			setIsGameTestOpen(true);
+		};
+		const handleGameTestClosed = () => {
+			Manager.GL.isGameTestOpen = false;
+			setIsGameTestOpen(false);
+		};
 		const handleGameTestExited = () => window.dispatchEvent(new Event('game-test-closed'));
 		window.addEventListener('focus', handleWindowFocus);
 		window.addEventListener('blur', handleWindowBlur);
@@ -472,7 +478,12 @@ function MapEditor() {
 		dispatch(setMapObjectDialogOpen(isOpenMapObject));
 	}, [isOpenMapObject]);
 
-	useEffect(() => () => { dispatch(setMapObjectDialogOpen(false)); }, []);
+	useEffect(
+		() => () => {
+			dispatch(setMapObjectDialogOpen(false));
+		},
+		[],
+	);
 
 	useEffect(() => {
 		if (simulation && (needsReloadMap || !isOpenMapObject)) {
@@ -703,12 +714,7 @@ function MapEditor() {
 			)}
 			{isOpenMapObject && !simulation && !preview && <HeroPreviewOverlay />}
 			{preview && (
-				<ObjectCommandTestOverlay
-					session={preview.session}
-					hud={preview.hud}
-					onStop={stopPreview}
-					preview
-				/>
+				<ObjectCommandTestOverlay session={preview.session} hud={preview.hud} onStop={stopPreview} preview />
 			)}
 			{playCommandRequest && (
 				<DialogObjectCommandTest

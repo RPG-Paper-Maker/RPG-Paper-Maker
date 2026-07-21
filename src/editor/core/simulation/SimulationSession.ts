@@ -133,6 +133,7 @@ class SimulationSession {
 			cameraTargetPosition: null,
 			camera: options.map.camera,
 			parallelCommands: [],
+			ignoreMoveBlockingCollisions: options.singleCommand ?? false,
 			getElapsedTime: () => this.lastElapsedTime,
 			showObjectPreview: (object) => this.showMapObjectPreview(object),
 		};
@@ -302,6 +303,9 @@ class SimulationSession {
 		const faceAngle = this.getFaceAngle();
 		this.object.update(elapsedTime, faceAngle);
 		this.hero.update(elapsedTime, faceAngle);
+		for (const object of this.ctx.mapObjects.values()) {
+			object.update(elapsedTime, faceAngle);
+		}
 		this.updateCameraTarget();
 		this.ctx.screen.updateWeather(this.ctx.screen.previousWeather, this.map.camera);
 		this.ctx.screen.updateWeather(this.ctx.screen.weather, this.map.camera);

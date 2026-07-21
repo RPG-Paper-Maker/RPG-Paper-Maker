@@ -2008,6 +2008,7 @@
 	"last.update.changes": "Últimas actualizaciones:",
 	"latest.video": "Último vídeo",
 	"tooltip.light.source": "Selecciona el comportamiento de la luz. Las luces puntuales brillan en todas las direcciones, los focos brillan en un cono, las luces direccionales iluminan de forma uniforme y las luces hemisféricas mezclan los colores del cielo y del suelo.",
+	"tooltip.light.orientation": "Si se marca, la fuente de luz puntual o el foco gira con el ángulo y la orientación del objeto del mapa.",
 	"tooltip.light.intensity": "Controla el brillo de la luz. Los valores más altos producen una iluminación más intensa.",
 	"tooltip.light.offset": "Mueve la fuente de luz en relación con el objeto del mapa. Usa los desplazamientos X, Y y Z para colocarla con precisión.",
 	"tooltip.light.ground.color": "El color emitido desde abajo por una luz hemisférica. Se mezcla con el color principal emitido desde arriba.",

@@ -2016,6 +2016,7 @@
 	"light.target.z": "Cible Z (pixels)",
 	"light.softness": "Douceur",
 	"tooltip.light.source": "Sélectionne le comportement de la lumière. Les lumières ponctuelles brillent dans toutes les directions, les projecteurs dans un cône, les lumières directionnelles éclairent uniformément et les lumières hémisphériques mélangent les couleurs du ciel et du sol.",
+	"tooltip.light.orientation": "Si coché, la source de lumière ponctuelle ou le projecteur tourne avec l'angle et l'orientation de l'objet de carte.",
 	"tooltip.light.intensity": "Contrôle la luminosité de la lumière. Des valeurs plus élevées produisent un éclairage plus fort.",
 	"tooltip.light.offset": "Déplace la source lumineuse par rapport à l'objet de la carte. Utilisez les décalages X, Y et Z pour la placer précisément.",
 	"tooltip.light.ground.color": "La couleur émise par le dessous par une lumière hémisphérique. Elle se mélange à la couleur principale émise par le dessus.",

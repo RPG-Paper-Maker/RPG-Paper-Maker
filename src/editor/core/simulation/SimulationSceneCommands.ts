@@ -41,6 +41,7 @@ enum MODIFY_LIGHT_ACTION {
 
 const LIGHT_PROPERTIES: (keyof Model.MapObjectLight)[] = [
 	'kind',
+	'followOrientation',
 	'color',
 	'groundColor',
 	'intensity',
@@ -56,6 +57,8 @@ const LIGHT_PROPERTIES: (keyof Model.MapObjectLight)[] = [
 	'targetY',
 	'targetZ',
 ];
+
+const LEGACY_LIGHT_PROPERTIES = LIGHT_PROPERTIES.filter((property) => property !== 'followOrientation');
 
 enum SUB_MOVE_KIND {
 	STEP,
@@ -504,7 +507,13 @@ class CommandMoveObject extends CommandBase {
 					.clone()
 					.addScaledVector(state.vector as THREE.Vector3, advance);
 				const next = ctx.map
-					? SimulationCollisions.adjustMove(ctx.map, target.worldPosition, desired, target.through)
+					? SimulationCollisions.adjustMove(
+							ctx.map,
+							target.worldPosition,
+							desired,
+							target.through,
+							ctx.ignoreMoveBlockingCollisions,
+						)
 					: desired;
 				target.setWorldPosition(next);
 				const done = advance >= 1;
@@ -599,6 +608,7 @@ class CommandMoveObject extends CommandBase {
 			case SUB_MOVE_KIND.TOGGLE:
 				if (move.flag !== null) {
 					target[move.flag] = move.onOff;
+					target.state[move.flag] = move.onOff;
 					target.build();
 				}
 				return true;
@@ -1011,9 +1021,14 @@ class CommandModifyLight extends CommandBase {
 		if (this.action !== MODIFY_LIGHT_ACTION.DELETE) {
 			this.light = new Model.MapObjectLight();
 			this.light.applyDefault();
+			const properties =
+				command.length - iterator.i ===
+				LEGACY_LIGHT_PROPERTIES.length * (this.action === MODIFY_LIGHT_ACTION.EDIT ? 3 : 2)
+					? LEGACY_LIGHT_PROPERTIES
+					: LIGHT_PROPERTIES;
 			const hasSelectedFields =
-				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i > LIGHT_PROPERTIES.length * 2;
-			for (const property of LIGHT_PROPERTIES) {
+				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i >= properties.length * 3;
+			for (const property of properties) {
 				this.selectedFields.push(hasSelectedFields ? Utils.initializeBoolCommand(command, iterator) : true);
 				(this.light[property] as DynamicValue).updateCommand(command, iterator);
 			}
@@ -1066,6 +1081,47 @@ class CommandModifyLight extends CommandBase {
 	}
 }
 
+class CommandChangeState extends CommandBase {
+	private mapID: DynamicValue;
+	private objectID: DynamicValue;
+	private stateID: DynamicValue;
+	private dontChangeOrientation: boolean;
+
+	constructor(command: MapObjectCommandType[]) {
+		super();
+		const iterator = Utils.generateIterator();
+		this.mapID = DynamicValue.createCommand(command, iterator);
+		this.objectID = DynamicValue.createCommand(command, iterator);
+		this.stateID = DynamicValue.createCommand(command, iterator);
+		iterator.i++; // The preview only changes graphics, so the state operation is irrelevant here.
+		this.dontChangeOrientation = Utils.numToBool(command[iterator.i] as number);
+	}
+
+	update(_state: CommandState, ctx: SimulationContext): number {
+		const mapID = ctx.game.resolveNumber(this.mapID);
+		if (mapID !== -1 && mapID !== ctx.map?.id) {
+			return 1;
+		}
+		const target = findObject(ctx, ctx.game.resolveNumber(this.objectID));
+		if (target === null) {
+			return 1;
+		}
+		const state = target.object.states.find((candidate) => candidate.id === ctx.game.resolveNumber(this.stateID));
+		if (!state) {
+			return 1;
+		}
+		ctx.showObjectPreview?.(target);
+		target.updateGraphics(
+			state.graphicsKind,
+			state.graphicsID,
+			state.graphicsIndexX,
+			state.graphicsIndexY,
+			!this.dontChangeOrientation,
+		);
+		return 1;
+	}
+}
+
 extraSimulationCommandFactories.set(
 	EVENT_COMMAND_KIND.MOVE_OBJECT,
 	(command: MapObjectCommandType[]) => new CommandMoveObject(command),
@@ -1082,5 +1138,9 @@ extraSimulationCommandFactories.set(
 	EVENT_COMMAND_KIND.MODIFY_LIGHT,
 	(command: MapObjectCommandType[]) => new CommandModifyLight(command),
 );
+extraSimulationCommandFactories.set(
+	EVENT_COMMAND_KIND.CHANGE_STATE,
+	(command: MapObjectCommandType[]) => new CommandChangeState(command),
+);
 
-export { CommandModifyLight, CommandMoveCamera, CommandMoveObject, CommandTeleportObject };
+export { CommandChangeState, CommandModifyLight, CommandMoveCamera, CommandMoveObject, CommandTeleportObject };

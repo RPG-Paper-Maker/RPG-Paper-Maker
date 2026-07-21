@@ -19,6 +19,7 @@ import { Base, DIALOG_OPTIONS } from './Base';
 class MapObjectLight extends Base {
 	public static type = 'MapObjectLight';
 	public kind!: DynamicValue;
+	public followOrientation!: DynamicValue;
 	public color!: DynamicValue;
 	public groundColor!: DynamicValue;
 	public intensity!: DynamicValue;
@@ -39,6 +40,13 @@ class MapObjectLight extends Base {
 			'kind',
 			'k',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, MAP_OBJECT_LIGHT_KIND.POINT),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'followOrientation',
+			'fo',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
@@ -114,13 +122,10 @@ class MapObjectLight extends Base {
 		return <DialogMapObjectLight {...options} />;
 	}
 
-	toString(): string {
-		return (
-			Base.STRING_START +
-			(this.id <= 0
-				? ''
-				: (Base.getByID(Base.MAP_OBJECT_LIGHT_SOURCE_OPTIONS, this.kind.getFixNumberValue())?.name ?? ''))
-		);
+	getName(): string {
+		return this.id > 0
+			? (Base.getByID(Base.MAP_OBJECT_LIGHT_SOURCE_OPTIONS, this.kind.getFixNumberValue())?.name ?? '')
+			: '';
 	}
 
 	copy(light: MapObjectLight) {
@@ -128,28 +133,6 @@ class MapObjectLight extends Base {
 	}
 
 	read(json: JSONType) {
-		const kinds: [string, DYNAMIC_VALUE_KIND][] = [
-			['k', DYNAMIC_VALUE_KIND.NUMBER],
-			['c', DYNAMIC_VALUE_KIND.TEXT],
-			['gc', DYNAMIC_VALUE_KIND.TEXT],
-			['i', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['io', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['it', DYNAMIC_VALUE_KIND.NUMBER],
-			['x', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['y', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['z', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['d', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['a', DYNAMIC_VALUE_KIND.NUMBER],
-			['p', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['tx', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['ty', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-			['tz', DYNAMIC_VALUE_KIND.NUMBER_DECIMAL],
-		];
-		for (const [key, kind] of kinds) {
-			if (typeof json[key] === 'number' || typeof json[key] === 'string') {
-				json[key] = { k: kind, v: json[key] };
-			}
-		}
 		super.read(json, MapObjectLight.bindings);
 	}
 

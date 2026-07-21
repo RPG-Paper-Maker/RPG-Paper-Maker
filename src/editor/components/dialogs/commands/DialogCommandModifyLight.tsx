@@ -39,6 +39,8 @@ const createSelectedFields = (selected: boolean): Record<MapObjectLightField, bo
 		boolean
 	>;
 
+const LEGACY_MAP_OBJECT_LIGHT_FIELDS = MAP_OBJECT_LIGHT_FIELDS.filter((field) => field !== 'followOrientation');
+
 function DialogCommandModifyLight({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 	const [action, setAction] = useStateNumber();
@@ -67,17 +69,21 @@ function DialogCommandModifyLight({ commandKind, setIsOpen, list, onAccept, onRe
 			setAction(commandAction);
 			lightID.updateCommand(list, iterator);
 			if (list.length > iterator.i) {
+				const fields =
+					list.length - iterator.i ===
+					LEGACY_MAP_OBJECT_LIGHT_FIELDS.length * (commandAction === MODIFY_LIGHT_ACTION.EDIT ? 3 : 2)
+						? LEGACY_MAP_OBJECT_LIGHT_FIELDS
+						: MAP_OBJECT_LIGHT_FIELDS;
 				const hasSelectedFields =
-					commandAction === MODIFY_LIGHT_ACTION.EDIT &&
-					list.length - iterator.i > MAP_OBJECT_LIGHT_FIELDS.length * 2;
-				const fields = createSelectedFields(!hasSelectedFields);
-				for (const key of MAP_OBJECT_LIGHT_FIELDS) {
+					commandAction === MODIFY_LIGHT_ACTION.EDIT && list.length - iterator.i >= fields.length * 3;
+				const selected = createSelectedFields(!hasSelectedFields);
+				for (const key of fields) {
 					if (hasSelectedFields) {
-						fields[key] = Utils.initializeBoolCommand(list, iterator);
+						selected[key] = Utils.initializeBoolCommand(list, iterator);
 					}
 					(light[key] as DynamicValue).updateCommand(list, iterator);
 				}
-				setSelectedFields(fields);
+				setSelectedFields(selected);
 			}
 		}
 		setRevision((value) => value + 1);

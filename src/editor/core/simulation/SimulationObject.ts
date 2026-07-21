@@ -125,8 +125,8 @@ class SimulationObject {
 		this.state.graphicsKind = kind;
 		this.state.graphicsID = id;
 		this.state.graphicsIndexX = indexX;
-		this.state.graphicsIndexY = indexY;
-		this.baseRow = indexY - (indexY % 4);
+		this.state.graphicsIndexY = changeOrientation ? indexY : this.orientation;
+		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
 		if (changeOrientation) {
 			this.orientation = (indexY % 4) as SIM_ORIENTATION;
 		}
@@ -349,7 +349,9 @@ class SimulationObject {
 			switch (settings.kind.getFixNumberValue()) {
 				case 1: {
 					const spotParent = new THREE.Group();
-					spotParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][this.orientation]);
+					spotParent.rotation.y = THREE.MathUtils.degToRad(
+						settings.followOrientation.getFixNumberValue() === 1 ? [0, 270, 180, 90][this.orientation] : 0,
+					);
 					lights.add(spotParent);
 					const spot = new THREE.SpotLight(
 						settings.color.value as string,
@@ -385,13 +387,20 @@ class SimulationObject {
 						settings.intensity.getFixNumberValue(),
 					);
 					break;
-				default:
+				default: {
 					light = new THREE.PointLight(
 						settings.color.value as string,
 						settings.intensity.getFixNumberValue(),
 						settings.distance.getFixNumberValue(),
 					);
+					if (settings.followOrientation.getFixNumberValue() === 1) {
+						const pointParent = new THREE.Group();
+						pointParent.rotation.y = THREE.MathUtils.degToRad([0, 270, 180, 90][this.orientation]);
+						lights.add(pointParent);
+						lightParent = pointParent;
+					}
 					break;
+				}
 			}
 			light.position.set(
 				settings.x.getFixNumberValue() / Project.SQUARE_SIZE,
@@ -449,6 +458,9 @@ class SimulationObject {
 	}
 
 	update(elapsedTime: number, faceAngle: number) {
+		if (!this.render) {
+			return;
+		}
 		this.updateLights();
 		if (this.moveFrequencyTick > 0) {
 			this.moveFrequencyTick = Math.max(0, this.moveFrequencyTick - elapsedTime);
