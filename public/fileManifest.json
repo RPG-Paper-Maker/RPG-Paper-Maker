@@ -700,6 +700,7 @@
         "Label.js",
         "ModifyCurrency.js",
         "ModifyInventory.js",
+        "ModifyLight.js",
         "ModifyTeam.js",
         "MoveCamera.js",
         "MoveObject.js",
