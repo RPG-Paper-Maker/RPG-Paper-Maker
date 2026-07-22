@@ -77,6 +77,14 @@
 	}
 }
 
+.mapEditorBottomPreview {
+	#canvas-map-editor,
+	#canvas-hud {
+		top: auto;
+		bottom: 0;
+	}
+}
+
 .mapEditorUnfocusedOverlay {
 	position: fixed;
 	inset: 0;

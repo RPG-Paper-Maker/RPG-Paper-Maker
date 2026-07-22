@@ -553,6 +553,7 @@ function MapEditor() {
 	}, []);
 
 	const isSplitLayout = isOpenMapObject && simulation === null;
+	const isBottomSplitLayout = isSplitLayout && window.innerWidth <= 1000;
 
 	useEffect(() => {
 		if (isOpenMapObject && simulation === null && preview === null) {
@@ -566,35 +567,49 @@ function MapEditor() {
 			return;
 		}
 		let animationFrameID = 0;
-		let lastReserved = -1;
-		const apply = (reserved: number) => {
-			if (Math.abs(reserved - lastReserved) <= 0.5) {
+		let lastHorizontalReserved = -1;
+		let lastVerticalReserved = -1;
+		const apply = (horizontalReserved: number, verticalReserved: number) => {
+			if (
+				Math.abs(horizontalReserved - lastHorizontalReserved) <= 0.5 &&
+				Math.abs(verticalReserved - lastVerticalReserved) <= 0.5
+			) {
 				return;
 			}
-			lastReserved = reserved;
-			canvas.style.width = reserved > 0 ? `calc(100% - ${reserved}px)` : '';
+			lastHorizontalReserved = horizontalReserved;
+			lastVerticalReserved = verticalReserved;
+			canvas.style.width = horizontalReserved > 0 ? `calc(100% - ${horizontalReserved}px)` : '';
+			canvas.style.height = verticalReserved > 0 ? `${verticalReserved}px` : '';
 			resize();
 		};
 		if (!isSplitLayout) {
-			apply(0);
+			apply(0, 0);
 			return;
 		}
 		const measure = () => {
 			const container = canvas.parentElement;
 			const dialog = document.querySelector('.dialogObjectEditor') as HTMLElement | null;
-			let reserved = 0;
+			let horizontalReserved = 0;
+			let verticalReserved = 0;
 			if (container && dialog && window.innerWidth > 1000) {
 				const containerRect = container.getBoundingClientRect();
 				const dialogRect = dialog.getBoundingClientRect();
-				reserved = Math.max(0, Math.min(containerRect.width - 100, containerRect.right - dialogRect.left));
+				horizontalReserved = Math.max(
+					0,
+					Math.min(containerRect.width - 100, containerRect.right - dialogRect.left),
+				);
+			} else if (dialog) {
+				const dialogRect = dialog.getBoundingClientRect();
+				verticalReserved = Math.max(0, window.innerHeight - dialogRect.bottom);
 			}
-			apply(reserved);
+			apply(horizontalReserved, verticalReserved);
 			animationFrameID = requestAnimationFrame(measure);
 		};
 		measure();
 		return () => {
 			cancelAnimationFrame(animationFrameID);
 			canvas.style.width = '';
+			canvas.style.height = '';
 			resize();
 		};
 	}, [isSplitLayout]);
@@ -655,7 +670,7 @@ function MapEditor() {
 			<Loader isLoading={firstLoading} />
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 				<div
-					className={`mapEditor ${cursorClass()}`}
+					className={`mapEditor ${cursorClass()}${isBottomSplitLayout ? ' mapEditorBottomPreview' : ''}`}
 					onDoubleClick={handleDoubleClick}
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
 				>

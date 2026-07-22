@@ -41,6 +41,8 @@ function DialogMapObject({
 	onUpdateStateGraphics,
 }: Props) {
 	const { t } = useTranslation();
+	const isBottomPreviewLayout = window.innerWidth <= 1000;
+	const isNarrowDesktopLayout = window.innerWidth <= 1300;
 
 	const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
 
@@ -113,9 +115,9 @@ function DialogMapObject({
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth={window.innerWidth <= 1000 ? '100%' : '50%'}
-			initialHeight='100%'
-			initialPlacement='right'
+			initialWidth={isBottomPreviewLayout ? '100%' : isNarrowDesktopLayout ? '66.6667%' : '50%'}
+			initialHeight={isBottomPreviewLayout ? '66.6667vh' : '100%'}
+			initialPlacement={isBottomPreviewLayout ? 'top' : 'right'}
 			allowMapInteraction
 		>
 			<PanelMapObject

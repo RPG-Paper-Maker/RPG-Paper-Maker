@@ -33,6 +33,7 @@ type Props = {
 
 function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Props) {
 	const [rect, setRect] = useState<DOMRect | null>(null);
+	const [offset, setOffset] = useState({ x: 0, y: 0 });
 	const [isPaused, setIsPaused] = useState(false);
 	const [hudState, setHudState] = useState<SimulationHudState>(null);
 	const [renderer, setRenderer] = useState<SimulationSkinRenderer | null>(null);
@@ -120,7 +121,14 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 	useEffect(() => {
 		const update = () => {
 			const element = document.getElementById('canvas-map-editor');
-			setRect(element ? element.getBoundingClientRect() : null);
+			const canvasRect = element?.getBoundingClientRect() ?? null;
+			const parentRect = element?.parentElement?.getBoundingClientRect() ?? null;
+			setRect(canvasRect);
+			setOffset(
+				canvasRect && parentRect
+					? { x: canvasRect.left - parentRect.left, y: canvasRect.top - parentRect.top }
+					: { x: 0, y: 0 },
+			);
 		};
 		update();
 		const element = document.getElementById('canvas-map-editor');
@@ -211,7 +219,21 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 	};
 
 	return (
-		<div className={`objectCommandTestOverlay${preview ? ' objectCommandTestOverlayPreview' : ''}`}>
+		<div
+			className={`objectCommandTestOverlay${preview ? ' objectCommandTestOverlayPreview' : ''}`}
+			style={
+				rect
+					? {
+							left: offset.x,
+							top: offset.y,
+							width: rect.width,
+							height: rect.height,
+							right: 'auto',
+							bottom: 'auto',
+						}
+					: undefined
+			}
+		>
 			<canvas ref={refScreenCanvasBelow} className='objectCommandTestHudCanvas' />
 			<canvas ref={refHudCanvas} className='objectCommandTestHudCanvas' />
 			<canvas ref={refScreenCanvasAbove} className='objectCommandTestHudCanvas' />

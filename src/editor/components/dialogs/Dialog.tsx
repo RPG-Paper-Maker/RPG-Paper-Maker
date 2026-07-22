@@ -31,7 +31,7 @@ type Props = {
 	className?: string;
 	initialWidth?: string;
 	initialHeight?: string;
-	initialPlacement?: 'center' | 'right';
+	initialPlacement?: 'center' | 'right' | 'top';
 	isDisabled?: boolean;
 	isLoading?: boolean;
 	movable?: boolean;
@@ -360,6 +360,10 @@ function Dialog({
 				const top = Math.max(0, (window.innerHeight - rect.height) / 2);
 				dialogRef.current.style.left = `${left}px`;
 				dialogRef.current.style.top = `${top}px`;
+				setIsMoved(true);
+			} else if (initialPlacement === 'top' && dialogRef.current) {
+				dialogRef.current.style.left = '0px';
+				dialogRef.current.style.top = '0px';
 				setIsMoved(true);
 			} else if (dialogRef.current) {
 				const dialogs = Array.from(document.getElementsByClassName('dialog'));
