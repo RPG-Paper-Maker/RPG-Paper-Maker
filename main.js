@@ -143,26 +143,13 @@ const runRPMGame = async (location, battleTest = false) => {
 	});
 };
 
-async function extractZip(zipPath, destDir) {
-	await fs.mkdir(destDir, { recursive: true });
-
-	if (process.platform === 'win32') {
-		// Windows 10+ has tar built-in
-		const psCommand = `powershell -NoProfile -Command "Expand-Archive -LiteralPath '${zipPath}' -DestinationPath '${destDir}' -Force"`;
-		await run(psCommand);
-	} else {
-		// macOS / Linux have unzip
-		await run(`unzip -o "${zipPath}" -d "${destDir}"`);
-		if (process.platform === 'darwin') {
-			// Strip quarantine so Gatekeeper doesn't block the extracted app
-			await run(`xattr -r -d com.apple.quarantine "${destDir}"`).catch(() => {});
-		}
-	}
-}
-
 async function extractTarGz(tarPath, destDir) {
 	await fs.mkdir(destDir, { recursive: true });
 	await run(`tar -xzf "${tarPath}" -C "${destDir}"`);
+	if (process.platform === 'darwin') {
+		// Strip quarantine so Gatekeeper doesn't block the extracted app
+		await run(`xattr -r -d com.apple.quarantine "${destDir}"`).catch(() => {});
+	}
 }
 
 const getBackendCachePath = () => {
@@ -510,20 +497,20 @@ const init = async () => {
 		if (proceedWithUpdate) {
 			// Update updater
 			await createSplash('Updating...');
-			const updaterZipName = (() => {
+			const updaterArchiveName = (() => {
 				switch (process.platform) {
 					case 'win32':
-						return 'RPG.Paper.Maker.Windows.zip';
+						return 'RPG.Paper.Maker.Windows.tar.gz';
 					case 'darwin':
-						return 'RPG.Paper.Maker.Mac.zip';
+						return 'RPG.Paper.Maker.Mac.tar.gz';
 					case 'linux':
-						return 'RPG.Paper.Maker.Linux.zip';
+						return 'RPG.Paper.Maker.Linux.tar.gz';
 					default:
 						throw new Error(`Unsupported platform: ${process.platform}`);
 				}
 			})();
 			const res = await fetchFrom(
-				`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterZipName}`,
+				`https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/download/${latestUpdaterVersion}/${updaterArchiveName}`,
 			);
 			const contentLength = res.headers.get('content-length');
 			const total = contentLength ? parseInt(contentLength, 10) : null;
@@ -542,10 +529,10 @@ const init = async () => {
 				}
 			}
 			const blob = Buffer.concat(chunks);
-			await fs.writeFile(`${basePath}/../${updaterZipName}`, blob);
+			await fs.writeFile(`${basePath}/../${updaterArchiveName}`, blob);
 			setSplashProgress('Extracting...');
-			await extractZip(`${basePath}/../${updaterZipName}`, `${basePath}/../RPG Paper Maker temp`);
-			await fs.unlink(`${basePath}/../${updaterZipName}`);
+			await extractTarGz(`${basePath}/../${updaterArchiveName}`, `${basePath}/../RPG Paper Maker temp`);
+			await fs.unlink(`${basePath}/../${updaterArchiveName}`);
 			setSplashProgress('Copying files...');
 			if (await exists(distPath)) {
 				await copyFolder(
@@ -1121,9 +1108,9 @@ ipcMain.handle('copy-and-exclude', async (event, src, dst, excludePath) => {
 
 ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
 	const archiveNames = {
-		win32: 'RPG.Paper.Maker.Windows.zip',
-		linux: 'RPG.Paper.Maker.Linux.zip',
-		darwin: 'RPG.Paper.Maker.Mac.zip',
+		win32: 'RPG.Paper.Maker.Windows.tar.gz',
+		linux: 'RPG.Paper.Maker.Linux.tar.gz',
+		darwin: 'RPG.Paper.Maker.Mac.tar.gz',
 	};
 	const archiveName = archiveNames[targetOS];
 	const url = `https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/releases/latest/download/${archiveName}`;
@@ -1137,11 +1124,7 @@ ipcMain.handle('download-deploy-engine', async (event, targetOS) => {
 	await fs.mkdir(tempDir, { recursive: true });
 	const archivePath = path.join(tempDir, archiveName);
 	await fs.writeFile(archivePath, buffer);
-	if (archiveName.endsWith('.tar.gz')) {
-		await extractTarGz(archivePath, tempDir);
-	} else {
-		await extractZip(archivePath, tempDir);
-	}
+	await extractTarGz(archivePath, tempDir);
 	await fs.unlink(archivePath);
 	return { enginePath: path.join(tempDir, 'RPG Paper Maker'), tempDir };
 });

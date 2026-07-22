@@ -154,6 +154,7 @@ jobs:
               run: |
                   Copy-Item -Recurse electron-x64 "RPG Paper Maker"
                   Compress-Archive -Path "RPG Paper Maker" -DestinationPath RPG.Paper.Maker.Windows.zip
+                  tar -czf RPG.Paper.Maker.Windows.tar.gz "RPG Paper Maker"
 
             - name: Build installer
               shell: cmd
@@ -166,9 +167,9 @@ jobs:
               run: |
                   TAG="updater/${{ inputs.version }}"
                   if gh release view "$TAG" --repo RPG-Paper-Maker/RPG-Paper-Maker > /dev/null 2>&1; then
-                    gh release upload "$TAG" RPG.Paper.Maker.Windows.zip installer-output/RPG.Paper.Maker.Installer.exe --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
+                    gh release upload "$TAG" RPG.Paper.Maker.Windows.zip RPG.Paper.Maker.Windows.tar.gz installer-output/RPG.Paper.Maker.Installer.exe --clobber --repo RPG-Paper-Maker/RPG-Paper-Maker
                   else
-                    gh release create "$TAG" RPG.Paper.Maker.Windows.zip installer-output/RPG.Paper.Maker.Installer.exe \
+                    gh release create "$TAG" RPG.Paper.Maker.Windows.zip RPG.Paper.Maker.Windows.tar.gz installer-output/RPG.Paper.Maker.Installer.exe \
                       --title "Updater ${{ inputs.version }}" \
                       --latest=false \
                       --repo RPG-Paper-Maker/RPG-Paper-Maker
