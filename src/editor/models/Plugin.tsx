@@ -91,7 +91,11 @@ class Plugin extends Checkable {
 	static async getManifest(): Promise<JSONType[][] | null> {
 		const file = await readOnlineFile(`${this.BASE_GIT_URL}/manifest.json`);
 		if (file) {
-			return JSON.parse(file) as JSONType[][];
+			try {
+				return JSON.parse(file) as JSONType[][];
+			} catch {
+				return null;
+			}
 		}
 		return null;
 	}
