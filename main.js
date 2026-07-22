@@ -792,10 +792,6 @@ const createFolder = async (path) => {
 	await fs.mkdir(path, { recursive: true });
 };
 
-ipcMain.handle('create-folder', async (event, path) => {
-	await createFolder(path);
-});
-
 const clearReadOnly = async (targetPath) => {
 	if (!targetPath) return;
 	try {
@@ -805,7 +801,7 @@ const clearReadOnly = async (targetPath) => {
 	}
 };
 
-const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5, chmodPath = null) => {
+const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5, chmodPath = null, onRetry = null) => {
 	let lastError;
 	for (let attempt = 0; attempt < maxAttempts; attempt++) {
 		try {
@@ -818,21 +814,44 @@ const retryOnPermError = async (fn, extraCodes = [], maxAttempts = 5, chmodPath 
 			if (isPerm) {
 				await clearReadOnly(chmodPath);
 			}
+			onRetry?.(attempt + 1, err);
 			await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
 		}
 	}
 	throw lastError;
 };
 
+const notifyDelayedFileOperation = (event, attempt) => {
+	if (attempt === 10) {
+		event.sender.send('file-operation-delayed');
+	}
+};
+
+ipcMain.handle('create-folder', async (event, folderPath) => {
+	await retryOnPermError(
+		() => createFolder(folderPath),
+		['ENOENT'],
+		40,
+		folderPath,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
+	);
+});
+
 ipcMain.handle('remove-folder', async (event, path) => {
 	if (await exists(path)) {
-		await retryOnPermError(() => fs.rm(path, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }));
+		await retryOnPermError(
+			() => fs.rm(path, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }),
+			[],
+			40,
+			path,
+			(attempt) => notifyDelayedFileOperation(event, attempt),
+		);
 	}
 });
 
-const copyFolder = async (src, dst, exclude = []) => {
+const copyFolder = async (src, dst, exclude = [], onRetry = null) => {
 	if (!(await exists(dst))) {
-		await createFolder(dst);
+		await retryOnPermError(() => createFolder(dst), ['ENOENT'], 40, dst, onRetry);
 	}
 	const files = await fs.readdir(src);
 	for (const file of files) {
@@ -849,15 +868,15 @@ const copyFolder = async (src, dst, exclude = []) => {
 			throw err;
 		}
 		if (stats.isDirectory()) {
-			await copyFolder(sourcePath, destinationPath, exclude);
+			await copyFolder(sourcePath, destinationPath, exclude, onRetry);
 		} else {
-			await retryOnPermError(() => fs.copyFile(sourcePath, destinationPath));
+			await retryOnPermError(() => fs.copyFile(sourcePath, destinationPath), [], 40, destinationPath, onRetry);
 		}
 	}
 };
 
 ipcMain.handle('copy-folder', async (event, src, dst, exclude) => {
-	await copyFolder(src, dst, exclude ?? []);
+	await copyFolder(src, dst, exclude ?? [], (attempt) => notifyDelayedFileOperation(event, attempt));
 });
 
 ipcMain.handle('create-file', async (event, filePath, content) => {
@@ -873,20 +892,39 @@ ipcMain.handle('create-file', async (event, filePath, content) => {
 			}
 		},
 		['ENOENT'],
-		20,
+		40,
 		filePath,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
 	);
 });
 
 ipcMain.handle('remove-file', async (event, path, content) => {
-	await retryOnPermError(() => fs.unlink(path, content), [], 5, path).catch((e) => {
+	await retryOnPermError(
+		() => fs.unlink(path, content),
+		[],
+		40,
+		path,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
+	).catch((e) => {
 		if (e.code !== 'ENOENT') throw e;
 	});
 });
 
 ipcMain.handle('copy-file', async (event, src, dst) => {
-	await fs.mkdir(path.dirname(dst), { recursive: true });
-	await retryOnPermError(() => fs.copyFile(src, dst), ['ENOENT'], 5, dst);
+	await retryOnPermError(
+		() => fs.mkdir(path.dirname(dst), { recursive: true }),
+		['ENOENT'],
+		40,
+		dst,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
+	);
+	await retryOnPermError(
+		() => fs.copyFile(src, dst),
+		['ENOENT'],
+		40,
+		dst,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
+	);
 });
 
 ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
@@ -904,8 +942,9 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 			}
 		},
 		['EEXIST'],
-		10,
-		newFilePath
+		40,
+		newFilePath,
+		(attempt) => notifyDelayedFileOperation(event, attempt),
 	);
 	try {
 		const dir = await fs.open(path.dirname(newFilePath), 'r');
