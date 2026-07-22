@@ -253,6 +253,15 @@ class GL {
 			this.renderer.clear(true, true);
 			this.renderer.setScissorTest(true);
 			this.renderer.debug.onShaderError = (gl, program, vertShader, fragShader) => {
+				const shaderFingerprint = (shader: WebGLShader): string => {
+					const source = gl.getShaderSource(shader) ?? '';
+					let hash = 2166136261;
+					for (let i = 0; i < source.length; i++) {
+						hash ^= source.charCodeAt(i);
+						hash = Math.imul(hash, 16777619);
+					}
+					return `${source.length} chars, fnv1a-${(hash >>> 0).toString(16).padStart(8, '0')}`;
+				};
 				const sourceContext = (source: string | null, errorLine: number): string => {
 					if (!source) {
 						return '';
@@ -307,6 +316,21 @@ class GL {
 						`\nNo driver logs available. GL limits — varying vectors: ${maxVaryings}, vertex uniforms: ` +
 						`${maxVertUniforms}, fragment uniforms: ${maxFragUniforms}. Active attributes: ${activeAttributes}, ` +
 						`active uniforms: ${activeUniforms}.\n`;
+				}
+				if (!programLog && !vertLog && !fragLog) {
+					const debugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
+					const vendor = debugRendererInfo
+						? gl.getParameter(debugRendererInfo.UNMASKED_VENDOR_WEBGL)
+						: gl.getParameter(gl.VENDOR);
+					const renderer = debugRendererInfo
+						? gl.getParameter(debugRendererInfo.UNMASKED_RENDERER_WEBGL)
+						: gl.getParameter(gl.RENDERER);
+					msg +=
+						`WebGL: ${gl.getParameter(gl.VERSION)} | GLSL: ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}\n` +
+						`GPU: ${vendor} | ${renderer}\n` +
+						`Context: ${JSON.stringify(gl.getContextAttributes())}\n` +
+						`Generated shader fingerprints â€” vertex: ${shaderFingerprint(vertShader)}; ` +
+						`fragment: ${shaderFingerprint(fragShader)}.\n`;
 				}
 				console.error(msg);
 			};
