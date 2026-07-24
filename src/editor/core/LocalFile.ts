@@ -340,10 +340,15 @@ class LocalFile extends Serializable {
 	}
 
 	static async readPublicFile(path: string, isBlob = false): Promise<string> {
-		const url = `${path}?_=${Date.now()}`; // Cache busting
+		const base = new URL(window.location.href);
+		base.pathname = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+		base.search = '';
+		base.hash = '';
+		const url = new URL(path, base);
+		url.searchParams.set('_', Date.now().toString()); // Cache busting
 		try {
 			if (isBlob) {
-				const blob = await this.readPublicFileBlob(url);
+				const blob = await this.readPublicFileBlob(url.toString());
 				return await new Promise((resolve, reject) => {
 					const reader = new FileReader();
 					reader.onloadend = () => resolve(reader.result as string);
@@ -351,7 +356,11 @@ class LocalFile extends Serializable {
 					reader.readAsDataURL(blob);
 				});
 			} else {
-				return await (await fetch(url)).text();
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error(`HTTP ${response.status}`);
+				}
+				return await response.text();
 			}
 		} catch (error) {
 			throw new Error(`Failed to fetch public file: ${path}`, { cause: error });

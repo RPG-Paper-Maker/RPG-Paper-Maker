@@ -72,8 +72,17 @@ class GL {
 	}
 
 	static async initializeShaders() {
-		this.SHADER_DEFAULT_VERTEX = await readPublicFile(Paths.join('Scripts', 'Shaders', 'default.vert'));
-		this.SHADER_DEFAULT_FRAGMENT = await readPublicFile(Paths.join('Scripts', 'Shaders', 'default.frag'));
+		const vertexPath = Paths.join('Scripts', 'Shaders', 'default.vert');
+		const fragmentPath = Paths.join('Scripts', 'Shaders', 'default.frag');
+		const [vertex, fragment] = await Promise.all([readPublicFile(vertexPath), readPublicFile(fragmentPath)]);
+		if (!vertex.trimStart().startsWith('#')) {
+			throw new Error(`Invalid vertex shader content: ${vertexPath}`);
+		}
+		if (!fragment.trimStart().startsWith('#')) {
+			throw new Error(`Invalid fragment shader content: ${fragmentPath}`);
+		}
+		this.SHADER_DEFAULT_VERTEX = vertex;
+		this.SHADER_DEFAULT_FRAGMENT = fragment;
 	}
 
 	static renderToDataURL(
