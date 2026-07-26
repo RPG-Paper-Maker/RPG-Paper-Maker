@@ -192,7 +192,11 @@ function DialogPictures({
 	};
 
 	const handleChangeSelectedPicture = (node: Node | null) => {
-		updateSelectedPicture((node?.content ?? null) as Model.Picture | null);
+		const picture = (node?.content ?? null) as Model.Picture | null;
+		if (selectedKind === PICTURE_KIND.CHARACTERS && picture?.id !== selectedPicture?.id) {
+			setSelectedRect(new Rectangle());
+		}
+		updateSelectedPicture(picture);
 	};
 
 	const handleChangeStopAnimation = (b: boolean) => {

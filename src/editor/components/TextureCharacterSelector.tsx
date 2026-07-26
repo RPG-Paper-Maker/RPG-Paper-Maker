@@ -33,7 +33,6 @@ function TextureCharacterSelector({
 	adjustPositionSize,
 	base64 = false,
 }: Props) {
-	const divideSize = (Project.SQUARE_SIZE * 2) / Constants.BASE_SQUARE_SIZE;
 	const frames = Project.current!.systems.FRAMES;
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
 
@@ -41,8 +40,8 @@ function TextureCharacterSelector({
 		<TextureSquareSelector
 			texture={texture}
 			canChangeSize={false}
-			divideWidth={divideSize}
-			divideHeight={divideSize}
+			divideWidth={2}
+			divideHeight={2}
 			columns={frames}
 			rows={rows}
 			defaultRectangle={defaultRectangle}
@@ -50,6 +49,7 @@ function TextureCharacterSelector({
 			adjustPositionSize={adjustPositionSize}
 			base64={base64}
 			doNotUpdateTexture
+			selectionSquareSize={Constants.BASE_SQUARE_SIZE}
 		/>
 	);
 }
