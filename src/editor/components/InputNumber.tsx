@@ -23,6 +23,7 @@ type Props = {
 	decimals?: boolean;
 	disabled?: boolean;
 	suffixPlaceholder?: string;
+	onBlur?: (value: number) => void;
 };
 
 function InputNumber({
@@ -34,6 +35,7 @@ function InputNumber({
 	decimals = false,
 	disabled = false,
 	suffixPlaceholder,
+	onBlur,
 }: Props) {
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
 
@@ -89,6 +91,7 @@ function InputNumber({
 			onChange(v);
 		}
 		setDisplayedValue(transformValueToText(v));
+		onBlur?.(v);
 	};
 
 	useEffect(() => {

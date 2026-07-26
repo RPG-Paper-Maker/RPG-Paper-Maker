@@ -1916,6 +1916,7 @@
 	"update.list.size": "Обновить размер списка",
 	"update.id": "Обновить ID",
 	"warning.update.list.size": "Вы уменьшите размер списка. Последние элементы будут удалены, подтверждаете?",
+	"warning.square.size.update": "Changing the square size will delete all existing collisions. Do you want to continue?",
 	"deploy": "Развернуть",
 	"auto.updater": "Автообновление",
 	"manual": "Ручной",

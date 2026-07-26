@@ -1917,6 +1917,7 @@
 	"update.list.size": "목록 크기 업데이트",
 	"update.id": "ID 업데이트",
 	"warning.update.list.size": "목록의 크기가 줄어듭니다. 마지막 요소들이 삭제됩니다. 계속하시겠습니까?",
+	"warning.square.size.update": "Changing the square size will delete all existing collisions. Do you want to continue?",
 	"deploy": "배포",
 	"auto.updater": "자동 업데이트 도구",
 	"manual": "매뉴얼",

@@ -1916,6 +1916,7 @@
 	"update.list.size": "Actualizar tamaño de la lista",
 	"update.id": "Actualizar ID",
 	"warning.update.list.size": "Reducirás el tamaño de la lista. Se eliminarán los últimos elementos, ¿confirmas?",
+	"warning.square.size.update": "Changing the square size will delete all existing collisions. Do you want to continue?",
 	"deploy": "Implementar",
 	"auto.updater": "Actualizador automático",
 	"manual": "Manual",

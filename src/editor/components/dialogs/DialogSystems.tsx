@@ -60,7 +60,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 	};
 
 	const handleSave = async () => {
-		panelSystemRef.current?.accept();
+		const shouldSavePictures = panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
 		panelTitleScreenGameOverRef.current?.accept();
 		panelMainMenuRef.current?.accept();
@@ -68,6 +68,9 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		panelCommonReactionsRef.current?.accept();
 		panelModelsRef.current?.accept();
 		await Project.current!.systems.save();
+		if (shouldSavePictures) {
+			await Project.current!.pictures.save();
+		}
 		Project.SQUARE_SIZE = Project.current!.systems.SQUARE_SIZE;
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();

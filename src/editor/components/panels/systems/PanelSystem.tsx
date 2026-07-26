@@ -31,8 +31,10 @@ import InputText from '../../InputText';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import TooltipInformation from '../../TooltipInformation';
 import Tree from '../../Tree';
+import Dialog, { Z_INDEX_LEVEL } from '../../dialogs/Dialog';
 import DialogEnterNameOptions from '../../dialogs/DialogEnterNameOptions';
 import DialogCommandSetDialogBoxOptions from '../../dialogs/commands/DialogCommandSetDialogBoxOptions';
+import FooterNoYes from '../../dialogs/footers/FooterNoYes';
 
 const PanelSystem = forwardRef((props, ref) => {
 	const { t } = useTranslation();
@@ -45,6 +47,8 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isDialogDefaultDialogBoxOptionsOpen, setIsDialogDefaultDialogBoxOptionsOpen] = useState(false);
 	const [isDialogEnterNameOptionsOpen, setIsDialogEnterNameOptionOpen] = useState(false);
+	const [isSquareSizeWarningOpen, setIsSquareSizeWarningOpen] = useState(false);
+	const [shouldClearCollisions, setShouldClearCollisions] = useState(false);
 	const [projectName, setProjectName] = useState(new Model.Localization());
 	const [windowWidth, setWindowWidth] = useStateNumber();
 	const [windowHeight, setWindowHeight] = useStateNumber();
@@ -89,6 +93,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [frequencies, setFrequencies] = useState<Node[]>([]);
 	const [skyboxes, setSkyboxes] = useState<Node[]>([]);
 	const [initialPartyMembers, setInitialPartyMembers] = useState<Node[]>([]);
+	const squareSizeBeforeChange = useRef(0);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -100,6 +105,8 @@ const PanelSystem = forwardRef((props, ref) => {
 		setAntialias(systems.antialias);
 		setIsMouseControls(systems.isMouseControls);
 		setSquareSize(systems.SQUARE_SIZE);
+		squareSizeBeforeChange.current = systems.SQUARE_SIZE;
+		setShouldClearCollisions(false);
 		setRayPortionsEngine(systems.PORTIONS_RAY);
 		setRayPortionsIngame(systems.portionsRayIngame);
 		mountainCollisionHeight.copy(systems.mountainCollisionHeight);
@@ -159,8 +166,32 @@ const PanelSystem = forwardRef((props, ref) => {
 		setEnterNameTable(options);
 	};
 
+	const handleSquareSizeBlur = (value: number) => {
+		if (value !== squareSizeBeforeChange.current) {
+			setIsSquareSizeWarningOpen(true);
+		}
+	};
+
+	const handleRejectSquareSizeWarning = () => {
+		setSquareSize(squareSizeBeforeChange.current);
+		setIsSquareSizeWarningOpen(false);
+	};
+
+	const handleAcceptSquareSizeWarning = () => {
+		setShouldClearCollisions(true);
+		squareSizeBeforeChange.current = squareSize;
+		setIsSquareSizeWarningOpen(false);
+	};
+
 	const accept = () => {
 		const systems = Project.current!.systems;
+		if (shouldClearCollisions) {
+			for (const pictures of Project.current!.pictures.list.values()) {
+				for (const picture of pictures) {
+					picture.collisions.clear();
+				}
+			}
+		}
 		systems.projectName = projectName.clone();
 		systems.windowWidth = windowWidth;
 		systems.windowHeight = windowHeight;
@@ -209,6 +240,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.cameraProperties = Node.createListFromNodes(cameraProperties);
 		systems.skyboxes = Node.createListFromNodes(skyboxes);
 		systems.initialPartyMembers = Node.createListFromNodes(initialPartyMembers);
+		return shouldClearCollisions;
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -271,7 +303,13 @@ const PanelSystem = forwardRef((props, ref) => {
 								<div>
 									{t('square.size')} ({t('in.px')}):
 								</div>
-								<InputNumber value={squareSize} onChange={setSquareSize} min={1} max={999} />
+								<InputNumber
+									value={squareSize}
+									onChange={setSquareSize}
+									onBlur={handleSquareSizeBlur}
+									min={1}
+									max={999}
+								/>
 							</Flex>
 							<Flex column spaced>
 								<div>
@@ -590,6 +628,17 @@ const PanelSystem = forwardRef((props, ref) => {
 					options={enterNameTable}
 					onAccept={handleAcceptEnterNameOptions}
 				/>
+			)}
+			{isSquareSizeWarningOpen && (
+				<Dialog
+					title={t('warning')}
+					isOpen
+					zIndex={Z_INDEX_LEVEL.LAYER_TOP}
+					footer={<FooterNoYes onNo={handleRejectSquareSizeWarning} onYes={handleAcceptSquareSizeWarning} />}
+					onClose={handleRejectSquareSizeWarning}
+				>
+					<div className='warning'>{t('warning.square.size.update')}</div>
+				</Dialog>
 			)}
 		</>
 	);

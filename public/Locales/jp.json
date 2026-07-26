@@ -1916,6 +1916,7 @@
 	"update.list.size": "リストサイズの更新",
 	"update.id": "IDの更新",
 	"warning.update.list.size": "リストのサイズを縮小します。末尾の要素が削除されますが、よろしいですか？",
+	"warning.square.size.update": "Changing the square size will delete all existing collisions. Do you want to continue?",
 	"deploy": "デプロイ",
 	"auto.updater": "自動アップデーター",
 	"manual": "手動",
