@@ -1557,13 +1557,16 @@ class MapPortion {
 		}
 		if (this.objectsMesh !== null) {
 			this.map.scene.remove(this.objectsMesh);
+			this.objectsMesh.geometry.dispose();
 			this.objectsMesh = null;
 		}
 		for (const mesh of this.objectsMeshes) {
 			this.map.scene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 		for (const lights of this.objectsLightsGroups) {
 			this.map.scene.remove(lights);
@@ -1958,13 +1961,16 @@ class MapPortion {
 		this.objects3DMeshes = [];
 		if (this.objectsMesh !== null) {
 			this.map.scene.remove(this.objectsMesh);
+			this.objectsMesh.geometry.dispose();
 			this.objectsMesh = null;
 		}
 		for (const mesh of this.objectsMeshes) {
 			this.map.scene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 		for (const lights of this.objectsLightsGroups) {
 			this.map.scene.remove(lights);
