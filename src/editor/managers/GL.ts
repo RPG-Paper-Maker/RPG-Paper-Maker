@@ -156,6 +156,43 @@ class GL {
 		};
 	}
 
+	/**
+	 * Apply the map screen tone while preserving an imported GLTF material's
+	 * native textures and lighting shader.
+	 *
+	 * @param material The GLTF material to update
+	 */
+	static applyScreenTone(material: THREE.Material): void {
+		if (material.userData.rpmScreenToneApplied || !(material instanceof THREE.MeshStandardMaterial)) {
+			return;
+		}
+
+		material.userData.rpmScreenToneApplied = true;
+		const onBeforeCompile = material.onBeforeCompile;
+		const customProgramCacheKey = material.customProgramCacheKey;
+		material.onBeforeCompile = (shader, renderer): void => {
+			onBeforeCompile(shader, renderer);
+			shader.uniforms.rpmScreenTone = { value: GL.screenTone };
+			shader.fragmentShader = shader.fragmentShader.replace(
+				'#include <common>',
+				'#include <common>\nuniform vec4 rpmScreenTone;',
+			);
+			shader.fragmentShader = shader.fragmentShader.replace(
+				'#include <fog_fragment>',
+				`vec3 rpmScreenToneRgb = gl_FragColor.rgb + rpmScreenTone.rgb;
+const vec3 rpmScreenToneWeights = vec3(0.2125, 0.7154, 0.0721);
+gl_FragColor.rgb = mix(
+	vec3(dot(rpmScreenToneRgb, rpmScreenToneWeights)),
+	rpmScreenToneRgb,
+	rpmScreenTone.a
+);
+#include <fog_fragment>`,
+			);
+		};
+		material.customProgramCacheKey = (): string => `${customProgramCacheKey.call(material)}|rpm-screen-tone`;
+		material.needsUpdate = true;
+	}
+
 	static createMaterial(opts: {
 		texture?: THREE.Texture | null;
 		flipX?: boolean;

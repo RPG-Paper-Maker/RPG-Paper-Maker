@@ -10,15 +10,15 @@
 */
 
 import * as THREE from 'three';
-import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../../common';
+import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Manager, MapElement, Model } from '../../Editor';
+import { getMapObjectLightIntensity } from '../../models/MapObjectLight';
 import type { Map as SceneMap } from '../../scenes/Map';
 import { CustomGeometry } from '../CustomGeometry';
 import { CustomGeometryFace } from '../CustomGeometryFace';
 import { Position } from '../Position';
 import { Project } from '../Project';
 import { Rectangle } from '../Rectangle';
-import { getMapObjectLightIntensity } from '../../models/MapObjectLight';
 
 export enum SIM_ORIENTATION {
 	SOUTH,
@@ -35,7 +35,7 @@ export const SIM_ORIENTATION_VECTORS: ReadonlyArray<THREE.Vector3> = [
 ];
 
 class SimulationObject {
-	public mesh: THREE.Mesh | null = null;
+	public mesh: THREE.Object3D | null = null;
 	public worldPosition: THREE.Vector3;
 	public orientation!: SIM_ORIENTATION;
 	public frame = 0;
@@ -64,6 +64,8 @@ class SimulationObject {
 	private previewMaterial: THREE.Material | null = null;
 	private previewMaterialSource: THREE.Material | null = null;
 	private previewFrameBounds = new THREE.Vector4(0, 0, 1, 1);
+	private gltfAnimationMixer: THREE.AnimationMixer | null = null;
+	private gltfAnimationElapsedTime = 0;
 	private lights: { light: THREE.Light; settings: Model.MapObjectLight }[] = [];
 	private standaloneLights: THREE.Group | null = null;
 	private standaloneLightsBasePosition: THREE.Vector3 | null = null;
@@ -92,6 +94,13 @@ class SimulationObject {
 	}
 
 	applyState(state: Model.MapObjectState, preserveLightAnimation = false) {
+		const isSameGltf =
+			this.state?.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D &&
+			state.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D &&
+			this.state.graphicsID === state.graphicsID;
+		if (!isSameGltf) {
+			this.gltfAnimationElapsedTime = 0;
+		}
 		this.state = state.clone();
 		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
 		this.orientation = (this.state.graphicsIndexY % 4) as SIM_ORIENTATION;
@@ -219,7 +228,15 @@ class SimulationObject {
 		if (this.disposed || !this.render) {
 			return;
 		}
-		const buildKey = `${this.state.graphicsKind}-${this.state.graphicsID}-${this.getCurrentColumn()}-${this.getCurrentRow()}`;
+		const objectData =
+			this.state.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D
+				? Project.current!.specialElements.getObject3DByID(this.state.graphicsID)
+				: null;
+		const isGltf =
+			objectData?.shapeKind === SHAPE_KIND.CUSTOM && objectData.gltfID !== -1 && objectData.pictureID === -1;
+		const buildKey = isGltf
+			? `${this.state.graphicsKind}-${this.state.graphicsID}`
+			: `${this.state.graphicsKind}-${this.state.graphicsID}-${this.getCurrentColumn()}-${this.getCurrentRow()}`;
 		if (this.mesh !== null && buildKey === this.lastBuildKey) {
 			return;
 		}
@@ -283,6 +300,50 @@ class SimulationObject {
 				break;
 			}
 			case ELEMENT_MAP_KIND.OBJECT3D: {
+				if (isGltf && objectData) {
+					const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, objectData.gltfID);
+					if (!shape?.gltfScene) {
+						this.ensureObject3DTexture(state.graphicsID);
+						return;
+					}
+					const clone = shape.gltfScene.clone(true);
+					const scale = objectData.scale;
+					clone.scale.set(
+						scale * this.basePosition.scaleX,
+						scale * this.basePosition.scaleY,
+						scale * this.basePosition.scaleZ,
+					);
+					clone.position.copy(MapElement.Object3D.create(objectData).getLocalPosition(this.basePosition));
+					clone.rotation.set(
+						(this.basePosition.angleX * Math.PI) / 180,
+						(this.basePosition.angleY * Math.PI) / 180,
+						(this.basePosition.angleZ * Math.PI) / 180,
+					);
+					clone.traverse((child) => {
+						if (child instanceof THREE.Mesh) {
+							const materials = Array.isArray(child.material) ? child.material : [child.material];
+							for (const material of materials) {
+								Manager.GL.applyScreenTone(material);
+							}
+							child.receiveShadow = true;
+							child.castShadow = true;
+						}
+					});
+					const group = new THREE.Group();
+					group.add(clone);
+					const stopAnimation = objectData.stopAnimationIndex;
+					if (stopAnimation >= 0 && stopAnimation < shape.gltfAnimations.length) {
+						this.gltfAnimationMixer = new THREE.AnimationMixer(clone);
+						const action = this.gltfAnimationMixer.clipAction(shape.gltfAnimations[stopAnimation]);
+						action.setLoop(THREE.LoopRepeat, Infinity);
+						action.play();
+						const duration = shape.gltfAnimations[stopAnimation].duration;
+						action.time = duration > 0 ? this.gltfAnimationElapsedTime % duration : 0;
+					}
+					mesh = group as unknown as THREE.Mesh;
+					this.meshIsFace = false;
+					break;
+				}
 				const material = MapElement.Object3D.getObject3DTexture(this.map, state.graphicsID);
 				if (material) {
 					const geometryObject3D = new CustomGeometry();
@@ -462,6 +523,8 @@ class SimulationObject {
 			return;
 		}
 		this.updateLights();
+		this.gltfAnimationMixer?.update(elapsedTime / 1000);
+		this.gltfAnimationElapsedTime += elapsedTime / 1000;
 		if (this.moveFrequencyTick > 0) {
 			this.moveFrequencyTick = Math.max(0, this.moveFrequencyTick - elapsedTime);
 		}
@@ -481,7 +544,7 @@ class SimulationObject {
 		if (this.setWithCamera) {
 			this.build();
 		}
-		if (this.mesh && this.meshIsFace) {
+		if (this.meshIsFace && this.mesh instanceof THREE.Mesh) {
 			(this.mesh.geometry as CustomGeometryFace).rotate(faceAngle, MapElement.Base.Y_AXIS);
 		}
 	}
@@ -605,6 +668,8 @@ void main() {`,
 	}
 
 	private removeMesh() {
+		this.gltfAnimationMixer?.stopAllAction();
+		this.gltfAnimationMixer = null;
 		if (this.mesh) {
 			this.map.scene.remove(this.mesh);
 			this.mesh = null;

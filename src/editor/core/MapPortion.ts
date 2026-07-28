@@ -50,11 +50,15 @@ class MapPortion {
 	public objects3DMeshes!: THREE.Mesh[];
 	public objectsMesh: THREE.Mesh | null = null;
 	public objectsMeshes: THREE.Mesh[] = [];
+	public objectsGltfMeshes: THREE.Group[] = [];
+	public objectsGltfMixers: THREE.AnimationMixer[] = [];
 	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
 	public objectsLightsGroups: THREE.Group[] = [];
 	private animatedLights: { light: THREE.Light; settings: Model.MapObjectLight }[] = [];
 	public hasStopAnimation = false;
 	private lightsStartTime = performance.now();
+	private gltfAnimationElapsedTime = 0;
+	private gltfAnimationTimer = new THREE.Timer();
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	static offsetMeshPositionLayer(map: Scene.Map, mesh: THREE.Mesh, side: number, layer: number, up = true) {
@@ -1391,6 +1395,10 @@ class MapPortion {
 						);
 						clone.traverse((child) => {
 							if (child instanceof THREE.Mesh) {
+								const materials = Array.isArray(child.material) ? child.material : [child.material];
+								for (const material of materials) {
+									Manager.GL.applyScreenTone(material);
+								}
 								child.receiveShadow = true;
 								child.castShadow = true;
 								child.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
@@ -1554,6 +1562,8 @@ class MapPortion {
 		this.hasStopAnimation = false;
 		if (!preserveLightAnimation) {
 			this.lightsStartTime = performance.now();
+			this.gltfAnimationElapsedTime = 0;
+			this.gltfAnimationTimer.reset();
 		}
 		if (this.objectsMesh !== null) {
 			this.map.scene.remove(this.objectsMesh);
@@ -1564,6 +1574,12 @@ class MapPortion {
 			this.map.scene.remove(mesh);
 			mesh.geometry.dispose();
 		}
+		for (const mesh of this.objectsGltfMeshes) {
+			this.map.scene.remove(mesh);
+		}
+		for (const mixer of this.objectsGltfMixers) {
+			mixer.stopAllAction();
+		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
 			mesh.geometry.dispose();
@@ -1572,6 +1588,8 @@ class MapPortion {
 			this.map.scene.remove(lights);
 		}
 		this.objectsMeshes = [];
+		this.objectsGltfMeshes = [];
+		this.objectsGltfMixers = [];
 		this.objectsSpritesFaceMeshes = [];
 		this.objectsLightsGroups = [];
 		const geometry = new CustomGeometry();
@@ -1711,6 +1729,58 @@ class MapPortion {
 						break;
 					}
 					case ELEMENT_MAP_KIND.OBJECT3D: {
+						const objectData = Project.current!.specialElements.getObject3DByID(state.graphicsID);
+						if (
+							objectData?.shapeKind === SHAPE_KIND.CUSTOM &&
+							objectData.gltfID !== -1 &&
+							objectData.pictureID === -1
+						) {
+							const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, objectData.gltfID);
+							if (shape?.gltfScene) {
+								const clone = shape.gltfScene.clone(true);
+								const scale = objectData.scale;
+								clone.scale.set(
+									scale * position.scaleX,
+									scale * position.scaleY,
+									scale * position.scaleZ,
+								);
+								const object3D = MapElement.Object3D.create(objectData);
+								clone.position.copy(object3D.getLocalPosition(position));
+								clone.rotation.set(
+									(position.angleX * Math.PI) / 180,
+									(position.angleY * Math.PI) / 180,
+									(position.angleZ * Math.PI) / 180,
+								);
+								clone.traverse((child) => {
+									if (child instanceof THREE.Mesh) {
+										const materials = Array.isArray(child.material)
+											? child.material
+											: [child.material];
+										for (const material of materials) {
+											Manager.GL.applyScreenTone(material);
+										}
+										child.receiveShadow = true;
+										child.castShadow = true;
+										child.renderOrder = 4;
+									}
+								});
+								this.objectsGltfMeshes.push(clone);
+								const stopAnimation = objectData.stopAnimationIndex;
+								if (stopAnimation >= 0 && stopAnimation < shape.gltfAnimations.length) {
+									const mixer = new THREE.AnimationMixer(clone);
+									const action = mixer.clipAction(shape.gltfAnimations[stopAnimation]);
+									action.setLoop(THREE.LoopRepeat, Infinity);
+									action.play();
+									const duration = shape.gltfAnimations[stopAnimation].duration;
+									action.time = duration > 0 ? this.gltfAnimationElapsedTime % duration : 0;
+									this.objectsGltfMixers.push(mixer);
+								}
+								this.addObjectLights(clone, state, position.toVector3());
+								this.map.scene.add(clone);
+								continue;
+							}
+							break;
+						}
 						const material = MapElement.Object3D.getObject3DTexture(this.map, state.graphicsID);
 						if (material) {
 							const geometryObject3D = new CustomGeometry();
@@ -1868,6 +1938,14 @@ class MapPortion {
 		for (const { light, settings } of this.animatedLights) {
 			light.intensity = getMapObjectLightIntensity(settings, lightsElapsedTime);
 		}
+		if (this.objectsGltfMixers.length > 0) {
+			this.gltfAnimationTimer.update();
+			const delta = this.gltfAnimationTimer.getDelta();
+			for (const mixer of this.objectsGltfMixers) {
+				mixer.update(delta);
+			}
+			this.gltfAnimationElapsedTime += delta;
+		}
 	}
 
 	updateFaceSprites(angle: number) {
@@ -1967,6 +2045,12 @@ class MapPortion {
 		for (const mesh of this.objectsMeshes) {
 			this.map.scene.remove(mesh);
 			mesh.geometry.dispose();
+		}
+		for (const mesh of this.objectsGltfMeshes) {
+			this.map.scene.remove(mesh);
+		}
+		for (const mixer of this.objectsGltfMixers) {
+			mixer.stopAllAction();
 		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
 			this.map.scene.remove(mesh);
