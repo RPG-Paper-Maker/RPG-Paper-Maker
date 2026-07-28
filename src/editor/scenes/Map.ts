@@ -1130,6 +1130,14 @@ class Map extends Base {
 			case ELEMENT_MAP_KIND.OBJECT: {
 				const previousPosition = this.cursorObject.position.clone();
 				position.layer = 0;
+				const objectAtPosition = this.getMapPortionByPosition(position)?.model.objects.get(position.toKey());
+				if (
+					this.movingObject !== null &&
+					!position.equals(previousPosition) &&
+					objectAtPosition !== undefined
+				) {
+					break;
+				}
 				this.updateObjectCursor(preview, position);
 				this.moveObject(previousPosition, position);
 				break;
