@@ -20,6 +20,7 @@ import {
 	IO,
 	Paths,
 	PICTURE_KIND,
+	SONG_KIND,
 	Utils,
 } from '../../common';
 import {
@@ -233,6 +234,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 				switch (k) {
 					case PICTURE_KIND.WINDOW_SKINS:
 					case PICTURE_KIND.CHARACTERS:
+					case PICTURE_KIND.TITLE_SCREENS:
 						v.splice(2);
 						break;
 					case PICTURE_KIND.BARS:
@@ -245,10 +247,10 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			for (const [, v] of project.shapes.list.entries()) {
 				v.splice(1);
 			}
-			for (const [, v] of project.songs.list.entries()) {
-				v.splice(1);
+			for (const [k, v] of project.songs.list.entries()) {
+				v.splice(k === SONG_KIND.MUSIC ? 2 : 1);
 			}
-			project.videos.list = [];
+			project.videos.list.splice(2);
 			project.fonts.list = [];
 			project.systems.windowSkins.splice(1);
 			project.systems.fontNames[0].isBasic = true;
@@ -269,8 +271,6 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.battleSystem.battleVictory.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.battleSystem.battleLevelUp.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.battleSystem.elements.splice(1);
-			project.titleScreenGameOver.titleBackgroundImageID = -1;
-			project.titleScreenGameOver.titleMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.titleScreenGameOver.gameOverBackgroundImageID = -1;
 			project.titleScreenGameOver.gameOverMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.commonEvents.commonReactions.splice(1);
