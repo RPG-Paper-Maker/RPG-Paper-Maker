@@ -225,12 +225,11 @@ const ensureLinuxAngleBackend = async () => {
 };
 
 app.commandLine.appendSwitch('high-dpi-support', 'true');
-app.commandLine.appendSwitch('ignore-gpu-blocklist');
+if (process.platform !== 'darwin') {
+	app.commandLine.appendSwitch('ignore-gpu-blocklist');
+}
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling,MediaSessionService');
-if (process.platform === 'darwin') {
-	app.commandLine.appendSwitch('use-angle', 'metal');
-	app.commandLine.appendSwitch('use-gl', 'angle');
-} else if (process.platform === 'linux') {
+if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
 	app.commandLine.appendSwitch('no-sandbox');
 	app.commandLine.appendSwitch('use-gl', 'angle');
