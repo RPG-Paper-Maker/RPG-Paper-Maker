@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Modifier le chemin du dossier BR",
 	"debug.options": "Options de débogage",
 	"general.options": "Options générales",
+	"live.preview": "Aperçu en direct de la commande",
 	"show.hide.grid": "Afficher / Cacher la grille",
 	"show.hide.square.information": "Afficher / Cacher les informations",
 	"play": "Jouer",

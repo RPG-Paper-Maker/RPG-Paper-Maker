@@ -21,7 +21,7 @@ import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Manager, Scene } from '../../Editor';
 import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
-import { setEngineFontSize, setProjects, setTheme } from '../../store';
+import { setEngineFontSize, setLivePreview, setProjects, setTheme } from '../../store';
 import Loader from '../Loader';
 
 type Props = {
@@ -111,6 +111,7 @@ function PanelLoading({ setLoaded }: Props) {
 		await EngineSettings.current.load();
 		dispatch(setTheme(Constants.THEMES[EngineSettings.current.theme]));
 		dispatch(setEngineFontSize(EngineSettings.current.engineFontSize));
+		dispatch(setLivePreview(EngineSettings.current.livePreview));
 	};
 
 	const initializeLocales = async () => {

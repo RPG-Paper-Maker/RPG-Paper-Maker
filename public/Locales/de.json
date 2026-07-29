@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Setze BR Ordnerpfad",
 	"debug.options": "Debug-Einstellungen",
 	"general.options": "Programm Einstellungen",
+	"live.preview": "Live-Befehlsvorschau",
 	"show.hide.grid": "Zeige / Verstecke Gitter",
 	"show.hide.square.information": "Zeige / Verstecke Information",
 	"play": "Spielen",

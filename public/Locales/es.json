@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Seleccionar fichero de rutas BR",
 	"debug.options": "Opciones de debug",
 	"general.options": "Opciones generales",
+	"live.preview": "Vista previa del comando en directo",
 	"show.hide.grid": "Mostrar / Ocultar cuadrícula",
 	"show.hide.square.information": "Mostrar / Ocultar información",
 	"play": "Jugar",

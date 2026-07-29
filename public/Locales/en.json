@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Set BR path folder",
 	"debug.options": "Debug options",
 	"general.options": "General options",
+	"live.preview": "Live preview command",
 	"show.hide.grid": "Show / Hide grid",
 	"show.hide.square.information": "Show / Hide information",
 	"play": "Play",

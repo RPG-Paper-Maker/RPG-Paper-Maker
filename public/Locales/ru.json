@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Установить путь к папке BR",
 	"debug.options": "Настройки отладки",
 	"general.options": "Общие настройки",
+	"live.preview": "Предпросмотр команды в реальном времени",
 	"show.hide.grid": "Показать / скрыть сетку",
 	"show.hide.square.information": "Показать / скрыть информацию",
 	"play": "Играть",

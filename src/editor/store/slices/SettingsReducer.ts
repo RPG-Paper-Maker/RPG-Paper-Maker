@@ -17,6 +17,7 @@ const SettingsSlice = createSlice({
 	initialState: {
 		theme: 'darkTheme',
 		engineFontSize: 12,
+		livePreview: true,
 	},
 	reducers: {
 		setTheme(state, action: PayloadAction<string>) {
@@ -25,8 +26,11 @@ const SettingsSlice = createSlice({
 		setEngineFontSize(state, action: PayloadAction<number>) {
 			state.engineFontSize = action.payload;
 		},
+		setLivePreview(state, action: PayloadAction<boolean>) {
+			state.livePreview = action.payload;
+		},
 	},
 });
 
-export const { setTheme, setEngineFontSize } = SettingsSlice.actions;
+export const { setTheme, setEngineFontSize, setLivePreview } = SettingsSlice.actions;
 export const SettingsReducer = SettingsSlice.reducer;

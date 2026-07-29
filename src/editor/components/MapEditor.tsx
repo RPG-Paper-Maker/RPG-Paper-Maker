@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, RPM, SPECIAL_KEY, Utils } from '../common';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
+import { EngineSettings } from '../data';
 import { Data, Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import {
@@ -72,6 +73,7 @@ function MapEditor() {
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
+	const livePreview = useSelector((state: RootState) => state.settings.livePreview);
 	useSelector((state: RootState) => state.triggers.splitting);
 	useSelector((state: RootState) => state.mapEditor.needsUpdate);
 
@@ -356,6 +358,12 @@ function MapEditor() {
 		});
 	};
 
+	useEffect(() => {
+		if (!livePreview) {
+			stopPreview();
+		}
+	}, [livePreview]);
+
 	const startSingleCommandPreview = (
 		info: PlayCommandInfo,
 		editedObject: Model.CommonObject,
@@ -392,6 +400,10 @@ function MapEditor() {
 	};
 
 	const handleSelectCommand = (info: PlayCommandInfo | null, editedObject: Model.CommonObject | null) => {
+		if (!livePreview) {
+			stopPreview();
+			return;
+		}
 		if (!info || !editedObject) {
 			stopPreview();
 			return;
@@ -404,6 +416,10 @@ function MapEditor() {
 		editedObject: Model.CommonObject,
 		command: Model.MapObjectCommand | null,
 	) => {
+		if (!livePreview) {
+			stopPreview();
+			return;
+		}
 		if (livePreviewTimeout.current !== null) {
 			clearTimeout(livePreviewTimeout.current);
 		}
@@ -412,7 +428,9 @@ function MapEditor() {
 			return;
 		}
 		livePreviewTimeout.current = setTimeout(() => {
-			startSingleCommandPreview(info, editedObject, command);
+			if (EngineSettings.current!.livePreview) {
+				startSingleCommandPreview(info, editedObject, command);
+			}
 		}, 120);
 	};
 

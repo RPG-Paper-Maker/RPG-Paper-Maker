@@ -61,7 +61,7 @@ import {
 	setProjects,
 	showWarning,
 } from './slices/ProjectsReducer';
-import { setEngineFontSize, setTheme, SettingsReducer } from './slices/SettingsReducer';
+import { setEngineFontSize, setLivePreview, setTheme, SettingsReducer } from './slices/SettingsReducer';
 import {
 	setMapObjectDialogOpen,
 	setNeedsReloadMap,
@@ -159,6 +159,7 @@ export {
 	setSelectedPosition,
 	setSpecialElementsGridView,
 	setEngineFontSize,
+	setLivePreview,
 	setTheme,
 	setUndoRedoIndex,
 	setUndoRedoLength,

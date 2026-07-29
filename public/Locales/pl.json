@@ -47,6 +47,7 @@
 	"set.br.path.folder": "Ustaw folder domyślnych zasobów (BR)",
 	"debug.options": "Opcje Debug",
 	"general.options": "Ustawienia ogólne",
+	"live.preview": "Podgląd polecenia na żywo",
 	"show.hide.grid": "Wyświetl siatkę",
 	"show.hide.square.information": "Wyświetl / Ukryj informacje",
 	"play": "Graj",

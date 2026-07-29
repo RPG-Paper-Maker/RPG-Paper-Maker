@@ -47,6 +47,7 @@
 	"set.br.path.folder": "BR 경로 폴더 설정",
 	"debug.options": "디버그 옵션",
 	"general.options": "일반 옵션",
+	"live.preview": "명령 실시간 미리보기",
 	"show.hide.grid": "그리드 표시/숨기기",
 	"show.hide.square.information": "정보 표시/숨기기",
 	"play": "플레이",

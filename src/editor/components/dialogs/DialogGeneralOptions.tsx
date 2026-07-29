@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../../common';
 import { EngineSettings } from '../../data';
 import { Model } from '../../Editor';
-import { RootState, setEngineFontSize, setTheme } from '../../store';
+import { RootState, setEngineFontSize, setLivePreview, setTheme } from '../../store';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
@@ -37,6 +37,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 
 	const theme = useSelector((state: RootState) => state.settings.theme);
 	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
+	const livePreview = useSelector((state: RootState) => state.settings.livePreview);
 
 	const dispatch = useDispatch();
 
@@ -50,10 +51,15 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 		dispatch(setEngineFontSize(v));
 	};
 
+	const handleChangeLivePreview = (v: boolean) => {
+		dispatch(setLivePreview(v));
+	};
+
 	const handleAccept = async () => {
 		setIsLoading(true);
 		EngineSettings.current!.theme = themeID;
 		EngineSettings.current!.engineFontSize = engineFontSize;
+		EngineSettings.current!.livePreview = livePreview;
 		EngineSettings.current!.updaterType = updaterType;
 		EngineSettings.current!.getUnstableVersions = getUnstableVersions;
 		await EngineSettings.current!.save();
@@ -63,6 +69,7 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 	const handleReject = async () => {
 		handleChangeTheme(EngineSettings.current!.theme);
 		dispatch(setEngineFontSize(EngineSettings.current!.engineFontSize));
+		handleChangeLivePreview(EngineSettings.current!.livePreview);
 		setIsOpen(false);
 	};
 
@@ -95,6 +102,10 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 								max={24}
 								suffixPlaceholder='px'
 							/>
+						</Value>
+						<Label>{t('live.preview')}</Label>
+						<Value>
+							<Checkbox isChecked={livePreview} onChange={handleChangeLivePreview} />
 						</Value>
 						{Constants.IS_DESKTOP && (
 							<>
