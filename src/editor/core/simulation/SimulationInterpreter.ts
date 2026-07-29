@@ -30,6 +30,8 @@ import {
 import { SimulationObject } from './SimulationObject';
 import { SimulationScreen } from './SimulationScreen';
 
+const MAX_DIRECT_COMMANDS_PER_UPDATE = 1000;
+
 export type SimulationContext = {
 	game: GameStateSimulation;
 	hud: SimulationHud | null;
@@ -218,14 +220,15 @@ class SimulationInterpreter {
 			return;
 		}
 		let directNode = true;
-		while (directNode) {
+		let directCommands = 0;
+		while (directNode && directCommands++ < MAX_DIRECT_COMMANDS_PER_UPDATE) {
 			if (this.currentCommand!.data === null) {
 				this.currentCommand = this.endOfBlock(this.currentCommand!, this.currentCommand!.next);
 				this.currentState = this.initializeState();
 				directNode = this.currentCommand !== null;
 				continue;
 			}
-			if (this.currentCommand!.data!.parallel) {
+			if (this.currentCommand!.data!.parallel && !this.currentState?.parallel) {
 				const interpreter = new SimulationInterpreter(
 					this.ctx,
 					this.tree,
@@ -251,6 +254,11 @@ class SimulationInterpreter {
 			} else {
 				directNode = false;
 			}
+		}
+		if (directNode) {
+			// A command loop without a yielding command would otherwise freeze the editor preview.
+			this.currentCommand = null;
+			this.currentState = null;
 		}
 	}
 
