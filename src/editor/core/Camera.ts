@@ -109,7 +109,7 @@ class Camera {
 	}
 
 	getYOffsetDepth() {
-		return Math.max(Math.min(this.distance * 0.001, 4), 0.03);
+		return 0.05 * Math.min((this.distance / 50) ** 2, 1);
 	}
 
 	getUp() {

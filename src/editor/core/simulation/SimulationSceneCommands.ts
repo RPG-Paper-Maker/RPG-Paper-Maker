@@ -770,6 +770,7 @@ class CommandMoveCamera extends CommandBase {
 		camera.horizontalAngle += timeRate * (state!.finalDifH as number);
 		camera.verticalAngle += timeRate * (state!.finalDifV as number);
 		camera.distance += timeRate * (state!.finalDifDistance as number);
+		ctx.map?.updateLayerOffsets();
 		if (!state!.targetApplied) {
 			state!.targetApplied = true;
 			if (state!.newTarget) {
@@ -808,6 +809,7 @@ class CommandMoveCamera extends CommandBase {
 		camera.horizontalAngle += state.finalDifH as number;
 		camera.verticalAngle += state.finalDifV as number;
 		camera.distance += state.finalDifDistance as number;
+		ctx.map?.updateLayerOffsets();
 		if (state.newTarget) {
 			ctx.cameraTarget = state.newTarget as SimulationObject;
 			ctx.cameraTargetPosition = null;

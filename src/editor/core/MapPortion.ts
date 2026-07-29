@@ -922,7 +922,13 @@ class MapPortion {
 		this.updateWallsGeometry();
 		this.updateMountainsGeometry();
 		this.updateObjects3DGeometry();
-		this.updateObjectsGeometry();
+		this.updateObjectsGeometry(true);
+	}
+
+	updateLayerGeometries() {
+		this.map.scene.remove(this.map.hoveredMesh);
+		this.updateLandsGeometries();
+		this.updateSpritesGeometry();
 	}
 
 	updateLandsGeometries() {

@@ -160,6 +160,7 @@ class Map extends Base {
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public lockedLayer: number | null = null;
+	private previousLayerOffset = Number.NaN;
 	public requestPaintHUD = false;
 	public needsUpdateRaycasting = false;
 	public needsMouseDown = false;
@@ -1568,15 +1569,25 @@ class Map extends Base {
 		if (this.isZoomLocked) {
 			return;
 		}
-		this.grid.line.position.setY(this.cursor.position.getTotalY() + this.camera.getYOffsetDepth());
-		this.cursor.updateMeshPosition();
 		if (isIn) {
 			this.camera.zoomIn(coef);
 		} else {
 			this.camera.zoomOut(coef);
 		}
+		this.grid.line.position.setY(this.cursor.position.getTotalY() + this.camera.getYOffsetDepth());
+		this.cursor.updateMeshPosition();
+		this.updateLayerOffsets();
+	}
+
+	updateLayerOffsets() {
+		const offset = this.camera.getYOffsetDepth();
+		if (offset === this.previousLayerOffset) {
+			return;
+		}
+		this.previousLayerOffset = offset;
 		this.forEachMapPortions((mapPortion) => {
-			mapPortion?.updatePositionLayers();
+			mapPortion.updatePositionLayers();
+			mapPortion.updateLayerGeometries();
 		});
 	}
 
