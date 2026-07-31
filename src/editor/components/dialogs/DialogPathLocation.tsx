@@ -23,7 +23,6 @@ import FooterCancelOK from './footers/FooterCancelOK';
 
 export enum LOCATION_TYPE {
 	BR,
-	DLCS,
 }
 
 type Props = {
@@ -38,8 +37,6 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 		switch (locationType) {
 			case LOCATION_TYPE.BR:
 				return Project.current!.systems.PATH_BR;
-			case LOCATION_TYPE.DLCS:
-				return Project.current!.systems.PATH_DLCS;
 		}
 	};
 
@@ -60,9 +57,6 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 			case LOCATION_TYPE.BR:
 				setLocation(Paths.join(Paths.DIST, Paths.BR));
 				break;
-			case LOCATION_TYPE.DLCS:
-				setLocation(Paths.join(window.env.appPath, Paths.DLCS));
-				break;
 		}
 	};
 
@@ -71,9 +65,6 @@ function DialogPathLocation({ setIsOpen, locationType }: Props) {
 		switch (locationType) {
 			case LOCATION_TYPE.BR:
 				Project.current!.systems.PATH_BR = location;
-				break;
-			case LOCATION_TYPE.DLCS:
-				Project.current!.systems.PATH_DLCS = location;
 				break;
 		}
 		dispatch(setNeedsReloadMap());

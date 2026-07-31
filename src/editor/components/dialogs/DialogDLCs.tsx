@@ -34,10 +34,11 @@ function DialogDLCs({ setIsOpen }: Props) {
 	const [wrongFolderPath, setWrongFolderPath] = useState(false);
 
 	const dispatch = useDispatch();
+	const dlcsPath = Project.current!.systems.PATH_DLCS;
 
 	const updateDLCsList = async () => {
 		try {
-			const names = await IO.getFolders(Paths.join(window.env.appPath, Paths.DLCS));
+			const names = await IO.getFolders(dlcsPath);
 			setDlcs(
 				names.map((name) => Checkable.createCheckable(-1, name, Project.current!.dlcs.list.includes(name))),
 			);
@@ -53,7 +54,7 @@ function DialogDLCs({ setIsOpen }: Props) {
 		if (path) {
 			setIsLoading(true);
 			const folderName = Paths.getFileName(path);
-			await IO.copyFolder(path, Paths.join(window.env.appPath, Paths.DLCS, folderName));
+			await IO.copyFolder(path, Paths.join(dlcsPath, folderName));
 			await updateDLCsList();
 		}
 	};

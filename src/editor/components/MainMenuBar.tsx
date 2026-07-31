@@ -168,7 +168,6 @@ enum DIALOG_TYPE {
 	OBJECTS_3D,
 	MOUNTAINS,
 	LOCATION_FOLDER_BR,
-	LOCATION_FOLDER_DLC,
 	DEBUG_OPTIONS,
 	GENERAL_OPTIONS,
 	CHANGE_LANGUAGE,
@@ -342,8 +341,8 @@ function MainMenuBar() {
 							Project.current.systems.PATH_BR = newBRPath;
 							await Project.current.systems.save();
 						}
-						if (!(await IO.checkFileExists(Project.current.systems.PATH_DLCS))) {
-							const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
+						const newDLCsPath = Paths.join(window.env.appPath, Paths.DLCS);
+						if (Project.current.systems.PATH_DLCS !== newDLCsPath) {
 							Project.current.systems.PATH_DLCS = newDLCsPath;
 							await Project.current.systems.save();
 						}
@@ -697,8 +696,6 @@ function MainMenuBar() {
 	const handleMountains = async () => setDialogType(DIALOG_TYPE.MOUNTAINS);
 
 	const handleSetBRPathFolder = async () => setDialogType(DIALOG_TYPE.LOCATION_FOLDER_BR);
-
-	const handleSetDLCsPathFolder = async () => setDialogType(DIALOG_TYPE.LOCATION_FOLDER_DLC);
 
 	const handleDebugOptions = async () => setDialogType(DIALOG_TYPE.DEBUG_OPTIONS);
 
@@ -1072,11 +1069,6 @@ function MainMenuBar() {
 								onClick: handleSetBRPathFolder,
 								disabled: !isProjectOpened,
 							},
-							{
-								title: `${t('set.dlc.s.path.folder')}...`,
-								onClick: handleSetDLCsPathFolder,
-								disabled: !isProjectOpened,
-							},
 						]
 					: []),
 				{
@@ -1296,15 +1288,7 @@ function MainMenuBar() {
 			case DIALOG_TYPE.MOUNTAINS:
 				return <DialogCollisions kind={PICTURE_KIND.MOUNTAINS} setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.LOCATION_FOLDER_BR:
-			case DIALOG_TYPE.LOCATION_FOLDER_DLC:
-				return (
-					<DialogPathLocation
-						setIsOpen={handleSetIsDialogOpen}
-						locationType={
-							dialogType === DIALOG_TYPE.LOCATION_FOLDER_BR ? LOCATION_TYPE.BR : LOCATION_TYPE.DLCS
-						}
-					/>
-				);
+				return <DialogPathLocation setIsOpen={handleSetIsDialogOpen} locationType={LOCATION_TYPE.BR} />;
 			case DIALOG_TYPE.DEBUG_OPTIONS:
 				return <DialogDebugOptions setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.GENERAL_OPTIONS:
