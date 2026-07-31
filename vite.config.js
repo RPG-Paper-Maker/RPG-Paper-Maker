@@ -15,7 +15,7 @@ const chunkMap = [
 	{ name: 'toastify', deps: ['react-toastify'] },
 ];
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	base: './',
 	plugins: [
 		react(),
@@ -25,6 +25,7 @@ export default defineConfig({
 		pluginChecker({ typescript: true }),
 	],
 	build: {
+		target: mode === 'electron' ? 'chrome150' : undefined,
 		rollupOptions: {
 			output: {
 				manualChunks(id) {
@@ -41,4 +42,4 @@ export default defineConfig({
 			},
 		},
 	},
-});
+}));

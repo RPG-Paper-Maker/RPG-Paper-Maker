@@ -182,10 +182,10 @@ class Inputs {
 
 			// Key up
 			const handleKeyUp = (e: globalThis.KeyboardEvent) => {
+				ArrayUtils.removeElement(Inputs.keys, e.key);
 				if (!Inputs.isMapKeyboardAllowed(e) || !Scene.Map.current) {
 					return;
 				}
-				ArrayUtils.removeElement(Inputs.keys, e.key);
 				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onKeyUp();
 			};
 			if (!canvasOnly) {
@@ -323,11 +323,23 @@ class Inputs {
 			canvas.addEventListener('wheel', handleWheel);
 
 			const handleWindowBlur = async () => {
-				const wasPressed = Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed;
+				const wasMousePressed =
+					Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed;
+				const hadPressedKeys = Inputs.keys.length > 0;
 				Inputs.isPointerPressed = false;
 				Inputs.isMouseRightPressed = false;
 				Inputs.isMouseWheelPressed = false;
-				if (wasPressed && Scene.Map.current && !Scene.Map.current.loading) {
+				Inputs.isALT = false;
+				Inputs.isCTRL = false;
+				Inputs.isSHIFT = false;
+				Inputs.keys.length = 0;
+				if (Scene.Map.current && !Scene.Map.current.loading) {
+					if (hadPressedKeys) {
+						(Scene.Map.currentpositionSelector ?? Scene.Map.current).onKeyUp();
+					}
+					if (!wasMousePressed) {
+						return;
+					}
 					await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
 				}
 			};

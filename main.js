@@ -88,6 +88,7 @@ const runRPMEngine = async () => {
 		},
 		icon: appIconPath,
 		frame: false,
+		hasShadow: process.platform !== 'darwin',
 	});
 	window.removeMenu();
 	window.maximize();

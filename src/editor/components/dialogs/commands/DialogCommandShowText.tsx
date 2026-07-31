@@ -162,7 +162,7 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
 
-	useLivePreview(onLivePreview, buildCommand);
+	useLivePreview(onLivePreview, buildCommand, 500);
 
 	const handleAccept = async () => {
 		setIsOpen(false);

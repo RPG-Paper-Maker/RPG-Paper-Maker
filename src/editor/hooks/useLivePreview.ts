@@ -17,11 +17,13 @@ const POLL_INTERVAL = 60;
 function useLivePreview(
 	onLivePreview: ((command: Model.MapObjectCommand) => void) | undefined,
 	buildCommand: () => Model.MapObjectCommand | null,
+	debounce = 0,
 ) {
 	const lastRef = useRef<string | null>(null);
 	const buildRef = useRef(buildCommand);
 	const previewRef = useRef(onLivePreview);
 	const checkRef = useRef<() => void>(() => undefined);
+	const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	buildRef.current = buildCommand;
 	previewRef.current = onLivePreview;
@@ -40,7 +42,17 @@ function useLivePreview(
 			return;
 		}
 		lastRef.current = json;
-		onPreview(command);
+		if (debounceTimeoutRef.current !== null) {
+			clearTimeout(debounceTimeoutRef.current);
+		}
+		if (debounce === 0) {
+			onPreview(command);
+			return;
+		}
+		debounceTimeoutRef.current = setTimeout(() => {
+			debounceTimeoutRef.current = null;
+			onPreview(command);
+		}, debounce);
 	};
 
 	useEffect(() => {
@@ -49,7 +61,12 @@ function useLivePreview(
 
 	useEffect(() => {
 		const interval = setInterval(() => checkRef.current(), POLL_INTERVAL);
-		return () => clearInterval(interval);
+		return () => {
+			clearInterval(interval);
+			if (debounceTimeoutRef.current !== null) {
+				clearTimeout(debounceTimeoutRef.current);
+			}
+		};
 	}, []);
 }
 
