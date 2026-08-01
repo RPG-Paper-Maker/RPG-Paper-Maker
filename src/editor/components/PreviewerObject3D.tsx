@@ -169,25 +169,17 @@ function PreviewerObject3D({ sceneID, objectID, shape, triggerUpdate, setTrigger
 			const renderer = GL?.renderer;
 			const canvasRect = lastCanvasRectRef.current ?? canvas?.getBoundingClientRect();
 			if (renderer && canvasRect && canvasRect.width > 0 && canvasRect.height > 0) {
-				if (canvas && hasRenderedSinceActivateRef.current) {
-					const tmp = document.createElement('canvas');
-					tmp.width = canvasRect.width;
-					tmp.height = canvasRect.height;
-					const ctx = tmp.getContext('2d');
-					if (ctx) {
-						ctx.drawImage(
-							renderer.domElement,
-							canvasRect.left,
-							canvasRect.top,
-							canvasRect.width,
-							canvasRect.height,
-							0,
-							0,
-							canvasRect.width,
-							canvasRect.height,
-						);
-						setScreenshot(tmp.toDataURL('image/png'));
-					}
+				const scene = Scene.Previewer3D.listScenes.get(sceneID);
+				if (scene && hasRenderedSinceActivateRef.current) {
+					setScreenshot(
+						Manager.GL.withNeutralScreenTone(() =>
+							Manager.GL.renderToDataURL(
+								[{ scene: scene.scene, camera: scene.camera.perspectiveCamera }],
+								300,
+								300,
+							),
+						),
+					);
 				}
 				const domRect = renderer.domElement.getBoundingClientRect();
 				renderer.setViewport(

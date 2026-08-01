@@ -285,9 +285,6 @@ gl_FragColor.rgb = mix(
 			this.renderer = new THREE.WebGLRenderer({
 				alpha: true,
 				powerPreference: 'high-performance',
-				// preserveDrawingBuffer is needed on the dialog context (layer 1) so that
-				// toDataURL() can capture a screenshot for frozen-dialog previews.
-				preserveDrawingBuffer: layer === 1,
 			});
 			this.renderer.setPixelRatio(Utils.getPixelRatio());
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
