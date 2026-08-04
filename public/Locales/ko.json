@@ -981,6 +981,7 @@
 	"turn": "턴",
 	"restrictions": "제한 사항",
 	"battler.position": "전투원 위치",
+	"battler.pose": "배틀러 포즈",
 	"release.if.dead": "사망 시 해제",
 	"release.at.end.battle": "전투 종료 시 해제",
 	"chance.after.being.attacked": "피격 후 확률",

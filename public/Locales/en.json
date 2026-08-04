@@ -980,6 +980,7 @@
 	"turn": "Turn",
 	"restrictions": "Restrictions",
 	"battler.position": "Battler position",
+	"battler.pose": "Battler pose",
 	"release.if.dead": "Release if dead",
 	"release.at.end.battle": "Release at end of battle",
 	"chance.after.being.attacked": "Chance after being attacked",

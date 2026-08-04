@@ -981,6 +981,7 @@
 	"turn": "回合",
 	"restrictions": "限制",
 	"battler.position": "战斗者位置",
+	"battler.pose": "战斗者姿势",
 	"release.if.dead": "死亡时解除",
 	"release.at.end.battle": "战斗结束时解除",
 	"chance.after.being.attacked": "受到攻击后解除概率",

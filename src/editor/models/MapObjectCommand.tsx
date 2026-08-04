@@ -2087,6 +2087,9 @@ class MapObjectCommand extends Base {
 				true,
 			)}`;
 		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			text += ` ${t('battler.pose')}=${this.toStringDynamicValue(iterator, properties, parameters)}`;
+		}
 		return [text];
 	}
 

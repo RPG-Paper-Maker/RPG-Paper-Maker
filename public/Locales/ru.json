@@ -980,6 +980,7 @@
 	"turn": "Ход",
 	"restrictions": "Ограничения",
 	"battler.position": "Позиция бойца",
+	"battler.pose": "Поза бойца",
 	"release.if.dead": "Завершить при смерти",
 	"release.at.end.battle": "Завершить в конце боя",
 	"chance.after.being.attacked": "Шанс после атаки",

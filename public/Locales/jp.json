@@ -980,6 +980,7 @@
 	"turn": "ターン",
 	"restrictions": "行動制限",
 	"battler.position": "バトラー位置",
+	"battler.pose": "バトラーポーズ",
 	"release.if.dead": "死亡時に解除",
 	"release.at.end.battle": "戦闘終了時に解除",
 	"chance.after.being.attacked": "攻撃を受けた際の解除率",

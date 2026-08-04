@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PICTURE_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -19,6 +19,7 @@ import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
+import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
@@ -44,6 +45,8 @@ function DialogCommandChangeBattlerGraphics({
 	const [facesetIndexY, setFacesetIndexY] = useStateNumber();
 	const [isBattler, setIsBattler] = useStateBool();
 	const [battlerID] = useStateDynamicValue();
+	const [isPose, setIsPose] = useStateBool();
+	const [pose] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -51,6 +54,7 @@ function DialogCommandChangeBattlerGraphics({
 		let fx = 0;
 		let fy = 0;
 		battlerID.updateToNone();
+		pose.updateToDefaultNumber(0);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			panelSelectionHeroRef.current?.initialize(list, iterator);
@@ -66,8 +70,14 @@ function DialogCommandChangeBattlerGraphics({
 			if (checked) {
 				battlerID.updateCommand(list, iterator, true);
 			}
+			checked = Utils.initializeBoolCommand(list, iterator);
+			setIsPose(checked);
+			if (checked) {
+				pose.updateCommand(list, iterator);
+			}
 		} else {
 			panelSelectionHeroRef.current?.initialize();
+			setIsPose(false);
 		}
 		setFacesetIndexX(fx);
 		setFacesetIndexY(fy);
@@ -92,6 +102,10 @@ function DialogCommandChangeBattlerGraphics({
 		newList.push(Utils.boolToNum(isBattler));
 		if (isBattler) {
 			battlerID.getCommand(newList, true);
+		}
+		newList.push(Utils.boolToNum(isPose));
+		if (isPose) {
+			pose.getCommand(newList);
 		}
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
@@ -145,6 +159,18 @@ function DialogCommandChangeBattlerGraphics({
 							selectedDynamic={battlerID}
 							disabled={!isBattler}
 							active
+						/>
+					</Value>
+					<Label>
+						<Checkbox isChecked={isPose} onChange={setIsPose}>
+							{t('battler.pose')}
+						</Checkbox>
+					</Label>
+					<Value>
+						<DynamicValueSelector
+							value={pose}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+							disabled={!isPose}
 						/>
 					</Value>
 				</Form>

@@ -980,6 +980,7 @@
 	"turn": "Хід",
 	"restrictions": "Обмеження",
 	"battler.position": "Позиція бійця",
+	"battler.pose": "Поза бійця",
 	"release.if.dead": "Знімається при смерті",
 	"release.at.end.battle": "Закінчується в кінці бою",
 	"chance.after.being.attacked": "шансом після атаки",
