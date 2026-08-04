@@ -281,6 +281,7 @@ function DynamicValueSelector({
 				break;
 		}
 		switch (optionsType) {
+			case DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.TEXT:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
