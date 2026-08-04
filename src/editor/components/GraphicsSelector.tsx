@@ -47,6 +47,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 
 	const [isOpenDialogPictures, setIsOpenDialogPictures] = useState(false);
 	const [isOpenDialogObjects3D, setIsOpenDialogObjects3D] = useState(false);
+	const [isInTopDialog, setIsInTopDialog] = useState(false);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const refBorder = useRef<HTMLDivElement>(null);
@@ -201,6 +202,23 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		}
 	}, [isObject3D, isOpenDialogObjects3D, hidden]);
 
+	useLayoutEffect(() => {
+		const root = document.getElementById('root');
+		if (!isObject3D || hidden || !root) {
+			setIsInTopDialog(false);
+			return;
+		}
+		const update = () => {
+			const dialog = refContainer.current?.closest('.dialog');
+			const dialogs = document.getElementsByClassName('dialog');
+			setIsInTopDialog(dialog ? dialog === dialogs[dialogs.length - 1] : dialogs.length === 0);
+		};
+		update();
+		const observer = new MutationObserver(update);
+		observer.observe(root, { childList: true });
+		return () => observer.disconnect();
+	}, [isObject3D, hidden]);
+
 	useEffect(() => {
 		if (isObject3D && !isOpenDialogObjects3D && !hidden) {
 			let rafId: number;
@@ -224,12 +242,15 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		<>
 			<Flex column spaced>
 				{t('graphics')}:
-				<div ref={refContainer} className='graphicsSelector' onDoubleClick={handleDoubleClick} onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}>
+				<div
+					ref={refContainer}
+					className='graphicsSelector'
+					onDoubleClick={handleDoubleClick}
+					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
+				>
 					{!isObject3D && <div ref={refBorder} className='border' />}
 					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
-					{isObject3D && !hidden && (
-						<PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} />
-					)}
+					{isObject3D && !hidden && <PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} />}
 				</div>
 				<Dropdown
 					selectedID={options.graphicsKind}
@@ -262,6 +283,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 			{isObject3D &&
 				!isOpenDialogObjects3D &&
 				!hidden &&
+				isInTopDialog &&
 				ReactDOM.createPortal(
 					<div ref={refPortalBorder} className='graphicsSelector-border-overlay' />,
 					document.getElementById('root')!,
