@@ -23,6 +23,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
+import ToggleButton from '../../ToggleButton';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -47,6 +48,7 @@ function DialogCommandChangeBattlerGraphics({
 	const [battlerID] = useStateDynamicValue();
 	const [isPose, setIsPose] = useStateBool();
 	const [pose] = useStateDynamicValue();
+	const [isPermanent, setIsPermanent] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -75,9 +77,11 @@ function DialogCommandChangeBattlerGraphics({
 			if (checked) {
 				pose.updateCommand(list, iterator);
 			}
+			setIsPermanent(iterator.i > list.length || Utils.initializeBoolCommand(list, iterator));
 		} else {
 			panelSelectionHeroRef.current?.initialize();
 			setIsPose(false);
+			setIsPermanent(false);
 		}
 		setFacesetIndexX(fx);
 		setFacesetIndexY(fy);
@@ -107,6 +111,7 @@ function DialogCommandChangeBattlerGraphics({
 		if (isPose) {
 			pose.getCommand(newList);
 		}
+		newList.push(Utils.boolToNum(isPermanent));
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -174,6 +179,10 @@ function DialogCommandChangeBattlerGraphics({
 						/>
 					</Value>
 				</Form>
+				<Flex spaced centerV>
+					<div>{t('permanent')}:</div>
+					<ToggleButton value={isPermanent} onChange={setIsPermanent} />
+				</Flex>
 			</Flex>
 		</Dialog>
 	);
