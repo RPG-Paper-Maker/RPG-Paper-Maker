@@ -55,6 +55,7 @@
 		"build": "rm -rf dist && npm run update-mods && vite build && npm run generate-file-manifest && npm run push-file-manifest && bash scripts/update-dist-dependencies.sh",
 		"build-quick": "vite build",
 		"build-quick-electron": "vite build --mode electron",
+		"build-release-electron": "npm run update-mods && vite build --mode electron && npm run generate-file-manifest && npm run push-file-manifest && bash scripts/update-dist-dependencies.sh",
 		"eslint": "eslint ./src",
 		"electron": "electron ./main.js",
 		"build-electron": "npm run build-quick-electron && npm run electron",
