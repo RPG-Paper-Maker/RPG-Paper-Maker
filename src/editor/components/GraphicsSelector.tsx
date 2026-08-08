@@ -24,6 +24,7 @@ import Flex from './Flex';
 import PreviewerObject3D from './PreviewerObject3D';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPictures from './dialogs/DialogPictures';
+import DialogMapObjectAutotile from './dialogs/DialogMapObjectAutotile';
 
 export type GraphicsSelectorOptions = {
 	graphicsID: number;
@@ -47,6 +48,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 
 	const [isOpenDialogPictures, setIsOpenDialogPictures] = useState(false);
 	const [isOpenDialogObjects3D, setIsOpenDialogObjects3D] = useState(false);
+	const [isOpenDialogAutotile, setIsOpenDialogAutotile] = useState(false);
 	const [isInTopDialog, setIsInTopDialog] = useState(false);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
@@ -61,6 +63,8 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		options.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 
 	const isObject3D = options.graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
+	const isFloor = options.graphicsKind === ELEMENT_MAP_KIND.FLOOR;
+	const isAutotile = options.graphicsKind === ELEMENT_MAP_KIND.AUTOTILE;
 
 	const updatePicture = async (
 		picture: Model.Picture,
@@ -79,11 +83,43 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		const ctx = getContext();
 		if (ctx) {
 			clear(ctx);
-			draw(ctx, picture, img, rect, isTileset);
+			draw(ctx, pic, img, rect, isTileset);
 		}
 		if (triggerHandler) {
 			onUpdateGraphics(picture.id, rect, isTileset, kind);
 		}
+	};
+
+	const updateAutotilePicture = async () => {
+		const autotile = Project.current!.specialElements.getAutotileByID(options.graphicsID);
+		const picture = autotile && Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, autotile.pictureID);
+		const rect = options.rectTileset;
+		if (!picture || !rect) {
+			return;
+		}
+		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
+		const ctx = getContext();
+		if (!ctx) {
+			return;
+		}
+		clear(ctx);
+		const autotileWidth = Project.SQUARE_SIZE * 2;
+		const autotileHeight = Project.SQUARE_SIZE * 3;
+		const srcWidth = Project.SQUARE_SIZE;
+		const srcHeight = Project.SQUARE_SIZE;
+		const borderWidth = refBorder.current?.offsetWidth ?? 0;
+		const borderHeight = refBorder.current?.offsetHeight ?? 0;
+		const ratio = Math.min(borderWidth / srcWidth, borderHeight / srcHeight);
+		const width = srcWidth * ratio;
+		const height = srcHeight * ratio;
+		if (refCanvas.current) {
+			refCanvas.current.width = width;
+			refCanvas.current.height = height;
+			refCanvas.current.style.width = `${width}px`;
+			refCanvas.current.style.height = `${height}px`;
+		}
+		ctx.imageSmoothingEnabled = false;
+		ctx.drawImage(image, rect.x * autotileWidth, rect.y * autotileHeight, srcWidth, srcHeight, 0, 0, width, height);
 	};
 
 	const getContext = () => {
@@ -139,8 +175,10 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	};
 
 	const handleDoubleClick = () => {
-		if (isCharacter) {
+		if (isCharacter || isFloor) {
 			setIsOpenDialogPictures(true);
+		} else if (isAutotile) {
+			setIsOpenDialogAutotile(true);
 		} else {
 			setIsOpenDialogObjects3D(true);
 		}
@@ -155,6 +193,10 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		);
 	};
 
+	const handleAcceptAutotile = (id: number, rect: Rectangle) => {
+		onUpdateGraphics(id, rect, true, ELEMENT_MAP_KIND.AUTOTILE);
+	};
+
 	const handleAcceptObjects3D = (object3D: Model.Object3D) => {
 		onUpdateGraphics(object3D.id, new Rectangle(), false, options.graphicsKind);
 	};
@@ -167,15 +209,27 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		) {
 			onChangeGraphicsKind(kind);
 		} else {
-			onUpdateGraphics(kind === ELEMENT_MAP_KIND.NONE ? -1 : 1, new Rectangle(), false, kind);
+			const isAutotile = kind === ELEMENT_MAP_KIND.AUTOTILE;
+			onUpdateGraphics(
+				kind === ELEMENT_MAP_KIND.NONE
+					? -1
+					: kind === ELEMENT_MAP_KIND.FLOOR
+						? 0
+						: isAutotile
+							? (Project.current!.specialElements.autotiles[0]?.id ?? -1)
+							: 1,
+				new Rectangle(),
+				kind === ELEMENT_MAP_KIND.FLOOR || isAutotile,
+				kind,
+			);
 		}
 	};
 
 	useEffect(() => {
-		if (isCharacter) {
-			const isTileset = options.graphicsID === 0;
+		if (isCharacter || isFloor) {
+			const isTileset = isFloor || options.graphicsID === 0;
 			updatePicture(
-				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, options.graphicsID),
+				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, isFloor ? 0 : options.graphicsID),
 				isTileset && options.rectTileset
 					? options.rectTileset.clone()
 					: new Rectangle(options.graphicsIndexX, options.graphicsIndexY, 1, 1),
@@ -183,6 +237,8 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 				options.graphicsKind,
 				false,
 			).catch(console.error);
+		} else if (isAutotile) {
+			updateAutotilePicture().catch(console.error);
 		} else {
 			const ctx = getContext();
 			if (ctx) {
@@ -249,7 +305,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 					onTouchEnd={(e) => doubleTapHandler(e, handleDoubleClick)}
 				>
 					{!isObject3D && <div ref={refBorder} className='border' />}
-					{isCharacter && <canvas ref={refCanvas} className='pointer' />}
+					{(isCharacter || isFloor || isAutotile) && <canvas ref={refCanvas} className='pointer' />}
 					{isObject3D && !hidden && <PreviewerObject3D sceneID={sceneID} objectID={options.graphicsID} />}
 				</div>
 				<Dropdown
@@ -266,11 +322,19 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 					dynamicPictureID={options.dynamicID}
 					setIsOpen={setIsOpenDialogPictures}
 					onAccept={handleAcceptPictures}
-					pictureID={options.graphicsID}
+					pictureID={isFloor ? 0 : options.graphicsID}
 					indexX={options.graphicsIndexX}
 					indexY={options.graphicsIndexY}
 					rectTileset={options.rectTileset}
 					active={options.dynamicID !== undefined}
+				/>
+			)}
+			{isOpenDialogAutotile && (
+				<DialogMapObjectAutotile
+					setIsOpen={setIsOpenDialogAutotile}
+					autotileID={options.graphicsID}
+					rectangle={options.rectTileset ?? new Rectangle()}
+					onAccept={handleAcceptAutotile}
 				/>
 			)}
 			{isOpenDialogObjects3D && (

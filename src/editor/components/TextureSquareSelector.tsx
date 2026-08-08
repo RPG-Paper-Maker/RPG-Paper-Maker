@@ -351,6 +351,7 @@ function TextureSquareSelector({
 		const { x, y } = getCurrentPosition(e);
 		currentState.firstX = x;
 		currentState.firstY = y;
+		updateMove(x, y);
 	};
 
 	const handleTouchStart = (e: TouchEvent) => {

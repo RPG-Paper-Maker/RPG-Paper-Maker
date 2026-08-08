@@ -51,6 +51,12 @@ function DialogMountainsTopFloor({ setIsOpen }: Props) {
 	const [selectedAutotileRect, setSelectedAutotileRect] = useState<Rectangle>(
 		new Rectangle(savedAutotileRect.x, savedAutotileRect.y, savedAutotileRect.width, savedAutotileRect.height),
 	);
+	const handleSelectAutotile = (id: number) => {
+		if (id !== selectedAutotileID) {
+			setSelectedAutotileID(id);
+			setSelectedAutotileRect(new Rectangle());
+		}
+	};
 
 	const handleAccept = async () => {
 		dispatch(setCurrentMountainTopFloorIsAutotile(isAutotile));
@@ -117,7 +123,7 @@ function DialogMountainsTopFloor({ setIsOpen }: Props) {
 					<Flex one>
 						<PanelSpecialElementsSelection
 							kind={PICTURE_KIND.AUTOTILES}
-							onSelect={setSelectedAutotileID}
+							onSelect={handleSelectAutotile}
 							selectedID={selectedAutotileID}
 							onUpdateAutotileRect={setSelectedAutotileRect}
 							defaultAutotileRect={selectedAutotileRect}

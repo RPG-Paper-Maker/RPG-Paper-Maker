@@ -783,6 +783,17 @@ class MapPortion {
 			this.model.objects.set(key, object);
 		}
 		this.map.portionsToUpdate.add(this);
+		for (let x = -1; x <= 1; x++) {
+			for (let z = -1; z <= 1; z++) {
+				const neighbor = position.clone();
+				neighbor.x += x;
+				neighbor.z += z;
+				const portion = this.map.getMapPortionByPosition(neighbor);
+				if (portion) {
+					this.map.portionsToUpdate.add(portion);
+				}
+			}
+		}
 		this.map.portionsToSave.add(this);
 		if (!undoRedo) {
 			this.map.undoRedoStates.push(
@@ -795,6 +806,39 @@ class MapPortion {
 				),
 			);
 		}
+	}
+
+	private getObjectAutotileTileID(position: Position, state: Model.MapObjectState) {
+		const sameAutotileAt = (x: number, z: number) => {
+			const neighbor = position.clone();
+			neighbor.x = x;
+			neighbor.z = z;
+			const object = this.map.getMapPortionByPosition(neighbor)?.model.objects.get(neighbor.toKey());
+			const other = object?.getFirstState();
+			return (
+				other?.graphicsKind === ELEMENT_MAP_KIND.AUTOTILE &&
+				other.graphicsID === state.graphicsID &&
+				other.layer.getFixNumberValue() === state.layer.getFixNumberValue() &&
+				other.rectTileset?.x === state.rectTileset?.x &&
+				other.rectTileset?.y === state.rectTileset?.y
+			);
+		};
+		const left = sameAutotileAt(position.x - 1, position.z);
+		const right = sameAutotileAt(position.x + 1, position.z);
+		const top = sameAutotileAt(position.x, position.z - 1);
+		const bottom = sameAutotileAt(position.x, position.z + 1);
+		const topLeft = sameAutotileAt(position.x - 1, position.z - 1);
+		const topRight = sameAutotileAt(position.x + 1, position.z - 1);
+		const bottomLeft = sameAutotileAt(position.x - 1, position.z + 1);
+		const bottomRight = sameAutotileAt(position.x + 1, position.z + 1);
+		const corner = (horizontal: boolean, vertical: boolean, diagonal: boolean) =>
+			!horizontal && !vertical ? 1 : !vertical ? 3 : !horizontal ? 4 : diagonal ? 2 : 0;
+		return (
+			corner(left, top, topLeft) * 128 +
+			corner(right, top, topRight) * 25 +
+			corner(left, bottom, bottomLeft) * 5 +
+			corner(right, bottom, bottomRight)
+		);
 	}
 
 	checkTextures() {
@@ -844,6 +888,13 @@ class MapPortion {
 			const state = object.getFirstState();
 			if (state) {
 				switch (state.graphicsKind) {
+					case ELEMENT_MAP_KIND.AUTOTILE:
+						if (MapElement.Autotiles.getAutotileTexture(this.map, state.graphicsID) === null) {
+							this.map.loading = true;
+							this.loadTexturesAndUpdateGeometries().catch(console.error);
+							return false;
+						}
+						break;
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 						if (state.graphicsID !== 0) {
@@ -890,6 +941,9 @@ class MapPortion {
 			const state = object.getFirstState();
 			if (state) {
 				switch (state.graphicsKind) {
+					case ELEMENT_MAP_KIND.AUTOTILE:
+						await MapElement.Autotiles.loadAutotileTexture(this.map, state.graphicsID);
+						break;
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 						if (state.graphicsID !== 0) {
@@ -1643,6 +1697,7 @@ class MapPortion {
 				position.scaleX = state.scaleX.getFixNumberValue();
 				position.scaleY = state.scaleY.getFixNumberValue();
 				position.scaleZ = state.scaleZ.getFixNumberValue();
+				position.layer += state.layer.getFixNumberValue() - 1;
 			}
 
 			if (state) {
@@ -1651,6 +1706,38 @@ class MapPortion {
 				switch (state.graphicsKind) {
 					case ELEMENT_MAP_KIND.NONE:
 						break;
+					case ELEMENT_MAP_KIND.FLOOR: {
+						const geometryFloor = new CustomGeometry();
+						const floor = MapElement.Floor.create(state.rectTileset ?? new Rectangle());
+						const { width, height } = Manager.GL.getMaterialTextureSize(this.map.materialTileset);
+						floor.updateGeometry(this.map, geometryFloor, position, width, height, 0);
+						geometryFloor.updateAttributes();
+						mesh = new THREE.Mesh(geometryFloor, this.map.materialTileset);
+						this.objectsMeshes.push(mesh);
+						break;
+					}
+					case ELEMENT_MAP_KIND.AUTOTILE: {
+						const bundles = MapElement.Autotiles.getAutotileTexture(this.map, state.graphicsID);
+						const autotileModel = Project.current!.specialElements.getAutotileByID(state.graphicsID);
+						const bundle = bundles?.find((entry) =>
+							entry.isInTexture(autotileModel?.pictureID ?? -1, state.rectTileset),
+						);
+						if (!bundle) {
+							break;
+						}
+						const geometryAutotile = new CustomGeometry();
+						const autotile = MapElement.Autotile.create(
+							state.graphicsID,
+							this.getObjectAutotileTileID(position, state),
+							state.rectTileset ?? new Rectangle(),
+						);
+						const { width, height } = Manager.GL.getMaterialTextureSize(bundle.material);
+						autotile.updateGeometryAutotile(this.map, geometryAutotile, bundle, position, width, height, 0);
+						geometryAutotile.updateAttributes();
+						mesh = new THREE.Mesh(geometryAutotile, bundle.material!);
+						this.objectsMeshes.push(mesh);
+						break;
+					}
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE: {
 						this.hasStopAnimation ||= state.stopAnimation;

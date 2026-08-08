@@ -64,6 +64,12 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 				case 3:
 					kind = ELEMENT_MAP_KIND.OBJECT3D;
 					break;
+				case 4:
+					kind = ELEMENT_MAP_KIND.FLOOR;
+					break;
+				case 5:
+					kind = ELEMENT_MAP_KIND.AUTOTILE;
+					break;
 			}
 			graphicOptions.dynamicID!.updateCommand(command.command, iterator, true);
 			const id = graphicOptions.dynamicID!.isActivated ? -1 : (graphicOptions.dynamicID!.value as number);
@@ -71,17 +77,17 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 				graphicOptions.dynamicID!.updateToDefaultNumber();
 			}
 			let rect: Rectangle | undefined = undefined;
-			let indexX = 0;
-			let indexY = 0;
-			if (id === 0 && !graphicOptions.dynamicID!.isActivated) {
-				const x = Number(command.command[iterator.i++]);
-				const y = Number(command.command[iterator.i++]);
-				const w = Number(command.command[iterator.i++]);
-				const h = Number(command.command[iterator.i++]);
+			const x = Number(command.command[iterator.i++]);
+			const y = Number(command.command[iterator.i++]);
+			const w = Number(command.command[iterator.i++]);
+			const h = Number(command.command[iterator.i++]);
+			let indexX = x;
+			let indexY = y;
+			if (
+				(kind === ELEMENT_MAP_KIND.FLOOR && id === 0 && !graphicOptions.dynamicID!.isActivated) ||
+				kind === ELEMENT_MAP_KIND.AUTOTILE
+			) {
 				rect = new Rectangle(x, y, w, h);
-			} else {
-				indexX = Number(command.command[iterator.i++]);
-				indexY = Number(command.command[iterator.i++]);
 			}
 			setGraphicOptions({
 				dynamicID: graphicOptions.dynamicID,
@@ -129,6 +135,12 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			case ELEMENT_MAP_KIND.OBJECT3D:
 				index = 3;
 				break;
+			case ELEMENT_MAP_KIND.FLOOR:
+				index = 4;
+				break;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				index = 5;
+				break;
 		}
 		list.push(index);
 		if (graphicOptions.dynamicID!.isActivated) {
@@ -138,7 +150,11 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			value.updateToDefaultNumber(graphicOptions.graphicsID);
 			value.getCommand(list, true);
 		}
-		if (graphicOptions.rectTileset && !graphicOptions.dynamicID!.isActivated && graphicOptions.graphicsID === 0) {
+		if (
+			graphicOptions.rectTileset &&
+			!graphicOptions.dynamicID!.isActivated &&
+			(graphicOptions.graphicsID === 0 || graphicOptions.graphicsKind === ELEMENT_MAP_KIND.AUTOTILE)
+		) {
 			list.push(graphicOptions.rectTileset.x);
 			list.push(graphicOptions.rectTileset.y);
 			list.push(graphicOptions.rectTileset.width);
@@ -177,7 +193,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 					options={graphicOptions}
 					onChangeGraphicsKind={handleChangeGraphicsKind}
 					onUpdateGraphics={handleUpdateGraphics}
-					/>
+				/>
 				<Checkbox isChecked={isDontChangeOrientation} onChange={setIsDontChangeOrientation}>
 					{t('dont.change.orientation')}
 				</Checkbox>

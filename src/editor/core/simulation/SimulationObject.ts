@@ -234,9 +234,10 @@ class SimulationObject {
 				: null;
 		const isGltf =
 			objectData?.shapeKind === SHAPE_KIND.CUSTOM && objectData.gltfID !== -1 && objectData.pictureID === -1;
+		const rect = this.state.rectTileset;
 		const buildKey = isGltf
 			? `${this.state.graphicsKind}-${this.state.graphicsID}`
-			: `${this.state.graphicsKind}-${this.state.graphicsID}-${this.getCurrentColumn()}-${this.getCurrentRow()}`;
+			: `${this.state.graphicsKind}-${this.state.graphicsID}-${this.getCurrentColumn()}-${this.getCurrentRow()}-${rect?.x}-${rect?.y}-${rect?.width}-${rect?.height}-${this.state.layer.getFixNumberValue()}`;
 		if (this.mesh !== null && buildKey === this.lastBuildKey) {
 			return;
 		}
@@ -245,6 +246,63 @@ class SimulationObject {
 		const state = this.state;
 		let mesh: THREE.Mesh | null = null;
 		switch (state.graphicsKind) {
+			case ELEMENT_MAP_KIND.AUTOTILE: {
+				const autotile = Project.current!.specialElements.getAutotileByID(state.graphicsID);
+				const bundles = MapElement.Autotiles.getAutotileTexture(this.map, state.graphicsID);
+				const bundle = bundles?.find((entry) =>
+					entry.isInTexture(autotile?.pictureID ?? -1, state.rectTileset),
+				);
+				if (!autotile || !bundle) {
+					this.ensureAutotileTexture(state.graphicsID);
+					return;
+				}
+				const position = this.basePosition.clone();
+				position.layer += state.layer.getFixNumberValue() - 1;
+				position.centerX = state.centerX.getFixNumberValue();
+				position.centerZ = state.centerZ.getFixNumberValue();
+				position.angleX = state.angleX.getFixNumberValue();
+				position.angleY = state.angleY.getFixNumberValue();
+				position.angleZ = state.angleZ.getFixNumberValue();
+				position.scaleX = state.scaleX.getFixNumberValue();
+				position.scaleY = state.scaleY.getFixNumberValue();
+				position.scaleZ = state.scaleZ.getFixNumberValue();
+				const geometryAutotile = new CustomGeometry();
+				const autotileElement = MapElement.Autotile.create(
+					state.graphicsID,
+					this.getObjectAutotileTileID(this.basePosition),
+					state.rectTileset ?? new Rectangle(),
+				);
+				const { width, height } = Manager.GL.getMaterialTextureSize(bundle.material);
+				autotileElement.updateGeometryAutotile(this.map, geometryAutotile, bundle, position, width, height, 0);
+				geometryAutotile.updateAttributes();
+				mesh = new THREE.Mesh(geometryAutotile, this.applyPreviewEffect(bundle.material!));
+				this.meshIsFace = false;
+				break;
+			}
+			case ELEMENT_MAP_KIND.FLOOR: {
+				const material = this.map.materialTileset;
+				if (!material) {
+					return;
+				}
+				const position = this.basePosition.clone();
+				position.layer += state.layer.getFixNumberValue() - 1;
+				position.centerX = state.centerX.getFixNumberValue();
+				position.centerZ = state.centerZ.getFixNumberValue();
+				position.angleX = state.angleX.getFixNumberValue();
+				position.angleY = state.angleY.getFixNumberValue();
+				position.angleZ = state.angleZ.getFixNumberValue();
+				position.scaleX = state.scaleX.getFixNumberValue();
+				position.scaleY = state.scaleY.getFixNumberValue();
+				position.scaleZ = state.scaleZ.getFixNumberValue();
+				const geometryFloor = new CustomGeometry();
+				const floor = MapElement.Floor.create(state.rectTileset ?? new Rectangle());
+				const { width, height } = Manager.GL.getMaterialTextureSize(material);
+				floor.updateGeometry(this.map, geometryFloor, position, width, height, 0);
+				geometryFloor.updateAttributes();
+				mesh = new THREE.Mesh(geometryFloor, this.applyPreviewEffect(material));
+				this.meshIsFace = false;
+				break;
+			}
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 			case ELEMENT_MAP_KIND.SPRITE_FACE: {
 				const material =
@@ -474,6 +532,40 @@ class SimulationObject {
 		}
 	}
 
+	private getObjectAutotileTileID(position: Position) {
+		const state = this.state;
+		const sameAutotileAt = (x: number, z: number) => {
+			const neighbor = position.clone();
+			neighbor.x = x;
+			neighbor.z = z;
+			const object = this.map.getMapPortionByPosition(neighbor)?.model.objects.get(neighbor.toKey());
+			const other = object?.getFirstState();
+			return (
+				other?.graphicsKind === ELEMENT_MAP_KIND.AUTOTILE &&
+				other.graphicsID === state.graphicsID &&
+				other.layer.getFixNumberValue() === state.layer.getFixNumberValue() &&
+				other.rectTileset?.x === state.rectTileset?.x &&
+				other.rectTileset?.y === state.rectTileset?.y
+			);
+		};
+		const left = sameAutotileAt(position.x - 1, position.z);
+		const right = sameAutotileAt(position.x + 1, position.z);
+		const top = sameAutotileAt(position.x, position.z - 1);
+		const bottom = sameAutotileAt(position.x, position.z + 1);
+		const topLeft = sameAutotileAt(position.x - 1, position.z - 1);
+		const topRight = sameAutotileAt(position.x + 1, position.z - 1);
+		const bottomLeft = sameAutotileAt(position.x - 1, position.z + 1);
+		const bottomRight = sameAutotileAt(position.x + 1, position.z + 1);
+		const corner = (horizontal: boolean, vertical: boolean, diagonal: boolean) =>
+			!horizontal && !vertical ? 1 : !vertical ? 3 : !horizontal ? 4 : diagonal ? 2 : 0;
+		return (
+			corner(left, top, topLeft) * 128 +
+			corner(right, top, topRight) * 25 +
+			corner(left, bottom, bottomLeft) * 5 +
+			corner(right, bottom, bottomRight)
+		);
+	}
+
 	private ensureCharacterTexture(id: number) {
 		if (id === 0) {
 			return;
@@ -506,6 +598,25 @@ class SimulationObject {
 			MapElement.Object3D.loadObject3DTexture(this.map, id),
 			MapElement.Object3D.loadShapeOBJ(id),
 		]).then(() => {
+			if (this.pendingTextureKey !== key) {
+				return;
+			}
+			this.pendingTextureKey = null;
+			if (this.disposed) {
+				return;
+			}
+			this.lastBuildKey = '';
+			this.build();
+		});
+	}
+
+	private ensureAutotileTexture(id: number) {
+		const key = `autotile-${id}`;
+		if (this.pendingTextureKey === key) {
+			return;
+		}
+		this.pendingTextureKey = key;
+		void MapElement.Autotiles.loadAutotileTexture(this.map, id).then(() => {
 			if (this.pendingTextureKey !== key) {
 				return;
 			}

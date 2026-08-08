@@ -45,6 +45,8 @@ class Base extends Serializable {
 	public static STRING_START = '> ';
 	public static GRAPHICS_OPTIONS = [
 		Base.create(ELEMENT_MAP_KIND.NONE, 'none'),
+		Base.create(ELEMENT_MAP_KIND.FLOOR, 'floor'),
+		Base.create(ELEMENT_MAP_KIND.AUTOTILE, 'autotile'),
 		Base.create(ELEMENT_MAP_KIND.SPRITE_FIX, 'fix.sprite'),
 		Base.create(ELEMENT_MAP_KIND.SPRITE_FACE, 'face.sprite'),
 		Base.create(ELEMENT_MAP_KIND.OBJECT3D, 'threed.object'),

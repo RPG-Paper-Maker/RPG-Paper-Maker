@@ -27,6 +27,7 @@ class MapObjectState extends Base {
 	public graphicsIndexX!: number;
 	public graphicsIndexY!: number;
 	public rectTileset?: Rectangle;
+	public layer!: DynamicValue;
 	public objectMovingKind!: OBJECT_MOVING_KIND;
 	public eventCommandRoute!: MapObjectCommand | null;
 	public speedID!: number;
@@ -56,6 +57,7 @@ class MapObjectState extends Base {
 		['graphicsIndexX', 'x', undefined, BINDING.NUMBER],
 		['graphicsIndexY', 'y', undefined, BINDING.NUMBER],
 		['rectTileset', 'rt', undefined, BINDING.RECTANGLE],
+		['layer', 'layer', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['objectMovingKind', 'omk', OBJECT_MOVING_KIND.FIX, BINDING.NUMBER],
 		['eventCommandRoute', 'ecr', null, BINDING.OBJECT, MapObjectCommand],
 		['speedID', 's', 1, BINDING.NUMBER],

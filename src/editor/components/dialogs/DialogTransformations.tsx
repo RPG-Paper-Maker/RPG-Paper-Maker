@@ -31,6 +31,7 @@ type Props = {
 	scaleX: DynamicValue;
 	scaleY: DynamicValue;
 	scaleZ: DynamicValue;
+	layer?: DynamicValue;
 	onAccept?: () => void;
 	onLiveChange?: () => void;
 };
@@ -45,6 +46,7 @@ function DialogTransformations({
 	scaleX,
 	scaleY,
 	scaleZ,
+	layer,
 	onAccept,
 	onLiveChange,
 }: Props) {
@@ -58,7 +60,9 @@ function DialogTransformations({
 	const [sx] = useStateDynamicValue();
 	const [sy] = useStateDynamicValue();
 	const [sz] = useStateDynamicValue();
+	const [transformLayer] = useStateDynamicValue();
 	const originalValues = useRef<DynamicValue[]>([]);
+	const originalLayer = useRef<DynamicValue | null>(null);
 	const isInitialized = useRef(false);
 	const [, setTrigger] = useStateBool();
 
@@ -71,6 +75,9 @@ function DialogTransformations({
 		sx.copy(scaleX);
 		sy.copy(scaleY);
 		sz.copy(scaleZ);
+		if (layer) {
+			transformLayer.copy(layer);
+		}
 		setTrigger((v) => !v);
 	};
 
@@ -83,6 +90,7 @@ function DialogTransformations({
 		scaleX.copy(sx);
 		scaleY.copy(sy);
 		scaleZ.copy(sz);
+		layer?.copy(transformLayer);
 	};
 
 	const handleLiveChange = () => {
@@ -100,7 +108,16 @@ function DialogTransformations({
 	};
 
 	const handleClose = () => {
-		const [originalCenterX, originalCenterZ, originalAngleX, originalAngleY, originalAngleZ, originalScaleX, originalScaleY, originalScaleZ] = originalValues.current;
+		const [
+			originalCenterX,
+			originalCenterZ,
+			originalAngleX,
+			originalAngleY,
+			originalAngleZ,
+			originalScaleX,
+			originalScaleY,
+			originalScaleZ,
+		] = originalValues.current;
 		centerX.copy(originalCenterX);
 		centerZ.copy(originalCenterZ);
 		angleX.copy(originalAngleX);
@@ -109,6 +126,9 @@ function DialogTransformations({
 		scaleX.copy(originalScaleX);
 		scaleY.copy(originalScaleY);
 		scaleZ.copy(originalScaleZ);
+		if (layer && originalLayer.current) {
+			layer.copy(originalLayer.current);
+		}
 		onLiveChange?.();
 		setIsOpen(false);
 	};
@@ -124,6 +144,7 @@ function DialogTransformations({
 			scaleY.clone(),
 			scaleZ.clone(),
 		];
+		originalLayer.current = layer?.clone() ?? null;
 		initialize();
 		isInitialized.current = true;
 	}, []);
@@ -140,45 +161,103 @@ function DialogTransformations({
 				<Label>{t('center')} X</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={cx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />%
+						<DynamicValueSelector
+							value={cx}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeValue={handleLiveChange}
+							onChangeKind={handleLiveChange}
+						/>
+						%
 					</Flex>
 				</Value>
 				<Label>{t('center')} Z</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={cz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />%
+						<DynamicValueSelector
+							value={cz}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeValue={handleLiveChange}
+							onChangeKind={handleLiveChange}
+						/>
+						%
 					</Flex>
 				</Value>
 				<Label>{t('angle')} X</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={ax} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
+						<DynamicValueSelector
+							value={ax}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeValue={handleLiveChange}
+							onChangeKind={handleLiveChange}
+						/>
+						°
 					</Flex>
 				</Value>
 				<Label>{t('angle')} Y</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={ay} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
+						<DynamicValueSelector
+							value={ay}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeValue={handleLiveChange}
+							onChangeKind={handleLiveChange}
+						/>
+						°
 					</Flex>
 				</Value>
 				<Label>{t('angle')} Z</Label>
 				<Value>
 					<Flex spaced centerV>
-						<DynamicValueSelector value={az} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />°
+						<DynamicValueSelector
+							value={az}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+							onChangeValue={handleLiveChange}
+							onChangeKind={handleLiveChange}
+						/>
+						°
 					</Flex>
 				</Value>
 				<Label>{t('scale')} X</Label>
 				<Value>
-					<DynamicValueSelector value={sx} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
+					<DynamicValueSelector
+						value={sx}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						onChangeValue={handleLiveChange}
+						onChangeKind={handleLiveChange}
+					/>
 				</Value>
 				<Label>{t('scale')} Y</Label>
 				<Value>
-					<DynamicValueSelector value={sy} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
+					<DynamicValueSelector
+						value={sy}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						onChangeValue={handleLiveChange}
+						onChangeKind={handleLiveChange}
+					/>
 				</Value>
 				<Label>{t('scale')} Z</Label>
 				<Value>
-					<DynamicValueSelector value={sz} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} onChangeValue={handleLiveChange} onChangeKind={handleLiveChange} />
+					<DynamicValueSelector
+						value={sz}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						onChangeValue={handleLiveChange}
+						onChangeKind={handleLiveChange}
+					/>
 				</Value>
+				{layer && (
+					<>
+						<Label>{t('layer')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={transformLayer}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								onChangeValue={handleLiveChange}
+								onChangeKind={handleLiveChange}
+							/>
+						</Value>
+					</>
+				)}
 			</Form>
 		</Dialog>
 	);
