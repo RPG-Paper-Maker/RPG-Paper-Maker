@@ -771,6 +771,7 @@ class Map extends Base {
 		const texture = Manager.GL.textureLoader.load(picture.getPath());
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
+		texture.colorSpace = THREE.SRGBColorSpace;
 		this.scene.background = texture;
 	}
 
