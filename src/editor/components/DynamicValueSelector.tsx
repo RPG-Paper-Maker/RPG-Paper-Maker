@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
+import { LocalVariablesContext } from './LocalVariablesContext';
 import DialogInfoFormulas from './dialogs/DialogInfoFormulas';
 import Dropdown from './Dropdown';
 import ToggleButton from './ToggleButton';
@@ -60,6 +61,7 @@ function DynamicValueSelector({
 	disableDynamic = false,
 }: Props) {
 	const { t } = useTranslation();
+	const localVariables = useContext(LocalVariablesContext);
 	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
@@ -77,6 +79,9 @@ function DynamicValueSelector({
 	);
 	const [valueVariableID, setValueVariableID] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1,
+	);
+	const [valueLocalVariableIndex, setValueLocalVariableIndex] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE ? localVariables.indexOf(value.value as string) : 0,
 	);
 	const [forcedVariableID, setForcedVariabledID] = useState<number | null>(null);
 	const [valueKeyboardID, setValueKeyboardID] = useState(
@@ -303,6 +308,9 @@ function DynamicValueSelector({
 		if (addNoneOption) {
 			ArrayUtils.insertFirst(list, DYNAMIC_VALUE_KIND.NONE);
 		}
+		if (localVariables.length > 0) {
+			list.push(DYNAMIC_VALUE_KIND.LOCAL_VARIABLE);
+		}
 		return list;
 	};
 
@@ -333,6 +341,9 @@ function DynamicValueSelector({
 				break;
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				value.value = valueVariableID;
+				break;
+			case DYNAMIC_VALUE_KIND.LOCAL_VARIABLE:
+				value.value = localVariables[valueLocalVariableIndex];
 				break;
 			case DYNAMIC_VALUE_KIND.TEXT:
 			case DYNAMIC_VALUE_KIND.FORMULA:
@@ -434,6 +445,11 @@ function DynamicValueSelector({
 		value.value = id;
 	};
 
+	const handleChangeLocalVariable = (id: number) => {
+		setValueLocalVariableIndex(id);
+		value.value = localVariables[id];
+	};
+
 	const handleChangeKeyboard = (id: number) => {
 		setValueKeyboardID(id);
 		value.value = id;
@@ -484,6 +500,9 @@ function DynamicValueSelector({
 				if (valueVariableID !== value.value) {
 					setForcedVariabledID(value.value as number);
 				}
+				break;
+			case DYNAMIC_VALUE_KIND.LOCAL_VARIABLE:
+				setValueLocalVariableIndex(localVariables.indexOf(value.value as string));
 				break;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
 				setValueVariableID(value.value as number);
@@ -592,6 +611,16 @@ function DynamicValueSelector({
 						onChange={handleChangeVariable}
 						disabled={disabled}
 						fillWidth={fillWidth}
+					/>
+				);
+			case DYNAMIC_VALUE_KIND.LOCAL_VARIABLE:
+				return (
+					<Dropdown
+						selectedID={valueLocalVariableIndex}
+						onChange={handleChangeLocalVariable}
+						options={localVariables.map((name, index) => Model.Base.create(index, name))}
+						disabled={disabled}
+						width={INPUT_WIDTH}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.TEXT:

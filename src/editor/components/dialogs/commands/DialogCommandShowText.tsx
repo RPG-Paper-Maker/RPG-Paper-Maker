@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useContext, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaItalic } from 'react-icons/fa';
 import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
@@ -26,6 +26,7 @@ import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import { LocalVariablesContext } from '../../LocalVariablesContext';
 import Tab from '../../Tab';
 import TextArea from '../../TextArea';
 import TooltipInformation from '../../TooltipInformation';
@@ -37,6 +38,7 @@ import useLivePreview from '../../../hooks/useLivePreview';
 
 function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
+	const localVariables = useContext(LocalVariablesContext);
 
 	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
 	const [interlocutor] = useStateDynamicValue();
@@ -122,6 +124,10 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 
 	const handleChangeVariable = (id: number) => {
 		setTriggerInsertText([`[var=${id}]`]);
+	};
+
+	const handleChangeLocalVariable = (id: number) => {
+		setTriggerInsertText([`[lvar=${localVariables[id]}]`]);
 	};
 
 	const handleChangeParameter = (id: number) => {
@@ -252,6 +258,15 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 							displayIDs
 							noWidthChange
 						/>
+						{localVariables.length > 0 && (
+							<Dropdown
+								selectedID={-1}
+								onChange={handleChangeLocalVariable}
+								options={localVariables.map((name, index) => Model.Base.create(index, name))}
+								noSelectionName={t('local.variable')}
+								noWidthChange
+							/>
+						)}
 						<Dropdown
 							selectedID={-1}
 							onChange={handleChangeParameter}

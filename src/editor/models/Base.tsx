@@ -34,6 +34,8 @@ export type DIALOG_OPTIONS = {
 	setIsOpen: (b: boolean) => void;
 	model: Base;
 	parent: Node | null;
+	node?: Node;
+	list?: Node[];
 	onAccept: () => void;
 	onReject: () => void;
 	onLivePreview?: (command: MapObjectCommand | null) => void;
@@ -128,6 +130,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.SOUND, 'Sounds'),
 		Base.create(DYNAMIC_VALUE_KIND.MUSIC_EFFECT, 'MusicEffects'),
 		Base.create(DYNAMIC_VALUE_KIND.VIDEOS, 'Videos'),
+		Base.create(DYNAMIC_VALUE_KIND.LOCAL_VARIABLE, 'local.variable'),
 	];
 	public static ON_OFF_OPTIONS = Base.mapListIndex(['ON', 'OFF']);
 	public static SHAPE_KIND_OPTIONS = [

@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useContext, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, ITEM_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, ITEM_KIND, Utils } from '../../../common';
 import { Project } from '../../../core/Project';
 import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -25,6 +25,8 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import InputNumber from '../../InputNumber';
+import InputText from '../../InputText';
+import { LocalVariablesContext } from '../../LocalVariablesContext';
 import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
@@ -55,6 +57,11 @@ enum SELECTION_VALUE_TYPE {
 
 function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
+	const localVariables = useContext(LocalVariablesContext);
+	const isLocal = commandKind === EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE;
+	const [isCreatingLocalVariable, setIsCreatingLocalVariable] = useState(true);
+	const [localVariableName, setLocalVariableName] = useState('');
+	const [localVariableIndex, setLocalVariableIndex] = useState(0);
 
 	const [selectionType, setSelectionType] = useStateNumber();
 	const [variableID, setVariableID] = useState(1);
@@ -118,18 +125,29 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		setValueScript('');
 		if (list) {
 			const iterator = Utils.generateIterator();
-			const selection = list[iterator.i++] as SELECTION_TYPE;
-			setSelectionType(selection);
-			switch (selection) {
-				case SELECTION_TYPE.ONE_VARIABLE:
-					setForcedVariableID(list[iterator.i++] as number);
-					break;
-				case SELECTION_TYPE.RANGE:
-					setRange1(list[iterator.i++] as number);
-					setRange2(list[iterator.i++] as number);
-					break;
+			if (isLocal) {
+				const isCreating = Utils.numToBool(list[iterator.i++] as number);
+				setIsCreatingLocalVariable(isCreating);
+				const name = list[iterator.i++] as string;
+				setLocalVariableName(name);
+				setLocalVariableIndex(Math.max(localVariables.indexOf(name), 0));
+				setSelectionOperationType(
+					isCreating ? SELECTION_OPERATION_TYPE.EQUALS : (list[iterator.i++] as SELECTION_OPERATION_TYPE),
+				);
+			} else {
+				const selection = list[iterator.i++] as SELECTION_TYPE;
+				setSelectionType(selection);
+				switch (selection) {
+					case SELECTION_TYPE.ONE_VARIABLE:
+						setForcedVariableID(list[iterator.i++] as number);
+						break;
+					case SELECTION_TYPE.RANGE:
+						setRange1(list[iterator.i++] as number);
+						setRange2(list[iterator.i++] as number);
+						break;
+				}
+				setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
 			}
-			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
 			const selectionValue = list[iterator.i++] as SELECTION_VALUE_TYPE;
 			setSelectionValueType(selectionValue);
 			switch (selectionValue) {
@@ -174,6 +192,8 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 			}
 		} else {
 			setSelectionType(SELECTION_TYPE.ONE_VARIABLE);
+			setIsCreatingLocalVariable(true);
+			setLocalVariableName('');
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.EQUALS);
 			setSelectionValueType(SELECTION_VALUE_TYPE.NUMBER);
 		}
@@ -194,17 +214,23 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const handleAccept = async () => {
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
-		newList.push(selectionType);
-		switch (selectionType) {
-			case SELECTION_TYPE.ONE_VARIABLE:
-				newList.push(variableID);
-				break;
-			case SELECTION_TYPE.RANGE:
-				newList.push(range1);
-				newList.push(range2);
-				break;
+		if (isLocal) {
+			newList.push(Utils.boolToNum(isCreatingLocalVariable));
+			newList.push(isCreatingLocalVariable ? localVariableName : localVariables[localVariableIndex]);
+			if (!isCreatingLocalVariable) newList.push(selectionOperationType);
+		} else {
+			newList.push(selectionType);
+			switch (selectionType) {
+				case SELECTION_TYPE.ONE_VARIABLE:
+					newList.push(variableID);
+					break;
+				case SELECTION_TYPE.RANGE:
+					newList.push(range1);
+					newList.push(range2);
+					break;
+			}
+			newList.push(selectionOperationType);
 		}
-		newList.push(selectionOperationType);
 		newList.push(selectionValueType);
 		switch (selectionValueType) {
 			case SELECTION_VALUE_TYPE.NUMBER:
@@ -260,42 +286,79 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 
 	return (
 		<Dialog
-			title={`${t('change.variables')}...`}
+			title={`${t(isLocal ? 'change.local.variables' : 'change.variables')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge>
-				<Groupbox title={t('selection')}>
-					<RadioGroup selected={selectionType} onChange={setSelectionType}>
-						<Form>
-							<Label>
-								<RadioButton value={SELECTION_TYPE.ONE_VARIABLE}>{t('one.variable')}</RadioButton>
-							</Label>
-							<Value>
-								<VariableSelector
-									variableID={variableID}
-									onChange={setVariableID}
-									forcedVariableID={forcedVariableID}
-									setForcedVariableID={setForcedVariableID}
-									disabled={!isOneVariable}
-								/>
-							</Value>
-							<Label>
-								<RadioButton value={SELECTION_TYPE.RANGE}>{t('range')}</RadioButton>
-							</Label>
-							<Value>
-								<Flex spaced centerV>
-									<InputNumber value={range1} onChange={setRange1} min={1} disabled={!isRange} />
-									<Flex disabledLabel={!isRange}>{t('to').toLowerCase()}</Flex>
-									<InputNumber value={range2} onChange={setRange2} min={1} disabled={!isRange} />
-								</Flex>
-							</Value>
-						</Form>
-					</RadioGroup>
-				</Groupbox>
-				<PanelOperation selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
+				{isLocal ? (
+					<Groupbox title={t('selection')}>
+						<RadioGroup
+							selected={Utils.boolToNum(isCreatingLocalVariable)}
+							onChange={(v) => setIsCreatingLocalVariable(Utils.numToBool(v))}
+						>
+							<Form>
+								<Label>
+									<RadioButton value={1}>{t('create')}</RadioButton>
+								</Label>
+								<Value>
+									<InputText
+										value={localVariableName}
+										onChange={setLocalVariableName}
+										disabled={!isCreatingLocalVariable}
+									/>
+								</Value>
+								<Label>
+									<RadioButton value={0}>{t('update')}</RadioButton>
+								</Label>
+								<Value>
+									<Dropdown
+										selectedID={localVariableIndex}
+										onChange={setLocalVariableIndex}
+										options={localVariables.map((name, index) => Model.Base.create(index, name))}
+										disabled={isCreatingLocalVariable || localVariables.length === 0}
+									/>
+								</Value>
+							</Form>
+						</RadioGroup>
+					</Groupbox>
+				) : (
+					<Groupbox title={t('selection')}>
+						<RadioGroup selected={selectionType} onChange={setSelectionType}>
+							<Form>
+								<Label>
+									<RadioButton value={SELECTION_TYPE.ONE_VARIABLE}>{t('one.variable')}</RadioButton>
+								</Label>
+								<Value>
+									<VariableSelector
+										variableID={variableID}
+										onChange={setVariableID}
+										forcedVariableID={forcedVariableID}
+										setForcedVariableID={setForcedVariableID}
+										disabled={!isOneVariable}
+									/>
+								</Value>
+								<Label>
+									<RadioButton value={SELECTION_TYPE.RANGE}>{t('range')}</RadioButton>
+								</Label>
+								<Value>
+									<Flex spaced centerV>
+										<InputNumber value={range1} onChange={setRange1} min={1} disabled={!isRange} />
+										<Flex disabledLabel={!isRange}>{t('to').toLowerCase()}</Flex>
+										<InputNumber value={range2} onChange={setRange2} min={1} disabled={!isRange} />
+									</Flex>
+								</Value>
+							</Form>
+						</RadioGroup>
+					</Groupbox>
+				)}
+				<PanelOperation
+					selectionType={selectionOperationType}
+					setSelectionType={setSelectionOperationType}
+					disabled={isLocal && isCreatingLocalVariable}
+				/>
 				<Groupbox title={t('value')}>
 					<RadioGroup selected={selectionValueType} onChange={setSelectionValueType}>
 						<Form>

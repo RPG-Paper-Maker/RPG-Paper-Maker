@@ -1271,10 +1271,13 @@ function Tree({
 				setIsOpen: setIsOpenDialog,
 				model: newModel ?? selectedNode.content,
 				parent: selectedNode.parent,
+				node: selectedNode,
+				list,
 				onAccept: handleAcceptDialog,
 				onReject: handleRejectDialog,
 				onLivePreview: onDialogLivePreview
-					? (command: Model.MapObjectCommand | null) => onDialogLivePreview(selectedNode, command, newModel !== null)
+					? (command: Model.MapObjectCommand | null) =>
+							onDialogLivePreview(selectedNode, command, newModel !== null)
 					: undefined,
 				onModelLivePreview: onDialogModelLivePreview
 					? (model: Model.Base | null) => onDialogModelLivePreview(model, newModel !== null)

@@ -47,6 +47,7 @@ export const OPERATORS_NUMBERS: ReadonlyArray<(a: number, b: number) => number> 
 
 class GameStateSimulation {
 	public variables = new Map<number, unknown>();
+	public localVariables = new Map<string, unknown>();
 	public currencies = new Map<number, number>();
 	public currenciesEarned = new Map<number, number>();
 	public currenciesUsed = new Map<number, number>();
@@ -126,6 +127,14 @@ class GameStateSimulation {
 		this.variables.set(id, value);
 	}
 
+	getLocalVariable(name: string): unknown {
+		return this.localVariables.get(name) ?? 0;
+	}
+
+	setLocalVariable(name: string, value: unknown) {
+		this.localVariables.set(name, value);
+	}
+
 	getCurrency(id: number): number {
 		return this.currencies.get(id) ?? 0;
 	}
@@ -158,6 +167,8 @@ class GameStateSimulation {
 		switch (value.kind) {
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				return this.getVariable(value.value as number);
+			case DYNAMIC_VALUE_KIND.LOCAL_VARIABLE:
+				return this.getLocalVariable(value.value as string);
 			case DYNAMIC_VALUE_KIND.PARAMETER:
 			case DYNAMIC_VALUE_KIND.PROPERTY:
 				return 0;

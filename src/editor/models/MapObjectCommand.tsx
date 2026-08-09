@@ -109,6 +109,27 @@ class MapObjectCommand extends Base {
 		return mapObjectCommand;
 	}
 
+	static getLocalVariableNames(list: Node[], current?: Node): string[] {
+		const names = new Set<string>();
+		let isCurrentFound = false;
+		const visit = (nodes: Node[]) => {
+			for (const node of nodes) {
+				if (node === current) {
+					isCurrentFound = true;
+					return;
+				}
+				const command = node.content as MapObjectCommand;
+				if (command.kind === EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE) {
+					names.add(command.command[1] as string);
+				}
+				visit(node.children);
+				if (isCurrentFound) return;
+			}
+		};
+		visit(list);
+		return [...names];
+	}
+
 	static cacheMapObjects(mapID: number, objects: Base[]) {
 		MapObjectCommand.mapObjectsCache.set(mapID, objects);
 	}
@@ -259,6 +280,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				return <MdOutlineAddReaction />;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+				return <TbNumbers />;
+			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
 				return <TbNumbers />;
 			case EVENT_COMMAND_KIND.SCRIPT:
 				return <IoLogoJavascript />;
@@ -426,6 +449,8 @@ class MapObjectCommand extends Base {
 				return t('call.a.common.reaction');
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 				return t('change.variables');
+			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
+				return t('change.local.variables');
 			case EVENT_COMMAND_KIND.SCRIPT:
 				return t('script');
 			case EVENT_COMMAND_KIND.PLUGIN:
@@ -517,6 +542,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.COMMENT:
 				return MapObjectCommand.COLOR_COMMENT;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
 			case EVENT_COMMAND_KIND.SCRIPT:
 			case EVENT_COMMAND_KIND.PLUGIN:
 				return MapObjectCommand.COLOR_YELLOW;
@@ -785,6 +811,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 				texts = this.toStringChangeVariables(iterator, properties, parameters);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
+				texts = this.toStringChangeLocalVariables(iterator, properties, parameters);
+				break;
 			case EVENT_COMMAND_KIND.SCRIPT:
 				texts = this.toStringScript(iterator, properties, parameters);
 				break;
@@ -867,6 +896,8 @@ class MapObjectCommand extends Base {
 				const variable = Project.current!.variables.getVariableByID(value as number);
 				return `${t('variable')} ${variable?.toString() ?? value}`;
 			}
+			case DYNAMIC_VALUE_KIND.LOCAL_VARIABLE:
+				return `${t('local.variable')} ${value}`;
 			case DYNAMIC_VALUE_KIND.PARAMETER: {
 				const parameter = Base.getByID(parameters, value as number);
 				return `${t('parameter')} ${parameter?.toString() ?? value}`;
@@ -2532,6 +2563,15 @@ class MapObjectCommand extends Base {
 				break;
 		}
 		return [str];
+	}
+
+	toStringChangeLocalVariables(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const isCreating = Utils.numToBool(this.command[iterator.i++] as number);
+		let text = this.command[iterator.i++] as string;
+		text += isCreating ? ' = ' : ` ${this.toStringOperation(iterator)} `;
+		const valueKind = this.command[iterator.i++] as number;
+		if ([0, 2, 3].includes(valueKind)) text += this.toStringDynamicValue(iterator, properties, parameters);
+		return [text];
 	}
 
 	toStringScript(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

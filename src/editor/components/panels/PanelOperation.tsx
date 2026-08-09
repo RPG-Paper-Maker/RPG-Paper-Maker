@@ -27,21 +27,34 @@ export enum SELECTION_OPERATION_TYPE {
 type Props = {
 	selectionType: number;
 	setSelectionType: (v: number) => void;
+	disabled?: boolean;
 };
 
-function PanelOperation({ selectionType, setSelectionType }: Props) {
+function PanelOperation({ selectionType, setSelectionType, disabled = false }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<Groupbox title={t('operation')}>
+		<Groupbox title={t('operation')} disabled={disabled}>
 			<RadioGroup selected={selectionType} onChange={setSelectionType}>
 				<Flex columnMobile spaced>
-					<RadioButton value={SELECTION_OPERATION_TYPE.EQUALS}>(=) {t('equals')}</RadioButton>
-					<RadioButton value={SELECTION_OPERATION_TYPE.PLUS}>(+) {t('plus')}</RadioButton>
-					<RadioButton value={SELECTION_OPERATION_TYPE.MINUS}>(-) {t('minus')}</RadioButton>
-					<RadioButton value={SELECTION_OPERATION_TYPE.TIMES}>(*) {t('times')}</RadioButton>
-					<RadioButton value={SELECTION_OPERATION_TYPE.DIVIDED_BY}>(/) {t('divided.by')}</RadioButton>
-					<RadioButton value={SELECTION_OPERATION_TYPE.MODULO}>(%) {t('modulo')}</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.EQUALS} disabled={disabled}>
+						(=) {t('equals')}
+					</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.PLUS} disabled={disabled}>
+						(+) {t('plus')}
+					</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.MINUS} disabled={disabled}>
+						(-) {t('minus')}
+					</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.TIMES} disabled={disabled}>
+						(*) {t('times')}
+					</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.DIVIDED_BY} disabled={disabled}>
+						(/) {t('divided.by')}
+					</RadioButton>
+					<RadioButton value={SELECTION_OPERATION_TYPE.MODULO} disabled={disabled}>
+						(%) {t('modulo')}
+					</RadioButton>
 				</Flex>
 			</RadioGroup>
 		</Groupbox>

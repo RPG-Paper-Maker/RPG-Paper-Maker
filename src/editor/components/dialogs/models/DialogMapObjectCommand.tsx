@@ -12,6 +12,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EVENT_COMMAND_KIND } from '../../../common';
+import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
 import { MapObjectCommand, MapObjectCommandType } from '../../../models';
 import Button from '../../Button';
@@ -73,6 +74,7 @@ import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject
 import DialogCommandTransformABattler from '../commands/DialogCommandTransformABattler';
 import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
+import { LocalVariablesContext } from '../../LocalVariablesContext';
 
 export type CommandProps = {
 	commandKind: EVENT_COMMAND_KIND;
@@ -86,14 +88,17 @@ export type CommandProps = {
 type Props = {
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
+	node?: Node;
+	list?: Node[];
 	isNew: boolean;
 	onAccept: () => void;
 	onReject: () => void;
 	onLivePreview?: (command: Model.MapObjectCommand | null) => void;
 };
 
-function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, onLivePreview }: Props) {
+function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept, onReject, onLivePreview }: Props) {
 	const command = model as MapObjectCommand;
+	const localVariables = MapObjectCommand.getLocalVariableNames(list ?? [], node);
 
 	const { t } = useTranslation();
 
@@ -317,6 +322,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 				<Groupbox title={t('variables')}>
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.CHANGE_VARIABLES)}
+						{getButton(EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE)}
 					</Flex>
 				</Groupbox>
 				<Groupbox title={t('advanced')}>
@@ -455,6 +461,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				return <DialogCommandCallACommonReaction {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
 				return <DialogCommandChangeVariables {...options} />;
 			case EVENT_COMMAND_KIND.SCRIPT:
 				return <DialogCommandScript {...options} />;
@@ -477,7 +484,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 	}, [isNew, selectedCommand]);
 
 	return (
-		<>
+		<LocalVariablesContext.Provider value={localVariables}>
 			{!isOpenCommand && (
 				<Dialog
 					title={`${t('commands')}...`}
@@ -503,7 +510,7 @@ function DialogMapObjectCommand({ setIsOpen, model, isNew, onAccept, onReject, o
 				</Dialog>
 			)}
 			{getDialogCommand()}
-		</>
+		</LocalVariablesContext.Provider>
 	);
 }
 

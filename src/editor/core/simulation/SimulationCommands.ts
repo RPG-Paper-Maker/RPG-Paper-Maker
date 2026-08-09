@@ -213,27 +213,35 @@ class CommandShowText extends CommandBase {
 	}
 
 	private resolveMessage(game: GameStateSimulation): string {
-		return this.message.replace(/\[(var|par|pro|hname)=(-?\d+)\]/g, (_match, tag: string, num: string) => {
-			const id = parseInt(num, 10);
-			switch (tag) {
-				case 'var':
-					return String(game.getVariable(id) ?? '');
-				case 'hname': {
-					const instanceID = game.getVariable(id);
-					const hero =
-						game.findHeroByInstanceID(typeof instanceID === 'number' ? instanceID : Number(instanceID)) ??
-						game.teamHeroes[0] ??
-						null;
-					return hero ? hero.name : '';
+		return this.message.replace(
+			/\[(?:(var|par|pro|hname)=(-?\d+)|lvar=([^\]]*))\]/g,
+			(_match, tag: string | undefined, num: string | undefined, localVariableName: string | undefined) => {
+				if (localVariableName !== undefined) {
+					return String(game.getLocalVariable(localVariableName));
 				}
-				case 'par':
-					return '0';
-				case 'pro':
-					return '0';
-				default:
-					return '';
-			}
-		});
+				const id = parseInt(num!, 10);
+				switch (tag) {
+					case 'var':
+						return String(game.getVariable(id) ?? '');
+					case 'hname': {
+						const instanceID = game.getVariable(id);
+						const hero =
+							game.findHeroByInstanceID(
+								typeof instanceID === 'number' ? instanceID : Number(instanceID),
+							) ??
+							game.teamHeroes[0] ??
+							null;
+						return hero ? hero.name : '';
+					}
+					case 'par':
+						return '0';
+					case 'pro':
+						return '0';
+					default:
+						return '';
+				}
+			},
+		);
 	}
 
 	getContent(ctx: SimulationContext): SimulationTextContent {
@@ -529,8 +537,9 @@ class CommandWait extends CommandBase {
 }
 
 class CommandChangeVariables extends CommandBase {
-	private selection: number;
+	private selection!: number;
 	private nbSelection: number;
+	private localVariableName: string | null = null;
 	private operation: number;
 	private valueKind: number;
 	private valueNumber!: DynamicValue;
@@ -543,15 +552,21 @@ class CommandChangeVariables extends CommandBase {
 	private valueTotalCurrencyKind!: number;
 	private valueTotalCurrencyID!: DynamicValue;
 
-	constructor(command: MapObjectCommandType[]) {
+	constructor(command: MapObjectCommandType[], isLocal = false) {
 		super();
-		const iterator: ITERATOR = { i: 2 };
-		this.selection = command[1] as number;
+		const iterator: ITERATOR = { i: isLocal ? 0 : 2 };
 		this.nbSelection = 1;
-		if (command[0] === 1) {
-			this.nbSelection = (command[iterator.i++] as number) - this.selection;
+		if (isLocal) {
+			const isCreating = Utils.numToBool(command[iterator.i++] as number);
+			this.localVariableName = command[iterator.i++] as string;
+			this.operation = isCreating ? 0 : (command[iterator.i++] as number);
+		} else {
+			this.selection = command[1] as number;
+			if (command[0] === 1) {
+				this.nbSelection = (command[iterator.i++] as number) - this.selection;
+			}
+			this.operation = command[iterator.i++] as number;
 		}
-		this.operation = command[iterator.i++] as number;
 		this.valueKind = command[iterator.i++] as number;
 		switch (this.valueKind) {
 			case 0:
@@ -619,6 +634,16 @@ class CommandChangeVariables extends CommandBase {
 			}
 			default:
 				return 1;
+		}
+		if (this.localVariableName !== null) {
+			const previous = game.getLocalVariable(this.localVariableName);
+			game.setLocalVariable(
+				this.localVariableName,
+				typeof value === 'number' && typeof previous === 'number'
+					? OPERATORS_NUMBERS[this.operation](previous, value)
+					: value,
+			);
+			return 1;
 		}
 		for (let i = 0; i < this.nbSelection; i++) {
 			const id = this.selection + i;
@@ -772,6 +797,8 @@ export const createSimulationCommand = (
 			return new CommandShowText(command);
 		case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 			return new CommandChangeVariables(command);
+		case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
+			return new CommandChangeVariables(command, true);
 		case EVENT_COMMAND_KIND.WHILE:
 			return new CommandWhile();
 		case EVENT_COMMAND_KIND.WHILE_BREAK:
