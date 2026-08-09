@@ -123,10 +123,12 @@ abstract class Object3D extends Base {
 			return;
 		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
-			if (object.gltfID !== -1) {
-				await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID).loadShape();
-			} else {
-				await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).loadShape();
+			const shape =
+				object.gltfID !== -1
+					? Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID)
+					: Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID);
+			if (shape) {
+				await shape.loadShape();
 			}
 		}
 	}
