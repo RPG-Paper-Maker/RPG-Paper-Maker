@@ -382,6 +382,7 @@ export enum BUTTON_TYPE {
 	RED = 'red',
 	PATREON = 'patreon',
 	PRIMARY_TEXT = 'primaryText',
+	GREEN_BORDER = 'greenBorder',
 }
 
 export enum OBJECT_MOVING_KIND {

@@ -31,6 +31,7 @@ type Props = {
 	className?: string;
 	initialWidth?: string;
 	initialHeight?: string;
+	heightRefreshKey?: string | number;
 	initialPlacement?: 'center' | 'right' | 'top';
 	isDisabled?: boolean;
 	isLoading?: boolean;
@@ -112,6 +113,7 @@ function Dialog({
 	className,
 	initialWidth,
 	initialHeight,
+	heightRefreshKey,
 	initialPlacement = 'center',
 	isDisabled = false,
 	isLoading = false,
@@ -346,6 +348,17 @@ function Dialog({
 				: `${rect.height + 2}px`;
 		}
 	}, [isOpen, scaledWidth, scaledHeight]);
+
+	useLayoutEffect(() => {
+		if (!dialogRef.current || !isOpen || heightRefreshKey === undefined) {
+			return;
+		}
+		dialogRef.current.style.height = 'auto';
+		dialogRef.current.style.minHeight = '0';
+		const rect = dialogRef.current.getBoundingClientRect();
+		dialogRef.current.style.height = `${rect.height + 2}px`;
+		dialogRef.current.style.minHeight = `${rect.height + 2}px`;
+	}, [heightRefreshKey, isOpen]);
 
 	useLayoutEffect(() => {
 		if (isOpen) {

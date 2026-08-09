@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	BUTTON_TYPE,
 	Constants,
 	DYNAMIC_VALUE_KIND,
 	ELEMENT_MAP_KIND,
@@ -24,6 +25,7 @@ import {
 	Utils,
 } from '../../common';
 import {
+	copyFolder,
 	copyPublicFile,
 	copyPublicFolder,
 	createFile,
@@ -53,6 +55,11 @@ enum PROJECT_TYPE {
 	TUTORIAL,
 }
 
+type DLCProject = {
+	name: string;
+	path: string;
+};
+
 type Props = {
 	setIsOpen: (b: boolean) => void;
 	onAccept: (data: Model.ProjectPreview) => void;
@@ -68,6 +75,8 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
 	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
 	const [projectType, setProjectType] = useState(PROJECT_TYPE.DEFAULT);
+	const [dlcProjects, setDLCProjects] = useState<DLCProject[]>([]);
+	const [selectedDLCProject, setSelectedDLCProject] = useState<DLCProject | null>(null);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 	const [isPermissionError, setIsPermissionError] = useState(false);
 
@@ -76,6 +85,25 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const dispatch = useDispatch();
 
 	const getcompleteLocation = () => Paths.join(location, folderName);
+
+	useEffect(() => {
+		const loadDLCProjects = async () => {
+			if (!Constants.IS_DESKTOP) {
+				return;
+			}
+			const dlcsPath = Paths.join(window.env.appPath, Paths.DLCS);
+			const dlcs = await IO.getFolders(dlcsPath);
+			const projects = await Promise.all(
+				dlcs.map(async (dlc) => {
+					const projectsPath = Paths.join(dlcsPath, dlc, 'Projects');
+					const names = await IO.getFolders(projectsPath);
+					return names.map((name) => ({ name, path: Paths.join(projectsPath, name) }));
+				}),
+			);
+			setDLCProjects(projects.flat());
+		};
+		void loadDLCProjects();
+	}, []);
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
 		if (!folderName) {
@@ -138,7 +166,9 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		const folderPath = project.getPath();
 		await createFolder(project.getPath());
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
-		if (projectType === PROJECT_TYPE.TUTORIAL) {
+		if (selectedDLCProject) {
+			await copyFolder(selectedDLCProject.path, project.getPath());
+		} else if (projectType === PROJECT_TYPE.TUTORIAL) {
 			await copyPublicFolder([Paths.TUTORIAL], project.getPath());
 		} else {
 			for (const file of Paths.ALL_JSON) {
@@ -189,7 +219,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.systems.PATH_BR = Paths.join(Paths.DIST, Paths.BR);
 			project.systems.PATH_DLCS = Paths.join(window.env.appPath, Paths.DLCS);
 		}
-		if (projectType !== PROJECT_TYPE.TUTORIAL) {
+		if (projectType !== PROJECT_TYPE.TUTORIAL && !selectedDLCProject) {
 			await Model.Map.createDefaultMap(1, t('starting.map'));
 			await Model.Map.createDefaultMap(2, t('default'));
 			project.translateDefaults();
@@ -329,11 +359,17 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		setIsOpen(false);
 	};
 
+	const handleSelectProjectType = (type: PROJECT_TYPE) => {
+		setProjectType(type);
+		setSelectedDLCProject(null);
+	};
+
 	return (
 		<>
 			<Dialog
 				title={`${t('new.project')}...`}
 				isOpen
+				heightRefreshKey={dlcProjects.length}
 				isLoading={isLoading}
 				isDisabled={isDialogConfirmOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
@@ -375,30 +411,42 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 					)}
 					<Flex spaced centerV>
 						<div>{t('project.type')}:</div>
-						<Flex spaced>
+						<Flex wrap spaced>
 							<Tooltip text={t('blank.tooltip')}>
 								<Button
-									active={projectType === PROJECT_TYPE.BLANK}
-									onClick={() => setProjectType(PROJECT_TYPE.BLANK)}
+									active={projectType === PROJECT_TYPE.BLANK && !selectedDLCProject}
+									onClick={() => handleSelectProjectType(PROJECT_TYPE.BLANK)}
 								>
 									{t('blank')}
 								</Button>
 							</Tooltip>
 							<Tooltip text={t('default.tooltip')}>
 								<Button
-									active={projectType === PROJECT_TYPE.DEFAULT}
-									onClick={() => setProjectType(PROJECT_TYPE.DEFAULT)}
+									active={projectType === PROJECT_TYPE.DEFAULT && !selectedDLCProject}
+									onClick={() => handleSelectProjectType(PROJECT_TYPE.DEFAULT)}
 								>
 									{t('default')}
 								</Button>
 							</Tooltip>
 							<Tooltip text={t('tutorial.tooltip')}>
 								<Button
-									active={projectType === PROJECT_TYPE.TUTORIAL}
-									onClick={() => setProjectType(PROJECT_TYPE.TUTORIAL)}
+									active={projectType === PROJECT_TYPE.TUTORIAL && !selectedDLCProject}
+									onClick={() => handleSelectProjectType(PROJECT_TYPE.TUTORIAL)}
 								>
 									{t('tutorial')}
 								</Button>
+							</Tooltip>
+							<Tooltip text='DLC'>
+								{dlcProjects.map((project) => (
+									<Button
+										key={project.path}
+										buttonType={BUTTON_TYPE.GREEN_BORDER}
+										active={selectedDLCProject?.path === project.path}
+										onClick={() => setSelectedDLCProject(project)}
+									>
+										{project.name}
+									</Button>
+								))}
 							</Tooltip>
 						</Flex>
 					</Flex>

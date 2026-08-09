@@ -56,6 +56,10 @@ button.primaryText {
 	color: var(--primary-color);
 }
 
+button.greenBorder {
+	border: 1px solid var(--green-color);
+}
+
 button.backgroundOnHoverOnly {
 	background-color: var(--main-bg-color);
 }
