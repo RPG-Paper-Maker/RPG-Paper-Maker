@@ -53,6 +53,7 @@ enum SELECTION_VALUE_TYPE {
 	ENEMY_INSTANCE_ID = 8,
 	OTHER_CHARACTERISTICS = 9,
 	SCRIPT = 10,
+	TERRAIN_AT_COORDINATES = 11,
 }
 
 function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
@@ -86,6 +87,12 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const [valueEnemyID, setValueEnemyID] = useStateNumber();
 	const [valueOtherCharacteristicsIndex, setValueOtherCharacteristicsIndex] = useStateNumber();
 	const [valueScript, setValueScript] = useStateString();
+	const [valueTerrainX] = useStateDynamicValue();
+	const [valueTerrainY] = useStateDynamicValue();
+	const [valueTerrainZ] = useStateDynamicValue();
+	const [valueTerrainXPlus] = useStateDynamicValue();
+	const [valueTerrainYPlus] = useStateDynamicValue();
+	const [valueTerrainZPlus] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const isOneVariable = selectionType === SELECTION_TYPE.ONE_VARIABLE;
@@ -101,6 +108,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const isEnemyInstanceID = selectionValueType === SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID;
 	const isOtherCharacteristics = selectionValueType === SELECTION_VALUE_TYPE.OTHER_CHARACTERISTICS;
 	const isScript = selectionValueType === SELECTION_VALUE_TYPE.SCRIPT;
+	const isTerrainAtCoordinates = selectionValueType === SELECTION_VALUE_TYPE.TERRAIN_AT_COORDINATES;
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
 	const initialize = () => {
@@ -123,6 +131,12 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		setValueEnemyID(TroopMonster.currentMonsters[0]?.id ?? -1);
 		setValueOtherCharacteristicsIndex(0);
 		setValueScript('');
+		valueTerrainX.updateToDefaultNumber();
+		valueTerrainY.updateToDefaultNumber();
+		valueTerrainZ.updateToDefaultNumber();
+		valueTerrainXPlus.updateToDefaultNumber();
+		valueTerrainYPlus.updateToDefaultNumber();
+		valueTerrainZPlus.updateToDefaultNumber();
 		if (list) {
 			const iterator = Utils.generateIterator();
 			if (isLocal) {
@@ -188,6 +202,14 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 					break;
 				case SELECTION_VALUE_TYPE.SCRIPT:
 					setValueScript(list[iterator.i++] as string);
+					break;
+				case SELECTION_VALUE_TYPE.TERRAIN_AT_COORDINATES:
+					valueTerrainX.updateCommand(list, iterator);
+					valueTerrainY.updateCommand(list, iterator);
+					valueTerrainZ.updateCommand(list, iterator);
+					valueTerrainXPlus.updateCommand(list, iterator);
+					valueTerrainYPlus.updateCommand(list, iterator);
+					valueTerrainZPlus.updateCommand(list, iterator);
 					break;
 			}
 		} else {
@@ -270,6 +292,14 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 				break;
 			case SELECTION_VALUE_TYPE.SCRIPT:
 				newList.push(valueScript);
+				break;
+			case SELECTION_VALUE_TYPE.TERRAIN_AT_COORDINATES:
+				valueTerrainX.getCommand(newList);
+				valueTerrainY.getCommand(newList);
+				valueTerrainZ.getCommand(newList);
+				valueTerrainXPlus.getCommand(newList);
+				valueTerrainYPlus.getCommand(newList);
+				valueTerrainZPlus.getCommand(newList);
 				break;
 		}
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
@@ -529,6 +559,81 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 										translateOptions
 									/>
 								</Flex>
+							</Value>
+							<Label>
+								<RadioButton value={SELECTION_VALUE_TYPE.TERRAIN_AT_COORDINATES}>
+									{t('terrain')}
+								</RadioButton>
+							</Label>
+							<Value>
+								<Form>
+									<Label>X</Label>
+									<Value>
+										<Flex columnMobile spaced>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainX}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('square.s')}
+											</Flex>
+											<div>+</div>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainXPlus}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('pixel.s')}
+											</Flex>
+										</Flex>
+									</Value>
+									<Label>Y</Label>
+									<Value>
+										<Flex columnMobile spaced>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainY}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('square.s')}
+											</Flex>
+											<div>+</div>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainYPlus}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('pixel.s')}
+											</Flex>
+										</Flex>
+									</Value>
+									<Label>Z</Label>
+									<Value>
+										<Flex columnMobile spaced>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainZ}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('square.s')}
+											</Flex>
+											<div>+</div>
+											<Flex spaced centerV>
+												<DynamicValueSelector
+													value={valueTerrainZPlus}
+													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+													disabled={!isTerrainAtCoordinates}
+												/>
+												{t('pixel.s')}
+											</Flex>
+										</Flex>
+									</Value>
+								</Form>
 							</Value>
 							<Label>
 								<RadioButton value={SELECTION_VALUE_TYPE.SCRIPT}>{t('script')}</RadioButton>

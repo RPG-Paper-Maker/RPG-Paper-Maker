@@ -114,13 +114,13 @@ class MapObjectCommand extends Base {
 		let isCurrentFound = false;
 		const visit = (nodes: Node[]) => {
 			for (const node of nodes) {
-				if (node === current) {
-					isCurrentFound = true;
-					return;
-				}
 				const command = node.content as MapObjectCommand;
 				if (command.kind === EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE) {
 					names.add(command.command[1] as string);
+				}
+				if (node === current) {
+					isCurrentFound = true;
+					return;
 				}
 				visit(node.children);
 				if (isCurrentFound) return;
@@ -2561,6 +2561,22 @@ class MapObjectCommand extends Base {
 			case 10:
 				str += `${t('script')}: ${this.command[iterator.i++]}`;
 				break;
+			case 11: {
+				const x = this.toStringDynamicValue(iterator, properties, parameters);
+				const y = this.toStringDynamicValue(iterator, properties, parameters);
+				const z = this.toStringDynamicValue(iterator, properties, parameters);
+				const xPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				const yPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				const zPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				str += `${t('terrain').toLowerCase()} (${t('x.square.position').toLowerCase()}: ${x}, ${t(
+					'x.pixel.position',
+				).toLowerCase()}: ${xPixels}, ${t('y.square.position').toLowerCase()}: ${y}, ${t(
+					'y.pixel.position',
+				).toLowerCase()}: ${yPixels}, ${t('z.square.position').toLowerCase()}: ${z}, ${t(
+					'z.pixel.position',
+				).toLowerCase()}: ${zPixels})`;
+				break;
+			}
 		}
 		return [str];
 	}
@@ -2570,7 +2586,23 @@ class MapObjectCommand extends Base {
 		let text = this.command[iterator.i++] as string;
 		text += isCreating ? ' = ' : ` ${this.toStringOperation(iterator)} `;
 		const valueKind = this.command[iterator.i++] as number;
-		if ([0, 2, 3].includes(valueKind)) text += this.toStringDynamicValue(iterator, properties, parameters);
+		if ([0, 2, 3].includes(valueKind)) {
+			text += this.toStringDynamicValue(iterator, properties, parameters);
+		} else if (valueKind === 11) {
+			const x = this.toStringDynamicValue(iterator, properties, parameters);
+			const y = this.toStringDynamicValue(iterator, properties, parameters);
+			const z = this.toStringDynamicValue(iterator, properties, parameters);
+			const xPixels = this.toStringDynamicValue(iterator, properties, parameters);
+			const yPixels = this.toStringDynamicValue(iterator, properties, parameters);
+			const zPixels = this.toStringDynamicValue(iterator, properties, parameters);
+			text += `${t('terrain').toLowerCase()} (${t('x.square.position').toLowerCase()}: ${x}, ${t(
+				'x.pixel.position',
+			).toLowerCase()}: ${xPixels}, ${t('y.square.position').toLowerCase()}: ${y}, ${t(
+				'y.pixel.position',
+			).toLowerCase()}: ${yPixels}, ${t('z.square.position').toLowerCase()}: ${z}, ${t(
+				'z.pixel.position',
+			).toLowerCase()}: ${zPixels})`;
+		}
 		return [text];
 	}
 

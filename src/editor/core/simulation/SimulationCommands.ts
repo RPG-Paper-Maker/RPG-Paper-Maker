@@ -551,6 +551,12 @@ class CommandChangeVariables extends CommandBase {
 	private valueItemID!: DynamicValue;
 	private valueTotalCurrencyKind!: number;
 	private valueTotalCurrencyID!: DynamicValue;
+	private valueTerrainX!: DynamicValue;
+	private valueTerrainY!: DynamicValue;
+	private valueTerrainZ!: DynamicValue;
+	private valueTerrainXPlus!: DynamicValue;
+	private valueTerrainYPlus!: DynamicValue;
+	private valueTerrainZPlus!: DynamicValue;
 
 	constructor(command: MapObjectCommandType[], isLocal = false) {
 		super();
@@ -589,6 +595,14 @@ class CommandChangeVariables extends CommandBase {
 			case 6:
 				this.valueTotalCurrencyKind = command[iterator.i++] as number;
 				this.valueTotalCurrencyID = DynamicValue.createCommand(command, iterator);
+				break;
+			case 11:
+				this.valueTerrainX = DynamicValue.createCommand(command, iterator);
+				this.valueTerrainY = DynamicValue.createCommand(command, iterator);
+				this.valueTerrainZ = DynamicValue.createCommand(command, iterator);
+				this.valueTerrainXPlus = DynamicValue.createCommand(command, iterator);
+				this.valueTerrainYPlus = DynamicValue.createCommand(command, iterator);
+				this.valueTerrainZPlus = DynamicValue.createCommand(command, iterator);
 				break;
 		}
 	}
@@ -632,6 +646,9 @@ class CommandChangeVariables extends CommandBase {
 				}
 				break;
 			}
+			case 11:
+				value = 0;
+				break;
 			default:
 				return 1;
 		}
