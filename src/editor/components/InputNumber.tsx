@@ -15,7 +15,7 @@ import { Inputs } from '../managers';
 import '../styles/Input.css';
 
 type Props = {
-	value: number;
+	value?: number;
 	onChange: (e: number) => void;
 	widthType?: INPUT_TYPE_WIDTH;
 	max?: number;
@@ -37,10 +37,17 @@ function InputNumber({
 	suffixPlaceholder,
 	onBlur,
 }: Props) {
-	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
+	const normalizeValue = (v: number | undefined) => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 
-	const transformValueToText = (v: number) =>
-		decimals ? Mathf.forceDecimalsText(v) : Mathf.forceInteger(v).toString();
+	const transformValue = (v: number | undefined) => {
+		const normalizedValue = normalizeValue(v);
+		return decimals ? Mathf.forceDecimals(normalizedValue) : Mathf.forceInteger(normalizedValue);
+	};
+
+	const transformValueToText = (v: number | undefined) => {
+		const normalizedValue = normalizeValue(v);
+		return decimals ? Mathf.forceDecimalsText(normalizedValue) : Mathf.forceInteger(normalizedValue).toString();
+	};
 
 	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
 	const [isTyping, setIsTyping] = useState(false);
@@ -81,13 +88,14 @@ function InputNumber({
 		setIsTyping(false);
 		Inputs.isMapFocused = document.getElementsByClassName('dialog').length === 0;
 		Inputs.keys = [];
-		let v = value;
-		if (value < min) {
+		const normalizedValue = normalizeValue(value);
+		let v = normalizedValue;
+		if (normalizedValue < min) {
 			v = min;
-		} else if (value > max) {
+		} else if (normalizedValue > max) {
 			v = max;
 		}
-		if (v !== value) {
+		if (v !== normalizedValue) {
 			onChange(v);
 		}
 		setDisplayedValue(transformValueToText(v));
