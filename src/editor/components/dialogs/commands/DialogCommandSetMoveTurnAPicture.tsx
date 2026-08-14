@@ -13,6 +13,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
+import useLivePreview from '../../../hooks/useLivePreview';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
@@ -25,7 +26,6 @@ import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
-import useLivePreview from '../../../hooks/useLivePreview';
 
 function DialogCommandSetMoveTurnAPicture({
 	commandKind,
@@ -281,15 +281,18 @@ function DialogCommandSetMoveTurnAPicture({
 						<Form>
 							<Label disabled={!isTurn}>
 								<Checkbox isChecked={isTurnAngle} onChange={setIsTurnAngle} disabled={!isTurn}>
-									{t('turn')}
+									{t('angle')}
 								</Checkbox>
 							</Label>
 							<Value disabled={!isTurn || !isTurnAngle}>
-								<DynamicValueSelector
-									value={turnAngle}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
-									disabled={!isTurn || !isTurnAngle}
-								/>
+								<Flex spaced centerV>
+									<DynamicValueSelector
+										value={turnAngle}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+										disabled={!isTurn || !isTurnAngle}
+									/>
+									°
+								</Flex>
 							</Value>
 						</Form>
 					</Value>
