@@ -101,7 +101,14 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 			const current = SimulationSession.current;
 			for (const [context, layer] of contexts) {
 				if (current) {
-					SimulationScreenRenderer.render(context, rect.width, rect.height, current.ctx.screen, layer);
+					SimulationScreenRenderer.render(
+						context,
+						rect.width,
+						rect.height,
+						current.ctx.screen,
+						layer,
+						renderer,
+					);
 				} else {
 					context.clearRect(0, 0, rect.width, rect.height);
 				}
@@ -110,7 +117,7 @@ function ObjectCommandTestOverlay({ session, hud, onStop, preview = false }: Pro
 		};
 		request = requestAnimationFrame(draw);
 		return () => cancelAnimationFrame(request);
-	}, [rect]);
+	}, [rect, renderer]);
 
 	useEffect(() => {
 		if (!hudState || hudState.kind !== 'choices') {

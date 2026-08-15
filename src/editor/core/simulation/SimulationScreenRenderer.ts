@@ -10,9 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { ANIMATION_POSITION_KIND, PICTURE_KIND } from '../../common';
+import { ANIMATION_POSITION_KIND, DISPLAY_PICTURE_KIND, PICTURE_KIND } from '../../common';
 import { Project } from '../Project';
 import { SIM_SCREEN_X, SIM_SCREEN_Y, SimulationPicture, SimulationScreen } from './SimulationScreen';
+import type { SimulationSkinRenderer } from './SimulationSkinRenderer';
 
 export type SimulationScreenLayer = 'below' | 'above';
 
@@ -23,6 +24,7 @@ class SimulationScreenRenderer {
 		height: number,
 		screen: SimulationScreen,
 		layer: SimulationScreenLayer,
+		skinRenderer: SimulationSkinRenderer | null = null,
 	) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.imageSmoothingEnabled = false;
@@ -34,7 +36,17 @@ class SimulationScreenRenderer {
 			if (isBelow !== (layer === 'below')) {
 				continue;
 			}
-			SimulationScreenRenderer.drawPicture(ctx, picture, screen, width, height, scaleX, scaleY, minScale);
+			SimulationScreenRenderer.drawPicture(
+				ctx,
+				picture,
+				screen,
+				width,
+				height,
+				scaleX,
+				scaleY,
+				minScale,
+				skinRenderer,
+			);
 		}
 		if (layer === 'above') {
 			SimulationScreenRenderer.drawAnimations(ctx, width, height, screen);
@@ -123,7 +135,12 @@ class SimulationScreenRenderer {
 		scaleX: number,
 		scaleY: number,
 		minScale: number,
+		skinRenderer: SimulationSkinRenderer | null,
 	) {
+		if (picture.displayKind === DISPLAY_PICTURE_KIND.TEXT) {
+			this.drawText(ctx, picture, width, height, scaleX, scaleY, minScale, skinRenderer);
+			return;
+		}
 		const image = screen.getImage(picture.pictureID, picture.pictureKind);
 		if (image === null || image.width === 0 || image.height === 0) {
 			return;
@@ -211,6 +228,37 @@ class SimulationScreenRenderer {
 			ctx.translate(x - w / 2, y - h / 2);
 		}
 		ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, w, h);
+		ctx.restore();
+	}
+
+	private static drawText(
+		ctx: CanvasRenderingContext2D,
+		picture: SimulationPicture,
+		width: number,
+		height: number,
+		scaleX: number,
+		scaleY: number,
+		minScale: number,
+		skinRenderer: SimulationSkinRenderer | null,
+	) {
+		const x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX;
+		const y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
+		ctx.save();
+		ctx.globalAlpha = Math.max(0, Math.min(picture.opacity, 1));
+		ctx.translate(x, y);
+		ctx.rotate((picture.angle * Math.PI) / 180);
+		ctx.scale(minScale * picture.zoom, minScale * picture.zoom);
+		if (picture.centered) {
+			ctx.font = '20px sans-serif';
+			ctx.translate(-ctx.measureText(picture.text.replace(/\[[^\]]+\]/g, '')).width / 2, -10);
+		}
+		if (skinRenderer) {
+			skinRenderer.drawRichText(ctx, picture.text, 0, 0, picture.textWidth);
+		} else {
+			ctx.font = '20px sans-serif';
+			ctx.textBaseline = 'top';
+			ctx.fillText(picture.text.replace(/\[[^\]]+\]/g, ''), 0, 0);
+		}
 		ctx.restore();
 	}
 }

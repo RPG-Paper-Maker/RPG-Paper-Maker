@@ -391,6 +391,11 @@ export enum OBJECT_MOVING_KIND {
 	ROUTE,
 }
 
+export enum DISPLAY_PICTURE_KIND {
+	PICTURE,
+	TEXT,
+}
+
 export enum EVENT_COMMAND_KIND {
 	NONE,
 	SHOW_TEXT,

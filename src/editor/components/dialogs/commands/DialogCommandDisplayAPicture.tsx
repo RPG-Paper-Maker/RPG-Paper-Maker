@@ -11,9 +11,11 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
-import { Model } from '../../../Editor';
+import { DISPLAY_PICTURE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
+import { Project } from '../../../core/Project';
 import { Rectangle } from '../../../core/Rectangle';
+import { Model } from '../../../Editor';
+import useLivePreview from '../../../hooks/useLivePreview';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -25,12 +27,13 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import InputNumber from '../../InputNumber';
+import PanelCommandText from '../../panels/PanelCommandText';
 import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
-import useLivePreview from '../../../hooks/useLivePreview';
 
 function DialogCommandDisplayAPicture({
 	commandKind,
@@ -58,8 +61,16 @@ function DialogCommandDisplayAPicture({
 	const [pictureIndexWidth, setPictureIndexWidth] = useState(1);
 	const [pictureIndexHeight, setPictureIndexHeight] = useState(1);
 	const [isOpenPictures, setIsOpenPictures] = useState(false);
+	const [displayKind, setDisplayKind] = useState(DISPLAY_PICTURE_KIND.PICTURE);
+	const [texts, setTexts] = useState<Map<number, string>>(new Map());
+	const [textWidth, setTextWidth] = useState(1280);
 
 	const initialize = () => {
+		const allTexts = new Map<number, string>();
+		setTextWidth(1280);
+		for (const language of Project.current!.languages.list) {
+			allTexts.set(language.id, '');
+		}
 		if (list) {
 			const iterator = Utils.generateIterator();
 			imageID.updateCommand(list, iterator, true);
@@ -76,6 +87,16 @@ function DialogCommandDisplayAPicture({
 			setPictureIndexY((list[iterator.i++] as number | undefined) ?? 0);
 			setPictureIndexWidth((list[iterator.i++] as number | undefined) ?? 1);
 			setPictureIndexHeight((list[iterator.i++] as number | undefined) ?? 1);
+			setDisplayKind((list[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE);
+			while (iterator.i < list.length) {
+				const languageID = list[iterator.i++] as number;
+				const value = list[iterator.i++];
+				if (languageID === -1) {
+					setTextWidth((value as number) || 1280);
+				} else {
+					allTexts.set(languageID, value as string);
+				}
+			}
 		} else {
 			imageID.isActivated = false;
 			imageID.updateToDefaultNumber(-1);
@@ -92,7 +113,10 @@ function DialogCommandDisplayAPicture({
 			setPictureIndexY(0);
 			setPictureIndexWidth(1);
 			setPictureIndexHeight(1);
+			setDisplayKind(DISPLAY_PICTURE_KIND.PICTURE);
+			setTextWidth(1280);
 		}
+		setTexts(allTexts);
 		setTrigger((v) => !v);
 	};
 
@@ -108,6 +132,13 @@ function DialogCommandDisplayAPicture({
 		angle.getCommand(newList);
 		newList.push(Utils.boolToNum(isStretch));
 		newList.push(pictureKind, pictureIndexX, pictureIndexY, pictureIndexWidth, pictureIndexHeight);
+		newList.push(displayKind);
+		if (displayKind === DISPLAY_PICTURE_KIND.TEXT) {
+			for (const [id, text] of texts) {
+				newList.push(id, text);
+			}
+			newList.push(-1, textWidth);
+		}
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
 
@@ -138,6 +169,11 @@ function DialogCommandDisplayAPicture({
 		}
 	};
 
+	const handleChangeTextArea = (id: number, text: string) => {
+		texts.set(id, text);
+		setTexts(new Map(texts));
+	};
+
 	useLayoutEffect(() => {
 		initialize();
 	}, []);
@@ -150,21 +186,43 @@ function DialogCommandDisplayAPicture({
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+				initialWidth='800px'
+				initialHeight='700px'
 			>
 				<Flex column spacedLarge fillWidth fillHeight>
-					<Flex columnMobile spaced>
-						<Flex spaced centerV>
-							<div className='whiteSpaceNowrap'>{t('image.id')}:</div>
-							<AssetSelector
-								selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-								kind={pictureKind}
-								selectedDynamic={imageID}
-								indexX={pictureIndexX}
-								indexY={pictureIndexY}
-								onOpen={() => setIsOpenPictures(true)}
-								active
-							/>
+					<Flex spaced centerV>
+						<div>{t('type')}:</div>
+						<Dropdown
+							selectedID={displayKind}
+							onChange={setDisplayKind}
+							options={Model.Base.DISPLAY_PICTURE_KIND_OPTIONS}
+							translateOptions
+						/>
+					</Flex>
+					{displayKind === DISPLAY_PICTURE_KIND.TEXT && (
+						<Flex column spaced>
+							<Flex spaced centerV>
+								<div>{t('width')}:</div>
+								<InputNumber value={textWidth} onChange={setTextWidth} min={0} />
+							</Flex>
+							<PanelCommandText texts={texts} onChange={handleChangeTextArea} />
 						</Flex>
+					)}
+					<Flex columnMobile spaced>
+						{displayKind === DISPLAY_PICTURE_KIND.PICTURE && (
+							<Flex spaced centerV>
+								<div className='whiteSpaceNowrap'>{t('image.id')}:</div>
+								<AssetSelector
+									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+									kind={pictureKind}
+									selectedDynamic={imageID}
+									indexX={pictureIndexX}
+									indexY={pictureIndexY}
+									onOpen={() => setIsOpenPictures(true)}
+									active
+								/>
+							</Flex>
+						)}
 						<Flex spaced centerV>
 							<div>{t('index')}:</div>
 							<TooltipInformation text={t('tooltip.picture.index')} />
@@ -233,12 +291,14 @@ function DialogCommandDisplayAPicture({
 									</Flex>
 								</Value>
 							</Form>
-							<Flex spaced centerV>
-								<Checkbox isChecked={isStretch} onChange={setIsStretch}>
-									{t('stretch')}
-								</Checkbox>
-								<TooltipInformation text={t('tooltip.stretch')} />
-							</Flex>
+							{displayKind === DISPLAY_PICTURE_KIND.PICTURE && (
+								<Flex spaced centerV>
+									<Checkbox isChecked={isStretch} onChange={setIsStretch}>
+										{t('stretch')}
+									</Checkbox>
+									<TooltipInformation text={t('tooltip.stretch')} />
+								</Flex>
+							)}
 						</Flex>
 					</Groupbox>
 				</Flex>

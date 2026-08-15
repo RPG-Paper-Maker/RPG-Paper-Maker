@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, PICTURE_KIND } from '../../common';
+import { Constants, DISPLAY_PICTURE_KIND, PICTURE_KIND } from '../../common';
 import { Manager, Model } from '../../Editor';
 import type { Map as SceneMap } from '../../scenes/Map';
 import type { Camera } from '../Camera';
@@ -23,6 +23,9 @@ export const SIM_SCREEN_Y = 720;
 
 export type SimulationPicture = {
 	index: number;
+	displayKind: DISPLAY_PICTURE_KIND;
+	text: string;
+	textWidth: number;
 	pictureID: number;
 	pictureKind: PICTURE_KIND;
 	indexX: number;
@@ -137,7 +140,9 @@ class SimulationScreen {
 	}
 
 	setPicture(picture: SimulationPicture) {
-		this.getImage(picture.pictureID, picture.pictureKind);
+		if (picture.displayKind === DISPLAY_PICTURE_KIND.PICTURE) {
+			this.getImage(picture.pictureID, picture.pictureKind);
+		}
 		for (let i = 0; i < this.pictures.length; i++) {
 			const index = this.pictures[i].index;
 			if (index === picture.index) {

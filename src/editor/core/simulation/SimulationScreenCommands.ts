@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../common';
+import { DISPLAY_PICTURE_KIND, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Manager, Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
 import { DynamicValue } from '../DynamicValue';
@@ -57,6 +57,9 @@ class CommandDisplayAPicture extends CommandBase {
 	private indexY: number;
 	private indexWidth: number;
 	private indexHeight: number;
+	private displayKind: DISPLAY_PICTURE_KIND;
+	private text: string;
+	private textWidth: number;
 
 	constructor(command: MapObjectCommandType[]) {
 		super();
@@ -75,6 +78,19 @@ class CommandDisplayAPicture extends CommandBase {
 		this.indexY = (command[iterator.i++] as number | undefined) ?? 0;
 		this.indexWidth = (command[iterator.i++] as number | undefined) ?? 1;
 		this.indexHeight = (command[iterator.i++] as number | undefined) ?? 1;
+		this.displayKind = (command[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE;
+		const texts = new Map<number, string>();
+		this.textWidth = 1280;
+		while (iterator.i < command.length) {
+			const languageID = command[iterator.i++] as number;
+			const value = command[iterator.i++];
+			if (languageID === -1) {
+				this.textWidth = (value as number) || 1280;
+			} else {
+				texts.set(languageID, value as string);
+			}
+		}
+		this.text = texts.get(Project.current!.languages.list[0].id) ?? [...texts.values()][0] ?? '';
 	}
 
 	update(_state: CommandState, ctx: SimulationContext): number {
@@ -83,6 +99,9 @@ class CommandDisplayAPicture extends CommandBase {
 		const y = game.resolveNumber(this.y);
 		ctx.screen.setPicture({
 			index: game.resolveNumber(this.index),
+			displayKind: this.displayKind,
+			text: this.resolveText(game),
+			textWidth: this.textWidth,
 			pictureID: game.resolveNumber(this.pictureID),
 			pictureKind: this.pictureKind,
 			indexX: this.indexX,
@@ -98,6 +117,21 @@ class CommandDisplayAPicture extends CommandBase {
 			angle: game.resolveNumber(this.angle),
 		});
 		return 1;
+	}
+
+	private resolveText(game: import('./GameStateSimulation').GameStateSimulation): string {
+		return this.text.replace(
+			/\[(?:(var|hname)=(-?\d+)|lvar=([^\]]*))\]/g,
+			(_match, tag, variableID, localVariableName) =>
+				localVariableName === undefined
+					? tag === 'hname'
+						? ((
+								game.findHeroByInstanceID(Number(game.getVariable(parseInt(variableID, 10)))) ??
+								game.teamHeroes[0]
+							)?.name ?? '')
+						: String(game.getVariable(parseInt(variableID, 10)) ?? '')
+					: String(game.getLocalVariable(localVariableName)),
+		);
 	}
 }
 

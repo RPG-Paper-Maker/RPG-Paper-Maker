@@ -158,6 +158,7 @@ class Base extends Serializable {
 	public static SQUARE_STEP_OPTIONS = Base.mapListIndex(['square', 'step']);
 	public static SQUARES_PIXELS_OPTIONS = Base.mapListIndex(['square.s', 'pixel.s']);
 	public static TOP_LEFT_CENTER_OPTIONS = Base.mapListIndex(['top.left', 'center']);
+	public static DISPLAY_PICTURE_KIND_OPTIONS = Base.mapListIndex(['picture', 'text']);
 	public static DAMAGE_KIND_OPTIONS = Base.mapListIndex(['statistic', 'currency', 'variable']);
 	public static TEAM_OPTIONS = Base.mapListIndex(['team', 'reserve', 'hidden', 'troop']);
 	public static MOVE_REMOVE_OPTIONS = Base.mapListIndex(['move', 'remove']);

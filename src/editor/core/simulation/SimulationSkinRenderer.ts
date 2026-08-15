@@ -41,6 +41,7 @@ type MessageStyle = {
 	size: number;
 	font: string;
 	color: string;
+	backColor: string | null;
 	strokeColor: string | null;
 	align: 'left' | 'center' | 'right';
 };
@@ -487,6 +488,7 @@ class SimulationSkinRenderer {
 			size: this.options.tSize,
 			font: this.options.tFont,
 			color: this.options.tcText,
+			backColor: null,
 			strokeColor: this.options.tOutline ? this.options.tcOutline : null,
 			align: 'left',
 		};
@@ -565,6 +567,9 @@ class SimulationSkinRenderer {
 			case 'textcolor':
 				style.color = this.colorById(parseInt(value, 10), style.color);
 				break;
+			case 'backcolor':
+				style.backColor = this.colorById(parseInt(value, 10), style.backColor ?? this.options.tcText);
+				break;
 			case 'strokecolor':
 				style.strokeColor = this.colorById(parseInt(value, 10), style.strokeColor ?? this.options.tcOutline);
 				break;
@@ -628,6 +633,10 @@ class SimulationSkinRenderer {
 	}
 
 	private drawStyledText(ctx: CanvasRenderingContext2D, text: string, style: MessageStyle, x: number, y: number) {
+		if (style.backColor) {
+			ctx.fillStyle = style.backColor;
+			ctx.fillRect(x, y - style.size / 2, ctx.measureText(text).width, style.size);
+		}
 		if (style.strokeColor) {
 			ctx.strokeStyle = style.strokeColor;
 			ctx.lineWidth = 3;
@@ -762,6 +771,10 @@ class SimulationSkinRenderer {
 		for (const segments of this.parseMessage(message)) {
 			cursorY = this.drawMessageLine(ctx, segments, x, cursorY, maxWidth);
 		}
+	}
+
+	public drawRichText(ctx: CanvasRenderingContext2D, message: string, x: number, y: number, maxWidth = 0) {
+		this.drawMessageContent(ctx, message, x, y, maxWidth);
 	}
 
 	private drawMessage(ctx: CanvasRenderingContext2D, content: SimulationTextContent): Rectangle {

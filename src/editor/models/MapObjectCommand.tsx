@@ -51,6 +51,7 @@ import { VscSymbolProperty } from 'react-icons/vsc';
 import {
 	BINDING,
 	CONDITION_HEROES_KIND,
+	DISPLAY_PICTURE_KIND,
 	DYNAMIC_VALUE_KIND,
 	EVENT_COMMAND_KIND,
 	ITEM_KIND,
@@ -1685,6 +1686,29 @@ class MapObjectCommand extends Base {
 		const zoom = this.toStringDynamicValue(iterator, properties, parameters);
 		const opacity = this.toStringDynamicValue(iterator, properties, parameters);
 		const angle = this.toStringDynamicValue(iterator, properties, parameters);
+		iterator.i++;
+		iterator.i += 5;
+		const displayKind =
+			(this.command[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE;
+		if (displayKind === DISPLAY_PICTURE_KIND.TEXT) {
+			let text = '';
+			let width = 1280;
+			while (iterator.i < this.command.length) {
+				const languageID = this.command[iterator.i++] as number;
+				const value = this.command[iterator.i++];
+				if (languageID === -1) {
+					width = (value as number) || 1280;
+				} else if (languageID === Project.current!.languages.list[0].id) {
+					text = value as string;
+				}
+			}
+			return [
+				text,
+				`${t('width')}=${width}, ${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t(
+					'opacity',
+				)}=${opacity}% ${t('angle')}=${angle}°`,
+			];
+		}
 		return [
 			`ID=${id} ${t('index').toLowerCase()}=${index}`,
 			`${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t('opacity')}=${opacity}% ${t(

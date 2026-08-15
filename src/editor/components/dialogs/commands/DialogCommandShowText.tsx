@@ -9,49 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useContext, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaItalic } from 'react-icons/fa';
-import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
 import { Project } from '../../../core/Project';
-import { Rectangle } from '../../../core/Rectangle';
 import { Model } from '../../../Editor';
+import useLivePreview from '../../../hooks/useLivePreview';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
-import Button from '../../Button';
-import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
-import { LocalVariablesContext } from '../../LocalVariablesContext';
-import Tab from '../../Tab';
-import TextArea from '../../TextArea';
+import PanelCommandText from '../../panels/PanelCommandText';
 import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
-import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
-import useLivePreview from '../../../hooks/useLivePreview';
 
 function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
-	const localVariables = useContext(LocalVariablesContext);
 
-	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
 	const [interlocutor] = useStateDynamicValue();
 	const [facesetID, setFacesetID] = useStateNumber();
 	const [facesetIndexX, setFacesetIndexX] = useStateNumber();
 	const [facesetIndexY, setFacesetIndexY] = useStateNumber();
-	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
 	const [texts, setTexts] = useState<Map<number, string>>(new Map());
-	const [triggerInsertText, setTriggerInsertText] = useState<string[] | null>(null);
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
-		setTabTitles(Project.current!.languages.list);
 		const allTexts = new Map<number, string>();
 		for (const language of Project.current!.languages.list) {
 			allTexts.set(language.id, '');
@@ -80,74 +68,6 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 		setFacesetID(id);
 		setFacesetIndexX(indexX);
 		setFacesetIndexY(indexY);
-	};
-
-	const handleClickBold = () => {
-		setTriggerInsertText(['[b]', '[/b]']);
-	};
-
-	const handleClickItalic = () => {
-		setTriggerInsertText(['[i]', '[/i]']);
-	};
-
-	const handleClickLeft = () => {
-		setTriggerInsertText(['[l]', '[/l]']);
-	};
-
-	const handleClickCenter = () => {
-		setTriggerInsertText(['[c]', '[/c]']);
-	};
-
-	const handleClickRight = () => {
-		setTriggerInsertText(['[r]', '[/r]']);
-	};
-
-	const handleChangeFontSize = (id: number) => {
-		setTriggerInsertText([`[size=${id}]`, '[/size]']);
-	};
-
-	const handleChangeFontName = (id: number) => {
-		setTriggerInsertText([`[font=${id}]`, '[/font]']);
-	};
-
-	const handleChangeTextColor = (id: number) => {
-		setTriggerInsertText([`[textcolor=${id}]`, '[/textcolor]']);
-	};
-
-	const handleChangeBackColor = (id: number) => {
-		setTriggerInsertText([`[backcolor=${id}]`, '[/backcolor]']);
-	};
-
-	const handleChangeOutlineColor = (id: number) => {
-		setTriggerInsertText([`[strokecolor=${id}]`, '[/strokecolor]']);
-	};
-
-	const handleChangeVariable = (id: number) => {
-		setTriggerInsertText([`[var=${id}]`]);
-	};
-
-	const handleChangeLocalVariable = (id: number) => {
-		setTriggerInsertText([`[lvar=${localVariables[id]}]`]);
-	};
-
-	const handleChangeParameter = (id: number) => {
-		setTriggerInsertText([`[par=${id}]`]);
-	};
-
-	const handleChangeProperty = (id: number) => {
-		setTriggerInsertText([`[pro=${id}]`]);
-	};
-
-	const handleChangeHeroName = (id: number) => {
-		setTriggerInsertText([`[hname=${id}]`]);
-	};
-
-	const handleClickIcon = () => {
-		setIsOpenDialogIcon(true);
-	};
-
-	const handleAcceptIcon = (picture: Model.Picture, rect: Rectangle) => {
-		setTriggerInsertText([`[ico=${picture.id};${rect.x};${rect.y}]`]);
 	};
 
 	const handleChangeTextArea = (id: number, text: string) => {
@@ -183,125 +103,6 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 	useLayoutEffect(() => {
 		initialize();
 	}, []);
-
-	const getTabContents = () =>
-		Project.current!.languages.list.map((language) => (
-			<Flex key={language.id} column spaced>
-				<Flex column>
-					<Flex columnMobile>
-						<Flex>
-							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickBold}>
-								<FaBold />
-							</Button>
-							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickItalic}>
-								<FaItalic />
-							</Button>
-							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickLeft}>
-								<FaAlignLeft />
-							</Button>
-							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickCenter}>
-								<FaAlignCenter />
-							</Button>
-							<Button buttonType={BUTTON_TYPE.PRIMARY_TEXT} onClick={handleClickRight}>
-								<FaAlignRight />
-							</Button>
-						</Flex>
-						<Flex>
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeFontSize}
-								options={Project.current!.systems.fontSizes}
-								noSelectionName={t('font.size')}
-								displayIDs
-								noWidthChange
-							/>
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeFontName}
-								options={Project.current!.systems.fontNames}
-								noSelectionName={t('font.name')}
-								displayIDs
-								noWidthChange
-							/>
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeTextColor}
-								options={Project.current!.systems.colors}
-								noSelectionName={t('text.color')}
-								displayIDs
-								noWidthChange
-							/>
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeBackColor}
-								options={Project.current!.systems.colors}
-								noSelectionName={t('back.color')}
-								displayIDs
-								noWidthChange
-							/>
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeOutlineColor}
-								options={Project.current!.systems.colors}
-								noSelectionName={t('outline.color')}
-								displayIDs
-								noWidthChange
-							/>
-						</Flex>
-					</Flex>
-					<Flex>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeVariable}
-							options={Project.current!.variables.getVariables()}
-							noSelectionName={t('variable')}
-							displayIDs
-							noWidthChange
-						/>
-						{localVariables.length > 0 && (
-							<Dropdown
-								selectedID={-1}
-								onChange={handleChangeLocalVariable}
-								options={localVariables.map((name, index) => Model.Base.create(index, name))}
-								noSelectionName={t('local.variable')}
-								noWidthChange
-							/>
-						)}
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeParameter}
-							options={Project.current!.currentMapObjectParameters}
-							noSelectionName={t('parameter')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeProperty}
-							options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
-							noSelectionName={t('property')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={handleChangeHeroName}
-							options={Project.current!.variables.getVariables()}
-							noSelectionName={t('hero.name')}
-							displayIDs
-							noWidthChange
-						/>
-						<Button onClick={handleClickIcon}>{t('icon')}...</Button>
-					</Flex>
-				</Flex>
-				<TextArea
-					text={texts.get(language.id)}
-					onChange={(text) => handleChangeTextArea(language.id, text)}
-					triggerInsertText={triggerInsertText}
-					setTriggerInsertText={setTriggerInsertText}
-				/>
-			</Flex>
-		));
 
 	return (
 		<>
@@ -345,19 +146,9 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 							/>
 						</Value>
 					</Form>
-					<Tab titles={tabTitles} contents={getTabContents()} />
+					<PanelCommandText texts={texts} onChange={handleChangeTextArea} />
 				</Flex>
 			</Dialog>
-			{isOpenDialogIcon && (
-				<DialogPictures
-					setIsOpen={setIsOpenDialogIcon}
-					pictureID={-1}
-					indexX={0}
-					indexY={0}
-					kind={PICTURE_KIND.ICONS}
-					onAccept={handleAcceptIcon}
-				/>
-			)}
 		</>
 	);
 }
