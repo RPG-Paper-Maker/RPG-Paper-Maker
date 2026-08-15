@@ -184,7 +184,11 @@ function DialogCharacteristic({ setIsOpen, model, onAccept, onReject }: Props) {
 			beginWeaponArmorID.value = 0;
 			setTrigger((b) => !b);
 		}
-		if (beginEquipmentDatabase.length > 0) {
+		if (
+			beginEquipmentDatabase.length > 0 &&
+			(beginWeaponArmorID.kind !== DYNAMIC_VALUE_KIND.DATABASE ||
+				!beginEquipmentDatabase.some((entry) => entry.id === beginWeaponArmorID.value))
+		) {
 			beginWeaponArmorID.kind = DYNAMIC_VALUE_KIND.DATABASE;
 			beginWeaponArmorID.value = beginEquipmentDatabase[0].id;
 			setTrigger((b) => !b);
