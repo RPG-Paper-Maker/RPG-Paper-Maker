@@ -567,7 +567,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 							</Label>
 							<Value>
 								<Form>
-									<Label>X</Label>
+									<Label disabled={!isTerrainAtCoordinates}>X</Label>
 									<Value>
 										<Flex columnMobile spaced>
 											<Flex spaced centerV>
@@ -576,20 +576,20 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('square.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('square.s')}</Flex>
 											</Flex>
-											<div>+</div>
+											<Flex disabledLabel={!isTerrainAtCoordinates}>+</Flex>
 											<Flex spaced centerV>
 												<DynamicValueSelector
 													value={valueTerrainXPlus}
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('pixel.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('pixel.s')}</Flex>
 											</Flex>
 										</Flex>
 									</Value>
-									<Label>Y</Label>
+									<Label disabled={!isTerrainAtCoordinates}>Y</Label>
 									<Value>
 										<Flex columnMobile spaced>
 											<Flex spaced centerV>
@@ -598,20 +598,20 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('square.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('square.s')}</Flex>
 											</Flex>
-											<div>+</div>
+											<Flex disabledLabel={!isTerrainAtCoordinates}>+</Flex>
 											<Flex spaced centerV>
 												<DynamicValueSelector
 													value={valueTerrainYPlus}
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('pixel.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('pixel.s')}</Flex>
 											</Flex>
 										</Flex>
 									</Value>
-									<Label>Z</Label>
+									<Label disabled={!isTerrainAtCoordinates}>Z</Label>
 									<Value>
 										<Flex columnMobile spaced>
 											<Flex spaced centerV>
@@ -620,16 +620,16 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('square.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('square.s')}</Flex>
 											</Flex>
-											<div>+</div>
+											<Flex disabledLabel={!isTerrainAtCoordinates}>+</Flex>
 											<Flex spaced centerV>
 												<DynamicValueSelector
 													value={valueTerrainZPlus}
 													optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 													disabled={!isTerrainAtCoordinates}
 												/>
-												{t('pixel.s')}
+												<Flex disabledLabel={!isTerrainAtCoordinates}>{t('pixel.s')}</Flex>
 											</Flex>
 										</Flex>
 									</Value>

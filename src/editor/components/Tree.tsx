@@ -849,9 +849,9 @@ function Tree({
 
 	useLayoutEffect(() => {
 		if (!noFirstSelection && !deselectable) {
-			const index =
-				defaultSelectedID === undefined ? 0 : list.findIndex((node) => node.content.id === defaultSelectedID);
-			const node = list[index] ?? Node.create(createDefault(-1));
+			const node =
+				(defaultSelectedID === undefined ? list[0] : Node.getNodeByID(list, defaultSelectedID)) ??
+				Node.create(createDefault(-1));
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node.content.name);
 			if (onSelectedItem) {

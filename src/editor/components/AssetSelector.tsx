@@ -44,6 +44,7 @@ type Props = {
 	kind?: number;
 	songOptions?: Model.PlaySong;
 	onChange?: (id: number, indexX: number, indexY: number) => void;
+	onOpen?: () => void;
 	disabled?: boolean;
 	active?: boolean;
 	disableParametersProperties?: boolean;
@@ -63,6 +64,7 @@ function AssetSelector({
 	kind,
 	songOptions,
 	onChange,
+	onOpen,
 	disabled = false,
 	active = false,
 	disableParametersProperties = false,
@@ -97,7 +99,11 @@ function AssetSelector({
 
 	const handleDoubleClick = () => {
 		if (!disabled) {
-			setIsOpen(true);
+			if (onOpen) {
+				onOpen();
+			} else {
+				setIsOpen(true);
+			}
 		}
 	};
 
@@ -155,7 +161,7 @@ function AssetSelector({
 	};
 
 	const getDialog = () => {
-		if (isOpen) {
+		if (isOpen && !onOpen) {
 			switch (selectionType) {
 				case ASSET_SELECTOR_TYPE.PICTURES:
 					return (

@@ -24,6 +24,11 @@ export const SIM_SCREEN_Y = 720;
 export type SimulationPicture = {
 	index: number;
 	pictureID: number;
+	pictureKind: PICTURE_KIND;
+	indexX: number;
+	indexY: number;
+	indexWidth: number;
+	indexHeight: number;
 	centered: boolean;
 	stretch: boolean;
 	x: number;
@@ -77,7 +82,7 @@ class SimulationScreen {
 	public previousWeather: SimulationWeather | null = null;
 	public animations: SimulationAnimation[] = [];
 
-	private static images = new Map<number, HTMLImageElement | null>();
+	private static images = new Map<string, HTMLImageElement | null>();
 	private static animationImages = new Map<number, HTMLImageElement | null>();
 
 	static clearImages() {
@@ -85,26 +90,27 @@ class SimulationScreen {
 		SimulationScreen.animationImages.clear();
 	}
 
-	getImage(pictureID: number): HTMLImageElement | null {
+	getImage(pictureID: number, pictureKind = PICTURE_KIND.PICTURES): HTMLImageElement | null {
+		const key = `${pictureKind}:${pictureID}`;
 		const images = SimulationScreen.images;
-		if (images.has(pictureID)) {
-			return images.get(pictureID) ?? null;
+		if (images.has(key)) {
+			return images.get(key) ?? null;
 		}
-		images.set(pictureID, null);
-		const picture = Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, pictureID);
+		images.set(key, null);
+		const picture = Project.current!.pictures.getByID(pictureKind, pictureID);
 		if (picture) {
 			void (async () => {
 				const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 				if (image.width > 0 && !Picture2D.isMissing(image)) {
-					images.set(pictureID, image);
+					images.set(key, image);
 				}
 			})();
 		}
 		return null;
 	}
 
-	getImageSize(pictureID: number): { width: number; height: number } | null {
-		const image = this.getImage(pictureID);
+	getImageSize(pictureID: number, pictureKind = PICTURE_KIND.PICTURES): { width: number; height: number } | null {
+		const image = this.getImage(pictureID, pictureKind);
 		return image === null ? null : { width: image.width, height: image.height };
 	}
 
@@ -131,7 +137,7 @@ class SimulationScreen {
 	}
 
 	setPicture(picture: SimulationPicture) {
-		this.getImage(picture.pictureID);
+		this.getImage(picture.pictureID, picture.pictureKind);
 		for (let i = 0; i < this.pictures.length; i++) {
 			const index = this.pictures[i].index;
 			if (index === picture.index) {

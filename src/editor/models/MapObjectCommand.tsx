@@ -1660,11 +1660,22 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringDisplayAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const pictureKindIterator = Utils.generateIterator();
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		pictureKindIterator.i++;
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		this.toStringDynamicValue(pictureKindIterator, properties, parameters);
+		pictureKindIterator.i++;
+		const pictureKind = (this.command[pictureKindIterator.i] as PICTURE_KIND | undefined) ?? PICTURE_KIND.PICTURES;
 		const id = this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters,
-			Project.current!.pictures.getList(PICTURE_KIND.PICTURES),
+			Project.current!.pictures.getList(pictureKind),
 			true,
 		);
 		const index = this.toStringDynamicValue(iterator, properties, parameters);
@@ -2586,22 +2597,99 @@ class MapObjectCommand extends Base {
 		let text = this.command[iterator.i++] as string;
 		text += isCreating ? ' = ' : ` ${this.toStringOperation(iterator)} `;
 		const valueKind = this.command[iterator.i++] as number;
-		if ([0, 2, 3].includes(valueKind)) {
-			text += this.toStringDynamicValue(iterator, properties, parameters);
-		} else if (valueKind === 11) {
-			const x = this.toStringDynamicValue(iterator, properties, parameters);
-			const y = this.toStringDynamicValue(iterator, properties, parameters);
-			const z = this.toStringDynamicValue(iterator, properties, parameters);
-			const xPixels = this.toStringDynamicValue(iterator, properties, parameters);
-			const yPixels = this.toStringDynamicValue(iterator, properties, parameters);
-			const zPixels = this.toStringDynamicValue(iterator, properties, parameters);
-			text += `${t('terrain').toLowerCase()} (${t('x.square.position').toLowerCase()}: ${x}, ${t(
-				'x.pixel.position',
-			).toLowerCase()}: ${xPixels}, ${t('y.square.position').toLowerCase()}: ${y}, ${t(
-				'y.pixel.position',
-			).toLowerCase()}: ${yPixels}, ${t('z.square.position').toLowerCase()}: ${z}, ${t(
-				'z.pixel.position',
-			).toLowerCase()}: ${zPixels})`;
+		switch (valueKind) {
+			case 0:
+			case 2:
+			case 3:
+				text += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 1:
+				text += `${t('random.number.between').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+				)} ${t('and').toLowerCase()} ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				break;
+			case 4:
+				text += `${t('object.id').toLowerCase()} ${this.toStringDynamicObject(
+					iterator,
+					properties,
+					parameters,
+				)} ${t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name)}`;
+				break;
+			case 5: {
+				text += `${t('number.of').toLowerCase()} `;
+				let list: Base[] = [];
+				switch (this.command[iterator.i++]) {
+					case ITEM_KIND.ITEM:
+						text += t('item').toLowerCase();
+						list = Project.current!.items.list;
+						break;
+					case ITEM_KIND.WEAPON:
+						text += t('weapon').toLowerCase();
+						list = Project.current!.weapons.list;
+						break;
+					case ITEM_KIND.ARMOR:
+						text += t('armor').toLowerCase();
+						list = Project.current!.armors.list;
+						break;
+				}
+				text += ` ${this.toStringDynamicValue(iterator, properties, parameters, list)} ${t(
+					'in.inventory',
+				).toLowerCase()}`;
+				break;
+			}
+			case 6:
+				text += `${t('total.currency').toLowerCase()} ${t(
+					Base.CURRENCY_OPTIONS[this.command[iterator.i++] as number].name,
+				).toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.systems.currencies,
+				)}`;
+				break;
+			case 7:
+				text += `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+				)} ${t('statistic.id').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.battleSystem.statistics,
+				)}`;
+				break;
+			case 8:
+				text += `${t('enemy')} ${
+					TroopMonster.currentMonsters[this.command[iterator.i++] as number]?.toString() ?? ''
+				} ${t('instance.id').toLowerCase()}`;
+				break;
+			case 9:
+				text += t(
+					Base.VARIABLE_OTHER_CHARACTERISTICS_OPTIONS[this.command[iterator.i++] as number].name,
+				).toLowerCase();
+				break;
+			case 10:
+				text += `${t('script')}: ${this.command[iterator.i++]}`;
+				break;
+			case 11: {
+				const x = this.toStringDynamicValue(iterator, properties, parameters);
+				const y = this.toStringDynamicValue(iterator, properties, parameters);
+				const z = this.toStringDynamicValue(iterator, properties, parameters);
+				const xPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				const yPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				const zPixels = this.toStringDynamicValue(iterator, properties, parameters);
+				text += `${t('terrain').toLowerCase()} (${t('x.square.position').toLowerCase()}: ${x}, ${t(
+					'x.pixel.position',
+				).toLowerCase()}: ${xPixels}, ${t('y.square.position').toLowerCase()}: ${y}, ${t(
+					'y.pixel.position',
+				).toLowerCase()}: ${yPixels}, ${t('z.square.position').toLowerCase()}: ${z}, ${t(
+					'z.pixel.position',
+				).toLowerCase()}: ${zPixels})`;
+				break;
+			}
 		}
 		return [text];
 	}

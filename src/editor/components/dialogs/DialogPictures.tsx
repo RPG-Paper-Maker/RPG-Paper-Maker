@@ -13,6 +13,7 @@ import { ReactNode, useLayoutEffect, useMemo, useReducer, useState } from 'react
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
+import { Constants } from '../../common';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
@@ -34,6 +35,7 @@ import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	kind?: PICTURE_KIND;
+	defaultKind?: PICTURE_KIND;
 	setIsOpen: (b: boolean) => void;
 	pictureID?: number;
 	dynamicPictureID?: DynamicValue;
@@ -41,12 +43,14 @@ type Props = {
 	indexY?: number;
 	rectTileset?: Rectangle;
 	onAccept?: (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => void;
+	onAcceptSelection?: (picture: Model.Picture, rect: Rectangle) => void;
 	onReject?: () => void;
 	active?: boolean;
 };
 
 function DialogPictures({
 	kind,
+	defaultKind,
 	setIsOpen,
 	pictureID,
 	dynamicPictureID,
@@ -54,6 +58,7 @@ function DialogPictures({
 	indexY,
 	rectTileset,
 	onAccept,
+	onAcceptSelection,
 	onReject,
 	active = false,
 }: Props) {
@@ -70,7 +75,8 @@ function DialogPictures({
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
-	const [selectedKind, setSelectedKind] = useState(kind);
+	const [selectedKind, setSelectedKind] = useState(kind ?? defaultKind);
+	const isSelectionMode = kind !== undefined || onAccept !== undefined || onAcceptSelection !== undefined;
 	const [, forceUpdateLimit] = useReducer((x: number) => x + 1, 0);
 	const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -135,13 +141,15 @@ function DialogPictures({
 		setIsInitiating(true);
 		setNewDynamicPictureID(dynamicPictureID?.clone());
 		setIsSelectedLeftList(true);
-		setPictures(Node.createList(Project.current!.pictures.getList(selectedKind!), kind !== undefined));
+		setPictures(Node.createList(Project.current!.pictures.getList(selectedKind!), isSelectionMode));
 		let rect = new Rectangle();
 		let rectT = new Rectangle();
 		if (pictureID !== undefined) {
 			const picture = Project.current!.pictures.getByID(selectedKind!, pictureID);
 			updateSelectedPicture(picture);
-			if (pictureID === 0) {
+			if (selectedKind === PICTURE_KIND.TILESETS && rectTileset) {
+				rectT = rectTileset.clone();
+			} else if (pictureID === 0) {
 				if (rectTileset) {
 					rectT = rectTileset.clone();
 				}
@@ -224,7 +232,7 @@ function DialogPictures({
 	};
 
 	const handleAccept = async () => {
-		if (kind === undefined) {
+		if (!isSelectionMode) {
 			setIsLoading(true);
 			await Scene.Map.current?.reloadTextures();
 			await Project.current!.pictures.save();
@@ -236,8 +244,8 @@ function DialogPictures({
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				setIsLoading(true);
-				await Scene.Map.current?.reloadTextures(kind);
-				Project.current!.pictures.list.set(kind, Node.createListFromNodes(pictures));
+				await Scene.Map.current?.reloadTextures(selectedKind);
+				Project.current!.pictures.list.set(selectedKind!, Node.createListFromNodes(pictures));
 				await Project.current!.pictures.save();
 				const isTileset = selectedPicture.id === 0;
 				onAccept?.(
@@ -246,6 +254,10 @@ function DialogPictures({
 						? selectedRectTileset.clone()
 						: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
 					isTileset,
+				);
+				onAcceptSelection?.(
+					selectedPicture,
+					selectedKind === PICTURE_KIND.TILESETS ? selectedRectTileset.clone() : selectedRect.clone(),
 				);
 				if (active) {
 					if (!newDynamicPictureID!.isActivated) {
@@ -262,7 +274,7 @@ function DialogPictures({
 	};
 
 	const handleReject = async () => {
-		if (kind === undefined) {
+		if (!isSelectionMode) {
 			setIsLoading(true);
 			await Project.current!.pictures.load();
 			setIsLoading(false);
@@ -328,6 +340,16 @@ function DialogPictures({
 	const getPreviewerContent = () => {
 		if (selectedPicture) {
 			const path = selectedPicture.getPath();
+			if (!isSelectionMode) {
+				switch (selectedKind) {
+					case PICTURE_KIND.CHARACTERS:
+					case PICTURE_KIND.BATTLERS:
+						return wrapWithLimitTabs(<TexturePreviewer texture={path} base64={!selectedPicture.isBR} />);
+					case PICTURE_KIND.FACESETS:
+					case PICTURE_KIND.TILESETS:
+						return <TexturePreviewer texture={path} base64={!selectedPicture.isBR} />;
+				}
+			}
 			switch (selectedKind) {
 				case PICTURE_KIND.CHARACTERS:
 					if (selectedPicture.id === -1) {
@@ -354,12 +376,35 @@ function DialogPictures({
 							isClimbAnimation={isClimbAnimation}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
-							base64={!selectedPicture.isBR}
 							adjustPositionSize
+							base64={!selectedPicture.isBR}
 						/>,
 					);
 				case PICTURE_KIND.BATTLERS:
-					return wrapWithLimitTabs(<TexturePreviewer texture={path} base64={!selectedPicture.isBR} />);
+					return wrapWithLimitTabs(
+						<TextureSquareSelector
+							texture={path}
+							canChangeSize={false}
+							columns={Project.current!.systems.battlersFrames}
+							rows={Project.current!.systems.battlersRows}
+							defaultRectangle={selectedRect}
+							onUpdateRectangle={setSelectedRect}
+							adjustPositionSize
+							base64={!selectedPicture.isBR}
+							doNotUpdateTexture
+							selectionSquareSize={Project.SQUARE_SIZE}
+						/>,
+					);
+				case PICTURE_KIND.TILESETS:
+					return (
+						<TextureSquareSelector
+							texture={path}
+							defaultRectangle={selectedRectTileset}
+							onUpdateRectangle={setSelectedRectTileset}
+							base64={!selectedPicture.isBR}
+							doNotUpdateTexture
+						/>
+					);
 				case PICTURE_KIND.ICONS: {
 					const size = Project.current!.systems.iconsSize / Project.SQUARE_SIZE;
 					return (
@@ -423,7 +468,7 @@ function DialogPictures({
 
 	return (
 		<Dialog
-			title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
+			title={`${t(isSelectionMode ? 'select.picture' : 'pictures.manager')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			initialWidth={window.innerWidth <= 1000 ? '100%' : '80%'}
@@ -438,6 +483,7 @@ function DialogPictures({
 						<Tree
 							constructorType={Model.TreeMapTag}
 							list={folders}
+							defaultSelectedID={selectedKind}
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleChangeFolder}
 							cannotAdd

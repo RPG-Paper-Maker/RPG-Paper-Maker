@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { ANIMATION_POSITION_KIND } from '../../common';
+import { ANIMATION_POSITION_KIND, PICTURE_KIND } from '../../common';
 import { Project } from '../Project';
 import { SIM_SCREEN_X, SIM_SCREEN_Y, SimulationPicture, SimulationScreen } from './SimulationScreen';
 
@@ -26,15 +26,15 @@ class SimulationScreenRenderer {
 	) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.imageSmoothingEnabled = false;
-		const scale = width / SIM_SCREEN_X;
-		const offsetX = 0;
-		const offsetY = height - SIM_SCREEN_Y * scale;
+		const scaleX = width / SIM_SCREEN_X;
+		const scaleY = height / SIM_SCREEN_Y;
+		const minScale = Math.min(scaleX, scaleY);
 		for (const picture of screen.pictures) {
 			const isBelow = picture.index < 0;
 			if (isBelow !== (layer === 'below')) {
 				continue;
 			}
-			SimulationScreenRenderer.drawPicture(ctx, picture, screen, width, height, scale, offsetX, offsetY);
+			SimulationScreenRenderer.drawPicture(ctx, picture, screen, width, height, scaleX, scaleY, minScale);
 		}
 		if (layer === 'above') {
 			SimulationScreenRenderer.drawAnimations(ctx, width, height, screen);
@@ -120,11 +120,11 @@ class SimulationScreenRenderer {
 		screen: SimulationScreen,
 		width: number,
 		height: number,
-		scale: number,
-		offsetX: number,
-		offsetY: number,
+		scaleX: number,
+		scaleY: number,
+		minScale: number,
 	) {
-		const image = screen.getImage(picture.pictureID);
+		const image = screen.getImage(picture.pictureID, picture.pictureKind);
 		if (image === null || image.width === 0 || image.height === 0) {
 			return;
 		}
@@ -132,6 +132,45 @@ class SimulationScreenRenderer {
 		let y: number;
 		let w: number;
 		let h: number;
+		const isIcon = picture.pictureKind === PICTURE_KIND.ICONS;
+		const isFaceset = picture.pictureKind === PICTURE_KIND.FACESETS;
+		const isCharacter = picture.pictureKind === PICTURE_KIND.CHARACTERS;
+		const isBattler = picture.pictureKind === PICTURE_KIND.BATTLERS;
+		const isTileset = picture.pictureKind === PICTURE_KIND.TILESETS;
+		const selectedPicture = Project.current!.pictures.getByID(picture.pictureKind, picture.pictureID);
+		const sourceWidth = isIcon
+			? (Project.current!.systems.iconsSize / Project.SQUARE_SIZE) * Project.SQUARE_SIZE
+			: isFaceset
+				? Project.current!.systems.facesetsSizeWidth
+				: isCharacter
+					? image.width / Project.current!.systems.FRAMES
+					: isBattler
+						? image.width / Project.current!.systems.battlersFrames
+						: isTileset
+							? picture.indexWidth * Project.SQUARE_SIZE
+							: image.width;
+		const sourceHeight = isIcon
+			? (Project.current!.systems.iconsSize / Project.SQUARE_SIZE) * Project.SQUARE_SIZE
+			: isFaceset
+				? Project.current!.systems.facesetsSizeHeight
+				: isCharacter
+					? image.height / (selectedPicture?.getRows() ?? 4)
+					: isBattler
+						? image.height / Project.current!.systems.battlersRows
+						: isTileset
+							? picture.indexHeight * Project.SQUARE_SIZE
+							: image.height;
+		const hasSelectionGrid = isIcon || isFaceset || isCharacter || isBattler || isTileset;
+		const sourceX = isTileset
+			? picture.indexX * Project.SQUARE_SIZE
+			: hasSelectionGrid
+				? picture.indexX * sourceWidth
+				: 0;
+		const sourceY = isTileset
+			? picture.indexY * Project.SQUARE_SIZE
+			: hasSelectionGrid
+				? picture.indexY * sourceHeight
+				: 0;
 		if (picture.stretch) {
 			const systems = Project.current!.systems;
 			const stretchX = width / systems.windowWidth;
@@ -141,10 +180,10 @@ class SimulationScreenRenderer {
 			x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * stretchX : picture.x * stretchX;
 			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * stretchY : picture.y * stretchY;
 		} else {
-			w = image.width * scale * picture.zoom;
-			h = image.height * scale * picture.zoom;
-			x = offsetX + picture.x * scale;
-			y = offsetY + picture.y * scale;
+			w = sourceWidth * minScale * picture.zoom;
+			h = sourceHeight * minScale * picture.zoom;
+			x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX;
+			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
 		}
 		x = Math.round(x);
 		y = Math.round(y);
@@ -171,7 +210,7 @@ class SimulationScreenRenderer {
 		if (picture.centered) {
 			ctx.translate(x - w / 2, y - h / 2);
 		}
-		ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, w, h);
+		ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, w, h);
 		ctx.restore();
 	}
 }

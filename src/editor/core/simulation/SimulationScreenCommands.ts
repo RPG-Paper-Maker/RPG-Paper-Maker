@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, Utils } from '../../common';
+import { DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Manager, Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
 import { DynamicValue } from '../DynamicValue';
@@ -52,6 +52,11 @@ class CommandDisplayAPicture extends CommandBase {
 	private opacity: DynamicValue;
 	private angle: DynamicValue;
 	private stretch: boolean;
+	private pictureKind: PICTURE_KIND;
+	private indexX: number;
+	private indexY: number;
+	private indexWidth: number;
+	private indexHeight: number;
 
 	constructor(command: MapObjectCommandType[]) {
 		super();
@@ -65,6 +70,11 @@ class CommandDisplayAPicture extends CommandBase {
 		this.opacity = DynamicValue.createCommand(command, iterator);
 		this.angle = DynamicValue.createCommand(command, iterator);
 		this.stretch = Utils.numToBool(command[iterator.i++] as number);
+		this.pictureKind = (command[iterator.i++] as PICTURE_KIND | undefined) ?? PICTURE_KIND.PICTURES;
+		this.indexX = (command[iterator.i++] as number | undefined) ?? 0;
+		this.indexY = (command[iterator.i++] as number | undefined) ?? 0;
+		this.indexWidth = (command[iterator.i++] as number | undefined) ?? 1;
+		this.indexHeight = (command[iterator.i++] as number | undefined) ?? 1;
 	}
 
 	update(_state: CommandState, ctx: SimulationContext): number {
@@ -74,6 +84,11 @@ class CommandDisplayAPicture extends CommandBase {
 		ctx.screen.setPicture({
 			index: game.resolveNumber(this.index),
 			pictureID: game.resolveNumber(this.pictureID),
+			pictureKind: this.pictureKind,
+			indexX: this.indexX,
+			indexY: this.indexY,
+			indexWidth: this.indexWidth,
+			indexHeight: this.indexHeight,
 			centered: this.centered,
 			stretch: this.stretch,
 			x: this.centered ? SIM_SCREEN_X / 2 + x : x,
