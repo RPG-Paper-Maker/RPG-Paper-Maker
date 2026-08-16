@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "Utwórz model na mapie",
 	"new.object.model.id": "Nowe zdarzenie - ID modelu",
 	"stock.id.in.variable.id": "Zapisz ID w zmiennej",
+	"stock.last.object.id.in.variable": "Zapisz ostatni identyfikator obiektu w zmiennej",
 	"jump": "Skok",
 	"peak": "Szczyt",
 	"turn.north": "Obrót góra (północ)",

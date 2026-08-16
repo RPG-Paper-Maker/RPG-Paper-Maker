@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "Створити об'єкт на карті",
 	"new.object.model.id": "№ нової моделі об'єктів",
 	"stock.id.in.variable.id": "Записати № в змінній №",
+	"stock.last.object.id.in.variable": "Зберегти ID останнього об'єкта у змінній",
 	"jump": "Стрибок",
 	"peak": "Пік",
 	"turn.north": "Поворот на північ",

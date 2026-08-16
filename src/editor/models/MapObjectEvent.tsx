@@ -67,7 +67,15 @@ class MapObjectEvent extends Base {
 		this.isSystem = list[iterator.i++] === 0;
 		this.id = list[iterator.i++] as number;
 		this.parameters = [];
-		while (iterator.i < list.length) {
+		const event = Base.getByID(
+			this.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
+			this.id,
+		) as CommonEvent | null;
+		for (
+			let parameterIndex = 0;
+			parameterIndex < (event?.parameters.length ?? 0) && iterator.i < list.length;
+			parameterIndex++
+		) {
 			const paramID = list[iterator.i++] as number;
 			const v = new DynamicValue();
 			v.updateCommand(list, iterator);

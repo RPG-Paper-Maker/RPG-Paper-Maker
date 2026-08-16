@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "Crea oggetto nella mappa",
 	"new.object.model.id": "Nuovo ID modello oggetto",
 	"stock.id.in.variable.id": "Salva ID in ID variabile",
+	"stock.last.object.id.in.variable": "Memorizza l'ultimo ID oggetto nella variabile",
 	"jump": "Salta",
 	"peak": "Picco",
 	"turn.north": "Volta a nord",

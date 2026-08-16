@@ -48,6 +48,8 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 	const [onlyTheClosest, setOnlyTheClosest] = useStateBool();
 	const [objectID] = useStateDynamicValue();
 	const [event] = useState<Model.MapObjectEvent>(new Model.MapObjectEvent());
+	const [isStockLastObjectID, setIsStockLastObjectID] = useStateBool();
+	const [stockLastObjectIDVariable] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
@@ -57,6 +59,7 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 	const initialize = () => {
 		detectionID.updateToDefaultDatabase(Project.current!.systems.detections);
 		objectID.updateToDefaultDatabase(-1);
+		stockLastObjectIDVariable.updateToDefaultVariable(1);
 		let scr = true;
 		let otc = false;
 		if (list) {
@@ -74,9 +77,15 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 					break;
 			}
 			panelObjectEventRef.current?.initialize(list, iterator);
+			const checked = iterator.i < list.length && Utils.initializeBoolCommand(list, iterator);
+			setIsStockLastObjectID(checked);
+			if (checked) {
+				stockLastObjectIDVariable.updateCommand(list, iterator);
+			}
 		} else {
 			setSelectionTargetType(SELECTION_TARGET_TYPE.DETECTION);
 			panelObjectEventRef.current?.initialize();
+			setIsStockLastObjectID(false);
 		}
 		setSenderCantReceive(scr);
 		setOnlyTheClosest(otc);
@@ -98,6 +107,10 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 				break;
 		}
 		panelObjectEventRef.current?.accept(newList);
+		newList.push(Utils.boolToNum(isStockLastObjectID));
+		if (isStockLastObjectID) {
+			stockLastObjectIDVariable.getCommand(newList);
+		}
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -183,6 +196,16 @@ function DialogCommandSendEvent({ commandKind, setIsOpen, list, onAccept, onReje
 				<Groupbox title={t('event')}>
 					<PanelObjectEvent event={event} isNew={!list} ref={panelObjectEventRef} />
 				</Groupbox>
+				<Flex spaced centerV>
+					<Checkbox isChecked={isStockLastObjectID} onChange={setIsStockLastObjectID}>
+						{t('stock.last.object.id.in.variable')}
+					</Checkbox>
+					<DynamicValueSelector
+						value={stockLastObjectIDVariable}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+						disabled={!isStockLastObjectID}
+					/>
+				</Flex>
 			</Flex>
 		</Dialog>
 	);

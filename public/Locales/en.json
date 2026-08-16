@@ -1065,6 +1065,7 @@
 	"create.object.in.map": "Create object in map",
 	"new.object.model.id": "New object model ID",
 	"stock.id.in.variable.id": "Stock ID in variable ID",
+	"stock.last.object.id.in.variable": "Store last object ID in variable",
 	"jump": "Jump",
 	"peak": "Peak",
 	"turn.north": "Turn north",

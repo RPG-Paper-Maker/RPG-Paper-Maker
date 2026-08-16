@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "マップ内にオブジェクト作成",
 	"new.object.model.id": "新オブジェクトモデルID",
 	"stock.id.in.variable.id": "作成したIDを変数に格納",
+	"stock.last.object.id.in.variable": "最後にイベントを送信したオブジェクトIDを変数に格納",
 	"jump": "ジャンプ",
 	"peak": "頂点",
 	"turn.north": "北を向く",

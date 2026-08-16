@@ -1062,6 +1062,7 @@
 	"create.object.in.map": "在地图中创建物体",
 	"new.object.model.id": "新物体模型 ID",
 	"stock.id.in.variable.id": "将 ID 存储在变量中",
+	"stock.last.object.id.in.variable": "将最后一个对象 ID 存储在变量中",
 	"jump": "跳跃",
 	"peak": "顶点",
 	"turn.north": "转向北",

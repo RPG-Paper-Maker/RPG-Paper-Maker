@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "Créer un objet dans la carte",
 	"new.object.model.id": "Nouvel objet de modèle d'ID",
 	"stock.id.in.variable.id": "Stocker l'ID dans la variable d'ID",
+	"stock.last.object.id.in.variable": "Stocker le dernier ID d'objet dans la variable",
 	"jump": "Saut",
 	"peak": "Sommet",
 	"turn.north": "Tourner vers le nord",

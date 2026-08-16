@@ -1061,6 +1061,7 @@
 	"create.object.in.map": "Crea un objeto en el mapa",
 	"new.object.model.id": "Nuevo objeto de plantilla de ID",
 	"stock.id.in.variable.id": "ID de tienda en variable de ID",
+	"stock.last.object.id.in.variable": "Guardar el último ID de objeto en la variable",
 	"jump": "Saltar",
 	"peak": "Pico",
 	"turn.north": "Gira hacia el norte",

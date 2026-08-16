@@ -1911,6 +1911,12 @@ class MapObjectCommand extends Base {
 				event.id,
 			)?.name ?? '';
 		str += ` ${t('with.event').toLowerCase()} ${event.toString()}`;
+		if (iterator.i < this.command.length && Utils.initializeBoolCommand(this.command, iterator)) {
+			return [
+				str,
+				`${t('stock.last.object.id.in.variable')} ${this.toStringDynamicValue(iterator, properties, parameters)}`,
+			];
+		}
 		return [str];
 	}
 

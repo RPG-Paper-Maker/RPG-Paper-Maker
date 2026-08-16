@@ -1062,6 +1062,7 @@
 	"create.object.in.map": "맵에 오브젝트 생성",
 	"new.object.model.id": "새 오브젝트 모델 ID",
 	"stock.id.in.variable.id": "변수 ID에 ID 저장",
+	"stock.last.object.id.in.variable": "마지막 오브젝트 ID를 변수에 저장",
 	"jump": "점프",
 	"peak": "정점",
 	"turn.north": "북쪽으로 돌기",
