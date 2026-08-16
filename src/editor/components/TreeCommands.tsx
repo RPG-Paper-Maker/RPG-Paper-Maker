@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { isValidElement, ReactNode, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPlay, FaSlidersH } from 'react-icons/fa';
 import { ArrayUtils, EVENT_COMMAND_KIND } from '../common';
@@ -36,11 +36,28 @@ const KINDS_WITHOUT_PLAY = [
 	EVENT_COMMAND_KIND.IF_LOSE,
 ];
 
+const getTextContent = (node: ReactNode): string[] => {
+	if (typeof node === 'string' || typeof node === 'number') {
+		return [String(node)];
+	}
+	if (Array.isArray(node)) {
+		return node.flatMap(getTextContent);
+	}
+	return isValidElement<{ children?: ReactNode }>(node) ? getTextContent(node.props.children) : [];
+};
+
 function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCommand, onLivePreviewCommand }: Props) {
 	const { t } = useTranslation();
 
 	const canPlayCommand = (node: Node) =>
 		node.content.id > 0 && !KINDS_WITHOUT_PLAY.includes((node.content as Model.MapObjectCommand).kind);
+	const getTooltip = (node: Node) => {
+		const command = node.content as Model.MapObjectCommand;
+		const text = getTextContent(command.toString());
+		return [EVENT_COMMAND_KIND.IF, EVENT_COMMAND_KIND.COMMENT].includes(command.kind)
+			? text.join('\n')
+			: text.slice(1).join('\n').trim().replace(/^:\s*/, '');
+	};
 	const [updatedList, setUpdatedList] = useState<Node[] | null>(null);
 
 	const handleAcceptCommand = (node: Node, isNew: boolean) => {
@@ -165,7 +182,7 @@ function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCo
 			cannotUpdateListSize
 			canDisable
 			cannotClear
-			hideTooltip
+			getTooltip={getTooltip}
 			rowActions={
 				onPlayCommand
 					? [

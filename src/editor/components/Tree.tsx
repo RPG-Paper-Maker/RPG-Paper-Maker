@@ -90,6 +90,7 @@ type Props = {
 	blurOnMouseLeave?: boolean;
 	triggerNewItem?: boolean;
 	rowActions?: TreeRowAction[];
+	getTooltip?: (node: Node) => string;
 	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 	onDialogModelLivePreview?: (model: Model.Base | null, isNew: boolean) => void;
 };
@@ -152,6 +153,7 @@ function Tree({
 	blurOnMouseLeave = false,
 	triggerNewItem,
 	rowActions,
+	getTooltip,
 	onDialogLivePreview,
 	onDialogModelLivePreview,
 }: Props) {
@@ -1031,6 +1033,7 @@ function Tree({
 						hideCheck={hideCheck}
 						isCutSource={copiedItems?.isCut === true && copiedItems.sourceNodes?.includes(node) === true}
 						hideTooltip={hideTooltip}
+						tooltip={getTooltip?.(node)}
 						rowActions={disabled ? undefined : rowActions}
 					/>
 				</div>,

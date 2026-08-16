@@ -43,6 +43,7 @@ type Props = {
 	hideCheck?: boolean;
 	isCutSource?: boolean;
 	hideTooltip?: boolean;
+	tooltip?: string;
 	rowActions?: TreeRowAction[];
 };
 
@@ -62,6 +63,7 @@ function TreeItem({
 	hideCheck = false,
 	isCutSource = false,
 	hideTooltip = false,
+	tooltip,
 	rowActions,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
@@ -110,7 +112,12 @@ function TreeItem({
 		} else {
 			const name = doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString();
 			return (
-				<Flex one spaced className='textEllipsis' title={hideTooltip ? undefined : name}>
+				<Flex
+					one
+					spaced
+					className='textEllipsis'
+					title={hideTooltip ? undefined : (tooltip ?? (typeof name === 'string' ? name : undefined))}
+				>
 					{name}
 				</Flex>
 			);
