@@ -11,13 +11,15 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { COMMAND_MOVE_KIND, ELEMENT_MAP_KIND, Utils } from '../../../common';
+import { COMMAND_MOVE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, ELEMENT_MAP_KIND, Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Rectangle } from '../../../core/Rectangle';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
+import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import GraphicsSelector, { GraphicsSelectorOptions } from '../../GraphicsSelector';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
@@ -44,11 +46,17 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		graphicsKind: 0,
 	});
 	const [isDontChangeOrientation, setIsDontChangeOrientation] = useStateBool();
+	const [isIndexX, setIsIndexX] = useStateBool();
+	const [indexXValue] = useStateDynamicValue();
+	const [isIndexY, setIsIndexY] = useStateBool();
+	const [indexYValue] = useStateDynamicValue();
 
 	const initialize = () => {
 		if (isNew) {
 			graphicOptions.dynamicID!.isActivated = false;
 			graphicOptions.dynamicID!.updateToDefaultNumber();
+			indexXValue.updateToDefaultNumber();
+			indexYValue.updateToDefaultNumber();
 		} else {
 			const iterator = Utils.generateIterator();
 			iterator.i += 2;
@@ -81,8 +89,25 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			const y = Number(command.command[iterator.i++]);
 			const w = Number(command.command[iterator.i++]);
 			const h = Number(command.command[iterator.i++]);
-			let indexX = x;
-			let indexY = y;
+			let hasIndexX = false;
+			let hasIndexY = false;
+			indexXValue.updateToDefaultNumber(x);
+			indexYValue.updateToDefaultNumber(y);
+			if (command.command[iterator.i] === 'indices') {
+				iterator.i++;
+				hasIndexX = Utils.initializeBoolCommand(command.command, iterator);
+				if (hasIndexX) {
+					indexXValue.updateCommand(command.command, iterator);
+				}
+				hasIndexY = Utils.initializeBoolCommand(command.command, iterator);
+				if (hasIndexY) {
+					indexYValue.updateCommand(command.command, iterator);
+				}
+			}
+			setIsIndexX(hasIndexX);
+			setIsIndexY(hasIndexY);
+			const indexX = x;
+			const indexY = y;
 			if (
 				(kind === ELEMENT_MAP_KIND.FLOOR && id === 0 && !graphicOptions.dynamicID!.isActivated) ||
 				kind === ELEMENT_MAP_KIND.AUTOTILE
@@ -108,6 +133,12 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 	};
 
 	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean, kind: number) => {
+		if (!isIndexX) {
+			indexXValue.updateToDefaultNumber(isTileset ? 0 : rect.x);
+		}
+		if (!isIndexY) {
+			indexYValue.updateToDefaultNumber(isTileset ? 0 : rect.y);
+		}
 		setGraphicOptions({
 			dynamicID: graphicOptions.dynamicID,
 			graphicsID: id,
@@ -165,6 +196,20 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			list.push(1);
 			list.push(1);
 		}
+		const isCharacterSprite =
+			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
+		if (isCharacterSprite && (isIndexX || isIndexY)) {
+			list.push('indices');
+			list.push(Utils.boolToNum(isIndexX));
+			if (isIndexX) {
+				indexXValue.getCommand(list);
+			}
+			list.push(Utils.boolToNum(isIndexY));
+			if (isIndexY) {
+				indexYValue.getCommand(list);
+			}
+		}
 		command.command = list;
 		setIsOpen(false);
 		onAccept();
@@ -186,17 +231,46 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			initialWidth='450px'
+			initialHeight='350px'
 		>
 			<Flex column spaced centerH>
-				<GraphicsSelector
-					sceneID='dialog-command-move-object'
-					options={graphicOptions}
-					onChangeGraphicsKind={handleChangeGraphicsKind}
-					onUpdateGraphics={handleUpdateGraphics}
-				/>
+				<Flex one centerH fillWidth>
+					<GraphicsSelector
+						sceneID='dialog-command-move-object'
+						options={graphicOptions}
+						onChangeGraphicsKind={handleChangeGraphicsKind}
+						onUpdateGraphics={handleUpdateGraphics}
+					/>
+				</Flex>
 				<Checkbox isChecked={isDontChangeOrientation} onChange={setIsDontChangeOrientation}>
 					{t('dont.change.orientation')}
 				</Checkbox>
+				{(graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+					graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE) && (
+					<Flex column spaced>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isIndexX} onChange={setIsIndexX}>
+								Index X
+							</Checkbox>
+							<DynamicValueSelector
+								value={indexXValue}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								disabled={!isIndexX}
+							/>
+						</Flex>
+						<Flex spaced centerV>
+							<Checkbox isChecked={isIndexY} onChange={setIsIndexY}>
+								Index Y
+							</Checkbox>
+							<DynamicValueSelector
+								value={indexYValue}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								disabled={!isIndexY}
+							/>
+						</Flex>
+					</Flex>
+				)}
 			</Flex>
 		</Dialog>
 	);

@@ -125,8 +125,8 @@ type SubMove =
 			kind: SUB_MOVE_KIND.CHANGE_GRAPHICS;
 			graphicsKind: ELEMENT_MAP_KIND;
 			pictureID: DynamicValue;
-			indexX: number;
-			indexY: number;
+			indexX: number | DynamicValue;
+			indexY: number | DynamicValue;
 			changeOrientation: boolean;
 	  }
 	| { kind: SUB_MOVE_KIND.CHANGE_SPEED; value: DynamicValue }
@@ -288,12 +288,23 @@ class CommandMoveObject extends CommandBase {
 				const indexX = command[iterator.i++] as number;
 				const indexY = command[iterator.i++] as number;
 				iterator.i += 2;
+				let dynamicIndexX: DynamicValue | undefined;
+				let dynamicIndexY: DynamicValue | undefined;
+				if (command[iterator.i] === 'indices') {
+					iterator.i++;
+					if (Utils.numToBool(command[iterator.i++] as number)) {
+						dynamicIndexX = DynamicValue.createCommand(command, iterator);
+					}
+					if (Utils.numToBool(command[iterator.i++] as number)) {
+						dynamicIndexY = DynamicValue.createCommand(command, iterator);
+					}
+				}
 				this.subMoves.push({
 					kind: SUB_MOVE_KIND.CHANGE_GRAPHICS,
 					graphicsKind,
 					pictureID,
-					indexX,
-					indexY,
+					indexX: dynamicIndexX ?? indexX,
+					indexY: dynamicIndexY ?? indexY,
 					changeOrientation: !dontChangeOrientation,
 				});
 			} else if (kind >= COMMAND_MOVE_KIND.TURN_NORTH && kind <= COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE) {
@@ -594,8 +605,8 @@ class CommandMoveObject extends CommandBase {
 				target.updateGraphics(
 					move.graphicsKind,
 					ctx.game.resolveNumber(move.pictureID),
-					move.indexX,
-					move.indexY,
+					move.indexX instanceof DynamicValue ? ctx.game.resolveNumber(move.indexX) : move.indexX,
+					move.indexY instanceof DynamicValue ? ctx.game.resolveNumber(move.indexY) : move.indexY,
 					move.changeOrientation,
 				);
 				return true;

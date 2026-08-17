@@ -98,6 +98,18 @@ class MapObjectCommandMove extends Base {
 		for (let k = 0; k < j; k++) {
 			this.command.push(list[iterator.i++]);
 		}
+		if (kind === COMMAND_MOVE_KIND.CHANGE_GRAPHICS && list[iterator.i] === 'indices') {
+			this.command.push(list[iterator.i++]);
+			for (let k = 0; k < 2; k++) {
+				const isDynamic = list[iterator.i++] as number;
+				this.command.push(isDynamic);
+				if (Utils.numToBool(isDynamic)) {
+					const start = iterator.i;
+					DynamicValue.createCommand(list, iterator);
+					this.command.push(...list.slice(start, iterator.i));
+				}
+			}
+		}
 	}
 
 	getDialog(options: DIALOG_OPTIONS): ReactNode {
