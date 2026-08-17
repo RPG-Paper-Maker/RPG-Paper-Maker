@@ -344,13 +344,7 @@ const httpsDownload = (url, onChunk) =>
 const fetchFrom = async (path) => {
 	const response = await fetch(path, { cache: 'no-store' });
 	if (!response.ok) {
-		dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
-			type: 'error',
-			title: 'Could not fetch',
-			message: `Unable to fetch ${path}`,
-		});
-		app.quit();
-		return;
+		throw new Error(`Unable to fetch ${path}: ${response.status} ${response.statusText}`);
 	}
 	return response;
 };
@@ -470,10 +464,19 @@ const init = async () => {
 		}
 	}
 	const currentUpdaterVersion = await fs.readFile(path.join(__dirname, 'updater', 'version'), 'utf8');
-	const response = await fetchFrom(
-		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/updater/version',
-	);
-	const latestUpdaterVersion = await response.text();
+	let latestUpdaterVersion;
+	try {
+		const response = await fetchFrom(
+			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/updater/version',
+		);
+		latestUpdaterVersion = await response.text();
+	} catch (err) {
+		if (isEngineDownloaded) {
+			await runRPMEngine();
+			return;
+		}
+		throw err;
+	}
 	if (currentUpdaterVersion !== latestUpdaterVersion) {
 		let proceedWithUpdate = true;
 		if (updateType === 1) {
@@ -583,10 +586,16 @@ const init = async () => {
 			await runRPMEngine();
 			return;
 		}
-		const response = await fetchFrom(
-			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
-		);
-		const versions = JSON.parse(await response.text());
+		let versions;
+		try {
+			const response = await fetchFrom(
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json',
+			);
+			versions = JSON.parse(await response.text());
+		} catch {
+			await runRPMEngine();
+			return;
+		}
 		const isLastVersionUnstable = versions.unstable;
 		const currentEngineVersion = await fs.readFile(path.join(__dirname, 'dist', 'version'), 'utf8');
 		const latestEngineVersion =
