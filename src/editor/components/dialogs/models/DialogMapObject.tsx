@@ -70,6 +70,7 @@ function DialogMapObject({
 		const map = Scene.Map.current;
 		if (map) {
 			map.objectDialogActive = true;
+			map.updateGridHeight(map.cursorObject.position);
 			map.cursorObject.removeFromScene();
 			if (map.isCursorObjectNew()) {
 				map.previewObjectSquarePosition = map.cursorObject.position.clone();

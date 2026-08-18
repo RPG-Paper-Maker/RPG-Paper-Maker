@@ -1349,6 +1349,19 @@ class Map extends Base {
 		return null;
 	}
 
+	selectPointedObject(): boolean {
+		const position = this.pointedMapElementPosition;
+		if (!position) {
+			return false;
+		}
+		const mapPortion = this.getMapPortionByPosition(position);
+		if (!mapPortion?.model.objects.get(position.toKey())) {
+			return false;
+		}
+		this.updateObjectCursor(false, position);
+		return true;
+	}
+
 	isCursorObjectNew(): boolean {
 		const position = this.cursorObject.position;
 		const mapPortion = this.getMapPortionByPosition(position);
@@ -1490,11 +1503,15 @@ class Map extends Base {
 				Math.max(-this.detectionFieldTop, this.cursor.position.z),
 			);
 		}
-		const totalY = this.cursor.position.getTotalY();
-		this.meshPlane!.position.setY(totalY);
-		this.grid.line.position.setY(totalY + this.camera.getYOffsetDepth());
+		this.updateGridHeight(this.cursor.position);
 		this.cursor.syncWithCameraTargetPosition();
 		this.camera.update();
+	}
+
+	updateGridHeight(position: Position) {
+		const totalY = position.getTotalY();
+		this.meshPlane!.position.setY(totalY);
+		this.grid.line.position.setY(totalY + this.camera.getYOffsetDepth());
 	}
 
 	moveCursorPixelHeight(up: boolean) {
@@ -2361,6 +2378,15 @@ class Map extends Base {
 	onMouseDown() {
 		if (this.isCameraRotationLocked) {
 			return;
+		}
+		if (
+			!Inputs.isSHIFT &&
+			!this.isCameraCursorLocked &&
+			!Inputs.isCTRL &&
+			Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT &&
+			this.selectPointedObject()
+		) {
+			this.lastPosition = this.cursorObject.position.clone();
 		}
 		if (Inputs.isSHIFT) {
 			this.camera.onMouseWheelUpdate(this === Map.current);

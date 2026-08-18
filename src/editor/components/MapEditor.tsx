@@ -248,6 +248,7 @@ function MapEditor() {
 			return;
 		}
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			Scene.Map.current.selectPointedObject();
 			const isNew = Scene.Map.current.isCursorObjectNew();
 			if (isNew) {
 				await handleNewMapObject();
