@@ -342,9 +342,12 @@ class CommandShakeScreen extends CommandBase {
 	private static updateTargetOffset(state: Record<string, unknown>, ctx: SimulationContext, timeRate: number) {
 		const camera = ctx.camera!;
 		const value = timeRate * (state.finalDifPos as number);
+		const shakeOffset = -value * Project.SQUARE_SIZE;
 		const radians = (camera.horizontalAngle * Math.PI) / 180;
 		camera.targetOffset.x += value * -Math.sin(radians);
 		camera.targetOffset.z += value * Math.cos(radians);
+		ctx.screen.shakeOffsetX += shakeOffset;
+		state.shakeOffsetX = (state.shakeOffsetX as number) + shakeOffset;
 	}
 
 	initialize(ctx: SimulationContext): CommandState {
@@ -372,6 +375,7 @@ class CommandShakeScreen extends CommandBase {
 			shakeTime,
 			shakeTimeLeft: shakeTime,
 			currentOffset: 0,
+			shakeOffsetX: 0,
 			beginPosX: ctx.camera.targetOffset.x,
 			beginPosZ: ctx.camera.targetOffset.z,
 			finalDifPos: -offset,
@@ -412,6 +416,7 @@ class CommandShakeScreen extends CommandBase {
 		if ((state!.timeLeft as number) === 0) {
 			ctx.camera!.targetOffset.x = state!.beginPosX as number;
 			ctx.camera!.targetOffset.z = state!.beginPosZ as number;
+			ctx.screen.shakeOffsetX -= state!.shakeOffsetX as number;
 			return 1;
 		}
 		return 0;

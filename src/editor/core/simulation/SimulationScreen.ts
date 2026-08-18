@@ -80,6 +80,7 @@ export type SimulationAnimation = {
 
 class SimulationScreen {
 	public pictures: SimulationPicture[] = [];
+	public shakeOffsetX: number = 0;
 	public fades: SimulationScreenFade[] = [];
 	public weather: SimulationWeather | null = null;
 	public previousWeather: SimulationWeather | null = null;

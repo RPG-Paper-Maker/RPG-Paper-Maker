@@ -138,7 +138,7 @@ class SimulationScreenRenderer {
 		skinRenderer: SimulationSkinRenderer | null,
 	) {
 		if (picture.displayKind === DISPLAY_PICTURE_KIND.TEXT) {
-			this.drawText(ctx, picture, width, height, scaleX, scaleY, minScale, skinRenderer);
+			this.drawText(ctx, picture, screen, width, height, scaleX, scaleY, minScale, skinRenderer);
 			return;
 		}
 		const image = screen.getImage(picture.pictureID, picture.pictureKind);
@@ -194,12 +194,16 @@ class SimulationScreenRenderer {
 			const stretchY = height / systems.windowHeight;
 			w = width * picture.zoom;
 			h = height * picture.zoom;
-			x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * stretchX : picture.x * stretchX;
+			x =
+			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * stretchX : picture.x * stretchX) +
+			screen.shakeOffsetX * stretchX;
 			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * stretchY : picture.y * stretchY;
 		} else {
 			w = sourceWidth * minScale * picture.zoom;
 			h = sourceHeight * minScale * picture.zoom;
-			x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX;
+			x =
+			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX) +
+			screen.shakeOffsetX * scaleX;
 			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
 		}
 		x = Math.round(x);
@@ -234,6 +238,7 @@ class SimulationScreenRenderer {
 	private static drawText(
 		ctx: CanvasRenderingContext2D,
 		picture: SimulationPicture,
+		screen: SimulationScreen,
 		width: number,
 		height: number,
 		scaleX: number,
@@ -241,7 +246,9 @@ class SimulationScreenRenderer {
 		minScale: number,
 		skinRenderer: SimulationSkinRenderer | null,
 	) {
-		const x = picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX;
+		const x =
+			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX) +
+			screen.shakeOffsetX * scaleX;
 		const y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
 		ctx.save();
 		ctx.globalAlpha = Math.max(0, Math.min(picture.opacity, 1));
