@@ -253,7 +253,7 @@ class SimulationScreenRenderer {
 			ctx.translate(-ctx.measureText(picture.text.replace(/\[[^\]]+\]/g, '')).width / 2, -10);
 		}
 		if (skinRenderer) {
-			skinRenderer.drawRichText(ctx, picture.text, 0, 0, picture.textWidth);
+			skinRenderer.drawRichText(ctx, picture.text, 0, 0, (picture.textWidth * scaleX) / minScale);
 		} else {
 			ctx.font = '20px sans-serif';
 			ctx.textBaseline = 'top';
