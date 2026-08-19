@@ -245,7 +245,6 @@ gl_FragColor.rgb = mix(
 			specular: new THREE.Color(0x000000),
 		});
 		material.userData.uniforms = uniforms;
-		material.forceSinglePass = true;
 		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
 			depthPacking: THREE.RGBADepthPacking,
 			map: opts.texture,

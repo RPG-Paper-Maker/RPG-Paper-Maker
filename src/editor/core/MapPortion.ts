@@ -16,6 +16,7 @@ import {
 	ACTION_KIND,
 	CUSTOM_SHAPE_KIND,
 	ELEMENT_MAP_KIND,
+	MAP_OBJECT_LIGHT_KIND,
 	Mathf,
 	PICTURE_KIND,
 	RAYCASTING_LAYER,
@@ -1701,6 +1702,9 @@ class MapPortion {
 			}
 
 			if (state) {
+				const hasPointLight = state.lights?.some(
+					(light) => light.kind.getFixNumberValue() === MAP_OBJECT_LIGHT_KIND.POINT,
+				);
 				let mesh: THREE.Mesh | null = null;
 				let pixelOffset = 0;
 				switch (state.graphicsKind) {
@@ -1853,7 +1857,7 @@ class MapPortion {
 											Manager.GL.applyScreenTone(material);
 										}
 										child.receiveShadow = true;
-										child.castShadow = true;
+										child.castShadow = !hasPointLight;
 										child.renderOrder = 4;
 									}
 								});
@@ -1890,7 +1894,7 @@ class MapPortion {
 				}
 				if (mesh) {
 					mesh.receiveShadow = true;
-					mesh.castShadow = true;
+					mesh.castShadow = !hasPointLight;
 					mesh.renderOrder = 4;
 					this.addObjectLights(mesh, state, position.toVector3());
 					mesh.onBeforeRender = () => this.updateLights();
@@ -2014,6 +2018,19 @@ class MapPortion {
 						lightParent = pointParent;
 					}
 					break;
+				}
+			}
+			if (
+				light instanceof THREE.PointLight ||
+				light instanceof THREE.SpotLight ||
+				light instanceof THREE.DirectionalLight
+			) {
+				light.castShadow = true;
+				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+					light.shadow.camera.near = 0.01;
+					light.shadow.camera.updateProjectionMatrix();
+					light.shadow.bias = -0.0003;
+					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
 				}
 			}
 			light.position.set(

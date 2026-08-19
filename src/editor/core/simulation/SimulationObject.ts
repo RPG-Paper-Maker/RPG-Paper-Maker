@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
+import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, MAP_OBJECT_LIGHT_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Manager, MapElement, Model } from '../../Editor';
 import { getMapObjectLightIntensity } from '../../models/MapObjectLight';
 import type { Map as SceneMap } from '../../scenes/Map';
@@ -244,6 +244,9 @@ class SimulationObject {
 		this.lastBuildKey = buildKey;
 		this.removeMesh();
 		const state = this.state;
+		const hasPointLight = state.lights?.some(
+			(light) => light.kind.getFixNumberValue() === MAP_OBJECT_LIGHT_KIND.POINT,
+		);
 		let mesh: THREE.Mesh | null = null;
 		switch (state.graphicsKind) {
 			case ELEMENT_MAP_KIND.AUTOTILE: {
@@ -384,7 +387,7 @@ class SimulationObject {
 								Manager.GL.applyScreenTone(material);
 							}
 							child.receiveShadow = true;
-							child.castShadow = true;
+							child.castShadow = !hasPointLight;
 						}
 					});
 					const group = new THREE.Group();
@@ -423,7 +426,7 @@ class SimulationObject {
 		}
 		if (mesh) {
 			mesh.receiveShadow = true;
-			mesh.castShadow = true;
+			mesh.castShadow = !hasPointLight;
 			mesh.renderOrder = 4;
 			this.map.scene.add(mesh);
 			this.mesh = mesh;
@@ -519,6 +522,19 @@ class SimulationObject {
 						lightParent = pointParent;
 					}
 					break;
+				}
+			}
+			if (
+				light instanceof THREE.PointLight ||
+				light instanceof THREE.SpotLight ||
+				light instanceof THREE.DirectionalLight
+			) {
+				light.castShadow = true;
+				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+					light.shadow.camera.near = 0.01;
+					light.shadow.camera.updateProjectionMatrix();
+					light.shadow.bias = -0.0003;
+					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
 				}
 			}
 			light.position.set(
