@@ -68,7 +68,7 @@ void getSpotShadowMasks(inout float spotShadows[NUM_SPOT_LIGHT_SHADOWS])
 			spotLight.shadowIntensity,
 			spotLight.shadowBias,
 			spotLight.shadowRadius,
-			vSpotShadowCoord[i]
+			vSpotLightCoord[i]
 		) : 1.0;
 	}
 	#pragma unroll_loop_end
