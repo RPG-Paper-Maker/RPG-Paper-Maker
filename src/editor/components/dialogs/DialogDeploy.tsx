@@ -179,6 +179,8 @@ function DialogDeploy({ setIsOpen }: Props) {
 		if (exportType === EXPORT_TYPE.APPLICATION) {
 			if (Constants.IS_DESKTOP) {
 				await IO.copyAndExclude(enginePath, path, Paths.join(enginePath, localAppPath!));
+				await removeFile(Paths.join(path, 'unins000.exe'));
+				await removeFile(Paths.join(path, 'unins000.dat'));
 				let extension = '';
 				switch (OS_KINDS[targetOSIndex]) {
 					case OS_KIND.WIN32:
