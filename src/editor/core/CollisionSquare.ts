@@ -59,7 +59,7 @@ class CollisionSquare extends Serializable {
 	}
 
 	copy(collision: CollisionSquare): void {
-		super.copy(collision);
+		super.copy(collision, CollisionSquare.getBindings([]));
 		this.rect = collision.rect?.clone() ?? null;
 	}
 
