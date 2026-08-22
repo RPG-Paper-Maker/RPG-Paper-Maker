@@ -29,14 +29,26 @@ function DialogMapObjectLight({ setIsOpen, model, onAccept, onReject, onModelLiv
 	const light = model as MapObjectLight;
 	const { t } = useTranslation();
 	const originalLight = useRef(light.clone() as MapObjectLight);
+	const previewTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const [, setRevision] = useState(0);
 	const preview = () => {
 		setRevision((value) => value + 1);
-		onModelLivePreview?.(light);
+		if (previewTimeout.current !== null) {
+			clearTimeout(previewTimeout.current);
+		}
+		previewTimeout.current = setTimeout(() => {
+			previewTimeout.current = null;
+			onModelLivePreview?.(light);
+		}, 120);
 	};
 
 	useEffect(() => {
-		preview();
+		onModelLivePreview?.(light);
+		return () => {
+			if (previewTimeout.current !== null) {
+				clearTimeout(previewTimeout.current);
+			}
+		};
 	}, []);
 
 	const accept = () => {
@@ -45,6 +57,9 @@ function DialogMapObjectLight({ setIsOpen, model, onAccept, onReject, onModelLiv
 	};
 
 	const reject = () => {
+		if (previewTimeout.current !== null) {
+			clearTimeout(previewTimeout.current);
+		}
 		light.copy(originalLight.current);
 		onModelLivePreview?.(null);
 		onReject?.();
