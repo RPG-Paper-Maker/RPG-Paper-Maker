@@ -806,6 +806,15 @@ void main() {`,
 			this.standaloneLights = null;
 			this.standaloneLightsBasePosition = null;
 		}
+		for (const { light } of this.lights) {
+			if (
+				light instanceof THREE.PointLight ||
+				light instanceof THREE.SpotLight ||
+				light instanceof THREE.DirectionalLight
+			) {
+				light.shadow.dispose();
+			}
+		}
 		this.lights = [];
 	}
 

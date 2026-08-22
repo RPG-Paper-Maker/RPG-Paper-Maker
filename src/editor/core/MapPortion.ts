@@ -1619,6 +1619,7 @@ class MapPortion {
 	}
 
 	updateObjectsGeometry(preserveLightAnimation = false) {
+		this.disposeObjectLights();
 		this.animatedLights = [];
 		this.hasStopAnimation = false;
 		if (!preserveLightAnimation) {
@@ -2058,6 +2059,18 @@ class MapPortion {
 		}
 	}
 
+	private disposeObjectLights() {
+		for (const { light } of this.animatedLights) {
+			if (
+				light instanceof THREE.PointLight ||
+				light instanceof THREE.SpotLight ||
+				light instanceof THREE.DirectionalLight
+			) {
+				light.shadow.dispose();
+			}
+		}
+	}
+
 	updateFaceSprites(angle: number) {
 		for (const mesh of this.spritesFaceMeshes) {
 			if (mesh) {
@@ -2169,6 +2182,7 @@ class MapPortion {
 		for (const lights of this.objectsLightsGroups) {
 			this.map.scene.remove(lights);
 		}
+		this.disposeObjectLights();
 		this.objectsLightsGroups = [];
 		this.animatedLights = [];
 	}
