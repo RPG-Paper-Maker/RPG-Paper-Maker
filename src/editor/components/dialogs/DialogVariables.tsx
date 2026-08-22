@@ -20,6 +20,7 @@ import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import InputText from '../InputText';
+import ToggleButton from '../ToggleButton';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -45,6 +46,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	);
 	const [defaultValueNumber, setDefaultValueNumber] = useState(0);
 	const [defaultValueText, setDefaultValueText] = useState('');
+	const [defaultValueSwitch, setDefaultValueSwitch] = useState(false);
 	const currentVariablesPage = useRef<Model.VariablesPage | null>(null);
 
 	const isDefaultValueDisabled = () => !selectedVariable || selectedVariable.content.id <= 0;
@@ -55,14 +57,23 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const handleSelectVariable = (node: Node | null) => {
 		setSelectedVariable(node);
 		const variable = node?.content as Model.Variable | undefined;
-		if (variable && variable.id > 0 && typeof variable.defaultValue === 'string') {
-			setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.TEXT);
-			setDefaultValueNumber(0);
-			setDefaultValueText(variable.defaultValue);
+		if (variable && variable.id > 0) {
+			switch (typeof variable.defaultValue) {
+				case 'string':
+					setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.TEXT);
+					setDefaultValueText(variable.defaultValue);
+					break;
+				case 'boolean':
+					setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.SWITCH);
+					setDefaultValueSwitch(variable.defaultValue);
+					break;
+				default:
+					setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.NUMBER);
+					setDefaultValueNumber(variable.defaultValue);
+			}
 		} else {
 			setDefaultValueKind(VARIABLE_DEFAULT_VALUE_KIND.NUMBER);
-			setDefaultValueNumber(variable && variable.id > 0 ? (variable.defaultValue as number) : 0);
-			setDefaultValueText('');
+			setDefaultValueNumber(0);
 		}
 	};
 
@@ -70,7 +81,16 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 		setDefaultValueKind(kind);
 		const variable = getSelectedVariable();
 		if (variable) {
-			variable.defaultValue = kind === VARIABLE_DEFAULT_VALUE_KIND.TEXT ? defaultValueText : defaultValueNumber;
+			switch (kind) {
+				case VARIABLE_DEFAULT_VALUE_KIND.TEXT:
+					variable.defaultValue = defaultValueText;
+					break;
+				case VARIABLE_DEFAULT_VALUE_KIND.SWITCH:
+					variable.defaultValue = defaultValueSwitch;
+					break;
+				default:
+					variable.defaultValue = defaultValueNumber;
+			}
 		}
 	};
 
@@ -86,6 +106,14 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 		setDefaultValueText(value);
 		const variable = getSelectedVariable();
 		if (variable && defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.TEXT) {
+			variable.defaultValue = value;
+		}
+	};
+
+	const handleChangeDefaultValueSwitch = (value: boolean) => {
+		setDefaultValueSwitch(value);
+		const variable = getSelectedVariable();
+		if (variable && defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.SWITCH) {
 			variable.defaultValue = value;
 		}
 	};
@@ -217,6 +245,12 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 							<InputText
 								value={defaultValueText}
 								onChange={handleChangeDefaultValueText}
+								disabled={isDefaultValueDisabled()}
+							/>
+						) : defaultValueKind === VARIABLE_DEFAULT_VALUE_KIND.SWITCH ? (
+							<ToggleButton
+								value={defaultValueSwitch}
+								onChange={handleChangeDefaultValueSwitch}
 								disabled={isDefaultValueDisabled()}
 							/>
 						) : (

@@ -55,6 +55,7 @@ export enum MAP_OBJECT_LIGHT_KIND {
 export enum VARIABLE_DEFAULT_VALUE_KIND {
 	NUMBER,
 	TEXT,
+	SWITCH,
 }
 
 export enum MENU_INDEX_MAP_EDITOR {

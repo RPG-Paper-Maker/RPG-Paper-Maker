@@ -16,9 +16,9 @@ import { Base } from './Base';
 class Variable extends Base {
 	public static type = 'Variable';
 
-	public static DEFAULT_VALUE_KIND_OPTIONS = Base.mapListIndex(['number', 'text']);
+	public static DEFAULT_VALUE_KIND_OPTIONS = Base.mapListIndex(['number', 'text', 'switch']);
 
-	public defaultValue!: number | string;
+	public defaultValue!: number | string | boolean;
 
 	static create(id: number, name: string) {
 		const variable = new Variable();
@@ -29,9 +29,14 @@ class Variable extends Base {
 	}
 
 	getDefaultValueKind(): VARIABLE_DEFAULT_VALUE_KIND {
-		return typeof this.defaultValue === 'string'
-			? VARIABLE_DEFAULT_VALUE_KIND.TEXT
-			: VARIABLE_DEFAULT_VALUE_KIND.NUMBER;
+		switch (typeof this.defaultValue) {
+			case 'string':
+				return VARIABLE_DEFAULT_VALUE_KIND.TEXT;
+			case 'boolean':
+				return VARIABLE_DEFAULT_VALUE_KIND.SWITCH;
+			default:
+				return VARIABLE_DEFAULT_VALUE_KIND.NUMBER;
+		}
 	}
 
 	applyDefault(additionnalBinding: BindingType[] = []) {
@@ -46,7 +51,7 @@ class Variable extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, additionnalBinding);
-		this.defaultValue = (json.dv as number | string) ?? 0;
+		this.defaultValue = (json.dv as number | string | boolean) ?? 0;
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
