@@ -11,7 +11,7 @@
 
 import ColorPicker, { Color } from '@rc-component/color-picker';
 import '@rc-component/color-picker/assets/index.css';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, MAP_OBJECT_LIGHT_KIND } from '../../common';
 import { Base, MapObjectLight } from '../../models';
@@ -62,7 +62,12 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 	const lightKind = light.kind.getFixNumberValue() as MAP_OBJECT_LIGHT_KIND;
 	const hasDistance = lightKind === MAP_OBJECT_LIGHT_KIND.POINT || lightKind === MAP_OBJECT_LIGHT_KIND.SPOT;
 	const colorValue = light.color.kind === DYNAMIC_VALUE_KIND.TEXT ? (light.color.value as string) : '#ffffff';
+	const [pickerColor, setPickerColor] = useState(() => new Color(colorValue));
 	const isDisabled = (field: MapObjectLightField) => selectedFields !== undefined && !selectedFields[field];
+
+	useEffect(() => {
+		setPickerColor(new Color(colorValue));
+	}, [colorValue]);
 	const dynamic = (
 		field: MapObjectLightField,
 		value: typeof light.kind,
@@ -95,10 +100,12 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 	return (
 		<Flex columnMobile spacedLarge fillHeight fillWidth>
 			<ColorPicker
-				value={new Color(colorValue)}
+				value={pickerColor}
+				disabledAlpha
 				disabled={light.color.kind !== DYNAMIC_VALUE_KIND.TEXT || isDisabled('color')}
 				onChange={(value) => {
-					light.color.updateToDefaultText(value.toHexString());
+					setPickerColor(value);
+					light.color.updateToDefaultText(value.toHexString().slice(0, 7));
 					onChange?.();
 				}}
 			/>
