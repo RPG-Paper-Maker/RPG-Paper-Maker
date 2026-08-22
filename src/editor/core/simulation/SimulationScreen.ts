@@ -34,6 +34,8 @@ export type SimulationPicture = {
 	indexHeight: number;
 	centered: boolean;
 	stretch: boolean;
+	offsetX: number;
+	offsetY: number;
 	x: number;
 	y: number;
 	zoom: number;

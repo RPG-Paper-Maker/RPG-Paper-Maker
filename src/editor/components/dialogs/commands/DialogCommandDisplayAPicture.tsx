@@ -54,6 +54,8 @@ function DialogCommandDisplayAPicture({
 	const [opacity] = useStateDynamicValue();
 	const [angle] = useStateDynamicValue();
 	const [isStretch, setIsStretch] = useStateBool();
+	const [offsetX] = useStateDynamicValue();
+	const [offsetY] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 	const [pictureKind, setPictureKind] = useState(PICTURE_KIND.PICTURES);
 	const [pictureIndexX, setPictureIndexX] = useState(0);
@@ -68,6 +70,8 @@ function DialogCommandDisplayAPicture({
 	const initialize = () => {
 		const allTexts = new Map<number, string>();
 		setTextWidth(1280);
+		offsetX.updateToDefaultNumber(0, true);
+		offsetY.updateToDefaultNumber(0, true);
 		for (const language of Project.current!.languages.list) {
 			allTexts.set(language.id, '');
 		}
@@ -90,10 +94,15 @@ function DialogCommandDisplayAPicture({
 			setDisplayKind((list[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE);
 			while (iterator.i < list.length) {
 				const languageID = list[iterator.i++] as number;
+				if (languageID === -3) {
+					offsetX.updateCommand(list, iterator);
+					offsetY.updateCommand(list, iterator);
+					break;
+				}
 				const value = list[iterator.i++];
 				if (languageID === -1) {
 					setTextWidth((value as number) || 1280);
-				} else {
+				} else if (languageID !== -2) {
 					allTexts.set(languageID, value as string);
 				}
 			}
@@ -108,6 +117,8 @@ function DialogCommandDisplayAPicture({
 			opacity.updateToDefaultNumber(100, true);
 			angle.updateToDefaultNumber(0, true);
 			setIsStretch(false);
+			offsetX.updateToDefaultNumber(0, true);
+			offsetY.updateToDefaultNumber(0, true);
 			setPictureKind(PICTURE_KIND.PICTURES);
 			setPictureIndexX(0);
 			setPictureIndexY(0);
@@ -139,6 +150,9 @@ function DialogCommandDisplayAPicture({
 			}
 			newList.push(-1, textWidth);
 		}
+		newList.push(-3);
+		offsetX.getCommand(newList);
+		offsetY.getCommand(newList);
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
 
@@ -254,6 +268,30 @@ function DialogCommandDisplayAPicture({
 									value={y}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
 								/>
+							</Value>
+						</Form>
+					</Groupbox>
+					<Groupbox title={t('offset')}>
+						<Form>
+							<Label>X</Label>
+							<Value>
+								<Flex spaced centerV>
+									<DynamicValueSelector
+										value={offsetX}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+									/>
+									<TooltipInformation text={t('tooltip.picture.offset')} />
+								</Flex>
+							</Value>
+							<Label>Y</Label>
+							<Value>
+								<Flex spaced centerV>
+									<DynamicValueSelector
+										value={offsetY}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+									/>
+									<TooltipInformation text={t('tooltip.picture.offset')} />
+								</Flex>
 							</Value>
 						</Form>
 					</Groupbox>

@@ -60,6 +60,8 @@ class CommandDisplayAPicture extends CommandBase {
 	private displayKind: DISPLAY_PICTURE_KIND;
 	private text: string;
 	private textWidth: number;
+	private offsetX: DynamicValue;
+	private offsetY: DynamicValue;
 
 	constructor(command: MapObjectCommandType[]) {
 		super();
@@ -81,12 +83,19 @@ class CommandDisplayAPicture extends CommandBase {
 		this.displayKind = (command[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE;
 		const texts = new Map<number, string>();
 		this.textWidth = 1280;
+		this.offsetX = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
+		this.offsetY = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0);
 		while (iterator.i < command.length) {
 			const languageID = command[iterator.i++] as number;
+			if (languageID === -3) {
+				this.offsetX = DynamicValue.createCommand(command, iterator);
+				this.offsetY = DynamicValue.createCommand(command, iterator);
+				break;
+			}
 			const value = command[iterator.i++];
 			if (languageID === -1) {
 				this.textWidth = (value as number) || 1280;
-			} else {
+			} else if (languageID !== -2) {
 				texts.set(languageID, value as string);
 			}
 		}
@@ -97,6 +106,8 @@ class CommandDisplayAPicture extends CommandBase {
 		const game = ctx.game;
 		const x = game.resolveNumber(this.x);
 		const y = game.resolveNumber(this.y);
+		const offsetX = game.resolveNumber(this.offsetX);
+		const offsetY = game.resolveNumber(this.offsetY);
 		ctx.screen.setPicture({
 			index: game.resolveNumber(this.index),
 			displayKind: this.displayKind,
@@ -110,6 +121,8 @@ class CommandDisplayAPicture extends CommandBase {
 			indexHeight: this.indexHeight,
 			centered: this.centered,
 			stretch: this.stretch,
+			offsetX,
+			offsetY,
 			x: this.centered ? SIM_SCREEN_X / 2 + x : x,
 			y: this.centered ? SIM_SCREEN_Y / 2 + y : y,
 			zoom: game.resolveNumber(this.zoom) / 100,

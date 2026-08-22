@@ -1690,11 +1690,24 @@ class MapObjectCommand extends Base {
 		iterator.i += 5;
 		const displayKind =
 			(this.command[iterator.i++] as DISPLAY_PICTURE_KIND | undefined) ?? DISPLAY_PICTURE_KIND.PICTURE;
+		let offsetX = '0';
+		let offsetY = '0';
+		const readOffsets = () => {
+			if (this.command[iterator.i++] === -3) {
+				offsetX = this.toStringDynamicValue(iterator, properties, parameters);
+				offsetY = this.toStringDynamicValue(iterator, properties, parameters);
+			}
+		};
 		if (displayKind === DISPLAY_PICTURE_KIND.TEXT) {
 			let text = '';
 			let width = 1280;
 			while (iterator.i < this.command.length) {
 				const languageID = this.command[iterator.i++] as number;
+				if (languageID === -3) {
+					offsetX = this.toStringDynamicValue(iterator, properties, parameters);
+					offsetY = this.toStringDynamicValue(iterator, properties, parameters);
+					break;
+				}
 				const value = this.command[iterator.i++];
 				if (languageID === -1) {
 					width = (value as number) || 1280;
@@ -1704,14 +1717,15 @@ class MapObjectCommand extends Base {
 			}
 			return [
 				text,
-				`${t('width')}=${width}, ${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t(
+				`${t('width')}=${width}, ${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('offset')} X=${offsetX}, Y=${offsetY}, ${t('zoom')}=${zoom}% ${t(
 					'opacity',
 				)}=${opacity}% ${t('angle')}=${angle}°`,
 			];
 		}
+		readOffsets();
 		return [
 			`ID=${id} ${t('index').toLowerCase()}=${index}`,
-			`${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t('opacity')}=${opacity}% ${t(
+			`${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('offset')} X=${offsetX}, Y=${offsetY}, ${t('zoom')}=${zoom}% ${t('opacity')}=${opacity}% ${t(
 				'angle',
 			)}=${angle}°`,
 		];

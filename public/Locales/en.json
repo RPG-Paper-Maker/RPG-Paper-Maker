@@ -1954,6 +1954,7 @@
 	"tooltip.use.dynamic": "If checked, gets the script code from a variable, parameter, or property instead of using the text above.",
 	"tooltip.picture.index": "Picture slot number (0-99). Multiple pictures can be shown at once using different indexes. Lower indexes appear behind higher ones.",
 	"tooltip.picture.origin": "Which point of the image aligns with the X/Y coordinates. Top-left: coordinates are the image's top-left corner. Center: coordinates are the image's center.",
+	"tooltip.picture.offset": "Adds an offset to the normal X/Y position. This offset uses the smaller screen scale, so it stays proportional to non-stretched picture and text sizes.",
 	"tooltip.battlers.limit": "Limits the usable area of the battler image. This area is used to align damage numbers, animations, status effects, and other battle overlays.",
 	"tooltip.characters.limit": "Limits the usable area of the character image. This area is used as the offset between followers in the caterpillar system.",
 	"tooltip.stretch": "If checked, stretches the image to fill the entire screen.",

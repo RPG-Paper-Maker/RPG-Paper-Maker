@@ -1950,6 +1950,7 @@
 	"tooltip.use.dynamic": "Wenn aktiviert, wird der Skriptcode aus einer Variable, einem Parameter oder einer Eigenschaft bezogen, anstatt den obigen Text zu verwenden.",
 	"tooltip.picture.index": "Bildplatz-Nummer (0-99). Mehrere Bilder können gleichzeitig mit verschiedenen Indizes angezeigt werden. Niedrigere Indizes erscheinen hinter höheren.",
 	"tooltip.picture.origin": "Welcher Punkt des Bildes sich an den X/Y-Koordinaten ausrichtet. Oben-links: obere linke Ecke des Bildes. Mitte: Bildmitte.",
+	"tooltip.picture.offset": "Fügt der normalen X/Y-Position einen Versatz hinzu. Dieser Versatz verwendet den kleineren Bildschirmmaßstab, sodass er proportional zu den Größen nicht gestreckter Bilder und Texte bleibt.",
 	"tooltip.battlers.limit": "Begrenzt den nutzbaren Bereich des Battler-Bildes. Dieser Bereich wird zum Ausrichten von Schadenszahlen, Animationen, Status-Effekten und anderen Kampf-Overlays verwendet.",
 	"tooltip.characters.limit": "Begrenzt den nutzbaren Bereich des Charakterbildes. Dieser Bereich wird als Abstand zwischen den Folgern im Raupen-System verwendet.",
 	"tooltip.stretch": "Wenn aktiviert, wird das Bild auf den gesamten Bildschirm gestreckt.",

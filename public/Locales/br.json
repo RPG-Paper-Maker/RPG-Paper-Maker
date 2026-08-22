@@ -1950,6 +1950,7 @@
 	"tooltip.use.dynamic": "Se marcado, obtém o código do script de uma variável, parâmetro ou propriedade em vez do texto acima.",
 	"tooltip.picture.index": "Número do slot da imagem (0-99). Várias imagens podem ser exibidas ao mesmo tempo usando índices diferentes. Índices menores aparecem atrás dos maiores.",
 	"tooltip.picture.origin": "Qual ponto da imagem se alinha com as coordenadas X/Y. Superior-esquerdo: canto superior esquerdo da imagem. Centro: centro da imagem.",
+	"tooltip.picture.offset": "Adiciona um deslocamento à posição X/Y normal. Este deslocamento usa a menor escala da tela, mantendo-se proporcional aos tamanhos de imagens e textos não esticados.",
 	"tooltip.battlers.limit": "Limita a área utilizável da imagem do battler. Essa área é usada para alinhar números de dano, animações, status e outros efeitos sobrepostos de batalha.",
 	"tooltip.characters.limit": "Limita a área utilizável da imagem do personagem. Essa área é usada como o deslocamento entre seguidores no sistema de lagarta.",
 	"tooltip.stretch": "Se marcado, estica a imagem para preencher toda a tela.",

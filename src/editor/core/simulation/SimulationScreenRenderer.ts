@@ -195,16 +195,22 @@ class SimulationScreenRenderer {
 			w = width * picture.zoom;
 			h = height * picture.zoom;
 			x =
-			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * stretchX : picture.x * stretchX) +
-			screen.shakeOffsetX * stretchX;
-			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * stretchY : picture.y * stretchY;
+				(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * stretchX : picture.x * stretchX) +
+				screen.shakeOffsetX * stretchX +
+				picture.offsetX * minScale;
+			y =
+				(picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * stretchY : picture.y * stretchY) +
+				picture.offsetY * minScale;
 		} else {
 			w = sourceWidth * minScale * picture.zoom;
 			h = sourceHeight * minScale * picture.zoom;
 			x =
-			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX) +
-			screen.shakeOffsetX * scaleX;
-			y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
+				(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX) +
+				screen.shakeOffsetX * scaleX +
+				picture.offsetX * minScale;
+			y =
+				(picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY) +
+				picture.offsetY * minScale;
 		}
 		x = Math.round(x);
 		y = Math.round(y);
@@ -248,8 +254,11 @@ class SimulationScreenRenderer {
 	) {
 		const x =
 			(picture.centered ? width / 2 + (picture.x - SIM_SCREEN_X / 2) * scaleX : picture.x * scaleX) +
-			screen.shakeOffsetX * scaleX;
-		const y = picture.centered ? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY : picture.y * scaleY;
+			screen.shakeOffsetX * scaleX +
+			picture.offsetX * minScale;
+		const y = picture.centered
+			? height / 2 + (picture.y - SIM_SCREEN_Y / 2) * scaleY + picture.offsetY * minScale
+			: picture.y * scaleY + picture.offsetY * minScale;
 		ctx.save();
 		ctx.globalAlpha = Math.max(0, Math.min(picture.opacity, 1));
 		ctx.translate(x, y);
