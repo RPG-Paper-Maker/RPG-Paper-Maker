@@ -491,10 +491,11 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.model.save();
-		const tempPath = Paths.join(this.model.getPath(), Paths.TEMP);
+		const path = this.getPath();
+		const tempPath = Paths.join(path, Paths.TEMP);
 		const fileNames = await getFiles(tempPath);
 		for (const fileName of fileNames) {
-			await moveFile(Paths.join(tempPath, fileName), Paths.join(this.model.getPath(), fileName));
+			await moveFile(Paths.join(tempPath, fileName), Paths.join(path, fileName));
 		}
 		this.loading = false;
 	}
@@ -1335,8 +1336,11 @@ class Map extends Base {
 	async updateObject(object: Model.CommonObject | null) {
 		const position = this.cursorObject.position.clone();
 		const mapPortion = this.getMapPortionByPosition(position);
+		if (!mapPortion) {
+			return;
+		}
+		mapPortion.updateObject(position, object);
 		await this.model.updateObject(position, object);
-		mapPortion?.updateObject(position, object);
 		this.needsUpdateComponent = true;
 	}
 
