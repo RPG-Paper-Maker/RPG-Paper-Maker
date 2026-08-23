@@ -9,15 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { ReactNode, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CONDITION_HEROES_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, OPERATION_KIND, Utils } from '../../../common';
+import {
+	CONDITION_HEROES_KIND,
+	DYNAMIC_VALUE_OPTIONS_TYPE,
+	EVENT_COMMAND_KIND,
+	JSONType,
+	OPERATION_KIND,
+	Utils,
+} from '../../../common';
 import { Project } from '../../../core/Project';
 import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
+import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -59,10 +67,71 @@ enum SELECTION_HEROES_EQUIPED_TYPE {
 	ARMOR,
 }
 
-function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+enum CONDITION_OPERATOR {
+	AND,
+	OR,
+}
+
+const CONDITION_TREE_KIND = -1;
+
+type ConditionTree = {
+	condition?: MapObjectCommandType[];
+	operator?: CONDITION_OPERATOR;
+	children?: ConditionTree[];
+};
+
+const isConditionGroup = (tree: ConditionTree): tree is Required<Pick<ConditionTree, 'operator' | 'children'>> =>
+	tree.children !== undefined;
+
+const getConditionTree = (tree: ConditionTree, path: number[]): ConditionTree => {
+	let current = tree;
+	for (const index of path) {
+		current = current.children![index];
+	}
+	return current;
+};
+
+const replaceConditionTree = (tree: ConditionTree, path: number[], replacement: ConditionTree): ConditionTree => {
+	if (path.length === 0) {
+		return replacement;
+	}
+	const [index, ...remainingPath] = path;
+	return {
+		...tree,
+		children: tree.children!.map((child, childIndex) =>
+			childIndex === index ? replaceConditionTree(child, remainingPath, replacement) : child,
+		),
+	};
+};
+
+const getFirstConditionPath = (tree: ConditionTree, path: number[] = []): number[] => {
+	if (!isConditionGroup(tree)) {
+		return path;
+	}
+	return getFirstConditionPath(tree.children[0], [...path, 0]);
+};
+
+const removeConditionTree = (tree: ConditionTree, path: number[]): ConditionTree | null => {
+	if (path.length === 0) {
+		return null;
+	}
+	const [index, ...remainingPath] = path;
+	const child = tree.children![index];
+	const nextChild = remainingPath.length === 0 ? null : removeConditionTree(child, remainingPath);
+	const children = tree.children!.flatMap((current, currentIndex) =>
+		currentIndex === index ? (nextChild ? [nextChild] : []) : [current],
+	);
+	if (children.length === 1) {
+		return children[0];
+	}
+	return { ...tree, children };
+};
+
+function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [forcedTabIndex, setForcedTabIndex] = useState<number | null>(null);
+	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 	const [selectionType, setSelectionType] = useStateNumber();
 	const [variableParamProp] = useStateDynamicValue();
 	const [variableParamPropCompare, setVariableParamPropCompare] = useStateNumber();
@@ -106,6 +175,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 	const [chronometerCompareValue] = useStateDynamicValue();
 	const [script] = useStateDynamicValue();
 	const [isAddElse, setIsAddElse] = useStateBool();
+	const [conditionTree, setConditionTree] = useState<ConditionTree>({ condition: [] });
+	const [selectedConditionPath, setSelectedConditionPath] = useState<number[]>([]);
 	const [, setTrigger] = useStateBool();
 
 	const isVariableParamProp = selectionType === SELECTION_TYPE.VARIABLE_PARAM_PROP;
@@ -132,7 +203,23 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 	const compareOptions = Model.Base.getCompareOptions();
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
-	const initialize = () => {
+	const initialize = (conditionList: MapObjectCommandType[] | null | undefined = undefined, keepElse = false) => {
+		let list = conditionList === undefined ? commandList : conditionList;
+		const isTree = !keepElse && list?.[1] === CONDITION_TREE_KIND;
+		if (isTree) {
+			const tree = list![2] as unknown as {
+				operator: CONDITION_OPERATOR;
+				conditions?: MapObjectCommandType[][];
+				children?: ConditionTree[];
+			};
+			const root: ConditionTree = tree.children
+				? { operator: tree.operator, children: tree.children }
+				: { operator: tree.operator, children: tree.conditions!.map((condition) => ({ condition })) };
+			const path = getFirstConditionPath(root);
+			setConditionTree(root);
+			setSelectedConditionPath(path);
+			list = [list![0], ...getConditionTree(root, path).condition!];
+		}
 		variableParamProp.updateToDefaultVariable();
 		setVariableParamPropCompare(OPERATION_KIND.EQUAL_TO);
 		variableParamPropCompareValue.updateToDefaultNumber(0, true);
@@ -174,9 +261,13 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 		setChronometerCompare(OPERATION_KIND.EQUAL_TO);
 		chronometerCompareValue.updateToDefaultNumber();
 		script.updateToDefaultFormula();
-		if (list) {
+		if (list?.length) {
 			const iterator = Utils.generateIterator();
-			setIsAddElse(Utils.initializeBoolCommand(list, iterator));
+			if (!keepElse) {
+				setIsAddElse(Utils.initializeBoolCommand(list, iterator));
+			} else {
+				iterator.i++;
+			}
 			const selection = list[iterator.i++] as SELECTION_TYPE;
 			setForcedTabIndex(getTabIndex(selection));
 			setSelectionType(selection);
@@ -277,7 +368,14 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 			}
 		} else {
 			setSelectionType(SELECTION_TYPE.VARIABLE_PARAM_PROP);
-			setIsAddElse(false);
+			setForcedTabIndex(0);
+			if (!keepElse) {
+				setIsAddElse(false);
+			}
+		}
+		if (!keepElse && !isTree) {
+			setConditionTree({ condition: list?.length ? list.slice(1) : [] });
+			setSelectedConditionPath([]);
 		}
 		setTrigger((v) => !v);
 	};
@@ -303,10 +401,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 		}
 	};
 
-	const handleAccept = async () => {
-		setIsOpen(false);
+	const getCurrentCondition = (): MapObjectCommandType[] => {
 		const newList: MapObjectCommandType[] = [];
-		newList.push(Utils.boolToNum(isAddElse));
 		newList.push(selectionType);
 		switch (selectionType) {
 			case SELECTION_TYPE.VARIABLE_PARAM_PROP:
@@ -397,6 +493,69 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 				script.getCommand(newList);
 				break;
 		}
+		return newList;
+	};
+
+	const saveCurrentCondition = () =>
+		replaceConditionTree(conditionTree, selectedConditionPath, { condition: getCurrentCondition() });
+
+	const handleClickCondition = (path: number[]) => {
+		if (path.join() === selectedConditionPath.join()) {
+			return;
+		}
+		const tree = saveCurrentCondition();
+		setConditionTree(tree);
+		setSelectedConditionPath(path);
+		initialize([Utils.boolToNum(isAddElse), ...getConditionTree(tree, path).condition!], true);
+	};
+
+	const handleAddCondition = (path: number[]) => {
+		const tree = saveCurrentCondition();
+		const group = getConditionTree(tree, path);
+		const childPath = [...path, group.children!.length];
+		const nextTree = replaceConditionTree(tree, path, {
+			...group,
+			children: [...group.children!, { condition: [] }],
+		});
+		setConditionTree(nextTree);
+		setSelectedConditionPath(childPath);
+		initialize(null, true);
+	};
+
+	const handleAddParent = (path: number[]) => {
+		const tree = saveCurrentCondition();
+		const nextTree = replaceConditionTree(tree, path, {
+			operator: CONDITION_OPERATOR.AND,
+			children: [getConditionTree(tree, path), { condition: [] }],
+		});
+		setConditionTree(nextTree);
+		setSelectedConditionPath([...path, 1]);
+		initialize(null, true);
+	};
+
+	const handleRemoveCondition = (path: number[]) => {
+		const tree = removeConditionTree(saveCurrentCondition(), path);
+		if (!tree) {
+			return;
+		}
+		const nextPath = getFirstConditionPath(tree);
+		setConditionTree(tree);
+		setSelectedConditionPath(nextPath);
+		initialize([Utils.boolToNum(isAddElse), ...getConditionTree(tree, nextPath).condition!], true);
+	};
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		const tree = saveCurrentCondition();
+		const newList: MapObjectCommandType[] = [Utils.boolToNum(isAddElse)];
+		if (isConditionGroup(tree)) {
+			newList.push(CONDITION_TREE_KIND, {
+				operator: tree.operator,
+				children: tree.children,
+			} as unknown as JSONType);
+		} else {
+			newList.push(...tree.condition!);
+		}
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -408,6 +567,82 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 	useLayoutEffect(() => {
 		initialize();
 	}, []);
+
+	const handleChangeOperator = (path: number[], operator: CONDITION_OPERATOR) => {
+		const tree = saveCurrentCondition();
+		setConditionTree(replaceConditionTree(tree, path, { ...getConditionTree(tree, path), operator }));
+	};
+
+	const getConditionLabel = (condition: MapObjectCommandType[]) => {
+		const command = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF, [0, ...condition]);
+		const label = command.toStringIf(
+			Utils.generateIterator(),
+			Project.current!.currentMapObjectProperties.map((node) => node.content),
+			Project.current!.currentMapObjectParameters,
+		)[0];
+		return label.slice(label.indexOf('(') + 1, -1);
+	};
+
+	const getConditionTreeContent = (tree: ConditionTree, path: number[] = []): ReactNode => {
+		if (!isConditionGroup(tree)) {
+			const label = getConditionLabel(
+				path.join() === selectedConditionPath.join() ? getCurrentCondition() : tree.condition!,
+			);
+			return (
+				<Flex column centerH centerV spaced key={path.join()} className='conditionTreeLeaf'>
+					<Button
+						active={path.join() === selectedConditionPath.join()}
+						onClick={() => handleClickCondition(path)}
+						onClose={path.length > 0 ? () => handleRemoveCondition(path) : undefined}
+						title={label}
+					>
+						<span className='conditionTreeLabel'>{label}</span>
+					</Button>
+					<Button onClick={() => handleAddParent(path)}>+</Button>
+				</Flex>
+			);
+		}
+		return (
+			<Flex
+				column
+				centerH
+				centerV
+				key={path.join()}
+				className={path.length === 0 ? 'conditionTreeRoot' : undefined}
+			>
+				<div className='conditionTreeParentControl'>
+					<Dropdown
+						selectedID={tree.operator}
+						onChange={(operator) => handleChangeOperator(path, operator as CONDITION_OPERATOR)}
+						options={[
+							Model.Base.create(CONDITION_OPERATOR.AND, t('and').toUpperCase()),
+							Model.Base.create(CONDITION_OPERATOR.OR, t('or').toUpperCase()),
+						]}
+					/>
+					<Button className='conditionTreeAddCondition' onClick={() => handleAddCondition(path)}>
+						+
+					</Button>
+				</div>
+				<div className='conditionTreeParentLine' />
+				<Flex centerH className='flexTopVertically'>
+					<Flex
+						centerH
+						className={
+							tree.children.length > 1
+								? 'conditionTreeChildren conditionTreeChildrenMultiple'
+								: 'conditionTreeChildren'
+						}
+					>
+						{tree.children.map((child, index) => (
+							<div className='conditionTreeChild' key={index}>
+								{getConditionTreeContent(child, [...path, index])}
+							</div>
+						))}
+					</Flex>
+				</Flex>
+			</Flex>
+		);
+	};
 
 	const getVariablesParamPropContent = () => (
 		<Flex column spacedLarge key={0}>
@@ -785,9 +1020,13 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 			onClose={handleReject}
 			initialWidth='800px'
 			initialHeight='500px'
+			widthRefreshKey={JSON.stringify([conditionTree, currentTabIndex])}
+			widthRefreshPadding={40}
+			heightRefreshKey={JSON.stringify([conditionTree, currentTabIndex])}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<Flex column spacedLarge fillHeight>
+			<Flex column spacedLarge>
+				{getConditionTreeContent(conditionTree)}
 				<RadioGroup selected={selectionType} onChange={setSelectionType}>
 					<Tab
 						hideScroll
@@ -805,10 +1044,10 @@ function DialogCommandIf({ commandKind, setIsOpen, list, onAccept, onReject }: C
 						]}
 						forcedCurrentIndex={forcedTabIndex}
 						setForcedCurrentIndex={setForcedTabIndex}
+						onCurrentIndexChanged={setCurrentTabIndex}
 						padding
 					/>
 				</RadioGroup>
-				<Flex fillHeight />
 				<Checkbox isChecked={isAddElse} onChange={setIsAddElse}>
 					{t('add.else.conditions.not.apply')}
 				</Checkbox>

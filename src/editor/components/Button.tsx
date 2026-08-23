@@ -28,6 +28,8 @@ type Props = {
 	square?: boolean;
 	small?: boolean;
 	fillWidth?: boolean;
+	className?: string;
+	title?: string;
 	onClick?: () => void;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
@@ -48,6 +50,8 @@ function Button({
 	square = false,
 	small = false,
 	fillWidth = false,
+	className,
+	title,
 	onClick,
 	onMouseEnter,
 	onMouseLeave,
@@ -101,15 +105,24 @@ function Button({
 			ref={ref}
 			className={Utils.getClassName(
 				{ disabled, active: activeState, big, backgroundOnHoverOnly, square, small, fillWidth },
-				buttonType,
+				`${buttonType} ${className ?? ''}`,
 			)}
 			onClick={handleClick}
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
+			title={title}
 		>
 			{icon}
 			{children}
-			{onClose && <RxCross2 className='close' onClick={onClose} />}
+			{onClose && (
+				<RxCross2
+					className='close'
+					onClick={(event) => {
+						event.stopPropagation();
+						onClose();
+					}}
+				/>
+			)}
 		</button>
 	);
 }

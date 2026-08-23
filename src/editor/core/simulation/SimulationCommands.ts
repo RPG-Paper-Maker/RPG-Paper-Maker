@@ -357,9 +357,17 @@ class CommandChoice extends CommandBase {
 	goToNextCommand = () => 1;
 }
 
+type ConditionTree = {
+	condition?: MapObjectCommandType[];
+	operator?: number;
+	children?: ConditionTree[];
+};
+
 class CommandIf extends CommandBase {
 	private hasElse: boolean;
 	private kind: number;
+	private operator?: number;
+	private conditions?: CommandIf[];
 	private variableParamProp!: DynamicValue;
 	private variableParamPropOperation!: number;
 	private variableParamPropValue!: DynamicValue;
@@ -383,6 +391,24 @@ class CommandIf extends CommandBase {
 		const iterator = Utils.generateIterator();
 		this.hasElse = Utils.numToBool(command[iterator.i++] as number);
 		this.kind = command[iterator.i++] as number;
+		if (this.kind === -1) {
+			const tree = command[iterator.i++] as unknown as {
+				operator: number;
+				conditions?: MapObjectCommandType[][];
+				children?: ConditionTree[];
+			};
+			this.operator = tree.operator;
+			const conditions: ConditionTree[] = tree.children ?? tree.conditions!.map((condition) => ({ condition }));
+			this.conditions = conditions.map(
+				(condition) =>
+					new CommandIf(
+						condition.children
+							? ([0, -1, condition] as MapObjectCommandType[])
+							: ([0, ...condition.condition!] as MapObjectCommandType[]),
+					),
+			);
+			return;
+		}
 		switch (this.kind) {
 			case 0:
 				this.variableParamProp = DynamicValue.createCommand(command, iterator);
@@ -420,6 +446,11 @@ class CommandIf extends CommandBase {
 	}
 
 	evaluate(ctx: SimulationContext): boolean {
+		if (this.conditions) {
+			return this.operator === 0
+				? this.conditions.every((condition) => condition.evaluate(ctx))
+				: this.conditions.some((condition) => condition.evaluate(ctx));
+		}
 		const game = ctx.game;
 		switch (this.kind) {
 			case 0:

@@ -31,6 +31,8 @@ type Props = {
 	className?: string;
 	initialWidth?: string;
 	initialHeight?: string;
+	widthRefreshKey?: string | number;
+	widthRefreshPadding?: number;
 	heightRefreshKey?: string | number;
 	initialPlacement?: 'center' | 'right' | 'top';
 	isDisabled?: boolean;
@@ -113,6 +115,8 @@ function Dialog({
 	className,
 	initialWidth,
 	initialHeight,
+	widthRefreshKey,
+	widthRefreshPadding = 0,
 	heightRefreshKey,
 	initialPlacement = 'center',
 	isDisabled = false,
@@ -350,15 +354,48 @@ function Dialog({
 	}, [isOpen, scaledWidth, scaledHeight]);
 
 	useLayoutEffect(() => {
+		if (!dialogRef.current || !isOpen || widthRefreshKey === undefined) {
+			return;
+		}
+		const previousRect = dialogRef.current.getBoundingClientRect();
+		dialogRef.current.style.width = 'auto';
+		dialogRef.current.style.minWidth = '0';
+		const rect = dialogRef.current.getBoundingClientRect();
+		dialogRef.current.style.width = `${rect.width + 2 + widthRefreshPadding}px`;
+		const nextRect = dialogRef.current.getBoundingClientRect();
+		updatePosition(
+			previousRect.left + previousRect.width / 2 - nextRect.width / 2,
+			previousRect.top + previousRect.height / 2 - nextRect.height / 2,
+		);
+	}, [widthRefreshKey, widthRefreshPadding, isOpen]);
+
+	useLayoutEffect(() => {
 		if (!dialogRef.current || !isOpen || heightRefreshKey === undefined) {
 			return;
 		}
+		const previousRect = dialogRef.current.getBoundingClientRect();
 		dialogRef.current.style.height = 'auto';
-		dialogRef.current.style.minHeight = '0';
+		dialogRef.current.style.minHeight = scaledHeight ? `min(${scaledHeight}, calc(100vh - 10px))` : '0';
 		const rect = dialogRef.current.getBoundingClientRect();
-		dialogRef.current.style.height = `${rect.height + 2}px`;
-		dialogRef.current.style.minHeight = `${rect.height + 2}px`;
-	}, [heightRefreshKey, isOpen]);
+		const content = dialogRef.current.querySelector('.dialogContent');
+		const contentChild = content?.firstElementChild as HTMLElement | null;
+		const contentStyle = content && getComputedStyle(content);
+		const height = Math.max(
+			rect.height,
+			(contentChild?.scrollHeight ?? 0) +
+				(contentStyle ? parseFloat(contentStyle.paddingTop) + parseFloat(contentStyle.paddingBottom) : 0) +
+				Array.from(dialogRef.current.children)
+					.filter((child) => child !== content)
+					.reduce((total, child) => total + child.getBoundingClientRect().height, 0),
+		);
+		dialogRef.current.style.height = `${height + 2}px`;
+		dialogRef.current.style.minHeight = `${height + 2}px`;
+		const nextRect = dialogRef.current.getBoundingClientRect();
+		updatePosition(
+			previousRect.left + previousRect.width / 2 - nextRect.width / 2,
+			previousRect.top + previousRect.height / 2 - nextRect.height / 2,
+		);
+	}, [heightRefreshKey, isOpen, scaledHeight]);
 
 	useLayoutEffect(() => {
 		if (isOpen) {

@@ -82,3 +82,82 @@
 .dialogFooter {
 	padding: 10px 20px 20px 20px;
 }
+
+.conditionTreeRoot {
+	align-self: center;
+}
+
+.conditionTreeParentLine {
+	align-self: center;
+	width: 0;
+	height: 10px;
+	border-left: 1px solid var(--lightest-bg-color);
+}
+
+.conditionTreeChildren {
+	position: relative;
+	padding-top: 10px;
+}
+
+.conditionTreeParentControl {
+	position: relative;
+	display: flex;
+}
+
+.conditionTreeChildrenMultiple .conditionTreeChild::after {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: 0;
+	right: 0;
+	border-top: 1px solid var(--lightest-bg-color);
+}
+
+.conditionTreeChildrenMultiple .conditionTreeChild:first-child::after {
+	left: 50%;
+}
+
+.conditionTreeChildrenMultiple .conditionTreeChild:last-child::after {
+	right: 50%;
+}
+
+.conditionTreeChild {
+	position: relative;
+	padding: 0 5px;
+}
+
+.conditionTreeChild::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	height: 10px;
+	border-left: 1px solid var(--lightest-bg-color);
+}
+
+.conditionTreeLabel {
+	display: block;
+	max-width: 150px;
+	overflow-wrap: anywhere;
+	text-align: center;
+	white-space: normal;
+}
+
+.conditionTreeLeaf > button:first-child {
+	height: auto;
+	min-height: 20px;
+}
+
+.conditionTreeLeaf > button:first-child .close {
+	flex: 0 0 14px;
+	min-width: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.conditionTreeAddCondition {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	margin-left: 5px;
+}

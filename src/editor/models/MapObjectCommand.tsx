@@ -2345,6 +2345,28 @@ class MapObjectCommand extends Base {
 
 	toStringIf(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		iterator.i++;
+		if (this.command[iterator.i] === -1) {
+			type ConditionTree = {
+				condition?: MapObjectCommandType[];
+				operator?: number;
+				children?: ConditionTree[];
+				conditions?: MapObjectCommandType[][];
+			};
+			const getConditionString = (condition: MapObjectCommandType[]) => {
+				const command = MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF, [0, ...condition]);
+				const str = command.toStringIf(Utils.generateIterator(), properties, parameters)[0];
+				return str.slice(str.indexOf('(') + 1, -1);
+			};
+			const getTreeString = (tree: ConditionTree): string => {
+				const children: ConditionTree[] =
+					tree.children ?? tree.conditions?.map((condition) => ({ condition }) as ConditionTree) ?? [];
+				const operator = tree.operator === 0 ? t('and').toUpperCase() : t('or').toUpperCase();
+				return `(${children
+					.map((child) => (child.children ? getTreeString(child) : getConditionString(child.condition ?? [])))
+					.join(` ${operator} `)})`;
+			};
+			return [`${t('if')} ${getTreeString(this.command[++iterator.i] as unknown as ConditionTree)}`];
+		}
 		const compareOptions = Base.getCompareOptions();
 		let str = '';
 		switch (this.command[iterator.i++]) {
