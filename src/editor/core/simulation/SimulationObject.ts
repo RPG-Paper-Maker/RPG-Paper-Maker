@@ -530,6 +530,11 @@ class SimulationObject {
 				light instanceof THREE.DirectionalLight
 			) {
 				light.castShadow = true;
+				if (light instanceof THREE.PointLight) {
+					light.shadow.mapSize.set(256, 256);
+					light.shadow.autoUpdate = false;
+					light.shadow.needsUpdate = true;
+				}
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					light.shadow.camera.near = 0.01;
 					light.shadow.camera.updateProjectionMatrix();
