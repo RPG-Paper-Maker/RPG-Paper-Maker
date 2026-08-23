@@ -290,9 +290,29 @@ const getMimeType = (filePath) => {
 let window;
 let game;
 let gameProcess;
+let gameLaunchPromise = Promise.resolve();
 let updater;
 let splash;
 let isReadyToClose = false;
+
+const closeGameProcess = async () => {
+	const child = gameProcess;
+	if (!child) {
+		return;
+	}
+	await new Promise((resolve) => {
+		const finish = () => {
+			child.removeListener('exit', finish);
+			child.removeListener('error', finish);
+			resolve();
+		};
+		child.once('exit', finish);
+		child.once('error', finish);
+		if (!child.kill()) {
+			finish();
+		}
+	});
+};
 
 const hasInternet = async () => {
 	const urls = ['https://www.google.com', 'https://www.baidu.com', 'https://www.bing.com', 'https://one.one.one.one'];
@@ -955,33 +975,35 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 });
 
 ipcMain.handle('open-game', async (event, location, battleTest) => {
-	if (gameProcess) {
-		gameProcess.kill();
-		gameProcess = null;
-	}
-	const args = process.defaultApp ? [__filename] : [];
-	if (process.platform === 'linux') {
-		args.push('--no-sandbox', '--force-device-scale-factor=1', '--ozone-platform=x11');
-	}
-	args.push(
-		'--rpm-game-test',
-		`--rpm-game-project=${location}`,
-		`--rpm-game-battle=${battleTest ? 'true' : 'false'}`,
-	);
-	const child = spawn(process.execPath, args, {
-		stdio: 'ignore',
-		cwd: __dirname,
-	});
-	gameProcess = child;
-	child.on('exit', () => {
-		if (gameProcess === child) {
-			gameProcess = null;
-			if (window && !window.isDestroyed()) {
-				window.webContents.send('game-test-exited');
+	gameLaunchPromise = gameLaunchPromise
+		.catch(() => {})
+		.then(async () => {
+			await closeGameProcess();
+			const args = process.defaultApp ? [__filename] : [];
+			if (process.platform === 'linux') {
+				args.push('--no-sandbox', '--force-device-scale-factor=1', '--ozone-platform=x11');
 			}
-		}
-	});
-	child.unref();
+			args.push(
+				'--rpm-game-test',
+				`--rpm-game-project=${location}`,
+				`--rpm-game-battle=${battleTest ? 'true' : 'false'}`,
+			);
+			const child = spawn(process.execPath, args, {
+				stdio: 'ignore',
+				cwd: __dirname,
+			});
+			gameProcess = child;
+			child.on('exit', () => {
+				if (gameProcess === child) {
+					gameProcess = null;
+					if (window && !window.isDestroyed()) {
+						window.webContents.send('game-test-exited');
+					}
+				}
+			});
+			child.unref();
+		});
+	await gameLaunchPromise;
 });
 
 ipcMain.handle('change-window-title', function (event, title) {
@@ -1001,14 +1023,12 @@ ipcMain.handle('change-window-size', function (event, w, h, f) {
 	}
 });
 
-ipcMain.handle('close-game', () => {
+ipcMain.handle('close-game', async () => {
 	if (game && !game.isDestroyed()) {
 		game.close();
 	}
-	if (gameProcess) {
-		gameProcess.kill();
-		gameProcess = null;
-	}
+	await gameLaunchPromise;
+	await closeGameProcess();
 	game = null;
 });
 
