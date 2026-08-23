@@ -32,7 +32,7 @@ type Props = {
 	level?: number;
 	selected?: boolean;
 	onSwitchExpanded: (id: number, expanded: boolean) => void;
-	onMouseDown: (node: Node) => void;
+	onMouseDown: (node: Node, event: React.MouseEvent) => void;
 	onDragStart?: (event: React.DragEvent, node: Node) => void;
 	onDragOver?: (event: React.DragEvent, node: Node) => void;
 	onDragLeave?: (event: React.DragEvent) => void;
@@ -79,14 +79,14 @@ function TreeItem({
 		setIsChecked(b);
 	};
 
-	const handleMouseDown = () => {
-		onMouseDown(node);
+	const handleMouseDown = (event: React.MouseEvent) => {
+		onMouseDown(node, event);
 	};
 
-	const handleMouseDownSwitchExpand = () => {
+	const handleMouseDownSwitchExpand = (event: React.MouseEvent) => {
 		onSwitchExpanded(node.content.id, !expanded);
 		setExpanded((value) => !value);
-		handleMouseDown();
+		handleMouseDown(event);
 	};
 
 	useEffect(() => {

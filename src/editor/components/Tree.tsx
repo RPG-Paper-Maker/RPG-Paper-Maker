@@ -276,14 +276,31 @@ function Tree({
 		setNotExpandedItemsList(newList);
 	};
 
-	const handleMouseDownItem = (node: Node) => {
+	const getAllNodes = (nodes: Node[]): Node[] => nodes.flatMap((node) => [node, ...getAllNodes(node.children)]);
+
+	const handleMouseDownItem = (node: Node, event: React.MouseEvent) => {
 		if (currentSelectedItemNode === node) {
 			if (multipleSelection && additionalSelectedNodes.length > 0) {
 				pendingSingleSelectNode.current = node;
 			}
 			return;
 		}
-		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL) && currentSelectedItemNode) {
+		if (multipleSelection && event.ctrlKey && event.shiftKey && currentSelectedItemNode) {
+			const nodes = getAllNodes(list);
+			const start = nodes.indexOf(currentSelectedItemNode);
+			const end = nodes.indexOf(node);
+			if (start !== -1 && end !== -1) {
+				setAdditionalSelectedNodes(
+					nodes
+						.slice(Math.min(start, end), Math.max(start, end) + 1)
+						.filter((selectedNode) => selectedNode !== currentSelectedItemNode),
+				);
+			}
+		} else if (
+			multipleSelection &&
+			(event.shiftKey || event.ctrlKey || Inputs.isSHIFT || Inputs.isCTRL) &&
+			currentSelectedItemNode
+		) {
 			if (node.content.id !== currentSelectedItemNode.content.id) {
 				if (additionalSelectedNodes.some((n) => n.content.id === node.content.id)) {
 					setAdditionalSelectedNodes(additionalSelectedNodes.filter((n) => node.content.id !== n.content.id));
@@ -912,6 +929,17 @@ function Tree({
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (isFocused) {
+				if (multipleSelection && !disabled && event.ctrlKey && event.key.toUpperCase() === 'A') {
+					event.preventDefault();
+					const nodes = getAllNodes(list).filter((node) => node.content.id > 0);
+					if (nodes.length > 0) {
+						setCurrentSelectedItemNode(nodes[0]);
+						setAdditionalSelectedNodes(nodes.slice(1));
+						setCurrentName(nodes[0].content.name);
+						onSelectedItem?.(nodes[0], true);
+					}
+					return;
+				}
 				const currentTime = new Date().getTime();
 				switch (event.key.toUpperCase()) {
 					case 'ARROWUP':
