@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "Duration-Frame-Kämpfer",
 	"battlers.frame.attacking.duration": "Duration-Frame-Kämpfer greifen an",
 	"sun.light": "Sonnenlicht",
+	"object.lights.shadows": "Schatten von Objektlichtern",
 	"resolve": "Lösen",
 	"resolve.description": "Fügt einem Selbst für 5 Runden eine Barriere hinzu.",
 	"shining.slice": "glänzende Scheibe",

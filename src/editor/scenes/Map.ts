@@ -575,6 +575,14 @@ class Map extends Base {
 		}
 	}
 
+	updateObjectLightsShadows() {
+		this.scene.traverse((object) => {
+			if (object.userData.isObjectLight && object instanceof THREE.Light) {
+				object.castShadow = this.model.objectLightsShadows;
+			}
+		});
+	}
+
 	updateFog() {
 		if (this.model.isFog) {
 			const color = (

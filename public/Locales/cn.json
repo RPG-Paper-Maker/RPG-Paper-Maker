@@ -1806,6 +1806,7 @@
 	"battlers.frame.duration": "战斗者帧时长",
 	"battlers.frame.attacking.duration": "战斗者攻击帧时长",
 	"sun.light": "阳光",
+	"object.lights.shadows": "对象灯光阴影",
 	"resolve": "决心",
 	"resolve.description": "为自己添加 5 回合的护盾。",
 	"shining.slice": "闪耀斩击",

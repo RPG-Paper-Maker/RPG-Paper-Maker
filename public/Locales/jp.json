@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "バトラーのフレーム持続時間",
 	"battlers.frame.attacking.duration": "攻撃アニメーションのフレーム持続時間",
 	"sun.light": "日光",
+	"object.lights.shadows": "オブジェクトライトの影",
 	"resolve": "リゾルブ",
 	"resolve.description": "自分自身に5ターンの間バリアを張る。",
 	"shining.slice": "シャイニングスライス",

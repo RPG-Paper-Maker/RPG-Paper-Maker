@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "Batalhadores de quadro de duração",
 	"battlers.frame.attacking.duration": "Batalhadores de quadro de duração atacando",
 	"sun.light": "Luz solar",
+	"object.lights.shadows": "Sombras das luzes dos objetos",
 	"resolve": "Resolver",
 	"resolve.description": "Adiciona uma barreira a si mesmo por 5 turnos.",
 	"shining.slice": "fatia brilhante",

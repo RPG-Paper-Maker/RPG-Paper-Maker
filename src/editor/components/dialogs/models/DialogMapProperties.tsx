@@ -69,6 +69,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	const [increaseTop, setIncreaseTop] = useStateNumber();
 	const [cameraPropertiesID] = useStateDynamicValue();
 	const [isSunlight, setIsSunlight] = useStateBool();
+	const [objectLightsShadows, setObjectLightsShadows] = useStateBool();
 	const [isFog, setIsFog] = useStateBool();
 	const [fogColorID] = useStateDynamicValue();
 	const [fogIntensity] = useStateDynamicValue();
@@ -114,6 +115,16 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		previewedRef.current = true;
 		scene.model.isSunlight = value;
 		scene.initializeSunLight();
+	};
+
+	const previewObjectLightsShadows = (value: boolean) => {
+		const scene = getPreviewScene();
+		if (!scene || !readyRef.current) {
+			return;
+		}
+		previewedRef.current = true;
+		scene.model.objectLightsShadows = value;
+		scene.updateObjectLightsShadows();
 	};
 
 	const previewFog = (enabled?: boolean) => {
@@ -204,6 +215,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		playBackgroundSoundSelectorRef.current?.initialize(model.backgroundSound);
 		cameraPropertiesID.copy(model.cameraPropertiesID);
 		setIsSunlight(model.isSunlight);
+		setObjectLightsShadows(model.objectLightsShadows);
 		setIsFog(model.isFog);
 		fogColorID.copy(model.fogColorID);
 		fogIntensity.copy(model.fogIntensity);
@@ -252,6 +264,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		playBackgroundSoundSelectorRef.current?.accept(model.backgroundSound);
 		model.cameraPropertiesID.copy(cameraPropertiesID);
 		model.isSunlight = isSunlight;
+		model.objectLightsShadows = objectLightsShadows;
 		model.isFog = isFog;
 		model.fogColorID.copy(fogColorID);
 		model.fogIntensity.copy(fogIntensity);
@@ -442,6 +455,15 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 				}}
 			>
 				{t('sun.light')}
+			</Checkbox>
+			<Checkbox
+				isChecked={objectLightsShadows}
+				onChange={(value: boolean) => {
+					setObjectLightsShadows(value);
+					previewObjectLightsShadows(value);
+				}}
+			>
+				{t('object.lights.shadows')}
 			</Checkbox>
 			<Groupbox title={t('fog')}>
 				<Flex column spaced fillWidth>

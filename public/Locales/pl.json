@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "[Battlers] czas trwania klatki",
 	"battlers.frame.attacking.duration": "[Battlers] czas trwania klatki ataku",
 	"sun.light": "Światło słoneczne",
+	"object.lights.shadows": "Cienie świateł obiektów",
 	"resolve": "Bariera",
 	"resolve.description": "Dodaje barierę na 5 tur.",
 	"shining.slice": "Lśniące cięcie",

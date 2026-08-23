@@ -10,7 +10,15 @@
 */
 
 import { BINDING, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND, Utils } from '../common';
-import { copyPublicFile, createFile, createFolder, readJSON, removeFile, removeFolder, writeJSON } from '../common/Platform';
+import {
+	copyPublicFile,
+	createFile,
+	createFolder,
+	readJSON,
+	removeFile,
+	removeFolder,
+	writeJSON,
+} from '../common/Platform';
 import { DynamicValue } from '../core/DynamicValue';
 import { Portion } from '../core/Portion';
 import { Position } from '../core/Position';
@@ -43,6 +51,7 @@ class Map extends Localization {
 	public backgroundSound = PlaySong.createPlaySong(SONG_KIND.MUSIC);
 	public cameraPropertiesID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSunlight = true;
+	public objectLightsShadows = true;
 	public isFog = false;
 	public fogColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public fogIntensity = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0.06);
@@ -78,6 +87,7 @@ class Map extends Localization {
 			DynamicValue,
 		],
 		['isSunlight', 'isl', true, BINDING.BOOLEAN],
+		['objectLightsShadows', 'ols', true, BINDING.BOOLEAN],
 		['isFog', 'isFog', false, BINDING.BOOLEAN],
 		[
 			'fogColorID',
@@ -392,7 +402,7 @@ class Map extends Localization {
 			}
 			return mapPortion;
 		};
-		const shiftElements = <T,>(
+		const shiftElements = <T>(
 			source: globalThis.Map<string, T>,
 			getTarget: (mapPortion: Model.MapPortion) => globalThis.Map<string, T>,
 		) => {

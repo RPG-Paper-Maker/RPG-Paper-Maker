@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "Продолжительность кадра бойцов",
 	"battlers.frame.attacking.duration": "Продолжительность кадра атаки бойцов",
 	"sun.light": "Солнечные лучи",
+	"object.lights.shadows": "Тени от источников света объектов",
 	"resolve": "Решимость",
 	"resolve.description": "Добавляет барьер себе на 5 ходов.",
 	"shining.slice": "Блестящий срез",

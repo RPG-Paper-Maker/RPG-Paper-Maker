@@ -1809,6 +1809,7 @@
 	"battlers.frame.duration": "Battlers frame duration",
 	"battlers.frame.attacking.duration": "Battlers frame atk duration",
 	"sun.light": "Sunlight",
+	"object.lights.shadows": "Shadows from object lights",
 	"resolve": "Resolve",
 	"resolve.description": "Add a barrier to an self for 5 turns.",
 	"shining.slice": "Shining Slice",

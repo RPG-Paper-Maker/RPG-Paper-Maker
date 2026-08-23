@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "Тривалість кадру батлерів",
 	"battlers.frame.attacking.duration": "Тривалість кадру бійці атакують",
 	"sun.light": "Сонячне світло",
+	"object.lights.shadows": "Тіні від джерел світла об'єктів",
 	"resolve": "Розв&#39;язати",
 	"resolve.description": "Додає собі бар&#39;єр на 5 обертів.",
 	"shining.slice": "блискучий зріз",

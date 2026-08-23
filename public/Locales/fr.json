@@ -1805,6 +1805,7 @@
 	"battlers.frame.duration": "Durée frame battlers",
 	"battlers.frame.attacking.duration": "Durée frame battlers attaquant",
 	"sun.light": "Lumière du soleil",
+	"object.lights.shadows": "Ombres des lumières d’objets",
 	"resolve": "Résoudre",
 	"resolve.description": "Ajoute une barrière à un self pendant 5 tours.",
 	"shining.slice": "Tranche brillante",

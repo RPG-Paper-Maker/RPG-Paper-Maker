@@ -1806,6 +1806,7 @@
 	"battlers.frame.duration": "배틀러 프레임 지속 시간",
 	"battlers.frame.attacking.duration": "배틀러 공격 프레임 지속 시간",
 	"sun.light": "햇빛",
+	"object.lights.shadows": "오브젝트 조명 그림자",
 	"resolve": "결의",
 	"resolve.description": "5턴 동안 자신에게 보호막 부여",
 	"shining.slice": "샤이닝 슬라이스",
