@@ -188,6 +188,7 @@ class Base extends Serializable {
 		'z.pixel.position',
 		'orientation',
 		'terrain',
+		'property',
 	]);
 	public static VARIABLE_OTHER_CHARACTERISTICS_OPTIONS = Base.mapListIndex([
 		'current.map.id',

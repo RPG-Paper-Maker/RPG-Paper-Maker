@@ -2582,7 +2582,11 @@ class MapObjectCommand extends Base {
 					properties,
 					parameters,
 				)} `;
-				str += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name);
+				const characteristic = this.command[iterator.i++] as number;
+				str += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[characteristic].name);
+				if (characteristic === Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS.length - 1) {
+					str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				}
 				break;
 			case 5: {
 				str += `${t('number.of').toLowerCase()} `;
@@ -2681,7 +2685,12 @@ class MapObjectCommand extends Base {
 					iterator,
 					properties,
 					parameters,
-				)} ${t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name)}`;
+				)} `;
+				const characteristic = this.command[iterator.i++] as number;
+				text += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[characteristic].name);
+				if (characteristic === Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS.length - 1) {
+					text += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				}
 				break;
 			case 5: {
 				text += `${t('number.of').toLowerCase()} `;

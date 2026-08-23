@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useContext, useLayoutEffect, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, ITEM_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, ITEM_KIND, Utils } from '../../../common';
+import { readJSON } from '../../../common/Platform';
 import { Project } from '../../../core/Project';
 import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -84,6 +85,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const [valueStatisticID] = useStateDynamicValue();
 	const [valueObjectID] = useStateDynamicValue();
 	const [valueObjectCharacteristicIndex, setValueObjectCharacteristicIndex] = useStateNumber();
+	const [valueObjectPropertyID] = useStateDynamicValue();
+	const [objectProperties, setObjectProperties] = useState<Model.MapObjectProperty[]>([]);
+	const objectPropertySourceRef = useRef('');
 	const [valueEnemyID, setValueEnemyID] = useStateNumber();
 	const [valueOtherCharacteristicsIndex, setValueOtherCharacteristicsIndex] = useStateNumber();
 	const [valueScript, setValueScript] = useStateString();
@@ -128,6 +132,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		valueStatisticID.updateToDefaultDatabase(Project.current!.battleSystem.statistics);
 		valueObjectID.updateToDefaultDatabase(-1);
 		setValueObjectCharacteristicIndex(0);
+		valueObjectPropertyID.updateToDefaultNumber();
 		setValueEnemyID(TroopMonster.currentMonsters[0]?.id ?? -1);
 		setValueOtherCharacteristicsIndex(0);
 		setValueScript('');
@@ -192,7 +197,11 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 					break;
 				case SELECTION_VALUE_TYPE.OBJECT_CHARACTERISTIC:
 					valueObjectID.updateCommand(list, iterator);
-					setValueObjectCharacteristicIndex(list[iterator.i++] as number);
+					const characteristic = list[iterator.i++] as number;
+					setValueObjectCharacteristicIndex(characteristic);
+					if (characteristic === Model.Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS.length - 1) {
+						valueObjectPropertyID.updateCommand(list, iterator);
+					}
 					break;
 				case SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID:
 					setValueEnemyID(TroopMonster.currentMonsters[list[iterator.i++] as number]?.id ?? -1);
@@ -219,6 +228,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.EQUALS);
 			setSelectionValueType(SELECTION_VALUE_TYPE.NUMBER);
 		}
+		objectPropertySourceRef.current = `${valueObjectID.kind}:${valueObjectID.value}`;
 		setTrigger((v) => !v);
 	};
 
@@ -230,6 +240,45 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 				return Project.current!.weapons.list;
 			case ITEM_KIND.ARMOR:
 				return Project.current!.armors.list;
+		}
+	};
+
+	const updateObjectProperties = async () => {
+		const source = `${valueObjectID.kind}:${valueObjectID.value}`;
+		const shouldSelectProperty = source !== objectPropertySourceRef.current;
+		objectPropertySourceRef.current = source;
+		if (valueObjectID.kind !== DYNAMIC_VALUE_KIND.DATABASE || !Scene.Map.current) {
+			setObjectProperties([]);
+			return;
+		}
+		const objectID = valueObjectID.value;
+		const mapObject = Scene.Map.current.model.objects.find((object) => object.id === objectID);
+		if (!mapObject) {
+			setObjectProperties([]);
+			return;
+		}
+		const mapPortion = Scene.Map.current.getMapPortionByPosition(mapObject.position);
+		const currentObject = mapPortion?.model.objects.get(mapObject.position.toKey());
+		if (currentObject) {
+			setObjectProperties(currentObject.properties);
+			if (shouldSelectProperty && currentObject.properties.length > 0) {
+				valueObjectPropertyID.updateToDefaultDatabase(currentObject.properties);
+			}
+			return;
+		}
+		const portion = new Model.MapPortion(mapObject.position.getGlobalPortion());
+		let json = await readJSON(portion.getPath(true));
+		if (json === null) {
+			json = await readJSON(portion.getPath(false));
+		}
+		if (valueObjectID.kind !== DYNAMIC_VALUE_KIND.DATABASE || valueObjectID.value !== objectID) {
+			return;
+		}
+		portion.read(json ?? {});
+		const properties = portion.objects.get(mapObject.position.toKey())?.properties ?? [];
+		setObjectProperties(properties);
+		if (shouldSelectProperty && properties.length > 0) {
+			valueObjectPropertyID.updateToDefaultDatabase(properties);
 		}
 	};
 
@@ -283,6 +332,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 			case SELECTION_VALUE_TYPE.OBJECT_CHARACTERISTIC:
 				valueObjectID.getCommand(newList);
 				newList.push(valueObjectCharacteristicIndex);
+				if (valueObjectCharacteristicIndex === Model.Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS.length - 1) {
+					valueObjectPropertyID.getCommand(newList);
+				}
 				break;
 			case SELECTION_VALUE_TYPE.ENEMY_INSTANCE_ID:
 				newList.push(TroopMonster.currentMonsters.findIndex((monster) => monster.id === valueEnemyID));
@@ -519,6 +571,8 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 										databaseOptions={objectsList}
 										disabled={!isObjectCharacteristic}
+										onChangeKind={() => void updateObjectProperties()}
+										onChangeValue={() => void updateObjectProperties()}
 									/>
 									<Dropdown
 										selectedID={valueObjectCharacteristicIndex}
@@ -527,6 +581,19 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 										disabled={!isObjectCharacteristic}
 										translateOptions
 									/>
+									{valueObjectCharacteristicIndex ===
+										Model.Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS.length - 1 && (
+										<DynamicValueSelector
+											value={valueObjectPropertyID}
+											optionsType={
+												objectProperties.length > 0
+													? DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE
+													: DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER
+											}
+											databaseOptions={objectProperties}
+											disabled={!isObjectCharacteristic}
+										/>
+									)}
 								</Flex>
 							</Value>
 							<Label>
