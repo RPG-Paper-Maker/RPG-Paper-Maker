@@ -137,7 +137,13 @@ class Picture extends Asset {
 	}
 
 	static computeAutoDetectLimit(image: HTMLImageElement, frameWidth: number, frameHeight: number): Rectangle | null {
-		if (!image || frameWidth === 0 || frameHeight === 0) {
+		if (
+			!image ||
+			!Number.isSafeInteger(frameWidth) ||
+			!Number.isSafeInteger(frameHeight) ||
+			frameWidth <= 0 ||
+			frameHeight <= 0
+		) {
 			return null;
 		}
 		const offscreen = document.createElement('canvas');

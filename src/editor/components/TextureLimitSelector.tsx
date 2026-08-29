@@ -107,6 +107,11 @@ function TextureLimitSelector({ texture, frameColumns, frameRows, limit, onChang
 		const path = base64 && !Constants.IS_DESKTOP ? ((await LocalFile.readFile(texture)) ?? '') : texture;
 		const loaded = await Picture2D.loadImage(path);
 		setImage(loaded);
+		if (!Number.isFinite(frameColumns) || !Number.isFinite(frameRows) || frameColumns <= 0 || frameRows <= 0) {
+			setFrameWidth(0);
+			setFrameHeight(0);
+			return;
+		}
 		setFrameWidth(Math.floor(loaded.width / frameColumns));
 		setFrameHeight(Math.floor(loaded.height / frameRows));
 	};
