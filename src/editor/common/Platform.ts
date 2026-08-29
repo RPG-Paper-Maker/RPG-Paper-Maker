@@ -111,6 +111,7 @@ export const moveFolder = async (src: string, dst: string) => {
 };
 
 const pendingWrites = new Set<Promise<unknown>>();
+const pendingWritesByPath = new Map<string, Promise<void>>();
 
 export const flushPendingWrites = async () => {
 	await Promise.allSettled([...pendingWrites]);
@@ -118,22 +119,29 @@ export const flushPendingWrites = async () => {
 
 export const createFile = async (path: string, content: string) => {
 	if (Constants.IS_DESKTOP) {
-		const write = (async () => {
-			const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
-			await IO.createFile(tmpPath, content);
-			try {
-				await IO.moveFile(tmpPath, path);
-				await IO.removeFile(tmpPath).catch(() => {});
-			} catch (e) {
-				await IO.removeFile(tmpPath).catch(() => {});
-				throw e;
-			}
-		})();
+		const previousWrite = pendingWritesByPath.get(path) ?? Promise.resolve();
+		const write = previousWrite
+			.catch(() => {})
+			.then(async () => {
+				const tmpPath = path + '.' + Math.random().toString(36).slice(2) + '.tmp';
+				await IO.createFile(tmpPath, content);
+				try {
+					await IO.moveFile(tmpPath, path);
+					await IO.removeFile(tmpPath).catch(() => {});
+				} catch (e) {
+					await IO.removeFile(tmpPath).catch(() => {});
+					throw e;
+				}
+			});
+		pendingWritesByPath.set(path, write);
 		pendingWrites.add(write);
 		try {
 			await write;
 		} finally {
 			pendingWrites.delete(write);
+			if (pendingWritesByPath.get(path) === write) {
+				pendingWritesByPath.delete(path);
+			}
 		}
 	} else {
 		await LocalFile.createFile(path, content);
