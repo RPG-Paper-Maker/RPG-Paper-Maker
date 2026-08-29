@@ -85,6 +85,7 @@ type Props = {
 	hideCheck?: boolean;
 	triggerUpdate?: boolean;
 	doNotOpenDialog?: boolean;
+	forceOpenDialogOnCreate?: boolean;
 	inputNameWidth?: INPUT_TYPE_WIDTH;
 	hideTooltip?: boolean;
 	blurOnMouseLeave?: boolean;
@@ -148,6 +149,7 @@ function Tree({
 	cannotAddEditRemoveRoot = false,
 	hideCheck = false,
 	doNotOpenDialog = false,
+	forceOpenDialogOnCreate = false,
 	inputNameWidth = INPUT_TYPE_WIDTH.SMALL,
 	hideTooltip = false,
 	blurOnMouseLeave = false,
@@ -358,7 +360,10 @@ function Tree({
 		}
 		model.id = Node.getNewID(list);
 		setNewModel(model);
-		if (doNotOpenDialog || constructorType === Model.Base || constructorType === Model.Localization) {
+		if (
+			!forceOpenDialogOnCreate &&
+			(doNotOpenDialog || constructorType === Model.Base || constructorType === Model.Localization)
+		) {
 			handleAcceptDialog(model);
 		} else {
 			setIsOpenDialog(true);

@@ -79,16 +79,23 @@ function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCo
 					ArrayUtils.insertAt(currentList, index++, Node.create(endChoice, [], node.parent));
 				} else {
 					let previousNb = 0;
-					let i = 0;
-					let choice = currentList[index + i];
-					while ((choice.content as Model.MapObjectCommand).kind !== EVENT_COMMAND_KIND.END_CHOICE) {
-						i++;
+					while (
+						(currentList[index + previousNb]?.content as Model.MapObjectCommand | undefined)?.kind ===
+						EVENT_COMMAND_KIND.CHOICE
+					) {
 						previousNb++;
-						choice = currentList[index + i];
+					}
+					if (
+						(currentList[index + previousNb]?.content as Model.MapObjectCommand | undefined)?.kind !==
+						EVENT_COMMAND_KIND.END_CHOICE
+					) {
+						const endChoice = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_CHOICE);
+						endChoice.id = Node.getNewID(list);
+						ArrayUtils.insertAt(currentList, index + previousNb, Node.create(endChoice, [], node.parent));
 					}
 					if (previousNb > nb) {
-						for (i = nb; i < previousNb; i++) {
-							ArrayUtils.removeAt(currentList, index + i);
+						for (let i = nb; i < previousNb; i++) {
+							ArrayUtils.removeAt(currentList, index + nb);
 						}
 					} else if (previousNb < nb) {
 						for (let i = previousNb; i < nb; i++) {
@@ -96,6 +103,9 @@ function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCo
 							choice.id = Node.getNewID(list);
 							ArrayUtils.insertAt(currentList, index + i, Node.create(choice, [], node.parent));
 						}
+					}
+					for (let i = 0; i < nb; i++) {
+						(currentList[index + i].content as Model.MapObjectCommand).command = [i + 1];
 					}
 				}
 				break;

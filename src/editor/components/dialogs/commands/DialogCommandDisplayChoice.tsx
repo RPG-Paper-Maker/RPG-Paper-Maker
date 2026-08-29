@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
+import useLivePreview from '../../../hooks/useLivePreview';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -24,7 +25,6 @@ import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
-import useLivePreview from '../../../hooks/useLivePreview';
 
 function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
@@ -115,6 +115,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 						<Tree
 							list={choices}
 							constructorType={Model.Localization}
+							forceOpenDialogOnCreate
 							forcedCurrentSelectedItemIndex={forcedCurrentSelectedItemIndex}
 							setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIndex}
 							minHeight={TREES_MIN_HEIGHT}
