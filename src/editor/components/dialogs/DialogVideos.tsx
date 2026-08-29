@@ -166,6 +166,9 @@ function DialogVideos({
 	};
 
 	const handleReject = async () => {
+		if (manager) {
+			await Project.current!.videos.load();
+		}
 		onReject?.();
 		setSelectedVideo(null);
 		setIsOpen(false);
