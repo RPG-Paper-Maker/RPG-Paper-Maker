@@ -1653,11 +1653,18 @@ class MapObjectCommand extends Base {
 				)}]`,
 			);
 		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`[${t('permanent').toLowerCase()}]`);
+		}
 		return texts;
 	}
 
 	toStringRemoveObjectFromMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		return [`ID ${this.toStringDynamicObject(iterator, properties, parameters)}`];
+		const texts = [`ID ${this.toStringDynamicObject(iterator, properties, parameters)}`];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`[${t('permanent').toLowerCase()}]`);
+		}
+		return texts;
 	}
 
 	toStringDisplayAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

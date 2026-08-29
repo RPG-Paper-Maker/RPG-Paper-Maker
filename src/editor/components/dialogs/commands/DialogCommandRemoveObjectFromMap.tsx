@@ -16,6 +16,7 @@ import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
+import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
@@ -26,6 +27,7 @@ function DialogCommandRemoveObjectFromMap({ commandKind, setIsOpen, list, onAcce
 	const { t } = useTranslation();
 
 	const [objectID] = useStateDynamicValue();
+	const [isPermanent, setIsPermanent] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
@@ -35,6 +37,9 @@ function DialogCommandRemoveObjectFromMap({ commandKind, setIsOpen, list, onAcce
 		if (list) {
 			const iterator = Utils.generateIterator();
 			objectID.updateCommand(list, iterator);
+			setIsPermanent(Utils.initializeBoolCommand(list, iterator));
+		} else {
+			setIsPermanent(false);
 		}
 		setTrigger((v) => !v);
 	};
@@ -43,6 +48,7 @@ function DialogCommandRemoveObjectFromMap({ commandKind, setIsOpen, list, onAcce
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
 		objectID.getCommand(newList);
+		newList.push(Utils.boolToNum(isPermanent));
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -64,13 +70,18 @@ function DialogCommandRemoveObjectFromMap({ commandKind, setIsOpen, list, onAcce
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
-				<Flex spaced centerV>
-					<div>{t('object.id')}:</div>
-					<DynamicValueSelector
-						value={objectID}
-						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-						databaseOptions={objectsList}
-					/>
+				<Flex column spacedLarge>
+					<Flex spaced centerV>
+						<div>{t('object.id')}:</div>
+						<DynamicValueSelector
+							value={objectID}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							databaseOptions={objectsList}
+						/>
+					</Flex>
+					<Checkbox isChecked={isPermanent} onChange={setIsPermanent}>
+						{t('permanent')}
+					</Checkbox>
 				</Flex>
 			</Dialog>
 		</>

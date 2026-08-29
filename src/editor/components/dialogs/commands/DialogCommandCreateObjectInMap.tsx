@@ -34,6 +34,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 	const [modelID] = useStateDynamicValue();
 	const [isStockCurrentValueVariableID, setIsStockCurrentValueVariableID] = useStateBool();
 	const [stockCurrentValueVariableID] = useStateDynamicValue();
+	const [isPermanent, setIsPermanent] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -48,9 +49,11 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 			if (checked) {
 				stockCurrentValueVariableID.updateCommand(list, iterator);
 			}
+			setIsPermanent(Utils.initializeBoolCommand(list, iterator));
 		} else {
 			panelPositionRef.current?.initialize();
 			setIsStockCurrentValueVariableID(false);
+			setIsPermanent(false);
 		}
 		setTrigger((v) => !v);
 	};
@@ -64,6 +67,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 		if (isStockCurrentValueVariableID) {
 			stockCurrentValueVariableID.getCommand(newList);
 		}
+		newList.push(Utils.boolToNum(isPermanent));
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -106,6 +110,9 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 							disabled={!isStockCurrentValueVariableID}
 						/>
 					</Flex>
+					<Checkbox isChecked={isPermanent} onChange={setIsPermanent}>
+						{t('permanent')}
+					</Checkbox>
 				</Flex>
 			</Dialog>
 		</>
