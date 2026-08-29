@@ -20,18 +20,22 @@ class LocalFile extends Serializable {
 	public static readonly JSON_FILE_NAMES = 'fin';
 	public static readonly JSON_CONTENT = 'c';
 	public static readonly JSON_IS_DIR = 'id';
+	public static readonly JSON_CHUNK_COUNT = 'cc';
+	public static readonly CHUNK_SIZE = 256 * 1024;
 	public static folderLocks = new Map<string, Mutex>();
 	public static manifest: Record<string, unknown>;
 
 	public folderNames: string[] = [];
 	public fileNames: string[] = [];
 	public content: string = '';
+	public chunkCount: number = 0;
 	public isDir: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['folderNames', 'fon', [], BINDING.STRING],
 		['fileNames', 'fin', [], BINDING.STRING],
 		['content', 'c', '', BINDING.STRING],
+		['chunkCount', 'cc', 0, BINDING.NUMBER],
 		['isDir', 'id', false, BINDING.BOOLEAN],
 	];
 
@@ -60,6 +64,14 @@ class LocalFile extends Serializable {
 		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
 			file.read(json);
+			if (file.chunkCount > 0) {
+				const chunks = await Promise.all(
+					Array.from({ length: file.chunkCount }, (_, index) =>
+						localforage.getItem<string>(LocalFile.getChunkPath(path, index)),
+					),
+				);
+				return chunks.join('');
+			}
 			return file.content;
 		}
 		return null;
@@ -120,6 +132,11 @@ class LocalFile extends Serializable {
 	}
 
 	static async createFile(path: string, content = '') {
+		const previous = await localforage.getItem<JSONType>(path);
+		const previousFile = new LocalFile();
+		if (previous) {
+			previousFile.read(previous);
+		}
 		const dirs = path.split('/');
 		if (dirs.length > 1) {
 			const newFileName = dirs.pop()!;
@@ -143,11 +160,27 @@ class LocalFile extends Serializable {
 		}
 		// Create file
 		const file = new LocalFile();
-		file.content = content;
+		file.chunkCount = Math.ceil(content.length / LocalFile.CHUNK_SIZE);
+		if (file.chunkCount > 1) {
+			await Promise.all(
+				Array.from({ length: file.chunkCount }, (_, index) =>
+					localforage.setItem(
+						LocalFile.getChunkPath(path, index),
+						content.slice(index * LocalFile.CHUNK_SIZE, (index + 1) * LocalFile.CHUNK_SIZE),
+					),
+				),
+			);
+		} else {
+			file.chunkCount = 0;
+			file.content = content;
+		}
 		const fileJson = {};
 		file.write(fileJson);
 		// console.info('create file ' + path);
 		await localforage.setItem(path, fileJson);
+		if (previousFile.chunkCount > file.chunkCount) {
+			await LocalFile.removeChunks(path, previousFile.chunkCount, file.chunkCount);
+		}
 	}
 
 	static async removeFolder(path: string, editParent: boolean = true) {
@@ -216,16 +249,17 @@ class LocalFile extends Serializable {
 		// Remove file
 		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
+			const file = new LocalFile();
+			file.read(json);
 			await localforage.removeItem(path);
+			await LocalFile.removeChunks(path, file.chunkCount);
 		}
 	}
 
 	static async copyFile(src: string, dst: string) {
-		const json = await localforage.getItem<JSONType>(src);
-		if (json) {
-			const file = new LocalFile(false);
-			file.read(json);
-			await LocalFile.createFile(dst, file.content);
+		const content = await LocalFile.readFile(src);
+		if (content !== null) {
+			await LocalFile.createFile(dst, content);
 		}
 	}
 
@@ -259,8 +293,10 @@ class LocalFile extends Serializable {
 
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
 		const pathBefore = Paths.join(path, fileNameBefore);
-		const json = await localforage.getItem(pathBefore);
+		const json: JSONType | null = await localforage.getItem(pathBefore);
 		if (json) {
+			const file = new LocalFile();
+			file.read(json);
 			const release = await this.getLock(path).acquire();
 			try {
 				const parentJson: JSONType | null = await localforage.getItem(path);
@@ -287,6 +323,16 @@ class LocalFile extends Serializable {
 						}
 					}
 					const pathAfter = Paths.join(path, fileNameAfter);
+					if (file.chunkCount > 0) {
+						await Promise.all(
+							Array.from({ length: file.chunkCount }, async (_, index) => {
+								const chunkPathBefore = LocalFile.getChunkPath(pathBefore, index);
+								const chunk = await localforage.getItem<string>(chunkPathBefore);
+								await localforage.setItem(LocalFile.getChunkPath(pathAfter, index), chunk ?? '');
+								await localforage.removeItem(chunkPathBefore);
+							}),
+						);
+					}
 					await localforage.setItem(pathAfter, json);
 					await localforage.removeItem(pathBefore);
 				}
@@ -428,6 +474,20 @@ class LocalFile extends Serializable {
 
 	static async brutRemove(path: string) {
 		await localforage.removeItem(path);
+	}
+
+	private static getChunkPath(path: string, index: number) {
+		return `${path}.chunk.${index}`;
+	}
+
+	private static async removeChunks(path: string, chunkCount: number, startIndex = 0) {
+		if (chunkCount > startIndex) {
+			await Promise.all(
+				Array.from({ length: chunkCount - startIndex }, (_, index) =>
+					localforage.removeItem(LocalFile.getChunkPath(path, startIndex + index)),
+				),
+			);
+		}
 	}
 
 	static async config() {
