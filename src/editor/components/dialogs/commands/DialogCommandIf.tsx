@@ -499,6 +499,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 	const saveCurrentCondition = () =>
 		replaceConditionTree(conditionTree, selectedConditionPath, { condition: getCurrentCondition() });
 
+	const handleCurrentConditionChanged = () => setTrigger((v) => !v);
+
 	const handleClickCondition = (path: number[]) => {
 		if (path.join() === selectedConditionPath.join()) {
 			return;
@@ -651,6 +653,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={variableParamProp}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.VARIABLE_PARAM_PROP}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isVariableParamProp}
 				/>
 				<Flex disabledLabel>{t('is').toLowerCase()}</Flex>
@@ -666,6 +670,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={variableParamPropCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isVariableParamProp}
 				/>
 			</Flex>
@@ -687,6 +693,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 					<DynamicValueSelector
 						value={heroInstanceID}
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+						onChangeKind={handleCurrentConditionChanged}
+						onChangeValue={handleCurrentConditionChanged}
 						disabled={!isHeroes}
 					/>
 				)}
@@ -714,6 +722,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 						<DynamicValueSelector
 							value={heroesNamed}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+							onChangeKind={handleCurrentConditionChanged}
+							onChangeValue={handleCurrentConditionChanged}
 							disabled={!isHeroesNamed}
 						/>
 					</Flex>
@@ -738,6 +748,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 						<DynamicValueSelector
 							value={heroesAbleSkillID}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							onChangeKind={handleCurrentConditionChanged}
+							onChangeValue={handleCurrentConditionChanged}
 							databaseOptions={Project.current!.skills.list}
 							disabled={!isHeroesAbleSkill}
 						/>
@@ -758,6 +770,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 									<DynamicValueSelector
 										value={heroesEquipedWeaponID}
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										onChangeKind={handleCurrentConditionChanged}
+										onChangeValue={handleCurrentConditionChanged}
 										databaseOptions={Project.current!.weapons.list}
 										disabled={!isHeroesEquipedWithWeapon}
 									/>
@@ -771,6 +785,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 									<DynamicValueSelector
 										value={heroesEquipedArmorID}
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										onChangeKind={handleCurrentConditionChanged}
+										onChangeValue={handleCurrentConditionChanged}
 										databaseOptions={Project.current!.armors.list}
 										disabled={!isHeroesEquipedWithArmor}
 									/>
@@ -786,6 +802,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 						<DynamicValueSelector
 							value={heroesUnderEffectStatusID}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							onChangeKind={handleCurrentConditionChanged}
+							onChangeValue={handleCurrentConditionChanged}
 							databaseOptions={Project.current!.status.list}
 							disabled={!isHeroesUnderEffectStatus}
 						/>
@@ -798,6 +816,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 						<DynamicValueSelector
 							value={heroesHaveStatisticID}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							onChangeKind={handleCurrentConditionChanged}
+							onChangeValue={handleCurrentConditionChanged}
 							databaseOptions={Project.current!.battleSystem.statistics}
 							disabled={!isHeroesHaveStatistic}
 						/>
@@ -814,6 +834,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 						<DynamicValueSelector
 							value={heroesHaveStatisticCompareValue}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+							onChangeKind={handleCurrentConditionChanged}
+							onChangeValue={handleCurrentConditionChanged}
 							disabled={!isHeroesHaveStatistic}
 						/>
 					</Flex>
@@ -829,6 +851,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={currencyID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={Project.current!.systems.currencies}
 					disabled={!isCurrency}
 				/>
@@ -844,6 +868,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={currencyCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isCurrency}
 				/>
 			</Flex>
@@ -852,6 +878,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={itemID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={Project.current!.items.list}
 					disabled={!isItem}
 				/>
@@ -867,6 +895,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={itemCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isItem}
 				/>
 			</Flex>
@@ -875,6 +905,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={weaponID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={Project.current!.weapons.list}
 					disabled={!isWeapon}
 				/>
@@ -890,6 +922,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={weaponCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isWeapon}
 				/>
 			</Flex>
@@ -904,6 +938,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={armorID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={Project.current!.armors.list}
 					disabled={!isArmor}
 				/>
@@ -919,6 +955,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={armorCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isArmor}
 				/>
 			</Flex>
@@ -938,6 +976,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={keyID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={Project.current!.keyboard.list}
 					disabled={!isKey}
 				/>
@@ -945,6 +985,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={keyValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isKey}
 				/>
 			</Flex>
@@ -953,6 +995,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={objectLookingID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={objectsList}
 					disabled={!isObjectLooking}
 				/>
@@ -970,6 +1014,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={objectClimbingID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					databaseOptions={objectsList}
 					disabled={!isObjectClimbing}
 				/>
@@ -980,6 +1026,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={chronometerID}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isChronometer}
 				/>
 				<Dropdown
@@ -994,6 +1042,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={chronometerCompareValue}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isChronometer}
 				/>
 				<Flex disabledLabel={!isChronometer}>{t('seconds').toLowerCase()}</Flex>
@@ -1004,6 +1054,8 @@ function DialogCommandIf({ commandKind, setIsOpen, list: commandList, onAccept, 
 				<DynamicValueSelector
 					value={script}
 					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+					onChangeKind={handleCurrentConditionChanged}
+					onChangeValue={handleCurrentConditionChanged}
 					disabled={!isScript}
 					isTextarea
 					fillWidth

@@ -423,51 +423,62 @@ function DynamicValueSelector({
 				value.value = null;
 				break;
 		}
+		onChangeKind?.(id);
+		onChangeValue?.(value.value);
 	};
 
 	const handleChangeNumber = (num: number) => {
 		setValueNumber(num);
 		value.value = num;
+		onChangeValue?.(num);
 	};
 
 	const handleChangeText = (text: string) => {
 		setValueText(text);
 		value.value = text;
+		onChangeValue?.(text);
 	};
 
 	const handleChangeSwitch = (v: boolean) => {
 		setValueSwitch(v);
 		value.value = v;
+		onChangeValue?.(v);
 	};
 
 	const handleChangeVariable = (id: number) => {
 		setValueVariableID(id);
 		value.value = id;
+		onChangeValue?.(id);
 	};
 
 	const handleChangeLocalVariable = (id: number) => {
 		setValueLocalVariableIndex(id);
 		value.value = localVariables[id];
+		onChangeValue?.(value.value);
 	};
 
 	const handleChangeKeyboard = (id: number) => {
 		setValueKeyboardID(id);
 		value.value = id;
+		onChangeValue?.(id);
 	};
 
 	const handleChangeParameter = (id: number) => {
 		setValueParameterID(id);
 		value.value = id;
+		onChangeValue?.(id);
 	};
 
 	const handleChangeProperty = (id: number) => {
 		setValuePropertyID(id);
 		value.value = id;
+		onChangeValue?.(id);
 	};
 
 	const handleChangeDatabase = (id: number) => {
 		setValueDatabase(id);
 		value.value = id;
+		onChangeValue?.(id);
 	};
 
 	useLayoutEffect(() => {
