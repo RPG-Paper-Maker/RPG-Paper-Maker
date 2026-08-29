@@ -195,6 +195,7 @@ function DialogShapes({ kind, setIsOpen, shapeID, onAccept, onReject }: Props) {
 				)}
 				{selectedKind ? (
 					<PanelAssetsPreviewer
+						constructorType={Model.Shape}
 						assetID={shapeID}
 						list={shapes}
 						itemsAvailable={shapesAvailable}

@@ -36,7 +36,7 @@ class Shape extends Asset {
 	public gltfScene: THREE.Group | null = null;
 	public gltfAnimations: THREE.AnimationClip[] = [];
 
-	constructor(kind: CUSTOM_SHAPE_KIND) {
+	constructor(kind: CUSTOM_SHAPE_KIND = CUSTOM_SHAPE_KIND.OBJ) {
 		super();
 		this.kind = kind;
 	}
