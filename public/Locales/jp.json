@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "2つの値のうち小さい方を返す",
 	"formulas.utility.round": "最も近い整数に丸める",
 	"formulas.utility.floor.ceil": "切り捨て / 切り上げ",
+	"floor.result": "結果を切り捨て",
 	"formulas.utility.random": "最小値と最大値の間のランダムな整数（含む）",
 	"formulas.utility.variance": "ランダムな±パーセンテージ分散を持つ値",
 	"formulas.game.variable": "IDでゲーム変数を取得",

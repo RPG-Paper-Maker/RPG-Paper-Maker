@@ -589,6 +589,7 @@ class CommandChangeVariables extends CommandBase {
 	private valueTerrainXPlus!: DynamicValue;
 	private valueTerrainYPlus!: DynamicValue;
 	private valueTerrainZPlus!: DynamicValue;
+	private isFloored: boolean;
 
 	constructor(command: MapObjectCommandType[], isLocal = false) {
 		super();
@@ -629,7 +630,7 @@ class CommandChangeVariables extends CommandBase {
 				this.valueTotalCurrencyID = DynamicValue.createCommand(command, iterator);
 				break;
 			case 10:
-				this.valueScript = String(command[iterator.i]);
+				this.valueScript = String(command[iterator.i++]);
 				break;
 			case 11:
 				this.valueTerrainX = DynamicValue.createCommand(command, iterator);
@@ -640,6 +641,7 @@ class CommandChangeVariables extends CommandBase {
 				this.valueTerrainZPlus = DynamicValue.createCommand(command, iterator);
 				break;
 		}
+		this.isFloored = command[iterator.i] === 1;
 	}
 
 	update(_state: CommandState, ctx: SimulationContext): number {
@@ -701,22 +703,21 @@ class CommandChangeVariables extends CommandBase {
 		}
 		if (this.localVariableName !== null) {
 			const previous = game.getLocalVariable(this.localVariableName);
-			game.setLocalVariable(
-				this.localVariableName,
+			const result =
 				typeof value === 'number' && typeof previous === 'number'
 					? OPERATORS_NUMBERS[this.operation](previous, value)
-					: value,
-			);
+					: value;
+			game.setLocalVariable(this.localVariableName, this.isFloored ? Math.floor(result as number) : result);
 			return 1;
 		}
 		for (let i = 0; i < this.nbSelection; i++) {
 			const id = this.selection + i;
 			const previous = game.getVariable(id);
-			if (typeof value === 'number' && typeof previous === 'number') {
-				game.setVariable(id, OPERATORS_NUMBERS[this.operation](previous, value));
-			} else {
-				game.setVariable(id, value);
-			}
+			const result =
+				typeof value === 'number' && typeof previous === 'number'
+					? OPERATORS_NUMBERS[this.operation](previous, value)
+					: value;
+			game.setVariable(id, this.isFloored ? Math.floor(result as number) : result);
 		}
 		return 1;
 	}

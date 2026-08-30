@@ -2012,6 +2012,7 @@
 	"formulas.utility.min": "Returns the smaller of two values",
 	"formulas.utility.round": "Round to nearest integer",
 	"formulas.utility.floor.ceil": "Round down / round up",
+	"floor.result": "Floor result",
 	"formulas.utility.random": "Random integer between min and max (inclusive)",
 	"formulas.utility.variance": "Value with random +/- percentage variance",
 	"formulas.game.variable": "Get a game variable by its ID",

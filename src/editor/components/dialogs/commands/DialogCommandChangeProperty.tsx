@@ -40,6 +40,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 	const isInitializing = useRef(true);
 
 	const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
+	const objectProperties = objectID.kind === DYNAMIC_VALUE_KIND.DATABASE ? properties : [];
 
 	const getMapID = () =>
 		mapID.kind === DYNAMIC_VALUE_KIND.DATABASE || mapID.kind === DYNAMIC_VALUE_KIND.NUMBER
@@ -156,6 +157,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 								value={objectID}
 								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 								databaseOptions={objectsList}
+								onChangeKind={() => setTrigger((v) => !v)}
 							/>
 						</Value>
 					</Form>
@@ -166,7 +168,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 						<DynamicValueSelector
 							value={propertyID}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-							databaseOptions={properties}
+							databaseOptions={objectProperties}
 						/>
 					</Flex>
 				</Groupbox>

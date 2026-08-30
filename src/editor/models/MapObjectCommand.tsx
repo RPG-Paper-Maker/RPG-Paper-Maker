@@ -1989,10 +1989,12 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringChangeProperty(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		const propertyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
+		const propertyIterator = { i: iterator.i };
+		this.toStringDynamicValue(iterator, properties, parameters, properties);
 		const operation = this.toStringOperation(iterator);
 		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
 		if (iterator.i >= this.command.length) {
+			const propertyID = this.toStringDynamicValue(propertyIterator, properties, parameters, properties);
 			return [`${t('property.id')} ${propertyID} ${operation} ${newValue}`];
 		}
 		let mapID = '';
@@ -2012,7 +2014,14 @@ class MapObjectCommand extends Base {
 			}
 			mapID = this.toStringDynamicValue(iterator, properties, parameters);
 		}
+		const isObjectIDDatabase = this.command[iterator.i] === DYNAMIC_VALUE_KIND.DATABASE;
 		const objectID = this.toStringDynamicObjectInMap(iterator, properties, parameters, mapIDValue);
+		const propertyID = this.toStringDynamicValue(
+			propertyIterator,
+			properties,
+			parameters,
+			isObjectIDDatabase ? properties : [],
+		);
 		return [
 			`${t('map.id')} ${mapID}, ${t('object.id')} ${objectID}`,
 			`${t('property.id')} ${propertyID} ${operation} ${newValue}`,
@@ -2690,6 +2699,9 @@ class MapObjectCommand extends Base {
 				break;
 			}
 		}
+		if (iterator.i < this.command.length && Utils.initializeBoolCommand(this.command, iterator)) {
+			str += ` [${t('floor.result')}]`;
+		}
 		return [str];
 	}
 
@@ -2796,6 +2808,9 @@ class MapObjectCommand extends Base {
 				).toLowerCase()}: ${zPixels})`;
 				break;
 			}
+		}
+		if (iterator.i < this.command.length && Utils.initializeBoolCommand(this.command, iterator)) {
+			text += ` [${t('floor.result')}]`;
 		}
 		return [text];
 	}

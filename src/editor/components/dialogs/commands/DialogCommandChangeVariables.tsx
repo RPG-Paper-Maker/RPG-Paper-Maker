@@ -20,6 +20,7 @@ import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
 import { MapObjectCommandType, TroopMonster } from '../../../models';
+import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
@@ -97,6 +98,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 	const [valueTerrainXPlus] = useStateDynamicValue();
 	const [valueTerrainYPlus] = useStateDynamicValue();
 	const [valueTerrainZPlus] = useStateDynamicValue();
+	const [isFloored, setIsFloored] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const isOneVariable = selectionType === SELECTION_TYPE.ONE_VARIABLE;
@@ -142,6 +144,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		valueTerrainXPlus.updateToDefaultNumber();
 		valueTerrainYPlus.updateToDefaultNumber();
 		valueTerrainZPlus.updateToDefaultNumber();
+		setIsFloored(false);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			if (isLocal) {
@@ -221,6 +224,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 					valueTerrainZPlus.updateCommand(list, iterator);
 					break;
 			}
+			setIsFloored(iterator.i < list.length && Utils.initializeBoolCommand(list, iterator));
 		} else {
 			setSelectionType(SELECTION_TYPE.ONE_VARIABLE);
 			setIsCreatingLocalVariable(true);
@@ -354,6 +358,7 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 				valueTerrainZPlus.getCommand(newList);
 				break;
 		}
+		newList.push(Utils.boolToNum(isFloored));
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -711,6 +716,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 						</Form>
 					</RadioGroup>
 				</Groupbox>
+				<Checkbox isChecked={isFloored} onChange={setIsFloored}>
+					{t('floor.result')}
+				</Checkbox>
 			</Flex>
 		</Dialog>
 	);

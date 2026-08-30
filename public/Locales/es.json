@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Devuelve el menor de dos valores",
 	"formulas.utility.round": "Redondear al entero más cercano",
 	"formulas.utility.floor.ceil": "Redondear hacia abajo / hacia arriba",
+	"floor.result": "Redondear el resultado hacia abajo",
 	"formulas.utility.random": "Entero aleatorio entre min y max (inclusive)",
 	"formulas.utility.variance": "Valor con varianza aleatoria de porcentaje +/-",
 	"formulas.game.variable": "Obtener una variable del juego por su ID",

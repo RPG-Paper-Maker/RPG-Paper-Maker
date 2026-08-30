@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Возвращает меньшее из двух значений",
 	"formulas.utility.round": "Округлить до ближайшего целого числа",
 	"formulas.utility.floor.ceil": "Округлить вниз / округлить вверх",
+	"floor.result": "Округлить результат вниз",
 	"formulas.utility.random": "Случайное целое число между min и max (включительно)",
 	"formulas.utility.variance": "Значение со случайной ±процентной дисперсией",
 	"formulas.game.variable": "Получить игровую переменную по её ID",

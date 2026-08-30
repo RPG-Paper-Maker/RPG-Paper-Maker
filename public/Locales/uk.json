@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Повертає менше з двох значень",
 	"formulas.utility.round": "Округлення до найближчого цілого числа",
 	"formulas.utility.floor.ceil": "Округлення донизу / догори",
+	"floor.result": "Округлити результат донизу",
 	"formulas.utility.random": "Випадкове ціле число між мін та макс (включно)",
 	"formulas.utility.variance": "Значення з випадковою дисперсією ±%",
 	"formulas.game.variable": "Отримати змінну гри за її ID",

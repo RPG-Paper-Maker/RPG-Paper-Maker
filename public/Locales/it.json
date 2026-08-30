@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Restituisce il minore dei due valori",
 	"formulas.utility.round": "Arrotondare all'intero più vicino",
 	"formulas.utility.floor.ceil": "Arrotondare per difetto / per eccesso",
+	"floor.result": "Arrotonda il risultato per difetto",
 	"formulas.utility.random": "Intero casuale tra min e max (incluso)",
 	"formulas.utility.variance": "Valore con varianza percentuale casuale +/-",
 	"formulas.game.variable": "Ottenere una variabile di gioco tramite il suo ID",

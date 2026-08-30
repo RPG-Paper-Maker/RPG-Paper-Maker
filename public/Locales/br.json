@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Retorna o menor de dois valores",
 	"formulas.utility.round": "Arredondar para o inteiro mais próximo",
 	"formulas.utility.floor.ceil": "Arredondar para baixo / para cima",
+	"floor.result": "Arredondar o resultado para baixo",
 	"formulas.utility.random": "Inteiro aleatório entre min e max (inclusive)",
 	"formulas.utility.variance": "Valor com variância percentual aleatória +/-",
 	"formulas.game.variable": "Obter uma variável do jogo pelo seu ID",

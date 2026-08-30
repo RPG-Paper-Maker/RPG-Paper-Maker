@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Gibt den kleineren der beiden Werte zurück",
 	"formulas.utility.round": "Auf die nächste ganze Zahl runden",
 	"formulas.utility.floor.ceil": "Abrunden / Aufrunden",
+	"floor.result": "Ergebnis abrunden",
 	"formulas.utility.random": "Zufällige ganze Zahl zwischen min und max (inklusive)",
 	"formulas.utility.variance": "Wert mit zufälliger +/- prozentualer Varianz",
 	"formulas.game.variable": "Spielvariable nach ID abrufen",

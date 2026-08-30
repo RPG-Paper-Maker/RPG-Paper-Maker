@@ -2002,6 +2002,7 @@
 	"formulas.utility.min": "返回两个值中较小的",
 	"formulas.utility.round": "四舍五入到最近的整数",
 	"formulas.utility.floor.ceil": "向下取整 / 向上取整",
+	"floor.result": "向下取整结果",
 	"formulas.utility.random": "min到max之间的随机整数（含边界）",
 	"formulas.utility.variance": "带有随机±百分比浮动的值",
 	"formulas.game.variable": "通过ID获取游戏变量",

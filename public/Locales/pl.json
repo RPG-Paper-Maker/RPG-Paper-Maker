@@ -2001,6 +2001,7 @@
 	"formulas.utility.min": "Zwraca mniejszą z dwóch wartości",
 	"formulas.utility.round": "Zaokrąglij do najbliższej liczby całkowitej",
 	"formulas.utility.floor.ceil": "Zaokrąglij w dół / w górę",
+	"floor.result": "Zaokrąglij wynik w dół",
 	"formulas.utility.random": "Losowa liczba całkowita między min a max (włącznie)",
 	"formulas.utility.variance": "Wartość z losową wariancją procentową ±",
 	"formulas.game.variable": "Pobierz zmienną gry na podstawie jej ID",

@@ -2002,6 +2002,7 @@
 	"formulas.utility.min": "두 값 중 더 작은 값 반환",
 	"formulas.utility.round": "가장 가까운 정수로 반올림",
 	"formulas.utility.floor.ceil": "내림 / 올림",
+	"floor.result": "결과 내림",
 	"formulas.utility.random": "min과 max 사이의 무작위 정수 (포함)",
 	"formulas.utility.variance": "무작위 ±퍼센트 분산이 있는 값",
 	"formulas.game.variable": "ID로 게임 변수 가져오기",
