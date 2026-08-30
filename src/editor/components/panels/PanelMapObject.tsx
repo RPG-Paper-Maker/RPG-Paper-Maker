@@ -31,7 +31,7 @@ import GraphicsSelector, { GraphicsSelectorOptions } from '../GraphicsSelector';
 import Groupbox from '../Groupbox';
 import InputText from '../InputText';
 import Tab from '../Tab';
-import Tree, { TREES_MIN_HEIGHT } from '../Tree';
+import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from '../Tree';
 import TreeCommands from '../TreeCommands';
 
 export interface PanelMapObjectRef {
@@ -674,6 +674,7 @@ const PanelMapObject = forwardRef(
 											onPasteItem={handlePasteState}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
+											minWidth={TREES_MIN_WIDTH}
 											cannotUpdateListSize
 											canBeEmpty
 										/>
@@ -685,6 +686,7 @@ const PanelMapObject = forwardRef(
 										<Tree
 											list={properties}
 											constructorType={Model.MapObjectProperty}
+											minWidth={TREES_MIN_WIDTH}
 											onListUpdated={handleUpdateProperties}
 											cannotUpdateListSize
 											canBeEmpty
@@ -710,135 +712,143 @@ const PanelMapObject = forwardRef(
 									/>
 								</Flex>
 							</Flex>
-							<Flex
-								spaced
-								className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}
-							>
-								<GraphicsSelector
-									sceneID='dialog-map-object'
-									options={graphicOptions}
-									onChangeGraphicsKind={handleChangeGraphicsKind}
-									onUpdateGraphics={handleUpdateGraphics}
-									hidden={!selectedState || hideStateValues}
-								/>
-								<Flex column one spaced>
-									<Groupbox title={t('moving')}>
-										<Form>
-											<Label>{t('type')}</Label>
-											<Value>
-												<Dropdown
-													selectedID={objectMovingKind}
-													onChange={handleChangeObjectMovingKind}
-													options={Model.Base.OBJECT_MOVING_OPTIONS}
-													translateOptions
-													fillWidth
-												/>
-											</Value>
-											<td />
-											<Value>
-												<Button
-													disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
-													onClick={handleClickEditRoute}
-												>
-													{t('edit.route')}...
-												</Button>
-											</Value>
-											<Label>{t('speed')}</Label>
-											<Value>
-												<Dropdown
-													selectedID={speedID}
-													onChange={handleChangeSpeedID}
-													options={Project.current!.systems.speeds}
-													fillWidth
-												/>
-											</Value>
-											<Label>{t('frequency')}</Label>
-											<Value>
-												<Dropdown
-													selectedID={frequencyID}
-													onChange={handleChangeFrequencyID}
-													options={Project.current!.systems.frequencies}
-													fillWidth
-												/>
-											</Value>
-										</Form>
-									</Groupbox>
-									<Button onClick={handleClickUpdateTransformations}>
-										{t('update.transformations')}...
-									</Button>
+							{!hideStateValues && selectedState && (
+								<Flex spaced>
+									<GraphicsSelector
+										sceneID='dialog-map-object'
+										options={graphicOptions}
+										onChangeGraphicsKind={handleChangeGraphicsKind}
+										onUpdateGraphics={handleUpdateGraphics}
+									/>
+									<Flex column one spaced>
+										<Groupbox title={t('moving')}>
+											<Form>
+												<Label>{t('type')}</Label>
+												<Value>
+													<Dropdown
+														selectedID={objectMovingKind}
+														onChange={handleChangeObjectMovingKind}
+														options={Model.Base.OBJECT_MOVING_OPTIONS}
+														translateOptions
+														fillWidth
+													/>
+												</Value>
+												<td />
+												<Value>
+													<Button
+														disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
+														onClick={handleClickEditRoute}
+													>
+														{t('edit.route')}...
+													</Button>
+												</Value>
+												<Label>{t('speed')}</Label>
+												<Value>
+													<Dropdown
+														selectedID={speedID}
+														onChange={handleChangeSpeedID}
+														options={Project.current!.systems.speeds}
+														fillWidth
+													/>
+												</Value>
+												<Label>{t('frequency')}</Label>
+												<Value>
+													<Dropdown
+														selectedID={frequencyID}
+														onChange={handleChangeFrequencyID}
+														options={Project.current!.systems.frequencies}
+														fillWidth
+													/>
+												</Value>
+											</Form>
+										</Groupbox>
+										<Button onClick={handleClickUpdateTransformations}>
+											{t('update.transformations')}...
+										</Button>
+									</Flex>
 								</Flex>
-							</Flex>
-							<Flex
-								column
-								spaced
-								className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}
-							>
-								<Groupbox
-									canExpand
-									initialClose={!Project.current!.settings.mapObjectLightsOpened}
-									onChangeOpen={handleChangeLightsOpened}
-									title={
-										<Flex spaced>
-											Lights
-											{lights.length === 0 ? (
-												<span className='lightStatusEmpty'>(none)</span>
-											) : (
-												<span>({lights.length})</span>
-											)}
+							)}
+							{!hideStateValues && selectedState && (
+								<Flex column spaced>
+									<Groupbox
+										canExpand
+										initialClose={!Project.current!.settings.mapObjectLightsOpened}
+										onChangeOpen={handleChangeLightsOpened}
+										title={
+											<Flex spaced>
+												Lights
+												{lights.length === 0 ? (
+													<span className='lightStatusEmpty'>(none)</span>
+												) : (
+													<span>({lights.length})</span>
+												)}
+											</Flex>
+										}
+									>
+										<Flex one>
+											<Tree
+												list={lights}
+												constructorType={Model.MapObjectLight}
+												onListUpdated={handleUpdateLights}
+												onDialogModelLivePreview={handleLivePreviewLight}
+												minHeight={TREES_MIN_HEIGHT / 2}
+												applyDefault
+												canBeEmpty
+											/>
 										</Flex>
-									}
-								>
-									<Flex one>
-										<Tree
-											list={lights}
-											constructorType={Model.MapObjectLight}
-											onListUpdated={handleUpdateLights}
-											onDialogModelLivePreview={handleLivePreviewLight}
-											minHeight={TREES_MIN_HEIGHT / 2}
-											applyDefault
-											canBeEmpty
-										/>
-									</Flex>
-								</Groupbox>
-								<Groupbox
-									title={t('options')}
-									canExpand
-									initialClose={!Project.current!.settings.mapObjectOptionsOpened}
-									onChangeOpen={handleChangeOptionsOpened}
-								>
-									<Flex spacedLarge>
-										<Flex column>
-											<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>
-												{t('move.animation')}
-											</Checkbox>
-											<Checkbox isChecked={stopAnimation} onChange={handleChangeStopAnimation}>
-												{t('stop.animation')}
-											</Checkbox>
-											<Checkbox isChecked={climbAnimation} onChange={handleChangeClimbAnimation}>
-												{t('climb.animation')}
-											</Checkbox>
-											<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
-												{t('direction.fix')}
-											</Checkbox>
+									</Groupbox>
+									<Groupbox
+										title={t('options')}
+										canExpand
+										initialClose={!Project.current!.settings.mapObjectOptionsOpened}
+										onChangeOpen={handleChangeOptionsOpened}
+									>
+										<Flex spacedLarge>
+											<Flex column>
+												<Checkbox
+													isChecked={moveAnimation}
+													onChange={handleChangeMoveAnimation}
+												>
+													{t('move.animation')}
+												</Checkbox>
+												<Checkbox
+													isChecked={stopAnimation}
+													onChange={handleChangeStopAnimation}
+												>
+													{t('stop.animation')}
+												</Checkbox>
+												<Checkbox
+													isChecked={climbAnimation}
+													onChange={handleChangeClimbAnimation}
+												>
+													{t('climb.animation')}
+												</Checkbox>
+												<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
+													{t('direction.fix')}
+												</Checkbox>
+											</Flex>
+											<Flex column>
+												<Checkbox isChecked={through} onChange={handleChangeThrough}>
+													{t('through')}
+												</Checkbox>
+												<Checkbox
+													isChecked={setWithCamera}
+													onChange={handleChangeSetWithCamera}
+												>
+													{t('set.with.camera')}
+												</Checkbox>
+												<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
+													{t('pixel.offset')}
+												</Checkbox>
+												<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
+													{t('keep.position')}
+												</Checkbox>
+											</Flex>
+											<Flex one />
 										</Flex>
-										<Flex column>
-											<Checkbox isChecked={through} onChange={handleChangeThrough}>
-												{t('through')}
-											</Checkbox>
-											<Checkbox isChecked={setWithCamera} onChange={handleChangeSetWithCamera}>
-												{t('set.with.camera')}
-											</Checkbox>
-											<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
-												{t('pixel.offset')}
-											</Checkbox>
-											<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
-												{t('keep.position')}
-											</Checkbox>
-										</Flex>
-										<Flex one />
-									</Flex>
-								</Groupbox>
-							</Flex>
+									</Groupbox>
+								</Flex>
+							)}
 						</Flex>
 					</Flex>
 					<Flex spacedLarge>
@@ -858,7 +868,7 @@ const PanelMapObject = forwardRef(
 								{t('can.be.triggered.another.object')}
 							</Checkbox>
 						</Flex>
-						<Flex className={Utils.getClassName({ visibilityHidden: !selectedState || hideStateValues })}>
+						{!hideStateValues && selectedState && (
 							<Flex centerV spaced>
 								<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
 									{t('detection')}
@@ -867,7 +877,7 @@ const PanelMapObject = forwardRef(
 									...
 								</Button>
 							</Flex>
-						</Flex>
+						)}
 					</Flex>
 				</Flex>
 				{isDialogCommandMoveObjectOpen && (
