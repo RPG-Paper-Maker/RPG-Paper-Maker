@@ -582,6 +582,7 @@ class CommandChangeVariables extends CommandBase {
 	private valueItemID!: DynamicValue;
 	private valueTotalCurrencyKind!: number;
 	private valueTotalCurrencyID!: DynamicValue;
+	private valueScript!: string;
 	private valueTerrainX!: DynamicValue;
 	private valueTerrainY!: DynamicValue;
 	private valueTerrainZ!: DynamicValue;
@@ -626,6 +627,9 @@ class CommandChangeVariables extends CommandBase {
 			case 6:
 				this.valueTotalCurrencyKind = command[iterator.i++] as number;
 				this.valueTotalCurrencyID = DynamicValue.createCommand(command, iterator);
+				break;
+			case 10:
+				this.valueScript = String(command[iterator.i]);
 				break;
 			case 11:
 				this.valueTerrainX = DynamicValue.createCommand(command, iterator);
@@ -677,6 +681,18 @@ class CommandChangeVariables extends CommandBase {
 				}
 				break;
 			}
+			case 10:
+				try {
+					const currentValue =
+						this.localVariableName === null
+							? game.getVariable(this.selection)
+							: (game.getLocalVariable(this.localVariableName) ?? 0);
+					value = new Function('$value', 'Math', `return ${this.valueScript}`)(currentValue, Math);
+				} catch (error) {
+					console.error(`Error while interpreting simulation script: "${this.valueScript}"`, error);
+					value = null;
+				}
+				break;
 			case 11:
 				value = 0;
 				break;
