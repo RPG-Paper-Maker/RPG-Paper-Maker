@@ -1992,7 +1992,31 @@ class MapObjectCommand extends Base {
 		const propertyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
 		const operation = this.toStringOperation(iterator);
 		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
-		return [`${t('property.id')} ${propertyID} ${operation} ${newValue}`];
+		if (iterator.i >= this.command.length) {
+			return [`${t('property.id')} ${propertyID} ${operation} ${newValue}`];
+		}
+		let mapID = '';
+		let mapIDValue: number | null = null;
+		if (this.command[iterator.i + 1] === -1) {
+			mapID = t('this.map');
+			mapIDValue = -1;
+			iterator.i += 2;
+		} else {
+			const kind = this.command[iterator.i] as DYNAMIC_VALUE_KIND;
+			const value = this.command[iterator.i + 1];
+			if (
+				(kind === DYNAMIC_VALUE_KIND.DATABASE || kind === DYNAMIC_VALUE_KIND.NUMBER) &&
+				typeof value === 'number'
+			) {
+				mapIDValue = value;
+			}
+			mapID = this.toStringDynamicValue(iterator, properties, parameters);
+		}
+		const objectID = this.toStringDynamicObjectInMap(iterator, properties, parameters, mapIDValue);
+		return [
+			`${t('map.id')} ${mapID}, ${t('object.id')} ${objectID}`,
+			`${t('property.id')} ${propertyID} ${operation} ${newValue}`,
+		];
 	}
 
 	toStringModifyLight(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
