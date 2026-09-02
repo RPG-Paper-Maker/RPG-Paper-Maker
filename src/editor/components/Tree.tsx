@@ -92,6 +92,7 @@ type Props = {
 	triggerNewItem?: boolean;
 	rowActions?: TreeRowAction[];
 	getTooltip?: (node: Node) => string;
+	getSelectionNode?: (node: Node) => Node;
 	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 	onDialogModelLivePreview?: (model: Model.Base | null, isNew: boolean) => void;
 };
@@ -156,6 +157,7 @@ function Tree({
 	triggerNewItem,
 	rowActions,
 	getTooltip,
+	getSelectionNode,
 	onDialogLivePreview,
 	onDialogModelLivePreview,
 }: Props) {
@@ -280,7 +282,8 @@ function Tree({
 
 	const getAllNodes = (nodes: Node[]): Node[] => nodes.flatMap((node) => [node, ...getAllNodes(node.children)]);
 
-	const handleMouseDownItem = (node: Node, event: React.MouseEvent) => {
+	const handleMouseDownItem = (selectedNode: Node, event: React.MouseEvent) => {
+		const node = getSelectionNode?.(selectedNode) ?? selectedNode;
 		if (currentSelectedItemNode === node) {
 			if (multipleSelection && additionalSelectedNodes.length > 0) {
 				pendingSingleSelectNode.current = node;
@@ -539,10 +542,29 @@ function Tree({
 	};
 
 	const generateNewIDsToAllNodes = (node: Node) => {
-		node.content.id = Node.getNewID(list);
-		for (const child of node.children) {
-			generateNewIDsToAllNodes(child);
-		}
+		const usedIDs = new Set<number>();
+		const collectUsedIDs = (nodes: Node[]) => {
+			for (const currentNode of nodes) {
+				if (currentNode === node) {
+					continue;
+				}
+				usedIDs.add(currentNode.content.id);
+				collectUsedIDs(currentNode.children);
+			}
+		};
+		const updateIDs = (currentNode: Node) => {
+			let id = 1;
+			while (usedIDs.has(id)) {
+				id++;
+			}
+			currentNode.content.id = id;
+			usedIDs.add(id);
+			for (const child of currentNode.children) {
+				updateIDs(child);
+			}
+		};
+		collectUsedIDs(list);
+		updateIDs(node);
 	};
 
 	const handleClearItem = async () => {
