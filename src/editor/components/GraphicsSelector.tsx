@@ -75,7 +75,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	) => {
 		const pic = isTileset
 			? Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, Scene.Map.current!.model.getTileset().pictureID)
-			: picture;
+			: Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, picture.id);
 		if (!pic) {
 			return;
 		}
