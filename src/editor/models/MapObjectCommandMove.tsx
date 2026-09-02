@@ -60,9 +60,21 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS:
 				j = 10;
 				break;
-			case COMMAND_MOVE_KIND.JUMP:
-				j = 15;
-				break;
+			case COMMAND_MOVE_KIND.JUMP: {
+				const start = iterator.i;
+				iterator.i++;
+				for (let k = 0; k < 7; k++) {
+					DynamicValue.createCommand(list, iterator);
+				}
+				if (list[iterator.i] === 'pixels') {
+					iterator.i++;
+					for (let k = 0; k < 2; k++) {
+						DynamicValue.createCommand(list, iterator);
+					}
+				}
+				this.command.push(...list.slice(start, iterator.i));
+				return;
+			}
 			case COMMAND_MOVE_KIND.TURN_NORTH:
 			case COMMAND_MOVE_KIND.TURN_SOUTH:
 			case COMMAND_MOVE_KIND.TURN_WEST:
@@ -197,9 +209,19 @@ class MapObjectCommandMove extends Base {
 				peakYp.updateCommand(this.command, iterator);
 				const time = new DynamicValue();
 				time.updateCommand(this.command, iterator);
+				let xPixels = '';
+				let zPixels = '';
+				if (this.command[iterator.i++] === 'pixels') {
+					const xPixel = new DynamicValue();
+					xPixel.updateCommand(this.command, iterator);
+					const zPixel = new DynamicValue();
+					zPixel.updateCommand(this.command, iterator);
+					xPixels = `, X+:${xPixel.toString()}`;
+					zPixels = `, Z+:${zPixel.toString()}`;
+				}
 				str += `${t(
 					'jump',
-				)} ${squareStep.toLowerCase()} X:${x.toString()}, Y:${y.toString()}, Y+:${yp.toString()}, Z:${z.toString()}, ${t(
+				)} ${squareStep.toLowerCase()} X:${x.toString()}${xPixels}, Y:${y.toString()}, Y+:${yp.toString()}, Z:${z.toString()}${zPixels}, ${t(
 					'peak',
 				)} Y:${peakY.toString()}, Y+:${peakYp.toString()} ${t('time')}:${time.toString()}${i18next
 					.t('seconds')

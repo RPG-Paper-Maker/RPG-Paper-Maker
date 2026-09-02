@@ -135,9 +135,11 @@ type SubMove =
 			kind: SUB_MOVE_KIND.JUMP;
 			square: boolean;
 			x: DynamicValue;
+			xPixels: DynamicValue;
 			y: DynamicValue;
 			yPlus: DynamicValue;
 			z: DynamicValue;
+			zPixels: DynamicValue;
 			peakY: DynamicValue;
 			peakYPlus: DynamicValue;
 			time: DynamicValue;
@@ -264,7 +266,26 @@ class CommandMoveObject extends CommandBase {
 				const peakY = DynamicValue.createCommand(command, iterator);
 				const peakYPlus = DynamicValue.createCommand(command, iterator);
 				const time = DynamicValue.createCommand(command, iterator);
-				this.subMoves.push({ kind: SUB_MOVE_KIND.JUMP, square, x, y, yPlus, z, peakY, peakYPlus, time });
+				let xPixels = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+				let zPixels = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+				if (command[iterator.i] === 'pixels') {
+					iterator.i++;
+					xPixels = DynamicValue.createCommand(command, iterator);
+					zPixels = DynamicValue.createCommand(command, iterator);
+				}
+				this.subMoves.push({
+					kind: SUB_MOVE_KIND.JUMP,
+					square,
+					x,
+					xPixels,
+					y,
+					yPlus,
+					z,
+					zPixels,
+					peakY,
+					peakYPlus,
+					time,
+				});
 			} else if (kind === COMMAND_MOVE_KIND.CHANGE_GRAPHICS) {
 				iterator.i++;
 				const dontChangeOrientation = Utils.numToBool(command[iterator.i++] as number);
@@ -539,11 +560,15 @@ class CommandMoveObject extends CommandBase {
 					const square = move.square ? 1 : 1 / Project.SQUARE_SIZE;
 					state.jumpStart = start;
 					state.jumpEnd = new THREE.Vector3(
-						ctx.game.resolveNumber(move.x) * square + start.x,
+						ctx.game.resolveNumber(move.x) * square +
+							ctx.game.resolveNumber(move.xPixels) / Project.SQUARE_SIZE +
+							start.x,
 						ctx.game.resolveNumber(move.y) * square +
 							ctx.game.resolveNumber(move.yPlus) / Project.SQUARE_SIZE +
 							start.y,
-						ctx.game.resolveNumber(move.z) * square + start.z,
+						ctx.game.resolveNumber(move.z) * square +
+							ctx.game.resolveNumber(move.zPixels) / Project.SQUARE_SIZE +
+							start.z,
 					);
 					state.jumpPeak =
 						ctx.game.resolveNumber(move.peakY) +

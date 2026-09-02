@@ -37,9 +37,11 @@ function DialogCommandMoveObjectJump({ setIsOpen, model, isNew, onAccept, onReje
 	const { t } = useTranslation();
 
 	const [x] = useStateDynamicValue();
+	const [xPixels] = useStateDynamicValue();
 	const [y] = useStateDynamicValue();
 	const [yp] = useStateDynamicValue();
 	const [z] = useStateDynamicValue();
+	const [zPixels] = useStateDynamicValue();
 	const [peakY] = useStateDynamicValue();
 	const [peakYp] = useStateDynamicValue();
 	const [time] = useStateDynamicValue();
@@ -48,9 +50,11 @@ function DialogCommandMoveObjectJump({ setIsOpen, model, isNew, onAccept, onReje
 	const initialize = () => {
 		if (isNew) {
 			x.updateToDefaultNumber(0);
+			xPixels.updateToDefaultNumber(0);
 			y.updateToDefaultNumber(0);
 			yp.updateToDefaultNumber(0);
 			z.updateToDefaultNumber(0);
+			zPixels.updateToDefaultNumber(0);
 			peakY.updateToDefaultNumber(0);
 			peakYp.updateToDefaultNumber(0);
 			time.updateToDefaultNumber(1, true);
@@ -64,6 +68,13 @@ function DialogCommandMoveObjectJump({ setIsOpen, model, isNew, onAccept, onReje
 			peakY.updateCommand(command.command, iterator);
 			peakYp.updateCommand(command.command, iterator);
 			time.updateCommand(command.command, iterator);
+			if (command.command[iterator.i++] === 'pixels') {
+				xPixels.updateCommand(command.command, iterator);
+				zPixels.updateCommand(command.command, iterator);
+			} else {
+				xPixels.updateToDefaultNumber(0);
+				zPixels.updateToDefaultNumber(0);
+			}
 		}
 
 		setTrigger((v) => !v);
@@ -81,6 +92,9 @@ function DialogCommandMoveObjectJump({ setIsOpen, model, isNew, onAccept, onReje
 		peakY.getCommand(list);
 		peakYp.getCommand(list);
 		time.getCommand(list);
+		list.push('pixels');
+		xPixels.getCommand(list);
+		zPixels.getCommand(list);
 		command.command = list;
 		setIsOpen(false);
 		onAccept();
@@ -108,19 +122,51 @@ function DialogCommandMoveObjectJump({ setIsOpen, model, isNew, onAccept, onReje
 					<Form>
 						<Label>X</Label>
 						<Value>
-							<DynamicValueSelector value={x} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+							<Flex columnMobile spaced>
+								<Flex spaced>
+									<DynamicValueSelector value={x} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+									{t('square.s')}
+								</Flex>
+								<div>+</div>
+								<Flex spaced>
+									<DynamicValueSelector
+										value={xPixels}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									/>
+									{t('pixel.s')}
+								</Flex>
+							</Flex>
 						</Value>
 						<Label>Y</Label>
 						<Value>
-							<DynamicValueSelector value={y} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
-						</Value>
-						<Label>Y+</Label>
-						<Value>
-							<DynamicValueSelector value={yp} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+							<Flex columnMobile spaced>
+								<Flex spaced>
+									<DynamicValueSelector value={y} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+									{t('square.s')}
+								</Flex>
+								<div>+</div>
+								<Flex spaced>
+									<DynamicValueSelector value={yp} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+									{t('pixel.s')}
+								</Flex>
+							</Flex>
 						</Value>
 						<Label>Z</Label>
 						<Value>
-							<DynamicValueSelector value={z} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+							<Flex columnMobile spaced>
+								<Flex spaced>
+									<DynamicValueSelector value={z} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+									{t('square.s')}
+								</Flex>
+								<div>+</div>
+								<Flex spaced>
+									<DynamicValueSelector
+										value={zPixels}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									/>
+									{t('pixel.s')}
+								</Flex>
+							</Flex>
 						</Value>
 					</Form>
 				</Groupbox>
