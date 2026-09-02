@@ -51,6 +51,22 @@ function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCo
 
 	const canPlayCommand = (node: Node) =>
 		node.content.id > 0 && !KINDS_WITHOUT_PLAY.includes((node.content as Model.MapObjectCommand).kind);
+	const getSelectionNode = (node: Node) => {
+		if ((node.content as Model.MapObjectCommand).kind !== EVENT_COMMAND_KIND.END_IF) {
+			return node;
+		}
+		const siblings = node.parent?.children ?? list;
+		for (let i = siblings.indexOf(node) - 1; i >= 0; i--) {
+			const kind = (siblings[i].content as Model.MapObjectCommand).kind;
+			if (kind === EVENT_COMMAND_KIND.IF) {
+				return siblings[i];
+			}
+			if (kind === EVENT_COMMAND_KIND.START_BATTLE) {
+				return node;
+			}
+		}
+		return node;
+	};
 	const getTooltip = (node: Node) => {
 		const command = node.content as Model.MapObjectCommand;
 		const text = getTextContent(command.toString());
@@ -193,6 +209,7 @@ function TreeCommands({ list, onListUpdated, disabled, onPlayCommand, onSelectCo
 			canDisable
 			cannotClear
 			getTooltip={getTooltip}
+			getSelectionNode={getSelectionNode}
 			rowActions={
 				onPlayCommand
 					? [
