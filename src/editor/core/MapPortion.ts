@@ -1418,6 +1418,7 @@ class MapPortion {
 			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT3D;
 		for (const mesh of this.objects3DMeshes) {
 			this.map.scene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 		this.objects3DMeshes = [];
 		for (const [, object3D] of this.model.objects3D) {
