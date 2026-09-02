@@ -1063,6 +1063,7 @@
 	"new.object.model.id": "№ нової моделі об'єктів",
 	"stock.id.in.variable.id": "Записати № в змінній №",
 	"stock.last.object.id.in.variable": "Зберегти ID останнього об'єкта у змінній",
+	"stock.choice.index.in.variable": "Зберегти індекс вибору у змінній",
 	"jump": "Стрибок",
 	"peak": "Пік",
 	"turn.north": "Поворот на північ",

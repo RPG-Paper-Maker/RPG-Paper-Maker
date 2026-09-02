@@ -1064,6 +1064,7 @@
 	"new.object.model.id": "新物体模型 ID",
 	"stock.id.in.variable.id": "将 ID 存储在变量中",
 	"stock.last.object.id.in.variable": "将最后一个对象 ID 存储在变量中",
+	"stock.choice.index.in.variable": "将选项索引存储在变量中",
 	"jump": "跳跃",
 	"peak": "顶点",
 	"turn.north": "转向北",

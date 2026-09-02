@@ -17,6 +17,7 @@ import { Model } from '../../../Editor';
 import useLivePreview from '../../../hooks/useLivePreview';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
+import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
@@ -32,13 +33,24 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 	const [choices, setChoices] = useState<Node[]>([]);
 	const [maxNumberChoicesDisplay] = useStateDynamicValue();
 	const [cancelAutoIndex] = useStateDynamicValue();
+	const [isStockChoiceIndex, setIsStockChoiceIndex] = useState(false);
+	const [stockChoiceIndexVariable] = useStateDynamicValue();
 	const [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex] = useState<number | null>(null);
 
 	const initialize = () => {
+		stockChoiceIndexVariable.updateToDefaultVariable(1);
 		if (list) {
 			const iterator = Utils.generateIterator();
 			cancelAutoIndex.updateCommand(list, iterator);
 			maxNumberChoicesDisplay.updateCommand(list, iterator);
+			const checked =
+				iterator.i < list.length && list[iterator.i] !== '-'
+					? Utils.initializeBoolCommand(list, iterator)
+					: false;
+			setIsStockChoiceIndex(checked);
+			if (checked) {
+				stockChoiceIndexVariable.updateCommand(list, iterator);
+			}
 			let lang: Model.Localization | null = null;
 			let node = null;
 			const newChoices = [];
@@ -64,6 +76,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 		} else {
 			maxNumberChoicesDisplay.updateToDefaultNumber(5);
 			cancelAutoIndex.updateToDefaultNumber(2);
+			setIsStockChoiceIndex(false);
 			setChoices(
 				Node.createList([Model.Localization.create(1, t('yes')), Model.Localization.create(2, t('no'))], false),
 			);
@@ -75,6 +88,10 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 		const newList: MapObjectCommandType[] = [];
 		cancelAutoIndex.getCommand(newList);
 		maxNumberChoicesDisplay.getCommand(newList);
+		newList.push(Utils.boolToNum(isStockChoiceIndex));
+		if (isStockChoiceIndex) {
+			stockChoiceIndexVariable.getCommand(newList);
+		}
 		for (const node of choices) {
 			const lang = node.content as Model.Localization;
 			newList.push('-');
@@ -110,7 +127,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spaced fillWidth>
-				<Flex one fillWidth>
+				<Flex two fillWidth>
 					<Groupbox title={t('choices')} fillWidth>
 						<Tree
 							list={choices}
@@ -126,7 +143,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 					</Groupbox>
 				</Flex>
 				<Flex one fillWidth>
-					<Groupbox title={t('options')}>
+					<Groupbox title={t('options')} fillWidth>
 						<Flex column spaced>
 							{t('max.number.choices.display')}:
 							<DynamicValueSelector
@@ -141,6 +158,16 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 								value={cancelAutoIndex}
 								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 							/>
+							<Flex column spaced>
+								<Checkbox isChecked={isStockChoiceIndex} onChange={setIsStockChoiceIndex}>
+									{t('stock.choice.index.in.variable')}
+								</Checkbox>
+								<DynamicValueSelector
+									value={stockChoiceIndexVariable}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									disabled={!isStockChoiceIndex}
+								/>
+							</Flex>
 						</Flex>
 					</Groupbox>
 				</Flex>

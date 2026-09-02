@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { EVENT_COMMAND_KIND, ITEM_KIND, ITERATOR, Utils } from '../../common';
+import { DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, ITEM_KIND, ITERATOR, Utils } from '../../common';
 import { Localization, MapObjectCommandType } from '../../models';
 import { DynamicValue } from '../DynamicValue';
 import { Project } from '../Project';
@@ -285,6 +285,8 @@ class CommandShowText extends CommandBase {
 
 class CommandDisplayChoice extends CommandBase {
 	private cancelAutoIndex: DynamicValue;
+	private isStockChoiceIndex: boolean;
+	private stockChoiceIndexVariable?: DynamicValue;
 	private choices: string[] = [];
 	private showText: CommandShowText | null = null;
 
@@ -293,6 +295,13 @@ class CommandDisplayChoice extends CommandBase {
 		const iterator = Utils.generateIterator();
 		this.cancelAutoIndex = DynamicValue.createCommand(command, iterator);
 		DynamicValue.createCommand(command, iterator);
+		this.isStockChoiceIndex =
+			iterator.i < command.length && command[iterator.i] !== '-'
+				? Utils.initializeBoolCommand(command, iterator)
+				: false;
+		if (this.isStockChoiceIndex) {
+			this.stockChoiceIndexVariable = DynamicValue.createCommand(command, iterator);
+		}
 		let localization: Localization | null = null;
 		while (iterator.i < command.length) {
 			const next = command[iterator.i];
@@ -329,6 +338,13 @@ class CommandDisplayChoice extends CommandBase {
 
 	update(state: CommandState, ctx: SimulationContext): number {
 		const index = state!.index as number;
+		if (this.isStockChoiceIndex && index >= 0) {
+			if (this.stockChoiceIndexVariable!.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE) {
+				ctx.game.setLocalVariable(this.stockChoiceIndexVariable!.value as string, index);
+			} else {
+				ctx.game.setVariable(ctx.game.resolveNumber(this.stockChoiceIndexVariable!), index);
+			}
+		}
 		if (index >= 0) {
 			ctx.hud?.clear();
 		}

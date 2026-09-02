@@ -599,6 +599,12 @@ class MapObjectCommand extends Base {
 
 	getChoicesNumber(): number {
 		let i = 4;
+		if (this.command[i] !== '-') {
+			const isStockChoiceIndex = Utils.numToBool(this.command[i++] as number);
+			if (isStockChoiceIndex) {
+				i += 2;
+			}
+		}
 		let nb = 0;
 		let next = '';
 		while (i < this.command.length) {
@@ -1060,6 +1066,13 @@ class MapObjectCommand extends Base {
 	toStringDisplayChoices(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const cancelAutoIndex = this.toStringDynamicValue(iterator, properties, parameters);
 		const maxChoices = this.toStringDynamicValue(iterator, properties, parameters);
+		const isStockChoiceIndex =
+			iterator.i < this.command.length && this.command[iterator.i] !== '-'
+				? Utils.initializeBoolCommand(this.command, iterator)
+				: false;
+		const stockChoiceIndexVariable = isStockChoiceIndex
+			? this.toStringDynamicValue(iterator, properties, parameters)
+			: '';
 		const choices: string[] = [];
 		let lang: Localization | null = null;
 		let next = '';
@@ -1081,7 +1094,11 @@ class MapObjectCommand extends Base {
 		return [
 			`[${t('cancel.auto.index').toLowerCase()}=${cancelAutoIndex}, ${t(
 				'max.number.choices.display',
-			)}=${maxChoices}]`,
+			)}=${maxChoices}${
+				isStockChoiceIndex
+					? `, ${t('stock.choice.index.in.variable').toLowerCase()}=${stockChoiceIndexVariable}`
+					: ''
+			}]`,
 			choices.join(' | '),
 		];
 	}
