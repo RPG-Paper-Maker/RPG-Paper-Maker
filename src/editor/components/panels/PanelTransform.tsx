@@ -195,12 +195,17 @@ function PanelTransform({ kind }: Props) {
 	};
 
 	const updatePosition = (position: Position) => {
+		const map = Scene.Map.current;
+		const selectedElement = map?.selectedElement;
+		if (!map || !selectedElement) {
+			return;
+		}
 		dispatch(setSelectedPosition(position));
-		Scene.Map.current!.selectedMesh.position.copy(Scene.Map.current!.selectedElement!.getLocalPosition(position));
-		Scene.Map.current!.selectedMesh.rotation.copy(Scene.Map.current!.selectedElement!.getLocalRotation(position));
-		Scene.Map.current!.selectedMesh.scale.copy(Scene.Map.current!.selectedElement!.getLocalScale(position));
-		Scene.Map.current!.updateTransform();
-		Scene.Map.current!.updateUndoRedoSave();
+		map.selectedMesh.position.copy(selectedElement.getLocalPosition(position));
+		map.selectedMesh.rotation.copy(selectedElement.getLocalRotation(position));
+		map.selectedMesh.scale.copy(selectedElement.getLocalScale(position));
+		map.updateTransform();
+		map.updateUndoRedoSave();
 	};
 
 	const handleChangeCurrentX = (value: number) => {
@@ -278,129 +283,129 @@ function PanelTransform({ kind }: Props) {
 
 	return (
 		<Groupbox
-				title={
-					<Flex spaced>
-						{title}
-						<div className='warning textCenter'>
-							(
-							{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-								? t('square.mode.applied')
-								: t('pixel.mode.applied')}
-							)
-						</div>
-					</Flex>
-				}
-			>
-				<Flex column spacedLarge>
-					{isSelected && (
-						<Groupbox title={t('current.values')}>
-							<Flex column spaced>
-								<Flex centerV spaced>
-									X:
-									<InputNumber
-										min={getMinX()}
-										max={getMaxX()}
-										value={getCurrentX()}
-										onChange={handleChangeCurrentX}
-										decimals={isDecimal}
-									/>
-									{units}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'>
-											<Button
-												icon={<FaArrowRotateRight />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, -90)}
-											/>
-										</Tooltip>
-									)}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'>
-											<Button
-												icon={<FaArrowRotateLeft />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, 90)}
-											/>
-										</Tooltip>
-									)}
-								</Flex>
-								<Flex centerV spaced>
-									Y:
-									<InputNumber
-										min={getMinY()}
-										max={getMaxY()}
-										value={getCurrentY()}
-										onChange={handleChangeCurrentY}
-										decimals={isDecimal}
-									/>
-									{units}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'>
-											<Button
-												icon={<FaArrowRotateRight />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, -90)}
-											/>
-										</Tooltip>
-									)}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'>
-											<Button
-												icon={<FaArrowRotateLeft />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, 90)}
-											/>
-										</Tooltip>
-									)}
-								</Flex>
-								<Flex centerV spaced>
-									Z:
-									<InputNumber
-										min={getMinZ()}
-										max={getMaxZ()}
-										value={getCurrentZ()}
-										onChange={handleChangeCurrentZ}
-										decimals={isDecimal}
-									/>
-									{units}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='-90°'>
-											<Button
-												icon={<FaArrowRotateRight />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, -90)}
-											/>
-										</Tooltip>
-									)}
-									{kind === ACTION_KIND.ROTATE && (
-										<Tooltip text='+90°'>
-											<Button
-												icon={<FaArrowRotateLeft />}
-												square
-												small
-												onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, 90)}
-											/>
-										</Tooltip>
-									)}
-								</Flex>
-							</Flex>
-						</Groupbox>
-					)}
-					{isSelected ? (
-						<>
-							<div>{selectedMapElement?.toString()}</div>
-							<div>{getPositionText()}</div>
-						</>
-					) : (
-						<div className='textCenter textSmallDetail'>{t('no.map.element.selected')}.</div>
-					)}
+			title={
+				<Flex spaced>
+					{title}
+					<div className='warning textCenter'>
+						(
+						{currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+							? t('square.mode.applied')
+							: t('pixel.mode.applied')}
+						)
+					</div>
 				</Flex>
-			</Groupbox>
+			}
+		>
+			<Flex column spacedLarge>
+				{isSelected && (
+					<Groupbox title={t('current.values')}>
+						<Flex column spaced>
+							<Flex centerV spaced>
+								X:
+								<InputNumber
+									min={getMinX()}
+									max={getMaxX()}
+									value={getCurrentX()}
+									onChange={handleChangeCurrentX}
+									decimals={isDecimal}
+								/>
+								{units}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, -90)}
+										/>
+									</Tooltip>
+								)}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentX, handleChangeCurrentX, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+							<Flex centerV spaced>
+								Y:
+								<InputNumber
+									min={getMinY()}
+									max={getMaxY()}
+									value={getCurrentY()}
+									onChange={handleChangeCurrentY}
+									decimals={isDecimal}
+								/>
+								{units}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, -90)}
+										/>
+									</Tooltip>
+								)}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentY, handleChangeCurrentY, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+							<Flex centerV spaced>
+								Z:
+								<InputNumber
+									min={getMinZ()}
+									max={getMaxZ()}
+									value={getCurrentZ()}
+									onChange={handleChangeCurrentZ}
+									decimals={isDecimal}
+								/>
+								{units}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='-90°'>
+										<Button
+											icon={<FaArrowRotateRight />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, -90)}
+										/>
+									</Tooltip>
+								)}
+								{kind === ACTION_KIND.ROTATE && (
+									<Tooltip text='+90°'>
+										<Button
+											icon={<FaArrowRotateLeft />}
+											square
+											small
+											onClick={() => handleRotateStep(getCurrentZ, handleChangeCurrentZ, 90)}
+										/>
+									</Tooltip>
+								)}
+							</Flex>
+						</Flex>
+					</Groupbox>
+				)}
+				{isSelected ? (
+					<>
+						<div>{selectedMapElement?.toString()}</div>
+						<div>{getPositionText()}</div>
+					</>
+				) : (
+					<div className='textCenter textSmallDetail'>{t('no.map.element.selected')}.</div>
+				)}
+			</Flex>
+		</Groupbox>
 	);
 }
 
