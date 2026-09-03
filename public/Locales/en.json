@@ -861,6 +861,7 @@
 	"error.dialog.optional.mail": "Optional email (for feedback)",
 	"error.dialog.title": "An error occurred",
 	"error.dialog.intro": "Something went wrong. Your data should be safe. Please don't hesitate to send a report, dev is watching issues closely and will fix it! You can provide your email to have feedback on the issue state.",
+	"error.dialog.outdated": "You are using version {{currentVersion}}, but version {{latestVersion}} is available. Please update RPG Paper Maker before reporting this error. Click OK to send the report anyway.",
 	"error.dialog.mail": "Send report error now!",
 	"join.discord": "Discord Server",
 	"error.dialog.sent": "Report sent successfully! Thank you.",

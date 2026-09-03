@@ -2043,5 +2043,6 @@
 	"light.target.y": "Ziel Y (Pixel)",
 	"light.target.z": "Ziel Z (Pixel)",
 	"light.softness": "Weichheit",
-	"light.angle.softness": "Winkel / Weichheit"
+	"light.angle.softness": "Winkel / Weichheit",
+	"error.dialog.outdated": "Sie verwenden Version {{currentVersion}}, aber Version {{latestVersion}} ist verfügbar. Bitte aktualisieren Sie RPG Paper Maker, bevor Sie diesen Fehler melden. Klicken Sie auf OK, um den Bericht trotzdem zu senden."
 }

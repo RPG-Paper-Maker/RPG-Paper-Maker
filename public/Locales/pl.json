@@ -2043,5 +2043,6 @@
 	"light.target.y": "Cel Y (piksele)",
 	"light.target.z": "Cel Z (piksele)",
 	"light.softness": "Miękkość",
-	"light.angle.softness": "Kąt / miękkość"
+	"light.angle.softness": "Kąt / miękkość",
+	"error.dialog.outdated": "Używasz wersji {{currentVersion}}, ale dostępna jest wersja {{latestVersion}}. Zaktualizuj RPG Paper Maker przed zgłoszeniem tego błędu. Kliknij OK, aby mimo to wysłać raport."
 }

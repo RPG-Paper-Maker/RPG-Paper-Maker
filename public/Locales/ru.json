@@ -2043,5 +2043,6 @@
 	"light.target.y": "Цель Y (пиксели)",
 	"light.target.z": "Цель Z (пиксели)",
 	"light.softness": "Мягкость",
-	"light.angle.softness": "Угол / мягкость"
+	"light.angle.softness": "Угол / мягкость",
+	"error.dialog.outdated": "Вы используете версию {{currentVersion}}, но доступна версия {{latestVersion}}. Пожалуйста, обновите RPG Paper Maker перед сообщением об этой ошибке. Нажмите OK, чтобы все равно отправить отчет."
 }

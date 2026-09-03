@@ -2043,5 +2043,6 @@
 	"light.target.y": "Destinazione Y (pixel)",
 	"light.target.z": "Destinazione Z (pixel)",
 	"light.softness": "Morbidezza",
-	"light.angle.softness": "Angolo / morbidezza"
+	"light.angle.softness": "Angolo / morbidezza",
+	"error.dialog.outdated": "Stai usando la versione {{currentVersion}}, ma è disponibile la versione {{latestVersion}}. Aggiorna RPG Paper Maker prima di segnalare questo errore. Fai clic su OK per inviare comunque la segnalazione."
 }

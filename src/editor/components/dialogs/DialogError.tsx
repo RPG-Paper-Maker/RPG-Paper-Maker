@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosSend } from 'react-icons/io';
 import { MdHistory } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants, IO } from '../../common';
 import { Project } from '../../core/Project';
+import { EngineSettings } from '../../data/EngineSettings';
 import { RootState, setErrorDialog } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
@@ -25,6 +26,32 @@ import TextArea from '../TextArea';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import DialogManageBackups from './DialogManageBackups';
 import FooterOK from './footers/FooterOK';
+
+const VERSIONS_URL =
+	'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/master/versions/versions.json';
+
+const getEngineUpdate = async (): Promise<{ currentVersion: string; latestVersion: string } | null> => {
+	try {
+		const response = await fetch(VERSIONS_URL, { cache: 'no-store' });
+		if (!response.ok) {
+			return null;
+		}
+		const versions = (await response.json()) as { versions?: string[]; unstable?: boolean };
+		if (!Array.isArray(versions.versions)) {
+			return null;
+		}
+		const latestVersion =
+			versions.versions[
+				versions.versions.length -
+					1 -
+					(EngineSettings.current.getUnstableVersions || !versions.unstable ? 0 : 1)
+			];
+		const currentVersion = Project.VERSION.trim();
+		return latestVersion && currentVersion !== latestVersion ? { currentVersion, latestVersion } : null;
+	} catch {
+		return null;
+	}
+};
 
 function DialogError() {
 	const { t } = useTranslation();
@@ -36,6 +63,25 @@ function DialogError() {
 	const [sendStatus, setSendStatus] = useState<{ ok: boolean; message: string } | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [isBackupsOpen, setIsBackupsOpen] = useState(false);
+	const [engineUpdate, setEngineUpdate] = useState<{ currentVersion: string; latestVersion: string } | null>(null);
+	const [isUpdateWarningAcknowledged, setIsUpdateWarningAcknowledged] = useState(false);
+
+	useEffect(() => {
+		setEngineUpdate(null);
+		setIsUpdateWarningAcknowledged(false);
+		if (!errorDialog) {
+			return;
+		}
+		let isCurrent = true;
+		void getEngineUpdate().then((update) => {
+			if (isCurrent) {
+				setEngineUpdate(update);
+			}
+		});
+		return () => {
+			isCurrent = false;
+		};
+	}, [errorDialog]);
 
 	if (!errorDialog) {
 		return null;
@@ -83,18 +129,24 @@ function DialogError() {
 				title={t('error.dialog.title')}
 				footer={
 					<FooterOK
-						onOK={handleClose}
+						onOK={
+							engineUpdate && !isUpdateWarningAcknowledged
+								? () => setIsUpdateWarningAcknowledged(true)
+								: handleClose
+						}
 						leftContent={
-							<Flex centerV spaced>
-								<Checkbox isChecked={isDescription} onChange={setIsDescription}>
-									{t('error.dialog.optional.description')}
-								</Checkbox>
-								{Project.current && (
-									<Button icon={<MdHistory />} onClick={() => setIsBackupsOpen(true)}>
-										{t('manage.backups')}
-									</Button>
-								)}
-							</Flex>
+							engineUpdate && !isUpdateWarningAcknowledged ? undefined : (
+								<Flex centerV spaced>
+									<Checkbox isChecked={isDescription} onChange={setIsDescription}>
+										{t('error.dialog.optional.description')}
+									</Checkbox>
+									{Project.current && (
+										<Button icon={<MdHistory />} onClick={() => setIsBackupsOpen(true)}>
+											{t('manage.backups')}
+										</Button>
+									)}
+								</Flex>
+							)
 						}
 					/>
 				}
@@ -103,53 +155,55 @@ function DialogError() {
 				isLoading={loading}
 				initialHeight='300px'
 			>
-				<Flex column spaced>
-					<p>{t('error.dialog.intro')}</p>
-					{sendStatus ? (
-						<div
-							style={{
-								color: sendStatus.ok ? 'var(--green-color)' : 'var(--red-color)',
-							}}
-						>
-							{sendStatus.message}
-						</div>
-					) : (
-						<Flex column={isDescription} spaced fillWidth fillHeight centerV>
-							<Flex one />
-							<InputText
-								value={email}
-								onChange={setEmail}
-								placeholder={t('error.dialog.optional.mail')}
-								style={{ width: isDescription ? '100%' : undefined }}
-							/>
-							{isDescription && (
-								<TextArea
-									text={description}
-									onChange={setDescription}
-									placeholder={t('error.dialog.optional.description')}
-									smallDefaultHeight
-								/>
-							)}
-							<Button
-								icon={<IoIosSend />}
-								buttonType={BUTTON_TYPE.PRIMARY}
-								onClick={sendErrorReport}
-								disabled={!!sendStatus}
-								fillWidth={isDescription}
+				{engineUpdate && !isUpdateWarningAcknowledged ? (
+					<Flex column spaced>
+						<p>{t('error.dialog.outdated', engineUpdate)}</p>
+					</Flex>
+				) : (
+					<Flex column spaced>
+						<p>{t('error.dialog.intro')}</p>
+						{sendStatus ? (
+							<div
+								style={{
+									color: sendStatus.ok ? 'var(--green-color)' : 'var(--red-color)',
+								}}
 							>
-								{t('error.dialog.mail')}
-							</Button>
-							<Flex one />
-						</Flex>
-					)}
-				</Flex>
+								{sendStatus.message}
+							</div>
+						) : (
+							<Flex column={isDescription} spaced fillWidth fillHeight centerV>
+								<Flex one />
+								<InputText
+									value={email}
+									onChange={setEmail}
+									placeholder={t('error.dialog.optional.mail')}
+									style={{ width: isDescription ? '100%' : undefined }}
+								/>
+								{isDescription && (
+									<TextArea
+										text={description}
+										onChange={setDescription}
+										placeholder={t('error.dialog.optional.description')}
+										smallDefaultHeight
+									/>
+								)}
+								<Button
+									icon={<IoIosSend />}
+									buttonType={BUTTON_TYPE.PRIMARY}
+									onClick={sendErrorReport}
+									disabled={!!sendStatus}
+									fillWidth={isDescription}
+								>
+									{t('error.dialog.mail')}
+								</Button>
+								<Flex one />
+							</Flex>
+						)}
+					</Flex>
+				)}
 			</Dialog>
 			{Project.current && (
-				<DialogManageBackups
-					isOpen={isBackupsOpen}
-					setIsOpen={setIsBackupsOpen}
-					onAfterRestore={handleClose}
-				/>
+				<DialogManageBackups isOpen={isBackupsOpen} setIsOpen={setIsBackupsOpen} onAfterRestore={handleClose} />
 			)}
 		</>
 	);

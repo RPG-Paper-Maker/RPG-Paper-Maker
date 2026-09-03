@@ -2044,5 +2044,6 @@
 	"light.target.y": "目标 Y（像素）",
 	"light.target.z": "目标 Z（像素）",
 	"light.softness": "柔和度",
-	"light.angle.softness": "角度 / 柔和度"
+	"light.angle.softness": "角度 / 柔和度",
+	"error.dialog.outdated": "您正在使用版本 {{currentVersion}}，但版本 {{latestVersion}} 已可用。请先更新 RPG Paper Maker 再报告此错误。点击“确定”仍可发送报告。"
 }

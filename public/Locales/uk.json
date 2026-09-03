@@ -2043,5 +2043,6 @@
 	"light.target.y": "Ціль Y (пікселі)",
 	"light.target.z": "Ціль Z (пікселі)",
 	"light.softness": "М'якість",
-	"light.angle.softness": "Кут / м'якість"
+	"light.angle.softness": "Кут / м'якість",
+	"error.dialog.outdated": "Ви використовуєте версію {{currentVersion}}, але доступна версія {{latestVersion}}. Будь ласка, оновіте RPG Paper Maker перед повідомленням про цю помилку. Натисніть OK, щоб усе одно надіслати звіт."
 }

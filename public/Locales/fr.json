@@ -2043,5 +2043,6 @@
 	"light.offset.xyz": "Décalage X / Y / Z (pixels)",
 	"light.ground.color": "Couleur du sol",
 	"light.target.xyz": "Cible X / Y / Z (pixels)",
-	"light.angle.softness": "Angle / douceur"
+	"light.angle.softness": "Angle / douceur",
+	"error.dialog.outdated": "Vous utilisez la version {{currentVersion}}, mais la version {{latestVersion}} est disponible. Veuillez mettre à jour RPG Paper Maker avant de signaler cette erreur. Cliquez sur OK pour envoyer le rapport quand même."
 }

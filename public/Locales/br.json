@@ -2043,5 +2043,6 @@
 	"light.target.y": "Alvo Y (pixels)",
 	"light.target.z": "Alvo Z (pixels)",
 	"light.softness": "Suavidade",
-	"light.angle.softness": "Ângulo / suavidade"
+	"light.angle.softness": "Ângulo / suavidade",
+	"error.dialog.outdated": "Você está usando a versão {{currentVersion}}, mas a versão {{latestVersion}} está disponível. Atualize o RPG Paper Maker antes de relatar este erro. Clique em OK para enviar o relatório mesmo assim."
 }
