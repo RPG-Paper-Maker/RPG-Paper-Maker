@@ -1621,6 +1621,12 @@ class Map extends Base {
 		});
 	}
 
+	getFaceSpriteAngle() {
+		const vector = new THREE.Vector3();
+		this.camera.getThreeCamera().getWorldDirection(vector);
+		return Math.atan2(vector.x, vector.z) + Math.PI;
+	}
+
 	zoomIn(coef = 1) {
 		this.zoom(true, coef);
 	}
@@ -2816,9 +2822,7 @@ class Map extends Base {
 			}
 
 			// Update face sprites
-			const vector = new THREE.Vector3();
-			this.camera.getThreeCamera().getWorldDirection(vector);
-			const angle = Math.atan2(vector.x, vector.z) + Math.PI;
+			const angle = this.getFaceSpriteAngle();
 			const mapOrientation = this.camera.getMapOrientation();
 			if (this.lastMapOrientation !== mapOrientation) {
 				this.lastMapOrientation = mapOrientation;

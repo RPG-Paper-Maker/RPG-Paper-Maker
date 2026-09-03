@@ -1207,6 +1207,8 @@ class MapPortion {
 						true,
 						new THREE.Vector3(),
 					);
+					geometry.updateAttributes();
+					geometry.rotate(this.map.getFaceSpriteAngle(), MapElement.Base.Y_AXIS);
 					this.map.selectedPivotOffset.set(0, 0, 0);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (
@@ -1305,7 +1307,9 @@ class MapPortion {
 		for (let j = 0, l = this.spritesFaceMeshes.length; j < l; j++) {
 			const mesh = this.spritesFaceMeshes[j];
 			if (mesh) {
-				(mesh.geometry as CustomGeometryFace).updateAttributes();
+				const geometry = mesh.geometry as CustomGeometryFace;
+				geometry.updateAttributes();
+				geometry.rotate(this.map.getFaceSpriteAngle(), MapElement.Base.Y_AXIS);
 				this.map.scene.add(mesh);
 			}
 		}
@@ -1314,6 +1318,9 @@ class MapPortion {
 			const hoveredGeometry = this.map.hoveredMesh.geometry as CustomGeometry;
 			if (!hoveredGeometry.isEmpty()) {
 				hoveredGeometry.updateAttributes();
+				if (hoveredGeometry instanceof CustomGeometryFace) {
+					hoveredGeometry.rotate(this.map.getFaceSpriteAngle(), MapElement.Base.Y_AXIS);
+				}
 				this.map.hoveredMesh.renderOrder = 3;
 				this.map.hoveredMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 				this.map.scene.add(this.map.hoveredMesh);
