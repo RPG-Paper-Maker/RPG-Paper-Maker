@@ -34,6 +34,7 @@ const getArgValue = (name) => {
 const isGameTestProcess = process.argv.includes('--rpm-game-test');
 const gameTestLocation = getArgValue('--rpm-game-project');
 const gameTestBattleTest = getArgValue('--rpm-game-battle') === 'true';
+const isMac = process.platform === 'darwin';
 
 const createSplash = (title) => {
 	const splashPath = path.join(__dirname, 'updater', 'splash.html');
@@ -87,11 +88,13 @@ const runRPMEngine = async () => {
 			additionalArguments: [`--appPath=${app.getAppPath()}`],
 		},
 		icon: appIconPath,
-		frame: false,
-		hasShadow: process.platform !== 'darwin',
+		frame: isMac,
+		hasShadow: !isMac,
 	});
 	window.removeMenu();
-	window.maximize();
+	if (!isMac) {
+		window.maximize();
+	}
 	window.loadFile(path.join(__dirname, 'dist', 'index.html'));
 	window.on('maximize', () => {
 		window.webContents.send('is-maximized');
@@ -226,7 +229,9 @@ const ensureLinuxAngleBackend = async () => {
 };
 
 app.commandLine.appendSwitch('high-dpi-support', 'true');
-if (process.platform !== 'darwin') {
+if (isMac) {
+	app.commandLine.appendSwitch('force-device-scale-factor', '1');
+} else {
 	app.commandLine.appendSwitch('ignore-gpu-blocklist');
 }
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling,MediaSessionService');

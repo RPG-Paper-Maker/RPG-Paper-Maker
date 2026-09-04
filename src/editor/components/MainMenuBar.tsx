@@ -44,6 +44,7 @@ import {
 	JSONType,
 	KEY,
 	MenuItemType,
+	OS_KIND,
 	Paths,
 	PICTURE_KIND,
 	SPECIAL_KEY,
@@ -194,6 +195,7 @@ function MainMenuBar() {
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
 	const [isMaximized, setIsMaximized] = useState(true);
+	const [isMac, setIsMac] = useState(false);
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1208,6 +1210,9 @@ function MainMenuBar() {
 
 	useEffect(() => {
 		if (Constants.IS_DESKTOP) {
+			void IO.getOS()
+				.then((os) => setIsMac(os === OS_KIND.DARWIN))
+				.catch(console.error);
 			IO.onMaximized(() => {
 				setIsMaximized(true);
 			});
@@ -1337,7 +1342,7 @@ function MainMenuBar() {
 						<div className='hamburgerOpen menuSubContent'>{getMenuHamburger()}</div>
 					</div>
 				)}
-				{Constants.IS_DESKTOP && (
+				{Constants.IS_DESKTOP && !isMac && (
 					<>
 						<div className='textSmallDetail'>{document.title}</div>
 						<Flex one />
