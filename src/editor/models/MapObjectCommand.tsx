@@ -967,6 +967,10 @@ class MapObjectCommand extends Base {
 		}
 	}
 
+	toStringCompareOperation(iterator: ITERATOR): string {
+		return Base.getCompareOptions()[this.command[iterator.i++] as number].name.split(' ')[0];
+	}
+
 	toStringPosition(texts: string[], iterator: ITERATOR, properties: Base[], parameters: Base[], isBattleMap = false) {
 		const selectionKind = this.command[iterator.i++] as number;
 		if (isBattleMap && selectionKind === 0) {
@@ -2424,12 +2428,11 @@ class MapObjectCommand extends Base {
 			};
 			return [`${t('if')} ${getTreeString(this.command[++iterator.i] as unknown as ConditionTree)}`];
 		}
-		const compareOptions = Base.getCompareOptions();
 		let str = '';
 		switch (this.command[iterator.i++]) {
 			case 0:
 				str += this.toStringDynamicValue(iterator, properties, parameters);
-				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += ` ${this.toStringCompareOperation(iterator)} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 1: {
@@ -2500,7 +2503,7 @@ class MapObjectCommand extends Base {
 							parameters,
 							Project.current!.battleSystem.statistics,
 						)} `;
-						str += compareOptions[this.command[iterator.i++] as number].name;
+						str += this.toStringCompareOperation(iterator);
 						str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
 						break;
 				}
@@ -2513,7 +2516,7 @@ class MapObjectCommand extends Base {
 					parameters,
 					Project.current!.systems.currencies,
 				)}`;
-				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += ` ${this.toStringCompareOperation(iterator)} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 3:
@@ -2523,7 +2526,7 @@ class MapObjectCommand extends Base {
 					parameters,
 					Project.current!.items.list,
 				)}`;
-				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += ` ${this.toStringCompareOperation(iterator)} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 4:
@@ -2533,7 +2536,7 @@ class MapObjectCommand extends Base {
 					parameters,
 					Project.current!.weapons.list,
 				)}`;
-				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += ` ${this.toStringCompareOperation(iterator)} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
 					str += ` + ${t('check.weapons.equiped.too').toLowerCase()}`;
@@ -2546,7 +2549,7 @@ class MapObjectCommand extends Base {
 					parameters,
 					Project.current!.armors.list,
 				)}`;
-				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += ` ${this.toStringCompareOperation(iterator)} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
 					str += ` + ${t('check.armors.equiped.too').toLowerCase()}`;
@@ -2575,7 +2578,7 @@ class MapObjectCommand extends Base {
 				break;
 			case 10:
 				str += `${t('chronometer.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
-				str += `${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += `${this.toStringCompareOperation(iterator)} `;
 				str += `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next
 					.t('seconds')
 					.toLowerCase()}`;
