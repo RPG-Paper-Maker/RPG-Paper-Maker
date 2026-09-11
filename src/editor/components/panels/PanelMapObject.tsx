@@ -686,6 +686,9 @@ const PanelMapObject = forwardRef(
 										<Tree
 											list={properties}
 											constructorType={Model.MapObjectProperty}
+											getText={(node) =>
+												(node.content as Model.MapObjectProperty).toStringWithInitialValue()
+											}
 											minWidth={TREES_MIN_WIDTH}
 											onListUpdated={handleUpdateProperties}
 											cannotUpdateListSize

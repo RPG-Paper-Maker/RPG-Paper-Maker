@@ -44,6 +44,7 @@ type Props = {
 	isCutSource?: boolean;
 	hideTooltip?: boolean;
 	tooltip?: string;
+	text?: ReactNode;
 	rowActions?: TreeRowAction[];
 };
 
@@ -64,6 +65,7 @@ function TreeItem({
 	isCutSource = false,
 	hideTooltip = false,
 	tooltip,
+	text,
 	rowActions,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
@@ -110,7 +112,8 @@ function TreeItem({
 				</Flex>
 			));
 		} else {
-			const name = doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString();
+			const name =
+				text ?? (doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString());
 			return (
 				<Flex
 					one

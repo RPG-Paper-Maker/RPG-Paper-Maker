@@ -92,6 +92,7 @@ type Props = {
 	triggerNewItem?: boolean;
 	rowActions?: TreeRowAction[];
 	getTooltip?: (node: Node) => string;
+	getText?: (node: Node) => ReactNode;
 	getSelectionNode?: (node: Node) => Node;
 	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 	onDialogModelLivePreview?: (model: Model.Base | null, isNew: boolean) => void;
@@ -157,6 +158,7 @@ function Tree({
 	triggerNewItem,
 	rowActions,
 	getTooltip,
+	getText,
 	getSelectionNode,
 	onDialogLivePreview,
 	onDialogModelLivePreview,
@@ -283,6 +285,9 @@ function Tree({
 	const getAllNodes = (nodes: Node[]): Node[] => nodes.flatMap((node) => [node, ...getAllNodes(node.children)]);
 
 	const handleMouseDownItem = (selectedNode: Node, event: React.MouseEvent) => {
+		if (disabled) {
+			return;
+		}
 		const node = getSelectionNode?.(selectedNode) ?? selectedNode;
 		if (currentSelectedItemNode === node) {
 			if (multipleSelection && additionalSelectedNodes.length > 0) {
@@ -1089,6 +1094,7 @@ function Tree({
 						isCutSource={copiedItems?.isCut === true && copiedItems.sourceNodes?.includes(node) === true}
 						hideTooltip={hideTooltip}
 						tooltip={getTooltip?.(node)}
+						text={getText?.(node)}
 						rowActions={disabled ? undefined : rowActions}
 					/>
 				</div>,

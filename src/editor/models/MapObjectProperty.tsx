@@ -33,6 +33,10 @@ class MapObjectProperty extends Base {
 	}
 
 	toString(): string {
+		return this.toStringNameID();
+	}
+
+	toStringWithInitialValue(): string {
 		return `${this.toStringNameID()} = ${this.initialValue.toString()}`;
 	}
 
