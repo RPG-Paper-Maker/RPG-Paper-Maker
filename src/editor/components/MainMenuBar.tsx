@@ -78,7 +78,6 @@ import {
 	RootState,
 	setCurrentProject,
 	setCurrentTreeMapTag,
-	setErrorDialog,
 	setLoading,
 	setLoadingBar,
 	setNeedsReloadMap,
@@ -436,12 +435,7 @@ function MainMenuBar() {
 			Project.current = null;
 			dispatch(setLoadingBar(null));
 			dispatch(setLoading(false));
-			dispatch(
-				setErrorDialog({
-					message: error instanceof Error ? error.message : String(error),
-					stack: error instanceof Error ? (error.stack ?? '') : '',
-				}),
-			);
+			console.error(error);
 		}
 	};
 

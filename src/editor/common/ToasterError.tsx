@@ -19,10 +19,10 @@ const isGameMode = !!new URLSearchParams(window.location.search).get('project');
 
 const tr = (key: string): string => (typeof i18next?.t === 'function' ? (i18next.t(key) as string) : key);
 
-const isDelayedFileOperation = (message: string): boolean =>
+const isFileOperationError = (message: string): boolean =>
 	/remote method '(create-folder|remove-folder|copy-folder|create-file|remove-file|copy-file|rename-file)'/.test(
 		message,
-	) && message.includes('ENOENT');
+	);
 
 const notifyError = (text: string | ReactNode) => {
 	toast.error(text, TOASTER_OPTIONS);
@@ -66,18 +66,17 @@ console.error = (...args) => {
 	if (!message.trim()) {
 		message = 'Unknown error (no message provided).\n';
 	}
-	if (
-		message.includes('EBUSY') ||
-		message.includes('EPERM') ||
-		message.includes('EACCES') ||
-		isDelayedFileOperation(message)
-	) {
-		console.warn(tr('warning.file.busy'));
-		return;
-	}
 	if (message.includes('ENOSPC')) {
 		toast.warn(tr('warning.disk.full'), TOASTER_OPTIONS);
 		store.dispatch(setCurrentProject(null));
+		return;
+	}
+	if (isFileOperationError(message)) {
+		console.warn(...args);
+		return;
+	}
+	if (message.includes('EBUSY') || message.includes('EPERM') || message.includes('EACCES')) {
+		console.warn(tr('warning.file.busy'));
 		return;
 	}
 	if (message.includes('Failed to parse JSON file')) {
@@ -99,8 +98,8 @@ window.onerror = function (message, source, lineno, colno, error) {
 	}
 	const stack = error?.stack || `at ${source}:${lineno}:${colno}`;
 	const text = (message ? String(message) : error?.message) || 'Unknown error (no message provided).';
-	if (isDelayedFileOperation(text)) {
-		console.warn(tr('warning.file.busy'));
+	if (isFileOperationError(text)) {
+		console.warn(error ?? text);
 		return;
 	}
 	notifyError(<ToasterError message={text} stack={stack} />);
@@ -117,18 +116,17 @@ window.addEventListener('unhandledrejection', (event) => {
 	const reason = event.reason;
 	const message = reason?.message || String(reason);
 	const stack = reason?.stack || '';
-	if (
-		message.includes('EBUSY') ||
-		message.includes('EPERM') ||
-		message.includes('EACCES') ||
-		isDelayedFileOperation(message)
-	) {
-		console.warn(tr('warning.file.busy'));
-		return;
-	}
 	if (message.includes('ENOSPC')) {
 		toast.warn(tr('warning.disk.full'), TOASTER_OPTIONS);
 		store.dispatch(setCurrentProject(null));
+		return;
+	}
+	if (isFileOperationError(message)) {
+		console.warn(reason);
+		return;
+	}
+	if (message.includes('EBUSY') || message.includes('EPERM') || message.includes('EACCES')) {
+		console.warn(tr('warning.file.busy'));
 		return;
 	}
 	if (message.includes('interrupted by a new load request')) {
