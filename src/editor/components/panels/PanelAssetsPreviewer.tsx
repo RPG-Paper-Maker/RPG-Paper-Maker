@@ -413,6 +413,7 @@ function PanelAssetsPreviewer({
 								forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDLeft}
 								setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDLeft}
 								onDoubleClick={onDoubleClickLeftList}
+								disabled={isCheckedActivated}
 								showEditName
 								cannotAdd={!!itemsAvailable}
 								cannotEdit={!!itemsAvailable}
@@ -518,22 +519,22 @@ function PanelAssetsPreviewer({
 								<div>{options}</div>
 							</>
 						)}
-						{active && dynamicValueID && (
-							<Flex spaced>
-								<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
-									{t('select.by.id')}:
-								</Checkbox>
-								<DynamicValueSelector
-									value={dynamicValueID}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-									disabled={!isCheckedActivated}
-									disableParametersProperties={disableParametersProperties}
-								/>
-							</Flex>
-						)}
 					</Flex>
 				</Flex>
 			</Flex>
+			{active && dynamicValueID && (
+				<Flex spaced>
+					<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
+						{t('select.by.id')}:
+					</Checkbox>
+					<DynamicValueSelector
+						value={dynamicValueID}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+						disabled={!isCheckedActivated}
+						disableParametersProperties={disableParametersProperties}
+					/>
+				</Flex>
+			)}
 		</Flex>
 	);
 }

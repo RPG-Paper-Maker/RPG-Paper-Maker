@@ -31,6 +31,7 @@ export type GraphicsSelectorOptions = {
 	dynamicID?: DynamicValue;
 	graphicsIndexX: number;
 	graphicsIndexY: number;
+	selectionRectangle?: Rectangle;
 	rectTileset?: Rectangle;
 	graphicsKind: number;
 };
@@ -39,7 +40,13 @@ type Props = {
 	sceneID: string;
 	options: GraphicsSelectorOptions;
 	hidden?: boolean;
-	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean, kind: number) => void;
+	onUpdateGraphics: (
+		id: number,
+		rect: Rectangle,
+		isTileset: boolean,
+		kind: number,
+		selectionRectangle?: Rectangle,
+	) => void;
 	onChangeGraphicsKind: (kind: number) => void;
 };
 
@@ -72,6 +79,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		isTileset: boolean,
 		kind: number,
 		triggerHandler = true,
+		selectionRectangle?: Rectangle,
 	) => {
 		if (!picture) {
 			return;
@@ -89,7 +97,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 			draw(ctx, pic, img, rect, isTileset);
 		}
 		if (triggerHandler) {
-			onUpdateGraphics(picture.id, rect, isTileset, kind);
+			onUpdateGraphics(picture.id, rect, isTileset, kind, selectionRectangle);
 		}
 	};
 
@@ -148,8 +156,8 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	) => {
 		const rows = picture.getRows();
 		const columns = Project.current!.systems.FRAMES;
-		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : image.width / columns;
-		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : image.height / rows;
+		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : (image.width / columns) * rect.width;
+		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : (image.height / rows) * rect.height;
 		let width = refBorder.current?.offsetWidth ?? 0;
 		let height = refBorder.current?.offsetHeight ?? 0;
 		const ratioWidth = width / srcWidth;
@@ -187,12 +195,23 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		}
 	};
 
-	const handleAcceptPictures = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+	const handleAcceptPictures = async (
+		picture: Model.Picture,
+		rect: Rectangle,
+		isTileset: boolean,
+		isDynamicID: boolean,
+		selectionRectangle: Rectangle,
+	) => {
+		if (isDynamicID) {
+			return;
+		}
 		await updatePicture(
 			picture,
 			rect,
 			isTileset,
 			options.graphicsKind === ELEMENT_MAP_KIND.NONE ? ELEMENT_MAP_KIND.SPRITE_FACE : options.graphicsKind,
+			true,
+			selectionRectangle,
 		);
 	};
 
@@ -231,11 +250,17 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	useEffect(() => {
 		if (isCharacter || isFloor) {
 			const isTileset = isFloor || options.graphicsID === 0;
+			const selectionRectangle = options.selectionRectangle;
 			updatePicture(
 				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, isFloor ? 0 : options.graphicsID),
 				isTileset && options.rectTileset
 					? options.rectTileset.clone()
-					: new Rectangle(options.graphicsIndexX, options.graphicsIndexY, 1, 1),
+					: new Rectangle(
+							options.graphicsIndexX,
+							options.graphicsIndexY,
+							selectionRectangle?.width ?? 1,
+							selectionRectangle?.height ?? 1,
+						),
 				isTileset,
 				options.graphicsKind,
 				false,
@@ -328,6 +353,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 					pictureID={isFloor ? 0 : options.graphicsID}
 					indexX={options.graphicsIndexX}
 					indexY={options.graphicsIndexY}
+					selectionRectangle={options.selectionRectangle}
 					rectTileset={options.rectTileset}
 					active={options.dynamicID !== undefined}
 				/>

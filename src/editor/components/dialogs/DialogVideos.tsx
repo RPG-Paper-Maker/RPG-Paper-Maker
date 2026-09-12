@@ -146,7 +146,7 @@ function DialogVideos({
 			reset();
 			await Project.current!.videos.save();
 		} else {
-			if (!selectedVideo || !isSelectedLeftList) {
+			if (!selectedVideo || (!isSelectedLeftList && !newDynamicVideoID?.isActivated)) {
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				Project.current!.videos.list = videos.map((node) => node.content as Model.Video);
@@ -155,6 +155,7 @@ function DialogVideos({
 				if (active) {
 					if (!newDynamicVideoID!.isActivated) {
 						dynamicVideoID!.updateToDefaultNumber(selectedVideo.id);
+						dynamicVideoID!.isActivated = false;
 					} else {
 						dynamicVideoID!.copy(newDynamicVideoID!);
 					}

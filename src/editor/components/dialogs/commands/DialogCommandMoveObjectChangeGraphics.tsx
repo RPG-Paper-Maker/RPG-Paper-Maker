@@ -108,10 +108,17 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			setIsIndexY(hasIndexY);
 			const indexX = x;
 			const indexY = y;
-			if (
-				(kind === ELEMENT_MAP_KIND.FLOOR && id === 0 && !graphicOptions.dynamicID!.isActivated) ||
-				kind === ELEMENT_MAP_KIND.AUTOTILE
-			) {
+			const isTileset =
+				id === 0 &&
+				!graphicOptions.dynamicID!.isActivated &&
+				(kind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+					kind === ELEMENT_MAP_KIND.SPRITE_FACE ||
+					kind === ELEMENT_MAP_KIND.FLOOR);
+			const selectionRectangle =
+				!isTileset && (kind === ELEMENT_MAP_KIND.SPRITE_FIX || kind === ELEMENT_MAP_KIND.SPRITE_FACE)
+					? new Rectangle(x * w, y * h, w, h)
+					: undefined;
+			if (isTileset || kind === ELEMENT_MAP_KIND.AUTOTILE) {
 				rect = new Rectangle(x, y, w, h);
 			}
 			setGraphicOptions({
@@ -121,6 +128,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 				rectTileset: rect,
 				graphicsIndexX: indexX,
 				graphicsIndexY: indexY,
+				selectionRectangle,
 			});
 		}
 	};
@@ -132,7 +140,13 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		});
 	};
 
-	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean, kind: number) => {
+	const handleUpdateGraphics = (
+		id: number,
+		rect: Rectangle,
+		isTileset: boolean,
+		kind: number,
+		selectionRectangle?: Rectangle,
+	) => {
 		if (!isIndexX) {
 			indexXValue.updateToDefaultNumber(isTileset ? 0 : rect.x);
 		}
@@ -144,6 +158,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			graphicsID: id,
 			graphicsIndexX: isTileset ? 0 : rect.x,
 			graphicsIndexY: isTileset ? 0 : rect.y,
+			selectionRectangle,
 			rectTileset: isTileset ? rect.clone() : undefined,
 			graphicsKind: kind,
 		});
@@ -193,8 +208,8 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		} else {
 			list.push(graphicOptions.graphicsIndexX);
 			list.push(graphicOptions.graphicsIndexY);
-			list.push(1);
-			list.push(1);
+			list.push(graphicOptions.selectionRectangle?.width ?? 1);
+			list.push(graphicOptions.selectionRectangle?.height ?? 1);
 		}
 		const isCharacterSprite =
 			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||

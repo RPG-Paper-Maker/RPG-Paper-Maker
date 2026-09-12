@@ -41,8 +41,15 @@ type Props = {
 	dynamicPictureID?: DynamicValue;
 	indexX?: number;
 	indexY?: number;
+	selectionRectangle?: Rectangle;
 	rectTileset?: Rectangle;
-	onAccept?: (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => void;
+	onAccept?: (
+		picture: Model.Picture,
+		rect: Rectangle,
+		isTileset: boolean,
+		isDynamicID: boolean,
+		selectionRectangle: Rectangle,
+	) => void;
 	onAcceptSelection?: (picture: Model.Picture, rect: Rectangle) => void;
 	onReject?: () => void;
 	active?: boolean;
@@ -56,6 +63,7 @@ function DialogPictures({
 	dynamicPictureID,
 	indexX,
 	indexY,
+	selectionRectangle,
 	rectTileset,
 	onAccept,
 	onAcceptSelection,
@@ -69,8 +77,10 @@ function DialogPictures({
 	const [pictures, setPictures] = useState<Node[]>([]);
 	const [picturesAvailable, setPicturesAvailable] = useState<Node[]>([]);
 	const [selectedPicture, setSelectedPicture] = useState<Model.Picture | null>(null);
-	const [selectedRectTileset, setSelectedRectTileset] = useState(new Rectangle());
-	const [selectedRect, setSelectedRect] = useState(new Rectangle());
+	const [selectedRectTileset, setSelectedRectTileset] = useState(
+		() => rectTileset?.clone() ?? selectionRectangle?.clone() ?? new Rectangle(),
+	);
+	const [selectedRect, setSelectedRect] = useState(() => selectionRectangle?.clone() ?? new Rectangle());
 	const [isStopAnimation, setIsStopAnimation] = useState(false);
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
@@ -152,7 +162,11 @@ function DialogPictures({
 			} else if (pictureID === 0) {
 				if (rectTileset) {
 					rectT = rectTileset.clone();
+				} else if (selectionRectangle) {
+					rectT = selectionRectangle.clone();
 				}
+			} else if (selectionRectangle) {
+				rect = selectionRectangle.clone();
 			} else {
 				if (indexX !== undefined && indexY !== undefined) {
 					rect = new Rectangle(indexX, indexY, 1, 1);
@@ -240,7 +254,7 @@ function DialogPictures({
 			setIsOpen(false);
 			reset();
 		} else {
-			if (selectedPicture === null || !isSelectedLeftList) {
+			if (selectedPicture === null || (!isSelectedLeftList && !newDynamicPictureID?.isActivated)) {
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				setIsLoading(true);
@@ -254,6 +268,8 @@ function DialogPictures({
 						? selectedRectTileset.clone()
 						: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
 					isTileset,
+					newDynamicPictureID?.isActivated ?? false,
+					isTileset ? selectedRectTileset.clone() : selectedRect.clone(),
 				);
 				onAcceptSelection?.(
 					selectedPicture,
@@ -262,6 +278,7 @@ function DialogPictures({
 				if (active) {
 					if (!newDynamicPictureID!.isActivated) {
 						dynamicPictureID!.updateToDefaultNumber(selectedPicture.id);
+						dynamicPictureID!.isActivated = false;
 					} else {
 						dynamicPictureID!.copy(newDynamicPictureID!);
 					}
@@ -376,7 +393,7 @@ function DialogPictures({
 							isClimbAnimation={isClimbAnimation}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
-							adjustPositionSize
+							adjustPositionSize={!selectionRectangle}
 							base64={!selectedPicture.isBR}
 						/>,
 					);

@@ -254,7 +254,7 @@ function DialogSongs({
 			reset();
 			await Project.current!.songs.save();
 		} else {
-			if (selectedSong === null || !isSelectedLeftList) {
+			if (selectedSong === null || (!isSelectedLeftList && !newDynamicSongID?.isActivated)) {
 				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				Project.current!.songs.list.set(
