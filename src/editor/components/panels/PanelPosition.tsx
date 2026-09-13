@@ -29,7 +29,9 @@ import DialogSelectMapPosition from '../dialogs/DialogSelectMapPosition';
 
 export interface PanelPositionRef {
 	initialize: (list?: MapObjectCommandType[], iterator?: ITERATOR) => void;
+	initializePixels: (list?: MapObjectCommandType[], iterator?: ITERATOR) => void;
 	getCommand: (newList: MapObjectCommandType[]) => void;
+	getPixelsCommand: (newList: MapObjectCommandType[]) => void;
 }
 
 export enum SELECTION_TYPE {
@@ -47,9 +49,10 @@ export enum SELECTION_BATTLE_MAP_TYPE {
 
 type Props = {
 	isBattleMap?: boolean;
+	hasPixels?: boolean;
 };
 
-const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
+const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Props, ref) => {
 	const { t } = useTranslation();
 
 	const [isSelectMapPositionDialogOpen, setIsSelectMapPositionDialogOpen] = useState(false);
@@ -60,6 +63,8 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 	const [y, setY] = useStateNumber();
 	const [yp, setYp] = useStateNumber();
 	const [z, setZ] = useStateNumber();
+	const [xPixels] = useStateDynamicValue();
+	const [zPixels] = useStateDynamicValue();
 	const [enterMapID] = useStateDynamicValue();
 	const [enterX] = useStateDynamicValue();
 	const [enterY] = useStateDynamicValue();
@@ -85,6 +90,8 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 		enterYp.updateToDefaultNumber(0);
 		enterZ.updateToDefaultNumber(0);
 		positionObjectID.updateToDefaultDatabase(-1);
+		xPixels.updateToDefaultNumber(0);
+		zPixels.updateToDefaultNumber(0);
 		if (list && iterator) {
 			const selectionType = list[iterator.i++] as number;
 			setSelectionType(selectionType);
@@ -122,6 +129,13 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 		}
 	};
 
+	const initializePixels = (list?: MapObjectCommandType[], iterator?: ITERATOR) => {
+		if (hasPixels && list && iterator && list[iterator.i++] === 'pixels') {
+			xPixels.updateCommand(list, iterator);
+			zPixels.updateCommand(list, iterator);
+		}
+	};
+
 	const getCommand = (newList: MapObjectCommandType[]) => {
 		newList.push(selectionType);
 		if (isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ID) {
@@ -149,6 +163,14 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 		}
 	};
 
+	const getPixelsCommand = (newList: MapObjectCommandType[]) => {
+		if (hasPixels) {
+			newList.push('pixels');
+			xPixels.getCommand(newList);
+			zPixels.getCommand(newList);
+		}
+	};
+
 	const handleClickSelect = () => {
 		setIsSelectMapPositionDialogOpen(true);
 	};
@@ -163,7 +185,9 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 
 	useImperativeHandle(ref, () => ({
 		initialize,
+		initializePixels,
 		getCommand,
+		getPixelsCommand,
 	}));
 
 	return (
@@ -213,6 +237,17 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 											<Value disabled={!isSelect}>{x}</Value>
 											<Label disabled={!isSelect}>Y</Label>
 											<Value disabled={!isSelect}>{y}</Value>
+											{hasPixels && <Label disabled={!isSelect}>X+</Label>}
+											{hasPixels && (
+												<Value>
+													<DynamicValueSelector
+														value={xPixels}
+														optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+														disabled={!isSelect}
+														disableDynamic
+													/>
+												</Value>
+											)}
 										</Form>
 									</Flex>
 									<Flex one>
@@ -221,6 +256,17 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 											<Value disabled={!isSelect}>{z}</Value>
 											<Label disabled={!isSelect}>Y+</Label>
 											<Value disabled={!isSelect}>{yp}</Value>
+											{hasPixels && <Label disabled={!isSelect}>Z+</Label>}
+											{hasPixels && (
+												<Value>
+													<DynamicValueSelector
+														value={zPixels}
+														optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+														disabled={!isSelect}
+														disableDynamic
+													/>
+												</Value>
+											)}
 										</Form>
 									</Flex>
 								</Flex>
@@ -249,6 +295,16 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 										disabled={!isEnter}
 									/>
 								</Value>
+								{hasPixels && <Label disabled={!isEnter}>X+</Label>}
+								{hasPixels && (
+									<Value>
+										<DynamicValueSelector
+											value={xPixels}
+											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+											disabled={!isEnter}
+										/>
+									</Value>
+								)}
 								<Label disabled={!isEnter}>Y</Label>
 								<Value>
 									<DynamicValueSelector
@@ -273,6 +329,16 @@ const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 										disabled={!isEnter}
 									/>
 								</Value>
+								{hasPixels && <Label disabled={!isEnter}>Z+</Label>}
+								{hasPixels && (
+									<Value>
+										<DynamicValueSelector
+											value={zPixels}
+											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+											disabled={!isEnter}
+										/>
+									</Value>
+								)}
 							</Form>
 						</Value>
 						{!isBattleMap && (

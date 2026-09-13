@@ -50,6 +50,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 				stockCurrentValueVariableID.updateCommand(list, iterator);
 			}
 			setIsPermanent(Utils.initializeBoolCommand(list, iterator));
+			panelPositionRef.current?.initializePixels(list, iterator);
 		} else {
 			panelPositionRef.current?.initialize();
 			setIsStockCurrentValueVariableID(false);
@@ -68,6 +69,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 			stockCurrentValueVariableID.getCommand(newList);
 		}
 		newList.push(Utils.boolToNum(isPermanent));
+		panelPositionRef.current?.getPixelsCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -98,7 +100,7 @@ function DialogCommandCreateObjectInMap({ commandKind, setIsOpen, list, onAccept
 							databaseOptions={Project.current!.commonEvents.commonObjects}
 						/>
 					</Flex>
-					<PanelPosition ref={panelPositionRef} />
+					<PanelPosition hasPixels ref={panelPositionRef} />
 					<Flex spaced centerV>
 						<Checkbox isChecked={isStockCurrentValueVariableID} onChange={setIsStockCurrentValueVariableID}>
 							{t('stock.id.in.variable.id')}
