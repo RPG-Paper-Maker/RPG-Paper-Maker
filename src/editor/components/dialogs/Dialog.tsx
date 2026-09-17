@@ -367,6 +367,7 @@ function Dialog({
 			previousRect.left + previousRect.width / 2 - nextRect.width / 2,
 			previousRect.top + previousRect.height / 2 - nextRect.height / 2,
 		);
+		setIsMoved(true);
 	}, [widthRefreshKey, widthRefreshPadding, isOpen]);
 
 	useLayoutEffect(() => {
@@ -395,6 +396,7 @@ function Dialog({
 			previousRect.left + previousRect.width / 2 - nextRect.width / 2,
 			previousRect.top + previousRect.height / 2 - nextRect.height / 2,
 		);
+		setIsMoved(true);
 	}, [heightRefreshKey, isOpen, scaledHeight]);
 
 	useLayoutEffect(() => {
@@ -430,7 +432,7 @@ function Dialog({
 					dialogRef.current.style.top = `${top}px`;
 					setIsMoved(true);
 				} else {
-					setIsMoved(false);
+					setIsMoved(!!(dialogRef.current.style.left && dialogRef.current.style.top));
 				}
 			} else {
 				setIsMoved(false);

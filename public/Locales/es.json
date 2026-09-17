@@ -1884,6 +1884,7 @@
 	"warning.project.exist.overwrite": "Este proyecto ya existe en {{path}}. ¿Quieres sobrescribirlo?",
 	"warning.folder.permission": "Permiso denegado: no se puede crear una carpeta en \"{{path}}\". Por favor, elija una ubicación diferente, como la carpeta Documentos.",
 	"warning.dlcs.folder.path.wrong": "La ruta de la carpeta de DLCs es incorrecta",
+	"warning.dlc.project.version": "Esta plantilla de proyecto DLC requiere la última versión de RPG Paper Maker. Actualiza de la versión {{currentVersion}} a {{latestVersion}} antes de crear el proyecto.",
 	"new.folder": "Nueva carpeta",
 	"warning.delete.project": "¿Estás seguro de que deseas eliminar {{projectName}}?",
 	"start.position": "Posición inicial",

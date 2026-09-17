@@ -1884,6 +1884,7 @@
 	"warning.project.exist.overwrite": "このプロジェクトは既に {{path}} に存在します。上書きしますか？",
 	"warning.folder.permission": "アクセスが拒否されました：「{{path}}」にフォルダを作成できません。ドキュメントフォルダなど、別の場所を選択してください。",
 	"warning.dlcs.folder.path.wrong": "DLCsフォルダのパスが正しくありません",
+	"warning.dlc.project.version": "このDLCプロジェクトテンプレートには最新のRPG Paper Makerが必要です。プロジェクトを作成する前に、バージョン{{currentVersion}}から{{latestVersion}}へ更新してください。",
 	"new.folder": "新規フォルダ",
 	"warning.delete.project": "本当に {{projectName}} を削除しますか？",
 	"start.position": "スタート位置",

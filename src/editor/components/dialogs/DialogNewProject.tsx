@@ -37,6 +37,7 @@ import {
 import { DynamicValue } from '../../core/DynamicValue';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
+import { getEngineUpdate, type EngineUpdate } from '../../data/EngineVersion';
 import { Model, Scene } from '../../Editor';
 import { RootState, setCurrentProject, setCurrentTreeMapTag, setProjects } from '../../store';
 import Button from '../Button';
@@ -79,6 +80,7 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const [selectedDLCProject, setSelectedDLCProject] = useState<DLCProject | null>(null);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 	const [isPermissionError, setIsPermissionError] = useState(false);
+	const [dlcEngineUpdate, setDLCEngineUpdate] = useState<EngineUpdate | null>(null);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
 
@@ -123,7 +125,22 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 		setIsOpen(false);
 	};
 
+	const checkDLCProjectVersion = async () => {
+		if (!selectedDLCProject) {
+			return true;
+		}
+		const update = await getEngineUpdate();
+		if (!update) {
+			return true;
+		}
+		setDLCEngineUpdate(update);
+		return false;
+	};
+
 	const replaceProject = async () => {
+		if (!(await checkDLCProjectVersion())) {
+			return;
+		}
 		setIsLoading(true);
 		setIsDialogConfirmOpen(false);
 		if (Scene.Map.current) {
@@ -337,6 +354,9 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	};
 
 	const handleAccept = async (): Promise<boolean> => {
+		if (!folderName || !(await checkDLCProjectVersion())) {
+			return false;
+		}
 		if (await checkValidAccept()) {
 			try {
 				await createProject();
@@ -451,6 +471,14 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 						</Flex>
 					</Flex>
 				</Flex>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={!!dlcEngineUpdate}
+				footer={<FooterOK onOK={() => setDLCEngineUpdate(null)} />}
+				onClose={() => setDLCEngineUpdate(null)}
+			>
+				<p>{t('warning.dlc.project.version', dlcEngineUpdate ?? {})}</p>
 			</Dialog>
 			<Dialog
 				title={t('warning')}

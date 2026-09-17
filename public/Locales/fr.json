@@ -1884,6 +1884,7 @@
 	"warning.project.exist.overwrite": "Ce projet existe déjà dans {{path}}. Souhaitez vous l'écraser ?",
 	"warning.folder.permission": "Permission refusée : impossible de créer un dossier à « {{path}} ». Veuillez choisir un autre emplacement, par exemple votre dossier Documents.",
 	"warning.dlcs.folder.path.wrong": "Le chemin du dossier DLCs est incorrect",
+	"warning.dlc.project.version": "Ce modèle de projet DLC nécessite la dernière version de RPG Paper Maker. Veuillez passer de la version {{currentVersion}} à la version {{latestVersion}} avant de créer le projet.",
 	"new.folder": "Nouveau dossier",
 	"warning.delete.project": "Etes vous sûr de vouloir supprimer {{projectName}} ?",
 	"start.position": "Position de départ",

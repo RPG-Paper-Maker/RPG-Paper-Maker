@@ -1884,6 +1884,7 @@
 	"warning.project.exist.overwrite": "Ten projekt już istnieje w {{path}}. Czy chcesz go nadpisać?",
 	"warning.folder.permission": "Brak uprawnień: nie można utworzyć folderu w \"{{path}}\". Wybierz inne miejsce, na przykład folder Dokumenty.",
 	"warning.dlcs.folder.path.wrong": "Ścieżka folderu DLC jest nieprawidłowa",
+	"warning.dlc.project.version": "Ten szablon projektu DLC wymaga najnowszej wersji RPG Paper Maker. Przed utworzeniem projektu zaktualizuj wersję {{currentVersion}} do {{latestVersion}}.",
 	"new.folder": "Nowy folder",
 	"warning.delete.project": "Czy na pewno chcesz usunąć {{projectName}}?",
 	"start.position": "Pozycja wyjściowa",

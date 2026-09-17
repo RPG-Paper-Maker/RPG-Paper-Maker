@@ -1884,6 +1884,7 @@
 	"warning.project.exist.overwrite": "Цей проект уже існує в {{path}}. Ви хочете перезаписати його?",
 	"warning.folder.permission": "Доступ заборонено: неможливо створити папку за адресою «{{path}}». Будь ласка, виберіть інше місце, наприклад папку «Документи».",
 	"warning.dlcs.folder.path.wrong": "Шлях до папки DLC неправильний",
+	"warning.dlc.project.version": "Цей шаблон проєкту DLC потребує останньої версії RPG Paper Maker. Оновіться з версії {{currentVersion}} до {{latestVersion}} перед створенням проєкту.",
 	"new.folder": "Нова папка",
 	"warning.delete.project": "Ви впевнені, що хочете видалити {{projectName}}?",
 	"start.position": "Початкова позиція",
