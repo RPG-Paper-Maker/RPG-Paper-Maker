@@ -1744,7 +1744,7 @@ class MapObjectCommand extends Base {
 				}
 			}
 			return [
-				text,
+				`${text} ${t('index').toLowerCase()}=${index}`,
 				`${t('width')}=${width}, ${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('offset')} X=${offsetX}, Y=${offsetY}, ${t('zoom')}=${zoom}% ${t(
 					'opacity',
 				)}=${opacity}% ${t('angle')}=${angle}°`,
