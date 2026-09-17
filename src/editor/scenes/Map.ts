@@ -1955,8 +1955,31 @@ class Map extends Base {
 		} else {
 			meshHitGridY = intersects.length > 0 ? intersects[0].point.y : -Infinity;
 		}
+		const hasTransformedSpriteHit =
+			Map.isRemoving() &&
+			layer === RAYCASTING_LAYER.SPRITES &&
+			intersects.some((obj) => {
+				const positionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+					obj.faceIndex ?? 0
+				];
+				if (!positionKey) {
+					return false;
+				}
+				const position = Position.fromKey(positionKey);
+				return (
+					position.centerX !== 50 ||
+					position.centerZ !== 50 ||
+					position.angleX !== 0 ||
+					position.angleY !== 0 ||
+					position.angleZ !== 0 ||
+					position.scaleX !== 1 ||
+					position.scaleY !== 1 ||
+					position.scaleZ !== 1
+				);
+			});
 		const isPlane =
-			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY) || this.rectangleStartPosition !== null;
+			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY && !hasTransformedSpriteHit) ||
+			this.rectangleStartPosition !== null;
 		if (isPlane) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
@@ -2395,6 +2418,17 @@ class Map extends Base {
 
 	onMouseDown() {
 		if (this.isCameraRotationLocked) {
+			return;
+		}
+		if (
+			this.canEdit &&
+			Map.isRemoving() &&
+			Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.PENCIL &&
+			this.pointedMapElementPosition !== null &&
+			this.pointedMapElement?.kind === Map.currentSelectedMapElementKind
+		) {
+			this.remove(this.pointedMapElementPosition);
+			this.lastPosition = this.pointedMapElementPosition;
 			return;
 		}
 		if (
