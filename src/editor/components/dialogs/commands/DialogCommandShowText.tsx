@@ -29,6 +29,27 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
+function warnUnmatchedClosingTag(texts: Map<number, string>) {
+	for (const [, text] of texts) {
+		const openTags: string[] = [];
+		for (const match of text.matchAll(
+			/\[\/?(b|i|l|c|r|size|font|textcolor|backcolor|strokecolor|var|lvar|par|pro|hname|ico)(?:=[^\]]*)?\]/g,
+		)) {
+			const tag = match[1];
+			if (match[0].charAt(1) === '/') {
+				const index = openTags.lastIndexOf(tag);
+				if (index === -1) {
+					console.warn(`Show Text contains an unmatched closing tag: ${match[0]} -  ${text}`);
+					return;
+				}
+				openTags.splice(index, 1);
+			} else if (!['var', 'lvar', 'par', 'pro', 'hname', 'ico'].includes(tag)) {
+				openTags.push(tag);
+			}
+		}
+	}
+}
+
 function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
 
@@ -93,6 +114,7 @@ function DialogCommandShowText({ commandKind, setIsOpen, list, onAccept, onRejec
 	const handleAccept = async () => {
 		setIsOpen(false);
 		onAccept(buildCommand());
+		warnUnmatchedClosingTag(texts);
 	};
 
 	const handleReject = async () => {
