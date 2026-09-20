@@ -67,6 +67,10 @@ function DialogError() {
 		try {
 			const platform = Constants.IS_DESKTOP ? await IO.getOS() : 'web';
 			const updaterVersion = Constants.IS_DESKTOP ? await IO.getUpdaterVersion() : undefined;
+			const graphicsInformation = Constants.IS_DESKTOP ? await IO.getGraphicsInformation() : undefined;
+			const message = graphicsInformation
+				? `${errorDialog.message}\n\nChromium GPU information:\n${JSON.stringify(graphicsInformation, null, 2)}`
+				: errorDialog.message;
 			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report', {
 				method: 'POST',
 				headers: {
@@ -76,7 +80,7 @@ function DialogError() {
 					version: Project.VERSION || 'Not loaded',
 					updaterVersion,
 					os: `${platform} | ${navigator.userAgent}`,
-					message: errorDialog.message,
+					message,
 					stack: errorDialog.stack,
 					email,
 					description: isDescription ? description : undefined,

@@ -225,6 +225,10 @@ class IO {
 		return (await this.invoke('get-engine-folder')) as string;
 	}
 
+	static async getGraphicsInformation(): Promise<unknown> {
+		return await this.invoke('get-graphics-information');
+	}
+
 	static async copyAndExclude(src: string, dst: string, exclude: string): Promise<void> {
 		(await this.invoke('copy-and-exclude', src, dst, exclude)) as string;
 	}

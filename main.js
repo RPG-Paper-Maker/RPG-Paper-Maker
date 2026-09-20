@@ -1098,6 +1098,17 @@ ipcMain.handle('get-updater-version', async () => {
 	}
 });
 
+ipcMain.handle('get-graphics-information', async () => {
+	try {
+		return {
+			features: app.getGPUFeatureStatus(),
+			info: await app.getGPUInfo('complete'),
+		};
+	} catch (error) {
+		return { error: error instanceof Error ? error.message : String(error) };
+	}
+});
+
 ipcMain.handle('get-engine-folder', async () => {
 	const p = path.dirname(process.execPath);
 	return os.platform() === 'darwin' ? path.join(p, '..', '..', '..') : p;
