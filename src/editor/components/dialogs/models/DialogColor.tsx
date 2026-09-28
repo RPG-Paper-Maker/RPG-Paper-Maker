@@ -9,8 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import ColorPicker, { Color } from '@rc-component/color-picker';
-import '@rc-component/color-picker/assets/index.css';
+import ColorPicker, { Color } from '../../ColorPicker';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';

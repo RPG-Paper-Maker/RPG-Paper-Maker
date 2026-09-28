@@ -9,8 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import ColorPicker, { Color } from '@rc-component/color-picker';
-import '@rc-component/color-picker/assets/index.css';
+import ColorPicker, { Color } from '../ColorPicker';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, MAP_OBJECT_LIGHT_KIND } from '../../common';
@@ -66,7 +65,11 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 	const isDisabled = (field: MapObjectLightField) => selectedFields !== undefined && !selectedFields[field];
 
 	useEffect(() => {
-		setPickerColor(new Color(colorValue));
+		setPickerColor((current) =>
+			current.toHexString().slice(0, 7).toLowerCase() === colorValue.toLowerCase()
+				? current
+				: new Color(colorValue),
+		);
 	}, [colorValue]);
 	const dynamic = (
 		field: MapObjectLightField,
