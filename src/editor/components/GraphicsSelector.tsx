@@ -13,7 +13,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Model, Scene } from '../Editor';
-import { Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
+import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
@@ -156,13 +156,8 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	) => {
 		const rows = picture.getRows();
 		const columns = Project.current!.systems.FRAMES;
-		const selectionScale = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
-		const srcWidth = isTileset
-			? rect.width * Project.SQUARE_SIZE
-			: (image.width / columns) * rect.width * selectionScale;
-		const srcHeight = isTileset
-			? rect.height * Project.SQUARE_SIZE
-			: (image.height / rows) * rect.height * selectionScale;
+		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : (image.width / columns) * rect.width;
+		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : (image.height / rows) * rect.height;
 		let width = refBorder.current?.offsetWidth ?? 0;
 		let height = refBorder.current?.offsetHeight ?? 0;
 		const ratioWidth = width / srcWidth;

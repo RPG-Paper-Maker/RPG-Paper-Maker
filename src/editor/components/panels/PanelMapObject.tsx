@@ -912,6 +912,7 @@ const PanelMapObject = forwardRef(
 						scaleX={selectedState.scaleX}
 						scaleY={selectedState.scaleY}
 						scaleZ={selectedState.scaleZ}
+						opacity={selectedState.opacity}
 						layer={selectedState.layer}
 						onAccept={handleUpdateStates}
 						onLiveChange={() => {

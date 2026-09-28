@@ -33,6 +33,7 @@ import useLivePreview from '../../../hooks/useLivePreview';
 import DialogCommandMoveObjectChangeGraphics from './DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from './DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from './DialogCommandMoveObjectJump';
+import DialogCommandMoveObjectUpdateTransformations from './DialogCommandMoveObjectUpdateTransformations';
 import DialogCommandPlaySong from './DialogCommandPlaySong';
 import DialogCommandScript from './DialogCommandScript';
 import DialogCommandWait from './DialogCommandWait';
@@ -69,6 +70,10 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	const [changeGraphics, setChangeGraphics] = useState<Model.MapObjectCommandMove>(
 		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS),
 	);
+	const [updateTransformations, setUpdateTransformations] = useState<Model.MapObjectCommandMove>(
+		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS),
+	);
+	const [isDialogUpdateTransformationsOpen, setIsDialogUpdateTransformationsOpen] = useState(false);
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
@@ -167,6 +172,12 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 		ArrayUtils.insertAt(changeGraphics.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(changeGraphics);
 		setChangeGraphics(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS));
+	};
+
+	const handleAcceptUpdateTransformations = () => {
+		ArrayUtils.insertAt(updateTransformations.command, 1, Utils.boolToNum(isPermanent));
+		addCommand(updateTransformations);
+		setUpdateTransformations(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS));
 	};
 
 	const handleAcceptCommand = (command: Model.MapObjectCommand, kind: COMMAND_MOVE_KIND) => {
@@ -407,6 +418,9 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 										{t('keep.position')}
 									</Button>
 									<Button onClick={handleClickChangeGraphics}>{t('change.graphics')}...</Button>
+									<Button onClick={() => setIsDialogUpdateTransformationsOpen(true)}>
+										{t('update.transformations')}...
+									</Button>
 									<Button onClick={handleClickWait}>{t('wait')}...</Button>
 									<Button onClick={handleClickPlaySound}>{t('play.a.sound')}...</Button>
 									<Button onClick={handleClickScript}>{t('script')}...</Button>
@@ -445,6 +459,14 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 					setIsOpen={setIsDialogChangeGraphicsOpen}
 					model={changeGraphics}
 					onAccept={handleAcceptChangeGraphics}
+					isNew
+				/>
+			)}
+			{isDialogUpdateTransformationsOpen && (
+				<DialogCommandMoveObjectUpdateTransformations
+					setIsOpen={setIsDialogUpdateTransformationsOpen}
+					model={updateTransformations}
+					onAccept={handleAcceptUpdateTransformations}
 					isNew
 				/>
 			)}

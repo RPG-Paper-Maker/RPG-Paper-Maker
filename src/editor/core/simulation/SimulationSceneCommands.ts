@@ -72,6 +72,7 @@ enum SUB_MOVE_KIND {
 	PLAY_SOUND,
 	TOGGLE,
 	WAIT,
+	UPDATE_TRANSFORMATIONS,
 	UNSUPPORTED,
 }
 
@@ -160,6 +161,13 @@ type SubMove =
 			onOff: boolean;
 	  }
 	| { kind: SUB_MOVE_KIND.WAIT; milliseconds: DynamicValue }
+	| {
+			kind: SUB_MOVE_KIND.UPDATE_TRANSFORMATIONS;
+			checked: boolean[];
+			values: DynamicValue[];
+			time: DynamicValue;
+			equation: number;
+	  }
 	| { kind: SUB_MOVE_KIND.UNSUPPORTED };
 
 class CommandMoveObject extends CommandBase {
@@ -328,6 +336,13 @@ class CommandMoveObject extends CommandBase {
 					indexY: dynamicIndexY ?? indexY,
 					changeOrientation: !dontChangeOrientation,
 				});
+			} else if (kind === COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS) {
+				iterator.i++; // Permanent option is only meaningful in the game runtime.
+				const checked = Array.from({ length: 13 }, () => Utils.numToBool(command[iterator.i++] as number));
+				const values = Array.from({ length: 13 }, () => DynamicValue.createCommand(command, iterator));
+				const time = DynamicValue.createCommand(command, iterator);
+				const equation = command[iterator.i++] as number;
+				this.subMoves.push({ kind: SUB_MOVE_KIND.UPDATE_TRANSFORMATIONS, checked, values, time, equation });
 			} else if (kind >= COMMAND_MOVE_KIND.TURN_NORTH && kind <= COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE) {
 				switch (kind) {
 					case COMMAND_MOVE_KIND.TURN_NORTH:
@@ -654,6 +669,55 @@ class CommandMoveObject extends CommandBase {
 				}
 				state.waitRemaining = (state.waitRemaining as number) - elapsedTime;
 				return (state.waitRemaining as number) <= 0;
+			case SUB_MOVE_KIND.UPDATE_TRANSFORMATIONS: {
+				const keys = [
+					'centerX',
+					'centerZ',
+					'angleX',
+					'angleY',
+					'angleZ',
+					'scaleX',
+					'scaleY',
+					'scaleZ',
+					'opacity',
+				] as const;
+				if (state.transformTime === undefined) {
+					state.transformStart = keys.map((key) => target.state[key].getFixNumberValue());
+					state.transformEnd = move.values
+						.slice(0, 9)
+						.map((value, index) =>
+							move.checked[index]
+								? ctx.game.resolveNumber(value)
+								: (state.transformStart as number[])[index],
+						);
+					state.transformPositionStart = target.worldPosition.clone();
+					state.transformPositionEnd = move.values
+						.slice(9)
+						.map((value, index) => (move.checked[index + 9] ? ctx.game.resolveNumber(value) : 0));
+					state.transformTime = Math.max(0, ctx.game.resolveNumber(move.time) * 1000);
+					state.transformElapsed = 0;
+				}
+				const duration = state.transformTime as number;
+				state.transformElapsed = Math.min((state.transformElapsed as number) + elapsedTime, duration);
+				const progress = duration === 0 ? 1 : (state.transformElapsed as number) / duration;
+				const eased = Model.ProgressionTable.easing(move.equation, progress * 100, 1, 100, 0, true);
+				for (let i = 0; i < keys.length; i++) {
+					target.state[keys[i]].value =
+						(state.transformStart as number[])[i] +
+						((state.transformEnd as number[])[i] - (state.transformStart as number[])[i]) * eased;
+				}
+				const positionStart = state.transformPositionStart as THREE.Vector3;
+				const positionEnd = state.transformPositionEnd as number[];
+				target.setWorldPosition(
+					new THREE.Vector3(
+						positionStart.x + positionEnd[0] * eased,
+						positionStart.y + (positionEnd[1] + positionEnd[2] / Project.SQUARE_SIZE) * eased,
+						positionStart.z + positionEnd[3] * eased,
+					),
+				);
+				target.applyState(target.state, true);
+				return (state.transformElapsed as number) >= duration;
+			}
 			case SUB_MOVE_KIND.UNSUPPORTED:
 				return true;
 			default:
@@ -684,6 +748,7 @@ class CommandMoveObject extends CommandBase {
 			state.vector = null;
 			state.waitRemaining = null;
 			state.jumpTime = undefined;
+			state.transformTime = undefined;
 			if (!this.subMoves[state.index as number]) {
 				target.moving = false;
 				return 1;

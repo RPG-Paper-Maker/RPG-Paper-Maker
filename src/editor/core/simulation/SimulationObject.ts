@@ -102,6 +102,7 @@ class SimulationObject {
 			this.gltfAnimationElapsedTime = 0;
 		}
 		this.state = state.clone();
+		this.opacity = this.state.opacity.getFixNumberValue();
 		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
 		this.orientation = (this.state.graphicsIndexY % 4) as SIM_ORIENTATION;
 		this.frame = this.state.graphicsIndexX % Project.current!.systems.FRAMES;
@@ -389,9 +390,14 @@ class SimulationObject {
 					clone.traverse((child) => {
 						if (child instanceof THREE.Mesh) {
 							const materials = Array.isArray(child.material) ? child.material : [child.material];
-							for (const material of materials) {
+							const previewMaterials = materials.map((source) => {
+								const material = source.clone();
+								material.opacity = this.opacity;
+								material.transparent = this.opacity < 1;
 								Manager.GL.applyScreenTone(material);
-							}
+								return material;
+							});
+							child.material = Array.isArray(child.material) ? previewMaterials : previewMaterials[0];
 							child.receiveShadow = true;
 							child.castShadow = !hasPointLight;
 						}
@@ -697,6 +703,7 @@ class SimulationObject {
 
 	private applyPreviewEffect(source: THREE.Material): THREE.Material {
 		if (!this.previewOutline && this.opacity >= 1) {
+			this.disposePreviewMaterial();
 			return source;
 		}
 		if (this.previewMaterialSource !== source) {
@@ -732,6 +739,7 @@ class SimulationObject {
 			this.previewMaterial = material;
 			this.previewMaterialSource = source;
 		}
+		(this.previewMaterial as THREE.MeshPhongMaterial).opacity = this.opacity;
 		return this.previewMaterial!;
 	}
 

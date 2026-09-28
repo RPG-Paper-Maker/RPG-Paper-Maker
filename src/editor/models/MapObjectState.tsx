@@ -49,6 +49,7 @@ class MapObjectState extends Base {
 	public scaleX!: DynamicValue;
 	public scaleY!: DynamicValue;
 	public scaleZ!: DynamicValue;
+	public opacity!: DynamicValue;
 	public lights!: MapObjectLight[];
 
 	public static bindings: BindingType[] = [
@@ -124,6 +125,13 @@ class MapObjectState extends Base {
 			'scaleZ',
 			'sz',
 			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'opacity',
+			'o',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 1),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],

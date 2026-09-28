@@ -60,6 +60,16 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS:
 				j = 10;
 				break;
+			case COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS: {
+				const start = iterator.i;
+				iterator.i += 14;
+				for (let k = 0; k < 14; k++) {
+					DynamicValue.createCommand(list, iterator);
+				}
+				iterator.i++;
+				this.command.push(...list.slice(start, iterator.i));
+				return;
+			}
 			case COMMAND_MOVE_KIND.JUMP: {
 				const start = iterator.i;
 				iterator.i++;
@@ -322,6 +332,16 @@ class MapObjectCommandMove extends Base {
 				const value = new DynamicValue();
 				value.updateCommand(this.command, iterator, true);
 				str += `${t('change.graphics')} ${t('id')}:${value.toString()} ${permanent}`;
+				break;
+			}
+			case COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS: {
+				const permanent = Utils.initializeBoolCommand(this.command, iterator);
+				const selected = Array.from({ length: 13 }, () => Utils.initializeBoolCommand(this.command, iterator));
+				for (let i = 0; i < 14; i++) {
+					const value = new DynamicValue();
+					value.updateCommand(this.command, iterator);
+				}
+				str += `${t('update.transformations')} (${selected.filter(Boolean).length}) ${permanent ? `[${t('permanent')}]` : ''}`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.WAIT:

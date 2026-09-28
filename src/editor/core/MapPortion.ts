@@ -1729,7 +1729,7 @@ class MapPortion {
 						const { width, height } = Manager.GL.getMaterialTextureSize(this.map.materialTileset);
 						floor.updateGeometry(this.map, geometryFloor, position, width, height, 0);
 						geometryFloor.updateAttributes();
-						mesh = new THREE.Mesh(geometryFloor, this.map.materialTileset);
+						mesh = new THREE.Mesh(geometryFloor, this.getObjectMaterial(this.map.materialTileset, state));
 						this.objectsMeshes.push(mesh);
 						break;
 					}
@@ -1751,7 +1751,7 @@ class MapPortion {
 						const { width, height } = Manager.GL.getMaterialTextureSize(bundle.material);
 						autotile.updateGeometryAutotile(this.map, geometryAutotile, bundle, position, width, height, 0);
 						geometryAutotile.updateAttributes();
-						mesh = new THREE.Mesh(geometryAutotile, bundle.material!);
+						mesh = new THREE.Mesh(geometryAutotile, this.getObjectMaterial(bundle.material!, state));
 						this.objectsMeshes.push(mesh);
 						break;
 					}
@@ -1829,7 +1829,7 @@ class MapPortion {
 								MapElement.Base.Y_AXIS,
 							);
 						}
-						mesh = new THREE.Mesh(geometrySprite, material);
+						mesh = new THREE.Mesh(geometrySprite, this.getObjectMaterial(material, state));
 						mesh.customDepthMaterial = material?.userData.customDepthMaterial;
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
 							this.objectsMeshes.push(mesh);
@@ -1866,9 +1866,17 @@ class MapPortion {
 										const materials = Array.isArray(child.material)
 											? child.material
 											: [child.material];
-										for (const material of materials) {
+										const objectMaterials = materials.map((source) => {
+											const material = this.getObjectMaterial(
+												source as THREE.MeshPhongMaterial,
+												state,
+											)!;
 											Manager.GL.applyScreenTone(material);
-										}
+											return material;
+										});
+										child.material = Array.isArray(child.material)
+											? objectMaterials
+											: objectMaterials[0];
 										child.receiveShadow = true;
 										child.castShadow = !hasPointLight;
 										child.renderOrder = 4;
@@ -1899,7 +1907,7 @@ class MapPortion {
 							);
 							object3D.updateGeometry(geometryObject3D, position, 0);
 							geometryObject3D.updateAttributes();
-							mesh = new THREE.Mesh(geometryObject3D, material);
+							mesh = new THREE.Mesh(geometryObject3D, this.getObjectMaterial(material, state));
 							this.objectsMeshes.push(mesh);
 						}
 						break;
@@ -1944,6 +1952,32 @@ class MapPortion {
 			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
 			this.map.scene.add(this.objectsMesh);
 		}
+	}
+
+	private getObjectMaterial(
+		material: THREE.MeshPhongMaterial | null | undefined,
+		state: Model.MapObjectState,
+	): THREE.MeshPhongMaterial | undefined {
+		if (!material) {
+			return undefined;
+		}
+		if (state.opacity.getFixNumberValue() >= 1) {
+			return material;
+		}
+		const clone =
+			material instanceof THREE.MeshPhongMaterial &&
+			material.map &&
+			material.userData.uniforms?.offset &&
+			material.userData.uniforms?.repeat &&
+			material.userData.uniforms?.enableShadows &&
+			material.userData.uniforms?.colorD &&
+			material.userData.uniforms?.hovered
+				? Manager.GL.cloneMaterial(material)
+				: material.clone();
+		clone.opacity = state.opacity.getFixNumberValue();
+		clone.transparent = true;
+		clone.depthWrite = false;
+		return clone;
 	}
 
 	private addObjectLights(parent: THREE.Object3D | undefined, state: Model.MapObjectState, position: THREE.Vector3) {

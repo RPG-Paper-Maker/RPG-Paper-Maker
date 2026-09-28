@@ -16,6 +16,7 @@ import { MapObjectCommandMove } from '../../../models';
 import DialogCommandMoveObjectChangeGraphics from '../commands/DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from '../commands/DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from '../commands/DialogCommandMoveObjectJump';
+import DialogCommandMoveObjectUpdateTransformations from '../commands/DialogCommandMoveObjectUpdateTransformations';
 import DialogCommandWait from '../commands/DialogCommandWait';
 
 type Props = {
@@ -45,6 +46,8 @@ function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onRejec
 				return <DialogCommandMoveObjectChangeSpeedFrequency {...options} />;
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS:
 				return <DialogCommandMoveObjectChangeGraphics {...options} />;
+			case COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS:
+				return <DialogCommandMoveObjectUpdateTransformations {...options} />;
 			case COMMAND_MOVE_KIND.WAIT: {
 				const list = command.command.slice(1);
 				const handleAcceptWait = (c: Model.MapObjectCommand) => {
@@ -74,6 +77,7 @@ function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onRejec
 				COMMAND_MOVE_KIND.CHANGE_SPEED,
 				COMMAND_MOVE_KIND.CHANGE_FREQUENCY,
 				COMMAND_MOVE_KIND.CHANGE_GRAPHICS,
+				COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS,
 				COMMAND_MOVE_KIND.WAIT,
 			].includes(command.getKind())
 		) {

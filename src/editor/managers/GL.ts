@@ -274,6 +274,27 @@ gl_FragColor.rgb = mix(
 		return material;
 	}
 
+	static cloneMaterial(material: THREE.MeshPhongMaterial): THREE.MeshPhongMaterial {
+		const uniforms = material.userData.uniforms as Record<string, THREE.IUniform<unknown>>;
+		const offset = uniforms.offset.value as THREE.Vector2;
+		return this.createMaterial({
+			texture: material.map,
+			flipY: material.map?.flipY,
+			side: material.side,
+			repeat: uniforms.repeat.value as number,
+			shadows: uniforms.enableShadows.value as boolean,
+			depthWrite: material.depthWrite,
+			opacity: material.opacity,
+			uniforms: {
+				colorD: uniforms.colorD,
+				offset: { value: offset.clone() },
+				repeat: { value: uniforms.repeat.value },
+				enableShadows: { value: uniforms.enableShadows.value },
+				hovered: { value: uniforms.hovered.value },
+			},
+		});
+	}
+
 	initialize(layer = 0) {
 		if (!this.renderer) {
 			const parent = document.getElementById('root');
