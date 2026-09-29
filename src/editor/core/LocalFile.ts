@@ -391,7 +391,6 @@ class LocalFile extends Serializable {
 		base.search = '';
 		base.hash = '';
 		const url = new URL(path, base);
-		url.searchParams.set('_', Date.now().toString()); // Cache busting
 		try {
 			if (isBlob) {
 				const blob = await this.readPublicFileBlob(url.toString());
@@ -402,10 +401,7 @@ class LocalFile extends Serializable {
 					reader.readAsDataURL(blob);
 				});
 			} else {
-				const response = await fetch(url);
-				if (!response.ok) {
-					throw new Error(`HTTP ${response.status}`);
-				}
+				const response = await this.fetchPublicFile(url.toString());
 				return await response.text();
 			}
 		} catch (error) {
@@ -415,13 +411,36 @@ class LocalFile extends Serializable {
 
 	static async readPublicFileBlob(path: string): Promise<Blob> {
 		try {
-			const response = await fetch(path);
-			if (!response.ok) {
-				throw new Error(`HTTP ${response.status}`);
-			}
+			const response = await this.fetchPublicFile(path);
 			return await response.blob();
 		} catch (error) {
 			throw new Error(`Failed to fetch public file: ${path}`, { cause: error });
+		}
+	}
+
+	private static async fetchPublicFile(path: string): Promise<Response> {
+		const url = new URL(path, window.location.href);
+		const retryDelays = [1000, 2000, 4000];
+		for (let attempt = 0; ; attempt++) {
+			url.searchParams.set('_', Date.now().toString()); // Cache busting
+			try {
+				const response = await fetch(url);
+				if (response.ok) {
+					return response;
+				}
+				const error = new Error(`HTTP ${response.status}`);
+				if (
+					attempt === retryDelays.length ||
+					(response.status !== 408 && response.status !== 429 && response.status < 500)
+				) {
+					throw error;
+				}
+			} catch (error) {
+				if (attempt === retryDelays.length || !(error instanceof TypeError)) {
+					throw error;
+				}
+			}
+			await new Promise<void>((resolve) => setTimeout(resolve, retryDelays[attempt]));
 		}
 	}
 
