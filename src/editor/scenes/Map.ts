@@ -361,6 +361,7 @@ class Map extends Base {
 		// Grid
 		if (!this.isDetection && !this.isBattle) {
 			this.grid.initialize(this);
+			this.showGrid(Project.current!.settings.showGrid);
 			this.syncCursorGrid();
 		}
 
@@ -1384,6 +1385,9 @@ class Map extends Base {
 	}
 
 	enableView(b: boolean) {
+		if (!this.initialized) {
+			return;
+		}
 		this.showGrid(!b && Project.current!.settings.showGrid);
 		this.cursorStartPosition.mesh.visible = !b;
 		this.cursorObject.mesh.visible = !b;
@@ -1397,7 +1401,9 @@ class Map extends Base {
 	}
 
 	showGrid(b: boolean) {
-		this.grid.line.visible = b;
+		if (this.grid.line) {
+			this.grid.line.visible = b;
+		}
 	}
 
 	showSquareCoordinates(b: boolean) {
