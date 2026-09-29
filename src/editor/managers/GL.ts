@@ -357,8 +357,9 @@ gl_FragColor.rgb = mix(
 				const vertCompiled = gl.getShaderParameter(vertShader, gl.COMPILE_STATUS);
 				const fragCompiled = gl.getShaderParameter(fragShader, gl.COMPILE_STATUS);
 				const linkStatus = gl.getProgramParameter(program, gl.LINK_STATUS);
-				gl.validateProgram(program);
-				const validateStatus = gl.getProgramParameter(program, gl.VALIDATE_STATUS);
+				// Three.js calls this handler only after linking has failed. Validating an
+				// unlinked program creates a new INVALID_OPERATION error (1282).
+				const validateStatus = 'skipped (link failed)';
 				const programLog = gl.getProgramInfoLog(program)?.trim() ?? '';
 				const vertLog = gl.getShaderInfoLog(vertShader)?.trim() ?? '';
 				const fragLog = gl.getShaderInfoLog(fragShader)?.trim() ?? '';
@@ -372,8 +373,10 @@ gl_FragColor.rgb = mix(
 				const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
 				const maxVertUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
 				const maxFragUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
-				const activeAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-				const activeUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+				const activeAttributes = linkStatus
+					? gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES)
+					: 'unavailable';
+				const activeUniforms = linkStatus ? gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) : 'unavailable';
 				const debugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
 				const vendor = debugRendererInfo
 					? gl.getParameter(debugRendererInfo.UNMASKED_VENDOR_WEBGL)
@@ -387,6 +390,7 @@ gl_FragColor.rgb = mix(
 					`active uniforms: ${activeUniforms}.\n` +
 					`WebGL: ${gl.getParameter(gl.VERSION)} | GLSL: ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}\n` +
 					`GPU: ${vendor} | ${renderer}\n` +
+					`Context lost: ${gl.isContextLost()}\n` +
 					`Context: ${JSON.stringify(gl.getContextAttributes())}\n` +
 					`Generated shader fingerprints - vertex: ${shaderFingerprint(vertShader)}; ` +
 					`fragment: ${shaderFingerprint(fragShader)}.\n`;
