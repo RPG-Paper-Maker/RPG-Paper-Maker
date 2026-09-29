@@ -369,32 +369,27 @@ gl_FragColor.rgb = mix(
 				}
 				msg += `${formatShader('Vertex Shader', vertShader, vertLog, vertCompiled)}\n\n`;
 				msg += `${formatShader('Fragment Shader', fragShader, fragLog, fragCompiled)}\n`;
-				if (!programLog && !vertLog && !fragLog) {
-					const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
-					const maxVertUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
-					const maxFragUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
-					const activeAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-					const activeUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-					msg +=
-						`\nNo driver logs available. GL limits — varying vectors: ${maxVaryings}, vertex uniforms: ` +
-						`${maxVertUniforms}, fragment uniforms: ${maxFragUniforms}. Active attributes: ${activeAttributes}, ` +
-						`active uniforms: ${activeUniforms}.\n`;
-				}
-				if (!programLog && !vertLog && !fragLog) {
-					const debugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
-					const vendor = debugRendererInfo
-						? gl.getParameter(debugRendererInfo.UNMASKED_VENDOR_WEBGL)
-						: gl.getParameter(gl.VENDOR);
-					const renderer = debugRendererInfo
-						? gl.getParameter(debugRendererInfo.UNMASKED_RENDERER_WEBGL)
-						: gl.getParameter(gl.RENDERER);
-					msg +=
-						`WebGL: ${gl.getParameter(gl.VERSION)} | GLSL: ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}\n` +
-						`GPU: ${vendor} | ${renderer}\n` +
-						`Context: ${JSON.stringify(gl.getContextAttributes())}\n` +
-						`Generated shader fingerprints â€” vertex: ${shaderFingerprint(vertShader)}; ` +
-						`fragment: ${shaderFingerprint(fragShader)}.\n`;
-				}
+				const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
+				const maxVertUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+				const maxFragUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+				const activeAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+				const activeUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+				const debugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info');
+				const vendor = debugRendererInfo
+					? gl.getParameter(debugRendererInfo.UNMASKED_VENDOR_WEBGL)
+					: gl.getParameter(gl.VENDOR);
+				const renderer = debugRendererInfo
+					? gl.getParameter(debugRendererInfo.UNMASKED_RENDERER_WEBGL)
+					: gl.getParameter(gl.RENDERER);
+				msg +=
+					`\nGL limits - varying vectors: ${maxVaryings}, vertex uniforms: ${maxVertUniforms}, ` +
+					`fragment uniforms: ${maxFragUniforms}. Active attributes: ${activeAttributes}, ` +
+					`active uniforms: ${activeUniforms}.\n` +
+					`WebGL: ${gl.getParameter(gl.VERSION)} | GLSL: ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}\n` +
+					`GPU: ${vendor} | ${renderer}\n` +
+					`Context: ${JSON.stringify(gl.getContextAttributes())}\n` +
+					`Generated shader fingerprints - vertex: ${shaderFingerprint(vertShader)}; ` +
+					`fragment: ${shaderFingerprint(fragShader)}.\n`;
 				console.error(msg);
 			};
 			this.renderer.domElement.addEventListener('webglcontextlost', (event) => {
