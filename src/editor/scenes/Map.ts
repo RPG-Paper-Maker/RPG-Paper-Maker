@@ -1868,6 +1868,8 @@ class Map extends Base {
 			this.canEdit &&
 			Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
+		const isWallDrawing =
+			this.canEdit && Map.isDrawing() && Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL;
 		const pointer = new THREE.Vector2(
 			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
 			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1,
@@ -1984,10 +1986,19 @@ class Map extends Base {
 				);
 			});
 		const isPlane =
+			isWallDrawing ||
 			(intersectsPlane.length > 0 && meshHitGridY <= planeGridY && !hasTransformedSpriteHit) ||
 			this.rectangleStartPosition !== null;
 		if (isPlane) {
-			intersects = intersectsPlane;
+			intersects = isWallDrawing
+				? intersectsPlane.filter(
+						({ point }) =>
+							Math.round(point.x) >= 0 &&
+							Math.round(point.x) <= this.model.length &&
+							Math.round(point.z) >= 0 &&
+							Math.round(point.z) <= this.model.width,
+					)
+				: intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
 		}
 		if (
@@ -2013,10 +2024,18 @@ class Map extends Base {
 				continue;
 			}
 			let position = new Position(
-				obj.point.x > 0 ? Math.floor(obj.point.x) : Math.ceil(obj.point.x - 1),
+				isWallDrawing
+					? Math.round(obj.point.x)
+					: obj.point.x > 0
+						? Math.floor(obj.point.x)
+						: Math.ceil(obj.point.x - 1),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
-				obj.point.z > 0 ? Math.floor(obj.point.z) : Math.ceil(obj.point.z - 1),
+				isWallDrawing
+					? Math.round(obj.point.z)
+					: obj.point.z > 0
+						? Math.floor(obj.point.z)
+						: Math.ceil(obj.point.z - 1),
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -2430,6 +2449,7 @@ class Map extends Base {
 			this.canEdit &&
 			Map.isRemoving() &&
 			Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.PENCIL &&
+			Map.currentSelectedMapElementKind !== ELEMENT_MAP_KIND.SPRITE_WALL &&
 			this.pointedMapElementPosition !== null &&
 			this.pointedMapElement?.kind === Map.currentSelectedMapElementKind
 		) {
