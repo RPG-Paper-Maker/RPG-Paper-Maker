@@ -25,9 +25,10 @@ type Props = {
 	isNew: boolean;
 	onAccept: () => void;
 	onReject: () => void;
+	onModelLivePreview?: (model: Model.Base | null) => void;
 };
 
-function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onReject, onModelLivePreview }: Props) {
 	const command = model as MapObjectCommandMove;
 
 	const getDialogCommand = () => {
@@ -47,7 +48,7 @@ function DialogMapObjectCommandMove({ setIsOpen, model, isNew, onAccept, onRejec
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS:
 				return <DialogCommandMoveObjectChangeGraphics {...options} />;
 			case COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS:
-				return <DialogCommandMoveObjectUpdateTransformations {...options} />;
+				return <DialogCommandMoveObjectUpdateTransformations {...options} onLiveChange={onModelLivePreview} />;
 			case COMMAND_MOVE_KIND.WAIT: {
 				const list = command.command.slice(1);
 				const handleAcceptWait = (c: Model.MapObjectCommand) => {

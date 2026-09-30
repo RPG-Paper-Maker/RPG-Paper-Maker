@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { COMMAND_MOVE_KIND, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
@@ -31,9 +31,19 @@ type Props = {
 	isNew: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
+	onLiveChange?: (move: Model.MapObjectCommandMove | null) => void;
+	permanent?: boolean;
 };
 
-function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogCommandMoveObjectUpdateTransformations({
+	setIsOpen,
+	model,
+	isNew,
+	onAccept,
+	onReject,
+	onLiveChange,
+	permanent = false,
+}: Props) {
 	const { t } = useTranslation();
 	const command = model as Model.MapObjectCommandMove;
 	const [centerX] = useStateDynamicValue();
@@ -53,6 +63,8 @@ function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew,
 	const [checked, setChecked] = useState<boolean[]>(Array(13).fill(false));
 	const [equation, setEquation] = useStateNumber();
 	const [, setTrigger] = useStateBool();
+	const lastPreview = useRef<string | null>(null);
+	const checkPreviewRef = useRef<() => void>(() => undefined);
 	const values = {
 		centerX,
 		centerZ,
@@ -94,17 +106,31 @@ function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew,
 		);
 	};
 
-	const handleAccept = () => {
+	const buildMove = () => {
 		const list: MapObjectCommandType[] = [COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS];
-		if (!isNew) {
-			list.push(command.command[1]);
-		}
+		list.push(isNew ? Utils.boolToNum(permanent) : command.command[1]);
 		list.push(...checked.map(Utils.boolToNum));
 		Object.values(values).forEach((value) => value.getCommand(list));
 		positionValues.forEach((value) => value.getCommand(list));
 		time.getCommand(list);
 		list.push(equation);
-		command.command = list;
+		const move = Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS);
+		move.command = list;
+		return move;
+	};
+
+	checkPreviewRef.current = () => {
+		if (!onLiveChange) return;
+		const move = buildMove();
+		const serialized = JSON.stringify(move.command);
+		if (serialized === lastPreview.current) return;
+		lastPreview.current = serialized;
+		onLiveChange(move);
+	};
+
+	const handleAccept = () => {
+		const move = buildMove();
+		command.command = isNew ? [move.command[0], ...move.command.slice(2)] : move.command;
 		setIsOpen(false);
 		onAccept();
 	};
@@ -115,6 +141,17 @@ function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew,
 	};
 
 	useLayoutEffect(() => initialize(), []);
+	useEffect(() => {
+		checkPreviewRef.current();
+	});
+	useEffect(() => {
+		if (!onLiveChange) return;
+		const interval = setInterval(() => checkPreviewRef.current(), 60);
+		return () => {
+			clearInterval(interval);
+			onLiveChange(null);
+		};
+	}, []);
 
 	return (
 		<Dialog
@@ -129,6 +166,7 @@ function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew,
 					values={values}
 					checked={checked}
 					onChangeChecked={handleChangeChecked}
+					onChange={() => checkPreviewRef.current()}
 					additionalFields={['X', 'Y', 'Y+', 'Z'].map((label, index) => ({
 						label,
 						value: positionValues[index],
@@ -136,7 +174,12 @@ function DialogCommandMoveObjectUpdateTransformations({ setIsOpen, model, isNew,
 				/>
 				<Flex spaced centerV>
 					<div>{t('time')}:</div>
-					<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+					<DynamicValueSelector
+						value={time}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						onChangeValue={() => checkPreviewRef.current()}
+						onChangeKind={() => checkPreviewRef.current()}
+					/>
 					<div>{t('seconds')}</div>
 				</Flex>
 				<Flex column>

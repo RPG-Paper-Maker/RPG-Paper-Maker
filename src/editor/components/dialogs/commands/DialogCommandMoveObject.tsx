@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrayUtils, COMMAND_MOVE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
@@ -74,6 +74,8 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 		Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS),
 	);
 	const [isDialogUpdateTransformationsOpen, setIsDialogUpdateTransformationsOpen] = useState(false);
+	const previewTransformations = useRef<Model.MapObjectCommandMove | null>(null);
+	const previewEditedMove = useRef<Model.MapObjectCommandMove | null>(null);
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 
@@ -175,6 +177,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptUpdateTransformations = () => {
+		previewTransformations.current = null;
 		ArrayUtils.insertAt(updateTransformations.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(updateTransformations);
 		setUpdateTransformations(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS));
@@ -216,8 +219,21 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 		newList.push(Utils.boolToNum(isIgnoreIfImpossible));
 		newList.push(Utils.boolToNum(isWaitEnd));
 		newList.push(Utils.boolToNum(isWithCameraOrientation));
-		for (const node of commands) {
-			newList.push(...(node.content as Model.MapObjectCommandMove).command);
+		const previewIndex = currentSelectedItemIndex === -1 ? commands.length : currentSelectedItemIndex + 1;
+		commands.forEach((node, index) => {
+			if (index === previewIndex && previewTransformations.current) {
+				newList.push(...previewTransformations.current.command);
+			}
+			newList.push(
+				...(
+					(index === currentSelectedItemIndex && previewEditedMove.current
+						? previewEditedMove.current
+						: node.content) as Model.MapObjectCommandMove
+				).command,
+			);
+		});
+		if (previewIndex === commands.length && previewTransformations.current) {
+			newList.push(...previewTransformations.current.command);
 		}
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
@@ -267,6 +283,9 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 										forcedCurrentSelectedItemIndex={forcedCurrentSelectedItemIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIndex}
 										onSelectedItem={handleSelectedItem}
+										onDialogModelLivePreview={(move) => {
+											previewEditedMove.current = move as Model.MapObjectCommandMove | null;
+										}}
 										cannotUpdateListSize
 										canBeEmpty
 										canForcePasteAdd
@@ -467,6 +486,10 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 					setIsOpen={setIsDialogUpdateTransformationsOpen}
 					model={updateTransformations}
 					onAccept={handleAcceptUpdateTransformations}
+					onLiveChange={(move) => {
+						previewTransformations.current = move;
+					}}
+					permanent={isPermanent}
 					isNew
 				/>
 			)}
