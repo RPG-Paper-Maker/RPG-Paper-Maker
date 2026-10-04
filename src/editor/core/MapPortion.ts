@@ -898,6 +898,7 @@ class MapPortion {
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
+					case ELEMENT_MAP_KIND.FLOOR:
 						if (state.graphicsID !== 0) {
 							const textureCharacter = MapElement.Sprite.getCharacterTexture(this.map, state.graphicsID);
 							if (textureCharacter === null) {
@@ -947,6 +948,7 @@ class MapPortion {
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
+					case ELEMENT_MAP_KIND.FLOOR:
 						if (state.graphicsID !== 0) {
 							await MapElement.Sprite.loadCharacterTexture(this.map, state.graphicsID);
 						}
@@ -1724,12 +1726,36 @@ class MapPortion {
 					case ELEMENT_MAP_KIND.NONE:
 						break;
 					case ELEMENT_MAP_KIND.FLOOR: {
+						this.hasStopAnimation ||= state.graphicsID !== 0 && state.stopAnimation;
+						const material =
+							state.graphicsID === 0
+								? this.map.materialTileset
+								: this.map.texturesCharacters[state.graphicsID];
+						const { width, height } = Manager.GL.getMaterialTextureSize(material);
+						const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, state.graphicsID);
+						const frames = Project.current!.systems.FRAMES;
+						const column = state.stopAnimation
+							? state.graphicsIndexX -
+								(state.graphicsIndexX % frames) +
+								((state.graphicsIndexX + this.map.objectStopAnimationFrame.value) % frames)
+							: state.graphicsIndexX;
+						const orientation = state.setWithCamera
+							? Mathf.mod(state.graphicsIndexY - this.map.camera.getMapOrientation() + 2, 4)
+							: state.graphicsIndexY % 4;
+						const row =
+							state.graphicsIndexY -
+							(state.graphicsIndexY % 4) +
+							orientation +
+							(state.stopAnimation && picture?.isStopAnimation ? 4 : 0);
+						const texture =
+							state.graphicsID === 0 || !picture
+								? (state.rectTileset ?? new Rectangle())
+								: MapElement.Floor.getCharacterTexture(picture, column, row, width, height);
 						const geometryFloor = new CustomGeometry();
-						const floor = MapElement.Floor.create(state.rectTileset ?? new Rectangle());
-						const { width, height } = Manager.GL.getMaterialTextureSize(this.map.materialTileset);
+						const floor = MapElement.Floor.create(texture);
 						floor.updateGeometry(this.map, geometryFloor, position, width, height, 0);
 						geometryFloor.updateAttributes();
-						mesh = new THREE.Mesh(geometryFloor, this.getObjectMaterial(this.map.materialTileset, state));
+						mesh = new THREE.Mesh(geometryFloor, this.getObjectMaterial(material, state));
 						this.objectsMeshes.push(mesh);
 						break;
 					}

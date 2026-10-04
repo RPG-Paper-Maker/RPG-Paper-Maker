@@ -249,10 +249,10 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 
 	useEffect(() => {
 		if (isCharacter || isFloor) {
-			const isTileset = isFloor || options.graphicsID === 0;
+			const isTileset = options.graphicsID === 0;
 			const selectionRectangle = options.selectionRectangle;
 			updatePicture(
-				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, isFloor ? 0 : options.graphicsID),
+				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, options.graphicsID),
 				isTileset && options.rectTileset
 					? options.rectTileset.clone()
 					: new Rectangle(
@@ -350,7 +350,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 					dynamicPictureID={options.dynamicID}
 					setIsOpen={setIsOpenDialogPictures}
 					onAccept={handleAcceptPictures}
-					pictureID={isFloor ? 0 : options.graphicsID}
+					pictureID={options.graphicsID}
 					indexX={options.graphicsIndexX}
 					indexY={options.graphicsIndexY}
 					selectionRectangle={options.selectionRectangle}

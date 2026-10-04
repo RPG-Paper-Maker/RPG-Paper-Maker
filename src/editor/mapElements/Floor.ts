@@ -15,7 +15,7 @@ import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
-import { MapElement, Scene } from '../Editor';
+import { MapElement, Model, Scene } from '../Editor';
 import { Land } from './Land';
 
 const { t } = i18next;
@@ -37,6 +37,12 @@ class Floor extends Land {
 		floor.texture = texture;
 		floor.up = up;
 		return floor;
+	}
+
+	static getCharacterTexture(picture: Model.Picture, indexX: number, indexY: number, width: number, height: number) {
+		const frameWidth = width / Project.SQUARE_SIZE / Project.current!.systems.FRAMES;
+		const frameHeight = height / Project.SQUARE_SIZE / picture.getRows();
+		return new Rectangle(indexX * frameWidth, indexY * frameHeight, frameWidth, frameHeight);
 	}
 
 	static getTextureReduced(texture: Rectangle, x: number, z: number): Rectangle {

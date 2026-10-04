@@ -284,10 +284,26 @@ class SimulationObject {
 				break;
 			}
 			case ELEMENT_MAP_KIND.FLOOR: {
-				const material = this.map.materialTileset;
+				const material =
+					state.graphicsID === 0 ? this.map.materialTileset : this.map.texturesCharacters[state.graphicsID];
 				if (!material) {
+					if (state.graphicsID !== 0) {
+						this.ensureCharacterTexture(state.graphicsID);
+					}
 					return;
 				}
+				const { width, height } = Manager.GL.getMaterialTextureSize(material);
+				const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, state.graphicsID);
+				const texture =
+					state.graphicsID === 0 || !picture
+						? (state.rectTileset ?? new Rectangle())
+						: MapElement.Floor.getCharacterTexture(
+								picture,
+								this.getCurrentColumn(),
+								this.getCurrentRow(),
+								width,
+								height,
+							);
 				const position = this.basePosition.clone();
 				position.layer += state.layer.getFixNumberValue() - 1;
 				position.centerX = state.centerX.getFixNumberValue();
@@ -299,8 +315,7 @@ class SimulationObject {
 				position.scaleY = state.scaleY.getFixNumberValue();
 				position.scaleZ = state.scaleZ.getFixNumberValue();
 				const geometryFloor = new CustomGeometry();
-				const floor = MapElement.Floor.create(state.rectTileset ?? new Rectangle());
-				const { width, height } = Manager.GL.getMaterialTextureSize(material);
+				const floor = MapElement.Floor.create(texture);
 				floor.updateGeometry(this.map, geometryFloor, position, width, height, 0);
 				geometryFloor.updateAttributes();
 				mesh = new THREE.Mesh(geometryFloor, this.applyPreviewEffect(material));

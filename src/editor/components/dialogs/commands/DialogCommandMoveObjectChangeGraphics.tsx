@@ -115,7 +115,10 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 					kind === ELEMENT_MAP_KIND.SPRITE_FACE ||
 					kind === ELEMENT_MAP_KIND.FLOOR);
 			const selectionRectangle =
-				!isTileset && (kind === ELEMENT_MAP_KIND.SPRITE_FIX || kind === ELEMENT_MAP_KIND.SPRITE_FACE)
+				!isTileset &&
+				(kind === ELEMENT_MAP_KIND.SPRITE_FIX ||
+					kind === ELEMENT_MAP_KIND.SPRITE_FACE ||
+					kind === ELEMENT_MAP_KIND.FLOOR)
 					? new Rectangle(x * w, y * h, w, h)
 					: undefined;
 			if (isTileset || kind === ELEMENT_MAP_KIND.AUTOTILE) {
