@@ -175,6 +175,8 @@
 					let versionsData = null;
 					let currentEngineVersion = null;
 					let isUpdate = false;
+					let installationStarted = false;
+					const manual = new URLSearchParams(location.search).get('manual') === 'true';
 
 					const isVersionGTE = (a, b) => {
 						const pa = a.split('.').map(Number);
@@ -185,6 +187,45 @@
 						}
 						return true;
 					};
+
+					async function prepareInstallation() {
+						const versionTag = radioLatest.checked ? versionsData.lastVersion : versionSelect.value;
+						await window.ipcRenderer.invoke('change-window-title', `Updating to ${versionTag}...`);
+						const lastBRUpdateVersion = versionsData.lastBRUpdateVersion;
+						const skipBR =
+							isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
+								? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
+								: false;
+						const brSrc = `${window.env.appPath}/dist/BR`;
+						const brBackup = `${window.env.appPath}/BR_backup`;
+						const hasBR = skipBR && (await window.ipcRenderer.invoke('check-file-exists', brSrc));
+						if (hasBR) {
+							await window.ipcRenderer.invoke('copy-folder', brSrc, brBackup);
+						}
+						const settingsPath = `${window.env.appPath}/dist/engineSettings.json`;
+						const isEngineSettings = await window.ipcRenderer.invoke('check-file-exists', settingsPath);
+						if (isEngineSettings) {
+							await window.ipcRenderer.invoke(
+								'rename-file',
+								settingsPath,
+								`${window.env.appPath}/engineSettings.json`,
+							);
+						}
+						installationStarted = true;
+						await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+						await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
+						if (hasBR) {
+							await window.ipcRenderer.invoke('copy-folder', brBackup, brSrc);
+							await window.ipcRenderer.invoke('remove-folder', brBackup);
+						}
+						if (isEngineSettings) {
+							await window.ipcRenderer.invoke(
+								'rename-file',
+								`${window.env.appPath}/engineSettings.json`,
+								settingsPath,
+							);
+						}
+					}
 
 					// Radio control logic
 					radioLatest.addEventListener('change', () => {
@@ -232,50 +273,15 @@
 							} catch (e) {
 								currentEngineVersion = null;
 							}
-							await window.ipcRenderer.invoke(
-								'change-window-title',
-								`Updating to ${data.lastVersion}...`,
-							);
-							const lastBRUpdateVersion = data.lastBRUpdateVersion;
-							const skipBR =
-								isUpdate && currentEngineVersion !== null && !!lastBRUpdateVersion
-									? isVersionGTE(currentEngineVersion.trim(), lastBRUpdateVersion)
-									: false;
-							const brSrc = `${window.env.appPath}/dist/BR`;
-							const brBackup = `${window.env.appPath}/BR_backup`;
-							const hasBR = skipBR && (await window.ipcRenderer.invoke('check-file-exists', brSrc));
-							if (hasBR) {
-								await window.ipcRenderer.invoke('copy-folder', brSrc, brBackup);
-							}
-							if (isEngineSettings) {
-								await window.ipcRenderer.invoke(
-									'rename-file',
-									`${window.env.appPath}/dist/engineSettings.json`,
-									`${window.env.appPath}/engineSettings.json`,
-								);
-							}
-							await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
-							await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
-							if (hasBR) {
-								await window.ipcRenderer.invoke('copy-folder', brBackup, brSrc);
-								await window.ipcRenderer.invoke('remove-folder', brBackup);
-							}
-							if (isEngineSettings) {
-								await window.ipcRenderer.invoke(
-									'rename-file',
-									`${window.env.appPath}/engineSettings.json`,
-									`${window.env.appPath}/dist/engineSettings.json`,
-								);
-							}
-							await download();
-						} else {
+						}
+						if (manual || !isEngineDownloaded) {
 							latestLabel.textContent = `Download latest version (${data.lastVersion})`;
 							versionSelect.innerHTML = '';
-							data.versions.pop();
-							if (data.versions.length === 0) {
+							const olderVersions = data.versions.slice(0, data.versions.indexOf(data.lastVersion));
+							if (olderVersions.length === 0) {
 								radioOlder.disabled = true;
 							} else {
-								data.versions
+								olderVersions
 									.slice()
 									.reverse()
 									.forEach((v) => {
@@ -286,6 +292,9 @@
 									});
 							}
 							stepInstallComplete.classList.remove('hidden');
+						} else {
+							await prepareInstallation();
+							await download();
 						}
 					})().catch((err) => reportError('Error:\n' + err.stack));
 
@@ -550,12 +559,19 @@
 						const box = document.getElementById('errorBox');
 						box.style.display = 'block';
 						box.textContent = message;
-						await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+						if (installationStarted) {
+							await window.ipcRenderer.invoke('remove-folder', `${window.env.appPath}/dist`);
+						}
 					}
 
 					continueBtn.addEventListener('click', async () => {
-						await window.ipcRenderer.invoke('create-folder', `${window.env.appPath}/dist`);
-						await download();
+						continueBtn.disabled = true;
+						try {
+							await prepareInstallation();
+							await download();
+						} catch (err) {
+							await reportError('Download error:\n' + err.stack);
+						}
 					});
 				} catch (err) {
 					reportError('Error:\n' + err.stack);

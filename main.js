@@ -300,6 +300,27 @@ let updater;
 let splash;
 let isReadyToClose = false;
 
+const openUpdater = (manual = false, isEngineDownloaded = true) => {
+	updater = new BrowserWindow({
+		width: 600,
+		height: manual || !isEngineDownloaded ? 310 : 150,
+		webPreferences: {
+			nodeIntegration: false,
+			contextIsolation: true,
+			sandbox: false,
+			preload: path.join(__dirname, 'preload.js'),
+			additionalArguments: [`--appPath=${app.getAppPath()}`],
+		},
+		icon: appIconPath,
+		frame: true,
+	});
+	updater.removeMenu();
+	updater.loadFile(path.join(__dirname, 'updater', 'index.html'), { query: { manual: String(manual) } });
+	updater.on('closed', () => {
+		updater = null;
+	});
+};
+
 const closeGameProcess = async () => {
 	const child = gameProcess;
 	if (!child) {
@@ -646,24 +667,7 @@ const init = async () => {
 			return;
 		}
 	}
-	updater = new BrowserWindow({
-		width: 600,
-		height: isEngineDownloaded ? 150 : 310,
-		webPreferences: {
-			nodeIntegration: false,
-			contextIsolation: true,
-			sandbox: false,
-			preload: path.join(__dirname, 'preload.js'),
-			additionalArguments: [`--appPath=${app.getAppPath()}`],
-		},
-		icon: appIconPath,
-		frame: true,
-	});
-	updater.removeMenu();
-	updater.loadFile(path.join(__dirname, 'updater', 'index.html'));
-	updater.on('close', () => {
-		updater = null;
-	});
+	openUpdater(false, isEngineDownloaded);
 };
 
 app.whenReady().then(async () => {
@@ -954,7 +958,10 @@ ipcMain.handle('rename-file', async (event, oldFilePath, newFilePath) => {
 			try {
 				await fs.rename(oldFilePath, newFilePath);
 			} catch (err) {
-				if ((err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EACCES') && (await exists(newFilePath))) {
+				if (
+					(err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EACCES') &&
+					(await exists(newFilePath))
+				) {
 					await fs.rm(newFilePath, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
 					await fs.rename(oldFilePath, newFilePath);
 					return;
@@ -1064,6 +1071,24 @@ ipcMain.handle('close', () => {
 	if (window && !window.isDestroyed()) {
 		window.close();
 	}
+});
+
+ipcMain.handle('open-version-updater', async (event) => {
+	if (!window || event.sender !== window.webContents || updater) return;
+	const result = await dialog.showMessageBox(window, {
+		type: 'question',
+		buttons: ['Close editor and choose version', 'Cancel'],
+		defaultId: 1,
+		cancelId: 1,
+		title: 'Choose RPG Paper Maker version',
+		message: 'Close RPG Paper Maker to choose and download another version?',
+	});
+	if (result.response !== 0) return;
+	window.once('closed', () => {
+		window = null;
+		openUpdater(true);
+	});
+	window.close();
 });
 
 ipcMain.handle('ready-to-close', async () => {
@@ -1265,7 +1290,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-	if (!window) {
+	if (!window && !updater) {
 		init();
 	}
 });

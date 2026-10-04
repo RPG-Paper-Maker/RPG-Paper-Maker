@@ -492,7 +492,8 @@ function MainMenuBar() {
 		}
 		toast.warn(
 			t('warning.import.invalid.zip', {
-				defaultValue: 'This project archive could not be read. Please choose a valid, complete RPG Paper Maker ZIP export.',
+				defaultValue:
+					'This project archive could not be read. Please choose a valid, complete RPG Paper Maker ZIP export.',
 			}),
 			TOASTER_OPTIONS,
 		);
@@ -756,6 +757,10 @@ function MainMenuBar() {
 
 	const handleClose = async () => {
 		await IO.close();
+	};
+
+	const handleChooseVersion = async () => {
+		await IO.invoke('open-version-updater');
 	};
 
 	const handleClickHamburgerBack = () => {
@@ -1336,9 +1341,21 @@ function MainMenuBar() {
 						<div className='hamburgerOpen menuSubContent'>{getMenuHamburger()}</div>
 					</div>
 				)}
+				{Constants.IS_DESKTOP && (
+					<>
+						<span className='textSmallDetail'>RPG Paper Maker</span>
+						<button
+							className='versionButton noTitleDrag'
+							type='button'
+							title='Choose an RPG Paper Maker version'
+							onClick={handleChooseVersion}
+						>
+							{Project.VERSION}
+						</button>
+					</>
+				)}
 				{Constants.IS_DESKTOP && !isMac && (
 					<>
-						<div className='textSmallDetail'>{document.title}</div>
 						<Flex one />
 						<Flex fillHeight className='noTitleDrag'>
 							<Button square backgroundOnHoverOnly onClick={handleMinimize}>

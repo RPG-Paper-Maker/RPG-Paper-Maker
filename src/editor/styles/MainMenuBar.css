@@ -51,6 +51,22 @@
 			padding: 10px;
 		}
 	}
+
+	.versionButton {
+		padding: 2px 6px;
+		border: 1px solid var(--grey-color);
+		border-radius: 4px;
+		background: transparent;
+		color: var(--grey-color);
+		font-size: 11px;
+		cursor: pointer;
+	}
+
+	.versionButton:hover,
+	.versionButton:focus-visible {
+		color: var(--main-color);
+		border-color: currentColor;
+	}
 }
 
 .mainMenuBar,
