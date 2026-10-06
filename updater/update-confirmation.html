@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>RPG Paper Maker update</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				font: 14px/1.5 sans-serif;
+				color: #e6edf3;
+				background: #161b22;
+			}
+			main {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+				padding: 20px;
+				gap: 12px;
+			}
+			h1 {
+				margin: 0;
+				font-size: 20px;
+			}
+			p {
+				margin: 0;
+			}
+			#notes {
+				flex: 1;
+				min-height: 0;
+				overflow: auto;
+				padding: 0 18px 18px;
+				border: 1px solid #3d444d;
+				border-radius: 5px;
+				background: #0d1117;
+			}
+			#notes h2 {
+				margin: 20px 0 8px;
+				padding-bottom: 4px;
+				border-bottom: 1px solid #3d444d;
+				font-size: 18px;
+			}
+			#notes h3 {
+				margin: 14px 0 4px;
+				font-size: 15px;
+			}
+			#notes p {
+				margin: 6px 0;
+			}
+			#notes ul {
+				margin: 4px 0 12px;
+				padding-left: 24px;
+			}
+			#notes li {
+				margin: 3px 0;
+			}
+			#notes code {
+				color: #a5d6ff;
+			}
+			footer {
+				display: flex;
+				justify-content: flex-end;
+				gap: 10px;
+			}
+			button {
+				padding: 8px 16px;
+				border: 1px solid #3d444d;
+				border-radius: 5px;
+				background: #30363d;
+				color: #e6edf3;
+				cursor: pointer;
+			}
+			#download {
+				border-color: #218584;
+				background: #218584;
+				color: white;
+			}
+			button:focus-visible {
+				outline: 2px solid #58a6ff;
+				outline-offset: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1 id="title">RPG Paper Maker update</h1>
+			<p>A new version is available. Would you like to download it now? Everything is automatic and fast!</p>
+			<div id="notes" aria-label="Changelogs">Loading changelogs...</div>
+			<footer>
+				<button id="cancel" type="button">No</button>
+				<button id="download" type="button">Yes, download</button>
+			</footer>
+		</main>
+		<script>
+			const notes = document.getElementById('notes');
+			const inline = (value) =>
+				value
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/`([^`]+)`/g, '<code>$1</code>')
+					.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+					.replace(/\*(.+?)\*/g, '<em>$1</em>');
+			const renderChangelogs = (markdown) => {
+				if (!markdown) {
+					notes.textContent = 'No changelogs are available for these versions.';
+					return;
+				}
+				const parts = [];
+				let inList = false;
+				const endList = () => {
+					if (inList) parts.push('</ul>');
+					inList = false;
+				};
+				for (const line of markdown.split('\n')) {
+					const value = line.trim();
+					if (!value) {
+						endList();
+					} else if (value.startsWith('### ')) {
+						endList();
+						parts.push(`<h3>${inline(value.slice(4))}</h3>`);
+					} else if (value.startsWith('## ')) {
+						endList();
+						parts.push(`<h2>${inline(value.slice(3))}</h2>`);
+					} else if (value.startsWith('- ') || value.startsWith('* ')) {
+						if (!inList) parts.push('<ul>');
+						inList = true;
+						parts.push(`<li>${inline(value.slice(2))}</li>`);
+					} else {
+						endList();
+						parts.push(`<p>${inline(value)}</p>`);
+					}
+				}
+				endList();
+				notes.innerHTML = parts.join('');
+			};
+			window.ipcRenderer
+				.invoke('engine-update-details')
+				.then((details) => {
+					if (!details) throw new Error('Update details unavailable');
+					document.getElementById('title').textContent =
+						`Update ${details.currentVersion} → ${details.latestVersion}`;
+					renderChangelogs(details.changelogs);
+				})
+				.catch(() => {
+					notes.textContent = 'Unable to load changelogs.';
+				});
+			document.getElementById('cancel').addEventListener('click', () => {
+				window.ipcRenderer.send('engine-update-response', false);
+			});
+			document.getElementById('download').addEventListener('click', () => {
+				window.ipcRenderer.send('engine-update-response', true);
+			});
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') window.ipcRenderer.send('engine-update-response', false);
+			});
+		</script>
+	</body>
+</html>

@@ -395,6 +395,81 @@ const fetchFrom = async (path) => {
 	return response;
 };
 
+const getUpdateChangelogs = async (versions, currentVersion, latestVersion) => {
+	const current = currentVersion.trim();
+	const latestIndex = versions.indexOf(latestVersion);
+	if (latestIndex === -1) {
+		return '';
+	}
+	const pendingVersions = versions
+		.slice(0, latestIndex + 1)
+		.filter((version) => version.localeCompare(current, undefined, { numeric: true }) > 0)
+		.reverse();
+	const changelogs = new Array(pendingVersions.length);
+	const signal = AbortSignal.timeout(8000);
+	let nextIndex = 0;
+	await Promise.all(
+		Array.from({ length: Math.min(8, pendingVersions.length) }, async () => {
+			while (nextIndex < pendingVersions.length) {
+				const index = nextIndex++;
+				const version = pendingVersions[index];
+				try {
+					const url = `https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/develop/changelogs/${version}.md`;
+					const response = await fetch(url, { signal });
+					changelogs[index] = response.ok
+						? (await response.text()).trim()
+						: `## ${version}\nChangelog unavailable.`;
+				} catch {
+					changelogs[index] = `## ${version}\nChangelog unavailable.`;
+				}
+			}
+		}),
+	);
+	return changelogs.join('\n\n');
+};
+
+const showEngineUpdateDialog = (currentVersion, latestVersion, changelogs) =>
+	new Promise((resolve) => {
+		const parent = BrowserWindow.getFocusedWindow();
+		const updateDialog = new BrowserWindow({
+			width: 720,
+			height: 600,
+			minWidth: 500,
+			minHeight: 400,
+			parent: parent ?? undefined,
+			modal: !!parent,
+			show: false,
+			autoHideMenuBar: true,
+			icon: appIconPath,
+			webPreferences: {
+				nodeIntegration: false,
+				contextIsolation: true,
+				sandbox: false,
+				preload: path.join(__dirname, 'preload.js'),
+			},
+		});
+		let settled = false;
+		const finish = (accepted) => {
+			if (settled) return;
+			settled = true;
+			ipcMain.removeListener('engine-update-response', onResponse);
+			ipcMain.removeHandler('engine-update-details');
+			resolve(accepted);
+			if (!updateDialog.isDestroyed()) updateDialog.close();
+		};
+		const onResponse = (event, accepted) => {
+			if (event.sender === updateDialog.webContents) finish(accepted === true);
+		};
+		ipcMain.on('engine-update-response', onResponse);
+		ipcMain.handle('engine-update-details', (event) => {
+			if (event.sender !== updateDialog.webContents) return null;
+			return { currentVersion: currentVersion.trim(), latestVersion, changelogs };
+		});
+		updateDialog.on('closed', () => finish(false));
+		updateDialog.once('ready-to-show', () => updateDialog.show());
+		updateDialog.loadFile(path.join(__dirname, 'updater', 'update-confirmation.html')).catch(() => finish(false));
+	});
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const emptyFolder = async (folderPath) => {
@@ -648,16 +723,13 @@ const init = async () => {
 			versions.versions[versions.versions.length - 1 - (getUnstable || !isLastVersionUnstable ? 0 : 1)];
 		if (currentEngineVersion !== latestEngineVersion) {
 			if (updateType === 1) {
-				const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-					type: 'question',
-					buttons: ['Yes', 'No'],
-					defaultId: 0,
-					cancelId: 1,
-					title: `Update ${currentEngineVersion.trim()} -> ${latestEngineVersion}`,
-					message:
-						'A new version of RPG Paper Maker is available! Would you like to download it now? Everything is automatic and fast!',
-				});
-				if (result.response === 1) {
+				const changelogs = await getUpdateChangelogs(
+					versions.versions,
+					currentEngineVersion,
+					latestEngineVersion,
+				);
+				const accepted = await showEngineUpdateDialog(currentEngineVersion, latestEngineVersion, changelogs);
+				if (!accepted) {
 					await runRPMEngine();
 					return;
 				}
