@@ -584,6 +584,39 @@ class Map extends Base {
 		});
 	}
 
+	private limitObjectLightShadows(GL: Manager.GL) {
+		const shadowBudget = Math.max(0, GL.renderer.capabilities.maxTextures - 8);
+		const cameraPosition = this.camera.getThreeCamera().getWorldPosition(new THREE.Vector3());
+		const lightPosition = new THREE.Vector3();
+		const objectLights: { light: THREE.Light; distance: number }[] = [];
+		let otherShadows = 0;
+		this.scene.traverse((object) => {
+			if (!(object instanceof THREE.Light)) return;
+			if (!object.userData.isObjectLight) {
+				if (object.castShadow) otherShadows++;
+				return;
+			}
+			if (
+				object instanceof THREE.PointLight ||
+				object instanceof THREE.SpotLight ||
+				object instanceof THREE.DirectionalLight
+			) {
+				objectLights.push({
+					light: object,
+					distance:
+						object instanceof THREE.DirectionalLight
+							? -1
+							: object.getWorldPosition(lightPosition).distanceToSquared(cameraPosition),
+				});
+			}
+		});
+		objectLights.sort((a, b) => a.distance - b.distance || a.light.id - b.light.id);
+		const allowed = this.model.objectLightsShadows ? Math.max(0, shadowBudget - otherShadows) : 0;
+		for (let i = 0; i < objectLights.length; i++) {
+			objectLights[i].light.castShadow = i < allowed;
+		}
+	}
+
 	updateFog() {
 		if (this.model.isFog) {
 			const color = (
@@ -2927,6 +2960,9 @@ class Map extends Base {
 	draw3D(GL = Manager.GL.mainContext) {
 		if (this.needsClose) {
 			this.scene.background = new THREE.Color(0x2e324a);
+		}
+		if (GL.renderer) {
+			this.limitObjectLightShadows(GL);
 		}
 		super.draw3D(GL);
 	}
