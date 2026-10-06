@@ -415,6 +415,7 @@ function PanelAssetsPreviewer({
 								onDoubleClick={onDoubleClickLeftList}
 								disabled={isCheckedActivated}
 								showEditName
+								canEditName={(node) => !(node.content as Model.Asset).isBR}
 								cannotAdd={!!itemsAvailable}
 								cannotEdit={!!itemsAvailable}
 								cannotUpdateListSize
@@ -445,8 +446,7 @@ function PanelAssetsPreviewer({
 							>
 								<Flex className='textSmallDetail' spaced>
 									{t('drop.custom.assets.here')}
-									{importTypesLabel && <div className='textSmallDetail'>{importTypesLabel}</div>}
-									:
+									{importTypesLabel && <div className='textSmallDetail'>{importTypesLabel}</div>}:
 								</Flex>
 								<Flex one zeroHeight className='assetDropTree'>
 									{isDraggingOver && (

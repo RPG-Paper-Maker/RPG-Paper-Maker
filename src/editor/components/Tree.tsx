@@ -48,6 +48,7 @@ type Props = {
 	cannotDelete?: boolean;
 	cannotClear?: boolean;
 	canDelete?: (node: Node | null) => boolean;
+	canEditName?: (node: Node) => boolean;
 	canBeEmpty?: boolean;
 	canForcePasteAdd?: boolean;
 	canDisable?: boolean;
@@ -114,6 +115,7 @@ function Tree({
 	cannotUpdateListSize = false,
 	cannotDelete = false,
 	canDelete,
+	canEditName,
 	canBeEmpty = false,
 	canForcePasteAdd = false,
 	canDisable = false,
@@ -234,7 +236,11 @@ function Tree({
 		hasCustomItems = false;
 	}
 
-	const isEditNameDisabled = () => disabled || !currentSelectedItemNode || currentSelectedItemNode.content.id <= 0;
+	const isEditNameDisabled = () =>
+		disabled ||
+		!currentSelectedItemNode ||
+		currentSelectedItemNode.content.id <= 0 ||
+		(canEditName !== undefined && !canEditName(currentSelectedItemNode));
 
 	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotEdit;
 
@@ -778,7 +784,7 @@ function Tree({
 	};
 
 	const handleChangeName = (name: string) => {
-		if (currentSelectedItemNode) {
+		if (currentSelectedItemNode && !isEditNameDisabled()) {
 			currentSelectedItemNode.content.name = name;
 			setCurrentName(name);
 			onListUpdated?.();
