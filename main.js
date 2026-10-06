@@ -533,6 +533,14 @@ const init = async () => {
 			}
 		})();
 		await createSplash('');
+		const appRelativePath =
+			process.platform === 'darwin'
+				? path.join('RPG Paper Maker.app', 'Contents', 'Resources', 'app')
+				: path.join('resources', 'app');
+		const installedDLCs = path.join(basePath, '..', '..', 'RPG Paper Maker', appRelativePath, 'DLCs');
+		if (await exists(installedDLCs)) {
+			await copyDir(installedDLCs, path.join(basePath, appRelativePath, 'DLCs'));
+		}
 		try {
 			await emptyFolder(`${basePath}/../../RPG Paper Maker`);
 		} catch (e) {
