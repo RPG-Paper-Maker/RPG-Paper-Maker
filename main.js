@@ -1354,7 +1354,8 @@ ipcMain.handle('show-dialog-confirm-run-engine', async (event) => {
 		title: 'All files downloaded successfully.',
 		message: 'RPG Paper Maker will restart now.',
 	});
-	await runRPMEngine();
+	app.relaunch();
+	app.exit(0);
 });
 
 app.on('window-all-closed', () => {
