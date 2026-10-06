@@ -11,7 +11,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import simpleGit from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 const modsPath = './mods';
 const localMessage = 'Local copy: ';
