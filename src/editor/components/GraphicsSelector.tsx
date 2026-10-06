@@ -13,7 +13,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Model, Scene } from '../Editor';
-import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
+import { Constants, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
@@ -94,7 +94,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		const ctx = getContext();
 		if (ctx) {
 			clear(ctx);
-			draw(ctx, pic, img, rect, isTileset);
+			draw(ctx, pic, img, rect, isTileset, selectionRectangle);
 		}
 		if (triggerHandler) {
 			onUpdateGraphics(picture.id, rect, isTileset, kind, selectionRectangle);
@@ -153,11 +153,21 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		image: HTMLImageElement,
 		rect: Rectangle,
 		isTileset: boolean,
+		selectionRectangle?: Rectangle,
 	) => {
 		const rows = picture.getRows();
 		const columns = Project.current!.systems.FRAMES;
-		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : (image.width / columns) * rect.width;
-		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : (image.height / rows) * rect.height;
+		const srcRect = !isTileset && selectionRectangle ? selectionRectangle : rect;
+		const srcWidth = isTileset
+			? rect.width * Project.SQUARE_SIZE
+			: selectionRectangle
+				? srcRect.width * Constants.BASE_SQUARE_SIZE
+				: (image.width / columns) * rect.width;
+		const srcHeight = isTileset
+			? rect.height * Project.SQUARE_SIZE
+			: selectionRectangle
+				? srcRect.height * Constants.BASE_SQUARE_SIZE
+				: (image.height / rows) * rect.height;
 		let width = refBorder.current?.offsetWidth ?? 0;
 		let height = refBorder.current?.offsetHeight ?? 0;
 		const ratioWidth = width / srcWidth;
@@ -174,8 +184,12 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		ctx.imageSmoothingQuality = 'high';
 		ctx.drawImage(
 			image,
-			rect.x * (isTileset ? Project.SQUARE_SIZE : srcWidth),
-			rect.y * (isTileset ? Project.SQUARE_SIZE : srcHeight),
+			selectionRectangle
+				? srcRect.x * Constants.BASE_SQUARE_SIZE
+				: rect.x * (isTileset ? Project.SQUARE_SIZE : srcWidth),
+			selectionRectangle
+				? srcRect.y * Constants.BASE_SQUARE_SIZE
+				: rect.y * (isTileset ? Project.SQUARE_SIZE : srcHeight),
 			srcWidth,
 			srcHeight,
 			0,
@@ -264,6 +278,7 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 				isTileset,
 				options.graphicsKind,
 				false,
+				selectionRectangle,
 			).catch(console.error);
 		} else if (isAutotile) {
 			updateAutotilePicture().catch(console.error);

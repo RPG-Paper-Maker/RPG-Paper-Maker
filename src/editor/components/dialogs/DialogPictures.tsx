@@ -13,7 +13,6 @@ import { ReactNode, useLayoutEffect, useMemo, useReducer, useState } from 'react
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
-import { Constants } from '../../common';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
@@ -216,7 +215,9 @@ function DialogPictures({
 	const handleChangeSelectedPicture = (node: Node | null) => {
 		const picture = (node?.content ?? null) as Model.Picture | null;
 		if (selectedKind === PICTURE_KIND.CHARACTERS && picture?.id !== selectedPicture?.id) {
-			setSelectedRect(new Rectangle());
+			setSelectedRect(
+				picture?.id === pictureID && selectionRectangle ? selectionRectangle.clone() : new Rectangle(),
+			);
 		}
 		updateSelectedPicture(picture);
 	};
@@ -388,12 +389,13 @@ function DialogPictures({
 					}
 					return wrapWithLimitTabs(
 						<TextureCharacterSelector
+							key={path}
 							texture={path}
 							isStopAnimation={isStopAnimation}
 							isClimbAnimation={isClimbAnimation}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
-							adjustPositionSize={!selectionRectangle}
+							adjustPositionSize={!selectionRectangle || selectedPicture.id !== pictureID}
 							base64={!selectedPicture.isBR}
 						/>,
 					);

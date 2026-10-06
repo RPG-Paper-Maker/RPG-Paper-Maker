@@ -275,22 +275,23 @@ function TextureSquareSelector({
 		const y = rect.y * Constants.BASE_SQUARE_SIZE;
 		const w = rect.width * Constants.BASE_SQUARE_SIZE;
 		const h = rect.height * Constants.BASE_SQUARE_SIZE;
-		if (rect.width === 1 && rect.height === 1) {
+		if (w === Constants.BASE_SQUARE_SIZE && h === Constants.BASE_SQUARE_SIZE) {
 			ctx.drawImage(Scene.Map.pictureTilesetCursor, x, y, w, h);
 		} else {
-			const s = Constants.BASE_SQUARE_SIZE / 2;
+			const sourceS = Constants.BASE_SQUARE_SIZE / 2;
+			const s = w < Constants.BASE_SQUARE_SIZE || h < Constants.BASE_SQUARE_SIZE ? Math.min(w, h) / 4 : sourceS;
 			const xCorner = x + w - s;
 			const yCorner = y + h - s;
 			const lineW = w - 2 * s;
 			const lineH = h - 2 * s;
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, 0, s, s, x, y, s, s); // Top Left
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, 0, s, s, xCorner, y, s, s); // Top Right
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s, s, s, xCorner, yCorner, s, s); // Bottom Right
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s, s, s, x, yCorner, s, s); // Bottom Left
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, 0, 1, s, x + s, y, lineW, s); // Top
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, s, 1, s, x + s, yCorner, lineW, s); // Bottom
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s / 2, s, 1, x, y + s, s, lineH); // Left
-			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s / 2, s, 1, xCorner, y + s, s, lineH); // Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, 0, sourceS, sourceS, x, y, s, s); // Top Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, sourceS, 0, sourceS, sourceS, xCorner, y, s, s); // Top Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, sourceS, sourceS, sourceS, sourceS, xCorner, yCorner, s, s); // Bottom Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, sourceS, sourceS, sourceS, x, yCorner, s, s); // Bottom Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, sourceS / 2, 0, 1, sourceS, x + s, y, lineW, s); // Top
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, sourceS / 2, sourceS, 1, sourceS, x + s, yCorner, lineW, s); // Bottom
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, sourceS / 2, sourceS, 1, x, y + s, s, lineH); // Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, sourceS, sourceS / 2, sourceS, 1, xCorner, y + s, s, lineH); // Right
 		}
 		ctx.globalAlpha = 1;
 	};
