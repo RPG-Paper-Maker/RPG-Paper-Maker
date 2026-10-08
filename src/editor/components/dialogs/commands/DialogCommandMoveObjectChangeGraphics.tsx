@@ -31,9 +31,17 @@ type Props = {
 	isNew: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
+	permanent?: boolean;
 };
 
-function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogCommandMoveObjectChangeGraphics({
+	setIsOpen,
+	model,
+	isNew,
+	onAccept,
+	onReject,
+	permanent = false,
+}: Props) {
 	const command = model as Model.MapObjectCommandMove;
 
 	const { t } = useTranslation();
@@ -46,6 +54,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		graphicsKind: 0,
 	});
 	const [isDontChangeOrientation, setIsDontChangeOrientation] = useStateBool();
+	const [isPermanent, setIsPermanent] = useState(permanent);
 	const [isIndexX, setIsIndexX] = useStateBool();
 	const [indexXValue] = useStateDynamicValue();
 	const [isIndexY, setIsIndexY] = useStateBool();
@@ -60,6 +69,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 		} else {
 			const iterator = Utils.generateIterator();
 			iterator.i += 2;
+			setIsPermanent(command.command[1] === 1);
 			setIsDontChangeOrientation(Utils.initializeBoolCommand(command.command, iterator));
 			let kind = ELEMENT_MAP_KIND.NONE;
 			switch (command.command[iterator.i++]) {
@@ -168,10 +178,7 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 	};
 
 	const handleAccept = async () => {
-		const list: MapObjectCommandType[] = [COMMAND_MOVE_KIND.CHANGE_GRAPHICS];
-		if (!isNew) {
-			list.push(command.command[1]);
-		}
+		const list: MapObjectCommandType[] = [COMMAND_MOVE_KIND.CHANGE_GRAPHICS, Utils.boolToNum(isPermanent)];
 		list.push(Utils.boolToNum(isDontChangeOrientation));
 		let index = 0;
 		switch (graphicOptions.graphicsKind) {
@@ -264,6 +271,9 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 				</Flex>
 				<Checkbox isChecked={isDontChangeOrientation} onChange={setIsDontChangeOrientation}>
 					{t('dont.change.orientation')}
+				</Checkbox>
+				<Checkbox isChecked={isPermanent} onChange={setIsPermanent}>
+					{t('permanent')}
 				</Checkbox>
 				{(graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
 					graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE ||

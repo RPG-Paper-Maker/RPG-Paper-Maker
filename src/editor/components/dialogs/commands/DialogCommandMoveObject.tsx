@@ -171,7 +171,6 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptChangeGraphics = () => {
-		ArrayUtils.insertAt(changeGraphics.command, 1, Utils.boolToNum(isPermanent));
 		addCommand(changeGraphics);
 		setChangeGraphics(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS));
 	};
@@ -479,6 +478,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 					model={changeGraphics}
 					onAccept={handleAcceptChangeGraphics}
 					isNew
+					permanent={isPermanent}
 				/>
 			)}
 			{isDialogUpdateTransformationsOpen && (
