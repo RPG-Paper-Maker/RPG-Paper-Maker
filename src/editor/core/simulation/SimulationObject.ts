@@ -131,11 +131,19 @@ class SimulationObject {
 		this.updateMeshOffset();
 	}
 
-	updateGraphics(kind: ELEMENT_MAP_KIND, id: number, indexX: number, indexY: number, changeOrientation: boolean) {
+	updateGraphics(
+		kind: ELEMENT_MAP_KIND,
+		id: number,
+		indexX: number,
+		indexY: number,
+		changeOrientation: boolean,
+		rectTileset?: Rectangle,
+	) {
 		this.state.graphicsKind = kind;
 		this.state.graphicsID = id;
 		this.state.graphicsIndexX = indexX;
 		this.state.graphicsIndexY = changeOrientation ? indexY : this.orientation;
+		this.state.rectTileset = id === 0 || kind === ELEMENT_MAP_KIND.AUTOTILE ? rectTileset?.clone() : undefined;
 		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
 		if (changeOrientation) {
 			this.orientation = (indexY % 4) as SIM_ORIENTATION;

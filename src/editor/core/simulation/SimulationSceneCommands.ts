@@ -24,6 +24,7 @@ import { MapObjectCommandType } from '../../models';
 import { DynamicValue } from '../DynamicValue';
 import { Position } from '../Position';
 import { Project } from '../Project';
+import { Rectangle } from '../Rectangle';
 import { OPERATORS_NUMBERS } from './GameStateSimulation';
 import { SimulationCollisions } from './SimulationCollisions';
 import { CommandBase, CommandState, extraSimulationCommandFactories } from './SimulationCommands';
@@ -128,6 +129,7 @@ type SubMove =
 			pictureID: DynamicValue;
 			indexX: number | DynamicValue;
 			indexY: number | DynamicValue;
+			rectangle: Rectangle;
 			changeOrientation: boolean;
 	  }
 	| { kind: SUB_MOVE_KIND.CHANGE_SPEED; value: DynamicValue }
@@ -319,7 +321,8 @@ class CommandMoveObject extends CommandBase {
 				iterator.i++;
 				const indexX = command[iterator.i++] as number;
 				const indexY = command[iterator.i++] as number;
-				iterator.i += 2;
+				const width = command[iterator.i++] as number;
+				const height = command[iterator.i++] as number;
 				let dynamicIndexX: DynamicValue | undefined;
 				let dynamicIndexY: DynamicValue | undefined;
 				if (command[iterator.i] === 'indices') {
@@ -337,6 +340,7 @@ class CommandMoveObject extends CommandBase {
 					pictureID,
 					indexX: dynamicIndexX ?? indexX,
 					indexY: dynamicIndexY ?? indexY,
+					rectangle: new Rectangle(indexX, indexY, width, height),
 					changeOrientation: !dontChangeOrientation,
 				});
 			} else if (kind === COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS) {
@@ -651,6 +655,7 @@ class CommandMoveObject extends CommandBase {
 					move.indexX instanceof DynamicValue ? ctx.game.resolveNumber(move.indexX) : move.indexX,
 					move.indexY instanceof DynamicValue ? ctx.game.resolveNumber(move.indexY) : move.indexY,
 					move.changeOrientation,
+					move.rectangle,
 				);
 				return true;
 			case SUB_MOVE_KIND.CHANGE_SPEED: {
@@ -1225,6 +1230,7 @@ class CommandChangeState extends CommandBase {
 			state.graphicsIndexX,
 			state.graphicsIndexY,
 			!this.dontChangeOrientation,
+			state.rectTileset,
 		);
 		return 1;
 	}
