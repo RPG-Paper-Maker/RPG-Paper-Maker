@@ -8,9 +8,6 @@ on:
                 required: true
                 type: string
 
-env:
-    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
     build-mac:
         runs-on: macos-latest
@@ -99,7 +96,7 @@ jobs:
                   fi
 
             - name: Upload artifact for Steam deploy
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: mac-build
                   path: RPG.Paper.Maker.Mac.zip
@@ -176,7 +173,7 @@ jobs:
                   fi
 
             - name: Upload artifact for Steam deploy
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: win-build
                   path: RPG.Paper.Maker.Windows.zip
@@ -253,7 +250,7 @@ jobs:
                   fi
 
             - name: Upload artifact for Steam deploy
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: linux-build
                   path: RPG.Paper.Maker.Linux.zip
@@ -267,19 +264,19 @@ jobs:
             - uses: actions/checkout@v5
 
             - name: Download Mac build
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: mac-build
                   path: artifacts/
 
             - name: Download Windows build
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: win-build
                   path: artifacts/
 
             - name: Download Linux build
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v8
               with:
                   name: linux-build
                   path: artifacts/
