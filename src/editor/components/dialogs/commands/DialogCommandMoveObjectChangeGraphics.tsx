@@ -214,10 +214,11 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 			list.push(graphicOptions.selectionRectangle?.width ?? 1);
 			list.push(graphicOptions.selectionRectangle?.height ?? 1);
 		}
-		const isCharacterSprite =
+		const hasPictureIndices =
 			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
-			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
-		if (isCharacterSprite && (isIndexX || isIndexY)) {
+			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE ||
+			graphicOptions.graphicsKind === ELEMENT_MAP_KIND.FLOOR;
+		if (hasPictureIndices && (isIndexX || isIndexY)) {
 			list.push('indices');
 			list.push(Utils.boolToNum(isIndexX));
 			if (isIndexX) {
@@ -265,7 +266,8 @@ function DialogCommandMoveObjectChangeGraphics({ setIsOpen, model, isNew, onAcce
 					{t('dont.change.orientation')}
 				</Checkbox>
 				{(graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
-					graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE) && (
+					graphicOptions.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE ||
+					graphicOptions.graphicsKind === ELEMENT_MAP_KIND.FLOOR) && (
 					<Flex column spaced>
 						<Flex spaced centerV>
 							<Checkbox isChecked={isIndexX} onChange={setIsIndexX}>

@@ -309,6 +309,9 @@ class CommandMoveObject extends CommandBase {
 					case 3:
 						graphicsKind = ELEMENT_MAP_KIND.OBJECT3D;
 						break;
+					case 4:
+						graphicsKind = ELEMENT_MAP_KIND.FLOOR;
+						break;
 					default:
 						break;
 				}
