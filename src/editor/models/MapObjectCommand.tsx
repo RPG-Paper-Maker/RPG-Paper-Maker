@@ -65,14 +65,17 @@ import {
 import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObjectCommand';
 import Flex from '../components/Flex';
 import { Node } from '../core/Node';
+import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Scene } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
+import { CommonReaction } from './CommonReaction';
 import { Localization } from './Localization';
 import { MapObjectCommandMove } from './MapObjectCommandMove';
 import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
 import { MapObjectEvent } from './MapObjectEvent';
+import { MapObjectParameter } from './MapObjectParameter';
 import { Plugin } from './Plugin';
 import { PluginCommand } from './PluginCommand';
 import { TroopMonster } from './TroopMonster';
@@ -2597,12 +2600,22 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringCallACommonReaction(iterator: ITERATOR): string[] {
-		return [
-			Base.getByIDOrFirst(
-				Project.current!.commonEvents.commonReactions,
-				this.command[iterator.i++] as number,
-			).toString() as string,
-		];
+		const reaction = Base.getByIDOrFirst(
+			Project.current!.commonEvents.commonReactions,
+			this.command[iterator.i++] as number,
+		) as CommonReaction;
+		const parameters = reaction.getDefaultParameters();
+		const values: string[] = [];
+		while (iterator.i < this.command.length) {
+			const id = this.command[iterator.i++] as number;
+			const value = DynamicValue.createCommand(this.command, iterator);
+			const parameter = Base.getByID(parameters, id) as MapObjectParameter | null;
+			if (parameter) {
+				parameter.value = value;
+				values.push(parameter.toStringValueOrDefault());
+			}
+		}
+		return [`${reaction.toString()}${values.length > 0 ? ` [${values.join(', ')}]` : ''}`];
 	}
 
 	toStringChangeVariables(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
