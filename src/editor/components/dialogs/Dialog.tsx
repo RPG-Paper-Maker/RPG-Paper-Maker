@@ -240,6 +240,7 @@ function Dialog({
 			dialogRef.current &&
 			Object.values(RESIZING_TYPE).includes(dialogRef.current.style.cursor as RESIZING_TYPE)
 		) {
+			e.preventDefault();
 			setIsResizing(true);
 			setResizingType(dialogRef.current.style.cursor as RESIZING_TYPE);
 			setIsMoved(true);
