@@ -2035,6 +2035,7 @@
 	"warning.project.portal.path": "This project was opened through a restricted sandbox path (Steam/Flatpak document portal), so RPG Paper Maker can only see the selected file and not the rest of the project. Please move your project folder into your \"RPG Paper Maker Games\" folder (in your Documents), then open it from there.",
 	"last.update.changes": "Last update changes:",
 	"latest.video": "Latest video",
+	"latest.short": "Latest Short",
 	"light.source": "Source",
 	"light.kind.point": "Point",
 	"light.kind.spot": "Spot",

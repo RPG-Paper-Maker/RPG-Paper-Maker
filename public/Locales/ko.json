@@ -2024,6 +2024,7 @@
 	"last.save": "마지막 저장",
 	"last.update.changes": "최신 업데이트 내용:",
 	"latest.video": "최신 동영상",
+	"latest.short": "최신 쇼츠",
 	"tooltip.light.source": "조명의 동작을 선택합니다. 점 조명은 모든 방향으로 비추고, 스포트라이트는 원뿔 모양으로 비추며, 방향성 조명은 균일하게 비추고, 반구 조명은 하늘과 지면 색상을 혼합합니다.",
 	"tooltip.light.orientation": "선택하면 점 광원 또는 스포트라이트 광원의 위치가 맵 오브젝트의 각도와 방향을 따라 회전합니다.",
 	"tooltip.light.intensity": "조명의 밝기를 제어합니다. 값이 높을수록 더 강하게 비춥니다.",

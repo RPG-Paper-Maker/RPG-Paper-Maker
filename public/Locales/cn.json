@@ -2024,6 +2024,7 @@
 	"last.save": "最后保存",
 	"last.update.changes": "最新更新内容：",
 	"latest.video": "最新视频",
+	"latest.short": "最新短视频",
 	"tooltip.light.source": "选择灯光行为。点光源向所有方向发光，聚光灯以锥形发光，平行光均匀照亮，半球光混合天空和地面的颜色。",
 	"tooltip.light.orientation": "勾选后，点光源或聚光灯会随地图对象的角度和朝向旋转。",
 	"tooltip.light.intensity": "控制灯光亮度。数值越高，照明越强。",

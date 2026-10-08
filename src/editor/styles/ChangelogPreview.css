@@ -12,9 +12,9 @@
 .changelogPreview {
 	padding-top: 12px;
 	border-top: 1px solid var(--lighter-bg-color);
-	flex: 1 1 auto;
+	flex: 1 1 0;
 	height: 0;
-	min-height: 100px;
+	min-height: 0;
 	overflow-y: auto;
 	min-width: 220px;
 }
@@ -58,10 +58,23 @@
 	color: var(--grey-light-color);
 }
 
-.youtubePreview {
+.youtubePreviews {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+	max-width: calc(51.5vh + 10px);
+	flex-shrink: 0;
 	padding-top: 12px;
 	border-top: 1px solid var(--lighter-bg-color);
-	min-width: 220px;
+}
+
+.youtubePreview {
+	flex: 3.16 1 0;
+	min-width: 0;
+}
+
+.youtubeShortPreview {
+	flex: 1 1 0;
 }
 
 .youtubePreviewTitle {
@@ -72,17 +85,49 @@
 	letter-spacing: 0.05em;
 }
 
+.youtubeShortTitle {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	margin-top: 5px;
+	font-size: 11px;
+	line-height: 1.3;
+	color: var(--grey-light-color);
+}
+
 .youtubePreviewFrame {
 	width: 100%;
-	aspect-ratio: 16 / 9;
+	height: 100%;
+	object-fit: cover;
 	border: none;
 	border-radius: 4px;
+}
+
+.youtubeShortFrame {
+	position: absolute;
+	inset: 0;
+}
+
+.youtubeShortPreview .youtubeShortFrame {
+	max-height: none;
+}
+
+.youtubeShortPreview .youtubePreviewThumbnail {
+	aspect-ratio: 9 / 16;
+	background: var(--lighter-bg-color);
 }
 
 .youtubePreviewThumbnail {
 	cursor: pointer;
 	position: relative;
 	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	padding: 0;
+	border: 0;
+	background: none;
 	border-radius: 4px;
 	overflow: hidden;
 }
@@ -96,43 +141,22 @@
 	opacity: 0.75;
 }
 
-.youtubePlayIcon {
+.youtubePreviewThumbnail .youtubePlayIcon {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%) scale(1);
-	font-size: 48px;
+	width: 48px;
+	height: 48px;
 	color: rgba(255, 255, 255, 0.85);
 	pointer-events: none;
-	transition: transform 0.2s ease, color 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		color 0.2s ease;
 	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 }
 
 .youtubePreviewThumbnail:hover .youtubePlayIcon {
 	transform: translate(-50%, -50%) scale(1.15);
 	color: #fff;
-}
-
-@media (max-height: 950px) {
-	.youtubePreviewThumbnail {
-		width: fit-content;
-		max-width: 100%;
-		margin: 0 auto;
-	}
-
-	.youtubePreviewFrame {
-		width: auto;
-		max-width: 100%;
-		max-height: 22vh;
-	}
-}
-
-@media (max-height: 800px) {
-	.youtubePreviewFrame {
-		max-height: 130px;
-	}
-
-	.changelogPreview {
-		min-height: 70px;
-	}
 }

@@ -2023,6 +2023,7 @@
 	"last.save": "ultimo salvataggio",
 	"last.update.changes": "Ultime modifiche:",
 	"latest.video": "Ultimo video",
+	"latest.short": "Ultimo Short",
 	"tooltip.light.source": "Seleziona il comportamento della luce. Le luci puntiformi illuminano in ogni direzione, i faretti illuminano in un cono, le luci direzionali illuminano uniformemente e le luci emisferiche mescolano i colori del cielo e del terreno.",
 	"tooltip.light.orientation": "Se selezionata, la sorgente della luce puntiforme o del faretto ruota con l'angolo e l'orientamento dell'oggetto della mappa.",
 	"tooltip.light.intensity": "Controlla la luminosità della luce. Valori più alti producono un'illuminazione più intensa.",

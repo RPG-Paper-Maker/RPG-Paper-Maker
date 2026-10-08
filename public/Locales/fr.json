@@ -2023,6 +2023,7 @@
 	"warning.project.portal.path": "Ce projet a été ouvert via un chemin restreint en bac à sable (portail de documents Steam/Flatpak), donc RPG Paper Maker ne peut voir que le fichier sélectionné et non le reste du projet. Veuillez déplacer le dossier de votre projet dans votre dossier « RPG Paper Maker Games » (dans vos Documents), puis l'ouvrir depuis cet emplacement.",
 	"last.update.changes": "Dernières modifications :",
 	"latest.video": "Dernière vidéo",
+	"latest.short": "Dernier Short",
 	"light.intensity.animation": "Animation",
 	"light.offset.x": "Décalage X (pixels)",
 	"light.offset.y": "Décalage Y (pixels)",

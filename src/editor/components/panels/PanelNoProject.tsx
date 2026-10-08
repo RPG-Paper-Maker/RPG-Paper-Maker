@@ -26,6 +26,20 @@ import Button from '../Button';
 import Flex from '../Flex';
 import ProjectPreview from '../ProjectPreview';
 
+type YoutubeVideos = {
+	video?: string;
+	short?: string;
+};
+
+function getYoutubeVideoId(url: unknown): string | null {
+	if (typeof url !== 'string') return null;
+	const value = url.trim();
+	return (
+		value.match(/(?:v=|youtu\.be\/|shorts\/)([A-Za-z0-9_-]{11})/)?.[1] ??
+		(/^[A-Za-z0-9_-]{11}$/.test(value) ? value : null)
+	);
+}
+
 function escInline(s: string): string {
 	return s
 		.replace(/&/g, '&amp;')
@@ -86,6 +100,9 @@ function PanelNoProject() {
 
 	const [changelogHtml, setChangelogHtml] = useState<string | null>(null);
 	const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
+	const [youtubeShortId, setYoutubeShortId] = useState<string | null>(null);
+	const [youtubeShortTitle, setYoutubeShortTitle] = useState<string | null>(null);
+	const [youtubeShortThumbnailUrl, setYoutubeShortThumbnailUrl] = useState<string | null>(null);
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
@@ -128,28 +145,52 @@ function PanelNoProject() {
 		}
 	};
 
-	const fetchYoutubeVideo = async () => {
+	const fetchYoutubeVideos = async () => {
 		try {
 			const response = await fetch(
-				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/develop/youtube.txt',
+				'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/develop/youtube.json',
 				{ cache: 'no-store' },
 			);
-			if (response.ok) {
-				const text = (await response.text()).trim();
-				const match = text.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-				const id = match ? match[1] : text;
-				if (id) setYoutubeVideoId(id);
+			if (!response.ok) return;
+			const videos = (await response.json()) as YoutubeVideos;
+			const videoId = getYoutubeVideoId(videos.video);
+			const shortId = getYoutubeVideoId(videos.short);
+			if (videoId) setYoutubeVideoId(videoId);
+			if (shortId) {
+				setYoutubeShortId(shortId);
+				setYoutubeShortThumbnailUrl(`https://i.ytimg.com/vi/${shortId}/frame0.jpg`);
 			}
 		} catch {
-			// No internet: show nothing
+			// No internet: leave the previews hidden
 		}
 	};
 
 	useEffect(() => {
 		Manager.GL.mainContext.remove();
 		void fetchChangelog();
-		void fetchYoutubeVideo();
+		void fetchYoutubeVideos();
 	}, []);
+
+	useEffect(() => {
+		if (!youtubeShortId) return;
+		setYoutubeShortTitle(null);
+		const controller = new AbortController();
+		const fetchYoutubeShortTitle = async () => {
+			try {
+				const url = `https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/shorts/${youtubeShortId}`)}&format=json`;
+				const response = await fetch(url, { signal: controller.signal });
+				if (!response.ok) return;
+				const data = (await response.json()) as { title?: unknown };
+				if (typeof data.title === 'string' && data.title.trim()) {
+					setYoutubeShortTitle(data.title.trim());
+				}
+			} catch {
+				// No internet: leave the title hidden
+			}
+		};
+		void fetchYoutubeShortTitle();
+		return () => controller.abort();
+	}, [youtubeShortId]);
 
 	return (
 		<Flex column one className='paddingLarge'>
@@ -210,22 +251,61 @@ function PanelNoProject() {
 							/>
 						</div>
 					)}
-					{youtubeVideoId !== null && (
-						<div className='youtubePreview'>
-							<div className='youtubePreviewTitle'>{t('latest.video')}</div>
-							<div
-								className='youtubePreviewThumbnail'
-								onClick={async () =>
-									await openWebsite(`https://www.youtube.com/watch?v=${youtubeVideoId}`)
-								}
-							>
-								<img
-									className='youtubePreviewFrame'
-									src={`https://img.youtube.com/vi/${youtubeVideoId}/maxresdefault.jpg`}
-									alt='Latest video'
-								/>
-								<FaRegPlayCircle className='youtubePlayIcon' />
-							</div>
+					{(youtubeVideoId !== null || youtubeShortId !== null) && (
+						<div className='youtubePreviews'>
+							{youtubeVideoId !== null && (
+								<div className='youtubePreview'>
+									<div className='youtubePreviewTitle'>{t('latest.video')}</div>
+									<button
+										type='button'
+										className='youtubePreviewThumbnail'
+										aria-label={t('latest.video')}
+										onClick={async () =>
+											await openWebsite(`https://www.youtube.com/watch?v=${youtubeVideoId}`)
+										}
+									>
+										<img
+											className='youtubePreviewFrame'
+											src={`https://img.youtube.com/vi/${youtubeVideoId}/maxresdefault.jpg`}
+											alt=''
+										/>
+										<FaRegPlayCircle className='youtubePlayIcon' />
+									</button>
+								</div>
+							)}
+							{youtubeShortId !== null && (
+								<div className='youtubePreview youtubeShortPreview'>
+									<div className='youtubePreviewTitle'>{t('latest.short')}</div>
+									<button
+										type='button'
+										className='youtubePreviewThumbnail'
+										aria-label={t('latest.short')}
+										onClick={async () =>
+											await openWebsite(`https://www.youtube.com/shorts/${youtubeShortId}`)
+										}
+									>
+										{youtubeShortThumbnailUrl && (
+											<img
+												className='youtubePreviewFrame youtubeShortFrame'
+												src={youtubeShortThumbnailUrl}
+												alt=''
+												onError={() => {
+													const fallback = `https://i.ytimg.com/vi/${youtubeShortId}/hqdefault.jpg`;
+													setYoutubeShortThumbnailUrl(
+														youtubeShortThumbnailUrl === fallback ? null : fallback,
+													);
+												}}
+											/>
+										)}
+										<FaRegPlayCircle className='youtubePlayIcon' />
+									</button>
+									{youtubeShortTitle && (
+										<div className='youtubeShortTitle' title={youtubeShortTitle}>
+											{youtubeShortTitle}
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 					)}
 				</Flex>
