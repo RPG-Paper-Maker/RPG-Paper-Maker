@@ -37,6 +37,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
 	const [newValue] = useStateDynamicValue();
 	const [trigger, setTrigger] = useStateBool();
+	const [isInitialized, setIsInitialized] = useState(false);
 	const isInitializing = useRef(true);
 
 	const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
@@ -101,6 +102,7 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.EQUALS);
 			newValue.updateToDefaultNumber(0, true);
 		}
+		setIsInitialized(true);
 		setTrigger((v) => !v);
 	};
 
@@ -165,11 +167,13 @@ function DialogCommandChangeProperty({ commandKind, setIsOpen, list, onAccept, o
 				<Groupbox title={t('selection')}>
 					<Flex spaced centerV>
 						<div>{t('property.id')}:</div>
-						<DynamicValueSelector
-							value={propertyID}
-							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-							databaseOptions={objectProperties}
-						/>
+						{isInitialized && (
+							<DynamicValueSelector
+								value={propertyID}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+								databaseOptions={objectProperties}
+							/>
+						)}
 					</Flex>
 				</Groupbox>
 				<PanelOperation selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
