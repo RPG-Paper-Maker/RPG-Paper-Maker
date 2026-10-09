@@ -29,11 +29,27 @@ const appIconPath =
 const getArgValue = (name) => {
 	const prefix = `${name}=`;
 	const arg = process.argv.find((a) => a.startsWith(prefix));
-	return arg ? arg.slice(prefix.length) : null;
+	if (arg) {
+		return arg.slice(prefix.length);
+	}
+	const index = process.argv.indexOf(name);
+	return index === -1 ? null : (process.argv[index + 1] ?? null);
 };
 const isGameTestProcess = process.argv.includes('--rpm-game-test');
-const gameTestLocation = getArgValue('--rpm-game-project');
+const projectLocationArgument = getArgValue('--rpm-game-project');
 const gameTestBattleTest = getArgValue('--rpm-game-battle') === 'true';
+let initialEditorProjectPath = null;
+
+if (!isGameTestProcess) {
+	const projectArgument =
+		projectLocationArgument ??
+		process.argv.find((arg) => !arg.startsWith('--') && path.extname(arg).toLowerCase() === '.rpmg');
+
+	if (projectArgument) {
+		initialEditorProjectPath = path.resolve(projectArgument);
+	}
+}
+
 const isMac = process.platform === 'darwin';
 
 const createSplash = (title) => {
@@ -752,7 +768,7 @@ app.whenReady().then(async () => {
 				game.webContents.openDevTools({ mode: 'undocked' });
 			}
 		});
-		runRPMGame(gameTestLocation, gameTestBattleTest).catch(console.error);
+		runRPMGame(projectLocationArgument, gameTestBattleTest).catch(console.error);
 	} else if (app.isPackaged) {
 		globalShortcut.register('CommandOrControl+Alt+Shift+I', () => {
 			if (updater && !updater.isDestroyed()) {
