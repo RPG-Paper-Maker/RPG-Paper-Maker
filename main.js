@@ -36,13 +36,13 @@ const getArgValue = (name) => {
 	return index === -1 ? null : (process.argv[index + 1] ?? null);
 };
 const isGameTestProcess = process.argv.includes('--rpm-game-test');
-const projectLocationArgument = getArgValue('--rpm-game-project');
+const projectLocation = getArgValue('--rpm-game-project');
 const gameTestBattleTest = getArgValue('--rpm-game-battle') === 'true';
 let initialEditorProjectPath = null;
 
 if (!isGameTestProcess) {
 	const projectArgument =
-		projectLocationArgument ??
+		projectLocation ??
 		process.argv.find((arg) => !arg.startsWith('--') && path.extname(arg).toLowerCase() === '.rpmg');
 
 	if (projectArgument) {
@@ -774,7 +774,7 @@ app.whenReady().then(async () => {
 				game.webContents.openDevTools({ mode: 'undocked' });
 			}
 		});
-		runRPMGame(projectLocationArgument, gameTestBattleTest).catch(console.error);
+		runRPMGame(projectLocation, gameTestBattleTest).catch(console.error);
 	} else if (app.isPackaged) {
 		globalShortcut.register('CommandOrControl+Alt+Shift+I', () => {
 			if (updater && !updater.isDestroyed()) {
