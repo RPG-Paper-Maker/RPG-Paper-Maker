@@ -184,12 +184,16 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 		ctx.imageSmoothingQuality = 'high';
 		ctx.drawImage(
 			image,
-			selectionRectangle
-				? srcRect.x * Constants.BASE_SQUARE_SIZE
-				: rect.x * (isTileset ? Project.SQUARE_SIZE : srcWidth),
-			selectionRectangle
-				? srcRect.y * Constants.BASE_SQUARE_SIZE
-				: rect.y * (isTileset ? Project.SQUARE_SIZE : srcHeight),
+			isTileset
+				? rect.x * Project.SQUARE_SIZE
+				: selectionRectangle
+					? srcRect.x * Constants.BASE_SQUARE_SIZE
+					: rect.x * srcWidth,
+			isTileset
+				? rect.y * Project.SQUARE_SIZE
+				: selectionRectangle
+					? srcRect.y * Constants.BASE_SQUARE_SIZE
+					: rect.y * srcHeight,
 			srcWidth,
 			srcHeight,
 			0,
