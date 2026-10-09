@@ -73,6 +73,7 @@ function MapEditor() {
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	const mapStartupReactionsOpen = useSelector((state: RootState) => state.triggers.mapStartupReactionsOpen);
+	const systemsCommandPreviewOpen = useSelector((state: RootState) => state.triggers.systemsCommandPreviewOpen);
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 	const livePreview = useSelector((state: RootState) => state.settings.livePreview);
 	useSelector((state: RootState) => state.triggers.splitting);
@@ -572,7 +573,8 @@ function MapEditor() {
 		}
 	}, []);
 
-	const isSplitLayout = (isOpenMapObject || mapStartupReactionsOpen) && simulation === null;
+	const isSplitLayout =
+		(isOpenMapObject || mapStartupReactionsOpen || systemsCommandPreviewOpen) && simulation === null;
 	const isBottomSplitLayout = isSplitLayout && window.innerWidth <= 1000;
 
 	useEffect(() => {
@@ -609,7 +611,7 @@ function MapEditor() {
 		const measure = () => {
 			const container = canvas.parentElement;
 			const dialog = document.querySelector(
-				'.dialogObjectEditor, .dialogMapPropertiesStartup',
+				'.dialogObjectEditor, .dialogMapPropertiesStartup, .dialogSystemsCommandPreview',
 			) as HTMLElement | null;
 			let horizontalReserved = 0;
 			let verticalReserved = 0;

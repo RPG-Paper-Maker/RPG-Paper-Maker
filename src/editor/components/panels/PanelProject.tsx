@@ -73,6 +73,7 @@ function PanelProject() {
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 	const mapObjectDialogOpen = useSelector((state: RootState) => state.triggers.mapObjectDialogOpen);
 	const mapStartupReactionsOpen = useSelector((state: RootState) => state.triggers.mapStartupReactionsOpen);
+	const systemsCommandPreviewOpen = useSelector((state: RootState) => state.triggers.systemsCommandPreviewOpen);
 
 	const getDefaultTabTitles = () =>
 		Project.current!.treeMaps.tabs.map((id) =>
@@ -136,10 +137,7 @@ function PanelProject() {
 		Manager.GL.dialogContext.initialize(1);
 		const observer = new ResizeObserver(() => {
 			requestAnimationFrame(() => {
-				for (const GL of [
-					Manager.GL.mainContext,
-					Manager.GL.dialogContext,
-				]) {
+				for (const GL of [Manager.GL.mainContext, Manager.GL.dialogContext]) {
 					GL.renderer.setPixelRatio(Utils.getPixelRatio());
 					GL.renderer.setSize(window.innerWidth, window.innerHeight);
 				}
@@ -169,14 +167,32 @@ function PanelProject() {
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));
 			dispatch(setCurrentMountainID(Project.current!.settings.mapEditorCurrentMountainID));
-			dispatch(setCurrentMountainWidthSquaresBot(Project.current!.settings.mapEditorCurrentMountainWidthSquaresBot));
-			dispatch(setCurrentMountainWidthPixelsBot(Project.current!.settings.mapEditorCurrentMountainWidthPixelsBot));
-			dispatch(setCurrentMountainWidthSquaresTop(Project.current!.settings.mapEditorCurrentMountainWidthSquaresTop));
-			dispatch(setCurrentMountainWidthPixelsTop(Project.current!.settings.mapEditorCurrentMountainWidthPixelsTop));
-			dispatch(setCurrentMountainWidthSquaresLeft(Project.current!.settings.mapEditorCurrentMountainWidthSquaresLeft));
-			dispatch(setCurrentMountainWidthPixelsLeft(Project.current!.settings.mapEditorCurrentMountainWidthPixelsLeft));
-			dispatch(setCurrentMountainWidthSquaresRight(Project.current!.settings.mapEditorCurrentMountainWidthSquaresRight));
-			dispatch(setCurrentMountainWidthPixelsRight(Project.current!.settings.mapEditorCurrentMountainWidthPixelsRight));
+			dispatch(
+				setCurrentMountainWidthSquaresBot(Project.current!.settings.mapEditorCurrentMountainWidthSquaresBot),
+			);
+			dispatch(
+				setCurrentMountainWidthPixelsBot(Project.current!.settings.mapEditorCurrentMountainWidthPixelsBot),
+			);
+			dispatch(
+				setCurrentMountainWidthSquaresTop(Project.current!.settings.mapEditorCurrentMountainWidthSquaresTop),
+			);
+			dispatch(
+				setCurrentMountainWidthPixelsTop(Project.current!.settings.mapEditorCurrentMountainWidthPixelsTop),
+			);
+			dispatch(
+				setCurrentMountainWidthSquaresLeft(Project.current!.settings.mapEditorCurrentMountainWidthSquaresLeft),
+			);
+			dispatch(
+				setCurrentMountainWidthPixelsLeft(Project.current!.settings.mapEditorCurrentMountainWidthPixelsLeft),
+			);
+			dispatch(
+				setCurrentMountainWidthSquaresRight(
+					Project.current!.settings.mapEditorCurrentMountainWidthSquaresRight,
+				),
+			);
+			dispatch(
+				setCurrentMountainWidthPixelsRight(Project.current!.settings.mapEditorCurrentMountainWidthPixelsRight),
+			);
 			dispatch(setCurrentMountainAllSides(Project.current!.settings.mapEditorCurrentMountainAllSides));
 			dispatch(setCurrentMountainHeightSquares(Project.current!.settings.mapEditorCurrentMountainHeightSquares));
 			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
@@ -220,7 +236,7 @@ function PanelProject() {
 				defaultLeftSize={266}
 				className='flex flexOne'
 				mobileHideFirst={projectMenuIndex === 2}
-				hideFirst={mapObjectDialogOpen || mapStartupReactionsOpen}
+				hideFirst={mapObjectDialogOpen || mapStartupReactionsOpen || systemsCommandPreviewOpen}
 			>
 				<Flex column one className='bgDarker scrollable'>
 					{!openLoading && (

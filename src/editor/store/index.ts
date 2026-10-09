@@ -65,6 +65,7 @@ import { setEngineFontSize, setLivePreview, setTheme, SettingsReducer } from './
 import {
 	setMapObjectDialogOpen,
 	setMapStartupReactionsOpen,
+	setSystemsCommandPreviewOpen,
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadPageUpdate,
@@ -150,6 +151,7 @@ export {
 	setMapEditorLoaded,
 	setMapObjectDialogOpen,
 	setMapStartupReactionsOpen,
+	setSystemsCommandPreviewOpen,
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadPageUpdate,

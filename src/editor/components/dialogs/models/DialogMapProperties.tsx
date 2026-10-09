@@ -436,12 +436,16 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		setSimulation(null);
 	};
 
-	const stopPreview = () => {
+	const cancelPendingPreview = () => {
 		previewRequestRef.current++;
 		if (previewTimeoutRef.current !== null) {
 			clearTimeout(previewTimeoutRef.current);
 			previewTimeoutRef.current = null;
 		}
+	};
+
+	const stopPreview = () => {
+		cancelPendingPreview();
 		previewRef.current?.stop();
 		previewRef.current = null;
 		setPreview(null);
@@ -467,7 +471,6 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 			simulationRef.current
 		)
 			return;
-		stopPreview();
 		const hud = new SimulationHudBridge();
 		const session = SimulationSession.start({
 			map,
@@ -487,14 +490,20 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const handleSelectCommand = (info: PlayCommandInfo | null) => {
-		stopPreview();
-		if (livePreview && info) void startCommandPreview(info);
+		cancelPendingPreview();
+		if (livePreview && info) {
+			void startCommandPreview(info);
+		} else {
+			stopPreview();
+		}
 	};
 
 	const handleLivePreviewCommand = (info: PlayCommandInfo, command: Model.MapObjectCommand | null) => {
-		stopPreview();
+		cancelPendingPreview();
 		if (livePreview && command) {
 			previewTimeoutRef.current = setTimeout(() => void startCommandPreview(info, command), 120);
+		} else {
+			stopPreview();
 		}
 	};
 
