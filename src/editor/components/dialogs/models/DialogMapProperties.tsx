@@ -9,20 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Data, Model, Scene } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
+import { EngineSettings } from '../../../data';
 import type { SimulationHudBridge, SimulationSession } from '../../../core/simulation';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { RandomBattle, SELECTION_SKY_TYPE } from '../../../models';
-import { setMapStartupReactionsOpen, setNeedsReloadMap } from '../../../store';
+import { RootState, setMapStartupReactionsOpen, setNeedsReloadMap } from '../../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
@@ -67,8 +68,12 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	const [isStartupReactionsTab, setIsStartupReactionsTab] = useState(false);
 	const [playCommandRequest, setPlayCommandRequest] = useState<PlayCommandInfo | null>(null);
 	const [simulation, setSimulation] = useState<{ session: SimulationSession; hud: SimulationHudBridge } | null>(null);
+	const [preview, setPreview] = useState<{ session: SimulationSession; hud: SimulationHudBridge } | null>(null);
 	const startupTabRef = useRef(false);
 	const simulationRef = useRef<SimulationSession | null>(null);
+	const previewRef = useRef<SimulationSession | null>(null);
+	const previewTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const previewRequestRef = useRef(0);
 	const [localization, setLocalization] = useState(new Model.Localization());
 	const [id, setID] = useStateNumber();
 	const [tilesetID, setTilesetID] = useStateNumber();
@@ -99,6 +104,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	const [randomBattleVariance] = useStateDynamicValue();
 
 	const dispatch = useDispatch();
+	const livePreview = useSelector((state: RootState) => state.settings.livePreview);
 	const previewedRef = useRef(false);
 	const readyRef = useRef(false);
 	const previewBoxRafRef = useRef<number | null>(null);
@@ -261,6 +267,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const handleAccept = async () => {
+		stopPreview();
 		simulationRef.current?.stop();
 		simulationRef.current = null;
 		setIsLoading(true);
@@ -315,6 +322,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const handleReject = () => {
+		stopPreview();
 		simulationRef.current?.stop();
 		simulationRef.current = null;
 		getPreviewScene()?.clearPreviewSize();
@@ -331,6 +339,9 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		initialize();
 		return () => {
 			Scene.Map.previewOnly = false;
+			previewRequestRef.current++;
+			if (previewTimeoutRef.current !== null) clearTimeout(previewTimeoutRef.current);
+			previewRef.current?.stop();
 			simulationRef.current?.stop();
 			dispatch(setMapStartupReactionsOpen(false));
 			if (previewBoxRafRef.current !== null) {
@@ -355,10 +366,15 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		}
 	}, [isStartupReactionsTab, simulation]);
 
+	useEffect(() => {
+		if (!livePreview) stopPreview();
+	}, [livePreview]);
+
 	const handleStartupTabChanged = (index: number) => {
 		const selected = index === 1;
 		startupTabRef.current = selected;
 		if (!selected) {
+			stopPreview();
 			simulationRef.current?.stop();
 			simulationRef.current = null;
 			setSimulation(null);
@@ -384,6 +400,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const startSimulation = async (info: PlayCommandInfo) => {
+		stopPreview();
 		const config = await getTestConfig();
 		const { SimulationHudBridge, SimulationSession } = await import('../../../core/simulation');
 		const map = getPreviewScene();
@@ -417,6 +434,68 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		simulationRef.current?.stop();
 		simulationRef.current = null;
 		setSimulation(null);
+	};
+
+	const stopPreview = () => {
+		previewRequestRef.current++;
+		if (previewTimeoutRef.current !== null) {
+			clearTimeout(previewTimeoutRef.current);
+			previewTimeoutRef.current = null;
+		}
+		previewRef.current?.stop();
+		previewRef.current = null;
+		setPreview(null);
+	};
+
+	const startCommandPreview = async (info: PlayCommandInfo, overrideCommand?: Model.MapObjectCommand) => {
+		const request = previewRequestRef.current;
+		const config = await getTestConfig();
+		const map = getPreviewScene();
+		if (
+			request !== previewRequestRef.current ||
+			!startupTabRef.current ||
+			!map ||
+			simulationRef.current ||
+			!EngineSettings.current?.livePreview
+		)
+			return;
+		const { SimulationHudBridge, SimulationSession } = await import('../../../core/simulation');
+		if (
+			request !== previewRequestRef.current ||
+			!startupTabRef.current ||
+			getPreviewScene() !== map ||
+			simulationRef.current
+		)
+			return;
+		stopPreview();
+		const hud = new SimulationHudBridge();
+		const session = SimulationSession.start({
+			map,
+			object: panelMapObjectRef.current!.getEditedObject(),
+			reaction: info.reaction,
+			stateID: info.stateID,
+			targetNode: info.node,
+			config,
+			hud,
+			singleCommand: true,
+			overrideCommand,
+			insertNewCommand: info.isNewCommand,
+		});
+		session.update(0);
+		previewRef.current = session;
+		setPreview({ session, hud });
+	};
+
+	const handleSelectCommand = (info: PlayCommandInfo | null) => {
+		stopPreview();
+		if (livePreview && info) void startCommandPreview(info);
+	};
+
+	const handleLivePreviewCommand = (info: PlayCommandInfo, command: Model.MapObjectCommand | null) => {
+		stopPreview();
+		if (livePreview && command) {
+			previewTimeoutRef.current = setTimeout(() => void startCommandPreview(info, command), 120);
+		}
 	};
 
 	const getMapSettingsContent = () => (
@@ -699,6 +778,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 			object={startupObject}
 			ref={panelMapObjectRef}
 			onPlayCommand={handlePlayCommand}
+			onSelectCommand={handleSelectCommand}
+			onLivePreviewCommand={handleLivePreviewCommand}
 			hideNameID
 			hideStateValues
 			saveOnDestruction
@@ -799,14 +880,15 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 					/>
 				</Suspense>
 			)}
-			{simulation &&
+			{(simulation || preview) &&
 				document.getElementById('canvas-map-editor')?.parentElement &&
 				createPortal(
 					<Suspense fallback={null}>
 						<ObjectCommandTestOverlay
-							session={simulation.session}
-							hud={simulation.hud}
-							onStop={handleStopSimulation}
+							session={(simulation || preview)!.session}
+							hud={(simulation || preview)!.hud}
+							onStop={simulation ? handleStopSimulation : stopPreview}
+							preview={!simulation}
 						/>
 					</Suspense>,
 					document.getElementById('canvas-map-editor')!.parentElement!,
