@@ -557,6 +557,9 @@ const init = async () => {
 		await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
 		const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
 		const args = ['./main.js'];
+		if (initialEditorProjectPath) {
+			args.push(`--rpm-game-project=${initialEditorProjectPath}`);
+		}
 		const child = spawn(electronPath, args, {
 			detached: true,
 			stdio: 'ignore',
@@ -705,6 +708,9 @@ const init = async () => {
 				}
 			})()}`;
 			const args = ['./main.js'];
+			if (initialEditorProjectPath) {
+				args.push(`--rpm-game-project=${initialEditorProjectPath}`);
+			}
 			const child = spawn(electronPath, args, {
 				detached: true,
 				stdio: 'ignore',
