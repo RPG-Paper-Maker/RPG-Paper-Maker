@@ -809,6 +809,36 @@ ipcMain.handle('get-system-information', () => {
 	};
 });
 
+ipcMain.handle('get-startup-project', async (event) => {
+	if (!window || event.sender !== window.webContents || !initialEditorProjectPath) {
+		return null;
+	}
+	const projectPath = initialEditorProjectPath;
+	initialEditorProjectPath = null;
+	try {
+		const stats = await fs.stat(projectPath);
+		let folderPath = projectPath;
+		if (!stats.isDirectory()) {
+			if (!stats.isFile() || path.extname(projectPath).toLowerCase() !== '.rpmg') {
+				throw new Error('Expected a project folder or .rpmg file.');
+			}
+			folderPath = path.dirname(projectPath);
+		}
+		if (!(await fs.stat(path.join(folderPath, 'system.json'))).isFile()) {
+			throw new Error('The project folder does not contain system.json.');
+		}
+		return folderPath;
+	} catch (error) {
+		await dialog.showMessageBox(window, {
+			type: 'error',
+			title: 'Unable to open project',
+			message: `Unable to open project: ${projectPath}`,
+			detail: error.message,
+		});
+		return null;
+	}
+});
+
 ipcMain.handle('open-file-dialog', async (event, options) => {
 	const result = await dialog.showOpenDialog(window, {
 		filters: options.extensions.map((extension) => {
