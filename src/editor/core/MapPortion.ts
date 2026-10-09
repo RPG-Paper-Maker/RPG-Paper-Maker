@@ -1550,23 +1550,46 @@ class MapPortion {
 					geometry = new CustomGeometry();
 					if (object3D && material) {
 						if (this.map.selectedElement === object3D) {
-							const selectedGeometryPosition =
-								object3D instanceof MapElement.Object3DBox
-									? new Position(
-											0,
-											-MapElement.Object3DBox.COEF,
-											0,
-											0,
-											0,
-											object3D.data.isTopLeft ? 0 : -1,
-											object3D.data.isTopLeft ? 0 : -1,
+							const isBox = object3D instanceof MapElement.Object3DBox;
+							const boxPosition =
+								isBox && this.map.transformControls.dragging
+									? Position.createFromVector3(
+											this.map.selectedMesh.position,
+											this.map.selectedMesh.rotation,
+											this.map.selectedMesh.scale,
 										)
-									: new Position(0, 0, 0, 0, 0, 0, 0);
-							object3D.updateGeometry(geometry, selectedGeometryPosition, 0);
-							const selectedLocalPosition = this.map.selectedElement.getLocalPosition(position);
-							if (object3D instanceof MapElement.Object3DBox && object3D.data.isTopLeft) {
-								selectedLocalPosition.x += 0.5 - MapElement.Object3DBox.COEF;
-								selectedLocalPosition.z += 0.5 - MapElement.Object3DBox.COEF;
+									: position;
+							object3D.updateGeometry(
+								geometry,
+								isBox ? boxPosition : new Position(0, 0, 0, 0, 0, 0, 0),
+								0,
+							);
+							const selectedLocalPosition = isBox
+								? boxPosition.toVector3()
+								: object3D.getLocalPosition(position);
+							if (isBox) {
+								const inverse = new THREE.Matrix4()
+									.compose(
+										this.map.transformControls.dragging
+											? this.map.selectedMesh.position
+											: selectedLocalPosition,
+										new THREE.Quaternion().setFromEuler(
+											this.map.transformControls.dragging
+												? this.map.selectedMesh.rotation
+												: boxPosition.toRotationEuler(),
+										),
+										this.map.transformControls.dragging
+											? this.map.selectedMesh.scale
+											: boxPosition.toScaleVector(),
+									)
+									.invert();
+								const vertex = new THREE.Vector3();
+								for (let vi = 0; vi < geometry._vertices.length; vi += 3) {
+									vertex
+										.fromArray(geometry._vertices, vi)
+										.applyMatrix4(inverse)
+										.toArray(geometry._vertices, vi);
+								}
 							}
 							// For custom OBJ models, center geometry at origin for correct
 							// rotation pivot, and track the offset for the transform system

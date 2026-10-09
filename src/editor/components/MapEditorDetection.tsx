@@ -10,11 +10,14 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
+import { BiSolidPencil } from 'react-icons/bi';
+import { LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { TbHandMove } from 'react-icons/tb';
 import PixelIcon from '../../assets/icons/pixel.svg?react';
 import SquareIcon from '../../assets/icons/square.svg?react';
-import { Constants, MOBILE_ACTION } from '../common';
+import { ACTION_KIND, Constants, MOBILE_ACTION } from '../common';
 import { Project } from '../core/Project';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
@@ -50,9 +53,11 @@ function MapEditorDetection({
 	newBoxHeightPixels,
 	boxes,
 }: Props) {
+	const { t } = useTranslation();
 	const [firstLoading, setFirstLoading] = useState(false);
 	const [elementPositionIndex, setElementPositionIndex] = useState(0);
 	const [mobileIndex, setMobileIndex] = useState(MOBILE_ACTION.PLUS);
+	const [transformMode, setTransformMode] = useState<ACTION_KIND | null>(null);
 
 	const refCanvas = useRef<HTMLDivElement>(null);
 	const previousMobileAction = useRef(Scene.Map.currentSelectedMobileAction);
@@ -116,6 +121,7 @@ function MapEditorDetection({
 		if (Scene.Map.currentpositionSelector) {
 			setElementPositionIndex(0);
 			Scene.Map.currentpositionSelector.detectionSquare = true;
+			Scene.Map.currentpositionSelector.setDetectionTransformMode(transformMode);
 		}
 	};
 
@@ -123,6 +129,7 @@ function MapEditorDetection({
 		if (Scene.Map.currentpositionSelector) {
 			setElementPositionIndex(1);
 			Scene.Map.currentpositionSelector.detectionSquare = false;
+			Scene.Map.currentpositionSelector.setDetectionTransformMode(transformMode);
 		}
 	};
 
@@ -140,6 +147,11 @@ function MapEditorDetection({
 
 	const updateMobileIndex = (index: number) => {
 		setMobileIndex(index);
+	};
+
+	const handleTransformMode = (mode: ACTION_KIND | null) => {
+		setTransformMode(mode);
+		Scene.Map.currentpositionSelector?.setDetectionTransformMode(mode);
 	};
 
 	useEffect(() => {
@@ -207,8 +219,12 @@ function MapEditorDetection({
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			<Flex column fillHeight>
+			<Flex column fillHeight spaced>
+				<div>
+					{transformMode === null ? t('detection.description') : `${t('select')} ${t('box').toLowerCase()}`}
+				</div>
 				<Flex>
+					<Flex one />
 					<Menu
 						horizontal
 						isActivable
@@ -218,8 +234,29 @@ function MapEditorDetection({
 						<MenuItem icon={<SquareIcon />} onClick={handleSquare} />
 						<MenuItem icon={<PixelIcon />} onClick={handlePixel} />
 					</Menu>
-					<Flex one />
-					{Constants.IS_MOBILE && (
+					<Menu horizontal isActivable activeIndex={transformMode === null ? 0 : transformMode + 1}>
+						<MenuItem
+							icon={<BiSolidPencil />}
+							tooltip={t('pencil')}
+							onClick={() => handleTransformMode(null)}
+						/>
+						<MenuItem
+							icon={<LuMove3D />}
+							tooltip={t('translation')}
+							onClick={() => handleTransformMode(ACTION_KIND.TRANSLATE)}
+						/>
+						<MenuItem
+							icon={<LuRotate3D />}
+							tooltip={t('rotation')}
+							onClick={() => handleTransformMode(ACTION_KIND.ROTATE)}
+						/>
+						<MenuItem
+							icon={<LuScale3D />}
+							tooltip={t('scaling')}
+							onClick={() => handleTransformMode(ACTION_KIND.SCALE)}
+						/>
+					</Menu>
+					{Constants.IS_MOBILE && transformMode === null && (
 						<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={updateMobileIndex}>
 							<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus} />
 							<MenuItem icon={<AiOutlineMinusSquare />} onClick={handleMobileMinus} />

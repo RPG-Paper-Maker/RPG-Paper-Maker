@@ -93,6 +93,13 @@ class Map extends Base {
 	public detectionBoxesMesh?: THREE.Mesh;
 	public detectionCurrentData?: Model.Object3D;
 	public detectionSquare = true;
+	public detectionTransformMode: ACTION_KIND | null = null;
+	public detectionTransformControls: TransformControls | null = null;
+	public detectionSelectedKey: string | null = null;
+	public detectionTransformObject: THREE.Object3D | null = null;
+	public detectionTransformStartPosition: THREE.Vector3 | null = null;
+	public detectionHoverMesh: THREE.Mesh | null = null;
+	public detectionHoveredKey: string | null = null;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
@@ -376,6 +383,19 @@ class Map extends Base {
 			this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.selectedMesh.receiveShadow = true;
 			this.selectedMesh.castShadow = true;
+			this.transformControls.addEventListener('objectChange', () => {
+				if (
+					!this.transformControls.dragging ||
+					Project.current?.settings.mapEditorCurrentActionIndex !== ACTION_KIND.SCALE ||
+					!(this.selectedElement instanceof MapElement.Object3DBox) ||
+					!this.selectedPosition
+				) {
+					return;
+				}
+				this.isDraggingTransforming = true;
+				this.updateMoveTransformDragging();
+				this.getMapPortionByPosition(this.selectedPosition)?.updateObjects3DGeometry();
+			});
 			this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
 			this.hoveredMesh.receiveShadow = true;
@@ -843,16 +863,6 @@ class Map extends Base {
 		this.detectionFieldTop = top;
 		this.detectionFieldBot = bot;
 		this.syncCursorGrid();
-		if (this.detectionBoxes) {
-			const entries = this.detectionBoxes.entries();
-			for (const [positionKey] of entries) {
-				const position = Position.fromKey(positionKey);
-				if (position.x < -left || position.x > right || position.z < -top || position.z > bot) {
-					this.detectionBoxes.delete(positionKey);
-				}
-			}
-			this.updateDetectionBoxes(this.detectionBoxes);
-		}
 	}
 
 	initializeDetectionBoxes(boxes: globalThis.Map<string, MapElement.Object3DBox>) {
@@ -861,23 +871,186 @@ class Map extends Base {
 		let count = 0;
 		for (const [positionKey, box] of boxes) {
 			const position = Position.fromKey(positionKey);
-			count = box.updateGeometry(geometry, position, count);
+			count = box.updateGeometry(geometry, position, count, true);
 		}
 		geometry.updateAttributes();
 		this.detectionBoxesMesh = new THREE.Mesh(geometry, Map.materialDetectionBox);
 		this.detectionBoxesMesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
 		this.detectionBoxesMesh.renderOrder = 999;
 		this.scene.add(this.detectionBoxesMesh);
+		this.detectionHoverMesh = new THREE.Mesh(
+			new CustomGeometry(),
+			new THREE.MeshBasicMaterial({
+				color: 0xffffff,
+				transparent: true,
+				opacity: 0.35,
+				depthWrite: false,
+				polygonOffset: true,
+				polygonOffsetFactor: -1,
+				polygonOffsetUnits: -1,
+			}),
+		);
+		this.detectionHoverMesh.visible = false;
+		this.detectionHoverMesh.renderOrder = 1000;
+		this.detectionHoverMesh.raycast = () => {};
+		this.scene.add(this.detectionHoverMesh);
+	}
+
+	clearDetectionHover() {
+		this.detectionHoveredKey = null;
+		if (this.detectionHoverMesh) this.detectionHoverMesh.visible = false;
+	}
+
+	getDetectionBoxKeyAtPointer(): string | null {
+		if (
+			!this.detectionBoxesMesh ||
+			!this.detectionBoxes ||
+			Inputs.getPositionX() < 0 ||
+			Inputs.getPositionY() < 0
+		) {
+			return null;
+		}
+		const pointer = new THREE.Vector2(
+			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
+			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1,
+		);
+		const raycaster = new THREE.Raycaster();
+		raycaster.layers.set(RAYCASTING_LAYER.OBJECTS3D);
+		raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+		const hit = raycaster.intersectObject(this.detectionBoxesMesh)[0];
+		const key =
+			hit?.faceIndex == null
+				? null
+				: (this.detectionBoxesMesh.geometry as CustomGeometry).facePositions[hit.faceIndex];
+		return key && this.detectionBoxes.has(key) ? key : null;
+	}
+
+	updateDetectionHover() {
+		if (!this.detectionHoverMesh || !this.detectionBoxes || this.detectionTransformControls?.dragging) {
+			this.clearDetectionHover();
+			return;
+		}
+		const key = this.getDetectionBoxKeyAtPointer();
+		if (key === this.detectionHoveredKey) return;
+		this.clearDetectionHover();
+		if (!key) return;
+		const box = this.detectionBoxes.get(key)!;
+		const geometry = new CustomGeometry();
+		box.updateGeometry(geometry, Position.fromKey(key), 0, true);
+		geometry.updateAttributes();
+		this.detectionHoverMesh.geometry.dispose();
+		this.detectionHoverMesh.geometry = geometry;
+		this.detectionHoverMesh.visible = true;
+		this.detectionHoveredKey = key;
+	}
+
+	setDetectionTransformMode(mode: ACTION_KIND | null) {
+		this.detectionTransformMode = mode;
+		if (mode === null) {
+			this.clearDetectionHover();
+			this.detectionTransformControls?.detach();
+			this.detectionSelectedKey = null;
+			this.detectionTransformStartPosition = null;
+			return;
+		}
+		if (!this.detectionTransformControls) {
+			this.detectionTransformObject = new THREE.Object3D();
+			this.scene.add(this.detectionTransformObject);
+			this.detectionTransformControls = new TransformControls(this.camera.getThreeCamera(), this.canvas!);
+			this.detectionTransformControls.addEventListener('mouseDown', () => {
+				this.detectionTransformStartPosition = this.detectionTransformObject!.position.clone();
+			});
+			this.detectionTransformControls.addEventListener('mouseUp', () => {
+				this.detectionTransformStartPosition = null;
+			});
+			this.detectionTransformControls.addEventListener('objectChange', () => this.updateDetectionTransform());
+			this.scene.add(this.detectionTransformControls.getHelper());
+		}
+		this.detectionTransformControls.setMode(this.getTransformMode(mode));
+		this.detectionTransformControls.setTranslationSnap(null);
+		this.detectionTransformControls.setRotationSnap(this.detectionSquare ? Math.PI / 4 : null);
+		if (this.detectionSelectedKey) {
+			this.detectionTransformControls.attach(this.detectionTransformObject!);
+		}
+		if (this.detectionBoxes) this.updateDetectionBoxes(this.detectionBoxes);
+		this.updateDetectionHover();
+	}
+
+	selectDetectionBox() {
+		if (!this.detectionTransformControls) return;
+		const key = this.getDetectionBoxKeyAtPointer();
+		if (!key) {
+			this.detectionSelectedKey = null;
+			this.detectionTransformStartPosition = null;
+			this.detectionTransformControls.detach();
+			return;
+		}
+		this.detectionSelectedKey = key;
+		const position = Position.fromKey(key);
+		const box = this.detectionBoxes!.get(key)!;
+		const size = box.data.getSizeVector().multiply(position.toScaleVector());
+		this.detectionTransformObject!.position.copy(
+			box.getLocalPosition(position).addScaledVector(size, 0.5).addScalar(-MapElement.Object3DBox.COEF),
+		);
+		this.detectionTransformObject!.rotation.copy(position.toRotationEuler());
+		this.detectionTransformObject!.scale.copy(position.toScaleVector());
+		this.detectionTransformControls.attach(this.detectionTransformObject!);
+	}
+
+	updateDetectionTransform() {
+		this.clearDetectionHover();
+		const key = this.detectionSelectedKey;
+		if (!key || !this.detectionBoxes || !this.detectionTransformObject) return;
+		const box = this.detectionBoxes.get(key);
+		if (!box) return;
+		const position = Position.fromKey(key);
+		const object = this.detectionTransformObject;
+		const transformed = Position.createFromVector3(object.position, object.rotation, object.scale);
+		position.angleX = transformed.angleX;
+		position.angleY = transformed.angleY;
+		position.angleZ = transformed.angleZ;
+		position.scaleX = Math.max(0.001, transformed.scaleX);
+		position.scaleY = Math.max(0.001, transformed.scaleY);
+		position.scaleZ = Math.max(0.001, transformed.scaleZ);
+		object.scale.set(position.scaleX, position.scaleY, position.scaleZ);
+		if (this.detectionTransformMode === ACTION_KIND.TRANSLATE && this.detectionTransformStartPosition) {
+			const stepsPerSquare = this.detectionSquare ? 1 : Project.SQUARE_SIZE;
+			const start = this.detectionTransformStartPosition;
+			object.position.set(
+				start.x + Math.round((object.position.x - start.x) * stepsPerSquare) / stepsPerSquare,
+				start.y + Math.round((object.position.y - start.y) * stepsPerSquare) / stepsPerSquare,
+				start.z + Math.round((object.position.z - start.z) * stepsPerSquare) / stepsPerSquare,
+			);
+		}
+		const halfSize = box.data.getSizeVector().multiply(position.toScaleVector()).multiplyScalar(0.5);
+		const origin = object.position.clone().sub(halfSize);
+		const x = Mathf.forceDecimals(origin.x + 0.5, 6);
+		const y = Mathf.forceDecimals(origin.y, 6);
+		const z = Mathf.forceDecimals(origin.z + 0.5, 6);
+		position.x = Math.floor(x);
+		position.y = Math.floor(y);
+		position.z = Math.floor(z);
+		position.centerX = Mathf.forceDecimals((x - position.x) * 100, 6);
+		position.yPixels = Mathf.forceDecimals((y - position.y) * 100, 6);
+		position.centerZ = Mathf.forceDecimals((z - position.z) * 100, 6);
+		this.detectionBoxes.delete(key);
+		this.detectionSelectedKey = position.toKey();
+		this.detectionBoxes.set(this.detectionSelectedKey, box);
+		this.updateDetectionBoxes(this.detectionBoxes);
 	}
 
 	updateDetectionBoxes(boxes: globalThis.Map<string, MapElement.Object3DBox>) {
+		if (this.detectionHoveredKey && !this.detectionBoxes?.has(this.detectionHoveredKey)) {
+			this.clearDetectionHover();
+		}
 		const geometry = new CustomGeometry();
 		let count = 0;
 		for (const [positionKey, box] of boxes) {
 			const position = Position.fromKey(positionKey);
-			count = box.updateGeometry(geometry, position, count);
+			count = box.updateGeometry(geometry, position, count, true);
 		}
 		geometry.updateAttributes();
+		this.detectionBoxesMesh!.geometry.dispose();
 		this.detectionBoxesMesh!.geometry = geometry;
 	}
 
@@ -1896,6 +2069,10 @@ class Map extends Base {
 	}
 
 	updateRaycasting() {
+		if (this.isDetection && this.detectionTransformMode !== null) return;
+		if (this.isDetection && Map.isRemoving() && this.detectionBoxes && this.detectionBoxesMesh) {
+			this.updateDetectionBoxes(this.detectionBoxes);
+		}
 		const isLayerOn = this.canEdit && Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
 		const isSpriteOptionSelected =
 			this.canEdit &&
@@ -2478,6 +2655,10 @@ class Map extends Base {
 		if (this.isCameraRotationLocked) {
 			return;
 		}
+		if (this.isDetection && this.detectionTransformMode !== null) {
+			if (Inputs.isPointerPressed && !this.detectionTransformControls?.axis) this.selectDetectionBox();
+			return;
+		}
 		if (
 			this.canEdit &&
 			Map.isRemoving() &&
@@ -2634,6 +2815,10 @@ class Map extends Base {
 	}
 
 	onPointerDown() {
+		if (this.isDetection && this.detectionTransformMode !== null) {
+			if (!this.detectionTransformControls?.axis) this.selectDetectionBox();
+			return;
+		}
 		if (Inputs.previousTouchDistance === 0 && this.rectangleStartPosition === null) {
 			if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 				this.needsUpdateRaycasting = true;
@@ -2650,10 +2835,13 @@ class Map extends Base {
 			this.requestPaintHUD = true;
 		}
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
+			if (this.isDetection) this.clearDetectionHover();
 			if (!this.isCameraRotationLocked) {
 				this.camera.onMouseWheelUpdate(this === Map.current);
 				this.requestPaintHUD = true;
 			}
+		} else if (this.isDetection && this.detectionTransformMode !== null) {
+			this.updateDetectionHover();
 		} else {
 			// Avoid to draw undesired new preview
 			if (!this.mouseUp) {
@@ -3098,6 +3286,8 @@ class Map extends Base {
 
 	close() {
 		super.close();
+		this.detectionTransformControls?.detach();
+		this.detectionTransformControls?.dispose();
 		// Dispose per-map GPU resources to prevent VRAM leaks
 		if (this.materialTileset) {
 			this.materialTileset.map?.dispose();

@@ -270,7 +270,6 @@ function DialogDetection({ setIsOpen, model, onAccept, onReject }: Props) {
 					</Groupbox>
 				</Flex>
 				<Flex one column spacedLarge>
-					{t('detection.description')}
 					<MapEditorDetection
 						fieldLeft={fieldLeft}
 						fieldRight={fieldRight}

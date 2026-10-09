@@ -194,10 +194,11 @@ class Inputs {
 
 			// Mouse down
 			const handleMouseDown = (e: MouseEvent) => {
+				const map = getMap();
 				if (
 					(!this.isMapFocused && !Scene.Map.currentpositionSelector && !this.allowMapMouseDuringDialog) ||
-					!Scene.Map.current ||
-					Scene.Map.current.loading
+					!map ||
+					map.loading
 				) {
 					return;
 				}
@@ -218,23 +219,27 @@ class Inputs {
 					default:
 						break;
 				}
-				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
+				const rect = canvas.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
 				Inputs.mouseX = x;
 				Inputs.mouseY = y;
 				Inputs.previousMouseX = x;
 				Inputs.previousMouseY = y;
-				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseDown();
+				map.onMouseDown();
 			};
 			canvas.addEventListener('mousedown', handleMouseDown, false);
 
 			// Mouse move
 			const handleMouseMove = (e: MouseEvent) => {
+				if (!canvasOnly && Scene.Map.currentpositionSelector) {
+					return;
+				}
+				const map = getMap();
 				if (
 					(!this.isMapFocused && !Scene.Map.currentpositionSelector && !this.allowMapMouseDuringDialog) ||
-					!Scene.Map.current ||
-					Scene.Map.current.loading
+					!map ||
+					map.loading
 				) {
 					return;
 				}
@@ -250,44 +255,50 @@ class Inputs {
 				if (Inputs.isMouseWheelPressed && (e.buttons & 4) === 0) {
 					Inputs.isMouseWheelPressed = false;
 				}
-				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
+				const rect = canvas.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
 				const isOutsideCanvas = x < 0 || y < 0 || x > rect.width || y > rect.height;
+				Inputs.previousMouseX = Inputs.mouseX;
+				Inputs.previousMouseY = Inputs.mouseY;
+				Inputs.mouseX = x;
+				Inputs.mouseY = y;
 				if (
 					!isOutsideCanvas ||
 					Inputs.isPointerPressed ||
 					Inputs.isMouseRightPressed ||
 					Inputs.isMouseWheelPressed
 				) {
-					(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseMove();
+					map.onMouseMove();
 				}
-				Inputs.previousMouseX = Inputs.mouseX;
-				Inputs.previousMouseY = Inputs.mouseY;
-				Inputs.mouseX = x;
-				Inputs.mouseY = y;
 			};
-			if (!canvasOnly) {
-				document.addEventListener('mousemove', handleMouseMove, false);
-			}
+			document.addEventListener('mousemove', handleMouseMove, false);
 
 			// Mouse leave canvas
 			const handleMouseLeave = () => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed && !Inputs.isMouseWheelPressed) {
-					Scene.Map.current.forEachMapPortions((mapPortion) => {
-						mapPortion.removeLastPreview();
-					});
-					Scene.Map.current.requestPaintHUD = true;
+					if (map.isDetection) {
+						map.clearDetectionHover();
+						if (map.detectionBoxes && map.detectionBoxesMesh) map.updateDetectionBoxes(map.detectionBoxes);
+					} else {
+						map.forEachMapPortions((mapPortion) => mapPortion.removeLastPreview());
+						map.requestPaintHUD = true;
+					}
 				}
 			};
 			canvas.addEventListener('mouseleave', handleMouseLeave, false);
 
 			// Mouse up
 			const handleMouseUp = async (e: MouseEvent) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				if (!canvasOnly && Scene.Map.currentpositionSelector) {
+					return;
+				}
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
 				switch (e.button) {
@@ -303,11 +314,9 @@ class Inputs {
 					default:
 						break;
 				}
-				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
+				await map.onMouseUp();
 			};
-			if (!canvasOnly) {
-				document.addEventListener('mouseup', handleMouseUp, false);
-			}
+			document.addEventListener('mouseup', handleMouseUp, false);
 
 			// Mouse wheel
 			const handleWheel = async (e: WheelEvent) => {
@@ -315,14 +324,17 @@ class Inputs {
 					return;
 				}
 				e.preventDefault();
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				const map = getMap();
+				if (!map || map.loading) {
 					return;
 				}
-				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseWheel(e.deltaY);
+				await map.onMouseWheel(e.deltaY);
 			};
 			canvas.addEventListener('wheel', handleWheel);
 
 			const handleWindowBlur = async () => {
+				if (!canvasOnly && Scene.Map.currentpositionSelector) return;
+				const map = getMap();
 				const wasMousePressed =
 					Inputs.isPointerPressed || Inputs.isMouseRightPressed || Inputs.isMouseWheelPressed;
 				const hadPressedKeys = Inputs.keys.length > 0;
@@ -333,14 +345,14 @@ class Inputs {
 				Inputs.isCTRL = false;
 				Inputs.isSHIFT = false;
 				Inputs.keys.length = 0;
-				if (Scene.Map.current && !Scene.Map.current.loading) {
+				if (map && !map.loading) {
 					if (hadPressedKeys) {
-						(Scene.Map.currentpositionSelector ?? Scene.Map.current).onKeyUp();
+						map.onKeyUp();
 					}
 					if (!wasMousePressed) {
 						return;
 					}
-					await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
+					await map.onMouseUp();
 				}
 			};
 			window.addEventListener('blur', handleWindowBlur);
@@ -349,9 +361,9 @@ class Inputs {
 				if (!canvasOnly) {
 					window.removeEventListener('keydown', handleKeyDown);
 					window.removeEventListener('keyup', handleKeyUp);
-					document.removeEventListener('mousemove', handleMouseMove, false);
-					document.removeEventListener('mouseup', handleMouseUp, false);
 				}
+				document.removeEventListener('mousemove', handleMouseMove, false);
+				document.removeEventListener('mouseup', handleMouseUp, false);
 				canvas.removeEventListener('mousedown', handleMouseDown, false);
 				canvas.removeEventListener('mouseleave', handleMouseLeave, false);
 				canvas.removeEventListener('wheel', handleWheel);

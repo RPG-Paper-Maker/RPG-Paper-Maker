@@ -183,26 +183,30 @@ class Object3DBox extends Object3D {
 	}
 
 	getAdditionalX(): number {
-		return this.data.isTopLeft ? 0 : 0.5;
+		return 0.5;
 	}
 
 	getAdditionalZ(): number {
-		return this.data.isTopLeft ? 0 : 0.5;
+		return 0.5;
 	}
 
-	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
+	updateGeometry(geometry: CustomGeometry, position: Position, count: number, centerPivot = false): number {
 		const localPosition = this.getLocalPosition(position);
-		const rotationCenter = this.data.isTopLeft
-			? new THREE.Vector3(
-					localPosition.x + 0.5 - Object3DBox.COEF,
-					localPosition.y,
-					localPosition.z + 0.5 - Object3DBox.COEF,
-				)
-			: localPosition;
 		const size = this.data.getSizeVector().multiply(position.toScaleVector());
 		size.setX(size.x - 2 * Object3DBox.COEF);
 		size.setY(size.y - 2 * Object3DBox.COEF);
 		size.setZ(size.z - 2 * Object3DBox.COEF);
+		const rotationCenter = centerPivot
+			? localPosition
+					.clone()
+					.add(this.data.isTopLeft ? size.clone().multiplyScalar(0.5) : new THREE.Vector3(0, size.y / 2, 0))
+			: this.data.isTopLeft
+				? new THREE.Vector3(
+						localPosition.x + 0.5 - Object3DBox.COEF,
+						localPosition.y,
+						localPosition.z + 0.5 - Object3DBox.COEF,
+					)
+				: localPosition;
 		const w = this.data.getTotalWidthPixels();
 		const h = this.data.getTotalHeightPixels();
 		const d = this.data.getTotalDepthPixels();

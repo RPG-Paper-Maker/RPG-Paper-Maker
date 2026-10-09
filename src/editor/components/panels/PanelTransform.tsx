@@ -201,11 +201,10 @@ function PanelTransform({ kind }: Props) {
 			return;
 		}
 		dispatch(setSelectedPosition(position));
-		const selectedLocalPosition = selectedElement.getLocalPosition(position).add(map.selectedPivotOffset);
-		if (selectedElement instanceof MapElement.Object3DBox && selectedElement.data.isTopLeft) {
-			selectedLocalPosition.x += 0.5 - MapElement.Object3DBox.COEF;
-			selectedLocalPosition.z += 0.5 - MapElement.Object3DBox.COEF;
-		}
+		const selectedLocalPosition =
+			selectedElement instanceof MapElement.Object3DBox
+				? position.toVector3()
+				: selectedElement.getLocalPosition(position).add(map.selectedPivotOffset);
 		map.selectedMesh.position.copy(selectedLocalPosition);
 		map.selectedMesh.rotation.copy(selectedElement.getLocalRotation(position));
 		map.selectedMesh.scale.copy(selectedElement.getLocalScale(position));
@@ -219,6 +218,7 @@ function PanelTransform({ kind }: Props) {
 			case ACTION_KIND.TRANSLATE:
 				if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
 					position.x = value;
+					if (selectedMapElement instanceof MapElement.Object3DBox) position.centerX = 50;
 				} else {
 					position.x = Math.floor(value / Project.SQUARE_SIZE);
 					position.centerX = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
@@ -265,6 +265,7 @@ function PanelTransform({ kind }: Props) {
 			case ACTION_KIND.TRANSLATE:
 				if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
 					position.z = value;
+					if (selectedMapElement instanceof MapElement.Object3DBox) position.centerZ = 50;
 				} else {
 					position.z = Math.floor(value / Project.SQUARE_SIZE);
 					position.centerZ = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
