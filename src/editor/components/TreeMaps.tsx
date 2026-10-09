@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { lazy, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
@@ -21,9 +21,10 @@ import { TreeMapTag } from '../models';
 import { RootState, setCopiedItems, setCurrentTreeMapTag, setNeedsReloadMap, triggerTreeMap } from '../store';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
-import DialogMapProperties from './dialogs/models/DialogMapProperties';
 import DialogName from './dialogs/models/DialogName';
 import Tree from './Tree';
+
+const DialogMapProperties = lazy(() => import('./dialogs/models/DialogMapProperties'));
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -510,14 +511,16 @@ function TreeMaps({
 				blurOnMouseLeave
 			/>
 			{isOpenMapProperties && (
-				<DialogMapProperties
-					setIsOpen={setIsOpenMapProperties}
-					model={editedMap}
-					onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
-					onReject={isNew ? handleRejectNewMap : handleRejectEditMap}
-					onNameChange={handleMapNameChange}
-					isNew={isNew}
-				/>
+				<Suspense fallback={null}>
+					<DialogMapProperties
+						setIsOpen={setIsOpenMapProperties}
+						model={editedMap}
+						onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
+						onReject={isNew ? handleRejectNewMap : handleRejectEditMap}
+						onNameChange={handleMapNameChange}
+						isNew={isNew}
+					/>
+				</Suspense>
 			)}
 			{isOpenName && (
 				<DialogName

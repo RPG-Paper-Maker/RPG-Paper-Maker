@@ -55,6 +55,7 @@ const TriggersSlice = createSlice({
 		needsReloadMap: false,
 		isOpeningNewDialog: false,
 		mapObjectDialogOpen: false,
+		mapStartupReactionsOpen: false,
 	},
 	reducers: {
 		triggerNewProject(state, action: PayloadAction<boolean>) {
@@ -156,6 +157,9 @@ const TriggersSlice = createSlice({
 		setMapObjectDialogOpen(state, action: PayloadAction<boolean>) {
 			state.mapObjectDialogOpen = action.payload;
 		},
+		setMapStartupReactionsOpen(state, action: PayloadAction<boolean>) {
+			state.mapStartupReactionsOpen = action.payload;
+		},
 	},
 });
 
@@ -193,5 +197,6 @@ export const {
 	setNeedsReloadMap,
 	setIsOpeningNewDialog,
 	setMapObjectDialogOpen,
+	setMapStartupReactionsOpen,
 } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;

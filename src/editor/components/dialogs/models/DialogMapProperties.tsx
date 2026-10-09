@@ -9,18 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Model, Scene } from '../../../Editor';
+import { Data, Model, Scene } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
+import type { SimulationHudBridge, SimulationSession } from '../../../core/simulation';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { RandomBattle, SELECTION_SKY_TYPE } from '../../../models';
-import { setNeedsReloadMap } from '../../../store';
+import { setMapStartupReactionsOpen, setNeedsReloadMap } from '../../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
@@ -36,9 +38,13 @@ import RadioGroup from '../../RadioGroup';
 import SliderDynamic from '../../SliderDynamic';
 import Tab from '../../Tab';
 import Tree from '../../Tree';
-import PanelMapObject, { PanelMapObjectRef } from '../../panels/PanelMapObject';
+import PanelMapObject from '../../panels/PanelMapObject';
+import type { PanelMapObjectRef, PlayCommandInfo } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+
+const DialogObjectCommandTest = lazy(() => import('../DialogObjectCommandTest'));
+const ObjectCommandTestOverlay = lazy(() => import('../../ObjectCommandTestOverlay'));
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
@@ -58,6 +64,11 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isStartupReactionsTab, setIsStartupReactionsTab] = useState(false);
+	const [playCommandRequest, setPlayCommandRequest] = useState<PlayCommandInfo | null>(null);
+	const [simulation, setSimulation] = useState<{ session: SimulationSession; hud: SimulationHudBridge } | null>(null);
+	const startupTabRef = useRef(false);
+	const simulationRef = useRef<SimulationSession | null>(null);
 	const [localization, setLocalization] = useState(new Model.Localization());
 	const [id, setID] = useStateNumber();
 	const [tilesetID, setTilesetID] = useStateNumber();
@@ -250,6 +261,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const handleAccept = async () => {
+		simulationRef.current?.stop();
+		simulationRef.current = null;
 		setIsLoading(true);
 		const previousModel = model.clone();
 		model.name = localization.name;
@@ -302,6 +315,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	};
 
 	const handleReject = () => {
+		simulationRef.current?.stop();
+		simulationRef.current = null;
 		getPreviewScene()?.clearPreviewSize();
 		if (onReject) {
 			void onReject();
@@ -316,6 +331,8 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		initialize();
 		return () => {
 			Scene.Map.previewOnly = false;
+			simulationRef.current?.stop();
+			dispatch(setMapStartupReactionsOpen(false));
 			if (previewBoxRafRef.current !== null) {
 				cancelAnimationFrame(previewBoxRafRef.current);
 			}
@@ -324,6 +341,83 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 			}
 		};
 	}, []);
+
+	useLayoutEffect(() => {
+		dispatch(setMapStartupReactionsOpen(isStartupReactionsTab && simulation === null));
+		const dialog = document.querySelector('.dialogMapProperties') as HTMLElement | null;
+		if (dialog) {
+			const rect = dialog.getBoundingClientRect();
+			dialog.style.left = `${Math.max(0, window.innerWidth - 10 - rect.width)}px`;
+			dialog.style.top =
+				isStartupReactionsTab && window.innerWidth <= 1000
+					? '0px'
+					: `${Math.max(0, (window.innerHeight - rect.height) / 2)}px`;
+		}
+	}, [isStartupReactionsTab, simulation]);
+
+	const handleStartupTabChanged = (index: number) => {
+		const selected = index === 1;
+		startupTabRef.current = selected;
+		if (!selected) {
+			simulationRef.current?.stop();
+			simulationRef.current = null;
+			setSimulation(null);
+			setPlayCommandRequest(null);
+		}
+		setIsStartupReactionsTab(selected);
+	};
+
+	const getTestConfig = async () => {
+		const tests = new Data.ObjectCommandTests();
+		await tests.load();
+		const configs = tests.configs ?? [];
+		if (configs.length === 0) {
+			const config = new Model.ObjectCommandTestConfig();
+			config.applyDefault();
+			return config;
+		}
+		const index = Math.max(
+			0,
+			Math.min(Project.current!.settings.lastTabIndexObjectCommandTest, configs.length - 1),
+		);
+		return configs[index];
+	};
+
+	const startSimulation = async (info: PlayCommandInfo) => {
+		const config = await getTestConfig();
+		const { SimulationHudBridge, SimulationSession } = await import('../../../core/simulation');
+		const map = getPreviewScene();
+		if (!startupTabRef.current || !map) {
+			return;
+		}
+		const hud = new SimulationHudBridge();
+		simulationRef.current?.stop();
+		const session = SimulationSession.start({
+			map,
+			object: panelMapObjectRef.current!.getEditedObject(),
+			reaction: info.reaction,
+			stateID: info.stateID,
+			targetNode: info.node,
+			config,
+			hud,
+		});
+		simulationRef.current = session;
+		setSimulation({ session, hud });
+	};
+
+	const handlePlayCommand = (info: PlayCommandInfo) => {
+		if (info.openOptions) {
+			setPlayCommandRequest(info);
+		} else {
+			void startSimulation(info);
+		}
+	};
+
+	const handleStopSimulation = () => {
+		simulationRef.current?.stop();
+		simulationRef.current = null;
+		setSimulation(null);
+	};
 
 	const getMapSettingsContent = () => (
 		<Flex key={0} column spacedLarge>
@@ -604,6 +698,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 			key={1}
 			object={startupObject}
 			ref={panelMapObjectRef}
+			onPlayCommand={handlePlayCommand}
 			hideNameID
 			hideStateValues
 			saveOnDestruction
@@ -653,31 +748,70 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 	);
 
 	return (
-		<Dialog
-			title={`${t('edit.map.properties')}...`}
-			isOpen
-			isLoading={isLoading}
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			onClose={handleReject}
-			initialWidth='600px'
-			initialHeight='650px'
-			initialPlacement='right'
-			allowMapInteraction
-		>
-			<Flex one fillWidth fillHeight spacedLarge columnMobile>
-				<Tab
-					titles={[
-						Model.Base.create(1, t('settings')),
-						Model.Base.create(2, t('map.startup.reactions')),
-						Model.Base.create(3, t('battles')),
-					]}
-					contents={[getMapSettingsContent(), getMapStartupReactionsContent(), getBattlesContent()]}
-					padding
-					hideScroll
-					lazyLoadingContent
-				/>
-			</Flex>
-		</Dialog>
+		<>
+			<Dialog
+				title={`${t('edit.map.properties')}...`}
+				isOpen
+				className={`dialogMapProperties${isStartupReactionsTab ? ' dialogMapPropertiesStartup' : ''}`}
+				movable={!isStartupReactionsTab}
+				isLoading={isLoading}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				onClose={handleReject}
+				initialWidth={
+					isStartupReactionsTab
+						? window.innerWidth <= 1000
+							? '100%'
+							: window.innerWidth <= 1300
+								? '66.6667%'
+								: '50%'
+						: '600px'
+				}
+				initialHeight={isStartupReactionsTab ? (window.innerWidth <= 1000 ? '66.6667vh' : '100%') : '650px'}
+				initialPlacement={isStartupReactionsTab && window.innerWidth <= 1000 ? 'top' : 'right'}
+				allowMapInteraction
+			>
+				<Flex one fillWidth fillHeight spacedLarge columnMobile>
+					<Tab
+						titles={[
+							Model.Base.create(1, t('settings')),
+							Model.Base.create(2, t('map.startup.reactions')),
+							Model.Base.create(3, t('battles')),
+						]}
+						contents={[getMapSettingsContent(), getMapStartupReactionsContent(), getBattlesContent()]}
+						onCurrentIndexChanged={handleStartupTabChanged}
+						padding
+						hideScroll
+						lazyLoadingContent
+					/>
+				</Flex>
+			</Dialog>
+			{playCommandRequest && (
+				<Suspense fallback={null}>
+					<DialogObjectCommandTest
+						setIsOpen={(open) => {
+							if (!open) setPlayCommandRequest(null);
+						}}
+						onAccept={() => {
+							const request = playCommandRequest;
+							setPlayCommandRequest(null);
+							void startSimulation(request);
+						}}
+					/>
+				</Suspense>
+			)}
+			{simulation &&
+				document.getElementById('canvas-map-editor')?.parentElement &&
+				createPortal(
+					<Suspense fallback={null}>
+						<ObjectCommandTestOverlay
+							session={simulation.session}
+							hud={simulation.hud}
+							onStop={handleStopSimulation}
+						/>
+					</Suspense>,
+					document.getElementById('canvas-map-editor')!.parentElement!,
+				)}
+		</>
 	);
 }
 

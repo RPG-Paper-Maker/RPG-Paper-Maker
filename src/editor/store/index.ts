@@ -64,6 +64,7 @@ import {
 import { setEngineFontSize, setLivePreview, setTheme, SettingsReducer } from './slices/SettingsReducer';
 import {
 	setMapObjectDialogOpen,
+	setMapStartupReactionsOpen,
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadPageUpdate,
@@ -148,6 +149,7 @@ export {
 	setLoadingBar,
 	setMapEditorLoaded,
 	setMapObjectDialogOpen,
+	setMapStartupReactionsOpen,
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadPageUpdate,
