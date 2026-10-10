@@ -256,14 +256,15 @@ function MainMenuBar() {
 				const folders = filePath.split('/');
 				folders.pop();
 				const folderPath = folders.join('/');
-				await handleOpenProject(
-					Model.ProjectPreview.create(
-						await Data.System.getProjectName(folderPath),
-						Paths.normalize(folderPath),
-					),
-				);
+				await handleOpenProjectFolderPath(folderPath);
 			}
 		}
+	};
+
+	const handleOpenProjectFolderPath = async (folderPath: string) => {
+		await handleOpenProject(
+			Model.ProjectPreview.create(await Data.System.getProjectName(folderPath), Paths.normalize(folderPath)),
+		);
 	};
 
 	const handleOpenProject = async (project: Model.ProjectPreview, addExtraVersion?: string) => {
@@ -1209,6 +1210,13 @@ function MainMenuBar() {
 
 	useEffect(() => {
 		if (Constants.IS_DESKTOP) {
+			void IO.invoke('get-startup-project')
+				.then(async (folderPath) => {
+					if (typeof folderPath === 'string') {
+						await handleOpenProjectFolderPath(folderPath);
+					}
+				})
+				.catch(console.error);
 			void IO.getOS()
 				.then((os) => setIsMac(os === OS_KIND.DARWIN))
 				.catch(console.error);

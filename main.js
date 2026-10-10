@@ -29,11 +29,31 @@ const appIconPath =
 const getArgValue = (name) => {
 	const prefix = `${name}=`;
 	const arg = process.argv.find((a) => a.startsWith(prefix));
-	return arg ? arg.slice(prefix.length) : null;
+	if (arg) {
+		return arg.slice(prefix.length);
+	}
+	const index = process.argv.indexOf(name);
+	const value = index === -1 ? undefined : process.argv[index + 1];
+	if (!value || value.startsWith('-')) {
+		return null;
+	}
+	return value;
 };
 const isGameTestProcess = process.argv.includes('--rpm-game-test');
-const gameTestLocation = getArgValue('--rpm-game-project');
+const projectLocation = getArgValue('--rpm-game-project');
 const gameTestBattleTest = getArgValue('--rpm-game-battle') === 'true';
+let initialEditorProjectPath = null;
+
+if (!isGameTestProcess) {
+	const projectArgument =
+		projectLocation ??
+		process.argv.find((arg) => !arg.startsWith('--') && path.extname(arg).toLowerCase() === '.rpmg');
+
+	if (projectArgument) {
+		initialEditorProjectPath = path.resolve(projectArgument);
+	}
+}
+
 const isMac = process.platform === 'darwin';
 
 const createSplash = (title) => {
@@ -549,6 +569,9 @@ const init = async () => {
 		await copyDir(basePath, `${basePath}/../../RPG Paper Maker`);
 		const electronPath = `${basePath}/../../RPG Paper Maker/${execPath}`;
 		const args = ['./main.js'];
+		if (initialEditorProjectPath) {
+			args.push(`--rpm-game-project=${initialEditorProjectPath}`);
+		}
 		const child = spawn(electronPath, args, {
 			detached: true,
 			stdio: 'ignore',
@@ -697,6 +720,9 @@ const init = async () => {
 				}
 			})()}`;
 			const args = ['./main.js'];
+			if (initialEditorProjectPath) {
+				args.push(`--rpm-game-project=${initialEditorProjectPath}`);
+			}
 			const child = spawn(electronPath, args, {
 				detached: true,
 				stdio: 'ignore',
@@ -760,7 +786,7 @@ app.whenReady().then(async () => {
 				game.webContents.openDevTools({ mode: 'undocked' });
 			}
 		});
-		runRPMGame(gameTestLocation, gameTestBattleTest).catch(console.error);
+		runRPMGame(projectLocation, gameTestBattleTest).catch(console.error);
 	} else if (app.isPackaged) {
 		globalShortcut.register('CommandOrControl+Alt+Shift+I', () => {
 			if (updater && !updater.isDestroyed()) {
@@ -793,6 +819,36 @@ ipcMain.handle('get-system-information', () => {
 		gamesFolder: path.join(documentsFolder, 'RPG Paper Maker Games'),
 		userLocale: app.getLocale(),
 	};
+});
+
+ipcMain.handle('get-startup-project', async (event) => {
+	if (!window || event.sender !== window.webContents || !initialEditorProjectPath) {
+		return null;
+	}
+	const projectPath = initialEditorProjectPath;
+	initialEditorProjectPath = null;
+	try {
+		const stats = await fs.stat(projectPath);
+		let folderPath = projectPath;
+		if (!stats.isDirectory()) {
+			if (!stats.isFile() || path.extname(projectPath).toLowerCase() !== '.rpmg') {
+				throw new Error('Expected a project folder or .rpmg file.');
+			}
+			folderPath = path.dirname(projectPath);
+		}
+		if (!(await fs.stat(path.join(folderPath, 'system.json'))).isFile()) {
+			throw new Error('The project folder does not contain system.json.');
+		}
+		return folderPath;
+	} catch (error) {
+		await dialog.showMessageBox(window, {
+			type: 'error',
+			title: 'Unable to open project',
+			message: `Unable to open project: ${projectPath}`,
+			detail: error.message,
+		});
+		return null;
+	}
 });
 
 ipcMain.handle('open-file-dialog', async (event, options) => {
