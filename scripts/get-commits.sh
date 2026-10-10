@@ -6,6 +6,7 @@ declare -A commits
 print_unique_commits() {
   local commit
   while IFS= read -r commit; do
+    [ -n "$commit" ] || continue
     if [ -z "${commits[$commit]+x}" ]; then
       commits[$commit]=1
       printf "%s\n" "$commit"
