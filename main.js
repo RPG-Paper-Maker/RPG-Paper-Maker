@@ -33,7 +33,11 @@ const getArgValue = (name) => {
 		return arg.slice(prefix.length);
 	}
 	const index = process.argv.indexOf(name);
-	return index === -1 ? null : (process.argv[index + 1] ?? null);
+	const value = index === -1 ? undefined : process.argv[index + 1];
+	if (!value || value.startsWith('-')) {
+		return null;
+	}
+	return value;
 };
 const isGameTestProcess = process.argv.includes('--rpm-game-test');
 const projectLocation = getArgValue('--rpm-game-project');
