@@ -710,7 +710,18 @@ class CommandChangeVariables extends CommandBase {
 						this.localVariableName === null
 							? game.getVariable(this.selection)
 							: (game.getLocalVariable(this.localVariableName) ?? 0);
-					value = new Function('$value', 'Math', `return ${this.valueScript}`)(currentValue, Math);
+					const scene = {
+						Map: {
+							current: {
+								currentReaction: ctx.object ? { currentMapObject: { id: ctx.object.object.id } } : null,
+							},
+						},
+					};
+					value = new Function('$value', 'Math', 'Scene', `return ${this.valueScript}`)(
+						currentValue,
+						Math,
+						scene,
+					);
 				} catch (error) {
 					console.error(`Error while interpreting simulation script: "${this.valueScript}"`, error);
 					value = null;
