@@ -120,7 +120,7 @@ const PanelModels = forwardRef(
 			if (selectedModel) {
 				panelMapObjectRef.current?.initialize();
 			}
-		}, [panelMapObjectRef.current, selectedModel]);
+		}, [selectedModel]);
 
 		return (
 			<Flex columnMobile spacedLarge fillWidth fillHeight>

@@ -53,12 +53,6 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		}
 		setIsFocused(true);
 		switch (e.button) {
-			case 0:
-				setTimeout(() => {
-					// Small wait to let selected item time for onClick method to be triggered before hidding
-					setIsOpen(false);
-				}, 200);
-				break;
 			case 2:
 				setIsOpen(false);
 				setTimeout(() => {
@@ -66,6 +60,10 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 				}, 100);
 				break;
 		}
+	};
+
+	const handleClick = () => {
+		setIsOpen(false);
 	};
 
 	const handleContextMenu = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -94,7 +92,6 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 		clearTimeout(timerID);
 		setTimerID(undefined);
 	};
-
 
 	useEffect(() => {
 		const handleMouseDownOutside = (e: MouseEvent) => {
@@ -141,6 +138,7 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused, column = t
 			fillHeight
 			ref={refComplete}
 			onMouseDown={handleMouseDown}
+			onClick={handleClick}
 			onContextMenu={handleContextMenu}
 			onTouchStart={handleTouchStart}
 			onTouchMove={handleTouchMove}
