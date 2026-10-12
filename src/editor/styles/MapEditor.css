@@ -104,6 +104,12 @@
 	z-index: 1;
 }
 
+.mapEditorDetectionHUD {
+	position: fixed;
+	z-index: 10000;
+	pointer-events: none;
+}
+
 #canvas-rendering {
 	display: none;
 }

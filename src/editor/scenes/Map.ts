@@ -1749,7 +1749,7 @@ class Map extends Base {
 			nextY--;
 			nextYPixels = Project.SQUARE_SIZE - 1;
 		}
-		if (nextY >= -this.model.depth && nextY < this.model.height) {
+		if ((this.isDetection || nextY >= -this.model.depth) && nextY < this.model.height) {
 			position.y = nextY;
 			position.updateYPixels(nextYPixels);
 		}
@@ -1759,7 +1759,7 @@ class Map extends Base {
 		const addition = up ? 1 : -1;
 		if (square) {
 			const newY = this.cursor.position.y + addition;
-			if (newY >= -this.model.depth && newY < this.model.height) {
+			if ((this.isDetection || newY >= -this.model.depth) && newY < this.model.height) {
 				this.cursor.position.y = newY;
 			}
 		} else {
@@ -3155,13 +3155,13 @@ class Map extends Base {
 		super.draw3D(GL);
 	}
 
-	drawCursorCoords() {
+	drawCursorCoords(ctx = Map.ctxHUD!) {
 		const space = 18;
 		const padding = 10;
 		const lines = this.cursor.position.toStringCoords().split('\n');
-		Map.ctxHUD!.textBaseline = 'top';
+		ctx.textBaseline = 'top';
 		for (const [index, line] of lines.entries()) {
-			Utils.drawStrokedText(Map.ctxHUD!, line, padding, padding + index * space);
+			Utils.drawStrokedText(ctx, line, padding, padding + index * space);
 		}
 	}
 

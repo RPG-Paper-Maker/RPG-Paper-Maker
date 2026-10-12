@@ -346,9 +346,9 @@ function Tree({
 			return;
 		}
 		if (!hasCustomItems && (!cannotAddEditRemoveRoot || currentSelectedItemNode !== list[0])) {
-			if (isEmpty) {
+			if (isEmpty && !cannotAdd) {
 				await handleNewItem();
-			} else {
+			} else if (!isEmpty && !cannotEdit) {
 				await handleEditItem();
 			}
 		}

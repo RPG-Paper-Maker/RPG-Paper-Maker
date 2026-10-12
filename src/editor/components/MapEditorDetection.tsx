@@ -10,6 +10,7 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BiSolidPencil } from 'react-icons/bi';
@@ -17,10 +18,11 @@ import { LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { TbHandMove } from 'react-icons/tb';
 import PixelIcon from '../../assets/icons/pixel.svg?react';
 import SquareIcon from '../../assets/icons/square.svg?react';
-import { ACTION_KIND, Constants, MOBILE_ACTION } from '../common';
+import { ACTION_KIND, Constants, MOBILE_ACTION, Utils } from '../common';
 import { Project } from '../core/Project';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
+import '../styles/MapEditor.css';
 import Flex from './Flex';
 import Loader from './Loader';
 import Menu from './Menu';
@@ -60,6 +62,7 @@ function MapEditorDetection({
 	const [transformMode, setTransformMode] = useState<ACTION_KIND | null>(null);
 
 	const refCanvas = useRef<HTMLDivElement>(null);
+	const refCanvasHUD = useRef<HTMLCanvasElement>(null);
 	const previousMobileAction = useRef(Scene.Map.currentSelectedMobileAction);
 
 	const clearMap = () => {
@@ -91,11 +94,16 @@ function MapEditorDetection({
 		}
 		const map = Scene.Map.currentpositionSelector;
 		if (map) {
+			syncHUDBounds();
 			if (!map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
 				map.update();
+			}
+			if (map.cursorPositionUpdated) {
+				drawCursorCoords();
+				map.cursorPositionUpdated = false;
 			}
 			if (map.initialized) {
 				map.draw3D(Manager.GL.dialogContext);
@@ -114,7 +122,48 @@ function MapEditorDetection({
 					canvas.clientHeight,
 				);
 			}
+			syncHUDBounds();
+			drawCursorCoords();
 		}
+	};
+
+	const syncHUDBounds = () => {
+		const canvas = refCanvas.current;
+		const canvasHUD = refCanvasHUD.current;
+		if (!canvas || !canvasHUD) return;
+		const rect = canvas.getBoundingClientRect();
+		const bounds = {
+			left: `${rect.left}px`,
+			top: `${rect.top}px`,
+			width: `${rect.width}px`,
+			height: `${rect.height}px`,
+		};
+		for (const side of ['left', 'top', 'width', 'height'] as const) {
+			if (canvasHUD.style[side] !== bounds[side]) canvasHUD.style[side] = bounds[side];
+		}
+		const ratio = Utils.getPixelRatio();
+		const width = Math.round(rect.width * ratio);
+		const height = Math.round(rect.height * ratio);
+		if (canvasHUD.width !== width || canvasHUD.height !== height) {
+			canvasHUD.width = width;
+			canvasHUD.height = height;
+			canvasHUD.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
+			drawCursorCoords();
+		}
+	};
+
+	const drawCursorCoords = () => {
+		const canvasHUD = refCanvasHUD.current;
+		const map = Scene.Map.currentpositionSelector;
+		const ctx = canvasHUD?.getContext('2d');
+		if (!canvasHUD || !map || !ctx) return;
+		ctx.clearRect(0, 0, canvasHUD.width, canvasHUD.height);
+		ctx.font = 'bold 12px sans-serif';
+		ctx.fillStyle = 'white';
+		ctx.strokeStyle = '#29273d';
+		ctx.lineJoin = 'round';
+		ctx.lineWidth = 3;
+		map.drawCursorCoords(ctx);
 	};
 
 	const handleSquare = () => {
@@ -268,6 +317,10 @@ function MapEditorDetection({
 					<div ref={refCanvas} id='canvas-map-editor-detection' className='fillSpace' />
 				</div>
 			</Flex>
+			{createPortal(
+				<canvas ref={refCanvasHUD} className='mapEditorDetectionHUD' />,
+				document.getElementById('root')!,
+			)}
 		</>
 	);
 }
