@@ -29,6 +29,8 @@ import './SimulationScreenCommands';
 
 export type SimulationSessionOptions = {
 	map: SceneMap;
+	position?: Position;
+	showObject?: boolean;
 	object: Model.CommonObject;
 	reaction: Model.MapObjectReaction;
 	stateID: number;
@@ -91,10 +93,18 @@ class SimulationSession {
 		this.map.simulationActive = true;
 		this.onFinished = options.onFinished;
 		const game = GameStateSimulation.create(options.config);
-		const position = options.map.cursorObject.position.clone();
-		this.object = new SimulationObject(options.map, options.object, options.stateID, position);
+		const position = options.position?.clone() ?? options.map.cursorObject.position.clone();
+		this.object = new SimulationObject(
+			options.map,
+			options.object,
+			options.stateID,
+			position,
+			1,
+			false,
+			options.showObject,
+		);
 		this.hero = this.createHero(position);
-		this.hideMapObject(position);
+		if (options.showObject !== false) this.hideMapObject(position);
 		this.previousElementKind = Scene.Map.currentSelectedMapElementKind;
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.VIEW;
 		options.map.enableView(true);

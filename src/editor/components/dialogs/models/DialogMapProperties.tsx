@@ -17,7 +17,12 @@ import { Data, Model, Scene } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
-import { EngineSettings } from '../../../data';
+import { Position } from '../../../core/Position';
+import {
+	EngineSettings,
+	getSimulationDialogSpacePercent,
+	saveSimulationDialogSpacePercent,
+} from '../../../data/EngineSettings';
 import type { SimulationHudBridge, SimulationSession } from '../../../core/simulation';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -411,6 +416,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		simulationRef.current?.stop();
 		const session = SimulationSession.start({
 			map,
+			position: isNew ? new Position() : map.cursor.position.clone(),
 			object: panelMapObjectRef.current!.getEditedObject(),
 			reaction: info.reaction,
 			stateID: info.stateID,
@@ -474,6 +480,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 		const hud = new SimulationHudBridge();
 		const session = SimulationSession.start({
 			map,
+			position: isNew ? new Position() : map.cursor.position.clone(),
 			object: panelMapObjectRef.current!.getEditedObject(),
 			reaction: info.reaction,
 			stateID: info.stateID,
@@ -847,16 +854,11 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 				isLoading={isLoading}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
-				initialWidth={
-					isStartupReactionsTab
-						? window.innerWidth <= 1000
-							? '100%'
-							: window.innerWidth <= 1300
-								? '66.6667%'
-								: '50%'
-						: '600px'
-				}
+				initialWidth={isStartupReactionsTab ? (window.innerWidth <= 1000 ? '100%' : '66.6667%') : '600px'}
 				initialHeight={isStartupReactionsTab ? (window.innerWidth <= 1000 ? '66.6667vh' : '100%') : '650px'}
+				rememberSpacePercentage={isStartupReactionsTab}
+				getSpacePercentage={getSimulationDialogSpacePercent}
+				onSpacePercentageChange={saveSimulationDialogSpacePercent}
 				initialPlacement={isStartupReactionsTab && window.innerWidth <= 1000 ? 'top' : 'right'}
 				allowMapInteraction
 			>

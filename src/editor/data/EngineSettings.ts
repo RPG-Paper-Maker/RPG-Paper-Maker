@@ -29,6 +29,7 @@ class EngineSettings extends Serializable {
 	public theme!: number;
 	public engineFontSize!: number;
 	public livePreview!: boolean;
+	public simulationDialogSpacePercent!: number;
 	public updaterType!: number;
 	public getUnstableVersions!: boolean;
 
@@ -45,6 +46,7 @@ class EngineSettings extends Serializable {
 		['theme', 't', 0, BINDING.NUMBER],
 		['engineFontSize', 'efs', 12, BINDING.NUMBER],
 		['livePreview', 'lp', true, BINDING.BOOLEAN],
+		['simulationDialogSpacePercent', 'sdp', 66.6667, BINDING.NUMBER],
 		['updaterType', 'ut', 1, BINDING.NUMBER],
 		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],
 	];
@@ -105,6 +107,18 @@ class EngineSettings extends Serializable {
 	}
 }
 
+function getSimulationDialogSpacePercent(): number {
+	return EngineSettings.current?.simulationDialogSpacePercent ?? 66.6667;
+}
+
+function saveSimulationDialogSpacePercent(percent: number): void {
+	const settings = EngineSettings.current;
+	if (settings && settings.simulationDialogSpacePercent !== percent) {
+		settings.simulationDialogSpacePercent = percent;
+		void settings.save();
+	}
+}
+
 // AZERTY locales: France, Belgium, Luxembourg, Monaco, Belgian Dutch
 const AZERTY_LOCALES = ['fr-FR', 'fr-BE', 'fr-LU', 'fr-MC', 'nl-BE'];
 
@@ -130,4 +144,4 @@ export async function detectMovementKeys(): Promise<[string, string, string, str
 	return ['w', 's', 'a', 'd'];
 }
 
-export { EngineSettings };
+export { EngineSettings, getSimulationDialogSpacePercent, saveSimulationDialogSpacePercent };

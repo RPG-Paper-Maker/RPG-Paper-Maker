@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { VscChromeClose } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +31,9 @@ type Props = {
 	className?: string;
 	initialWidth?: string;
 	initialHeight?: string;
+	rememberSpacePercentage?: boolean;
+	getSpacePercentage?: () => number;
+	onSpacePercentageChange?: (percent: number) => void;
 	widthRefreshKey?: string | number;
 	widthRefreshPadding?: number;
 	heightRefreshKey?: string | number;
@@ -115,6 +118,9 @@ function Dialog({
 	className,
 	initialWidth,
 	initialHeight,
+	rememberSpacePercentage = false,
+	getSpacePercentage,
+	onSpacePercentageChange,
 	widthRefreshKey,
 	widthRefreshPadding = 0,
 	heightRefreshKey,
@@ -145,8 +151,15 @@ function Dialog({
 	const dispatch = useDispatch();
 	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
 	const fontSizeFactor = engineFontSize / DEFAULT_ENGINE_FONT_SIZE;
-	const scaledWidth = scaleDimension(initialWidth, fontSizeFactor);
-	const scaledHeight = scaleDimension(initialHeight, fontSizeFactor);
+	const [spaceWidth, spaceHeight] = useMemo(() => {
+		if (!rememberSpacePercentage) return [initialWidth, initialHeight];
+		const stored = getSpacePercentage?.();
+		const percent =
+			typeof stored === 'number' && Number.isFinite(stored) && stored > 0 && stored <= 100 ? stored : 66.6667;
+		return window.innerWidth <= 1000 ? [initialWidth, `${percent}vh`] : [`${percent}%`, initialHeight];
+	}, [initialWidth, initialHeight, rememberSpacePercentage, getSpacePercentage]);
+	const scaledWidth = scaleDimension(spaceWidth, fontSizeFactor);
+	const scaledHeight = scaleDimension(spaceHeight, fontSizeFactor);
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {
@@ -205,6 +218,18 @@ function Dialog({
 	};
 
 	const handleMouseUpResizing = () => {
+		if (rememberSpacePercentage && dialogRef.current) {
+			const isBottomLayout = window.innerWidth <= 1000;
+			const resizedRelevantAxis = isBottomLayout
+				? resizingType !== RESIZING_TYPE.LEFT_RIGHT
+				: resizingType !== RESIZING_TYPE.BOTTOM;
+			if (resizedRelevantAxis) {
+				const rect = dialogRef.current.getBoundingClientRect();
+				const size = isBottomLayout ? rect.height / window.innerHeight : rect.width / window.innerWidth;
+				const percent = Math.round(size * 100000) / 1000;
+				if (percent > 0) onSpacePercentageChange?.(percent);
+			}
+		}
 		setIsResizing(false);
 	};
 

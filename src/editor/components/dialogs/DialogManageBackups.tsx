@@ -33,7 +33,7 @@ type Props = {
 
 function DialogManageBackups({ isOpen, setIsOpen, project, onAfterRestore }: Props) {
 	const projectLocation = project?.location ?? Project.current?.location ?? '';
-	const projectName = project?.name ?? Project.current?.systems.projectName.getName() ?? '';
+	const projectName = project?.name ?? Project.current?.systems?.projectName?.getName() ?? '';
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 

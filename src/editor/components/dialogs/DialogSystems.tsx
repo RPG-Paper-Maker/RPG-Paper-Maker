@@ -16,7 +16,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core/Project';
 import { SimulationHudBridge, SimulationSession } from '../../core/simulation';
-import { EngineSettings } from '../../data';
+import {
+	EngineSettings,
+	getSimulationDialogSpacePercent,
+	saveSimulationDialogSpacePercent,
+} from '../../data/EngineSettings';
 import { Data, Model, Scene } from '../../Editor';
 import { RootState, setIsSystemsDialogOpen, setNeedsReloadMap, setSystemsCommandPreviewOpen } from '../../store';
 import ObjectCommandTestOverlay from '../ObjectCommandTestOverlay';
@@ -144,6 +148,8 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		const hud = new SimulationHudBridge();
 		const session = SimulationSession.start({
 			map,
+			position: map.cursor.position.clone(),
+			showObject: !previewCommonReactions,
 			object,
 			reaction: info.reaction,
 			stateID: info.stateID,
@@ -191,6 +197,8 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 		const hud = new SimulationHudBridge();
 		const session = SimulationSession.start({
 			map,
+			position: map.cursor.position.clone(),
+			showObject: !previewCommonReactions,
 			object,
 			reaction: info.reaction,
 			stateID: info.stateID,
@@ -317,9 +325,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 					isPreviewLayout
 						? window.innerWidth <= 1000
 							? '100%'
-							: window.innerWidth <= 1300
-								? '66.6667%'
-								: '50%'
+							: '66.6667%'
 						: window.innerWidth <= 1000
 							? '100%'
 							: '1000px'
@@ -327,6 +333,9 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 				initialHeight={
 					isPreviewLayout ? (window.innerWidth <= 1000 ? '66.6667vh' : '100%') : 'calc(100% - 50px)'
 				}
+				rememberSpacePercentage={isPreviewLayout}
+				getSpacePercentage={getSimulationDialogSpacePercent}
+				onSpacePercentageChange={saveSimulationDialogSpacePercent}
 				initialPlacement={
 					isPreviewLayout && window.innerWidth <= 1000 ? 'top' : isPreviewLayout ? 'right' : 'center'
 				}

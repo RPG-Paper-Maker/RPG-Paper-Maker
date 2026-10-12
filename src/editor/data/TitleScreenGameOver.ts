@@ -80,6 +80,8 @@ class TitleScreenGameOver extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TitleScreenGameOver.getBindings(additionnalBinding));
+		this.titleMusic ??= PlaySong.createPlaySong(SONG_KIND.MUSIC);
+		this.gameOverMusic ??= PlaySong.createPlaySong(SONG_KIND.MUSIC);
 		this.titleMusic.kind = SONG_KIND.MUSIC;
 		this.gameOverMusic.kind = SONG_KIND.MUSIC;
 	}

@@ -13,6 +13,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model, Scene } from '../../../Editor';
 import { ELEMENT_MAP_KIND } from '../../../common';
+import { getSimulationDialogSpacePercent, saveSimulationDialogSpacePercent } from '../../../data/EngineSettings';
 import PanelMapObject, { PanelMapObjectRef, PlayCommandInfo } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -42,7 +43,6 @@ function DialogMapObject({
 }: Props) {
 	const { t } = useTranslation();
 	const isBottomPreviewLayout = window.innerWidth <= 1000;
-	const isNarrowDesktopLayout = window.innerWidth <= 1300;
 
 	const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
 
@@ -116,8 +116,11 @@ function DialogMapObject({
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth={isBottomPreviewLayout ? '100%' : isNarrowDesktopLayout ? '66.6667%' : '50%'}
+			initialWidth={isBottomPreviewLayout ? '100%' : '66.6667%'}
 			initialHeight={isBottomPreviewLayout ? '66.6667vh' : '100%'}
+			rememberSpacePercentage
+			getSpacePercentage={getSimulationDialogSpacePercent}
+			onSpacePercentageChange={saveSimulationDialogSpacePercent}
 			initialPlacement={isBottomPreviewLayout ? 'top' : 'right'}
 			allowMapInteraction
 		>
