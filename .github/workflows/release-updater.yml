@@ -180,7 +180,7 @@ jobs:
                   retention-days: 1
 
     build-linux:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
 
         steps:
             - uses: actions/checkout@v5
@@ -258,7 +258,7 @@ jobs:
 
     deploy-steam:
         needs: [build-mac, build-win, build-linux]
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
 
         steps:
             - uses: actions/checkout@v5
