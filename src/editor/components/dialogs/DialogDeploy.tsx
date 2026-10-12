@@ -56,7 +56,7 @@ type Props = {
 function DialogDeploy({ setIsOpen }: Props) {
 	const { t } = useTranslation();
 
-	const [isWarningLocationOpen, setIsWarningLocationOpen] = useState(false);
+	const [warningLocationPath, setWarningLocationPath] = useState<string | null>(null);
 	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
 	const [exportType, setExportType] = useState(Constants.IS_DESKTOP ? EXPORT_TYPE.APPLICATION : EXPORT_TYPE.WEB);
 	const [major, setMajor] = useState(Project.current!.settings.lastMajorVersion);
@@ -88,9 +88,21 @@ function DialogDeploy({ setIsOpen }: Props) {
 		exportType === EXPORT_TYPE.APPLICATION &&
 		(targetOS === OS_KIND.LINUX || targetOS === OS_KIND.DARWIN);
 
-	const getPathProject = () => {
+	const getDeployName = () => {
 		const suffix = exportType === EXPORT_TYPE.WEB ? '-Browser' : `-${OS_SUFFIXES[targetOSIndex]}`;
-		return Paths.join(location, `${Paths.getFileName(Project.current!.getPath())}-${major}.${minor}${suffix}`);
+		return `${Paths.getFileName(Project.current!.getPath())}-${major}.${minor}${suffix}`;
+	};
+
+	const getDeployLocation = () => {
+		const normalizedLocation = Paths.normalize(location).replace(/\/+$/, '');
+		if (Paths.getFileName(normalizedLocation) === getDeployName()) {
+			return normalizedLocation.slice(0, normalizedLocation.lastIndexOf('/'));
+		}
+		return normalizedLocation;
+	};
+
+	const getPathProject = () => {
+		return Paths.join(getDeployLocation(), getDeployName());
 	};
 
 	const deploy = async () => {
@@ -157,7 +169,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 						targetOS === OS_KIND.LINUX ? ['Game', 'RPG Paper Maker.bin', 'chrome_crashpad_handler'] : [];
 					await IO.createTarGz(outputPath, executables);
 					await IO.removeFolder(outputPath);
-					await IO.openFolder(location);
+					await IO.openFolder(getDeployLocation());
 				} else {
 					await IO.openFolder(outputPath);
 				}
@@ -168,6 +180,9 @@ function DialogDeploy({ setIsOpen }: Props) {
 					await removeFolder(outputPath);
 				}
 			}
+			Project.current!.settings.lastMajorVersion = major;
+			Project.current!.settings.lastMinorVersion = minor;
+			await Project.current!.settings.save();
 			setIsOpen(false);
 		} finally {
 			dispatch(setLoading(false));
@@ -319,29 +334,32 @@ function DialogDeploy({ setIsOpen }: Props) {
 	};
 
 	const handleWarningLocationNo = () => {
-		setIsWarningLocationOpen(false);
+		setWarningLocationPath(null);
 	};
 
 	const handleWarningLocationYes = async () => {
-		setIsWarningLocationOpen(false);
+		setWarningLocationPath(null);
 		if (needsTarGz) {
 			await removeFile(`${getPathProject()}.tar.gz`);
-		} else {
-			await removeFolder(getPathProject());
 		}
+		await removeFolder(getPathProject());
 		await deploy();
 	};
 
 	const handleAccept = async () => {
-		const pathToCheck = needsTarGz ? `${getPathProject()}.tar.gz` : getPathProject();
-		if (await checkFileExists(pathToCheck)) {
-			setIsWarningLocationOpen(true);
+		const outputPath = getPathProject();
+		const archivePath = `${outputPath}.tar.gz`;
+		const existingPath =
+			needsTarGz && (await checkFileExists(archivePath))
+				? archivePath
+				: (await checkFileExists(outputPath))
+					? outputPath
+					: null;
+		if (existingPath) {
+			setWarningLocationPath(existingPath);
 			return;
 		}
 		await deploy();
-		Project.current!.settings.lastMajorVersion = major;
-		Project.current!.settings.lastMinorVersion = minor;
-		await Project.current!.settings.save();
 	};
 
 	const handleReject = async () => {
@@ -439,13 +457,13 @@ function DialogDeploy({ setIsOpen }: Props) {
 				</Flex>
 			</Dialog>
 			<Dialog
-				isOpen={isWarningLocationOpen}
+				isOpen={warningLocationPath !== null}
 				title={t('warning')}
 				footer={<FooterNoYes onNo={handleWarningLocationNo} onYes={handleWarningLocationYes} />}
 				onClose={handleWarningLocationNo}
 			>
 				{t('warning.project.exist.overwrite', {
-					path: needsTarGz ? `${getPathProject()}.tar.gz` : getPathProject(),
+					path: warningLocationPath,
 				})}
 			</Dialog>
 		</>
