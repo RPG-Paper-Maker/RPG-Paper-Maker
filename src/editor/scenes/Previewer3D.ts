@@ -260,17 +260,18 @@ class Previewer3D extends Base {
 	}
 
 	async loadObject3D(object3DID: number) {
-		const object = Project.current!.specialElements.getObject3DByID(object3DID);
+		const object = Project.current?.specialElements.getObject3DByID(object3DID);
 		await this.loadObject3DByModel(object);
 	}
 
-	async loadObject3DByModel(object: Model.Object3D) {
-		if (!object) {
+	async loadObject3DByModel(object?: Model.Object3D) {
+		const project = Project.current;
+		if (!project || !object) {
 			this.clear();
 			return;
 		}
 		if (object.shapeKind === SHAPE_KIND.CUSTOM && object.gltfID !== -1 && object.pictureID === -1) {
-			const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID);
+			const shape = project.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID);
 			if (!shape) {
 				this.clear();
 				return;
@@ -278,16 +279,26 @@ class Previewer3D extends Base {
 			if (!shape.isShapeLoaded()) {
 				await shape.loadShape();
 			}
+			if (Project.current !== project) return;
 			if (shape.gltfScene) {
 				this.addGltfScene(shape.gltfScene, object.scale, shape.gltfAnimations);
 				return;
 			}
 		}
 		const texture = await Object3D.loadObject3DTexture(Scene.Map.current, object.id);
+		if (Project.current !== project) return;
 		const geometry = new CustomGeometry();
 		const object3DElement = MapElement.Object3D.create(object);
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
-			await (object3DElement as MapElement.Object3DCustom).loadShape();
+			const shape =
+				object.gltfID !== -1
+					? project.shapes.getByID(CUSTOM_SHAPE_KIND.GLTF, object.gltfID)
+					: project.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID);
+			(object3DElement as MapElement.Object3DCustom).shape = shape;
+			if (shape) {
+				await shape.loadShape();
+			}
+			if (Project.current !== project) return;
 		}
 		object3DElement.updateGeometry(geometry, new Position(), 0);
 		this.addToScene(geometry, texture);
