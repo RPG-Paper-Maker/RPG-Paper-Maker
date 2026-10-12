@@ -96,23 +96,31 @@ class SpecialElements extends Serializable {
 		this.autotiles[2].name = t('haunted');
 		this.autotiles[3].name = t('snow');
 		this.autotiles[4].name = t('lava');
-		this.walls[0].name = t('woods.wall');
-		this.walls[1].name = t('bush');
-		this.walls[2].name = t('bush.haunted');
-		this.walls[3].name = t('bush.snow');
-		this.walls[4].name = t('bridge.string');
-		this.walls[5].name = t('brick');
-		this.walls[6].name = t('hedge');
-		this.walls[7].name = t('sandstone');
-		this.walls[8].name = t('big.sandstone');
-		this.walls[9].name = t('hedge.snow');
-		this.walls[10].name = t('inside.door.opened');
-		this.walls[11].name = t('inside.1');
-		this.walls[12].name = t('inside.2');
-		this.walls[13].name = t('inside.3');
-		this.walls[14].name = t('wood');
-		this.walls[15].name = t('sewers');
-		this.walls[16].name = t('cave');
+		const wallNameKeys = [
+			'woods.wall',
+			'bush',
+			'bush.haunted',
+			'bush.snow',
+			'bridge.string',
+			'brick',
+			'hedge',
+			'sandstone',
+			'big.sandstone',
+			'hedge.snow',
+			'inside.door.opened',
+			'inside.1',
+			'inside.2',
+			'inside.3',
+			'wood',
+			'sewers',
+			'cave',
+		];
+		for (const [index, key] of wallNameKeys.entries()) {
+			const wall = this.getWallByID(index + 1);
+			if (wall) {
+				wall.name = t(key);
+			}
+		}
 		this.objects3D[0].name = t('tent');
 		this.objects3D[1].name = t('small.chest');
 		this.objects3D[2].name = t('small.chest.opened');

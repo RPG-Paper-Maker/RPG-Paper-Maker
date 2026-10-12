@@ -112,6 +112,7 @@ function PanelProject() {
 		Scene.Map.onSelectMapID = (id: number) => {
 			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
 			handleSelectedMapItemRef.current(node);
+			if (node) setMapForcedCurrentSelectedItemID(id);
 		};
 		return () => {
 			Scene.Map.onSelectMapID = null;

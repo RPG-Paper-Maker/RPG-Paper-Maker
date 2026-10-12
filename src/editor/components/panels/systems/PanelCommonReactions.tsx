@@ -23,6 +23,7 @@ import TreeCommands from '../../TreeCommands';
 import type { PlayCommandInfo } from '../PanelMapObject';
 
 type Props = {
+	selectedReactionID?: number;
 	onPlayCommand?: (info: PlayCommandInfo, object: Model.CommonObject) => void;
 	onSelectCommand?: (info: PlayCommandInfo | null, object: Model.CommonObject) => void;
 	onLivePreviewCommand?: (
@@ -34,10 +35,11 @@ type Props = {
 };
 
 const PanelCommonReactions = forwardRef(
-	({ onPlayCommand, onSelectCommand, onLivePreviewCommand, onReactionChanged }: Props, ref) => {
+	({ selectedReactionID, onPlayCommand, onSelectCommand, onLivePreviewCommand, onReactionChanged }: Props, ref) => {
 		const { t } = useTranslation();
 
 		const [reactions, setReactions] = useState<Node[]>([]);
+		const [forcedReactionID, setForcedReactionID] = useState<number | null>(null);
 		const [selectedReaction, setSelectedReaction] = useState<Model.CommonReaction | null>(null);
 		const [parameters, setParameters] = useState<Node[]>([]);
 		const [isBlock, setIsBlock] = useStateBool();
@@ -51,6 +53,7 @@ const PanelCommonReactions = forwardRef(
 		const initialize = () => {
 			const commonEvents = Project.current!.commonEvents;
 			setReactions(Node.createList(commonEvents.commonReactions));
+			setForcedReactionID(selectedReactionID ?? null);
 		};
 
 		const handleSelectReaction = (node: Node | null) => {
@@ -127,6 +130,9 @@ const PanelCommonReactions = forwardRef(
 						<Tree
 							constructorType={Model.CommonReaction}
 							list={reactions}
+							forcedCurrentSelectedItemID={forcedReactionID}
+							setForcedCurrentSelectedItemID={setForcedReactionID}
+							noFirstSelection={selectedReactionID !== undefined}
 							minWidth={TREES_MIN_WIDTH}
 							onSelectedItem={handleSelectReaction}
 							onListUpdated={handleUpdateReactions}

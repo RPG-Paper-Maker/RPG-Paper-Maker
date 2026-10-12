@@ -60,6 +60,7 @@ function TreeMaps({
 	const [editedFolder, setEditedFolder] = useState<Model.Base>(new Model.Base());
 	const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 	const [isOpenMapProperties, setIsOpenMapProperties] = useState(false);
+	const [mapPropertiesInitialTab, setMapPropertiesInitialTab] = useState(0);
 	const [isOpenName, setIsOpenName] = useState(false);
 	const [isOpenDialogConfirm, setIsOpenDialogConfirm] = useState(false);
 	const [isDeletingMap, setIsDeletingMap] = useState(false);
@@ -83,6 +84,26 @@ function TreeMaps({
 		RPM.treeCurrentForceUpdate = () => dispatch(triggerTreeMap());
 		RPM.treeCurrentSetSelectedItem = (node: Node) => setForcedCurrentSelectedItemID?.(node.content.id);
 	};
+
+	useEffect(() => {
+		const handleNavigateStartup = (event: Event) => {
+			const id = (event as CustomEvent<number>).detail;
+			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
+			if (!node) return;
+			void (async () => {
+				const map = Model.Map.create(id, node.content.name);
+				await map.load();
+				originalMapNameRef.current = map.name;
+				setSelectedNode(node);
+				setEditedMap(map);
+				setIsNew(false);
+				setMapPropertiesInitialTab(1);
+				setIsOpenMapProperties(true);
+			})();
+		};
+		window.addEventListener('variable-usage-startup', handleNavigateStartup);
+		return () => window.removeEventListener('variable-usage-startup', handleNavigateStartup);
+	}, []);
 
 	useEffect(() => {
 		if (triggerNewMap === undefined) {
@@ -139,6 +160,7 @@ function TreeMaps({
 		if (!folder) return;
 		setEditedMap(map);
 		setIsNew(true);
+		setMapPropertiesInitialTab(0);
 		previousTagRef.current = currentTreeMapTag;
 		const node = Node.create(Model.TreeMapTag.create(map.id, map.name), [], parent);
 		node.isPreview = true;
@@ -352,6 +374,7 @@ function TreeMaps({
 			originalMapNameRef.current = map.name;
 			setEditedMap(map);
 			setIsNew(false);
+			setMapPropertiesInitialTab(0);
 			setIsOpenMapProperties(true);
 		}
 	};
@@ -362,6 +385,7 @@ function TreeMaps({
 		originalMapNameRef.current = map.name;
 		setEditedMap(map);
 		setIsNew(false);
+		setMapPropertiesInitialTab(0);
 		setIsOpenMapProperties(true);
 	};
 
@@ -514,6 +538,7 @@ function TreeMaps({
 				<Suspense fallback={null}>
 					<DialogMapProperties
 						setIsOpen={setIsOpenMapProperties}
+						initialTabIndex={mapPropertiesInitialTab}
 						model={editedMap}
 						onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
 						onReject={isNew ? handleRejectNewMap : handleRejectEditMap}

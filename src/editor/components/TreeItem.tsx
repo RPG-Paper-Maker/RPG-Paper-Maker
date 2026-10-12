@@ -105,6 +105,9 @@ function TreeItem({
 	}, [node, expanded]);
 
 	const getString = () => {
+		if (text !== undefined) {
+			return text;
+		}
 		if (headers && headers.length > 0) {
 			return node.toStrings().map((value, index) => (
 				<Flex one spaced className='textEllipsis' key={headers[index]} title={hideTooltip ? undefined : value}>

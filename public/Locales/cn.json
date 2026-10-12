@@ -2049,5 +2049,7 @@
 	"light.target.z": "目标 Z（像素）",
 	"light.softness": "柔和度",
 	"light.angle.softness": "角度 / 柔和度",
-	"error.dialog.outdated": "您正在使用版本 {{currentVersion}}，但版本 {{latestVersion}} 已可用。请先更新 RPG Paper Maker 再报告此错误。点击“确定”仍可发送报告。"
+	"error.dialog.outdated": "您正在使用版本 {{currentVersion}}，但版本 {{latestVersion}} 已可用。请先更新 RPG Paper Maker 再报告此错误。点击“确定”仍可发送报告。",
+	"variable.usages.map.path": "\u5730\u56fe\u8def\u5f84",
+	"variable.usages.object.name": "\u5bf9\u8c61\u540d\u79f0"
 }

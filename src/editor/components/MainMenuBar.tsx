@@ -180,6 +180,13 @@ function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [dialogType, setDialogType] = useState<DIALOG_TYPE | null>(null);
+	const [variableUsageSystemsTarget, setVariableUsageSystemsTarget] = useState<{
+		reactionID?: number;
+		modelID?: number;
+		modelKind?: 'default' | 'hero';
+		eventIndex?: number;
+		stateID?: number;
+	} | null>(null);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
@@ -236,8 +243,28 @@ function MainMenuBar() {
 	const handleSetIsDialogOpen = (b: boolean) => {
 		if (!b) {
 			setDialogType(null);
+			setVariableUsageSystemsTarget(null);
 		}
 	};
+
+	useEffect(() => {
+		const handleNavigate = (event: Event) => {
+			setVariableUsageSystemsTarget(
+				(
+					event as CustomEvent<{
+						reactionID?: number;
+						modelID?: number;
+						modelKind?: 'default' | 'hero';
+						eventIndex?: number;
+						stateID?: number;
+					}>
+				).detail,
+			);
+			setDialogType(DIALOG_TYPE.SYSTEMS);
+		};
+		window.addEventListener('variable-usage-systems', handleNavigate);
+		return () => window.removeEventListener('variable-usage-systems', handleNavigate);
+	}, []);
 
 	const handleNewProject = async () => {
 		setDialogType(DIALOG_TYPE.NEW_PROJECT);
@@ -1287,7 +1314,24 @@ function MainMenuBar() {
 			case DIALOG_TYPE.DATA:
 				return <DialogData setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.SYSTEMS:
-				return <DialogSystems setIsOpen={handleSetIsDialogOpen} />;
+				return (
+					<DialogSystems
+						setIsOpen={handleSetIsDialogOpen}
+						initialTabIndex={
+							variableUsageSystemsTarget?.reactionID !== undefined
+								? 5
+								: variableUsageSystemsTarget?.modelID !== undefined ||
+									  variableUsageSystemsTarget?.modelKind
+									? 6
+									: undefined
+						}
+						selectedReactionID={variableUsageSystemsTarget?.reactionID}
+						selectedModelID={variableUsageSystemsTarget?.modelID}
+						selectedModelKind={variableUsageSystemsTarget?.modelKind}
+						selectedEventIndex={variableUsageSystemsTarget?.eventIndex}
+						selectedStateID={variableUsageSystemsTarget?.stateID}
+					/>
+				);
 			case DIALOG_TYPE.VARIABLES:
 				return <DialogVariables setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.COLLISIONS:

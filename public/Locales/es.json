@@ -2048,5 +2048,7 @@
 	"light.target.z": "Objetivo Z (píxeles)",
 	"light.softness": "Suavidad",
 	"light.angle.softness": "Ángulo / suavidad",
-	"error.dialog.outdated": "Estás usando la versión {{currentVersion}}, pero la versión {{latestVersion}} está disponible. Actualiza RPG Paper Maker antes de informar de este error. Haz clic en Aceptar para enviar el informe de todos modos."
+	"error.dialog.outdated": "Estás usando la versión {{currentVersion}}, pero la versión {{latestVersion}} está disponible. Actualiza RPG Paper Maker antes de informar de este error. Haz clic en Aceptar para enviar el informe de todos modos.",
+	"variable.usages.map.path": "Ruta del mapa",
+	"variable.usages.object.name": "Nombre del objeto"
 }

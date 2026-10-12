@@ -54,6 +54,7 @@ const ObjectCommandTestOverlay = lazy(() => import('../../ObjectCommandTestOverl
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
+	initialTabIndex?: number;
 	model: Model.Map;
 	onAccept: (previousModel: Model.Map, increaseLeft: number, increaseTop: number) => Promise<void>;
 	onReject?: () => void | Promise<void>;
@@ -61,7 +62,15 @@ type Props = {
 	isNew?: boolean;
 };
 
-function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChange, isNew = false }: Props) {
+function DialogMapProperties({
+	setIsOpen,
+	model,
+	onAccept,
+	onReject,
+	onNameChange,
+	isNew = false,
+	initialTabIndex = 0,
+}: Props) {
 	const { t } = useTranslation();
 
 	const playMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
@@ -864,6 +873,7 @@ function DialogMapProperties({ setIsOpen, model, onAccept, onReject, onNameChang
 			>
 				<Flex one fillWidth fillHeight spacedLarge columnMobile>
 					<Tab
+						defaultIndex={initialTabIndex}
 						titles={[
 							Model.Base.create(1, t('settings')),
 							Model.Base.create(2, t('map.startup.reactions')),

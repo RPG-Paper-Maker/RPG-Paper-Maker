@@ -2048,5 +2048,7 @@
 	"light.target.z": "ターゲット Z（ピクセル）",
 	"light.softness": "柔らかさ",
 	"light.angle.softness": "角度 / 柔らかさ",
-	"error.dialog.outdated": "バージョン {{currentVersion}} を使用中ですが、バージョン {{latestVersion}} が利用できます。このエラーを報告する前に RPG Paper Maker を更新してください。OK をクリックすると、それでもレポートを送信できます。"
+	"error.dialog.outdated": "バージョン {{currentVersion}} を使用中ですが、バージョン {{latestVersion}} が利用できます。このエラーを報告する前に RPG Paper Maker を更新してください。OK をクリックすると、それでもレポートを送信できます。",
+	"variable.usages.map.path": "\u30de\u30c3\u30d7\u306e\u30d1\u30b9",
+	"variable.usages.object.name": "\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u540d"
 }

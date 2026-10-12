@@ -9,12 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaSearch } from 'react-icons/fa';
+import { FaArrowRightFromBracket } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
 import { INPUT_TYPE_WIDTH, Utils, VARIABLE_DEFAULT_VALUE_KIND } from '../../common';
 import { Node } from '../../core/Node';
+import { Position } from '../../core/Position';
 import { Project } from '../../core/Project';
-import { Data, Model } from '../../Editor';
+import { findVariableUsages, setPendingVariableObject, VariableUsage } from '../../data/VariableUsages';
+import { Data, Model, Scene } from '../../Editor';
+import '../../styles/VariableUsages.css';
+import Button from '../Button';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
@@ -35,6 +42,25 @@ type Props = {
 function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
+	// Resolve Base when the dialog renders, after the Editor module has initialized.
+	const VariableUsageRow = useMemo(
+		() =>
+			class extends Model.Base {
+				usage: VariableUsage;
+
+				constructor(id = 0, usage?: VariableUsage) {
+					super();
+					this.id = id;
+					this.usage = usage!;
+				}
+
+				static getTreeHeader() {
+					return ['variable.usages.map.path', 'object.id', 'variable.usages.object.name', 'command', ''];
+				}
+			},
+		[],
+	);
+
 	const [initialized, setInitialized] = useState(false);
 	const [pages, setPages] = useState<Node[]>([]);
 	const [variables, setVariables] = useState<Node[]>([]);
@@ -47,7 +73,10 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const [defaultValueNumber, setDefaultValueNumber] = useState(0);
 	const [defaultValueText, setDefaultValueText] = useState('');
 	const [defaultValueSwitch, setDefaultValueSwitch] = useState(false);
+	const [usages, setUsages] = useState<Node[] | null>(null);
+	const [loadingUsages, setLoadingUsages] = useState(false);
 	const currentVariablesPage = useRef<Model.VariablesPage | null>(null);
+	const navigatingToUsage = useRef(false);
 
 	const isDefaultValueDisabled = () => !selectedVariable || selectedVariable.content.id <= 0;
 
@@ -164,6 +193,9 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	};
 
 	const handleAccept = async () => {
+		if (currentVariablesPage.current) {
+			currentVariablesPage.current.list = Node.createListFromNodes<Model.Variable>(variables);
+		}
 		Project.current!.variables.pages = Node.createListFromNodes(pages);
 		await Project.current!.variables.save();
 		if (model && selectedVariable) {
@@ -177,6 +209,63 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 	const handleReject = async () => {
 		onReject?.();
 		setIsOpen(false);
+	};
+
+	const handleFindUsages = async () => {
+		const variable = getSelectedVariable();
+		if (!variable) return;
+		setLoadingUsages(true);
+		try {
+			const found = await findVariableUsages(variable.id);
+			setUsages(found.map((usage, index) => Node.create(new VariableUsageRow(index + 1, usage))));
+		} catch (error) {
+			console.error(error);
+			toast.error(t('variable.usages.error', { defaultValue: 'Could not search variable usages.' }));
+		} finally {
+			setLoadingUsages(false);
+		}
+	};
+
+	const handleGoToUsage = async (node: Node) => {
+		if (navigatingToUsage.current) return;
+		navigatingToUsage.current = true;
+		const usage = (node.content as InstanceType<typeof VariableUsageRow>).usage;
+		try {
+			await handleAccept();
+		} catch (error) {
+			navigatingToUsage.current = false;
+			console.error(error);
+			toast.error(t('variables.save.error', { defaultValue: 'Could not save variables.' }));
+			return;
+		}
+		setUsages(null);
+		if (usage.mapID !== null && usage.isStartup) {
+			Scene.Map.onSelectMapID?.(usage.mapID);
+			window.dispatchEvent(new CustomEvent('variable-usage-startup', { detail: usage.mapID }));
+		} else if (usage.mapID !== null && usage.position) {
+			setPendingVariableObject({ mapID: usage.mapID, position: usage.position });
+			const tag = Node.getNodeByID(Project.current!.treeMaps.tree, usage.mapID)?.content as
+				Model.TreeMapTag | undefined;
+			if (tag) {
+				const position = new Position();
+				position.read(usage.position);
+				tag.cursorPosition = position;
+			}
+			Scene.Map.onSelectMapID?.(usage.mapID);
+			window.dispatchEvent(new Event('variable-usage-map-object'));
+		} else if (usage.reactionID !== undefined || usage.modelID !== undefined || usage.modelKind) {
+			window.dispatchEvent(
+				new CustomEvent('variable-usage-systems', {
+					detail: {
+						reactionID: usage.reactionID,
+						modelID: usage.modelID,
+						modelKind: usage.modelKind,
+						eventIndex: usage.eventIndex,
+						stateID: usage.stateID,
+					},
+				}),
+			);
+		}
 	};
 
 	useLayoutEffect(() => {
@@ -197,7 +286,7 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			initialWidth='700px'
+			initialWidth='800px'
 			initialHeight='640px'
 		>
 			<Flex spacedLarge fillWidth fillHeight>
@@ -261,9 +350,75 @@ function DialogVariables({ setIsOpen, model, onAccept, onReject }: Props) {
 								disabled={isDefaultValueDisabled()}
 							/>
 						)}
+						<Flex one />
+						<Button
+							icon={<FaSearch />}
+							disabled={isDefaultValueDisabled() || loadingUsages}
+							onClick={() => void handleFindUsages()}
+						>
+							{loadingUsages
+								? t('searching', { defaultValue: 'Searching...' })
+								: t('find.variable.usages', { defaultValue: 'Find usages' })}
+						</Button>
 					</Flex>
 				</Flex>
 			</Flex>
+			{usages && (
+				<Dialog
+					title={t('variable.usages', { defaultValue: 'Variable usages' })}
+					isOpen
+					onClose={() => setUsages(null)}
+					zIndex={Z_INDEX_LEVEL.LAYER_THREE}
+					initialWidth='1100px'
+					initialHeight='600px'
+				>
+					<Flex column fillWidth fillHeight className='variableUsages'>
+						<Tree
+							constructorType={VariableUsageRow}
+							list={usages}
+							cannotAdd
+							cannotEdit
+							cannotDelete
+							cannotDragDrop
+							cannotClear
+							canBeEmpty
+							scrollable
+							getText={(node) => {
+								const usage = (node.content as InstanceType<typeof VariableUsageRow>).usage;
+								return (
+									<>
+										<Flex one className='textEllipsis'>
+											{usage.mapPath}
+										</Flex>
+										<Flex one>{usage.objectID ?? '-'}</Flex>
+										<Flex one className='textEllipsis'>
+											{usage.objectName}
+										</Flex>
+										<Flex one className='textEllipsis'>
+											{usage.command.toString()}
+										</Flex>
+										<Flex
+											className='variableUsageAction'
+											onMouseDown={(event: React.MouseEvent) => event.stopPropagation()}
+										>
+											<button
+												type='button'
+												className='variableUsageGoTo'
+												title='Go to'
+												aria-label='Go to'
+												onClick={() => void handleGoToUsage(node)}
+											>
+												<FaArrowRightFromBracket />
+											</button>
+										</Flex>
+									</>
+								);
+							}}
+						/>
+						{usages.length === 0 && t('no.variable.usages', { defaultValue: 'No usages found.' })}
+					</Flex>
+				</Dialog>
+			)}
 		</Dialog>
 	);
 }

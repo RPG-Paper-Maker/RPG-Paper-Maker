@@ -23,6 +23,10 @@ import Tree, { TREES_MIN_WIDTH } from '../../Tree';
 import PanelMapObject, { PanelMapObjectRef, PlayCommandInfo } from '../PanelMapObject';
 
 type Props = {
+	selectedModelID?: number;
+	selectedModelKind?: 'default' | 'hero';
+	selectedEventIndex?: number;
+	selectedStateID?: number;
 	onPlayCommand?: (info: PlayCommandInfo, object: Model.CommonObject) => void;
 	onSelectCommand?: (info: PlayCommandInfo | null, object: Model.CommonObject) => void;
 	onLivePreviewCommand?: (
@@ -40,7 +44,19 @@ enum SELECTION_KIND {
 }
 
 const PanelModels = forwardRef(
-	({ onPlayCommand, onSelectCommand, onLivePreviewCommand, onModelChanged }: Props, ref) => {
+	(
+		{
+			selectedModelID,
+			selectedModelKind,
+			selectedEventIndex,
+			selectedStateID,
+			onPlayCommand,
+			onSelectCommand,
+			onLivePreviewCommand,
+			onModelChanged,
+		}: Props,
+		ref,
+	) => {
 		const { t } = useTranslation();
 
 		const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
@@ -66,10 +82,12 @@ const PanelModels = forwardRef(
 
 		const initialize = () => {
 			const commonEvents = Project.current!.commonEvents;
-			setSelectedModel(commonEvents.defaultObject);
-			setSelectionType(SELECTION_KIND.DEFAULT);
+			setSelectedModel(selectedModelKind === 'hero' ? commonEvents.heroObject : commonEvents.defaultObject);
+			setSelectionType(selectedModelKind === 'hero' ? SELECTION_KIND.HERO : SELECTION_KIND.DEFAULT);
 			setModels(Node.createList(commonEvents.commonObjects));
-			setForcedCurrentIndex(-1);
+			const index = commonEvents.commonObjects.findIndex((model) => model.id === selectedModelID);
+			setForcedCurrentIndex(index);
+			if (index >= 0) setSelectionType(SELECTION_KIND.LIST);
 		};
 
 		const handleClickDefault = () => {
@@ -91,7 +109,7 @@ const PanelModels = forwardRef(
 				onModelChanged?.();
 				const model = node.content as Model.CommonObject;
 				setSelectedModel(model);
-				if (isClick) {
+				if (isClick || selectedModelID !== undefined) {
 					setSelectionType(SELECTION_KIND.LIST);
 				}
 			}
@@ -153,6 +171,8 @@ const PanelModels = forwardRef(
 					{selectedModel && !isModelDisabled && (
 						<PanelMapObject
 							object={selectedModel}
+							initialEventIndex={selectedEventIndex}
+							initialStateID={selectedStateID}
 							ref={panelMapObjectRef}
 							hideNameID
 							saveOnUpdate

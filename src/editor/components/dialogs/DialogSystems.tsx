@@ -50,9 +50,22 @@ export enum SYSTEMS_TAB {
 type Props = {
 	setIsOpen: (b: boolean) => void;
 	initialTabIndex?: SYSTEMS_TAB;
+	selectedReactionID?: number;
+	selectedModelID?: number;
+	selectedModelKind?: 'default' | 'hero';
+	selectedEventIndex?: number;
+	selectedStateID?: number;
 };
 
-function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
+function DialogSystems({
+	setIsOpen,
+	initialTabIndex,
+	selectedReactionID,
+	selectedModelID,
+	selectedModelKind,
+	selectedEventIndex,
+	selectedStateID,
+}: Props) {
 	const { t } = useTranslation();
 
 	const dispatch = useDispatch();
@@ -359,6 +372,7 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 						<PanelCommonReactions
 							key={5}
 							ref={panelCommonReactionsRef}
+							selectedReactionID={selectedReactionID}
 							onPlayCommand={previewCommonReactions ? handlePlayCommand : undefined}
 							onSelectCommand={previewCommonReactions ? handleSelectCommand : undefined}
 							onLivePreviewCommand={previewCommonReactions ? handleLivePreviewCommand : undefined}
@@ -367,6 +381,10 @@ function DialogSystems({ setIsOpen, initialTabIndex }: Props) {
 						<PanelModels
 							key={6}
 							ref={panelModelsRef}
+							selectedModelID={selectedModelID}
+							selectedModelKind={selectedModelKind}
+							selectedEventIndex={selectedEventIndex}
+							selectedStateID={selectedStateID}
 							onPlayCommand={previewModels ? handlePlayCommand : undefined}
 							onSelectCommand={previewModels ? handleSelectCommand : undefined}
 							onLivePreviewCommand={previewModels ? handleLivePreviewCommand : undefined}

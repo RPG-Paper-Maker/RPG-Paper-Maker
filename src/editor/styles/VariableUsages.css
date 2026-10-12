@@ -1,0 +1,64 @@
+/* Keep the usage tree headers aligned with their rows while the command fills the remaining width. */
+.variableUsages {
+	--usage-map-width: 25%;
+	--usage-id-width: 10%;
+	--usage-name-width: 20%;
+	--usage-action-width: 24px;
+
+	.treeHeader > .flex:nth-child(1),
+	.treeItem > .flex:nth-of-type(1) {
+		flex: 0 0 var(--usage-map-width);
+		min-width: 0;
+	}
+
+	.treeHeader > .flex:nth-child(2),
+	.treeItem > .flex:nth-of-type(2) {
+		flex: 0 0 var(--usage-id-width);
+		min-width: 0;
+	}
+
+	.treeHeader > .flex:nth-child(3),
+	.treeItem > .flex:nth-of-type(3) {
+		flex: 0 0 var(--usage-name-width);
+		min-width: 0;
+	}
+
+	.treeHeader > .flex:nth-child(4),
+	.treeItem > .flex:nth-of-type(4) {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.treeHeader > .flex:nth-child(5),
+	.treeItem > .flex:nth-of-type(5) {
+		flex: 0 0 var(--usage-action-width);
+	}
+
+	.variableUsageAction {
+		align-items: center;
+		justify-content: center;
+	}
+
+	.variableUsageGoTo {
+		width: 22px;
+		height: 20px;
+		padding: 0;
+		border: 1px solid var(--lighter-bg-color);
+		border-radius: 3px;
+		background: transparent;
+		color: inherit;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--primary-color);
+			background-color: rgba(255, 255, 255, 0.08);
+		}
+
+		svg {
+			width: 14px;
+			height: 14px;
+			align-self: center;
+			margin-top: 0;
+		}
+	}
+}

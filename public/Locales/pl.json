@@ -2048,5 +2048,7 @@
 	"light.target.z": "Cel Z (piksele)",
 	"light.softness": "Miękkość",
 	"light.angle.softness": "Kąt / miękkość",
-	"error.dialog.outdated": "Używasz wersji {{currentVersion}}, ale dostępna jest wersja {{latestVersion}}. Zaktualizuj RPG Paper Maker przed zgłoszeniem tego błędu. Kliknij OK, aby mimo to wysłać raport."
+	"error.dialog.outdated": "Używasz wersji {{currentVersion}}, ale dostępna jest wersja {{latestVersion}}. Zaktualizuj RPG Paper Maker przed zgłoszeniem tego błędu. Kliknij OK, aby mimo to wysłać raport.",
+	"variable.usages.map.path": "\u015acie\u017cka mapy",
+	"variable.usages.object.name": "Nazwa obiektu"
 }

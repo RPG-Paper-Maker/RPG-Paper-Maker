@@ -51,6 +51,8 @@ export type PlayCommandInfo = {
 
 type Props = {
 	object: Model.CommonObject;
+	initialEventIndex?: number;
+	initialStateID?: number;
 	hideNameID?: boolean;
 	hideStateValues?: boolean;
 	saveOnDestruction?: boolean;
@@ -65,6 +67,8 @@ const PanelMapObject = forwardRef(
 	(
 		{
 			object,
+			initialEventIndex,
+			initialStateID,
 			hideNameID = false,
 			hideStateValues = false,
 			saveOnDestruction = false,
@@ -138,15 +142,19 @@ const PanelMapObject = forwardRef(
 			const newEvents = Node.createList(object.events);
 			const newProperties = Node.createList(object.properties);
 			setStates(newStates);
-			setForcedCurrentSelectedIDState(newStates[0]?.content?.id ?? -1);
+			const initialState = newStates.find((node) => node.content.id === initialStateID) ?? newStates[0];
+			setForcedCurrentSelectedIDState(initialState?.content?.id ?? -1);
 			setProperties(newProperties);
 			setEvents(newEvents);
 			setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 			setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
-			const state = newStates.length > 0 ? (newStates[0].content as Model.MapObjectState) : null;
+			const state = (initialState?.content as Model.MapObjectState | undefined) ?? null;
 			handleChangeState(state, newEvents);
-			const event = newEvents.length > 0 ? newEvents[0] : null;
+			const event = newEvents[initialEventIndex ?? 0] ?? newEvents[0] ?? null;
 			handleSelectedItemEvent(event);
+			if (initialEventIndex !== undefined) {
+				setForcedCurrentSelectedIndexEvent(event ? newEvents.indexOf(event) : -1);
+			}
 			setForcedCurrentIndexTab(event ? newEvents.indexOf(event) : -1);
 			Project.current!.currentMapObjectStates = newStates;
 			Project.current!.currentMapObjectEvents = newEvents;
@@ -674,6 +682,7 @@ const PanelMapObject = forwardRef(
 											onPasteItem={handlePasteState}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
+											noFirstSelection={initialStateID !== undefined}
 											minWidth={TREES_MIN_WIDTH}
 											cannotUpdateListSize
 											canBeEmpty
@@ -708,6 +717,7 @@ const PanelMapObject = forwardRef(
 										onCreateItem={handleCreateEvent}
 										forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
+										noFirstSelection={initialEventIndex !== undefined}
 										doNotGenerateIDOnPaste
 										byIndex
 										cannotUpdateListSize

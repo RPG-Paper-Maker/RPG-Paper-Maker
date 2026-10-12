@@ -2048,5 +2048,7 @@
 	"light.target.z": "Ziel Z (Pixel)",
 	"light.softness": "Weichheit",
 	"light.angle.softness": "Winkel / Weichheit",
-	"error.dialog.outdated": "Sie verwenden Version {{currentVersion}}, aber Version {{latestVersion}} ist verfügbar. Bitte aktualisieren Sie RPG Paper Maker, bevor Sie diesen Fehler melden. Klicken Sie auf OK, um den Bericht trotzdem zu senden."
+	"error.dialog.outdated": "Sie verwenden Version {{currentVersion}}, aber Version {{latestVersion}} ist verfügbar. Bitte aktualisieren Sie RPG Paper Maker, bevor Sie diesen Fehler melden. Klicken Sie auf OK, um den Bericht trotzdem zu senden.",
+	"variable.usages.map.path": "Kartenpfad",
+	"variable.usages.object.name": "Objektname"
 }

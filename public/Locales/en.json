@@ -2052,5 +2052,13 @@
 	"light.target.y": "Target Y (pixels)",
 	"light.target.z": "Target Z (pixels)",
 	"light.softness": "Softness",
-	"light.angle.softness": "Angle / softness"
+	"light.angle.softness": "Angle / softness",
+	"variable.usages": "Variable usages",
+	"find.variable.usages": "Find usages",
+	"no.variable.usages": "No usages found.",
+	"variable.usages.error": "Could not search variable usages.",
+	"variable.usages.map.path": "Map path",
+	"variable.usages.object.name": "Object name",
+	"searching": "Searching...",
+	"variables.save.error": "Could not save variables."
 }

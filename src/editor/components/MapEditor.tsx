@@ -17,6 +17,8 @@ import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, RPM, SPEC
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { EngineSettings } from '../data';
+import { pendingVariableObject, setPendingVariableObject } from '../data/VariableUsages';
+import { Position } from '../core/Position';
 import { Data, Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import {
@@ -131,10 +133,23 @@ function MapEditor() {
 		if (currentMapTag && currentMapTag.id > 0) {
 			setFirstLoading(true);
 			dispatch(setMapEditorLoaded(false));
-			Scene.Map.current = new Scene.Map(currentMapTag);
-			Scene.Map.current.loading = true;
-			Scene.Map.current.canvas = refCanvas?.current;
-			await Scene.Map.current.load();
+			const map = new Scene.Map(currentMapTag);
+			Scene.Map.current = map;
+			map.loading = true;
+			map.canvas = refCanvas?.current;
+			await map.load();
+			if (Scene.Map.current !== map) return;
+			if (pendingVariableObject?.mapID === map.id) {
+				const position = new Position();
+				position.read(pendingVariableObject.position);
+				map.updateObjectCursor(false, position);
+				const object = map.getSelectedObject();
+				if (object) {
+					setCurrentMapObject(object.clone());
+					setIsOpenMapObject(true);
+				}
+				setPendingVariableObject(null);
+			}
 			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
 			const undoRedoLength = await Manager.UndoRedo.getStatesLength();
 			dispatch(setUndoRedoIndex(undoRedoIndex));
@@ -646,6 +661,14 @@ function MapEditor() {
 	useEffect(() => {
 		initializeMap().catch(console.error);
 	}, [needsReloadMap]);
+
+	useEffect(() => {
+		const handleNavigate = () => {
+			if (pendingVariableObject?.mapID === Scene.Map.current?.id) dispatch(setNeedsReloadMap());
+		};
+		window.addEventListener('variable-usage-map-object', handleNavigate);
+		return () => window.removeEventListener('variable-usage-map-object', handleNavigate);
+	}, [dispatch]);
 
 	const getContextMenuItems = () => {
 		if (Scene.Map.previewOnly) {
