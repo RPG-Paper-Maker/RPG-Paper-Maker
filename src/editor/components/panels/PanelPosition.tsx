@@ -124,7 +124,7 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 			setMapID(Scene.Map.current?.id ?? 1);
 			setX(cursor?.x ?? 0);
 			setY(cursor?.y ?? 0);
-			setYp(cursor?.yPixels ?? 0);
+			setYp(cursor?.getYPixelCount() ?? 0);
 			setZ(cursor?.z ?? 0);
 		}
 	};

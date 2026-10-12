@@ -53,6 +53,7 @@ const PanelSelectMapPosition = forwardRef(
 			setMapForcedCurrentSelectedItemID(defaultMapID);
 			setX(defaultX);
 			setY(defaultY);
+			setYp(defaultYp);
 			setZ(defaultZ);
 		};
 
@@ -65,7 +66,7 @@ const PanelSelectMapPosition = forwardRef(
 				} else {
 					tag.cursorPosition = new Position(defaultX, defaultY, 0, defaultZ);
 					tag.cursorPosition.updateYPixels(defaultYp);
-					setYp(tag.cursorPosition.yPixels);
+					setYp(tag.cursorPosition.getYPixelCount());
 				}
 				setCurrentMapTag(tag);
 			}
@@ -120,7 +121,7 @@ const PanelSelectMapPosition = forwardRef(
 			if (Scene.Map.currentpositionSelector) {
 				setX(Scene.Map.currentpositionSelector.cursor.position.x);
 				setY(Scene.Map.currentpositionSelector.cursor.position.y);
-				setYp(Scene.Map.currentpositionSelector.cursor.position.getTotalYPixels());
+				setYp(Scene.Map.currentpositionSelector.cursor.position.getYPixelCount());
 				setZ(Scene.Map.currentpositionSelector.cursor.position.z);
 			}
 		};
