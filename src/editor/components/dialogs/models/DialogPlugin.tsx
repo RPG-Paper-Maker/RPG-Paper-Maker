@@ -169,7 +169,7 @@ function DialogPlugin({ setIsOpen, model, isNew, onAccept, onReject }: Props) {
 		if (!loadingPlugins && allPluginsJSON.length > 0) {
 			setPlugins(
 				Node.createList(
-					allPluginsJSON[index].map((json, index) => Model.Plugin.create(index, json.name as string)),
+					allPluginsJSON[index].map((json, index) => Model.Plugin.create(index + 1, json.name as string)),
 					false,
 				),
 			);
@@ -306,9 +306,7 @@ const inject = Manager.Plugins.inject;
 		<Flex key={1} column spacedLarge fillWidth>
 			<Flex spaced centerV>
 				<Button onClick={handleClickImport}>...</Button>
-				<Flex className='textSmallDetail'>
-					{importFile?.name ?? importFolder ?? t('no.plugin.selected')}
-				</Flex>
+				<Flex className='textSmallDetail'>{importFile?.name ?? importFolder ?? t('no.plugin.selected')}</Flex>
 				<input ref={importFileInputRef} type='file' hidden onChange={handleImportFileChange} accept='.zip' />
 			</Flex>
 		</Flex>
