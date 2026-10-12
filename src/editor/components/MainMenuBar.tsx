@@ -174,6 +174,8 @@ enum DIALOG_TYPE {
 	ABOUT,
 }
 
+type PendingUnsavedAction = 'play' | 'deploy';
+
 function MainMenuBar() {
 	const { t } = useTranslation();
 
@@ -189,7 +191,7 @@ function MainMenuBar() {
 	const [corruptedProject, setCorruptedProject] = useState<Model.ProjectPreview | null>(null);
 	const [isDialogManageBackupsOpen, setIsDialogManageBackupsOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
-	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
+	const [pendingUnsavedAction, setPendingUnsavedAction] = useState<PendingUnsavedAction | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
@@ -474,7 +476,11 @@ function MainMenuBar() {
 	};
 
 	const handleDeploy = async () => {
-		setDialogType(DIALOG_TYPE.DEPLOY);
+		if (canSaveAll) {
+			setPendingUnsavedAction('deploy');
+		} else {
+			setDialogType(DIALOG_TYPE.DEPLOY);
+		}
 	};
 
 	const handleImport = async () => {
@@ -717,27 +723,40 @@ function MainMenuBar() {
 
 	const handlePlay = async () => {
 		if (canSaveAll) {
-			setIsDialogSavePlayOpen(true);
+			setPendingUnsavedAction('play');
 		} else {
 			await play();
 		}
 	};
 
-	const handleCancelSavePlay = async () => {
-		setIsDialogSavePlayOpen(false);
+	const continueAfterUnsavedPrompt = async (action: PendingUnsavedAction | null) => {
+		if (action === 'play') {
+			await play();
+		} else if (action === 'deploy') {
+			setDialogType(DIALOG_TYPE.DEPLOY);
+		}
 	};
 
-	const handleRejectSavePlay = async () => {
-		setIsDialogSavePlayOpen(false);
-		await play();
+	const handleCancelSaveAction = async () => {
+		setPendingUnsavedAction(null);
 	};
 
-	const handleAcceptSavePlay = async () => {
+	const handleRejectSaveAction = async () => {
+		const action = pendingUnsavedAction;
+		setPendingUnsavedAction(null);
+		await continueAfterUnsavedPrompt(action);
+	};
+
+	const handleAcceptSaveAction = async () => {
 		setIsLoading(true);
-		await handleSaveAll();
-		setIsLoading(false);
-		setIsDialogSavePlayOpen(false);
-		await play();
+		try {
+			await handleSaveAll();
+			const action = pendingUnsavedAction;
+			setPendingUnsavedAction(null);
+			await continueAfterUnsavedPrompt(action);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleAbout = async () => {
@@ -1468,19 +1487,19 @@ function MainMenuBar() {
 					<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
 				</Dialog>
 			)}
-			{isDialogWarningSavePlayOpen && (
+			{pendingUnsavedAction !== null && (
 				<Dialog
 					title={t('warning')}
-					isOpen={isDialogWarningSavePlayOpen}
+					isOpen={pendingUnsavedAction !== null}
 					isLoading={isLoading}
 					footer={
 						<FooterCancelNoYes
-							onCancel={handleCancelSavePlay}
-							onNo={handleRejectSavePlay}
-							onYes={handleAcceptSavePlay}
+							onCancel={handleCancelSaveAction}
+							onNo={handleRejectSaveAction}
+							onYes={handleAcceptSaveAction}
 						/>
 					}
-					onClose={handleRejectSavePlay}
+					onClose={handleRejectSaveAction}
 				>
 					<div className='textCenter'>{t('you.have.maps.not.saved')}</div>
 				</Dialog>
