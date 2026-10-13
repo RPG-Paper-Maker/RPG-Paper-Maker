@@ -13,6 +13,16 @@
                 "code.js",
                 "details.json"
             ]
+        },
+        {
+            "name": "Quick Time Battle",
+            "files": [
+                "code.js",
+                "details.json",
+                "FULL_INSTRUCTIONS.md",
+                "LICENSE",
+                "README.md"
+            ]
         }
     ],
     [
