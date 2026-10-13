@@ -1,0 +1,730 @@
+{
+	"name": "Quick Time Battle",
+	"description": "Timed WASD + Enter challenges on hero attacks scale damage; press a key before an enemy hit to dodge it.",
+	"version": "1.0.0",
+	"tutorial": "See FULL_INSTRUCTIONS.md",
+	"defaultParameters": [
+		{
+			"id": -1,
+			"name": "Multipliers",
+			"description": "Damage multipliers for OOPS, Good, Great, Excellent, Perfect.",
+			"defaultValue": {
+				"k": 8,
+				"v": "0.5, 1, 1.25, 1.5, 2"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Fail On Miss",
+			"description": "A failed challenge really misses. Off: it only uses the first multiplier.",
+			"defaultValue": {
+				"k": 10,
+				"v": false
+			}
+		},
+		{
+			"id": -1,
+			"name": "Perfect Crit",
+			"description": "A Perfect forces a critical hit.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Damage At Slash Frame",
+			"description": "Damage lands on the attacker's slash frame.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Tiering",
+			"description": "Skills named ... 1/2/3 get harder challenges.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Popup Linger",
+			"description": "Milliseconds damage numbers stay on screen.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1000
+			}
+		},
+		{
+			"id": -1,
+			"name": "UI Style",
+			"description": "pixel (chunky, matches the engine) or polished (smooth).",
+			"defaultValue": {
+				"k": 8,
+				"v": "pixel"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Pixel Size",
+			"description": "Screen pixels per UI pixel in pixel style. 0 = automatic.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "UI Scale",
+			"description": "Size of the challenge UI.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Prompts Over Head",
+			"description": "Prompts float above the active hero instead of mid-screen.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Hint Uses",
+			"description": "Text hints fade after this many uses per challenge type. 0 = never show.",
+			"defaultValue": {
+				"k": 12,
+				"v": 4
+			}
+		},
+		{
+			"id": -1,
+			"name": "Beat Pulse",
+			"description": "Prompt bubble pulses with each tick sound.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Impact Freeze Scale",
+			"description": "Length of the freeze on the slash frame. 0 = off.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Effects Scale",
+			"description": "Size of particles and bursts.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1.6
+			}
+		},
+		{
+			"id": -1,
+			"name": "Sound",
+			"description": "Synthesized sounds.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Volume",
+			"description": "Sound volume, 0 to 1.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.5
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Enabled",
+			"description": "Press a key just before an enemy hit to dodge it.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Window Frames",
+			"description": "Frames (60 fps) before the hit in which a press counts.",
+			"defaultValue": {
+				"k": 12,
+				"v": 30
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Cooldown",
+			"description": "Seconds before another dodge press is accepted.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.6
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Slide Distance",
+			"description": "Sidestep distance.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Slide Duration",
+			"description": "Sidestep duration in seconds.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.45
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 1",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 2",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 3",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 4",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 5",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 6",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 7",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 8",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Default Challenge",
+			"description": "JSON. Challenge for any damaging skill with no other entry.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{\"type\":\"timing\"}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Class Challenges",
+			"description": "JSON. Class ID -> {default:{...}, skills:{id:{...}}}.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Hero Challenges",
+			"description": "JSON. Hero ID -> {default:{...}, skills:{id:{...}}}. Overrides class.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Skill Challenges",
+			"description": "JSON. Skill ID -> challenge, or false for none. Beats hero/class defaults.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Element Themes",
+			"description": "JSON. Element ID -> theme.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{\"1\":\"fire\",\"2\":\"earth\",\"3\":\"lightning\",\"4\":\"water\",\"5\":\"ice\",\"6\":\"wind\",\"7\":\"shadow\",\"8\":\"light\"}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Name Themes",
+			"description": "JSON list of {match: regex, theme}. Used when a skill has no element.",
+			"defaultValue": {
+				"k": 8,
+				"v": "[{\"match\":\"heal|bandage|revive|remedy|barrier\",\"theme\":\"heal\"},{\"match\":\"power|war cry|resolve|concentration\",\"theme\":\"light\"}]"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Advanced Overrides",
+			"description": "JSON merged over everything else.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Debug",
+			"description": "Log choices to the console and the battle log.",
+			"defaultValue": {
+				"k": 10,
+				"v": false
+			}
+		},
+		{
+			"id": -1,
+			"name": "Battle Log",
+			"description": "Keep a rolling log in Saves/qtb-log.json.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Battle Log Entries",
+			"description": "Maximum log entries kept.",
+			"defaultValue": {
+				"k": 12,
+				"v": 150
+			}
+		}
+	],
+	"parameters": [
+		{
+			"id": -1,
+			"name": "Multipliers",
+			"description": "Damage multipliers for OOPS, Good, Great, Excellent, Perfect.",
+			"defaultValue": {
+				"k": 8,
+				"v": "0.5, 1, 1.25, 1.5, 2"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Fail On Miss",
+			"description": "A failed challenge really misses. Off: it only uses the first multiplier.",
+			"defaultValue": {
+				"k": 10,
+				"v": false
+			}
+		},
+		{
+			"id": -1,
+			"name": "Perfect Crit",
+			"description": "A Perfect forces a critical hit.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Damage At Slash Frame",
+			"description": "Damage lands on the attacker's slash frame.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Tiering",
+			"description": "Skills named ... 1/2/3 get harder challenges.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Popup Linger",
+			"description": "Milliseconds damage numbers stay on screen.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1000
+			}
+		},
+		{
+			"id": -1,
+			"name": "UI Style",
+			"description": "pixel (chunky, matches the engine) or polished (smooth).",
+			"defaultValue": {
+				"k": 8,
+				"v": "pixel"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Pixel Size",
+			"description": "Screen pixels per UI pixel in pixel style. 0 = automatic.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "UI Scale",
+			"description": "Size of the challenge UI.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Prompts Over Head",
+			"description": "Prompts float above the active hero instead of mid-screen.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Hint Uses",
+			"description": "Text hints fade after this many uses per challenge type. 0 = never show.",
+			"defaultValue": {
+				"k": 12,
+				"v": 4
+			}
+		},
+		{
+			"id": -1,
+			"name": "Beat Pulse",
+			"description": "Prompt bubble pulses with each tick sound.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Impact Freeze Scale",
+			"description": "Length of the freeze on the slash frame. 0 = off.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Effects Scale",
+			"description": "Size of particles and bursts.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1.6
+			}
+		},
+		{
+			"id": -1,
+			"name": "Sound",
+			"description": "Synthesized sounds.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Volume",
+			"description": "Sound volume, 0 to 1.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.5
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Enabled",
+			"description": "Press a key just before an enemy hit to dodge it.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Window Frames",
+			"description": "Frames (60 fps) before the hit in which a press counts.",
+			"defaultValue": {
+				"k": 12,
+				"v": 30
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Cooldown",
+			"description": "Seconds before another dodge press is accepted.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.6
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Slide Distance",
+			"description": "Sidestep distance.",
+			"defaultValue": {
+				"k": 12,
+				"v": 1
+			}
+		},
+		{
+			"id": -1,
+			"name": "Defense Slide Duration",
+			"description": "Sidestep duration in seconds.",
+			"defaultValue": {
+				"k": 12,
+				"v": 0.45
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 1",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 2",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 3",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 4",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 5",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 6",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 7",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Ranged Hero 8",
+			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
+			"defaultValue": {
+				"k": 4,
+				"v": 0
+			}
+		},
+		{
+			"id": -1,
+			"name": "Default Challenge",
+			"description": "JSON. Challenge for any damaging skill with no other entry.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{\"type\":\"timing\"}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Class Challenges",
+			"description": "JSON. Class ID -> {default:{...}, skills:{id:{...}}}.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Hero Challenges",
+			"description": "JSON. Hero ID -> {default:{...}, skills:{id:{...}}}. Overrides class.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Skill Challenges",
+			"description": "JSON. Skill ID -> challenge, or false for none. Beats hero/class defaults.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Element Themes",
+			"description": "JSON. Element ID -> theme.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{\"1\":\"fire\",\"2\":\"earth\",\"3\":\"lightning\",\"4\":\"water\",\"5\":\"ice\",\"6\":\"wind\",\"7\":\"shadow\",\"8\":\"light\"}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Name Themes",
+			"description": "JSON list of {match: regex, theme}. Used when a skill has no element.",
+			"defaultValue": {
+				"k": 8,
+				"v": "[{\"match\":\"heal|bandage|revive|remedy|barrier\",\"theme\":\"heal\"},{\"match\":\"power|war cry|resolve|concentration\",\"theme\":\"light\"}]"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Advanced Overrides",
+			"description": "JSON merged over everything else.",
+			"defaultValue": {
+				"k": 8,
+				"v": "{}"
+			}
+		},
+		{
+			"id": -1,
+			"name": "Debug",
+			"description": "Log choices to the console and the battle log.",
+			"defaultValue": {
+				"k": 10,
+				"v": false
+			}
+		},
+		{
+			"id": -1,
+			"name": "Battle Log",
+			"description": "Keep a rolling log in Saves/qtb-log.json.",
+			"defaultValue": {
+				"k": 10,
+				"v": true
+			}
+		},
+		{
+			"id": -1,
+			"name": "Battle Log Entries",
+			"description": "Maximum log entries kept.",
+			"defaultValue": {
+				"k": 12,
+				"v": 150
+			}
+		}
+	],
+	"commands": [
+		{
+			"id": 1,
+			"name": "Set enabled",
+			"description": "To turn Action Battle animations off mid-game:\nRun a Command > Structure > Plugin > Set Enabled OFF",
+			"defaultParameters": [
+				{
+					"id": -1,
+					"name": "value",
+					"description": "Enable quick-time challenges",
+					"defaultValue": {
+						"k": 10,
+						"v": true
+					}
+				}
+			]
+		}
+	]
+}
