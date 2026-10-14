@@ -212,7 +212,7 @@ class SpecialElements extends Serializable {
 		this.objects3D[88].name = t('small.tv');
 		this.objects3D[89].name = t('tv');
 		this.objects3D[90].name = t('small.table');
-		this.objects3D[91].name = t('table');
+		this.objects3D[91].name = t('table.object');
 		this.objects3D[92].name = t('big.table');
 		this.objects3D[93].name = t('chair.blue');
 		this.objects3D[94].name = t('chair.green');

@@ -538,6 +538,7 @@
 	"show.available.content": "利用可能なコンテンツを表示",
 	"refresh": "更新",
 	"table": "テーブル",
+	"table.object": "テーブル",
 	"graph": "グラフ",
 	"volume": "音量",
 	"floor": "床",

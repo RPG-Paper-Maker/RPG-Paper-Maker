@@ -538,6 +538,7 @@
 	"show.available.content": "사용 가능한 콘텐츠 표시",
 	"refresh": "새로고침",
 	"table": "테이블",
+	"table.object": "테이블",
 	"graph": "그래프",
 	"volume": "볼륨",
 	"floor": "바닥",

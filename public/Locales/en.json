@@ -542,6 +542,7 @@
 	"show.available.content": "Show available content",
 	"refresh": "Refresh",
 	"table": "Table",
+	"table.object": "Table",
 	"graph": "Graph",
 	"volume": "Volume",
 	"floor": "Floor",
