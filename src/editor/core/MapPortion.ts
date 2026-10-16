@@ -658,7 +658,7 @@ class MapPortion {
 		if (!this.map || (element && !position.isInMap(this.map.model, allowBorders))) {
 			return null;
 		}
-		if (element) {
+		if (element && !removingPreview) {
 			const owner = allowBorders
 				? this.map.getMapPortionByPositionWall(position)
 				: this.map.getMapPortionByPosition(position);

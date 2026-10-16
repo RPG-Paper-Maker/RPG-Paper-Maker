@@ -1254,7 +1254,11 @@ class Map extends Base {
 
 	getMapPortionFromGlobalPortion(globalPortion: Portion): MapPortion | null {
 		const portion = this.getLocalPortionFromGlobal(globalPortion);
-		return this.getMapPortion(portion.x, portion.y, portion.z);
+		if (!this.isInPortion(portion)) {
+			return null;
+		}
+		const mapPortion = this.getMapPortion(portion.x, portion.y, portion.z);
+		return mapPortion?.model.globalPortion.equals(globalPortion) ? mapPortion : null;
 	}
 
 	getMapPortionByPosition(position: Position): MapPortion | null {
