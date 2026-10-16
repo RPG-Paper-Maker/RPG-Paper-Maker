@@ -51,16 +51,22 @@ class Keyboard extends Serializable {
 
 	async applyKeyboardLayout() {
 		const [up, down, left, right] = await detectMovementKeys();
+		const setShortcuts = (abbreviation: string, shortcuts: string[][]) => {
+			const control = this.list.find((key) => key.abbreviation === abbreviation);
+			if (control) {
+				control.shortcuts = shortcuts;
+			}
+		};
 		// Hero movement
-		this.list[0].shortcuts = [[up]];
-		this.list[1].shortcuts = [[down]];
-		this.list[2].shortcuts = [[left]];
-		this.list[3].shortcuts = [[right]];
+		setShortcuts('UpHero', [[up]]);
+		setShortcuts('DownHero', [[down]]);
+		setShortcuts('LeftHero', [[left]]);
+		setShortcuts('RightHero', [[right]]);
 		// Menu movement (keep arrow keys as primary)
-		this.list[4].shortcuts = [['ArrowUp'], [up]];
-		this.list[5].shortcuts = [['ArrowDown'], [down]];
-		this.list[6].shortcuts = [['ArrowLeft'], [left]];
-		this.list[7].shortcuts = [['ArrowRight'], [right]];
+		setShortcuts('UpMenu', [['ArrowUp'], [up]]);
+		setShortcuts('DownMenu', [['ArrowDown'], [down]]);
+		setShortcuts('LeftMenu', [['ArrowLeft'], [left]]);
+		setShortcuts('RightMenu', [['ArrowRight'], [right]]);
 	}
 
 	translateDefaults(): void {
