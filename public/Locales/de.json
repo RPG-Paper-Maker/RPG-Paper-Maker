@@ -2015,6 +2015,7 @@
 	"warning.file.busy": "Eine Projektdatei wird von einem anderen Prozess gesperrt. Stellen Sie sicher, dass dieses Projekt nicht in einer anderen Instanz von RPG Paper Maker geöffnet ist. Es könnte auch ein Cloud-Synchronisierungstool (OneDrive, Dropbox usw.) sein, das die Datei vorübergehend sperrt.",
 	"warning.disk.full": "Dein Datenträger ist voll (ENOSPC). Das Projekt wurde geschlossen. Gib Speicherplatz frei, bevor du das Projekt erneut öffnest.",
 	"warning.map.depth.not.high.enough": "Die Kartentiefe ist nicht hoch genug. Öffnen Sie die Karteneigenschaften, um sie zu erhöhen.",
+	"warning.map.startup.detection.send.event": "Die Startreaktionen von Karte {{mapPath}} verwenden {{commandPath}} mit einer Erkennungszone als Ziel. Startreaktionen haben keine Position, daher schlägt dieser Befehl beim Spielen fehl. Senden Sie das Ereignis von einem auf der Karte platzierten Objekt oder wählen Sie ein Ziel ohne Erkennungszone.",
 	"manage.backups": "Backups verwalten",
 	"restore": "Wiederherstellen",
 	"no.backups.available": "Keine Backups verfügbar.",

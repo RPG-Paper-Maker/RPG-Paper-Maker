@@ -2016,6 +2016,7 @@
 	"warning.file.busy": "프로젝트 파일이 다른 프로세스에 의해 잠겨 있습니다. 이 프로젝트가 다른 RPG Paper Maker 인스턴스에서 열려 있지 않은지 확인하세요. 클라우드 동기화 도구(OneDrive, Dropbox 등)가 일시적으로 파일을 잠그고 있을 수도 있습니다.",
 	"warning.disk.full": "디스크가 가득 찼습니다(ENOSPC). 프로젝트가 닫혔습니다. 프로젝트를 다시 열기 전에 디스크 공간을 확보하세요.",
 	"warning.map.depth.not.high.enough": "맵 깊이가 충분히 높지 않습니다. 맵 속성을 열어 높이세요.",
+	"warning.map.startup.detection.send.event": "맵 {{mapPath}}의 시작 반응에서 {{commandPath}} 명령이 감지 영역을 대상으로 사용합니다. 시작 반응에는 위치가 없으므로 게임 실행 중 이 명령에서 오류가 발생합니다. 맵에 배치된 오브젝트에서 이벤트를 보내거나 감지 영역을 사용하지 않는 대상을 선택하세요.",
 	"manage.backups": "백업 관리",
 	"restore": "복원",
 	"no.backups.available": "사용 가능한 백업이 없습니다.",

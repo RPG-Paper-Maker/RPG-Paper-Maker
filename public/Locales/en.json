@@ -2027,6 +2027,7 @@
 	"warning.file.busy": "A project file is locked by another process. Make sure this project is not open in another instance of RPG Paper Maker. It could also be a cloud sync tool (OneDrive, Dropbox, etc.) temporarily locking the file.",
 	"warning.disk.full": "Your disk is full (ENOSPC). The project has been closed. Please free up disk space before reopening your project.",
 	"warning.map.depth.not.high.enough": "The map depth is not high enough. Open map properties to increase it.",
+	"warning.map.startup.detection.send.event": "Map {{mapPath}} startup reactions use {{commandPath}} targeting a detection. Startup reactions have no position, so this command will fail during play. Send the event from a placed map object or choose a target that does not use detection.",
 	"manage.backups": "Manage backups",
 	"last.save": "last save",
 	"restore": "Restore",

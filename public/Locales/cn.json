@@ -2016,6 +2016,7 @@
 	"warning.file.busy": "项目文件被另一个进程锁定。请确保该项目未在另一个 RPG Paper Maker 实例中打开。也可能是云同步工具（OneDrive、Dropbox 等）暂时锁定了该文件。",
 	"warning.disk.full": "磁盘已满（ENOSPC）。项目已关闭。请释放磁盘空间后再重新打开项目。",
 	"warning.map.depth.not.high.enough": "地图深度不够高。打开地图属性以增加它。",
+	"warning.map.startup.detection.send.event": "地图 {{mapPath}} 的启动反应通过 {{commandPath}} 将事件发送到检测范围。启动反应没有位置，因此该命令在游戏运行时会报错。请从地图上放置的对象发送事件，或选择不使用检测范围的目标。",
 	"manage.backups": "管理备份",
 	"restore": "恢复",
 	"no.backups.available": "没有可用的备份。",

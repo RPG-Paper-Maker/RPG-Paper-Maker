@@ -2015,6 +2015,7 @@
 	"warning.file.busy": "Un fichier du projet est verrouillé par un autre processus. Assurez-vous que ce projet n'est pas ouvert dans une autre instance de RPG Paper Maker. Cela peut également venir d'un outil de synchronisation cloud (OneDrive, Dropbox, etc.) qui verrouille temporairement le fichier.",
 	"warning.disk.full": "Votre disque est plein (ENOSPC). Le projet a été fermé. Veuillez libérer de l'espace disque avant de rouvrir votre projet.",
 	"warning.map.depth.not.high.enough": "La profondeur de la carte n'est pas assez élevée. Ouvrez les propriétés de la carte pour l'augmenter.",
+	"warning.map.startup.detection.send.event": "Les réactions au démarrage de la carte {{mapPath}} utilisent {{commandPath}} avec une détection. Les réactions au démarrage n'ont pas de position : cette commande échouera pendant le jeu. Envoyez l'événement depuis un objet placé sur la carte ou choisissez une cible qui n'utilise pas de détection.",
 	"manage.backups": "Gérer les sauvegardes",
 	"last.save": "dernière sauvegarde",
 	"restore": "Restaurer",

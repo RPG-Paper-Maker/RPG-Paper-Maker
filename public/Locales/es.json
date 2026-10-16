@@ -2015,6 +2015,7 @@
 	"warning.file.busy": "Un archivo del proyecto está bloqueado por otro proceso. Asegúrate de que este proyecto no esté abierto en otra instancia de RPG Paper Maker. También podría ser una herramienta de sincronización en la nube (OneDrive, Dropbox, etc.) que bloquea temporalmente el archivo.",
 	"warning.disk.full": "Tu disco está lleno (ENOSPC). El proyecto se ha cerrado. Libera espacio en disco antes de volver a abrir el proyecto.",
 	"warning.map.depth.not.high.enough": "La profundidad del mapa no es lo suficientemente alta. Abre las propiedades del mapa para aumentarla.",
+	"warning.map.startup.detection.send.event": "Las reacciones de inicio del mapa {{mapPath}} usan {{commandPath}} con una zona de detección como objetivo. Estas reacciones no tienen posición, por lo que el comando fallará durante el juego. Envía el evento desde un objeto colocado en el mapa o elige un objetivo que no use detección.",
 	"manage.backups": "Gestionar copias de seguridad",
 	"restore": "Restaurar",
 	"no.backups.available": "No hay copias de seguridad disponibles.",

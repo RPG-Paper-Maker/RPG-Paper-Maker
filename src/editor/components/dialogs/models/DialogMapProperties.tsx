@@ -14,7 +14,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Data, Model, Scene } from '../../../Editor';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import { Position } from '../../../core/Position';
@@ -51,6 +51,42 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 
 const DialogObjectCommandTest = lazy(() => import('../DialogObjectCommandTest'));
 const ObjectCommandTestOverlay = lazy(() => import('../../ObjectCommandTestOverlay'));
+
+function findStartupDetectionCommand(startupObject: Model.CommonObject): number[] | null {
+	const visit = (nodes: Node[], commonReactionIDs: Set<number>): number[] | null => {
+		for (const node of nodes) {
+			const command = node.content as Model.MapObjectCommand;
+			if (command.disabled) continue;
+			if (command.kind === EVENT_COMMAND_KIND.SEND_EVENT && command.command[0] === 1) {
+				return [...commonReactionIDs];
+			}
+			if (command.kind === EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION) {
+				const id = command.command[0] as number;
+				if (!commonReactionIDs.has(id)) {
+					const reaction = Model.Base.getByID(
+						Project.current!.commonEvents.commonReactions,
+						id,
+					) as Model.CommonReaction | null;
+					if (reaction) {
+						const path = visit(reaction.commands, new Set([...commonReactionIDs, id]));
+						if (path) return path;
+					}
+				}
+			}
+			const path = visit(node.children, commonReactionIDs);
+			if (path) return path;
+		}
+		return null;
+	};
+
+	for (const event of startupObject.events) {
+		for (const reaction of event.reactions.values()) {
+			const path = visit(reaction.commands, new Set());
+			if (path) return path;
+		}
+	}
+	return null;
+}
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
@@ -325,6 +361,15 @@ function DialogMapProperties({
 		}
 		panelMapObjectRef.current?.accept();
 		model.startupObject.copy(startupObject);
+		const detectionCommandPath = findStartupDetectionCommand(model.startupObject);
+		if (detectionCommandPath) {
+			const commandPath = [
+				...detectionCommandPath.map((id) => `${t('common.reaction')} ${id}`),
+				t('send.event'),
+			].join(' -> ');
+			const mapPath = Node.getNodeByID(Project.current!.treeMaps.tree, model.id)?.getPath(false) ?? model.name;
+			console.warn(t('warning.map.startup.detection.send.event', { mapPath, commandPath }));
+		}
 		model.randomBattleMapID.copy(randomBattleMapID);
 		model.randomBattles = Node.createListFromNodes(randomBattles);
 		model.randomBattleNumberStep.copy(randomBattleNumberStep);
