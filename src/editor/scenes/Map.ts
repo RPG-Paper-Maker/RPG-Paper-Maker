@@ -394,7 +394,10 @@ class Map extends Base {
 				}
 				this.isDraggingTransforming = true;
 				this.updateMoveTransformDragging();
-				this.getMapPortionByPosition(this.selectedPosition)?.updateObjects3DGeometry();
+				this.getMapPortionContainingElement(
+					this.selectedPosition,
+					ELEMENT_MAP_KIND.OBJECT3D,
+				)?.updateObjects3DGeometry();
 			});
 			this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
@@ -1258,6 +1261,25 @@ class Map extends Base {
 		return this.getMapPortionFromGlobalPortion(position.getGlobalPortion());
 	}
 
+	getMapPortionContainingElement(
+		position: Position,
+		kind: ELEMENT_MAP_KIND,
+		allowBorders = false,
+	): MapPortion | null {
+		const expected = allowBorders
+			? this.getMapPortionByPositionWall(position)
+			: this.getMapPortionByPosition(position);
+		if (expected?.model.getMapElement(position, kind)) {
+			return expected;
+		}
+		for (const portion of this.mapPortions ?? []) {
+			if (portion && portion !== expected && portion.model.getMapElement(position, kind)) {
+				return portion;
+			}
+		}
+		return expected;
+	}
+
 	getMapPortionByPositionWall(position: Position): MapPortion | null {
 		const portion = position.getGlobalPortion();
 		if (position.x === this.model.length) {
@@ -1402,7 +1424,7 @@ class Map extends Base {
 				if (!preview) {
 					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 					for (const p of positions) {
-						(isSpriteKind ? this.getMapPortionByPositionWall(p) : this.getMapPortionByPosition(p))?.remove(
+						this.getMapPortionContainingElement(p, Map.currentSelectedMapElementKind, isSpriteKind)?.remove(
 							p,
 							preview,
 							removePreview,
@@ -1410,9 +1432,10 @@ class Map extends Base {
 						);
 					}
 				} else {
-					(isSpriteKind
-						? this.getMapPortionByPositionWall(position)
-						: this.getMapPortionByPosition(position)
+					this.getMapPortionContainingElement(
+						position,
+						Map.currentSelectedMapElementKind,
+						isSpriteKind,
 					)?.remove(position, preview, removePreview, updateAutotiles);
 				}
 				break;
@@ -1505,7 +1528,10 @@ class Map extends Base {
 			});
 		}
 		for (const position of positions) {
-			this.getMapPortionByPositionWall(position)?.updateWall(
+			(add
+				? this.getMapPortionByPositionWall(position)
+				: this.getMapPortionContainingElement(position, ELEMENT_MAP_KIND.SPRITE_WALL, true)
+			)?.updateWall(
 				position,
 				add
 					? MapElement.SpriteWall.create(
@@ -1881,20 +1907,26 @@ class Map extends Base {
 	updateTransform() {
 		this.updateTransformPosition();
 		if (this.selectedPosition && this.selectedElement) {
-			this.getMapPortionByPosition(this.selectedPosition)?.removeSelected();
-			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
-			this.getMapPortionByPosition(Position.createFromVector3(worldPos))?.addSelected();
-			if (this.selectedGltfClone && this.selectedElement instanceof MapElement.Object3DCustom) {
-				// selectedPosition is already updated by addSelected via clone position
-			} else {
-				const newPosition = this.selectedElement.getPositionFromVec3(
-					this.selectedMesh.position,
-					this.selectedMesh.rotation,
-					this.selectedMesh.scale,
-				);
-				newPosition.layer = this.selectedPosition.layer;
-				this.selectedPosition = newPosition;
+			const newPosition =
+				this.selectedGltfClone && this.selectedElement instanceof MapElement.Object3DCustom
+					? Position.createFromVector3(
+							this.selectedGltfClone.position,
+							this.selectedGltfClone.rotation,
+							this.selectedGltfClone.scale.clone().divideScalar(this.selectedElement.data.scale),
+						)
+					: this.selectedElement.getPositionFromVec3(
+							this.selectedMesh.position,
+							this.selectedMesh.rotation,
+							this.selectedMesh.scale,
+						);
+			newPosition.layer = this.selectedPosition.layer;
+			const destination = newPosition.isInMap(this.model) ? this.getMapPortionByPosition(newPosition) : null;
+			const source = this.getMapPortionContainingElement(this.selectedPosition, this.selectedElement.kind);
+			if (!destination || !source?.model.getMapElement(this.selectedPosition, this.selectedElement.kind)) {
+				return;
 			}
+			source.removeSelected();
+			destination.addSelected(newPosition);
 		}
 	}
 
@@ -1978,8 +2010,9 @@ class Map extends Base {
 	removeTransform() {
 		if (this.selectedElement) {
 			this.transformControls.detach();
-			const worldPos = this.selectedMesh.position.clone().sub(this.selectedPivotOffset);
-			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(worldPos));
+			const mapPortion = this.selectedPosition
+				? this.getMapPortionContainingElement(this.selectedPosition, this.selectedElement.kind)
+				: null;
 			if (mapPortion) {
 				this.portionsToUpdate.add(mapPortion);
 			}
@@ -2011,7 +2044,7 @@ class Map extends Base {
 		this.updateRotationSnap(action);
 		this.updateTranslationSnap(action);
 		if (this.selectedElement === null && this.lastTransformPosition !== null && this.lastTransformKind !== null) {
-			const mapPortion = this.getMapPortionByPosition(this.lastTransformPosition);
+			const mapPortion = this.getMapPortionContainingElement(this.lastTransformPosition, this.lastTransformKind);
 			if (mapPortion) {
 				const element = mapPortion.model.getMapElement(this.lastTransformPosition, this.lastTransformKind);
 				if (element && !(action === ACTION_KIND.ROTATE && element.kind === ELEMENT_MAP_KIND.SPRITE_FACE)) {
@@ -2510,7 +2543,14 @@ class Map extends Base {
 					(obj.object.userData.gltfPositionKey as string | undefined);
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
-					const mapPortion = this.getMapPortionByPositionWall(newPosition);
+					const mapPortion =
+						Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT
+							? this.getMapPortionByPositionWall(newPosition)
+							: this.getMapPortionContainingElement(
+									newPosition,
+									Map.currentSelectedMapElementKind,
+									isSpriteOptionSelected,
+								);
 					if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 						const object = mapPortion?.model.objects.get(newPositionKey);
 						if (object) {
@@ -2603,11 +2643,17 @@ class Map extends Base {
 						if (newClone) gltfAddHoverOverlays(newClone);
 					}
 					if (!wasGltf && previousPointedMapElementPosition) {
-						const mapPortion = this.getMapPortionByPosition(previousPointedMapElementPosition);
+						const mapPortion = this.getMapPortionContainingElement(
+							previousPointedMapElementPosition,
+							Map.currentSelectedMapElementKind,
+						);
 						if (mapPortion) this.portionsToUpdate.add(mapPortion);
 					}
 					if (!isGltf && this.pointedMapElementPosition) {
-						const mapPortion = this.getMapPortionByPosition(this.pointedMapElementPosition);
+						const mapPortion = this.getMapPortionContainingElement(
+							this.pointedMapElementPosition,
+							Map.currentSelectedMapElementKind,
+						);
 						if (mapPortion) this.portionsToUpdate.add(mapPortion);
 					}
 				}
@@ -2779,6 +2825,8 @@ class Map extends Base {
 				!this.transformControls.dragging &&
 				(Inputs.isPointerPressed || this.needsMouseDown)
 			) {
+				const previousSelectedPosition = this.selectedPosition;
+				const previousSelectedElement = this.selectedElement;
 				this.selectedElement =
 					this.pointedMapElement === null ||
 					(Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.ROTATE &&
@@ -2795,7 +2843,17 @@ class Map extends Base {
 				}
 				this.selectedPivotOffset.set(0, 0, 0);
 				this.transformControls.detach();
-				const mapPortion = this.selectedPosition ? this.getMapPortionByPosition(this.selectedPosition) : null;
+				const previousPortion =
+					previousSelectedPosition && previousSelectedElement
+						? this.getMapPortionContainingElement(previousSelectedPosition, previousSelectedElement.kind)
+						: null;
+				if (previousPortion) {
+					this.portionsToUpdate.add(previousPortion);
+				}
+				const mapPortion =
+					this.selectedPosition && this.selectedElement
+						? this.getMapPortionContainingElement(this.selectedPosition, this.selectedElement.kind)
+						: null;
 				if (mapPortion) {
 					this.portionsToUpdate.add(mapPortion);
 				}
@@ -2807,7 +2865,10 @@ class Map extends Base {
 			}
 		}
 		if (!Map.previewOnly && this.canEdit && Map.isTransforming()) {
-			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
+			const mapPortion =
+				this.selectedPosition && this.selectedElement
+					? this.getMapPortionContainingElement(this.selectedPosition, this.selectedElement.kind)
+					: null;
 			if (mapPortion) {
 				mapPortion.updateGeometriesWithoutCheck();
 			}

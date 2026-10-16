@@ -658,6 +658,27 @@ class MapPortion {
 		if (!this.map || (element && !position.isInMap(this.map.model, allowBorders))) {
 			return null;
 		}
+		if (element) {
+			const owner = allowBorders
+				? this.map.getMapPortionByPositionWall(position)
+				: this.map.getMapPortionByPosition(position);
+			if (owner !== this) {
+				const ownerElements = owner?.model.getModelsByKind(kind);
+				if (!owner || !ownerElements) {
+					return null;
+				}
+				return owner.setMapElement(
+					position,
+					element,
+					kind,
+					ownerElements as Map<string, MapElement.Base>,
+					preview,
+					removingPreview,
+					undoRedo,
+					allowBorders,
+				);
+			}
+		}
 		const key = position.toKey();
 		let changed = false;
 		const previous = elements.get(key) || null;
@@ -722,25 +743,8 @@ class MapPortion {
 		}
 	}
 
-	addSelected() {
+	addSelected(position: Position) {
 		if (this.map.selectedElement && this.map.selectedPosition) {
-			let position: Position;
-			if (this.map.selectedGltfClone && this.map.selectedElement instanceof MapElement.Object3DCustom) {
-				const s = this.map.selectedElement.data.scale;
-				const posScale = this.map.selectedGltfClone.scale.clone().divideScalar(s);
-				position = Position.createFromVector3(
-					this.map.selectedGltfClone.position,
-					this.map.selectedGltfClone.rotation,
-					posScale,
-				);
-			} else {
-				position = this.map.selectedElement.getPositionFromVec3(
-					this.map.selectedMesh.position,
-					this.map.selectedMesh.rotation,
-					this.map.selectedMesh.scale,
-				);
-			}
-			position.layer = this.map.selectedPosition.layer;
 			const models = this.model.getModelsByKind(this.map.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
@@ -776,6 +780,13 @@ class MapPortion {
 	}
 
 	updateObject(position: Position, object: Model.CommonObject | null, undoRedo = false) {
+		if (object) {
+			const owner = this.map.getMapPortionByPosition(position);
+			if (owner !== this) {
+				owner?.updateObject(position, object, undoRedo);
+				return;
+			}
+		}
 		const key = position.toKey();
 		const previous = this.model.objects.get(key) || null;
 		if (object === null) {
@@ -1592,14 +1603,15 @@ class MapPortion {
 								}
 							}
 							// For custom OBJ models, center geometry at origin for correct
-							// rotation pivot, and track the offset for the transform system
+							// rotation pivot. The selected mesh applies scale after this offset.
 							if (object3D instanceof MapElement.Object3DCustom) {
-								const center = object3D.getScaledCenter(position.toScaleVector());
+								const localCenter = object3D.getScaledCenter(new THREE.Vector3(1, 1, 1));
+								const center = localCenter.clone().multiply(position.toScaleVector());
 								const verts = geometry._vertices;
 								for (let vi = 0; vi < verts.length; vi += 3) {
-									verts[vi] -= center.x;
-									verts[vi + 1] -= center.y;
-									verts[vi + 2] -= center.z;
+									verts[vi] -= localCenter.x;
+									verts[vi + 1] -= localCenter.y;
+									verts[vi + 2] -= localCenter.z;
 								}
 								this.map.selectedPivotOffset.copy(center);
 								selectedLocalPosition.add(center);
