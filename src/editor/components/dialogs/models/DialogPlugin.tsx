@@ -369,8 +369,8 @@ const inject = Manager.Plugins.inject;
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='800px'
-			initialHeight='600px'
+			initialWidth={window.innerWidth <= 1200 ? '100%' : '1200px'}
+			initialHeight='calc(100% - 50px)'
 			isLoading={isLoading}
 		>
 			<Tab
