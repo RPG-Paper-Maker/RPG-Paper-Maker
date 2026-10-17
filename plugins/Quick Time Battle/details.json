@@ -1,8 +1,8 @@
 {
 	"name": "Quick Time Battle",
 	"description": "Timed WASD + Enter challenges on hero attacks scale damage; press a key before an enemy hit to dodge it.",
-	"version": "1.0.0",
-	"tutorial": "See FULL_INSTRUCTIONS.md",
+	"version": "1.1.0",
+	"tutorial": "https://bigwoodart.github.io/RPGPM-Action-Battle-System/Tester.html",
 	"defaultParameters": [
 		{
 			"id": -1,
@@ -163,7 +163,7 @@
 			"description": "Frames (60 fps) before the hit in which a press counts.",
 			"defaultValue": {
 				"k": 12,
-				"v": 30
+				"v": 12
 			}
 		},
 		{
@@ -516,7 +516,7 @@
 			"description": "Frames (60 fps) before the hit in which a press counts.",
 			"defaultValue": {
 				"k": 12,
-				"v": 30
+				"v": 12
 			}
 		},
 		{
@@ -713,7 +713,7 @@
 		{
 			"id": 1,
 			"name": "Set enabled",
-			"description": "To turn Action Battle animations off mid-game:\nRun a Command > Structure > Plugin > Set Enabled OFF",
+			"description": "To turn Quick Time Battle off mid-game:\nRun a Command > Structure > Plugin > Set Enabled OFF",
 			"defaultParameters": [
 				{
 					"id": -1,

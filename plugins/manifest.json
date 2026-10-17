@@ -21,7 +21,9 @@
                 "details.json",
                 "FULL_INSTRUCTIONS.md",
                 "LICENSE",
-                "README.md"
+                "pic.png",
+                "README.md",
+                "Tester.html"
             ]
         }
     ],

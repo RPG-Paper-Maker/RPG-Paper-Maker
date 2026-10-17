@@ -1,4 +1,4 @@
-// Quick Time Battle v1.0.0 - RPG Paper Maker 3.0 plugin.
+// Quick Time Battle v1.1.0 - RPG Paper Maker 3.0 plugin.
 // Hero attacks and skills run a WASD + Enter quick-time challenge; the grade scales damage.
 // Press any key just before an enemy hit lands to dodge it. See FULL_INSTRUCTIONS.md.
 // Plugins run through `new Function(...)`: no imports. Globals: Common, Core, Data, Manager, Model, Scene.
@@ -40,7 +40,7 @@ const DEFAULT_CONFIG = Object.assign({
 	beatPulse: true,
 	freezeScale: 1, // impact freeze length multiplier (0 = off)
 	lingerMs: 1000, // how long damage/heal numbers stay up
-	defense: { enabled: true, windowFrames: 30, cooldown: 0.6, slide: 1, duration: 0.45, keys: ["W", "A", "S", "D", "ENTER"] }
+	defense: { enabled: true, windowFrames: 12, cooldown: 0.6, slide: 1, duration: 0.45, keys: ["W", "A", "S", "D", "ENTER"] }
 }, DEFAULT_TABLES);
 
 function param(name, fallback) {
@@ -168,8 +168,9 @@ function applyTier(def, tier) {
 	if (d.duration) d.duration *= Math.pow(0.88, k);
 	if (d.type === "timing" || d.type === "hold") d.zone = (d.zone || 0.16) * Math.pow(0.82, k);
 	if (d.type === "ring" || d.type === "crosshair" || d.type === "combo") d.tolerance = (d.tolerance || 0.1) * Math.pow(0.85, k);
+	if (d.type === "greenlight") d.window = (d.window || 1) * Math.pow(0.88, k);
 	if (d.type === "sequence") d.length = (d.length || 4) + k;
-	if (d.type === "mash") d.count = Math.round((d.count || 12) * (1 + 0.4 * k));
+	if (d.type === "mash") d.count = Math.round((d.count || 8) * (1 + 0.3 * k));
 	return d;
 }
 
@@ -929,7 +930,7 @@ class SequenceChallenge extends Challenge {
 		if (this.running && this.t - LEAD_IN >= this.limit) this.resolve(0);
 	}
 	onKey(key) {
-		if (!this.running || KEYS.indexOf(key) === -1) return;
+		if (!this.running || (KEYS.indexOf(key) === -1 && this.seq.indexOf(key) === -1)) return; // WASD, or any key the sequence names
 		if (key === this.seq[this.index]) {
 			// Each correct key is a higher note up a pentatonic-ish scale.
 			tone(440 * Math.pow(2, [0, 2, 4, 7, 9, 12, 14, 16][Math.min(this.index, 7)] / 12), 0.1, this.T.wave, 1);
@@ -975,11 +976,12 @@ class SequenceChallenge extends Challenge {
 }
 
 // Mash a key (default Enter). Pitch rises with the multiplier tier being reached.
+const MASH_TOP = 1.6; // goal multiple that earns a Perfect (v1.1: was 2.0)
 class MashChallenge extends Challenge {
 	constructor(def, theme) {
 		super(def, theme);
-		this.limit = def.duration || 2;
-		this.goal = def.count || 12;
+		this.limit = def.duration || 2.5;
+		this.goal = def.count || 8;
 		this.key = String(def.key || "ENTER").toUpperCase();
 		this.count = 0;
 		this.passed100 = false;
@@ -987,10 +989,10 @@ class MashChallenge extends Challenge {
 	get ratio() { return this.count / this.goal; }
 	update() {
 		if (!this.running) return;
-		this.intensity = Math.min(1, this.ratio / 2);
+		this.intensity = Math.min(1, this.ratio / MASH_TOP);
 		if (this.t - LEAD_IN >= this.limit) {
 			const r = this.ratio;
-			this.resolve(r >= 2 ? 4 : r >= 1.5 ? 3 : r >= 1 ? 2 : r >= 0.6 ? 1 : 0);
+			this.resolve(r >= MASH_TOP ? 4 : r >= 1.3 ? 3 : r >= 1 ? 2 : r >= 0.5 ? 1 : 0);
 		}
 	}
 	onKey(key) {
@@ -1002,7 +1004,7 @@ class MashChallenge extends Challenge {
 			return;
 		}
 		// Pitch climbs two octaves-ish across 0..150% of the goal.
-		tone(220 * Math.pow(2, Math.min(2, this.ratio) * 1.3), 0.07, this.T.wave, 0.9);
+		tone(220 * Math.pow(2, Math.min(MASH_TOP, this.ratio) * 1.6), 0.07, this.T.wave, 0.9);
 		const r = this.ratio;
 		if (!this.passed100 && r >= 1) { this.passed100 = true; tone(1568, 0.2, "sine", 1); }
 		this.burstAll(0); // small pop per press
@@ -1010,7 +1012,7 @@ class MashChallenge extends Challenge {
 	draw(ctx, w, h, u) {
 		const T = this.T, bw = 250 * u, bh = 28 * u, now = performance.now() / 1000;
 		const p = place(this, w, h, u, bw + 70 * u, bh + 36 * u); bubble(ctx, this, p, u);
-		const x = p.x - bw / 2 + 28 * u, y = p.y - bh / 2 + 10 * u, fill = Math.min(1, this.ratio / 2);
+		const x = p.x - bw / 2 + 28 * u, y = p.y - bh / 2 + 10 * u, fill = Math.min(1, this.ratio / MASH_TOP);
 		const danger = this.def.overload && this.ratio > this.def.overload * 0.85;
 		rr(ctx, x, y, bw, bh, bh / 2); ctx.lineWidth = 6 * u; ctx.strokeStyle = INK; ctx.stroke();
 		rr(ctx, x, y, bw, bh, bh / 2); ctx.fillStyle = mix(T.bar, "#000000", 0.3); ctx.fill();
@@ -1026,7 +1028,7 @@ class MashChallenge extends Challenge {
 			ctx.restore();
 			ctx.fillStyle = "rgba(255,255,255,0.3)"; rr(ctx, x + 4 * u, y + 3 * u, Math.max(2 * u, (bw - 8 * u) * fill), bh * 0.28, bh * 0.14); ctx.fill();
 		}
-		for (const [pos, big] of [[0.5, 0.8], [0.75, 0.95], [1, 1.2]]) {
+		for (const [pos, big] of [[1 / MASH_TOP, 0.8], [1.3 / MASH_TOP, 0.95], [1, 1.2]]) {
 			const lit = fill >= pos - 0.001, sx = x + bw * pos - (pos === 1 ? 4 * u : 0), sy = y - 11 * u;
 			ctx.save(); if (lit) { ctx.shadowColor = "#ffd23f"; ctx.shadowBlur = 10 * u; }
 			starPath(ctx, sx, sy, 9 * u * big * (lit ? 1.1 : 1), 4 * u * big, 5, 0); sticker(ctx, lit ? "#ffd23f" : "#8c849c", 1.4 * u);
@@ -1255,7 +1257,90 @@ class CrosshairChallenge extends RingChallenge {
 	}
 }
 
-const TYPES = { timing: TimingChallenge, ring: RingChallenge, sequence: SequenceChallenge, mash: MashChallenge, hold: HoldChallenge, aim: AimChallenge, combo: ComboChallenge, crosshair: CrosshairChallenge };
+// Red light, green light: coloured orbs with an X mean wait; press Enter the moment a green "GO!" shows.
+// Pressing early is an Oops. After GO the faster the press, the better the grade.
+const LIGHT_COLORS = ["#ff4d4d", "#4d7dff", "#ffd23f", "#a56bff", "#ff9a2e"]; // red, blue, yellow, violet, orange
+class GreenlightChallenge extends Challenge {
+	constructor(def, theme) {
+		super(def, theme);
+		this.window = def.window || 1.0; // seconds allowed to react after GO
+		const lo = def.minWait || 0.7, hi = Math.max(lo + 0.1, def.maxWait || 2.0);
+		this.goT = LEAD_IN + lo + Math.random() * (hi - lo);
+		this.idx = Math.floor(Math.random() * LIGHT_COLORS.length);
+		this.swapAcc = 0;
+		this.early = false;
+		this.gone = false;
+		this.reaction = null;
+	}
+	get isGo() { return !this.early && this.t >= this.goT; }
+	update(dt) {
+		if (!this.running) return;
+		if (this.isGo) {
+			if (!this.gone) { this.gone = true; tone(1568, 0.16, "sine", 1); tone(2093, 0.2, "sine", 0.8, undefined, 0.08); }
+			this.intensity = 1;
+			if (this.t - this.goT > this.window) this.resolve(0); // too slow
+			return;
+		}
+		this.intensity = 0.25;
+		this.swapAcc += dt;
+		if (this.swapAcc >= 0.42) { // a new decoy colour: never green, never the same twice in a row
+			this.swapAcc = 0;
+			this.idx = (this.idx + 1 + Math.floor(Math.random() * (LIGHT_COLORS.length - 1))) % LIGHT_COLORS.length;
+			tone(260 + this.idx * 30, 0.05, this.T.wave, 0.4);
+		}
+	}
+	onKey(key) {
+		if (key !== "ENTER" || !this.running) return;
+		if (!this.isGo) { // jumped the light
+			this.early = true; this.shakeAt = this.t;
+			tone(140, 0.2, "sawtooth", 0.9, 90);
+			this.resolve(0);
+			return;
+		}
+		this.reaction = this.t - this.goT;
+		const r = this.reaction / this.window;
+		this.resolve(r <= 0.3 ? 4 : r <= 0.5 ? 3 : r <= 0.75 ? 2 : 1);
+	}
+	draw(ctx, w, h, u) {
+		const now = performance.now() / 1000, R = 38 * u;
+		const p = place(this, w, h, u, R * 3.4, R * 2.7); bubble(ctx, this, p, u);
+		const go = this.isGo, live = this.grade === null;
+		const shake = this.early ? Math.sin((this.t - this.shakeAt) * 60) * 6 * u * Math.max(0, 1 - (this.t - this.shakeAt) / 0.35) : 0;
+		const hop = go && live ? Math.abs(Math.sin(now * 14)) * 5 * u : 0;
+		const cx = p.x + shake, cy = p.y - hop - 4 * u, rad = R * (go && live ? 1.1 : 1);
+		const col = this.early ? "#ff4d4d" : go ? "#3ddc6a" : LIGHT_COLORS[this.idx];
+		ctx.save();
+		if (go && live) { ctx.shadowColor = "#7dffa3"; ctx.shadowBlur = (16 + 8 * Math.sin(now * 20)) * u; }
+		ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); sticker(ctx, col, 3 * u);
+		ctx.restore();
+		const g = ctx.createRadialGradient(cx - rad * 0.35, cy - rad * 0.4, rad * 0.05, cx, cy, rad);
+		g.addColorStop(0, "rgba(255,255,255,0.6)"); g.addColorStop(0.4, "rgba(255,255,255,0)"); g.addColorStop(1, "rgba(0,0,0,0.22)");
+		ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+		ctx.beginPath(); ctx.ellipse(cx - rad * 0.4, cy - rad * 0.5, rad * 0.2, rad * 0.11, -0.6, 0, Math.PI * 2); ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.fill();
+		ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.lineJoin = "round";
+		if (go) {
+			ctx.font = "900 italic " + (rad * 0.8) + "px 'Trebuchet MS','Arial Black',sans-serif";
+			ctx.lineWidth = rad * 0.26; ctx.strokeStyle = INK; ctx.strokeText("GO!", cx, cy + rad * 0.04);
+			ctx.fillStyle = "#ffffff"; ctx.fillText("GO!", cx, cy + rad * 0.04);
+		} else {
+			const s = rad * 0.42;
+			ctx.lineCap = "round";
+			for (const [wd, c] of [[rad * 0.34, INK], [rad * 0.18, "#ffffff"]]) {
+				ctx.lineWidth = wd; ctx.strokeStyle = c;
+				ctx.beginPath(); ctx.moveTo(cx - s, cy - s); ctx.lineTo(cx + s, cy + s); ctx.moveTo(cx + s, cy - s); ctx.lineTo(cx - s, cy + s); ctx.stroke();
+			}
+		}
+		if (this.reaction !== null) {
+			const txt = this.reaction.toFixed(2) + "S";
+			ctx.font = "900 " + (13 * u) + "px 'Trebuchet MS','Arial Black',sans-serif";
+			ctx.lineWidth = 4 * u; ctx.strokeStyle = INK; ctx.strokeText(txt, cx, p.bottom - 4 * u);
+			ctx.fillStyle = "#ffffff"; ctx.fillText(txt, cx, p.bottom - 4 * u);
+		}
+		return go && live ? "NOW!" : "WAIT FOR GREEN!";
+	}
+}
+
+const TYPES = { timing: TimingChallenge, ring: RingChallenge, sequence: SequenceChallenge, mash: MashChallenge, hold: HoldChallenge, aim: AimChallenge, combo: ComboChallenge, crosshair: CrosshairChallenge, greenlight: GreenlightChallenge };
 
 function createChallenge(def, theme) {
 	if (!def || def === true) def = { type: "timing" };
@@ -1349,14 +1434,14 @@ function posOf(battler, w, h, fallbackX, fallbackY) {
 // Returns { skillId, hasDamage, element, name } or null when this action takes no challenge.
 function describeAction(battle) {
 	const K = Common.EFFECT_SPECIAL_ACTION_KIND;
-	const fromContent = c => ({ skillId: c.id, hasDamage: hasDamageEffect(c), element: elementOf(c), name: nameOf(c), tag: tagOf(c), firstIsDamage: c.getEffects()[0] && c.getEffects()[0].kind === Common.EFFECT_KIND.DAMAGES });
+	const fromContent = c => ({ skillId: c.id, hasDamage: hasDamageEffect(c), element: elementOf(c), name: nameOf(c), tag: tagOf(c), firstIsDamage: c.getEffects()[0] && c.getEffects()[0].kind === Common.EFFECT_KIND.DAMAGES, targetKind: c.targetKind });
 	try {
 		switch (battle.battleCommandKind) {
 			case K.APPLY_WEAPONS:
 				{
-				let tag;
-				try { tag = tagOf(Data.Skills.get(1)); } catch (e) { /* ignore */ }
-				return { skillId: 1, hasDamage: true, element: null, name: "", tag, firstIsDamage: true };
+				let tag, targetKind;
+				try { const s1 = Data.Skills.get(1); tag = tagOf(s1); targetKind = s1.targetKind; } catch (e) { /* ignore */ }
+				return { skillId: 1, hasDamage: true, element: null, name: "", tag, firstIsDamage: true, targetKind };
 			}
 			case K.OPEN_SKILLS:
 				return fromContent(battle.battleStartTurn.active
@@ -1371,6 +1456,20 @@ function describeAction(battle) {
 	return null;
 }
 
+// A confused hero hitting a teammate gets no challenge, so a bonus never lands on an ally.
+// True when an enemy-type action is aimed at heroes, or the user is under "attack a random ally".
+function hitsOwnTeam(battle, info) {
+	try {
+		const H = Common.CHARACTER_KIND.HERO, TK = Common.TARGET_KIND || {};
+		const targets = battle.targets || [];
+		const onAllies = targets.length > 0 && targets.every(t => t.player && t.player.kind === H);
+		if (onAllies && info.targetKind !== undefined && (info.targetKind === TK.ENEMY || info.targetKind === TK.ALL_ENEMIES)) return true;
+		const R = Common.STATUS_RESTRICTIONS_KIND;
+		if (info.hasDamage && R && battle.user.containsRestriction(R.ATTACK_RANDOM_ALLY)) return true;
+	} catch (e) { /* ignore */ }
+	return false;
+}
+
 // ---------------------------------------------------------------- hooks
 const BA = Scene.BattleAnimation.prototype;
 const origInitialize = BA.initialize;
@@ -1383,6 +1482,8 @@ function isRangedHero(battle) {
 	try {
 		const u = battle.user, pl = u && u.player;
 		if (!pl || pl.kind !== Common.CHARACTER_KIND.HERO) return false;
+		const hc = CONFIG.heroes && CONFIG.heroes[pl.id];
+		if (hc && hc.ranged === true) return true; // "Ranged Character" ticked in the Tester (Hero Challenges: {"ranged": true})
 		for (let i = 1; i <= 8; i++) {
 			const dv = Manager.Plugins.getParameters(pluginName)["Ranged Hero " + i];
 			// Never evaluate an unset variable slot: the engine pops up an error for variable 0.
@@ -1412,6 +1513,10 @@ BA.initialize = function () {
 	qte = null;
 	if (enabled && isHeroAction(this.battle)) {
 		const info = describeAction(this.battle);
+		if (info && hitsOwnTeam(this.battle, info)) {
+			blog("hero attacks an ally (confused): no challenge", { skillId: info.skillId });
+			return callInitialize(this);
+		}
 		if (info) {
 			const player = this.battle.user.player;
 			let classId = null;

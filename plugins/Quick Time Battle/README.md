@@ -17,12 +17,23 @@ A plugin for RPG Paper Maker 3.0 that adds Paper Mario-style timing challenges t
 
 Settings are in the plugin's parameter list. See **FULL_INSTRUCTIONS.md** for every setting, skill tag and command.
 
+**Online tester:** https://bigwoodart.github.io/RPGPM-Action-Battle-System/Tester.html
+
+**Tester.html** (optional, same page, works offline): open it in Chrome or Edge, pick your project, and try every character, skill and setting live, then save to the plugin.
+
+## Updating
+
+Your settings are stored in `details.json`. When updating, copy over `code.js` (and the docs and Tester) but **keep your own `details.json`**. Replacing it resets every setting to the defaults. The `update-only` zip leaves it out.
+
 ## License
 
 MIT (c) Wood (Skinnywoodplank). See LICENSE.
 
 ## Changelog
 
+- 1.1.0 New Greenlight minigame. Mash is easier (8 presses, Perfect at 1.6x). Dodge window default 12 frames. Ranged Character checkbox. Tester: More menu, grouped Skills list. Saved settings keep working.
+- 1.0.2 Confused heroes attacking a teammate get no challenge.
+- 1.0.1 Key sequences accept any key named in the sequence (e.g. Z, Y, X). Tester.html added.
 - 1.0.0 Release cleanup, full instructions, generic default tables.
 - 0.10.9 Ranged heroes also match the variable's instance ID.
 - 0.10.8 Empty Ranged Hero slots no longer cause an error.
