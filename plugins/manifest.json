@@ -66,6 +66,15 @@
             ]
         },
         {
+            "name": "Hearts Bar",
+            "files": [
+                "code.js",
+                "details.json",
+                "heart_bar.png",
+                "pic.png"
+            ]
+        },
+        {
             "name": "Hide object on block view",
             "files": [
                 "code.js",
