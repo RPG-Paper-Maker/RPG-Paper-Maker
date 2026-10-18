@@ -50,9 +50,13 @@ class AnimationFrameEffect extends Base {
 	}
 
 	toStrings(): string[] {
+		const songs = Project.current!.songs;
 		return [
 			Base.STRING_START + t(this.isSE ? 'sound.effect' : 'flash'),
-			Project.current!.songs.getByID(SONG_KIND.SOUND, this.se?.id ?? -1).toStringNameID(),
+			this.se?.songID?.isActivated
+				? Base.STRING_START + this.se.songID.toString(songs.getList(SONG_KIND.SOUND))
+				: (songs.getByID(SONG_KIND.SOUND, this.se?.id ?? -1)?.toStringNameID() ??
+					Base.STRING_START + (this.se?.songID?.toString(songs.getList(SONG_KIND.SOUND)) ?? '?')),
 			t(Base.ANIMATION_EFFECT_CONDITION_OPTIONS[this.condition].name),
 		];
 	}

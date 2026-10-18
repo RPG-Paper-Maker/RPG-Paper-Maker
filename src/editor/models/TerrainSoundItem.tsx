@@ -41,10 +41,13 @@ class TerrainSoundItem extends Base {
 	}
 
 	toStrings(): string[] {
+		const songs = Project.current!.songs;
+		const sound = this.sound;
 		return [
-			this.sound?.songID.isActivated
-				? Base.STRING_START + this.sound.songID.toString(Project.current!.songs.getList(SONG_KIND.SOUND))
-				: Project.current!.songs.getByID(SONG_KIND.SOUND, this.sound?.id ?? -1).toStringNameID(),
+			sound?.songID?.isActivated
+				? Base.STRING_START + sound.songID.toString(songs.getList(SONG_KIND.SOUND))
+				: (songs.getByID(SONG_KIND.SOUND, sound?.id ?? -1)?.toStringNameID() ??
+					Base.STRING_START + (sound?.songID?.toString(songs.getList(SONG_KIND.SOUND)) ?? '?')),
 		];
 	}
 
