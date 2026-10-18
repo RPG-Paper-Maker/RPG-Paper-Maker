@@ -100,6 +100,7 @@ function PanelNoProject() {
 
 	const [changelogHtml, setChangelogHtml] = useState<string | null>(null);
 	const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
+	const [youtubeVideoTitle, setYoutubeVideoTitle] = useState<string | null>(null);
 	const [youtubeShortId, setYoutubeShortId] = useState<string | null>(null);
 	const [youtubeShortTitle, setYoutubeShortTitle] = useState<string | null>(null);
 	const [youtubeShortThumbnailUrl, setYoutubeShortThumbnailUrl] = useState<string | null>(null);
@@ -170,6 +171,27 @@ function PanelNoProject() {
 		void fetchChangelog();
 		void fetchYoutubeVideos();
 	}, []);
+
+	useEffect(() => {
+		if (!youtubeVideoId) return;
+		setYoutubeVideoTitle(null);
+		const controller = new AbortController();
+		const fetchYoutubeVideoTitle = async () => {
+			try {
+				const url = `https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${youtubeVideoId}`)}&format=json`;
+				const response = await fetch(url, { signal: controller.signal });
+				if (!response.ok) return;
+				const data = (await response.json()) as { title?: unknown };
+				if (typeof data.title === 'string' && data.title.trim()) {
+					setYoutubeVideoTitle(data.title.trim());
+				}
+			} catch {
+				// No internet: leave the title hidden
+			}
+		};
+		void fetchYoutubeVideoTitle();
+		return () => controller.abort();
+	}, [youtubeVideoId]);
 
 	useEffect(() => {
 		if (!youtubeShortId) return;
@@ -271,6 +293,11 @@ function PanelNoProject() {
 										/>
 										<FaRegPlayCircle className='youtubePlayIcon' />
 									</button>
+									{youtubeVideoTitle && (
+										<div className='youtubeMediaTitle' title={youtubeVideoTitle}>
+											{youtubeVideoTitle}
+										</div>
+									)}
 								</div>
 							)}
 							{youtubeShortId !== null && (
@@ -300,7 +327,7 @@ function PanelNoProject() {
 										<FaRegPlayCircle className='youtubePlayIcon' />
 									</button>
 									{youtubeShortTitle && (
-										<div className='youtubeShortTitle' title={youtubeShortTitle}>
+										<div className='youtubeMediaTitle' title={youtubeShortTitle}>
 											{youtubeShortTitle}
 										</div>
 									)}

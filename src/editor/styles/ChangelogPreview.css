@@ -85,7 +85,7 @@
 	letter-spacing: 0.05em;
 }
 
-.youtubeShortTitle {
+.youtubeMediaTitle {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
