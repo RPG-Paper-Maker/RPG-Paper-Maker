@@ -717,14 +717,16 @@ class CommandChangeVariables extends CommandBase {
 							},
 						},
 					};
-					value = new Function('$value', 'Math', 'Scene', `return ${this.valueScript}`)(
+					const core = { Game: { current: game } };
+					value = new Function('$value', 'Math', 'Scene', 'Core', `return ${this.valueScript}`)(
 						currentValue,
 						Math,
 						scene,
+						core,
 					);
-				} catch (error) {
-					console.error(`Error while interpreting simulation script: "${this.valueScript}"`, error);
-					value = null;
+					value ??= -1;
+				} catch {
+					value = -1;
 				}
 				break;
 			case 11:
