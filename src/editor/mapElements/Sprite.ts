@@ -214,13 +214,14 @@ class Sprite extends Base {
 			// Face sprite
 			const p = new THREE.Vector3(pos.x, localPosition!.y + this.yOffset, pos.z);
 			const c = new THREE.Vector3(center.x, localPosition!.y + this.yOffset, center.z);
-			geometry.pushQuadVerticesFace(
-				Sprite.MODEL[0].clone().multiply(size).add(p),
-				Sprite.MODEL[1].clone().multiply(size).add(p),
-				Sprite.MODEL[2].clone().multiply(size).add(p),
-				Sprite.MODEL[3].clone().multiply(size).add(p),
-				c,
-			);
+			const vecFaceA = Sprite.MODEL[0].clone().multiply(size).add(p);
+			const vecFaceB = Sprite.MODEL[1].clone().multiply(size).add(p);
+			const vecFaceC = Sprite.MODEL[2].clone().multiply(size).add(p);
+			const vecFaceD = Sprite.MODEL[3].clone().multiply(size).add(p);
+			const rotation = position.toRotationEuler();
+			rotation.y = 0;
+			Base.rotateQuadEuler(vecFaceA, vecFaceB, vecFaceC, vecFaceD, c, rotation);
+			geometry.pushQuadVerticesFace(vecFaceA, vecFaceB, vecFaceC, vecFaceD, c);
 			geometry.pushQuadIndices(count, position);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count = count + 4;
