@@ -16,6 +16,8 @@ import { Position } from './Position';
 import { Serializable } from './Serializable';
 
 class UndoRedoState extends Serializable {
+	public static readonly JSON_START_POSITION_BEFORE = 'spb';
+	public static readonly JSON_START_POSITION_AFTER = 'spa';
 	public static readonly JSON_POSITION = 'p';
 	public static readonly JSON_ELEMENT_BEFORE = 'eb';
 	public static readonly JSON_KIND_BEFORE = 'kb';
@@ -27,6 +29,20 @@ class UndoRedoState extends Serializable {
 	public kindBefore!: ELEMENT_MAP_KIND;
 	public elementAfter!: MapElement.Base | Model.CommonObject | null;
 	public kindAfter!: ELEMENT_MAP_KIND;
+	public startPositionBefore: { mapID: number; position: Position } | null = null;
+	public startPositionAfter: { mapID: number; position: Position } | null = null;
+
+	static createStartPosition(
+		mapIDBefore: number,
+		positionBefore: Position,
+		mapIDAfter: number,
+		positionAfter: Position,
+	) {
+		const state = new UndoRedoState();
+		state.startPositionBefore = { mapID: mapIDBefore, position: positionBefore.clone() };
+		state.startPositionAfter = { mapID: mapIDAfter, position: positionAfter.clone() };
+		return state;
+	}
 
 	static create(
 		position: Position,
@@ -45,6 +61,13 @@ class UndoRedoState extends Serializable {
 	}
 
 	read(json: JSONType): void {
+		if (json[UndoRedoState.JSON_START_POSITION_BEFORE]) {
+			const before = json[UndoRedoState.JSON_START_POSITION_BEFORE] as { id: number; p: number[] };
+			const after = json[UndoRedoState.JSON_START_POSITION_AFTER] as { id: number; p: number[] };
+			this.startPositionBefore = { mapID: before.id, position: Position.createFromArray(before.p) };
+			this.startPositionAfter = { mapID: after.id, position: Position.createFromArray(after.p) };
+			return;
+		}
 		this.position = new Position();
 		this.position.read(json[UndoRedoState.JSON_POSITION] as number[]);
 		this.kindBefore = json[UndoRedoState.JSON_KIND_BEFORE] as number;
@@ -64,6 +87,15 @@ class UndoRedoState extends Serializable {
 	}
 
 	write(json: JSONType): void {
+		if (this.startPositionBefore && this.startPositionAfter) {
+			const before: number[] = [];
+			const after: number[] = [];
+			this.startPositionBefore.position.write(before);
+			this.startPositionAfter.position.write(after);
+			json[UndoRedoState.JSON_START_POSITION_BEFORE] = { id: this.startPositionBefore.mapID, p: before };
+			json[UndoRedoState.JSON_START_POSITION_AFTER] = { id: this.startPositionAfter.mapID, p: after };
+			return;
+		}
 		const array: number[] = [];
 		this.position.write(array);
 		json[UndoRedoState.JSON_POSITION] = array;

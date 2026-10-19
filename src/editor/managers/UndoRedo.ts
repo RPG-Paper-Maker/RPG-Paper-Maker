@@ -103,13 +103,29 @@ class UndoRedo {
 		if (before) {
 			for (let i = states.length - 1; i >= 0; i--) {
 				const state = states[i];
-				await this.apply(state.position, state.elementBefore, state.kindBefore);
+				if (state.startPositionBefore) {
+					await this.applyStartPosition(state.startPositionBefore);
+				} else {
+					await this.apply(state.position, state.elementBefore, state.kindBefore);
+				}
 			}
 		} else {
 			for (const state of states) {
-				await this.apply(state.position, state.elementAfter, state.kindAfter);
+				if (state.startPositionAfter) {
+					await this.applyStartPosition(state.startPositionAfter);
+				} else {
+					await this.apply(state.position, state.elementAfter, state.kindAfter);
+				}
 			}
 		}
+	}
+
+	private static async applyStartPosition(start: { mapID: number; position: Position }) {
+		const systems = Project.current!.systems;
+		systems.heroMapID = start.mapID;
+		systems.heroMapPosition = start.position.clone();
+		Scene.Map.current?.updatePreviewStartPosition();
+		await systems.save();
 	}
 
 	private static async action(before: boolean, indexOffset: number) {

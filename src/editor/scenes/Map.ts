@@ -172,6 +172,7 @@ class Map extends Base {
 	public needsUpdateRaycasting = false;
 	public needsMouseDown = false;
 	public needsSaveSystems = false;
+	private startPositionBefore: { mapID: number; position: Position } | null = null;
 	public needsUpdateComponent = false;
 	public needsUpdateCursor = false;
 	public mouseUp = false;
@@ -2096,10 +2097,19 @@ class Map extends Base {
 
 	updateStartPosition(position: Position) {
 		if (position.isInMap(this.model)) {
-			Project.current!.systems.heroMapID = this.id;
-			Project.current!.systems.heroMapPosition = position;
-			this.cursorStartPosition.position = position;
+			const systems = Project.current!.systems;
+			if (systems.heroMapID === this.id && systems.heroMapPosition.equals(position)) return;
+			if (!this.startPositionBefore) {
+				this.startPositionBefore = {
+					mapID: systems.heroMapID,
+					position: systems.heroMapPosition.clone(),
+				};
+			}
+			systems.heroMapID = this.id;
+			systems.heroMapPosition = position.clone();
+			this.cursorStartPosition.position = systems.heroMapPosition;
 			this.cursorStartPosition.updateMeshPosition();
+			this.cursorStartPosition.mesh.visible = true;
 			this.scene.add(this.cursorStartPosition.mesh);
 			this.needsSaveSystems = true;
 		}
@@ -3049,6 +3059,21 @@ class Map extends Base {
 		this.lastRectangleEndPosition = null;
 		this.isRectangleAdding = null;
 		if (this.canEdit) {
+			if (this.startPositionBefore) {
+				const before = this.startPositionBefore;
+				const systems = Project.current!.systems;
+				if (before.mapID !== systems.heroMapID || !before.position.equals(systems.heroMapPosition)) {
+					this.undoRedoStates.push(
+						UndoRedoState.createStartPosition(
+							before.mapID,
+							before.position,
+							systems.heroMapID,
+							systems.heroMapPosition,
+						),
+					);
+				}
+				this.startPositionBefore = null;
+			}
 			this.updateUndoRedoSave();
 			await Project.current!.treeMaps.save();
 			if (this.needsSaveSystems) {

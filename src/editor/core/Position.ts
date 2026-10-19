@@ -62,8 +62,8 @@ class Position extends Position3D {
 		return new Position(
 			array[0],
 			array[1],
-			array[3],
 			array[2],
+			array[3],
 			array[4],
 			array[5],
 			array[6],
@@ -111,7 +111,7 @@ class Position extends Position3D {
 	}
 
 	getYPixelCount(): number {
-		return Math.round(this.yPixels * Project.SQUARE_SIZE / 100);
+		return Math.round((this.yPixels * Project.SQUARE_SIZE) / 100);
 	}
 
 	getPixelsCenterX(): number {
@@ -314,7 +314,7 @@ class Position extends Position3D {
 			this.angleY
 		}, ${this.angleZ}]\n${t('scales')} = [${this.scaleX}, ${this.scaleY}, ${this.scaleZ}]\n${t(
 			'center',
-		)} = [X = ${Math.round(this.centerX * Project.SQUARE_SIZE / 100)}px, Z = ${Math.round(this.centerZ * Project.SQUARE_SIZE / 100)}px]`;
+		)} = [X = ${Math.round((this.centerX * Project.SQUARE_SIZE) / 100)}px, Z = ${Math.round((this.centerZ * Project.SQUARE_SIZE) / 100)}px]`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {
