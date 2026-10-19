@@ -34,6 +34,7 @@ type Props = {
 	onSwitchExpanded: (id: number, expanded: boolean) => void;
 	onMouseDown: (node: Node, event: React.MouseEvent) => void;
 	onDragStart?: (event: React.DragEvent, node: Node) => void;
+	onDragEnd?: () => void;
 	onDragOver?: (event: React.DragEvent, node: Node) => void;
 	onDragLeave?: (event: React.DragEvent) => void;
 	onDrop?: (event: React.DragEvent, node: Node) => void;
@@ -55,6 +56,7 @@ function TreeItem({
 	onSwitchExpanded,
 	onMouseDown,
 	onDragStart,
+	onDragEnd,
 	onDragOver,
 	onDragLeave,
 	onDrop,
@@ -136,6 +138,7 @@ function TreeItem({
 			style={{ paddingLeft: `${5 + level * 15}px`, opacity: isCutSource || node.isPreview ? 0.5 : 1 }}
 			onMouseDown={handleMouseDown}
 			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}
+			onDragEnd={onDragEnd}
 			onDragOver={(event: React.DragEvent) => onDragOver?.(event, node)}
 			onDragLeave={onDragLeave}
 			onDrop={(event: React.DragEvent) => onDrop?.(event, node)}

@@ -687,7 +687,29 @@ function Tree({
 
 	const handleDragStart = (event: React.DragEvent, node: Node) => {
 		pendingSingleSelectNode.current = null;
+		const row = event.currentTarget as HTMLElement;
+		const dragImage = row.cloneNode(true) as HTMLElement;
+		const rowRect = row.getBoundingClientRect();
+		const rowStyle = window.getComputedStyle(row);
+		dragImage.style.position = 'fixed';
+		dragImage.style.left = `${rowRect.left}px`;
+		dragImage.style.top = `${rowRect.top}px`;
+		dragImage.style.zIndex = '2147483647';
+		dragImage.style.pointerEvents = 'none';
+		dragImage.style.width = `${rowRect.width}px`;
+		dragImage.style.backgroundColor = rowStyle.backgroundColor;
+		dragImage.style.color = rowStyle.color;
+		document.body.appendChild(dragImage);
+		event.dataTransfer.setDragImage(dragImage, 12, 10);
+		window.setTimeout(() => dragImage.remove(), 0);
 		setDraggedNode(node);
+	};
+
+	const handleDragEnd = () => {
+		setDraggedNode(null);
+		listRef.current
+			?.querySelectorAll<HTMLElement>('.dragOverTop, .dragOverBot, .dragOverComplete')
+			.forEach(removeDragDropClasses);
 	};
 
 	const isMultiDrag = () =>
@@ -1087,6 +1109,7 @@ function Tree({
 						onDragStart={
 							!disabled && node.draggable && !node.content.isFixedNode() ? handleDragStart : undefined
 						}
+						onDragEnd={handleDragEnd}
 						onDragOver={
 							!disabled && node.draggable && !node.content.isFixedNode()
 								? (e, n) => handleDragOver(e, n, byIndex || nbSelectionNextIndex > 0)
