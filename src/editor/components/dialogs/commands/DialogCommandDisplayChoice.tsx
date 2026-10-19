@@ -26,6 +26,7 @@ import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
+import DialogChoiceText from './DialogChoiceText';
 
 function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
@@ -139,6 +140,7 @@ function DialogCommandDisplayChoice({ commandKind, setIsOpen, list, onAccept, on
 							doNotShowID
 							byIndex
 							scrollable
+							renderDialog={(options) => <DialogChoiceText {...options} />}
 						/>
 					</Groupbox>
 				</Flex>

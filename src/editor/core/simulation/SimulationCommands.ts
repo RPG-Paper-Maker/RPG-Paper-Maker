@@ -57,6 +57,35 @@ export interface SimulationHud {
 	clear(): void;
 }
 
+function resolveSimulationMessage(message: string, game: GameStateSimulation): string {
+	return message.replace(
+		/\[(?:(var|par|pro|hname)=(-?\d+)|lvar=([^\]]*))\]/g,
+		(_match, tag: string | undefined, num: string | undefined, localVariableName: string | undefined) => {
+			if (localVariableName !== undefined) {
+				return String(game.getLocalVariable(localVariableName));
+			}
+			const id = parseInt(num!, 10);
+			switch (tag) {
+				case 'var':
+					return String(game.getVariable(id) ?? '');
+				case 'hname': {
+					const instanceID = game.getVariable(id);
+					const hero =
+						game.findHeroByInstanceID(typeof instanceID === 'number' ? instanceID : Number(instanceID)) ??
+						game.teamHeroes[0] ??
+						null;
+					return hero ? hero.name : '';
+				}
+				case 'par':
+				case 'pro':
+					return '0';
+				default:
+					return '';
+			}
+		},
+	);
+}
+
 class CommandBase {
 	public parallel = false;
 	public disabled = false;
@@ -212,42 +241,10 @@ class CommandShowText extends CommandBase {
 		this.message = texts.get(firstLanguageID) ?? [...texts.values()][0] ?? '';
 	}
 
-	private resolveMessage(game: GameStateSimulation): string {
-		return this.message.replace(
-			/\[(?:(var|par|pro|hname)=(-?\d+)|lvar=([^\]]*))\]/g,
-			(_match, tag: string | undefined, num: string | undefined, localVariableName: string | undefined) => {
-				if (localVariableName !== undefined) {
-					return String(game.getLocalVariable(localVariableName));
-				}
-				const id = parseInt(num!, 10);
-				switch (tag) {
-					case 'var':
-						return String(game.getVariable(id) ?? '');
-					case 'hname': {
-						const instanceID = game.getVariable(id);
-						const hero =
-							game.findHeroByInstanceID(
-								typeof instanceID === 'number' ? instanceID : Number(instanceID),
-							) ??
-							game.teamHeroes[0] ??
-							null;
-						return hero ? hero.name : '';
-					}
-					case 'par':
-						return '0';
-					case 'pro':
-						return '0';
-					default:
-						return '';
-				}
-			},
-		);
-	}
-
 	getContent(ctx: SimulationContext): SimulationTextContent {
 		return {
 			interlocutor: ctx.game.resolveString(this.interlocutor),
-			message: this.resolveMessage(ctx.game),
+			message: resolveSimulationMessage(this.message, ctx.game),
 			facesetID: this.facesetID,
 			facesetIndexX: this.facesetIndexX,
 			facesetIndexY: this.facesetIndexY,
@@ -327,9 +324,13 @@ class CommandDisplayChoice extends CommandBase {
 	initialize(ctx: SimulationContext): CommandState {
 		const state: CommandState = { index: -1 };
 		if (ctx.hud) {
-			ctx.hud.showChoices(this.showText ? this.showText.getContent(ctx) : null, this.choices, (index) => {
-				state.index = index;
-			});
+			ctx.hud.showChoices(
+				this.showText ? this.showText.getContent(ctx) : null,
+				this.choices.map((choice) => resolveSimulationMessage(choice, ctx.game)),
+				(index) => {
+					state.index = index;
+				},
+			);
 		} else {
 			state.index = ctx.game.resolveNumber(this.cancelAutoIndex) - 1;
 		}

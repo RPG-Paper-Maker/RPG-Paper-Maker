@@ -27,6 +27,7 @@ import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
 import { Inputs } from '../managers';
 import { Localization, MapObjectCommand } from '../models';
+import { DIALOG_OPTIONS } from '../models/Base';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
@@ -97,6 +98,7 @@ type Props = {
 	getSelectionNode?: (node: Node) => Node;
 	onDialogLivePreview?: (node: Node, command: Model.MapObjectCommand | null, isNew: boolean) => void;
 	onDialogModelLivePreview?: (model: Model.Base | null, isNew: boolean) => void;
+	renderDialog?: (options: DIALOG_OPTIONS) => ReactNode;
 };
 
 export const TREES_SMALL_MIN_WIDTH = 75;
@@ -164,6 +166,7 @@ function Tree({
 	getSelectionNode,
 	onDialogLivePreview,
 	onDialogModelLivePreview,
+	renderDialog,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -1353,7 +1356,7 @@ function Tree({
 					? (model: Model.Base | null) => onDialogModelLivePreview(model, newModel !== null)
 					: undefined,
 			};
-			return options.model.getDialog(options);
+			return renderDialog ? renderDialog(options) : options.model.getDialog(options);
 		} else {
 			return null;
 		}

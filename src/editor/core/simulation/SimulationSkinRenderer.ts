@@ -481,7 +481,7 @@ class SimulationSkinRenderer {
 		);
 	}
 
-	private defaultMessageStyle(): MessageStyle {
+	private defaultMessageStyle(align: MessageStyle['align'] = 'left'): MessageStyle {
 		return {
 			bold: false,
 			italic: false,
@@ -490,7 +490,7 @@ class SimulationSkinRenderer {
 			color: this.options.tcText,
 			backColor: null,
 			strokeColor: this.options.tOutline ? this.options.tcOutline : null,
-			align: 'left',
+			align,
 		};
 	}
 
@@ -578,9 +578,9 @@ class SimulationSkinRenderer {
 		return true;
 	}
 
-	private parseMessage(message: string): MessageSegment[][] {
+	private parseMessage(message: string, align: MessageStyle['align'] = 'left'): MessageSegment[][] {
 		const lines: MessageSegment[][] = [[]];
-		const stack: MessageStyle[] = [this.defaultMessageStyle()];
+		const stack: MessageStyle[] = [this.defaultMessageStyle(align)];
 		let text = '';
 		const flush = () => {
 			if (text.length > 0) {
@@ -766,9 +766,41 @@ class SimulationSkinRenderer {
 		return cursorY;
 	}
 
-	private drawMessageContent(ctx: CanvasRenderingContext2D, message: string, x: number, y: number, maxWidth: number) {
-		let cursorY = y;
+	private measureMessage(ctx: CanvasRenderingContext2D, message: string): { width: number; height: number } {
+		let width = 0;
+		let height = 0;
+		let lastLineHeight = 0;
+		const iconSize = Project.current!.systems.iconsSize * 1.5;
 		for (const segments of this.parseMessage(message)) {
+			let lineWidth = 0;
+			let lineHeight = this.options.tSize;
+			for (const segment of segments) {
+				if (segment.type === 'icon') {
+					lineWidth += iconSize;
+					lineHeight = Math.max(lineHeight, iconSize);
+				} else {
+					this.applyMessageFont(ctx, segment.style);
+					lineWidth += ctx.measureText(segment.text).width;
+					lineHeight = Math.max(lineHeight, segment.style.size);
+				}
+			}
+			width = Math.max(width, lineWidth);
+			height += lineHeight * 1.35;
+			lastLineHeight = lineHeight;
+		}
+		return { width, height: height - lastLineHeight * 0.35 };
+	}
+
+	private drawMessageContent(
+		ctx: CanvasRenderingContext2D,
+		message: string,
+		x: number,
+		y: number,
+		maxWidth: number,
+		align: MessageStyle['align'] = 'left',
+	) {
+		let cursorY = y;
+		for (const segments of this.parseMessage(message, align)) {
 			cursorY = this.drawMessageLine(ctx, segments, x, cursorY, maxWidth);
 		}
 	}
@@ -842,7 +874,7 @@ class SimulationSkinRenderer {
 		this.setFont(ctx, this.options.tSize);
 		let maxWidth = MEDIUM_SLOT_WIDTH;
 		for (const choice of choices) {
-			const width = ctx.measureText(choice).width;
+			const width = this.measureMessage(ctx, choice).width;
 			if (width > maxWidth) {
 				maxWidth = width;
 			}
@@ -851,8 +883,6 @@ class SimulationSkinRenderer {
 		const x = withText ? SCREEN_X - maxWidth - 15 : (SCREEN_X - maxWidth) / 2;
 		const y = SCREEN_Y - 15 - 225 - choices.length * MEDIUM_SLOT_HEIGHT;
 		const rects: Rectangle[] = [];
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
 		for (let i = 0; i < choices.length; i++) {
 			const rect = new Rectangle(
 				x * this.horizontalLayoutScale,
@@ -861,7 +891,18 @@ class SimulationSkinRenderer {
 				MEDIUM_SLOT_HEIGHT,
 			);
 			this.drawBox(ctx, rect, i === hoveredChoice);
-			this.drawText(ctx, choices[i], rect.x + rect.width / 2, rect.y + rect.height / 2);
+			const contentX = rect.x + SMALL_SLOT_PADDING[0] * this.horizontalLayoutScale;
+			const contentWidth =
+				rect.width - (SMALL_SLOT_PADDING[0] + SMALL_SLOT_PADDING[2]) * this.horizontalLayoutScale;
+			const contentHeight = this.measureMessage(ctx, choices[i]).height;
+			this.drawMessageContent(
+				ctx,
+				choices[i],
+				contentX,
+				rect.y + (rect.height - contentHeight) / 2,
+				contentWidth,
+				'center',
+			);
 			rects.push(rect);
 		}
 		return rects;
