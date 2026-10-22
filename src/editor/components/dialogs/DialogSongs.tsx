@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -57,11 +57,14 @@ type Props = {
 	noDynamic?: boolean;
 };
 
-const hasAudioExtension = (path: string) => /^data:audio\/([^;,]+);/i.test(path) || /\.([^.]+)$/.test(path.split('?', 1)[0]);
+const hasAudioExtension = (path: string) =>
+	/^data:audio\/([^;,]+);/i.test(path) || /\.([^.]+)$/.test(path.split('?', 1)[0]);
 
 const warnMissingAudioExtension = (path: string) => {
 	if (!hasAudioExtension(path)) {
-		console.warn(`No file extension was found for audio file: ${path}. Consider using the "format" property or specify an extension.`);
+		console.warn(
+			`No file extension was found for audio file: ${path}. Consider using the "format" property or specify an extension.`,
+		);
 	}
 };
 
@@ -97,6 +100,7 @@ function DialogSongs({
 	const [isPaused, setIsPaused] = useStateBool();
 	const [isStopped, setIsStopped] = useStateBool();
 	const [selectedKind, setSelectedKind] = useState(kind);
+	const lastPreviewPosition = useRef(0);
 
 	const dispatch = useDispatch();
 
@@ -179,22 +183,13 @@ function DialogSongs({
 		if (song && path) {
 			const { Howl } = await import('howler');
 			warnMissingAudioExtension(path);
-			if (!song.isBR) {
-				setSelectedHowl(undefined);
-				setSelectedHowl(
-					new Howl({
-						src: [Constants.IS_DESKTOP ? path : ((await LocalFile.readFile(path)) ?? '')],
-						html5: true,
-					}),
-				);
-			} else {
-				setSelectedHowl(
-					new Howl({
-						src: [path],
-						html5: true,
-					}),
-				);
-			}
+			setSelectedHowl(
+				new Howl({
+					src: [song.isBR || Constants.IS_DESKTOP ? path : ((await LocalFile.readFile(path)) ?? '')],
+					html5: true,
+					loop: song.kind === SONG_KIND.MUSIC || song.kind === SONG_KIND.BACKGROUND_SOUND,
+				}),
+			);
 		} else {
 			setSelectedHowl(undefined);
 		}
@@ -222,13 +217,15 @@ function DialogSongs({
 
 	const handlePlay = () => {
 		if (selectedHowl) {
-			if (playingHowl) {
-				if (!isPaused) {
-					playingHowl.stop();
-					if (isStart && start.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL) {
-						selectedHowl.seek(start.value as number);
-					}
-				}
+			const resume = playingHowl === selectedHowl && isPaused && !isStopped;
+			if (playingHowl && !resume) {
+				playingHowl.stop();
+			}
+			if (!resume) {
+				const loopStart =
+					isStart && start.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL ? (start.value as number) : 0;
+				selectedHowl.seek(loopStart);
+				lastPreviewPosition.current = loopStart;
 			}
 			setPlayingHowl(selectedHowl);
 			selectedHowl.volume((volume.kind === DYNAMIC_VALUE_KIND.NUMBER ? (volume.value as number) : 100) / 100);
@@ -237,6 +234,33 @@ function DialogSongs({
 			setIsStopped(false);
 		}
 	};
+
+	useEffect(() => {
+		if (!playingHowl || isPaused || isStopped || !displayOptionsStartEnd) {
+			return;
+		}
+		let frame: number;
+		const updateLoop = () => {
+			if (playingHowl.playing()) {
+				const position = playingHowl.seek();
+				const loopStart =
+					isStart && start.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL ? (start.value as number) : 0;
+				const loopEnd = isEnd && end.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL ? (end.value as number) : null;
+				if (
+					(loopEnd !== null && loopEnd > loopStart && position >= loopEnd) ||
+					(loopStart > 0 && position < lastPreviewPosition.current)
+				) {
+					playingHowl.seek(loopStart);
+					lastPreviewPosition.current = loopStart;
+				} else {
+					lastPreviewPosition.current = position;
+				}
+			}
+			frame = requestAnimationFrame(updateLoop);
+		};
+		frame = requestAnimationFrame(updateLoop);
+		return () => cancelAnimationFrame(frame);
+	}, [playingHowl, isPaused, isStopped, displayOptionsStartEnd, isStart, start, isEnd, end]);
 
 	const handleChangeFolder = (node: Node | null) => {
 		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
@@ -359,7 +383,14 @@ function DialogSongs({
 						<Label>{t('volume')}</Label>
 						<Value>
 							<Flex spaced centerV>
-								<SliderDynamic dynamic={volume} min={0} max={100} unit='%' isVertical disableDynamic={noDynamic} />
+								<SliderDynamic
+									dynamic={volume}
+									min={0}
+									max={100}
+									unit='%'
+									isVertical
+									disableDynamic={noDynamic}
+								/>
 							</Flex>
 						</Value>
 						{displayOptionsStartEnd && (
