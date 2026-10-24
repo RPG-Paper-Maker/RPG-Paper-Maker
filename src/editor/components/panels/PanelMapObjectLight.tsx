@@ -23,7 +23,9 @@ import TooltipInformation from '../TooltipInformation';
 
 type Props = {
 	light: MapObjectLight;
+	sunlight?: boolean;
 	onChange?: () => void;
+	onColorChange?: () => void;
 	selectedFields?: Record<MapObjectLightField, boolean>;
 	onChangeSelectedField?: (field: MapObjectLightField, selected: boolean) => void;
 };
@@ -49,7 +51,14 @@ const MAP_OBJECT_LIGHT_FIELDS = [
 
 type MapObjectLightField = (typeof MAP_OBJECT_LIGHT_FIELDS)[number];
 
-function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelectedField }: Props) {
+function PanelMapObjectLight({
+	light,
+	sunlight = false,
+	onChange,
+	onColorChange,
+	selectedFields,
+	onChangeSelectedField,
+}: Props) {
 	const { t } = useTranslation();
 	const kinds = useMemo(
 		() =>
@@ -84,8 +93,8 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 			min={min}
 			max={max}
 			disabled={isDisabled(field)}
-			onChangeKind={onChange}
-			onChangeValue={onChange}
+			onChangeKind={field === 'color' ? (onColorChange ?? onChange) : onChange}
+			onChangeValue={field === 'color' ? (onColorChange ?? onChange) : onChange}
 		/>
 	);
 	const label = (field: MapObjectLightField, children: ReactNode) =>
@@ -109,53 +118,57 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 				onChange={(value) => {
 					setPickerColor(value);
 					light.color.updateToDefaultText(value.toHexString().slice(0, 7));
-					onChange?.();
+					(onColorChange ?? onChange)?.();
 				}}
 			/>
 			<Flex one column scrollable style={{ minWidth: 0, scrollbarGutter: 'stable' }}>
 				<Form>
 					<Label>{label('color', t('color'))}</Label>
 					<Value>{dynamic('color', light.color, DYNAMIC_VALUE_OPTIONS_TYPE.TEXT)}</Value>
-					<Label>
-						<Flex spaced centerV>
-							{label('kind', t('light.source'))}
-							<TooltipInformation text={t('tooltip.light.source')} />
-						</Flex>
-					</Label>
-					<Value>
-						<Flex spaced centerV>
-							<Dropdown
-								selectedID={lightKind}
-								onChange={(value: number) => {
-									light.kind.updateToDefaultNumber(value);
-									if (value === MAP_OBJECT_LIGHT_KIND.SPOT) {
-										light.followOrientation.updateToDefaultNumber(1);
-									} else if (value === MAP_OBJECT_LIGHT_KIND.POINT) {
-										light.followOrientation.updateToDefaultNumber(0);
-									}
-									onChange?.();
-								}}
-								options={kinds}
-								disabled={isDisabled('kind')}
-							/>
-							{(lightKind === MAP_OBJECT_LIGHT_KIND.POINT ||
-								lightKind === MAP_OBJECT_LIGHT_KIND.SPOT) && (
-								<>
-									<Checkbox
-										isChecked={light.followOrientation.getFixNumberValue() === 1}
-										disabled={isDisabled('followOrientation')}
-										onChange={(checked) => {
-											light.followOrientation.updateToDefaultNumber(checked ? 1 : 0);
-											onChange?.();
-										}}
-									>
-										{t('orientation')}
-									</Checkbox>
-									<TooltipInformation text={t('tooltip.light.orientation')} />
-								</>
-							)}
-						</Flex>
-					</Value>
+					{!sunlight && (
+						<Label>
+							<Flex spaced centerV>
+								{label('kind', t('light.source'))}
+								<TooltipInformation text={t('tooltip.light.source')} />
+							</Flex>
+						</Label>
+					)}
+					{!sunlight && (
+						<Value>
+							<Flex spaced centerV>
+								<Dropdown
+									selectedID={lightKind}
+									onChange={(value: number) => {
+										light.kind.updateToDefaultNumber(value);
+										if (value === MAP_OBJECT_LIGHT_KIND.SPOT) {
+											light.followOrientation.updateToDefaultNumber(1);
+										} else if (value === MAP_OBJECT_LIGHT_KIND.POINT) {
+											light.followOrientation.updateToDefaultNumber(0);
+										}
+										onChange?.();
+									}}
+									options={kinds}
+									disabled={isDisabled('kind')}
+								/>
+								{(lightKind === MAP_OBJECT_LIGHT_KIND.POINT ||
+									lightKind === MAP_OBJECT_LIGHT_KIND.SPOT) && (
+									<>
+										<Checkbox
+											isChecked={light.followOrientation.getFixNumberValue() === 1}
+											disabled={isDisabled('followOrientation')}
+											onChange={(checked) => {
+												light.followOrientation.updateToDefaultNumber(checked ? 1 : 0);
+												onChange?.();
+											}}
+										>
+											{t('orientation')}
+										</Checkbox>
+										<TooltipInformation text={t('tooltip.light.orientation')} />
+									</>
+								)}
+							</Flex>
+						</Value>
+					)}
 					<Label>
 						<Flex spaced centerV>
 							{label('intensity', t('intensity'))}
@@ -169,42 +182,53 @@ function PanelMapObjectLight({ light, onChange, selectedFields, onChangeSelected
 					</Value>
 					<Label>{label('intensityTime', `${t('light.intensity.animation')} ${t('time')} (ms)`)}</Label>
 					<Value>{dynamic('intensityTime', light.intensityTime, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER, 0)}</Value>
-					<Label>
-						<Flex spaced centerV>
-							{label('x', t('light.offset.x'))}
-							<TooltipInformation text={t('tooltip.light.offset')} />
-						</Flex>
-					</Label>
-					<Value>{dynamic('x', light.x, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
-					<Label>{label('y', t('light.offset.y'))}</Label>
-					<Value>{dynamic('y', light.y, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
-					<Label>{label('z', t('light.offset.z'))}</Label>
-					<Value>{dynamic('z', light.z, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
-					{lightKind === MAP_OBJECT_LIGHT_KIND.HEMISPHERE && (
+					{!sunlight && (
 						<>
 							<Label>
 								<Flex spaced centerV>
-									{label('groundColor', t('light.ground.color'))}
-									<TooltipInformation text={t('tooltip.light.ground.color')} />
+									{label('x', t('light.offset.x'))}
+									<TooltipInformation text={t('tooltip.light.offset')} />
 								</Flex>
 							</Label>
-							<Value>{dynamic('groundColor', light.groundColor, DYNAMIC_VALUE_OPTIONS_TYPE.TEXT)}</Value>
+							<Value>{dynamic('x', light.x, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
+							<Label>{label('y', t('light.offset.y'))}</Label>
+							<Value>{dynamic('y', light.y, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
+							<Label>{label('z', t('light.offset.z'))}</Label>
+							<Value>{dynamic('z', light.z, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL)}</Value>
+							{lightKind === MAP_OBJECT_LIGHT_KIND.HEMISPHERE && (
+								<>
+									<Label>
+										<Flex spaced centerV>
+											{label('groundColor', t('light.ground.color'))}
+											<TooltipInformation text={t('tooltip.light.ground.color')} />
+										</Flex>
+									</Label>
+									<Value>
+										{dynamic('groundColor', light.groundColor, DYNAMIC_VALUE_OPTIONS_TYPE.TEXT)}
+									</Value>
+								</>
+							)}
+							{hasDistance && (
+								<>
+									<Label>
+										<Flex spaced centerV>
+											{label('distance', t('range'))}
+											<TooltipInformation text={t('tooltip.light.range')} />
+										</Flex>
+									</Label>
+									<Value>
+										{dynamic(
+											'distance',
+											light.distance,
+											DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL,
+											0,
+										)}
+									</Value>
+								</>
+							)}
 						</>
 					)}
-					{hasDistance && (
-						<>
-							<Label>
-								<Flex spaced centerV>
-									{label('distance', t('range'))}
-									<TooltipInformation text={t('tooltip.light.range')} />
-								</Flex>
-							</Label>
-							<Value>
-								{dynamic('distance', light.distance, DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL, 0)}
-							</Value>
-						</>
-					)}
-					{lightKind === MAP_OBJECT_LIGHT_KIND.SPOT && (
+					{!sunlight && lightKind === MAP_OBJECT_LIGHT_KIND.SPOT && (
 						<>
 							<Label>{label('targetX', t('light.target.x'))}</Label>
 							<Value>

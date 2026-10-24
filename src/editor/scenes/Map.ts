@@ -579,12 +579,21 @@ class Map extends Base {
 
 	initializeSunLight() {
 		this.removeLights();
-		this.ambientLight = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? Math.PI - 14 / 9 : Math.PI);
+		this.ambientLight = new THREE.AmbientLight(
+			this.model.ambientLight.color.value as string,
+			this.model.isAmbientLight ? this.model.ambientLight.intensity.getFixNumberValue() : 0,
+		);
 		this.scene.add(this.ambientLight);
 		if (this.model.isSunlight) {
-			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
-			this.sunLight.position.set(-1, 1.75, 1);
-			this.sunLight.position.multiplyScalar(10);
+			this.sunLight = new THREE.DirectionalLight(
+				this.model.sunlightLight.color.value as string,
+				this.model.sunlightLight.intensity.getFixNumberValue(),
+			);
+			this.sunLight.position.set(
+				this.model.sunlightX,
+				this.model.sunlightY + this.model.sunlightYPlus / Project.SQUARE_SIZE,
+				this.model.sunlightZ,
+			);
 			this.sunLight.target.position.set(0, 0, 0);
 			this.scene.add(this.sunLight);
 			this.sunLight.castShadow = true;
@@ -3135,6 +3144,24 @@ class Map extends Base {
 			}
 
 			this.camera.update(this);
+			if (this.sunLight) {
+				const intensity = this.model.sunlightLight.intensity.getFixNumberValue();
+				const offset = this.model.sunlightLight.intensityOffset.getFixNumberValue();
+				const time = this.model.sunlightLight.intensityTime.getFixNumberValue();
+				const factor = time > 0 && offset !== 0 ? (1 - Math.cos((Math.PI * performance.now()) / time)) / 2 : 0;
+				this.sunLight.intensity = Math.max(0, intensity * (1 + (offset / 100) * factor));
+			}
+			if (this.ambientLight) {
+				const light = this.model.ambientLight;
+				const intensity = light.intensity.getFixNumberValue();
+				const offset = light.intensityOffset.getFixNumberValue();
+				const time = light.intensityTime.getFixNumberValue();
+				const factor = time > 0 && offset !== 0 ? (1 - Math.cos((Math.PI * performance.now()) / time)) / 2 : 0;
+				this.ambientLight.intensity = this.model.isAmbientLight
+					? Math.max(0, intensity * (1 + (offset / 100) * factor))
+					: 0;
+				this.ambientLight.color.set(light.color.value as string);
+			}
 
 			if (this.updateCurrentPortion()) {
 				this.loadPortions(true).catch(console.error);

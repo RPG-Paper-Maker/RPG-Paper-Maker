@@ -23,18 +23,33 @@ type Props = {
 	onAccept: () => void;
 	onReject?: () => void;
 	onModelLivePreview?: (model: Base | null) => void;
+	sunlight?: boolean;
+	ambient?: boolean;
 };
 
-function DialogMapObjectLight({ setIsOpen, model, onAccept, onReject, onModelLivePreview }: Props) {
+function DialogMapObjectLight({
+	setIsOpen,
+	model,
+	onAccept,
+	onReject,
+	onModelLivePreview,
+	sunlight = false,
+	ambient = false,
+}: Props) {
 	const light = model as MapObjectLight;
 	const { t } = useTranslation();
 	const originalLight = useRef(light.clone() as MapObjectLight);
 	const previewTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const [, setRevision] = useState(0);
-	const preview = () => {
+	const preview = (immediate = false) => {
 		setRevision((value) => value + 1);
 		if (previewTimeout.current !== null) {
 			clearTimeout(previewTimeout.current);
+		}
+		if (immediate) {
+			previewTimeout.current = null;
+			onModelLivePreview?.(light);
+			return;
 		}
 		previewTimeout.current = setTimeout(() => {
 			previewTimeout.current = null;
@@ -68,13 +83,18 @@ function DialogMapObjectLight({ setIsOpen, model, onAccept, onReject, onModelLiv
 
 	return (
 		<Dialog
-			title={`${t('light')}...`}
+			title={`${t(ambient ? 'ambient.light' : sunlight ? 'sun.light' : 'light')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={reject} onOK={accept} />}
 			onClose={reject}
 			initialHeight='400px'
 		>
-			<PanelMapObjectLight light={light} onChange={preview} />
+			<PanelMapObjectLight
+				light={light}
+				sunlight={sunlight || ambient}
+				onChange={() => preview()}
+				onColorChange={sunlight ? () => preview(true) : undefined}
+			/>
 		</Dialog>
 	);
 }

@@ -13,17 +13,15 @@ import * as THREE from 'three';
 import { Constants, Mathf, Utils } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
+import { Project } from './Project';
 
 class Camera {
 	public static MIN_ZOOM = 20 / Constants.BASE_SQUARE_SIZE;
 	public static MAX_ZOOM = 45000 / Constants.BASE_SQUARE_SIZE;
-	public static readonly SUN_FORWARD = new THREE.Vector3(1, -1.75, -1).normalize();
-	public static readonly SUN_RIGHT = new THREE.Vector3(1, 0, 1).normalize();
-	public static readonly SUN_UP = new THREE.Vector3(
-		Math.SQRT1_2 * (1.75 / 2.25),
-		Math.SQRT1_2 * (2 / 2.25),
-		-Math.SQRT1_2 * (1.75 / 2.25),
-	);
+	public static readonly SUN_FORWARD = new THREE.Vector3();
+	public static readonly SUN_RIGHT = new THREE.Vector3();
+	public static readonly SUN_UP = new THREE.Vector3();
+	private static readonly _sunOffset = new THREE.Vector3();
 	private static _snapTarget = new THREE.Vector3();
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
@@ -162,11 +160,23 @@ class Camera {
 
 		// Update light
 		if (map && map.sunLight) {
+			Camera._sunOffset.set(
+				map.model.sunlightX,
+				map.model.sunlightY + map.model.sunlightYPlus / Project.SQUARE_SIZE,
+				map.model.sunlightZ,
+			);
+			if (Camera._sunOffset.lengthSq() === 0) Camera._sunOffset.set(-10, 17.5, 10);
+			Camera.SUN_FORWARD.copy(Camera._sunOffset).negate().normalize();
+			Camera.SUN_RIGHT.set(-Camera.SUN_FORWARD.z, 0, Camera.SUN_FORWARD.x);
+			if (Camera.SUN_RIGHT.lengthSq() === 0) Camera.SUN_RIGHT.set(1, 0, 0);
+			Camera.SUN_RIGHT.normalize();
+			Camera.SUN_UP.crossVectors(Camera.SUN_RIGHT, Camera.SUN_FORWARD).normalize();
 			const d = Math.max(this.distance * 3.0, 10);
 			const far = Math.max(d * 2, 350);
 			if (
 				this._stableD === 0 ||
 				Math.abs(d - this._stableD) / this._stableD > 0.05 ||
+				map.sunLight.shadow.camera.right !== this._stableD ||
 				far !== map.sunLight.shadow.camera.far
 			) {
 				this._stableD = d;
@@ -188,7 +198,7 @@ class Camera {
 				.addScaledVector(Camera.SUN_FORWARD, Camera.SUN_FORWARD.dot(this.targetPosition));
 			map.sunLight.target.position.copy(Camera._snapTarget);
 			map.sunLight.target.updateMatrixWorld();
-			map.sunLight.position.set(-1, 1.75, 1).multiplyScalar(10).add(Camera._snapTarget);
+			map.sunLight.position.copy(Camera._sunOffset).add(Camera._snapTarget);
 		}
 	}
 

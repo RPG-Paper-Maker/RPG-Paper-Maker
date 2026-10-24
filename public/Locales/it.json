@@ -1809,6 +1809,7 @@
 	"battlers.frame.duration": "Durata frame battler",
 	"battlers.frame.attacking.duration": "Durata frame attacco battler",
 	"sun.light": "Luce solare",
+	"ambient.light": "Luce ambientale",
 	"object.lights.shadows": "Ombre delle luci degli oggetti",
 	"resolve": "Risoluzione",
 	"resolve.description": "Aggiunge una barriera a se stessi per 5 turni.",

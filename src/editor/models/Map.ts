@@ -28,6 +28,7 @@ import { Model } from '../Editor';
 import { CommonObject } from './CommonObject';
 import { Localization } from './Localization';
 import { MapObject } from './MapObject';
+import { MapObjectLight } from './MapObjectLight';
 import { PlaySong } from './PlaySong';
 import { RandomBattle } from './RandomBattle';
 
@@ -37,6 +38,18 @@ export enum SELECTION_SKY_TYPE {
 	SKYBOX,
 }
 class Map extends Localization {
+	static createSunlightLight(): MapObjectLight {
+		const light = new MapObjectLight();
+		light.applyDefault();
+		light.intensity.updateToDefaultNumber(2, true);
+		return light;
+	}
+	static createAmbientLight(): MapObjectLight {
+		const light = new MapObjectLight();
+		light.applyDefault();
+		light.intensity.updateToDefaultNumber(Math.PI - 14 / 9, true);
+		return light;
+	}
 	public static readonly SCREEN_TONE_COLOR_MIN = -255;
 	public static readonly SCREEN_TONE_COLOR_MAX = 255;
 	public static readonly SCREEN_TONE_GREY_MIN = 0;
@@ -51,6 +64,14 @@ class Map extends Localization {
 	public backgroundSound = PlaySong.createPlaySong(SONG_KIND.MUSIC);
 	public cameraPropertiesID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSunlight = true;
+	public sunlightLight = Map.createSunlightLight();
+	public isAmbientLight = true;
+	public ambientLight = Map.createAmbientLight();
+	public ambientLightCustomized = false;
+	public sunlightX = -10;
+	public sunlightY = 17;
+	public sunlightYPlus = Project.SQUARE_SIZE / 2;
+	public sunlightZ = 10;
 	public objectLightsShadows = true;
 	public isFog = false;
 	public fogColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
@@ -87,6 +108,13 @@ class Map extends Localization {
 			DynamicValue,
 		],
 		['isSunlight', 'isl', true, BINDING.BOOLEAN],
+		['sunlightLight', 'sll', undefined, BINDING.OBJECT, MapObjectLight],
+		['isAmbientLight', 'ial', true, BINDING.BOOLEAN],
+		['ambientLight', 'al', undefined, BINDING.OBJECT, MapObjectLight],
+		['sunlightX', 'slx', -10, BINDING.NUMBER],
+		['sunlightY', 'sly', 17, BINDING.NUMBER],
+		['sunlightYPlus', 'slyp', undefined, BINDING.NUMBER],
+		['sunlightZ', 'slz', 10, BINDING.NUMBER],
 		['objectLightsShadows', 'ols', true, BINDING.BOOLEAN],
 		['isFog', 'isFog', false, BINDING.BOOLEAN],
 		[
@@ -506,6 +534,13 @@ class Map extends Localization {
 
 	copy(map: Map): void {
 		super.copy(map, Map.getBindings([]));
+		this.ambientLightCustomized = map.ambientLightCustomized;
+	}
+
+	syncDefaultAmbientLight() {
+		if (this.ambientLightCustomized) return;
+		this.ambientLight.color.updateToDefaultText('#ffffff');
+		this.ambientLight.intensity.updateToDefaultNumber(this.isSunlight ? Math.PI - 14 / 9 : Math.PI, true);
 	}
 
 	async load() {
@@ -514,6 +549,40 @@ class Map extends Localization {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Map.getBindings(additionnalBinding));
+		const sunlightJSON = json.sll as JSONType | undefined;
+		if (sunlightJSON?.c === undefined) {
+			this.sunlightLight.color.updateToDefaultText('#ffffff');
+		}
+		if (sunlightJSON?.i === undefined) {
+			this.sunlightLight.intensity.updateToDefaultNumber(2, true);
+		} else if (this.sunlightLight.intensity.kind === DYNAMIC_VALUE_KIND.NUMBER) {
+			this.sunlightLight.intensity.updateToDefaultNumber(this.sunlightLight.intensity.value as number, true);
+		}
+		this.ambientLightCustomized = json.al !== undefined;
+		if (!this.ambientLightCustomized) {
+			this.syncDefaultAmbientLight();
+		} else {
+			const ambientJSON = json.al as JSONType;
+			if (ambientJSON.c === undefined) {
+				this.ambientLight.color.updateToDefaultText('#ffffff');
+			}
+			if (ambientJSON.i === undefined) {
+				this.ambientLight.intensity.updateToDefaultNumber(this.isSunlight ? Math.PI - 14 / 9 : Math.PI, true);
+			} else if (this.ambientLight.intensity.kind === DYNAMIC_VALUE_KIND.NUMBER) {
+				this.ambientLight.intensity.updateToDefaultNumber(this.ambientLight.intensity.value as number, true);
+			}
+		}
+		if (json.slpu !== 'px') {
+			if (this.sunlightX === -1 && this.sunlightY === 1 && this.sunlightZ === 1) {
+				const totalY = (this.sunlightY + (json.slyp === undefined ? 75 : this.sunlightYPlus) / 100) * 10;
+				this.sunlightX = -10;
+				this.sunlightY = Math.floor(totalY);
+				this.sunlightYPlus = (totalY - this.sunlightY) * Project.SQUARE_SIZE;
+				this.sunlightZ = 10;
+			} else {
+				this.sunlightYPlus = ((json.slyp === undefined ? 50 : this.sunlightYPlus) / 100) * Project.SQUARE_SIZE;
+			}
+		}
 		this.music.kind = SONG_KIND.MUSIC;
 		this.backgroundSound.kind = SONG_KIND.BACKGROUND_SOUND;
 		if (this.isSkyColor) {
@@ -527,6 +596,8 @@ class Map extends Localization {
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Map.getBindings(additionnalBinding));
+		if (!this.ambientLightCustomized) delete json.al;
+		json.slpu = 'px';
 		if (this.isSkyColor) {
 			const obj: JSONType = {};
 			this.skyColorID.write(obj);

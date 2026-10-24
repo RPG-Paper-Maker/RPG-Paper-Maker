@@ -1809,6 +1809,7 @@
 	"battlers.frame.duration": "バトラーのフレーム持続時間",
 	"battlers.frame.attacking.duration": "攻撃アニメーションのフレーム持続時間",
 	"sun.light": "日光",
+	"ambient.light": "環境光",
 	"object.lights.shadows": "オブジェクトライトの影",
 	"resolve": "リゾルブ",
 	"resolve.description": "自分自身に5ターンの間バリアを張る。",

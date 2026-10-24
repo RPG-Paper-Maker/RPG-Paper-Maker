@@ -30,6 +30,7 @@ import useStateNumber from '../../../hooks/useStateNumber';
 import { RandomBattle, SELECTION_SKY_TYPE } from '../../../models';
 import { RootState, setMapStartupReactionsOpen, setNeedsReloadMap } from '../../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
+import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -47,6 +48,7 @@ import Tree from '../../Tree';
 import PanelMapObject from '../../panels/PanelMapObject';
 import type { PanelMapObjectRef, PlayCommandInfo } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
+import DialogMapObjectLight from './DialogMapObjectLight';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 const DialogObjectCommandTest = lazy(() => import('../DialogObjectCommandTest'));
@@ -135,6 +137,21 @@ function DialogMapProperties({
 	const [increaseTop, setIncreaseTop] = useStateNumber();
 	const [cameraPropertiesID] = useStateDynamicValue();
 	const [isSunlight, setIsSunlight] = useStateBool();
+	const [sunlightLight] = useState(() => Model.Map.createSunlightLight());
+	const [isAmbientLight, setIsAmbientLight] = useStateBool();
+	const [ambientLight] = useState(() => Model.Map.createAmbientLight());
+	const [ambientLightCustomized, setAmbientLightCustomized] = useState(false);
+	const [isAmbientLightDialogOpen, setIsAmbientLightDialogOpen] = useState(false);
+	const [sunlightX, setSunlightX] = useState(-10);
+	const [sunlightY, setSunlightY] = useState(17);
+	const [sunlightYPlus, setSunlightYPlus] = useState(Project.SQUARE_SIZE / 2);
+	const [sunlightZ, setSunlightZ] = useState(10);
+	const [isSunlightDialogOpen, setIsSunlightDialogOpen] = useState(false);
+	const sunlightDialogInitialColor = useRef('');
+	const sunlightDialogLastColor = useRef('');
+	const sunlightDialogAmbient = useRef<Model.MapObjectLight | null>(null);
+	const sunlightDialogAmbientCustomized = useRef(false);
+	const sunlightDialogColorChanged = useRef(false);
 	const [objectLightsShadows, setObjectLightsShadows] = useStateBool();
 	const [isFog, setIsFog] = useStateBool();
 	const [fogColorID] = useStateDynamicValue();
@@ -174,14 +191,66 @@ function DialogMapProperties({
 		scene.applyCameraProperty(cameraPropertiesID.getFixNumberValue());
 	};
 
-	const previewSunlight = (value: boolean) => {
+	const previewSunlight = (
+		value: boolean,
+		position: { x?: number; y?: number; yPlus?: number; z?: number } = {},
+		ambientCustomized = ambientLightCustomized,
+	) => {
 		const scene = getPreviewScene();
 		if (!scene || !readyRef.current) {
 			return;
 		}
 		previewedRef.current = true;
 		scene.model.isSunlight = value;
+		scene.model.sunlightLight.copy(sunlightLight);
+		if (!ambientCustomized) {
+			scene.model.ambientLightCustomized = false;
+			scene.model.syncDefaultAmbientLight();
+			ambientLight.copy(scene.model.ambientLight);
+		} else {
+			scene.model.ambientLightCustomized = true;
+			scene.model.ambientLight.copy(ambientLight);
+		}
+		scene.model.sunlightX = position.x ?? sunlightX;
+		scene.model.sunlightY = position.y ?? sunlightY;
+		scene.model.sunlightYPlus = position.yPlus ?? sunlightYPlus;
+		scene.model.sunlightZ = position.z ?? sunlightZ;
 		scene.initializeSunLight();
+		scene.camera.update(scene);
+	};
+
+	const sunlightColorSignature = () => JSON.stringify([sunlightLight.color.kind, sunlightLight.color.value]);
+
+	const previewSunlightDialog = () => {
+		const color = sunlightColorSignature();
+		if (color !== sunlightDialogLastColor.current) {
+			sunlightDialogLastColor.current = color;
+			ambientLight.color.copy(sunlightLight.color);
+			sunlightDialogColorChanged.current = true;
+			setAmbientLightCustomized(true);
+		}
+		previewSunlight(isSunlight, {}, ambientLightCustomized || sunlightDialogColorChanged.current);
+	};
+
+	const restoreSunlightDialogAmbient = () => {
+		if (sunlightDialogAmbient.current) {
+			ambientLight.copy(sunlightDialogAmbient.current);
+			setAmbientLightCustomized(sunlightDialogAmbientCustomized.current);
+			sunlightDialogColorChanged.current = false;
+			previewSunlight(isSunlight, {}, sunlightDialogAmbientCustomized.current);
+			sunlightDialogAmbient.current = null;
+		}
+	};
+
+	const previewAmbientLight = (enabled = isAmbientLight, customized = ambientLightCustomized) => {
+		const scene = getPreviewScene();
+		if (!scene || !readyRef.current) return;
+		previewedRef.current = true;
+		scene.model.isAmbientLight = enabled;
+		scene.model.ambientLightCustomized = customized;
+		scene.model.ambientLight.copy(ambientLight);
+		scene.initializeSunLight();
+		scene.camera.update(scene);
 	};
 
 	const previewObjectLightsShadows = (value: boolean) => {
@@ -282,6 +351,14 @@ function DialogMapProperties({
 		playBackgroundSoundSelectorRef.current?.initialize(model.backgroundSound);
 		cameraPropertiesID.copy(model.cameraPropertiesID);
 		setIsSunlight(model.isSunlight);
+		sunlightLight.copy(model.sunlightLight);
+		setIsAmbientLight(model.isAmbientLight);
+		ambientLight.copy(model.ambientLight);
+		setAmbientLightCustomized(model.ambientLightCustomized);
+		setSunlightX(model.sunlightX);
+		setSunlightY(model.sunlightY);
+		setSunlightYPlus(model.sunlightYPlus);
+		setSunlightZ(model.sunlightZ);
 		setObjectLightsShadows(model.objectLightsShadows);
 		setIsFog(model.isFog);
 		fogColorID.copy(model.fogColorID);
@@ -334,6 +411,15 @@ function DialogMapProperties({
 		playBackgroundSoundSelectorRef.current?.accept(model.backgroundSound);
 		model.cameraPropertiesID.copy(cameraPropertiesID);
 		model.isSunlight = isSunlight;
+		model.sunlightLight.copy(sunlightLight);
+		model.isAmbientLight = isAmbientLight;
+		model.ambientLightCustomized = ambientLightCustomized;
+		model.ambientLight.copy(ambientLight);
+		model.syncDefaultAmbientLight();
+		model.sunlightX = sunlightX;
+		model.sunlightY = sunlightY;
+		model.sunlightYPlus = sunlightYPlus;
+		model.sunlightZ = sunlightZ;
 		model.objectLightsShadows = objectLightsShadows;
 		model.isFog = isFog;
 		model.fogColorID.copy(fogColorID);
@@ -690,15 +776,71 @@ function DialogMapProperties({
 					onChangeValue={previewCamera}
 				/>
 			</Flex>
-			<Checkbox
-				isChecked={isSunlight}
-				onChange={(value: boolean) => {
-					setIsSunlight(value);
-					previewSunlight(value);
-				}}
-			>
-				{t('sun.light')}
-			</Checkbox>
+			<Groupbox title={t('sun.light')}>
+				<Flex column spaced>
+					<Flex spaced centerV>
+						<Checkbox
+							isChecked={isSunlight}
+							onChange={(value: boolean) => {
+								setIsSunlight(value);
+								previewSunlight(value);
+							}}
+						>
+							{t('sun.light')}
+						</Checkbox>
+						<Button
+							disabled={!isSunlight}
+							onClick={() => {
+								const color = sunlightColorSignature();
+								sunlightDialogInitialColor.current = color;
+								sunlightDialogLastColor.current = color;
+								sunlightDialogAmbient.current = ambientLight.clone();
+								sunlightDialogAmbientCustomized.current = ambientLightCustomized;
+								sunlightDialogColorChanged.current = false;
+								setIsSunlightDialogOpen(true);
+							}}
+						>
+							{t('edit')}...
+						</Button>
+					</Flex>
+					<Flex spaced wrap>
+						{(['X', 'Y', 'Y+', 'Z'] as const).map((label, index) => {
+							const values = [sunlightX, sunlightY, sunlightYPlus, sunlightZ];
+							const setters = [setSunlightX, setSunlightY, setSunlightYPlus, setSunlightZ];
+							const keys = ['x', 'y', 'yPlus', 'z'] as const;
+							return (
+								<Flex key={label} column spaced>
+									{label}:
+									<InputNumber
+										value={values[index]}
+										disabled={!isSunlight}
+										onChange={(value) => {
+											setters[index](value);
+											previewSunlight(isSunlight, { [keys[index]]: value });
+										}}
+									/>
+								</Flex>
+							);
+						})}
+					</Flex>
+				</Flex>
+			</Groupbox>
+			<Groupbox title={t('ambient.light')}>
+				<Flex spaced centerV>
+					<Checkbox
+						isChecked={isAmbientLight}
+						onChange={(value: boolean) => {
+							setIsAmbientLight(value);
+							previewAmbientLight(value);
+						}}
+					>
+						{t('ambient.light')}
+					</Checkbox>
+					<Button disabled={!isAmbientLight} onClick={() => setIsAmbientLightDialogOpen(true)}>
+						{t('edit')}...
+					</Button>
+				</Flex>
+			</Groupbox>
 			<Checkbox
 				isChecked={objectLightsShadows}
 				onChange={(value: boolean) => {
@@ -932,6 +1074,38 @@ function DialogMapProperties({
 					/>
 				</Flex>
 			</Dialog>
+			{isSunlightDialogOpen && (
+				<DialogMapObjectLight
+					model={sunlightLight}
+					sunlight
+					setIsOpen={setIsSunlightDialogOpen}
+					onAccept={() => {
+						previewSunlightDialog();
+						if (sunlightColorSignature() === sunlightDialogInitialColor.current) {
+							restoreSunlightDialogAmbient();
+						} else {
+							sunlightDialogAmbient.current = null;
+						}
+					}}
+					onModelLivePreview={(light) => {
+						if (light) previewSunlightDialog();
+					}}
+					onReject={restoreSunlightDialogAmbient}
+				/>
+			)}
+			{isAmbientLightDialogOpen && (
+				<DialogMapObjectLight
+					model={ambientLight}
+					ambient
+					setIsOpen={setIsAmbientLightDialogOpen}
+					onAccept={() => {
+						setAmbientLightCustomized(true);
+						previewAmbientLight(isAmbientLight, true);
+					}}
+					onModelLivePreview={() => previewAmbientLight(isAmbientLight, true)}
+					onReject={() => previewAmbientLight()}
+				/>
+			)}
 			{playCommandRequest && (
 				<Suspense fallback={null}>
 					<DialogObjectCommandTest
