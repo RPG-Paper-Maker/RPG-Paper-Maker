@@ -23,11 +23,18 @@ function DialogChoiceText({ setIsOpen, model, onAccept, onReject }: DIALOG_OPTIO
 	const localization = model as Localization;
 	const [texts, setTexts] = useState(() => {
 		const initial = new Map<number, string>();
-		for (const language of Project.current!.languages.list) {
-			initial.set(language.id, localization.names.get(String(language.id)) ?? '');
+		for (const [id, text] of localization.names) {
+			initial.set(Number(id), text);
 		}
 		return initial;
 	});
+	const mainLanguageId = Project.current!.languages.list[0].id;
+	const displayedTexts = new Map(
+		Project.current!.languages.list.map((language) => [
+			language.id,
+			texts.get(language.id) ?? texts.get(mainLanguageId) ?? '',
+		]),
+	);
 
 	const handleChange = (id: number, text: string) => {
 		setTexts((current) => new Map(current).set(id, text));
@@ -53,7 +60,7 @@ function DialogChoiceText({ setIsOpen, model, onAccept, onReject }: DIALOG_OPTIO
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
-			<PanelCommandText texts={texts} onChange={handleChange} />
+			<PanelCommandText texts={displayedTexts} onChange={handleChange} />
 		</Dialog>
 	);
 }

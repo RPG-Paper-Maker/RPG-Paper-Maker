@@ -53,8 +53,9 @@ class Localization extends Base {
 		}
 	}
 
-	getName(): string {
-		return this.names.get('' + Project.current!.languages.list[0].id) ?? '';
+	getName(languageId: number | string = Project.current!.languages.list[0].id): string {
+		const mainLanguageId = String(Project.current!.languages.list[0].id);
+		return this.names.get(String(languageId)) ?? this.names.get(mainLanguageId) ?? '';
 	}
 
 	updateMainName(name: string) {

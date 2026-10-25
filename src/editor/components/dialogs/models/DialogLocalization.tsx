@@ -25,9 +25,10 @@ type Props = {
 	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
+	title?: string;
 };
 
-function DialogLocalization({ setIsOpen, model, onAccept, onReject }: Props) {
+function DialogLocalization({ setIsOpen, model, onAccept, onReject, title }: Props) {
 	const localization = model as Model.Localization;
 
 	const { t } = useTranslation();
@@ -54,6 +55,7 @@ function DialogLocalization({ setIsOpen, model, onAccept, onReject }: Props) {
 	const handleChangeName = (id: number, n: string) => {
 		names.set('' + id, n);
 		setNames(new Map(names));
+		if (id === Project.current!.languages.list[0].id) setName(n);
 	};
 
 	const handleAccept = async () => {
@@ -77,7 +79,9 @@ function DialogLocalization({ setIsOpen, model, onAccept, onReject }: Props) {
 			<Flex key={language.id} spaced>
 				{t('name')}:
 				<InputText
-					value={names.get('' + language.id) ?? ''}
+					value={
+						names.get(String(language.id)) ?? names.get(String(Project.current!.languages.list[0].id)) ?? ''
+					}
 					onChange={(n) => handleChangeName(language.id, n)}
 				/>
 			</Flex>
@@ -85,7 +89,7 @@ function DialogLocalization({ setIsOpen, model, onAccept, onReject }: Props) {
 
 	return (
 		<Dialog
-			title={`${t('edit.name')}...`}
+			title={`${title ?? t('edit.name')}...`}
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}

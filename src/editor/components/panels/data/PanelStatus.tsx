@@ -289,39 +289,59 @@ const PanelStatus = forwardRef((props, ref) => {
 						<Flex column spacedLarge>
 							<Flex column spaced>
 								<Flex disabledLabel={isStatusDisabled}>{t('ally.affected')}:</Flex>
-								<DynamicValueSelector
-									value={messageAllyAffected}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-									disabled={isStatusDisabled}
-									fillWidth
-								/>
+								{selectedstatus && (
+									<DynamicValueSelector
+										key={`${selectedstatus.id}-ally`}
+										value={messageAllyAffected}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+										localization={selectedstatus.messageAllyAffectedTranslations}
+										localizationTitle={t('ally.affected')}
+										disabled={isStatusDisabled}
+										fillWidth
+									/>
+								)}
 							</Flex>
 							<Flex column spaced>
 								<Flex disabledLabel={isStatusDisabled}>{t('enemy.affected')}:</Flex>
-								<DynamicValueSelector
-									value={messageEnemyAffected}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-									disabled={isStatusDisabled}
-									fillWidth
-								/>
+								{selectedstatus && (
+									<DynamicValueSelector
+										key={`${selectedstatus.id}-enemy`}
+										value={messageEnemyAffected}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+										localization={selectedstatus.messageEnemyAffectedTranslations}
+										localizationTitle={t('enemy.affected')}
+										disabled={isStatusDisabled}
+										fillWidth
+									/>
+								)}
 							</Flex>
 							<Flex column spaced>
 								<Flex disabledLabel={isStatusDisabled}>{t('status.healed')}:</Flex>
-								<DynamicValueSelector
-									value={messageStatusHealed}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-									disabled={isStatusDisabled}
-									fillWidth
-								/>
+								{selectedstatus && (
+									<DynamicValueSelector
+										key={`${selectedstatus.id}-healed`}
+										value={messageStatusHealed}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+										localization={selectedstatus.messageStatusHealedTranslations}
+										localizationTitle={t('status.healed')}
+										disabled={isStatusDisabled}
+										fillWidth
+									/>
+								)}
 							</Flex>
 							<Flex column spaced>
 								<Flex disabledLabel={isStatusDisabled}>{t('status.still.affected')}:</Flex>
-								<DynamicValueSelector
-									value={messageStatusStillAffected}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
-									disabled={isStatusDisabled}
-									fillWidth
-								/>
+								{selectedstatus && (
+									<DynamicValueSelector
+										key={`${selectedstatus.id}-still`}
+										value={messageStatusStillAffected}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT}
+										localization={selectedstatus.messageStatusStillAffectedTranslations}
+										localizationTitle={t('status.still.affected')}
+										disabled={isStatusDisabled}
+										fillWidth
+									/>
+								)}
 							</Flex>
 						</Flex>
 					</Groupbox>

@@ -10,14 +10,17 @@
 */
 
 import { useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { LuLanguages } from 'react-icons/lu';
 import { useTranslation } from 'react-i18next';
 import { ArrayUtils, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
+import Button from './Button';
 import { LocalVariablesContext } from './LocalVariablesContext';
 import DialogInfoFormulas from './dialogs/DialogInfoFormulas';
+import DialogLocalization from './dialogs/models/DialogLocalization';
 import Dropdown from './Dropdown';
 import ToggleButton from './ToggleButton';
 import Flex from './Flex';
@@ -36,6 +39,8 @@ type Props = {
 	disabled?: boolean;
 	onChangeKind?: (k: DYNAMIC_VALUE_KIND) => void;
 	onChangeValue?: (v: unknown) => void;
+	localization?: Model.Localization;
+	localizationTitle?: string;
 	min?: number;
 	max?: number;
 	addNoneOption?: boolean;
@@ -52,6 +57,8 @@ function DynamicValueSelector({
 	disabled = false,
 	onChangeKind,
 	onChangeValue,
+	localization,
+	localizationTitle,
 	min,
 	max,
 	addNoneOption = false,
@@ -63,6 +70,7 @@ function DynamicValueSelector({
 	const { t } = useTranslation();
 	const localVariables = useContext(LocalVariablesContext);
 	const [isDialogInfoFormulasOpen, setIsDialogInfoFormulasOpen] = useState(false);
+	const [isDialogLocalizationOpen, setIsDialogLocalizationOpen] = useState(false);
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
@@ -425,6 +433,9 @@ function DynamicValueSelector({
 		}
 		onChangeKind?.(id);
 		onChangeValue?.(value.value);
+		if (id === DYNAMIC_VALUE_KIND.TEXT) {
+			localization?.updateMainName(String(value.value ?? ''));
+		}
 	};
 
 	const handleChangeNumber = (num: number) => {
@@ -436,6 +447,16 @@ function DynamicValueSelector({
 	const handleChangeText = (text: string) => {
 		setValueText(text);
 		value.value = text;
+		onChangeValue?.(text);
+		if (kind === DYNAMIC_VALUE_KIND.TEXT) {
+			localization?.updateMainName(text);
+		}
+	};
+
+	const handleAcceptLocalization = () => {
+		const text = localization!.getName();
+		value.value = text;
+		setValueText(text);
 		onChangeValue?.(text);
 	};
 
@@ -763,6 +784,13 @@ function DynamicValueSelector({
 				)}
 				<Flex one spaced>
 					{getValueDisplay()}
+					{localization && (
+						<Button
+							icon={<LuLanguages />}
+							disabled={disabled || kind !== DYNAMIC_VALUE_KIND.TEXT}
+							onClick={() => setIsDialogLocalizationOpen(true)}
+						/>
+					)}
 					{kind === DYNAMIC_VALUE_KIND.FORMULA && (
 						<TooltipInformation
 							text={t('tooltip.click.formulas.overview')}
@@ -773,6 +801,14 @@ function DynamicValueSelector({
 				</Flex>
 			</div>
 			{isDialogInfoFormulasOpen && <DialogInfoFormulas setIsOpen={setIsDialogInfoFormulasOpen} />}
+			{isDialogLocalizationOpen && localization && (
+				<DialogLocalization
+					setIsOpen={setIsDialogLocalizationOpen}
+					model={localization}
+					onAccept={handleAcceptLocalization}
+					title={localizationTitle}
+				/>
+			)}
 		</>
 	);
 }
