@@ -27,9 +27,10 @@ import DialogPictures from '../dialogs/DialogPictures';
 type Props = {
 	texts: Map<number, string>;
 	onChange: (id: number, text: string) => void;
+	showDynamicValues?: boolean;
 };
 
-function PanelCommandText({ texts, onChange }: Props) {
+function PanelCommandText({ texts, onChange, showDynamicValues = true }: Props) {
 	const { t } = useTranslation();
 	const localVariables = useContext(LocalVariablesContext);
 	const [triggerInsertText, setTriggerInsertText] = useState<string[] | null>(null);
@@ -101,47 +102,51 @@ function PanelCommandText({ texts, onChange }: Props) {
 						</Flex>
 					</Flex>
 					<Flex>
-						<Dropdown
-							selectedID={-1}
-							onChange={(id) => insert(`[var=${id}]`)}
-							options={Project.current!.variables.getVariables()}
-							noSelectionName={t('variable')}
-							displayIDs
-							noWidthChange
-						/>
-						{localVariables.length > 0 && (
-							<Dropdown
-								selectedID={-1}
-								onChange={(id) => insert(`[lvar=${localVariables[id]}]`)}
-								options={localVariables.map((name, index) => Model.Base.create(index, name))}
-								noSelectionName={t('local.variable')}
-								noWidthChange
-							/>
+						{showDynamicValues && (
+							<>
+								<Dropdown
+									selectedID={-1}
+									onChange={(id) => insert(`[var=${id}]`)}
+									options={Project.current!.variables.getVariables()}
+									noSelectionName={t('variable')}
+									displayIDs
+									noWidthChange
+								/>
+								{localVariables.length > 0 && (
+									<Dropdown
+										selectedID={-1}
+										onChange={(id) => insert(`[lvar=${localVariables[id]}]`)}
+										options={localVariables.map((name, index) => Model.Base.create(index, name))}
+										noSelectionName={t('local.variable')}
+										noWidthChange
+									/>
+								)}
+								<Dropdown
+									selectedID={-1}
+									onChange={(id) => insert(`[par=${id}]`)}
+									options={Project.current!.currentMapObjectParameters}
+									noSelectionName={t('parameter')}
+									displayIDs
+									noWidthChange
+								/>
+								<Dropdown
+									selectedID={-1}
+									onChange={(id) => insert(`[pro=${id}]`)}
+									options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
+									noSelectionName={t('property')}
+									displayIDs
+									noWidthChange
+								/>
+								<Dropdown
+									selectedID={-1}
+									onChange={(id) => insert(`[hname=${id}]`)}
+									options={Project.current!.variables.getVariables()}
+									noSelectionName={t('hero.name')}
+									displayIDs
+									noWidthChange
+								/>
+							</>
 						)}
-						<Dropdown
-							selectedID={-1}
-							onChange={(id) => insert(`[par=${id}]`)}
-							options={Project.current!.currentMapObjectParameters}
-							noSelectionName={t('parameter')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={(id) => insert(`[pro=${id}]`)}
-							options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
-							noSelectionName={t('property')}
-							displayIDs
-							noWidthChange
-						/>
-						<Dropdown
-							selectedID={-1}
-							onChange={(id) => insert(`[hname=${id}]`)}
-							options={Project.current!.variables.getVariables()}
-							noSelectionName={t('hero.name')}
-							displayIDs
-							noWidthChange
-						/>
 						<Button onClick={() => setIsOpenDialogIcon(true)}>{t('icon')}...</Button>
 					</Flex>
 				</Flex>

@@ -227,6 +227,7 @@ function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept,
 						{getButton(EVENT_COMMAND_KIND.OPEN_SAVES_MENU)}
 						{getButton(EVENT_COMMAND_KIND.TITLE_SCREEN)}
 						{getButton(EVENT_COMMAND_KIND.GAME_OVER)}
+						{getButton(EVENT_COMMAND_KIND.PLAY_CREDITS)}
 					</Flex>
 				</Groupbox>
 				<Groupbox title={t('musics.sounds')}>

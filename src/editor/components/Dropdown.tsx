@@ -329,18 +329,23 @@ function Dropdown({
 				<Flex
 					one
 					centerV
+					spaced
 					className={Utils.getClassName({
 						textEllipsis: !noWidthChange,
 					})}
 				>
+					{selected.getDropdownIcon()}
 					{getCurrentItem()}
 				</Flex>
-				<Flex className="dropdownArrow">
+				<Flex className='dropdownArrow'>
 					<BsChevronDown />
 				</Flex>
 			</Flex>
 			<div
-				className={Utils.getClassName({ visibilityHidden: !canDisplayDropdown(), closing: isAnimatingClose, opening: isAnimatingOpen }, 'content')}
+				className={Utils.getClassName(
+					{ visibilityHidden: !canDisplayDropdown(), closing: isAnimatingClose, opening: isAnimatingOpen },
+					'content',
+				)}
 				ref={dropdownContainerRef}
 			>
 				{getDropdownItems()}

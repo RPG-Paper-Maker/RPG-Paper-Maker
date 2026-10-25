@@ -208,7 +208,14 @@ class Base extends Serializable {
 	public static SCREEN_RESOLUTION_OPTIONS = Base.mapListIndex(['window', 'full.screen']);
 	public static STRETCH_REPEAT_OPTIONS = Base.mapListIndex(['stretch', 'repeat']);
 	public static DETECTION_AUTOMATIC_OPTIONS = Base.mapListIndex(['circle', 'rectangle']);
-	public static TITLE_COMMAND_OPTIONS = Base.mapListIndex(['new.game', 'load.game', 'settings', 'exit', 'script']);
+	public static TITLE_COMMAND_OPTIONS = Base.mapListIndex([
+		'new.game',
+		'load.game',
+		'settings',
+		'exit',
+		'script',
+		'credits',
+	]);
 	public static GAME_OVER_COMMAND_OPTIONS = Base.mapListIndex(['continue', 'title.screen', 'exit', 'script']);
 	public static INVENTORY_FILTER_OPTIONS = Base.mapListIndex([
 		'all',
