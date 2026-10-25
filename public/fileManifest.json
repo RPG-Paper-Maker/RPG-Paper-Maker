@@ -694,6 +694,7 @@
         "ChangeVictoryMusic.js",
         "ChangeWeather.js",
         "Choice.js",
+        "CloseMainMenu.js",
         "Comment.js",
         "CreateObjectInMap.js",
         "DisplayAnAnimation.js",
@@ -723,6 +724,7 @@
         "OpenSavesMenu.js",
         "PlayAVideo.js",
         "PlayBackgroundSound.js",
+        "PlayCredits.js",
         "PlayMusic.js",
         "PlayMusicEffect.js",
         "PlaySound.js",
@@ -769,6 +771,7 @@
         "ShopCurrencies.js",
         "Skill.js",
         "SkillItem.js",
+        "SkipHold.js",
         "SpinBox.js",
         "Statistic.js",
         "StatisticProgression.js",
@@ -802,6 +805,8 @@
       "files": [
         "howler.core.min.js",
         "howler.min.js",
+        "three-mesh-bvh.js",
+        "three-mesh-bvh.LICENSE",
         "three.core.min.js",
         "three.module.min.js"
       ],
@@ -953,6 +958,7 @@
         "SaveGame.js",
         "SaveLoadGame.js",
         "ShowTextPreview.js",
+        "TitleCredits.js",
         "TitleScreen.js",
         "TitleSettings.js"
       ]
