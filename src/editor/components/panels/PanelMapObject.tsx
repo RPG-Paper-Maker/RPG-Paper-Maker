@@ -94,7 +94,6 @@ const PanelMapObject = forwardRef(
 		const [events, setEvents] = useState<Node[]>([]);
 		const [properties, setProperties] = useState<Node[]>([]);
 		const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
-		const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 		const [selectedState, setSelectedState] = useState<Model.MapObjectState | null>(null);
 		const [selectedEvent, setSelectedEvent] = useState<Model.MapObjectEvent | null>(null);
 		const [graphicOptions, setGraphicOptions] = useState<GraphicsSelectorOptions>({
@@ -125,7 +124,6 @@ const PanelMapObject = forwardRef(
 		const statesRef = useRef({
 			name,
 			modelID,
-			canBeTriggeredAnotherObject,
 			onlyOneEventPerFrame,
 			states,
 			events,
@@ -147,7 +145,6 @@ const PanelMapObject = forwardRef(
 			setProperties(newProperties);
 			setEvents(newEvents);
 			setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
-			setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 			const state = (initialState?.content as Model.MapObjectState | undefined) ?? null;
 			handleChangeState(state, newEvents);
 			const event = newEvents[initialEventIndex ?? 0] ?? newEvents[0] ?? null;
@@ -207,13 +204,6 @@ const PanelMapObject = forwardRef(
 			setOnlyOneEventPerFrame(b);
 			if (saveOnUpdate) {
 				object.onlyOneEventPerFrame = b;
-			}
-		};
-
-		const handleChangeCanBeTriggeredAnotherObject = (b: boolean) => {
-			setCanBeTriggeredAnotherObject(b);
-			if (saveOnUpdate) {
-				object.canBeTriggeredAnotherObject = b;
 			}
 		};
 
@@ -572,7 +562,6 @@ const PanelMapObject = forwardRef(
 		const accept = async () => {
 			object.name = statesRef.current.name;
 			object.commonModelID = statesRef.current.modelID;
-			object.canBeTriggeredAnotherObject = statesRef.current.canBeTriggeredAnotherObject;
 			object.onlyOneEventPerFrame = statesRef.current.onlyOneEventPerFrame;
 			object.states = Node.createListFromNodes(statesRef.current.states);
 			object.events = Node.createListFromNodes(statesRef.current.events);
@@ -583,7 +572,6 @@ const PanelMapObject = forwardRef(
 			const editedObject = object.clone();
 			editedObject.name = statesRef.current.name;
 			editedObject.commonModelID = statesRef.current.modelID;
-			editedObject.canBeTriggeredAnotherObject = statesRef.current.canBeTriggeredAnotherObject;
 			editedObject.onlyOneEventPerFrame = statesRef.current.onlyOneEventPerFrame;
 			editedObject.states = Node.createListFromNodes(statesRef.current.states);
 			editedObject.events = Node.createListFromNodes(statesRef.current.events);
@@ -602,13 +590,12 @@ const PanelMapObject = forwardRef(
 			statesRef.current = {
 				name,
 				modelID,
-				canBeTriggeredAnotherObject,
 				onlyOneEventPerFrame,
 				states,
 				events,
 				properties,
 			};
-		}, [name, modelID, canBeTriggeredAnotherObject, onlyOneEventPerFrame, states, events, properties]);
+		}, [name, modelID, onlyOneEventPerFrame, states, events, properties]);
 
 		useEffect(() => {
 			initialize();
@@ -872,13 +859,6 @@ const PanelMapObject = forwardRef(
 								title={t('tooltip.only.one.event.per.frame')}
 							>
 								{t('only.one.event.per.frame')}
-							</Checkbox>
-							<Checkbox
-								isChecked={canBeTriggeredAnotherObject}
-								onChange={handleChangeCanBeTriggeredAnotherObject}
-								title={t('tooltip.can.be.triggered.another.object')}
-							>
-								{t('can.be.triggered.another.object')}
 							</Checkbox>
 						</Flex>
 						{!hideStateValues && selectedState && (

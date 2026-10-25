@@ -26,7 +26,6 @@ class CommonObject extends Base {
 	public properties!: MapObjectProperty[];
 	public events!: MapObjectEvent[];
 	public onlyOneEventPerFrame!: boolean;
-	public canBeTriggeredAnotherObject!: boolean;
 	public commonModelID!: number;
 
 	public static bindings: BindingType[] = [
@@ -34,7 +33,6 @@ class CommonObject extends Base {
 		['properties', 'p', [], BINDING.LIST, MapObjectProperty],
 		['events', 'events', [], BINDING.LIST, MapObjectEvent],
 		['onlyOneEventPerFrame', 'ooepf', undefined, BINDING.BOOLEAN],
-		['canBeTriggeredAnotherObject', 'canBeTriggeredAnotherObject', true, BINDING.BOOLEAN],
 		['commonModelID', 'hId', undefined, BINDING.NUMBER],
 	];
 
@@ -45,7 +43,6 @@ class CommonObject extends Base {
 	static createStartupObject() {
 		const object = new CommonObject();
 		object.commonModelID = -1;
-		object.canBeTriggeredAnotherObject = true;
 		object.onlyOneEventPerFrame = false;
 		object.properties = [];
 		const firstState = Project.current!.commonEvents.states[0];
