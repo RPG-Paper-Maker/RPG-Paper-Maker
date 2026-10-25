@@ -75,6 +75,7 @@
 	"input.number": "输入数值",
 	"condition": "条件",
 	"open.main.menu": "打开主菜单",
+	"close.main.menu": "关闭主菜单",
 	"open.saves.menu": "打开存档菜单",
 	"modify.inventory": "修改物品栏",
 	"modify.team": "修改队伍",

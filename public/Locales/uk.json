@@ -75,6 +75,7 @@
 	"input.number": "Запитати число",
 	"condition": "Умова",
 	"open.main.menu": "Відкрити основне меню",
+	"close.main.menu": "Закрити основне меню",
 	"open.saves.menu": "Відкрити меню запису",
 	"modify.inventory": "Змінити інвентар",
 	"modify.team": "Змінити команду",

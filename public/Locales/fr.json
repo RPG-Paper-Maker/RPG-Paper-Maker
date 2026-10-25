@@ -75,6 +75,7 @@
 	"input.number": "Entrer un nombre",
 	"condition": "Condition",
 	"open.main.menu": "Ouvrir le menu principal",
+	"close.main.menu": "Fermer le menu principal",
 	"open.saves.menu": "Ouvrir le menu de sauvegardes",
 	"modify.inventory": "Modifier l'inventaire",
 	"modify.team": "Modifier l'équipe",

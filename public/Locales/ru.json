@@ -75,6 +75,7 @@
 	"input.number": "Ввод числа",
 	"condition": "Условие",
 	"open.main.menu": "Открыть главное меню",
+	"close.main.menu": "Закрыть главное меню",
 	"open.saves.menu": "Открыть меню сохранений",
 	"modify.inventory": "Изменить инвентарь",
 	"modify.team": "Изменить команду",

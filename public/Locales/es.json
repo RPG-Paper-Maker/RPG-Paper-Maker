@@ -75,6 +75,7 @@
 	"input.number": "Establecer número",
 	"condition": "Condición",
 	"open.main.menu": "Abrir menú principal",
+	"close.main.menu": "Cerrar menú principal",
 	"open.saves.menu": "Abrir menú de guardado",
 	"modify.inventory": "Modificar inventario",
 	"modify.team": "Modificar equipo",

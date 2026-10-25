@@ -75,6 +75,7 @@
 	"input.number": "数値入力の処理",
 	"condition": "条件分岐",
 	"open.main.menu": "メインメニューを開く",
+	"close.main.menu": "メインメニューを閉じる",
 	"open.saves.menu": "セーブメニューを開く",
 	"modify.inventory": "アイテムの増減",
 	"modify.team": "メンバーの入れ替え",

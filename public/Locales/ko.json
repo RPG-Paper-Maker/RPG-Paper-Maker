@@ -75,6 +75,7 @@
 	"input.number": "숫자 입력",
 	"condition": "조건 분기",
 	"open.main.menu": "메인 메뉴 열기",
+	"close.main.menu": "메인 메뉴 닫기",
 	"open.saves.menu": "저장 메뉴 열기",
 	"modify.inventory": "인벤토리 수정",
 	"modify.team": "팀 구성 수정",

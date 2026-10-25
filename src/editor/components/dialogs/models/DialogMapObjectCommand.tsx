@@ -224,6 +224,7 @@ function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept,
 						{getButton(EVENT_COMMAND_KIND.RESTOCK_SHOP)}
 						{getButton(EVENT_COMMAND_KIND.ENTER_A_NAME_MENU)}
 						{getButton(EVENT_COMMAND_KIND.OPEN_MAIN_MENU)}
+						{getButton(EVENT_COMMAND_KIND.CLOSE_MAIN_MENU)}
 						{getButton(EVENT_COMMAND_KIND.OPEN_SAVES_MENU)}
 						{getButton(EVENT_COMMAND_KIND.TITLE_SCREEN)}
 						{getButton(EVENT_COMMAND_KIND.GAME_OVER)}
