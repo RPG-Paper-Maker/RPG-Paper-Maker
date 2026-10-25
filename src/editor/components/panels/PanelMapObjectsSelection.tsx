@@ -118,6 +118,7 @@ function PanelMapObjectsSelection() {
 			rect?.width ?? 0,
 			rect?.height ?? 0,
 			Scene.Map.current?.model.getTileset()?.pictureID ?? 0,
+			Project.current?.specialElements.getAutotileByID(state.graphicsID)?.pictureID ?? 0,
 		].join(':');
 	};
 
@@ -182,17 +183,14 @@ function PanelMapObjectsSelection() {
 		return canvas.toDataURL('image/png');
 	};
 
-	const generateTilesetIcon = async (state: Model.MapObjectState): Promise<string> => {
-		const rect = state.rectTileset;
-		if (!rect || (rect.width === 0 && rect.height === 0)) {
-			return '';
-		}
-		const tileset = Scene.Map.current?.model.getTileset();
-		if (!tileset) {
-			return '';
-		}
-		const picture = Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, tileset.pictureID);
-		if (!picture) {
+	const generatePictureIcon = async (
+		picture: Model.Picture | undefined,
+		srcX: number,
+		srcY: number,
+		srcWidth: number,
+		srcHeight: number,
+	): Promise<string> => {
+		if (!picture || srcWidth <= 0 || srcHeight <= 0) {
 			return '';
 		}
 		const path = await picture.getPathOrBase64();
@@ -203,10 +201,6 @@ function PanelMapObjectsSelection() {
 		if (Picture2D.isMissing(image)) {
 			return '';
 		}
-		const srcX = rect.x * Project.SQUARE_SIZE;
-		const srcY = rect.y * Project.SQUARE_SIZE;
-		const srcWidth = rect.width * Project.SQUARE_SIZE;
-		const srcHeight = rect.height * Project.SQUARE_SIZE;
 		const canvas = document.createElement('canvas');
 		const size = 28;
 		canvas.width = size;
@@ -233,6 +227,36 @@ function PanelMapObjectsSelection() {
 			drawHeight,
 		);
 		return canvas.toDataURL('image/png');
+	};
+
+	const generateTilesetIcon = async (state: Model.MapObjectState): Promise<string> => {
+		const rect = state.rectTileset;
+		const tileset = Scene.Map.current?.model.getTileset();
+		if (!rect || !tileset) {
+			return '';
+		}
+		return generatePictureIcon(
+			Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, tileset.pictureID),
+			rect.x * Project.SQUARE_SIZE,
+			rect.y * Project.SQUARE_SIZE,
+			rect.width * Project.SQUARE_SIZE,
+			rect.height * Project.SQUARE_SIZE,
+		);
+	};
+
+	const generateAutotileIcon = async (state: Model.MapObjectState): Promise<string> => {
+		const autotile = Project.current!.specialElements.getAutotileByID(state.graphicsID);
+		const rect = state.rectTileset;
+		if (!autotile || !rect) {
+			return '';
+		}
+		return generatePictureIcon(
+			Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, autotile.pictureID),
+			rect.x * Project.SQUARE_SIZE * 2,
+			rect.y * Project.SQUARE_SIZE * 3,
+			Project.SQUARE_SIZE,
+			Project.SQUARE_SIZE,
+		);
 	};
 
 	const generateObject3DIcon = async (graphicsID: number): Promise<string> => {
@@ -291,6 +315,12 @@ function PanelMapObjectsSelection() {
 									} else {
 										dataURL = await generateTilesetIcon(state);
 									}
+									break;
+								case ELEMENT_MAP_KIND.FLOOR:
+									dataURL = await generateTilesetIcon(state);
+									break;
+								case ELEMENT_MAP_KIND.AUTOTILE:
+									dataURL = await generateAutotileIcon(state);
 									break;
 								case ELEMENT_MAP_KIND.OBJECT3D:
 									if (state.graphicsID > 0) {
