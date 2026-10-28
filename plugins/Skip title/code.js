@@ -1,25 +1,61 @@
-const pluginName = 'Skip title';
-
-const infoVar = Manager.Plugins.getParameter(pluginName, 'Text info variable ID');
+const pluginName = "Skip title";
 
 var currentGame = null;
-var settingsName = 'Enable Settings on Systems tab!';
+var settings = { name: function() { return "Enable Settings on Systems tab!"; } };
 
-Scene.TitleScreen.prototype.load = async function () {
-	const l = Data.TitlescreenGameover.titleCommands;
-	for (var i = 0; i < l.length; i++)
-		if (l[i].kind === Common.TITLE_COMMAND_KIND.SETTINGS) settingsName = l[i].name();
+class WaitSaveLoadScene extends EventCommand.Base
+{
+	constructor()
+	{
+		super();
+		this.prevScene = Manager.Stack.top;
+		this.beginCheck = false;
+	}
+
+	update(currentState)
+	{
+		return this.beginCheck && this.prevScene === Manager.Stack.top;
+	}
+}
+
+function addCustomWaitCommand()
+{
+	const c = Core.ReactionInterpreter.currentReaction.currentCommand;
+	if (!c.hasCustomWaitCommand)
+	{
+		c.hasCustomWaitCommand = true;
+		const n = c.next;
+		c.next = new Core.Node(c.parent, new WaitSaveLoadScene());
+		c.next.next = n;
+	}
+	else
+	{
+		c.beginCheck = false;
+		c.next.prevScene = Manager.Stack.top;
+	}
+	return c.next;
+}
+
+Scene.TitleScreen.prototype.load = async function ()
+{
 	Core.Game.current = null;
 	Manager.Videos.stop();
 	Manager.Songs.stopAll();
 	Manager.GL.screenTone.set(0, 0, 0, 1);
 	Manager.Stack.displayedPictures = [];
 	this.pictureBackground = await Core.Picture2D.loadImage();
+	Data.TitlescreenGameover.getTitleCommandsNames().forEach(command =>
+	{
+		if (command.datas.kind === Common.TITLE_COMMAND_KIND.SETTINGS)
+			settings = command.datas;
+	});
 	Model.TitleCommand.startNewGame();
 };
 
-Scene.LoadGame.prototype.cancel = function (isKey, options = {}) {
-	if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+Scene.LoadGame.prototype.cancel = function (isKey, options = {})
+{
+	if (Scene.MenuBase.checkCancelMenu(isKey, options))
+	{
 		Core.Game.current = currentGame;
 		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
@@ -27,74 +63,23 @@ Scene.LoadGame.prototype.cancel = function (isKey, options = {}) {
 	}
 };
 
-Manager.Plugins.registerCommand(pluginName, 'Save slot', (slot) => {
-	Core.Game.current.save(slot);
-});
-
-Manager.Plugins.registerCommand(pluginName, 'Load slot', async (slot) => {
-	if (await Common.IO.fileExists(Common.Paths.SAVES + '/' + slot + '.json')) {
-		Data.Systems.soundConfirmation.playSound();
-		Manager.Stack.replace(new Scene.Base());
-		const game = new Core.Game(slot);
-		await game.load();
-		Core.Game.current = game;
-		Core.Game.current.loadPositions();
-		Core.Game.current.hero.initializeProperties();
-		Manager.Stack.replace(new Scene.Map(Core.Game.current.currentMapID));
-	} else Data.Systems.soundImpossible.playSound();
-});
-
-Manager.Plugins.registerCommand(pluginName, 'Delete slot', async (slot) => {
-	const fs = require('fs').promises;
-	try {
-		await fs.unlink(Common.Paths.SAVES + '/' + slot + '.json');
-	} catch (e) {
-		console.error(e);
-	}
-});
-
-Manager.Plugins.registerCommand(pluginName, 'Slot exists?', async (slot, variable) => {
-	Core.Game.current.variables.set(variable, -1);
-	Core.Game.current.variables.set(variable, await Common.IO.fileExists(Common.Paths.SAVES + '/' + slot + '.json'));
-});
-
-Manager.Plugins.registerCommand(pluginName, 'Get slot info', async (slot, info, time) => {
-	const p = Core.ReactionInterpreter.currentObject;
-	const game = new Core.Game(slot);
-	p.properties[info] = null;
-	try {
-		await game.load();
-		var s = game.playTime.getSeconds();
-		const m = Math.floor(s / 60).toString();
-		const h = Math.floor(s / 3600).toString();
-		s = (s % 60).toString();
-		p.properties[info] = game.variables.get(infoVar);
-		p.properties[time] =
-			(h.length === 1 ? '0' : '') +
-			h +
-			':' +
-			(m.length === 1 ? '0' : '') +
-			m +
-			':' +
-			(s.length === 1 ? '0' : '') +
-			s;
-	} catch (error) {
-		p.properties[info] = '';
-		p.properties[time] = '';
-		console.log(error);
-	}
-});
-
-Manager.Plugins.registerCommand(pluginName, 'Open load menu', () => {
+Manager.Plugins.registerCommand(pluginName, "Open load menu", () =>
+{
+	const waitCommand = addCustomWaitCommand(true);
 	currentGame = Core.Game.current;
 	Manager.Stack.push(new Scene.Base());
 	Manager.Stack.push(new Scene.LoadGame());
+	waitCommand.data.beginCheck = true;
 });
 
-Manager.Plugins.registerCommand(pluginName, 'Open settings menu', () => {
-	Manager.Stack.push(new Scene.TitleSettings(settingsName));
+Manager.Plugins.registerCommand(pluginName, "Open settings menu", () =>
+{
+	const waitCommand = addCustomWaitCommand(true);
+	Manager.Stack.push(new Scene.TitleSettings(settings));
+	waitCommand.data.beginCheck = true;
 });
 
-Manager.Plugins.registerCommand(pluginName, 'Quit game', () => {
+Manager.Plugins.registerCommand(pluginName, "Quit game", () =>
+{
 	Model.TitleCommand.exit();
 });

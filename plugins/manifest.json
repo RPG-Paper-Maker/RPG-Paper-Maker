@@ -29,6 +29,20 @@
     ],
     [
         {
+            "name": "More save options",
+            "files": [
+                "code.js",
+                "details.json"
+            ]
+        },
+        {
+            "name": "More window options",
+            "files": [
+                "code.js",
+                "details.json"
+            ]
+        },
+        {
             "name": "Multiple window boxes",
             "files": [
                 "code.js",
@@ -37,11 +51,17 @@
             ]
         },
         {
+            "name": "Pause",
+            "files": [
+                "code.js",
+                "details.json"
+            ]
+        },
+        {
             "name": "Skip title",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         }
     ],
@@ -103,8 +123,7 @@
             "name": "Map loop",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         },
         {
@@ -118,8 +137,7 @@
             "name": "More mouse options",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         },
         {
@@ -142,8 +160,7 @@
             "name": "Particle effects",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ],
             "folders": [
                 {
@@ -152,6 +169,13 @@
                         "fire.png"
                     ]
                 }
+            ]
+        },
+        {
+            "name": "Platform jump",
+            "files": [
+                "code.js",
+                "details.json"
             ]
         },
         {
@@ -168,7 +192,6 @@
             "files": [
                 "code.js",
                 "details.json",
-                "LICENSE",
                 "Sky.js",
                 "Water.js",
                 "waternormals.jpg"
@@ -187,7 +210,6 @@
             "files": [
                 "code.js",
                 "details.json",
-                "LICENSE",
                 "ParticleSystem.js"
             ],
             "folders": [
@@ -205,6 +227,13 @@
                         "noise.jpg"
                     ]
                 }
+            ]
+        },
+        {
+            "name": "XRay on block",
+            "files": [
+                "code.js",
+                "details.json"
             ]
         }
     ],
@@ -418,31 +447,30 @@
             "name": "Gamepad",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         },
         {
             "name": "Hide message box",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         },
         {
             "name": "More sound options",
             "files": [
                 "code.js",
-                "details.json",
-                "LICENSE"
+                "details.json"
             ]
         },
         {
-            "name": "Typewriter Text",
+            "name": "Typewriter text",
             "files": [
+                "CHANGELOG.md",
                 "code.js",
-                "details.json"
+                "details.json",
+                "README.md"
             ]
         }
     ]

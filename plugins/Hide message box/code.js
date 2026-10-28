@@ -1,25 +1,21 @@
-const pluginName = 'Hide message box';
+const pluginName = "Hide message box";
 
 var isHidden = false;
 
-EventCommand.ShowText.prototype.action = function (currentState, isKey, options = {}) {
-	if (
-		Scene.MenuBase.checkActionMenu(isKey, options) &&
-		(isKey || (!isKey && this.windowMain.isInside(options.x, options.y))) &&
-		!isHidden
-	)
+EventCommand.ShowText.prototype.action = function (currentState, isKey, options = {})
+{
+	if (Scene.MenuBase.checkActionMenu(isKey, options) && (isKey || (!isKey && this.windowMain.isInside(options.x, options.y))) && !isHidden)
 		currentState.clicked = true;
-};
+}
 
-function hideText() {
-	if (isHidden) return;
-	for (var i = 0; i < Manager.Stack.top.reactionInterpreters.length; i++) {
+function hideText()
+{
+	if (isHidden)
+		return;
+	for (var i = 0; i < Manager.Stack.top.reactionInterpreters.length; i++)
+	{
 		const c = Manager.Stack.top.reactionInterpreters[i].currentCommand;
-		if (
-			!c ||
-			c.data.constructor.name !== 'ShowText' ||
-			(!!c.next && c.next.data.constructor.name === 'DisplayChoice')
-		)
+		if (!c || c.data.constructor.name !== "ShowText" || (!!c.next && c.next.data.constructor.name === "DisplayChoice"))
 			continue;
 		const m = c.data.windowMain;
 		c.prevMainWindow = [m.oX, m.oY, m.oH, m.oW];
@@ -39,12 +35,17 @@ function hideText() {
 	}
 }
 
-function showText() {
-	if (!isHidden) return;
-	for (var i = 0; i < Manager.Stack.top.reactionInterpreters.length; i++) {
+function showText()
+{
+	if (!isHidden)
+		return;
+	for (var i = 0; i < Manager.Stack.top.reactionInterpreters.length; i++)
+	{
 		const c = Manager.Stack.top.reactionInterpreters[i].currentCommand;
-		if (!c || c.data.constructor.name !== 'ShowText') continue;
-		if (!!c.prevMainWindow) {
+		if (!c || c.data.constructor.name !== "ShowText")
+			continue;
+		if (!!c.prevMainWindow)
+		{
 			const m = c.data.windowMain;
 			m.oX = c.prevMainWindow[0];
 			m.oY = c.prevMainWindow[1];
@@ -52,7 +53,8 @@ function showText() {
 			m.oW = c.prevMainWindow[3];
 			m.updateDimensions();
 		}
-		if (c.prevNameWindow) {
+		if (c.prevNameWindow)
+		{
 			const n = c.data.windowInterlocutor;
 			n.oX = c.prevNameWindow[0];
 			n.oY = c.prevNameWindow[1];
@@ -64,18 +66,22 @@ function showText() {
 	}
 }
 
-Manager.Plugins.registerCommand(pluginName, 'Hide text', () => {
+Manager.Plugins.registerCommand(pluginName, "Hide text", () =>
+{
 	hideText();
 });
 
-Manager.Plugins.registerCommand(pluginName, 'Show text', () => {
+Manager.Plugins.registerCommand(pluginName, "Show text", () =>
+{
 	showText();
 });
 
-Manager.Plugins.registerCommand(pluginName, 'Is hidden?', (prop) => {
+Manager.Plugins.registerCommand(pluginName, "Is hidden?", (prop) =>
+{
 	Core.ReactionInterpreter.currentObject.properties[prop] = isHidden;
 });
 
-Manager.Plugins.registerCommand(pluginName, 'Toggle text', () => {
+Manager.Plugins.registerCommand(pluginName, "Toggle text", () =>
+{
 	isHidden ? showText() : hideText();
 });
