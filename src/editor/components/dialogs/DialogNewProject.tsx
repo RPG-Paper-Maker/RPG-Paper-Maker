@@ -256,6 +256,9 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.items.list[0].id = 1;
 			project.skills.list.splice(5);
 			project.skills.list[0].animationTargetID = DynamicValue.create(DYNAMIC_VALUE_KIND.NONE);
+			for (const skill of project.skills.list) {
+				skill.pictureID = -1;
+			}
 			project.weapons.list = [Model.CommonSkillItem.createDefault() as Model.CommonSkillItem];
 			project.weapons.list[0].id = 1;
 			project.armors.list = [Model.CommonSkillItem.createDefault() as Model.CommonSkillItem];
@@ -269,6 +272,9 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.animations.list = [Model.Animation.createDefault() as Model.Animation];
 			project.animations.list[0].id = 1;
 			project.status.list.splice(1);
+			for (const status of project.status.list) {
+				status.pictureID = -1;
+			}
 			project.specialElements.autotiles = [Model.Autotile.createDefault() as Model.Autotile];
 			project.specialElements.autotiles[0].id = 1;
 			project.specialElements.walls = [Model.SpecialElement.createDefault() as Model.SpecialElement];
@@ -312,12 +318,16 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.systems.skyboxes[0].top = -1;
 			project.systems.skyboxes[0].left = -1;
 			project.systems.skyboxes[0].right = -1;
-			project.systems.currencies[0].pictureID = -1;
-			project.systems.currencies[1].pictureID = -1;
+			for (const currency of project.systems.currencies) {
+				currency.pictureID = -1;
+			}
 			project.battleSystem.battleMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.battleSystem.battleVictory.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.battleSystem.battleLevelUp.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.battleSystem.elements.splice(1);
+			for (const element of project.battleSystem.elements) {
+				element.pictureID = -1;
+			}
 			project.titleScreenGameOver.gameOverBackgroundImageID = -1;
 			project.titleScreenGameOver.gameOverMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 			project.commonEvents.commonReactions.splice(1);
