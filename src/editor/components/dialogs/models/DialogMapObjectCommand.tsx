@@ -18,6 +18,7 @@ import { MapObjectCommand, MapObjectCommandType } from '../../../models';
 import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import { LocalVariablesContext } from '../../LocalVariablesContext';
 import Tab from '../../Tab';
 import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
 import DialogCommandCallACommonReaction from '../commands/DialogCommandCallACommonReaction';
@@ -74,7 +75,6 @@ import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject
 import DialogCommandTransformABattler from '../commands/DialogCommandTransformABattler';
 import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
-import { LocalVariablesContext } from '../../LocalVariablesContext';
 
 export type CommandProps = {
 	commandKind: EVENT_COMMAND_KIND;
@@ -493,7 +493,7 @@ function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept,
 					isOpen
 					onClose={handleReject}
 					initialWidth='700px'
-					initialHeight='550px'
+					initialHeight='600px'
 					zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 				>
 					<Tab

@@ -382,35 +382,28 @@
 				"sys": true
 			},
 			{
-				"id": 8,
+				"id": 9,
 				"p": [],
 				"r": {
 					"1": {
 						"bh": true,
 						"c": [
 							{
-								"kind": 8,
-								"command": [0, 7, 9, "Data.Systems.caterpillarMaxPartyMembers.getValue() > 0"],
-								"children": [
-									{
-										"kind": 2,
-										"command": [
-											0,
-											101,
-											0,
-											10,
-											"Core.Game.current.teamHeroes[0].system.idCharacter  "
-										],
-										"children": []
-									},
-									{
-										"kind": 21,
-										"command": [7, -1, 0, 1, 0, 13, 0, 1, 2, 4, 101, 1, 0, 0, 1, 1],
-										"children": []
-									}
-								]
+								"kind": 81,
+								"command": [
+									1,
+									"CharacterID",
+									10,
+									"Core.Game.current.teamHeroes[0].system.idCharacter  ",
+									0
+								],
+								"children": []
 							},
-							{ "kind": 10, "command": [], "children": [] }
+							{
+								"kind": 21,
+								"command": [7, -1, 0, 1, 0, 13, 0, 1, 2, 71, "CharacterID", 1, 0, 0, 1, 1],
+								"children": []
+							}
 						]
 					}
 				},
