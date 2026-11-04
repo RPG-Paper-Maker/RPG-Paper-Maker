@@ -121,6 +121,7 @@ class Map extends Base {
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
 	public previousPortion!: Portion;
+	public isLoadingPortions = false;
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public materialTilesetHover!: THREE.MeshPhongMaterial;
 	public selectionOffset = new THREE.Vector2();
@@ -1082,8 +1083,17 @@ class Map extends Base {
 	}
 
 	async loadPortions(update: boolean = false) {
+		this.isLoadingPortions = true;
+		try {
+			await this.loadPortionsInternal(update);
+		} finally {
+			this.isLoadingPortions = false;
+		}
+	}
+
+	async loadPortionsInternal(update: boolean) {
 		if (!update) {
-			this.mapPortions = new Array(this.getMapPortionTotalSize());
+			this.mapPortions = new Array(this.getMapPortionTotalSize()).fill(null);
 		}
 		const offsetX = this.currentPortion.x - this.previousPortion.x;
 		const offsetY = this.currentPortion.y - this.previousPortion.y;
@@ -1235,7 +1245,7 @@ class Map extends Base {
 	removePortion(x: number, y: number, z: number) {
 		const index = this.getPortionIndex(x, y, z);
 		const mapPortion = this.mapPortions[index];
-		if (mapPortion !== null) {
+		if (mapPortion) {
 			mapPortion.cleanAll();
 			this.mapPortions[index] = null;
 		}
@@ -3163,7 +3173,7 @@ class Map extends Base {
 				this.ambientLight.color.set(light.color.value as string);
 			}
 
-			if (this.updateCurrentPortion()) {
+			if (!this.isLoadingPortions && this.updateCurrentPortion()) {
 				this.loadPortions(true).catch(console.error);
 				this.loading = true;
 			}
