@@ -401,11 +401,29 @@ class LocalFile extends Serializable {
 					reader.readAsDataURL(blob);
 				});
 			} else {
-				const response = await this.fetchPublicFile(url.toString());
-				return await response.text();
+				return await this.fetchPublicText(url.toString(), url.pathname.toLowerCase().endsWith('.json'));
 			}
 		} catch (error) {
 			throw new Error(`Failed to fetch public file: ${path}`, { cause: error });
+		}
+	}
+
+	private static async fetchPublicText(path: string, isJSON: boolean): Promise<string> {
+		const retryDelays = [1000, 2000, 4000];
+		for (let attempt = 0; ; attempt++) {
+			const response = await this.fetchPublicFile(path);
+			try {
+				const text = await response.text();
+				if (isJSON) {
+					JSON.parse(text.charCodeAt(0) === 0xfeff ? text.slice(1) : text);
+				}
+				return text;
+			} catch (error) {
+				if (attempt === retryDelays.length) {
+					throw error;
+				}
+			}
+			await new Promise<void>((resolve) => setTimeout(resolve, retryDelays[attempt]));
 		}
 	}
 
