@@ -72,6 +72,7 @@ function DialogUpdateListSize({ setIsOpen, canBeEmpty, initialSize, onAccept }: 
 					isOpen
 					footer={<FooterNoYes onYes={handleWarningAccept} onNo={handleWarningReject} />}
 					onClose={handleClose}
+					zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 				>
 					<div className='warning'>{t('warning.update.list.size')}</div>
 				</Dialog>
