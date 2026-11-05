@@ -32,6 +32,8 @@ class BattleSystem extends Serializable {
 	public battleLevelUp!: Model.PlaySong;
 	public battleVictory!: Model.PlaySong;
 	public cameraMoveInBattle!: boolean;
+	public windowProfileStatisticsWidth!: number;
+	public windowProfileHeight!: number;
 	public elements!: Model.Element[];
 	public statistics!: Model.Statistic[];
 	public battleMaps!: Model.BattleMap[];
@@ -97,6 +99,8 @@ class BattleSystem extends Serializable {
 		['battleLevelUp', 'blevelup', undefined, BINDING.OBJECT, Model.PlaySong],
 		['battleVictory', 'bvictory', undefined, BINDING.OBJECT, Model.PlaySong],
 		['cameraMoveInBattle', 'cmib', true, BINDING.BOOLEAN],
+		['windowProfileStatisticsWidth', 'windowProfileStatisticsWidth', 250, BINDING.NUMBER],
+		['windowProfileHeight', 'windowProfileHeight', 200, BINDING.NUMBER],
 		['elements', 'elements', [], BINDING.LIST, Model.Element],
 		['statistics', 'statistics', [], BINDING.LIST, Model.Statistic],
 		['battleMaps', 'battleMaps', [], BINDING.LIST, Model.BattleMap],

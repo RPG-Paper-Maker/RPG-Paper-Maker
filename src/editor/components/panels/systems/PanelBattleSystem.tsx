@@ -23,6 +23,7 @@ import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import InputNumber from '../../InputNumber';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import Tree from '../../Tree';
 
@@ -46,6 +47,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	const [troopsBattlersOffset] = useStateDynamicValue();
 	const [battleMaps, setBattleMaps] = useState<Node[]>([]);
 	const [cameraMoveInBattle, setcameraMoveInBattle] = useStateBool();
+	const [windowProfileStatisticsWidth, setWindowProfileStatisticsWidth] = useStateNumber();
+	const [windowProfileHeight, setWindowProfileHeight] = useStateNumber();
 	const [elements, setElements] = useState<Node[]>([]);
 	const [statistics, setStatistics] = useState<Node[]>([]);
 	const [weaponsKind, setWeaponsKind] = useState<Node[]>([]);
@@ -69,6 +72,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		playBattleVictorySelectorRef.current?.initialize(battleSystem.battleVictory);
 		setBattleMaps(Node.createList(battleSystem.battleMaps));
 		setcameraMoveInBattle(battleSystem.cameraMoveInBattle);
+		setWindowProfileStatisticsWidth(battleSystem.windowProfileStatisticsWidth);
+		setWindowProfileHeight(battleSystem.windowProfileHeight);
 		setElements(Node.createList(battleSystem.elements));
 		setStatistics(Node.createList(battleSystem.statistics));
 		setWeaponsKind(Node.createList(battleSystem.weaponsKind));
@@ -105,6 +110,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		playBattleVictorySelectorRef.current!.accept(battleSystem.battleVictory);
 		battleSystem.battleMaps = Node.createListFromNodes(battleMaps);
 		battleSystem.cameraMoveInBattle = cameraMoveInBattle;
+		battleSystem.windowProfileStatisticsWidth = windowProfileStatisticsWidth;
+		battleSystem.windowProfileHeight = windowProfileHeight;
 		battleSystem.elements = Node.createListFromNodes(elements);
 		battleSystem.statistics = Node.createListFromNodes(statistics);
 		battleSystem.weaponsKind = Node.createListFromNodes(weaponsKind);
@@ -214,6 +221,25 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				<Groupbox title={t('battle.maps')}>
 					<Flex one style={TREES_STYLE_HEIGHT}>
 						<Tree constructorType={Model.BattleMap} list={battleMaps} scrollable cannotUpdateListSize />
+					</Flex>
+				</Groupbox>
+				<Groupbox title={t('status.windows')}>
+					<Flex spacedLarge>
+						<Flex column spaced>
+							<div>
+								{t('statistics.width')} ({t('in.px')}):
+							</div>
+							<InputNumber
+								value={windowProfileStatisticsWidth}
+								onChange={setWindowProfileStatisticsWidth}
+							/>
+						</Flex>
+						<Flex column spaced>
+							<div>
+								{t('window.height')} ({t('in.px')}):
+							</div>
+							<InputNumber value={windowProfileHeight} onChange={setWindowProfileHeight} />
+						</Flex>
 					</Flex>
 				</Groupbox>
 				<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
