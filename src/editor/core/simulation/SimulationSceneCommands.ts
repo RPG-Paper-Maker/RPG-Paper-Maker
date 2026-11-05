@@ -579,7 +579,7 @@ class CommandMoveObject extends CommandBase {
 						)
 					: desired;
 				target.setWorldPosition(next);
-				const done = advance >= 1;
+				const done = move.square ? advance >= 1 : elapsedTime > 0;
 				if (done) {
 					target.moveFrequencyTick = target.frequencyValue * 1000;
 				}
