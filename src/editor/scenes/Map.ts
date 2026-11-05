@@ -2374,10 +2374,12 @@ class Map extends Base {
 						Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL)
 				) {
 					position.centerX =
-						((Math.floor(obj.point.x * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) *
+						(Mathf.mod(Math.floor(obj.point.x * Project.SQUARE_SIZE), Project.SQUARE_SIZE) /
+							Project.SQUARE_SIZE) *
 						100;
 					position.centerZ =
-						((Math.floor(obj.point.z * Project.SQUARE_SIZE) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) *
+						(Mathf.mod(Math.floor(obj.point.z * Project.SQUARE_SIZE), Project.SQUARE_SIZE) /
+							Project.SQUARE_SIZE) *
 						100;
 				}
 				if (isLayerOn) {
