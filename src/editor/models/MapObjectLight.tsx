@@ -20,6 +20,7 @@ class MapObjectLight extends Base {
 	public static type = 'MapObjectLight';
 	public kind!: DynamicValue;
 	public followOrientation!: DynamicValue;
+	public castShadow!: DynamicValue;
 	public color!: DynamicValue;
 	public groundColor!: DynamicValue;
 	public intensity!: DynamicValue;
@@ -50,6 +51,7 @@ class MapObjectLight extends Base {
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
+		['castShadow', 'cs', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['color', 'c', DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, '#ffffff'), BINDING.DYNAMIC_VALUE, DynamicValue],
 		[
 			'groundColor',

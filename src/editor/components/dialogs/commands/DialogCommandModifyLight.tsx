@@ -39,7 +39,16 @@ const createSelectedFields = (selected: boolean): Record<MapObjectLightField, bo
 		boolean
 	>;
 
-const LEGACY_MAP_OBJECT_LIGHT_FIELDS = MAP_OBJECT_LIGHT_FIELDS.filter((field) => field !== 'followOrientation');
+const PREVIOUS_MAP_OBJECT_LIGHT_FIELDS = MAP_OBJECT_LIGHT_FIELDS.filter((field) => field !== 'castShadow');
+const LEGACY_MAP_OBJECT_LIGHT_FIELDS = PREVIOUS_MAP_OBJECT_LIGHT_FIELDS.filter(
+	(field) => field !== 'followOrientation',
+);
+
+const getCommandFields = (remaining: number, action: MODIFY_LIGHT_ACTION) =>
+	[MAP_OBJECT_LIGHT_FIELDS, PREVIOUS_MAP_OBJECT_LIGHT_FIELDS, LEGACY_MAP_OBJECT_LIGHT_FIELDS].find(
+		(fields) =>
+			remaining === fields.length * 2 || (action === MODIFY_LIGHT_ACTION.EDIT && remaining === fields.length * 3),
+	) ?? MAP_OBJECT_LIGHT_FIELDS;
 
 function DialogCommandModifyLight({ commandKind, setIsOpen, list, onAccept, onReject, onLivePreview }: CommandProps) {
 	const { t } = useTranslation();
@@ -69,11 +78,7 @@ function DialogCommandModifyLight({ commandKind, setIsOpen, list, onAccept, onRe
 			setAction(commandAction);
 			lightID.updateCommand(list, iterator);
 			if (list.length > iterator.i) {
-				const fields =
-					list.length - iterator.i ===
-					LEGACY_MAP_OBJECT_LIGHT_FIELDS.length * (commandAction === MODIFY_LIGHT_ACTION.EDIT ? 3 : 2)
-						? LEGACY_MAP_OBJECT_LIGHT_FIELDS
-						: MAP_OBJECT_LIGHT_FIELDS;
+				const fields = getCommandFields(list.length - iterator.i, commandAction);
 				const hasSelectedFields =
 					commandAction === MODIFY_LIGHT_ACTION.EDIT && list.length - iterator.i >= fields.length * 3;
 				const selected = createSelectedFields(!hasSelectedFields);

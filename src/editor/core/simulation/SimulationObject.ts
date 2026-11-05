@@ -565,7 +565,8 @@ class SimulationObject {
 				light instanceof THREE.DirectionalLight
 			) {
 				light.userData.isObjectLight = true;
-				light.castShadow = this.map.model.objectLightsShadows;
+				light.userData.castShadow = settings.castShadow.getFixNumberValue() === 1;
+				light.castShadow = this.map.model.objectLightsShadows && light.userData.castShadow;
 				if (light instanceof THREE.PointLight) {
 					light.shadow.mapSize.set(256, 256);
 					light.shadow.autoUpdate = false;

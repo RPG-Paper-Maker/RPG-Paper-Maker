@@ -47,6 +47,7 @@ const MAP_OBJECT_LIGHT_FIELDS = [
 	'targetX',
 	'targetY',
 	'targetZ',
+	'castShadow',
 ] as const;
 
 type MapObjectLightField = (typeof MAP_OBJECT_LIGHT_FIELDS)[number];
@@ -205,6 +206,26 @@ function PanelMapObjectLight({
 									</Label>
 									<Value>
 										{dynamic('groundColor', light.groundColor, DYNAMIC_VALUE_OPTIONS_TYPE.TEXT)}
+									</Value>
+								</>
+							)}
+							{lightKind !== MAP_OBJECT_LIGHT_KIND.HEMISPHERE && (
+								<>
+									<Label>
+										<Flex spaced centerV>
+											{label('castShadow', t('light.cast.shadows'))}
+											<TooltipInformation text={t('tooltip.light.cast.shadows')} />
+										</Flex>
+									</Label>
+									<Value>
+										<Checkbox
+											isChecked={light.castShadow.getFixNumberValue() === 1}
+											disabled={isDisabled('castShadow')}
+											onChange={(checked) => {
+												light.castShadow.updateToDefaultNumber(checked ? 1 : 0);
+												onChange?.();
+											}}
+										/>
 									</Value>
 								</>
 							)}

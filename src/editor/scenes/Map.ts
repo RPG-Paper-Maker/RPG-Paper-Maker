@@ -613,7 +613,7 @@ class Map extends Base {
 	updateObjectLightsShadows() {
 		this.scene.traverse((object) => {
 			if (object.userData.isObjectLight && object instanceof THREE.Light) {
-				object.castShadow = this.model.objectLightsShadows;
+				object.castShadow = this.model.objectLightsShadows && object.userData.castShadow !== false;
 			}
 		});
 	}
@@ -628,6 +628,10 @@ class Map extends Base {
 			if (!(object instanceof THREE.Light)) return;
 			if (!object.userData.isObjectLight) {
 				if (object.castShadow) otherShadows++;
+				return;
+			}
+			if (object.userData.castShadow === false) {
+				object.castShadow = false;
 				return;
 			}
 			if (
