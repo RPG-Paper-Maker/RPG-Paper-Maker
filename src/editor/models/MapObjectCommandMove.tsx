@@ -11,10 +11,11 @@
 
 import i18next from 'i18next';
 import { ReactNode } from 'react';
-import { COMMAND_MOVE_KIND, EVENT_COMMAND_KIND, ITERATOR, Utils } from '../common';
+import { BINDING, COMMAND_MOVE_KIND, EVENT_COMMAND_KIND, ITERATOR, JSONType, Utils } from '../common';
 import DialogMapObjectCommandMove from '../components/dialogs/models/DialogMapObjectCommandMove';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommand, MapObjectCommandType } from './MapObjectCommand';
 
@@ -23,6 +24,12 @@ class MapObjectCommandMove extends Base {
 	public static type = 'MapObjectCommandMove';
 
 	public command!: MapObjectCommandType[];
+
+	public static bindings: BindingType[] = [['command', 'command', undefined, BINDING.LIST_STRING]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...this.bindings, ...additionnalBinding];
+	}
 
 	static createMove(kind: COMMAND_MOVE_KIND) {
 		const mapObjectCommand = new MapObjectCommandMove();
@@ -388,7 +395,16 @@ class MapObjectCommandMove extends Base {
 	}
 
 	copy(command: MapObjectCommandMove): void {
-		this.command = [...command.command];
+		this.command = [...(command.command ?? [])];
+	}
+
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.read(json, MapObjectCommandMove.getBindings(additionnalBinding));
+		this.command = this.command ?? [];
+	}
+
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.write(json, MapObjectCommandMove.getBindings(additionnalBinding));
 	}
 }
 
