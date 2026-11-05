@@ -3077,6 +3077,8 @@ class Map extends Base {
 				for (const element of mapPortion.model.objects3D.values()) {
 					if (element.isPreview) element.isPreview = false;
 				}
+				mapPortion.previewBoxes = [];
+				mapPortion.removePreviewBoxesMesh();
 				this.portionsToSave.add(mapPortion);
 			});
 		}

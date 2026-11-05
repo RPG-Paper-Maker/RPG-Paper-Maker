@@ -40,6 +40,8 @@ type GeometryMaterialType = {
 };
 
 class MapPortion {
+	public static readonly PREVIEW_BOX_MARGIN = 0.02;
+	public static readonly PREVIEW_BOX_MATERIAL = new THREE.LineBasicMaterial({ color: 0xffffff });
 	public map!: Scene.Map;
 	public model!: Model.MapPortion;
 	public floorsMeshes!: [THREE.Mesh[], THREE.Mesh[]]; // [0 for up, 1 for down][layer]
@@ -51,6 +53,8 @@ class MapPortion {
 	public objects3DMeshes!: THREE.Mesh[];
 	public objectsMesh: THREE.Mesh | null = null;
 	public objectsMeshes: THREE.Mesh[] = [];
+	public previewBoxes: THREE.Vector3[][] = [];
+	public previewBoxesMesh: THREE.LineSegments | null = null;
 	public objectsGltfMeshes: THREE.Group[] = [];
 	public objectsGltfMixers: THREE.AnimationMixer[] = [];
 	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
@@ -991,12 +995,163 @@ class MapPortion {
 		this.updateMountainsGeometry();
 		this.updateObjects3DGeometry();
 		this.updateObjectsGeometry(true);
+		this.updatePreviewBoxes();
 	}
 
 	updateLayerGeometries() {
 		this.map.scene.remove(this.map.hoveredMesh);
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
+		this.updatePreviewBoxes();
+	}
+
+	getDisplayPosition(positionKey: string): Position | null {
+		const position = Position.fromKey(positionKey);
+		if (this.map.previewSizeActive) {
+			position.x += this.map.previewShiftX;
+			position.z += this.map.previewShiftZ;
+			if (!position.isInMap(this.map.model, true)) {
+				return null;
+			}
+		}
+		return position;
+	}
+
+	addPreviewBox(box: THREE.Box3) {
+		if (box.isEmpty()) {
+			return;
+		}
+		box.expandByScalar(MapPortion.PREVIEW_BOX_MARGIN);
+		this.previewBoxes.push(
+			Array.from(
+				{ length: 8 },
+				(_, i) =>
+					new THREE.Vector3(
+						i & 1 ? box.max.x : box.min.x,
+						i & 2 ? box.max.y : box.min.y,
+						i & 4 ? box.max.z : box.min.z,
+					),
+			),
+		);
+	}
+
+	addPreviewGeometryBox(geometry: CustomGeometry) {
+		if (!geometry.isEmpty()) {
+			this.addPreviewBox(new THREE.Box3().setFromArray(geometry._vertices));
+		}
+	}
+
+	addPreviewFaceSpriteBox(sprite: MapElement.Sprite, position: Position, width: number, height: number) {
+		const flatPosition = position.clone();
+		flatPosition.angleX = 0;
+		flatPosition.angleZ = 0;
+		const geometry = new CustomGeometryFace();
+		sprite.updateGeometry(this.map, geometry, width, height, flatPosition, 0, true, flatPosition.toVector3());
+		if (geometry.isEmpty() || geometry._center.length < 3) {
+			return;
+		}
+		const box = new THREE.Box3().setFromArray(geometry._vertices);
+		const center = new THREE.Vector3().fromArray(geometry._center);
+		const margin = MapPortion.PREVIEW_BOX_MARGIN;
+		const halfDiagonal = (box.max.x - box.min.x) / 2 + margin;
+		const centerX = (box.min.x + box.max.x) / 2;
+		const footprint = [
+			[-halfDiagonal, 0],
+			[0, -halfDiagonal],
+			[0, halfDiagonal],
+			[halfDiagonal, 0],
+		];
+		const euler = position.toRotationEuler();
+		this.previewBoxes.push(
+			Array.from({ length: 8 }, (_, i) => {
+				const [x, z] = footprint[(i & 1) | ((i & 4) >> 1)];
+				const corner = new THREE.Vector3(
+					centerX + x,
+					i & 2 ? box.max.y + margin : box.min.y - margin,
+					center.z + z,
+				);
+				CustomGeometry.rotateVertexEuler(corner, center, euler);
+				return corner;
+			}),
+		);
+	}
+
+	updatePreviewBoxes() {
+		this.previewBoxes = [];
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.map.materialTileset);
+		for (const [positionKey, land] of this.model.lands) {
+			const position = land.isPreview ? this.getDisplayPosition(positionKey) : null;
+			if (position) {
+				const geometry = new CustomGeometry();
+				land.updateGeometryLand(this.map, geometry, position, 1, 1, 0, 0, 0, 0, 0, 1, 1, true);
+				this.addPreviewGeometryBox(geometry);
+			}
+		}
+		for (const [positionKey, sprite] of this.model.sprites) {
+			const position = sprite.isPreview ? this.getDisplayPosition(positionKey) : null;
+			if (position) {
+				if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
+					this.addPreviewFaceSpriteBox(sprite, position, width, height);
+				} else {
+					const geometry = new CustomGeometry();
+					sprite.updateGeometry(this.map, geometry, width, height, position, 0, true, position.toVector3());
+					this.addPreviewGeometryBox(geometry);
+				}
+			}
+		}
+		for (const [positionKey, mountain] of this.model.mountains) {
+			const position = mountain.isPreview ? this.getDisplayPosition(positionKey) : null;
+			if (position) {
+				const geometry = new CustomGeometry();
+				mountain.updateGeometry(geometry, position, 0);
+				this.addPreviewGeometryBox(geometry);
+			}
+		}
+		for (const [positionKey, object3D] of this.model.objects3D) {
+			const position = object3D.isPreview ? this.getDisplayPosition(positionKey) : null;
+			if (position && object3D.data) {
+				const clone = this.map.gltfClones.get(object3D);
+				if (clone) {
+					this.addPreviewBox(new THREE.Box3().setFromObject(clone));
+				} else {
+					const geometry = new CustomGeometry();
+					object3D.updateGeometry(geometry, position, 0);
+					this.addPreviewGeometryBox(geometry);
+				}
+			}
+		}
+		this.updatePreviewBoxesMesh();
+	}
+
+	removePreviewBoxesMesh() {
+		if (this.previewBoxesMesh) {
+			this.map.scene.remove(this.previewBoxesMesh);
+			this.previewBoxesMesh.geometry.dispose();
+			this.previewBoxesMesh = null;
+		}
+	}
+
+	updatePreviewBoxesMesh() {
+		this.removePreviewBoxesMesh();
+		if (this.previewBoxes.length === 0) {
+			return;
+		}
+		const vertices: number[] = [];
+		for (const corners of this.previewBoxes) {
+			for (let i = 0; i < 8; i++) {
+				for (const bit of [1, 2, 4]) {
+					if (!(i & bit)) {
+						corners[i].toArray(vertices, vertices.length);
+						corners[i | bit].toArray(vertices, vertices.length);
+					}
+				}
+			}
+		}
+		const geometry = new THREE.BufferGeometry();
+		geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+		this.previewBoxesMesh = new THREE.LineSegments(geometry, MapPortion.PREVIEW_BOX_MATERIAL);
+		this.previewBoxesMesh.renderOrder = 4;
+		this.map.scene.add(this.previewBoxesMesh);
 	}
 
 	updateLandsGeometries() {
@@ -2227,6 +2382,8 @@ class MapPortion {
 	}
 
 	cleanAll() {
+		this.previewBoxes = [];
+		this.removePreviewBoxesMesh();
 		for (let i = 0; i < 2; i++) {
 			for (const mesh of this.floorsMeshes[i]) {
 				if (mesh) {
