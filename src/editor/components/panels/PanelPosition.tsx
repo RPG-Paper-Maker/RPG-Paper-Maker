@@ -90,8 +90,8 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 		enterYp.updateToDefaultNumber(0);
 		enterZ.updateToDefaultNumber(0);
 		positionObjectID.updateToDefaultDatabase(-1);
-		xPixels.updateToDefaultNumber(0);
-		zPixels.updateToDefaultNumber(0);
+		xPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
+		zPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
 		if (list && iterator) {
 			const selectionType = list[iterator.i++] as number;
 			setSelectionType(selectionType);

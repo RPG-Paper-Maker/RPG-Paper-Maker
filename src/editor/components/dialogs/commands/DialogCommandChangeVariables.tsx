@@ -149,9 +149,9 @@ function DialogCommandChangeVariables({ commandKind, setIsOpen, list, onAccept, 
 		valueTerrainX.updateToDefaultNumber();
 		valueTerrainY.updateToDefaultNumber();
 		valueTerrainZ.updateToDefaultNumber();
-		valueTerrainXPlus.updateToDefaultNumber();
+		valueTerrainXPlus.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
 		valueTerrainYPlus.updateToDefaultNumber();
-		valueTerrainZPlus.updateToDefaultNumber();
+		valueTerrainZPlus.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
 		setIsFloored(false);
 		setCoordinatesValueType(COORDINATES_VALUE_TYPE.TERRAIN);
 		if (list) {
