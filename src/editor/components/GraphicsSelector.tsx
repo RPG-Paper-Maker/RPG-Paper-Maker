@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Model, Scene } from '../Editor';
@@ -39,6 +39,7 @@ export type GraphicsSelectorOptions = {
 type Props = {
 	sceneID: string;
 	options: GraphicsSelectorOptions;
+	titleSuffix?: ReactNode;
 	hidden?: boolean;
 	onUpdateGraphics: (
 		id: number,
@@ -50,7 +51,14 @@ type Props = {
 	onChangeGraphicsKind: (kind: number) => void;
 };
 
-function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKind, onUpdateGraphics }: Props) {
+function GraphicsSelector({
+	sceneID,
+	options,
+	titleSuffix,
+	hidden = false,
+	onChangeGraphicsKind,
+	onUpdateGraphics,
+}: Props) {
 	const { t } = useTranslation();
 
 	const [isOpenDialogPictures, setIsOpenDialogPictures] = useState(false);
@@ -344,7 +352,9 @@ function GraphicsSelector({ sceneID, options, hidden = false, onChangeGraphicsKi
 	return (
 		<>
 			<Flex column spaced>
-				{t('graphics')}:
+				<Flex centerV spaced>
+					{t('graphics')}:{titleSuffix}
+				</Flex>
 				<div
 					ref={refContainer}
 					className='graphicsSelector'

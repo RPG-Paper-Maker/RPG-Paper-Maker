@@ -2060,5 +2060,18 @@
 	"light.angle.softness": "Angolo / morbidezza",
 	"error.dialog.outdated": "Stai usando la versione {{currentVersion}}, ma è disponibile la versione {{latestVersion}}. Aggiorna RPG Paper Maker prima di segnalare questo errore. Fai clic su OK per inviare comunque la segnalazione.",
 	"variable.usages.map.path": "Percorso della mappa",
-	"variable.usages.object.name": "Nome dell'oggetto"
+	"variable.usages.object.name": "Nome dell'oggetto",
+	"variable.usages": "Utilizzi della variabile",
+	"find.variable.usages": "Trova utilizzi",
+	"no.variable.usages": "Nessun utilizzo trovato.",
+	"variable.usages.error": "Impossibile cercare gli utilizzi della variabile.",
+	"searching": "Ricerca in corso...",
+	"variables.save.error": "Impossibile salvare le variabili.",
+	"from.model": "Dal modello {{model}}",
+	"overrides.model": "Sostituisce il modello {{model}}",
+	"partially.overrides.model": "Sostituisce parzialmente il modello {{model}}",
+	"revert.to.model": "Ripristina il modello",
+	"revert.all.to.model": "Ripristina tutto il modello",
+	"replaces.model.reaction": "Sostituisce la reazione del modello {{model}}",
+	"override": "Sostituisci modello"
 }

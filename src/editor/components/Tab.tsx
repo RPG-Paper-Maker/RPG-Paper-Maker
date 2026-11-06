@@ -24,6 +24,7 @@ import TooltipInformation from './TooltipInformation';
 type Props = {
 	titles: Model.Base[];
 	setTitles?: (titles: Model.Base[]) => void;
+	titleSuffixes?: ReactNode[];
 	contents?: ReactNode[];
 	setContents?: (contents: ReactNode[]) => void;
 	defaultIndex?: number;
@@ -43,6 +44,7 @@ type Props = {
 function Tab({
 	titles,
 	setTitles,
+	titleSuffixes,
 	contents = [],
 	setContents,
 	defaultIndex = 0,
@@ -169,6 +171,7 @@ function Tab({
 					onClick={() => handleClickItem(index)}
 				>
 					{name}
+					{titleSuffixes?.[index]}
 					{titleTooltip && <TooltipInformation text={titleTooltip} />}
 					{closable && <RxCross2 onClick={(e) => handleClickClose(e, title)} />}
 				</div>

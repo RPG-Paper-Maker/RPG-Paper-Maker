@@ -11,6 +11,7 @@
 
 import { BINDING, DYNAMIC_VALUE_KIND, JSONType, Utils } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { ModelInheritance } from '../core/ModelInheritance';
 import { Project } from '../core/Project';
 import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
@@ -26,6 +27,7 @@ class CommonObject extends Base {
 	public properties!: MapObjectProperty[];
 	public events!: MapObjectEvent[];
 	public onlyOneEventPerFrame!: boolean;
+	public onlyOneEventPerFrameOverride = false;
 	public commonModelID!: number;
 
 	public static bindings: BindingType[] = [
@@ -87,14 +89,32 @@ class CommonObject extends Base {
 		super.applyDefault(CommonObject.getBindings([]));
 		this.copy(Project.current!.commonEvents.defaultObject);
 		this.name = '';
+		this.resetInheritanceFlags();
+	}
+
+	resetInheritanceFlags() {
+		this.onlyOneEventPerFrameOverride = false;
+		for (const state of this.states) {
+			state.overrides = [];
+		}
+		for (const event of this.events) {
+			for (const reaction of event.reactions.values()) {
+				reaction.inherit = true;
+			}
+		}
 	}
 
 	getFirstState(): MapObjectState | null {
 		return this.states[0] ?? null;
 	}
 
+	getResolvedFirstState(): MapObjectState | null {
+		return ModelInheritance.resolveFirstState(this);
+	}
+
 	copy(object: CommonObject, additionnalBinding: BindingType[] = []): void {
 		super.copy(object, CommonObject.getBindings(additionnalBinding));
+		this.onlyOneEventPerFrameOverride = object.onlyOneEventPerFrameOverride;
 	}
 
 	static fromJSON(json: JSONType): CommonObject {
@@ -105,10 +125,14 @@ class CommonObject extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CommonObject.getBindings(additionnalBinding));
+		this.onlyOneEventPerFrameOverride = json.ooepfOv === true;
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, CommonObject.getBindings(additionnalBinding));
+		if (this.onlyOneEventPerFrameOverride) {
+			json.ooepfOv = true;
+		}
 	}
 }
 

@@ -2061,5 +2061,18 @@
 	"light.angle.softness": "角度 / 柔和度",
 	"error.dialog.outdated": "您正在使用版本 {{currentVersion}}，但版本 {{latestVersion}} 已可用。请先更新 RPG Paper Maker 再报告此错误。点击“确定”仍可发送报告。",
 	"variable.usages.map.path": "\u5730\u56fe\u8def\u5f84",
-	"variable.usages.object.name": "\u5bf9\u8c61\u540d\u79f0"
+	"variable.usages.object.name": "\u5bf9\u8c61\u540d\u79f0",
+	"variable.usages": "变量用途",
+	"find.variable.usages": "查找用途",
+	"no.variable.usages": "未找到用途。",
+	"variable.usages.error": "无法搜索变量用途。",
+	"searching": "搜索中...",
+	"variables.save.error": "无法保存变量。",
+	"from.model": "来自模型 {{model}}",
+	"overrides.model": "覆盖模型 {{model}}",
+	"partially.overrides.model": "部分覆盖模型 {{model}}",
+	"revert.to.model": "恢复为模型",
+	"revert.all.to.model": "全部恢复为模型",
+	"replaces.model.reaction": "替换模型 {{model}} 的反应",
+	"override": "覆盖模型"
 }

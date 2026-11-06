@@ -2070,5 +2070,12 @@
 	"variable.usages.map.path": "Map path",
 	"variable.usages.object.name": "Object name",
 	"searching": "Searching...",
-	"variables.save.error": "Could not save variables."
+	"variables.save.error": "Could not save variables.",
+	"from.model": "From model {{model}}",
+	"overrides.model": "Overrides model {{model}}",
+	"partially.overrides.model": "Partially overrides model {{model}}",
+	"revert.to.model": "Revert to model",
+	"revert.all.to.model": "Revert all to model",
+	"replaces.model.reaction": "Replaces reaction of model {{model}}",
+	"override": "Override model"
 }

@@ -19,9 +19,10 @@ type Props = {
 	onChange?: (checked: boolean) => void;
 	disabled?: boolean;
 	title?: string;
+	className?: string;
 };
 
-function Checkbox({ children, isChecked = false, onChange, disabled = false, title }: Props) {
+function Checkbox({ children, isChecked = false, onChange, disabled = false, title, className }: Props) {
 	const handleClick = () => {
 		if (!disabled && onChange) {
 			onChange(!isChecked);
@@ -29,7 +30,11 @@ function Checkbox({ children, isChecked = false, onChange, disabled = false, tit
 	};
 
 	return (
-		<label className={Utils.getClassName({ disabled }, 'checkbox')} onClick={handleClick} title={title}>
+		<label
+			className={Utils.getClassName({ disabled }, className ? `checkbox ${className}` : 'checkbox')}
+			onClick={handleClick}
+			title={title}
+		>
 			<div className={Utils.getClassName({ checked: isChecked, disabled }, 'square')} />
 			{children}
 		</label>

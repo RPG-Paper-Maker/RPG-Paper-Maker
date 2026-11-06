@@ -11,7 +11,9 @@
 
 import { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
+import { FaLink, FaPen, FaUndo } from 'react-icons/fa';
+import { EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, STATE_OVERRIDE_GROUP, Utils } from '../../common';
+import { ModelInheritance, ResolvedObject } from '../../core/ModelInheritance';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
 import { Rectangle } from '../../core/Rectangle';
@@ -29,6 +31,7 @@ import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
 import GraphicsSelector, { GraphicsSelectorOptions } from '../GraphicsSelector';
 import Groupbox from '../Groupbox';
+import { InheritanceText, OverrideIndicator } from '../InheritanceBadge';
 import InputText from '../InputText';
 import Tab from '../Tab';
 import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from '../Tree';
@@ -55,6 +58,7 @@ type Props = {
 	initialStateID?: number;
 	hideNameID?: boolean;
 	hideStateValues?: boolean;
+	isModel?: boolean;
 	saveOnDestruction?: boolean;
 	saveOnUpdate?: boolean;
 	onPlayCommand?: (info: PlayCommandInfo) => void;
@@ -71,6 +75,7 @@ const PanelMapObject = forwardRef(
 			initialStateID,
 			hideNameID = false,
 			hideStateValues = false,
+			isModel = false,
 			saveOnDestruction = false,
 			saveOnUpdate = false,
 			onPlayCommand,
@@ -90,10 +95,12 @@ const PanelMapObject = forwardRef(
 		const [modelID, setModelID] = useStateNumber();
 		const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
 		const [tabContents, setTabContents] = useState<ReactNode[]>([]);
+		const [tabTitleSuffixes, setTabTitleSuffixes] = useState<ReactNode[]>([]);
 		const [states, setStates] = useState<Node[]>([]);
 		const [events, setEvents] = useState<Node[]>([]);
 		const [properties, setProperties] = useState<Node[]>([]);
 		const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
+		const [onlyOneEventPerFrameOverride, setOnlyOneEventPerFrameOverride] = useStateBool();
 		const [selectedState, setSelectedState] = useState<Model.MapObjectState | null>(null);
 		const [selectedEvent, setSelectedEvent] = useState<Model.MapObjectEvent | null>(null);
 		const [graphicOptions, setGraphicOptions] = useState<GraphicsSelectorOptions>({
@@ -120,11 +127,15 @@ const PanelMapObject = forwardRef(
 		const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
 		const [blockingHero, setBlockingHero] = useStateBool();
 		const [lights, setLights] = useState<Node[]>([]);
+		const [, setRefreshCount] = useState(0);
+
+		const parentRef = useRef<{ id: number; resolved: ResolvedObject | null }>({ id: -1, resolved: null });
 
 		const statesRef = useRef({
 			name,
 			modelID,
 			onlyOneEventPerFrame,
+			onlyOneEventPerFrameOverride,
 			states,
 			events,
 			properties,
@@ -136,15 +147,19 @@ const PanelMapObject = forwardRef(
 				setName(object.name);
 			}
 			setModelID(object.commonModelID);
-			const newStates = Node.createList(object.states);
-			const newEvents = Node.createList(object.events);
-			const newProperties = Node.createList(object.properties);
+			updateParent(object.commonModelID);
+			const { newStates, newEvents, newProperties } = syncLists(
+				Node.createList(object.states),
+				Node.createList(object.events),
+				Node.createList(object.properties),
+			);
 			setStates(newStates);
 			const initialState = newStates.find((node) => node.content.id === initialStateID) ?? newStates[0];
 			setForcedCurrentSelectedIDState(initialState?.content?.id ?? -1);
 			setProperties(newProperties);
 			setEvents(newEvents);
 			setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
+			setOnlyOneEventPerFrameOverride(object.onlyOneEventPerFrameOverride);
 			const state = (initialState?.content as Model.MapObjectState | undefined) ?? null;
 			handleChangeState(state, newEvents);
 			const event = newEvents[initialEventIndex ?? 0] ?? newEvents[0] ?? null;
@@ -171,6 +186,7 @@ const PanelMapObject = forwardRef(
 			setEvents([]);
 			setTabTitles([]);
 			setTabContents([]);
+			setTabTitleSuffixes([]);
 			Project.current!.currentMapObjectProperties = [];
 			Project.current!.currentMapObjectParameters = [];
 		};
@@ -179,7 +195,7 @@ const PanelMapObject = forwardRef(
 
 		const getDisabledModelIds = (): number[] => {
 			const commonObjects = Project.current!.commonEvents.commonObjects;
-			const disabledSet = new Set<number>([object.id]);
+			const disabledSet = new Set<number>(isModel ? [object.id] : []);
 			let changed = true;
 			while (changed) {
 				changed = false;
@@ -193,25 +209,185 @@ const PanelMapObject = forwardRef(
 			return Array.from(disabledSet);
 		};
 
+		const updateParent = (id: number) => {
+			parentRef.current = { id, resolved: ModelInheritance.resolveModel(id) };
+		};
+
+		const getParent = () => parentRef.current.resolved;
+
+		const getParentID = () => parentRef.current.id;
+
+		const getModelName = (id: number) => ModelInheritance.getModelName(id);
+
+		const refresh = () => setRefreshCount((count) => count + 1);
+
+		const syncNodes = (nodes: Node[], contents: Model.Base[]): Node[] => {
+			const nodesByContent = new Map(nodes.map((node) => [node.content, node]));
+			return contents.map((content) => nodesByContent.get(content) ?? Node.create(content));
+		};
+
+		const syncLists = (stateNodes: Node[], eventNodes: Node[], propertyNodes: Node[]) => {
+			const parent = getParent();
+			const newStates = syncNodes(
+				stateNodes,
+				ModelInheritance.syncStates(Node.createListFromNodes(stateNodes), parent),
+			);
+			const newEvents = syncNodes(
+				eventNodes,
+				ModelInheritance.syncEvents(
+					Node.createListFromNodes(eventNodes),
+					parent,
+					newStates.map((node) => node.content.id),
+				),
+			);
+			const newProperties = syncNodes(
+				propertyNodes,
+				ModelInheritance.syncProperties(Node.createListFromNodes(propertyNodes), parent),
+			);
+			return { newStates, newEvents, newProperties };
+		};
+
+		const replaceList = (target: Node[], source: Node[]): Node[] => {
+			target.splice(0, target.length, ...source);
+			return target;
+		};
+
+		const resync = (stateNodes: Node[], eventNodes: Node[], propertyNodes: Node[]) => {
+			const synced = syncLists(stateNodes, eventNodes, propertyNodes);
+			const newStates = replaceList(states, synced.newStates);
+			const newEvents = replaceList(events, synced.newEvents);
+			const newProperties = replaceList(properties, synced.newProperties);
+			Project.current!.currentMapObjectStates = newStates;
+			Project.current!.currentMapObjectEvents = newEvents;
+			Project.current!.currentMapObjectProperties = newProperties;
+			refresh();
+			saveStates(newStates);
+			saveEvents(newEvents);
+			saveProperties(newProperties);
+			const stateNode =
+				newStates.find((node) => node.content === selectedState) ??
+				newStates.find((node) => node.content.id === selectedState?.id) ??
+				newStates[0] ??
+				null;
+			const state = (stateNode?.content as Model.MapObjectState | undefined) ?? null;
+			if (state !== selectedState) {
+				setForcedCurrentSelectedIDState(state?.id ?? -1);
+			}
+			const eventIndex = Math.max(
+				0,
+				newEvents.findIndex((node) => node.content === selectedEvent),
+			);
+			const eventNode = newEvents[eventIndex] ?? null;
+			const event = (eventNode?.content as Model.MapObjectEvent | undefined) ?? null;
+			if (event !== selectedEvent) {
+				setSelectedEvent(event);
+				setForcedCurrentSelectedIndexEvent(eventNode ? eventIndex : -1);
+				Project.current!.currentMapObjectParameters = event?.parameters ?? [];
+			}
+			setForcedCurrentIndexTab(eventNode ? eventIndex : -1);
+			handleChangeState(state, newEvents);
+			if (state && event) {
+				setBlockingHero(getDisplayedReaction(event, state)?.blockingHero ?? false);
+			}
+		};
+
 		const handleChangeModelID = (id: number) => {
+			const parent = getParent();
+			const ownStates = states.filter(
+				(node) => !ModelInheritance.isMirrorState(node.content as Model.MapObjectState, parent),
+			);
+			const ownEvents = events.filter(
+				(node) => !ModelInheritance.isMirrorEvent(node.content as Model.MapObjectEvent, parent),
+			);
+			const ownProperties = properties.filter(
+				(node) => !ModelInheritance.isMirrorProperty(node.content as Model.MapObjectProperty, parent),
+			);
 			setModelID(id);
+			updateParent(id);
 			if (saveOnUpdate) {
 				object.commonModelID = id;
 			}
+			resync(ownStates, ownEvents, ownProperties);
 		};
 
 		const handleChangeOnlyOneEventPerFrame = (b: boolean) => {
 			setOnlyOneEventPerFrame(b);
+			setOnlyOneEventPerFrameOverride(true);
 			if (saveOnUpdate) {
 				object.onlyOneEventPerFrame = b;
+				object.onlyOneEventPerFrameOverride = true;
+			}
+		};
+
+		const handleRevertOnlyOneEventPerFrame = () => {
+			setOnlyOneEventPerFrameOverride(false);
+			if (saveOnUpdate) {
+				object.onlyOneEventPerFrameOverride = false;
+			}
+		};
+
+		const markTouched = (group: STATE_OVERRIDE_GROUP) => {
+			selectedState?.addOverride(group);
+		};
+
+		const markReactionTouched = (reaction: Model.MapObjectReaction) => {
+			reaction.inherit = false;
+			handleUpdateEvents();
+			refresh();
+		};
+
+		const saveStates = (nodes: Node[]) => {
+			if (saveOnUpdate) {
+				object.states = ModelInheritance.getOwnStatesForSave(Node.createListFromNodes(nodes), getParent());
+			}
+		};
+
+		const saveEvents = (nodes: Node[]) => {
+			if (saveOnUpdate) {
+				object.events = ModelInheritance.getOwnEventsForSave(Node.createListFromNodes(nodes), getParent());
+			}
+		};
+
+		const saveProperties = (nodes: Node[]) => {
+			if (saveOnUpdate) {
+				object.properties = ModelInheritance.getOwnPropertiesForSave(
+					Node.createListFromNodes(nodes),
+					getParent(),
+				);
 			}
 		};
 
 		const handleUpdateStates = () => {
-			if (saveOnUpdate) {
-				object.states = Node.createListFromNodes(statesRef.current.states);
-			}
+			saveStates(statesRef.current.states);
 		};
+
+		const handleStatesListUpdated = () => {
+			resync(states, events, properties);
+		};
+
+		const handleRevertGroup = (group: STATE_OVERRIDE_GROUP) => {
+			if (!selectedState) return;
+			selectedState.removeOverride(group);
+			resync(states, events, properties);
+			onUpdateStateGraphics?.(selectedState);
+		};
+
+		const handleRevertState = () => {
+			if (!selectedState) return;
+			selectedState.overrides = [];
+			resync(states, events, properties);
+			onUpdateStateGraphics?.(selectedState);
+		};
+
+		const canDeleteState = (node: Node | null) =>
+			node?.content instanceof Model.MapObjectState && !ModelInheritance.isMirrorState(node.content, getParent());
+
+		const canDeleteEvent = (node: Node | null) =>
+			node?.content instanceof Model.MapObjectEvent && !ModelInheritance.isMirrorEvent(node.content, getParent());
+
+		const canDeleteProperty = (node: Node | null) =>
+			node?.content instanceof Model.MapObjectProperty &&
+			!ModelInheritance.isMirrorProperty(node.content, getParent());
 
 		const handlePasteState = (node: Node, originalCopyNode: Node) => {
 			const state = node.content as Model.MapObjectState;
@@ -226,16 +402,16 @@ const PanelMapObject = forwardRef(
 		};
 
 		const handleUpdateProperties = () => {
-			if (saveOnUpdate) {
-				object.properties = Node.createListFromNodes(statesRef.current.properties);
-			}
+			resync(states, events, properties);
 		};
 
 		const handleUpdateLights = () => {
 			if (!selectedState) return;
 			selectedState.lights = lights.map((node) => node.content as Model.MapObjectLight);
+			markTouched(STATE_OVERRIDE_GROUP.LIGHTS);
 			handleUpdateStates();
 			onUpdateStateGraphics?.(selectedState);
+			refresh();
 		};
 
 		const handleLivePreviewLight = (light: Model.Base | null, isNew: boolean) => {
@@ -249,67 +425,160 @@ const PanelMapObject = forwardRef(
 		};
 
 		const handleUpdateEvents = () => {
-			if (saveOnUpdate) {
-				object.events = Node.createListFromNodes(statesRef.current.events);
+			saveEvents(statesRef.current.events);
+		};
+
+		const getReactionInfo = (event: Model.MapObjectEvent, state: Model.MapObjectState) => {
+			const reaction = event.reactions?.get('' + state.id) ?? null;
+			const parentReaction = ModelInheritance.getParentReaction(event, state.id, getParent(), getParentID());
+			const isInherited = !!reaction && reaction.inherit && !!parentReaction;
+			return { reaction, parentReaction, isInherited };
+		};
+
+		const getDisplayedReaction = (event: Model.MapObjectEvent, state: Model.MapObjectState) => {
+			const { reaction, parentReaction, isInherited } = getReactionInfo(event, state);
+			return isInherited ? parentReaction!.reaction : reaction;
+		};
+
+		const handleOverrideReaction = (
+			reaction: Model.MapObjectReaction,
+			parentReaction: Model.MapObjectReaction,
+			eventNodes: Node[],
+			state: Model.MapObjectState,
+		) => {
+			reaction.commands = parentReaction.commands.map((command) => command.clone());
+			reaction.blockingHero = parentReaction.blockingHero;
+			reaction.inherit = false;
+			setBlockingHero(reaction.blockingHero);
+			saveEvents(eventNodes);
+			updateReactionsTab(eventNodes, state);
+			refresh();
+		};
+
+		const handleRevertReaction = (
+			reaction: Model.MapObjectReaction,
+			parentReaction: Model.MapObjectReaction,
+			eventNodes: Node[],
+			state: Model.MapObjectState,
+		) => {
+			reaction.commands = [];
+			reaction.blockingHero = parentReaction.blockingHero;
+			reaction.inherit = true;
+			setBlockingHero(parentReaction.blockingHero);
+			saveEvents(eventNodes);
+			updateReactionsTab(eventNodes, state);
+			refresh();
+		};
+
+		const getReactionTabSuffix = (
+			event: Model.MapObjectEvent,
+			state: Model.MapObjectState,
+			eventNodes: Node[],
+		): ReactNode => {
+			const { reaction, parentReaction, isInherited } = getReactionInfo(event, state);
+			if (!reaction || !parentReaction) {
+				return null;
 			}
+			const sourceName = getModelName(parentReaction.sourceModelID);
+			return isInherited ? (
+				<>
+					<span className='inheritanceBadge' title={t('from.model', { model: sourceName })}>
+						<FaLink />
+					</span>
+					<span
+						className='inheritanceBadge inheritanceAction'
+						title={t('override')}
+						onClick={(e) => {
+							e.stopPropagation();
+							handleOverrideReaction(reaction, parentReaction.reaction, eventNodes, state);
+						}}
+					>
+						<FaPen />
+					</span>
+				</>
+			) : (
+				<>
+					<span
+						className='inheritanceBadge inheritanceOverridden'
+						title={t('replaces.model.reaction', { model: sourceName })}
+					>
+						●
+					</span>
+					<span
+						className='inheritanceBadge inheritanceAction'
+						title={t('revert.to.model')}
+						onClick={(e) => {
+							e.stopPropagation();
+							handleRevertReaction(reaction, parentReaction.reaction, eventNodes, state);
+						}}
+					>
+						<FaUndo />
+					</span>
+				</>
+			);
+		};
+
+		const renderReaction = (
+			event: Model.MapObjectEvent,
+			state: Model.MapObjectState,
+			eventNodes: Node[],
+			index: number,
+		) => {
+			const { reaction, parentReaction, isInherited } = getReactionInfo(event, state);
+			if (!reaction) {
+				return null;
+			}
+			const executedReaction = isInherited ? parentReaction!.reaction : reaction;
+			const getInfo = (commandNode: Node, openOptions: boolean, isNewCommand?: boolean): PlayCommandInfo => ({
+				node: commandNode,
+				reaction: executedReaction,
+				stateID: state.id,
+				openOptions,
+				isNewCommand,
+			});
+			return (
+				<Flex key={`${index}-${isInherited}`} column one>
+					<TreeCommands
+						list={
+							isInherited
+								? parentReaction!.reaction.commands.map((command) => command.clone())
+								: reaction.commands
+						}
+						disabled={isInherited}
+						onListUpdated={() => markReactionTouched(reaction)}
+						onPlayCommand={
+							onPlayCommand
+								? (commandNode: Node, openOptions: boolean) =>
+										onPlayCommand(getInfo(commandNode, openOptions))
+								: undefined
+						}
+						onSelectCommand={
+							onSelectCommand
+								? (commandNode: Node | null) =>
+										onSelectCommand(commandNode ? getInfo(commandNode, false) : null)
+								: undefined
+						}
+						onLivePreviewCommand={
+							onLivePreviewCommand
+								? (commandNode: Node, command: Model.MapObjectCommand | null, isNew: boolean) =>
+										onLivePreviewCommand(getInfo(commandNode, false, isNew), command)
+								: undefined
+						}
+					/>
+				</Flex>
+			);
 		};
 
 		const updateReactionsTab = (nodes: Node[], state: Model.MapObjectState | null) => {
 			if (state) {
 				setTabTitles(nodes.map((node) => node.content));
+				setTabTitleSuffixes(
+					nodes.map((node) => getReactionTabSuffix(node.content as Model.MapObjectEvent, state, nodes)),
+				);
 				setTabContents(
-					nodes.map((node) => {
-						const event = node.content as Model.MapObjectEvent;
-						const reaction = event.reactions?.get('' + state.id);
-						return reaction ? (
-							<TreeCommands
-								key={node.content.id}
-								list={reaction.commands}
-								onListUpdated={handleUpdateEvents}
-								onPlayCommand={
-									onPlayCommand
-										? (commandNode: Node, openOptions: boolean) =>
-												onPlayCommand({
-													node: commandNode,
-													reaction,
-													stateID: state.id,
-													openOptions,
-												})
-										: undefined
-								}
-								onSelectCommand={
-									onSelectCommand
-										? (commandNode: Node | null) =>
-												onSelectCommand(
-													commandNode
-														? {
-																node: commandNode,
-																reaction,
-																stateID: state.id,
-																openOptions: false,
-															}
-														: null,
-												)
-										: undefined
-								}
-								onLivePreviewCommand={
-									onLivePreviewCommand
-										? (commandNode: Node, command: Model.MapObjectCommand | null, isNew: boolean) =>
-												onLivePreviewCommand(
-													{
-														node: commandNode,
-														reaction,
-														stateID: state.id,
-														openOptions: false,
-														isNewCommand: isNew,
-													},
-													command,
-												)
-										: undefined
-								}
-							/>
-						) : null;
-					}),
+					nodes.map((node, index) =>
+						renderReaction(node.content as Model.MapObjectEvent, state, nodes, index),
+					),
 				);
 			}
 		};
@@ -317,10 +586,14 @@ const PanelMapObject = forwardRef(
 		const handleChangeBlockingHero = (b: boolean) => {
 			setBlockingHero(b);
 			if (selectedEvent && selectedState) {
-				const reaction = selectedEvent.reactions?.get('' + selectedState.id);
+				const { reaction, parentReaction, isInherited } = getReactionInfo(selectedEvent, selectedState);
 				if (reaction) {
+					if (isInherited) {
+						handleOverrideReaction(reaction, parentReaction!.reaction, events, selectedState);
+					}
 					reaction.blockingHero = b;
-					handleUpdateEvents();
+					setBlockingHero(b);
+					markReactionTouched(reaction);
 				}
 			}
 		};
@@ -335,7 +608,9 @@ const PanelMapObject = forwardRef(
 			const state = node && node.content.id !== -1 ? (node.content as Model.MapObjectState) : null;
 			handleChangeState(state);
 			if (state) {
-				setBlockingHero(selectedEvent?.reactions?.get?.('' + state.id)?.blockingHero ?? false);
+				setBlockingHero(
+					(selectedEvent ? getDisplayedReaction(selectedEvent, state)?.blockingHero : false) ?? false,
+				);
 			}
 		};
 
@@ -348,14 +623,14 @@ const PanelMapObject = forwardRef(
 				const reaction = new Model.MapObjectReaction();
 				reaction.commands = [];
 				reaction.blockingHero = true;
+				reaction.inherit = true;
 				event.reactions.set(id, reaction);
 				handleUpdateEvents();
 			}
 		};
 
 		const handleEventListUpdated = () => {
-			updateReactionsTab(events, selectedState);
-			handleUpdateEvents();
+			resync(states, events, properties);
 		};
 
 		const handleCreateEvent = (node: Node) => {
@@ -367,6 +642,7 @@ const PanelMapObject = forwardRef(
 				const reaction = new Model.MapObjectReaction();
 				reaction.commands = [];
 				reaction.blockingHero = true;
+				reaction.inherit = true;
 				reactions.set(id, reaction);
 			}
 		};
@@ -375,7 +651,9 @@ const PanelMapObject = forwardRef(
 			const event = (node?.content as Model.MapObjectEvent) ?? null;
 			setSelectedEvent(event);
 			if (event) {
-				setBlockingHero(event.reactions?.get?.('' + selectedState?.id)?.blockingHero ?? false);
+				setBlockingHero(
+					(selectedState ? getDisplayedReaction(event, selectedState)?.blockingHero : false) ?? false,
+				);
 			}
 			setForcedCurrentIndexTab(node ? events.indexOf(node) : -1);
 			Project.current!.currentMapObjectParameters = event?.parameters ?? [];
@@ -418,6 +696,7 @@ const PanelMapObject = forwardRef(
 				graphicsKind: kind,
 			});
 			selectedState!.graphicsKind = kind;
+			markTouched(STATE_OVERRIDE_GROUP.GRAPHICS);
 			handleUpdateStates();
 			onUpdateStateGraphics?.(selectedState!);
 		};
@@ -431,6 +710,7 @@ const PanelMapObject = forwardRef(
 			selectedState!.graphicsIndexX = isTileset ? 0 : rect.x;
 			selectedState!.graphicsIndexY = isTileset ? 0 : rect.y;
 			selectedState!.rectTileset = isTileset ? rect.clone() : undefined;
+			markTouched(STATE_OVERRIDE_GROUP.GRAPHICS);
 			setGraphicOptions({
 				graphicsKind: kind,
 				graphicsID: id,
@@ -449,6 +729,7 @@ const PanelMapObject = forwardRef(
 				selectedState!.eventCommandRoute = null;
 				setEventCommandRoute(null);
 			}
+			markTouched(STATE_OVERRIDE_GROUP.MOVING);
 			handleUpdateStates();
 		};
 
@@ -459,30 +740,35 @@ const PanelMapObject = forwardRef(
 		const handleAcceptEditRoute = (command: Model.MapObjectCommand) => {
 			selectedState!.eventCommandRoute = command;
 			setEventCommandRoute(command);
+			markTouched(STATE_OVERRIDE_GROUP.MOVING);
 			handleUpdateStates();
 		};
 
 		const handleChangeSpeedID = (speedID: number) => {
 			setSpeedID(speedID);
 			selectedState!.speedID = speedID;
+			markTouched(STATE_OVERRIDE_GROUP.MOVING);
 			handleUpdateStates();
 		};
 
 		const handleChangeFrequencyID = (frequencyID: number) => {
 			setFrequencyID(frequencyID);
 			selectedState!.frequencyID = frequencyID;
+			markTouched(STATE_OVERRIDE_GROUP.MOVING);
 			handleUpdateStates();
 		};
 
 		const handleChangeMoveAnimation = (moveAnimation: boolean) => {
 			setMoveAnimation(moveAnimation);
 			selectedState!.moveAnimation = moveAnimation;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 		};
 
 		const handleChangeStopAnimation = (stopAnimation: boolean) => {
 			setStopAnimation(stopAnimation);
 			selectedState!.stopAnimation = stopAnimation;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 			onUpdateStateGraphics?.(selectedState!);
 		};
@@ -490,24 +776,28 @@ const PanelMapObject = forwardRef(
 		const handleChangeClimbAnimation = (climbAnimation: boolean) => {
 			setClimbAnimation(climbAnimation);
 			selectedState!.climbAnimation = climbAnimation;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 		};
 
 		const handleChangeDirectionFix = (directionFix: boolean) => {
 			setDirectionFix(directionFix);
 			selectedState!.directionFix = directionFix;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 		};
 
 		const handleChangeThrough = (through: boolean) => {
 			setThrough(through);
 			selectedState!.through = through;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 		};
 
 		const handleChangeSetWithCamera = (setWithCamera: boolean) => {
 			setSetWithCamera(setWithCamera);
 			selectedState!.setWithCamera = setWithCamera;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 			onUpdateStateGraphics?.(selectedState!);
 		};
@@ -515,6 +805,7 @@ const PanelMapObject = forwardRef(
 		const handleChangePixelOffset = (pixelOffset: boolean) => {
 			setPixelOffset(pixelOffset);
 			selectedState!.pixelOffset = pixelOffset;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 			onUpdateStateGraphics?.(selectedState!);
 		};
@@ -522,6 +813,7 @@ const PanelMapObject = forwardRef(
 		const handleChangeKeepPosition = (keepPosition: boolean) => {
 			setKeepPosition(keepPosition);
 			selectedState!.keepPosition = keepPosition;
+			markTouched(STATE_OVERRIDE_GROUP.OPTIONS);
 			handleUpdateStates();
 		};
 
@@ -531,6 +823,7 @@ const PanelMapObject = forwardRef(
 			} else {
 				selectedState!.eventCommandDetection = null;
 				setEventCommandDetection(null);
+				markTouched(STATE_OVERRIDE_GROUP.DETECTION);
 				handleUpdateStates();
 			}
 		};
@@ -538,6 +831,7 @@ const PanelMapObject = forwardRef(
 		const handleAcceptDetection = (command: Model.MapObjectCommand) => {
 			selectedState!.eventCommandDetection = command;
 			setEventCommandDetection(command);
+			markTouched(STATE_OVERRIDE_GROUP.DETECTION);
 			handleUpdateStates();
 		};
 
@@ -563,9 +857,20 @@ const PanelMapObject = forwardRef(
 			object.name = statesRef.current.name;
 			object.commonModelID = statesRef.current.modelID;
 			object.onlyOneEventPerFrame = statesRef.current.onlyOneEventPerFrame;
-			object.states = Node.createListFromNodes(statesRef.current.states);
-			object.events = Node.createListFromNodes(statesRef.current.events);
-			object.properties = Node.createListFromNodes(statesRef.current.properties);
+			object.onlyOneEventPerFrameOverride = statesRef.current.onlyOneEventPerFrameOverride;
+			const parent = ModelInheritance.resolveModel(statesRef.current.modelID);
+			object.states = ModelInheritance.getOwnStatesForSave(
+				Node.createListFromNodes(statesRef.current.states),
+				parent,
+			);
+			object.events = ModelInheritance.getOwnEventsForSave(
+				Node.createListFromNodes(statesRef.current.events),
+				parent,
+			);
+			object.properties = ModelInheritance.getOwnPropertiesForSave(
+				Node.createListFromNodes(statesRef.current.properties),
+				parent,
+			);
 		};
 
 		const getEditedObject = () => {
@@ -573,6 +878,7 @@ const PanelMapObject = forwardRef(
 			editedObject.name = statesRef.current.name;
 			editedObject.commonModelID = statesRef.current.modelID;
 			editedObject.onlyOneEventPerFrame = statesRef.current.onlyOneEventPerFrame;
+			editedObject.onlyOneEventPerFrameOverride = statesRef.current.onlyOneEventPerFrameOverride;
 			editedObject.states = Node.createListFromNodes(statesRef.current.states);
 			editedObject.events = Node.createListFromNodes(statesRef.current.events);
 			editedObject.properties = Node.createListFromNodes(statesRef.current.properties);
@@ -591,11 +897,12 @@ const PanelMapObject = forwardRef(
 				name,
 				modelID,
 				onlyOneEventPerFrame,
+				onlyOneEventPerFrameOverride,
 				states,
 				events,
 				properties,
 			};
-		}, [name, modelID, onlyOneEventPerFrame, states, events, properties]);
+		}, [name, modelID, onlyOneEventPerFrame, onlyOneEventPerFrameOverride, states, events, properties]);
 
 		useEffect(() => {
 			initialize();
@@ -605,6 +912,74 @@ const PanelMapObject = forwardRef(
 				};
 			}
 		}, []);
+
+		const parent = getParent();
+		const parentID = getParentID();
+		const selectedParentState = selectedState ? ModelInheritance.findParentState(selectedState, parent) : null;
+		const selectedStateSourceName =
+			selectedState && selectedParentState
+				? getModelName(ModelInheritance.getStateSourceID(selectedState, parent, parentID))
+				: '';
+
+		const isGroupInherited = (group: STATE_OVERRIDE_GROUP) =>
+			!!selectedParentState && !!selectedState && !selectedState.isOverridden(group);
+
+		const getGroupClassName = (group: STATE_OVERRIDE_GROUP) =>
+			Utils.getClassName({ inheritedValues: isGroupInherited(group) });
+
+		const renderGroupIndicator = (group: STATE_OVERRIDE_GROUP) =>
+			selectedState && selectedParentState ? (
+				<OverrideIndicator
+					isOverridden={selectedState.isOverridden(group)}
+					sourceName={selectedStateSourceName}
+					onRevert={() => handleRevertGroup(group)}
+				/>
+			) : null;
+
+		const getStateText = (node: Node): ReactNode => {
+			if (!parent || !(node.content instanceof Model.MapObjectState)) {
+				return undefined;
+			}
+			const state = node.content as Model.MapObjectState;
+			return (
+				<InheritanceText
+					text={node.toString()}
+					origin={ModelInheritance.getStateOrigin(state, parent)}
+					sourceName={getModelName(ModelInheritance.getStateSourceID(state, parent, parentID))}
+				/>
+			);
+		};
+
+		const getEventText = (node: Node): ReactNode => {
+			if (!parent || !(node.content instanceof Model.MapObjectEvent)) {
+				return undefined;
+			}
+			const event = node.content as Model.MapObjectEvent;
+			return (
+				<InheritanceText
+					text={node.toString()}
+					origin={ModelInheritance.getEventOrigin(event, parent)}
+					sourceName={getModelName(ModelInheritance.getEventSourceID(event, parent, parentID))}
+				/>
+			);
+		};
+
+		const getPropertyText = (node: Node): ReactNode => {
+			if (!(node.content instanceof Model.MapObjectProperty)) {
+				return undefined;
+			}
+			const property = node.content as Model.MapObjectProperty;
+			if (!parent) {
+				return property.toStringWithInitialValue();
+			}
+			return (
+				<InheritanceText
+					text={property.toStringWithInitialValue()}
+					origin={ModelInheritance.getPropertyOrigin(property, parent)}
+					sourceName={getModelName(ModelInheritance.getPropertySourceID(property, parent, parentID))}
+				/>
+			);
+		};
 
 		return (
 			<>
@@ -640,6 +1015,7 @@ const PanelMapObject = forwardRef(
 								<Tab
 									titles={tabTitles}
 									setTitles={setTabTitles}
+									titleSuffixes={tabTitleSuffixes}
 									contents={tabContents}
 									setContents={setTabContents}
 									forcedCurrentIndex={forcedCurrentIndexTab}
@@ -647,6 +1023,12 @@ const PanelMapObject = forwardRef(
 									onCurrentIndexChanged={handleCurrentIndexTabChanged}
 								/>
 								<Checkbox
+									className={Utils.getClassName({
+										inheritedValues:
+											!!selectedEvent &&
+											!!selectedState &&
+											getReactionInfo(selectedEvent, selectedState).isInherited,
+									})}
 									isChecked={blockingHero}
 									onChange={handleChangeBlockingHero}
 									title={t('tooltip.block.hero.during.reaction')}
@@ -658,14 +1040,28 @@ const PanelMapObject = forwardRef(
 						<Flex column spaced>
 							<Flex columnMobile one spacedLarge>
 								<Flex column one spaced>
-									{t('states')}:
+									<Flex centerV spaced>
+										{t('states')}:
+										<Flex one />
+										{selectedState && selectedParentState && (
+											<Button
+												small
+												icon={<FaUndo />}
+												disabled={selectedState.overrides.length === 0}
+												onClick={handleRevertState}
+												title={t('revert.all.to.model')}
+											/>
+										)}
+									</Flex>
 									<Flex one zeroHeight>
 										<Tree
 											constructorType={Model.MapObjectState}
 											list={states}
+											getText={getStateText}
+											canDelete={canDeleteState}
 											onSelectedItem={handleSelectedItemState}
 											onCreateItem={handleCreateState}
-											onListUpdated={handleUpdateStates}
+											onListUpdated={handleStatesListUpdated}
 											onPasteItem={handlePasteState}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
@@ -682,9 +1078,8 @@ const PanelMapObject = forwardRef(
 										<Tree
 											list={properties}
 											constructorType={Model.MapObjectProperty}
-											getText={(node) =>
-												(node.content as Model.MapObjectProperty).toStringWithInitialValue()
-											}
+											getText={getPropertyText}
+											canDelete={canDeleteProperty}
 											minWidth={TREES_MIN_WIDTH}
 											onListUpdated={handleUpdateProperties}
 											cannotUpdateListSize
@@ -699,6 +1094,8 @@ const PanelMapObject = forwardRef(
 									<Tree
 										constructorType={Model.MapObjectEvent}
 										list={events}
+										getText={getEventText}
+										canDelete={canDeleteEvent}
 										onSelectedItem={handleSelectedItemEvent}
 										onListUpdated={handleEventListUpdated}
 										onCreateItem={handleCreateEvent}
@@ -714,57 +1111,78 @@ const PanelMapObject = forwardRef(
 							</Flex>
 							{!hideStateValues && selectedState && (
 								<Flex spaced>
-									<GraphicsSelector
-										sceneID='dialog-map-object'
-										options={graphicOptions}
-										onChangeGraphicsKind={handleChangeGraphicsKind}
-										onUpdateGraphics={handleUpdateGraphics}
-									/>
+									<Flex column spaced>
+										<Flex one className={getGroupClassName(STATE_OVERRIDE_GROUP.GRAPHICS)}>
+											<GraphicsSelector
+												sceneID='dialog-map-object'
+												options={graphicOptions}
+												titleSuffix={renderGroupIndicator(STATE_OVERRIDE_GROUP.GRAPHICS)}
+												onChangeGraphicsKind={handleChangeGraphicsKind}
+												onUpdateGraphics={handleUpdateGraphics}
+											/>
+										</Flex>
+									</Flex>
 									<Flex column one spaced>
-										<Groupbox title={t('moving')}>
-											<Form>
-												<Label>{t('type')}</Label>
-												<Value>
-													<Dropdown
-														selectedID={objectMovingKind}
-														onChange={handleChangeObjectMovingKind}
-														options={Model.Base.OBJECT_MOVING_OPTIONS}
-														translateOptions
-														fillWidth
-													/>
-												</Value>
-												<td />
-												<Value>
-													<Button
-														disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
-														onClick={handleClickEditRoute}
-													>
-														{t('edit.route')}...
-													</Button>
-												</Value>
-												<Label>{t('speed')}</Label>
-												<Value>
-													<Dropdown
-														selectedID={speedID}
-														onChange={handleChangeSpeedID}
-														options={Project.current!.systems.speeds}
-														fillWidth
-													/>
-												</Value>
-												<Label>{t('frequency')}</Label>
-												<Value>
-													<Dropdown
-														selectedID={frequencyID}
-														onChange={handleChangeFrequencyID}
-														options={Project.current!.systems.frequencies}
-														fillWidth
-													/>
-												</Value>
-											</Form>
+										<Groupbox
+											title={
+												<Flex centerV spaced>
+													{t('moving')}
+													{renderGroupIndicator(STATE_OVERRIDE_GROUP.MOVING)}
+												</Flex>
+											}
+										>
+											<div className={getGroupClassName(STATE_OVERRIDE_GROUP.MOVING)}>
+												<Form>
+													<Label>{t('type')}</Label>
+													<Value>
+														<Dropdown
+															selectedID={objectMovingKind}
+															onChange={handleChangeObjectMovingKind}
+															options={Model.Base.OBJECT_MOVING_OPTIONS}
+															translateOptions
+															fillWidth
+														/>
+													</Value>
+													<td />
+													<Value>
+														<Button
+															disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
+															onClick={handleClickEditRoute}
+														>
+															{t('edit.route')}...
+														</Button>
+													</Value>
+													<Label>{t('speed')}</Label>
+													<Value>
+														<Dropdown
+															selectedID={speedID}
+															onChange={handleChangeSpeedID}
+															options={Project.current!.systems.speeds}
+															fillWidth
+														/>
+													</Value>
+													<Label>{t('frequency')}</Label>
+													<Value>
+														<Dropdown
+															selectedID={frequencyID}
+															onChange={handleChangeFrequencyID}
+															options={Project.current!.systems.frequencies}
+															fillWidth
+														/>
+													</Value>
+												</Form>
+											</div>
 										</Groupbox>
-										<Button onClick={handleClickUpdateTransformations}>
-											{t('update.transformations')}...
-										</Button>
+										<Flex centerV spaced>
+											<Button
+												fillWidth
+												className={getGroupClassName(STATE_OVERRIDE_GROUP.TRANSFORM)}
+												onClick={handleClickUpdateTransformations}
+											>
+												{t('update.transformations')}...
+											</Button>
+											{renderGroupIndicator(STATE_OVERRIDE_GROUP.TRANSFORM)}
+										</Flex>
 									</Flex>
 								</Flex>
 							)}
@@ -782,10 +1200,11 @@ const PanelMapObject = forwardRef(
 												) : (
 													<span>({lights.length})</span>
 												)}
+												{renderGroupIndicator(STATE_OVERRIDE_GROUP.LIGHTS)}
 											</Flex>
 										}
 									>
-										<Flex one>
+										<Flex one className={getGroupClassName(STATE_OVERRIDE_GROUP.LIGHTS)}>
 											<Tree
 												list={lights}
 												constructorType={Model.MapObjectLight}
@@ -798,12 +1217,17 @@ const PanelMapObject = forwardRef(
 										</Flex>
 									</Groupbox>
 									<Groupbox
-										title={t('options')}
+										title={
+											<Flex centerV spaced>
+												{t('options')}
+												{renderGroupIndicator(STATE_OVERRIDE_GROUP.OPTIONS)}
+											</Flex>
+										}
 										canExpand
 										initialClose={!Project.current!.settings.mapObjectOptionsOpened}
 										onChangeOpen={handleChangeOptionsOpened}
 									>
-										<Flex spacedLarge>
+										<Flex spacedLarge className={getGroupClassName(STATE_OVERRIDE_GROUP.OPTIONS)}>
 											<Flex column>
 												<Checkbox
 													isChecked={moveAnimation}
@@ -853,22 +1277,41 @@ const PanelMapObject = forwardRef(
 					</Flex>
 					<Flex spacedLarge>
 						<Flex columnMobile one spaced>
-							<Checkbox
-								isChecked={onlyOneEventPerFrame}
-								onChange={handleChangeOnlyOneEventPerFrame}
-								title={t('tooltip.only.one.event.per.frame')}
-							>
-								{t('only.one.event.per.frame')}
-							</Checkbox>
+							<Flex centerV spaced>
+								<Checkbox
+									className={Utils.getClassName({
+										inheritedValues: !!parent && !onlyOneEventPerFrameOverride,
+									})}
+									isChecked={
+										parent && !onlyOneEventPerFrameOverride
+											? parent.onlyOneEventPerFrame
+											: onlyOneEventPerFrame
+									}
+									onChange={handleChangeOnlyOneEventPerFrame}
+									title={t('tooltip.only.one.event.per.frame')}
+								>
+									{t('only.one.event.per.frame')}
+								</Checkbox>
+								{parent && (
+									<OverrideIndicator
+										isOverridden={onlyOneEventPerFrameOverride}
+										sourceName={getModelName(parentID)}
+										onRevert={handleRevertOnlyOneEventPerFrame}
+									/>
+								)}
+							</Flex>
 						</Flex>
 						{!hideStateValues && selectedState && (
 							<Flex centerV spaced>
-								<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
-									{t('detection')}
-								</Checkbox>
-								<Button disabled={eventCommandDetection === null} onClick={handleClickDetection}>
-									...
-								</Button>
+								<Flex centerV spaced className={getGroupClassName(STATE_OVERRIDE_GROUP.DETECTION)}>
+									<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
+										{t('detection')}
+									</Checkbox>
+									<Button disabled={eventCommandDetection === null} onClick={handleClickDetection}>
+										...
+									</Button>
+								</Flex>
+								{renderGroupIndicator(STATE_OVERRIDE_GROUP.DETECTION)}
 							</Flex>
 						)}
 					</Flex>
@@ -904,7 +1347,10 @@ const PanelMapObject = forwardRef(
 						scaleZ={selectedState.scaleZ}
 						opacity={selectedState.opacity}
 						layer={selectedState.layer}
-						onAccept={handleUpdateStates}
+						onAccept={() => {
+							markTouched(STATE_OVERRIDE_GROUP.TRANSFORM);
+							handleUpdateStates();
+						}}
 						onLiveChange={() => {
 							handleUpdateStates();
 							onUpdateStateGraphics?.(selectedState);

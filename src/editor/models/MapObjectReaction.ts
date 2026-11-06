@@ -18,6 +18,7 @@ import { MapObjectCommand } from './MapObjectCommand';
 class MapObjectReaction extends Base {
 	public commands!: Node[];
 	public blockingHero!: boolean;
+	public inherit = false;
 
 	public static bindings: BindingType[] = [['blockingHero', 'bh', undefined, BINDING.BOOLEAN]];
 
@@ -28,15 +29,18 @@ class MapObjectReaction extends Base {
 	applyDefault(additionnalBinding: BindingType[] = []) {
 		super.applyDefault(MapObjectReaction.getBindings(additionnalBinding));
 		this.commands = [];
+		this.inherit = false;
 	}
 
 	copy(reaction: MapObjectReaction, additionnalBinding: BindingType[] = []): void {
 		super.copy(reaction, MapObjectReaction.getBindings(additionnalBinding));
 		this.commands = reaction.commands.map((command) => command.clone());
+		this.inherit = reaction.inherit;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectReaction.getBindings(additionnalBinding));
+		this.inherit = json.inh === true;
 		this.commands = (json.c as JSONType[]).map((jsonNode) => {
 			const node = new Node();
 			node.read(jsonNode, [], MapObjectCommand);
@@ -51,6 +55,9 @@ class MapObjectReaction extends Base {
 			node.write(nodeJson);
 			return nodeJson;
 		});
+		if (this.inherit) {
+			json.inh = true;
+		}
 	}
 }
 

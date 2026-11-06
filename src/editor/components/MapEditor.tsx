@@ -277,6 +277,7 @@ function MapEditor() {
 
 	const handleNewMapObject = async () => {
 		const mapObject = Project.current!.commonEvents.defaultObject.clone();
+		mapObject.resetInheritanceFlags();
 		const id = Model.Base.generateNewIDfromList(Scene.Map.current!.model.objects);
 		mapObject.id = id;
 		mapObject.name = Model.CommonObject.generateName(id);

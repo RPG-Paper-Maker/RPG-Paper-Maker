@@ -2060,5 +2060,18 @@
 	"light.angle.softness": "Kąt / miękkość",
 	"error.dialog.outdated": "Używasz wersji {{currentVersion}}, ale dostępna jest wersja {{latestVersion}}. Zaktualizuj RPG Paper Maker przed zgłoszeniem tego błędu. Kliknij OK, aby mimo to wysłać raport.",
 	"variable.usages.map.path": "\u015acie\u017cka mapy",
-	"variable.usages.object.name": "Nazwa obiektu"
+	"variable.usages.object.name": "Nazwa obiektu",
+	"variable.usages": "Użycia zmiennej",
+	"find.variable.usages": "Znajdź użycia",
+	"no.variable.usages": "Nie znaleziono użyć.",
+	"variable.usages.error": "Nie można wyszukać użyć zmiennej.",
+	"searching": "Wyszukiwanie...",
+	"variables.save.error": "Nie można zapisać zmiennych.",
+	"from.model": "Z modelu {{model}}",
+	"overrides.model": "Zastępuje model {{model}}",
+	"partially.overrides.model": "Częściowo zastępuje model {{model}}",
+	"revert.to.model": "Przywróć model",
+	"revert.all.to.model": "Przywróć wszystko z modelu",
+	"replaces.model.reaction": "Zastępuje reakcję modelu {{model}}",
+	"override": "Zastąp model"
 }

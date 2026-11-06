@@ -2066,5 +2066,12 @@
 	"variable.usages.map.path": "Chemin de la carte",
 	"variable.usages.object.name": "Nom de l'objet",
 	"searching": "Recherche en cours...",
-	"variables.save.error": "Impossible d'enregistrer les variables."
+	"variables.save.error": "Impossible d'enregistrer les variables.",
+	"from.model": "Depuis le modèle {{model}}",
+	"overrides.model": "Remplace le modèle {{model}}",
+	"partially.overrides.model": "Remplace partiellement le modèle {{model}}",
+	"revert.to.model": "Revenir au modèle",
+	"revert.all.to.model": "Tout revenir au modèle",
+	"replaces.model.reaction": "Remplace la réaction du modèle {{model}}",
+	"override": "Remplacer le modèle"
 }

@@ -10,7 +10,15 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, DYNAMIC_VALUE_KIND, ELEMENT_MAP_KIND, JSONType, OBJECT_MOVING_KIND } from '../common';
+import {
+	BINDING,
+	Constants,
+	DYNAMIC_VALUE_KIND,
+	ELEMENT_MAP_KIND,
+	JSONType,
+	OBJECT_MOVING_KIND,
+	STATE_OVERRIDE_GROUP,
+} from '../common';
 import DialogMapObjectState from '../components/dialogs/models/DialogMapObjectState';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
@@ -51,6 +59,7 @@ class MapObjectState extends Base {
 	public scaleZ!: DynamicValue;
 	public opacity!: DynamicValue;
 	public lights!: MapObjectLight[];
+	public overrides: STATE_OVERRIDE_GROUP[] = [...Constants.ALL_STATE_OVERRIDE_GROUPS];
 
 	public static bindings: BindingType[] = [
 		['graphicsKind', 'gk', undefined, BINDING.NUMBER],
@@ -151,6 +160,7 @@ class MapObjectState extends Base {
 
 	applyDefault(additionnalBinding: BindingType[] = []) {
 		super.applyDefault(MapObjectState.getBindings(additionnalBinding));
+		this.overrides = [];
 	}
 
 	initialize() {
@@ -162,6 +172,21 @@ class MapObjectState extends Base {
 			this.id = id;
 			this.name = name;
 		}
+		this.overrides = [];
+	}
+
+	isOverridden(group: STATE_OVERRIDE_GROUP): boolean {
+		return this.overrides.includes(group);
+	}
+
+	addOverride(group: STATE_OVERRIDE_GROUP) {
+		if (!this.isOverridden(group)) {
+			this.overrides.push(group);
+		}
+	}
+
+	removeOverride(group: STATE_OVERRIDE_GROUP) {
+		this.overrides = this.overrides.filter((g) => g !== group);
 	}
 
 	getCommonState(): Base | null {
@@ -178,14 +203,19 @@ class MapObjectState extends Base {
 
 	copy(state: MapObjectState, additionnalBinding: BindingType[] = []): void {
 		super.copy(state, MapObjectState.getBindings(additionnalBinding));
+		this.overrides = [...state.overrides];
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectState.getBindings(additionnalBinding));
+		this.overrides = Array.isArray(json.ov)
+			? (json.ov as STATE_OVERRIDE_GROUP[]).filter((group) => Constants.ALL_STATE_OVERRIDE_GROUPS.includes(group))
+			: [...Constants.ALL_STATE_OVERRIDE_GROUPS];
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapObjectState.getBindings(additionnalBinding));
+		json.ov = [...this.overrides];
 	}
 }
 

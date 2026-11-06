@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { STATE_OVERRIDE_GROUP } from './Enum';
+
 class Constants {
 	public static readonly NUMBER = 'number';
 	public static readonly STRING = 'string';
@@ -31,6 +33,15 @@ class Constants {
 	public static IS_MOBILE = false;
 	public static IS_DESKTOP = false;
 	public static USER_LOCALE = '';
+	public static readonly STATE_GROUP_KEYS: Record<STATE_OVERRIDE_GROUP, string[]> = {
+		[STATE_OVERRIDE_GROUP.GRAPHICS]: ['gk', 'gid', 'x', 'y', 'rt'],
+		[STATE_OVERRIDE_GROUP.MOVING]: ['omk', 'ecr', 's', 'f'],
+		[STATE_OVERRIDE_GROUP.OPTIONS]: ['move', 'stop', 'climb', 'dir', 'through', 'cam', 'pix', 'pos'],
+		[STATE_OVERRIDE_GROUP.TRANSFORM]: ['layer', 'cx', 'cz', 'ax', 'ay', 'az', 'sx', 'sy', 'sz', 'o'],
+		[STATE_OVERRIDE_GROUP.LIGHTS]: ['l'],
+		[STATE_OVERRIDE_GROUP.DETECTION]: ['ecd'],
+	};
+	public static readonly ALL_STATE_OVERRIDE_GROUPS = Object.values(STATE_OVERRIDE_GROUP);
 }
 
 export { Constants };

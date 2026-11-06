@@ -264,6 +264,39 @@ class DynamicValue extends Serializable {
 		return this.kind === dynamic.kind && this.value === dynamic.value;
 	}
 
+	isSameDefinition(dynamic: DynamicValue | null | undefined): boolean {
+		if (!dynamic) {
+			return false;
+		}
+		if (this === dynamic) {
+			return true;
+		}
+		if (this.kind !== dynamic.kind || JSON.stringify(this.value) !== JSON.stringify(dynamic.value)) {
+			return false;
+		}
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST: {
+				const structure = this.kind === DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE ? 'customStructure' : 'customList';
+				const json: JSONType = {};
+				const otherJson: JSONType = {};
+				this[structure]?.write(json);
+				dynamic[structure]?.write(otherJson);
+				return JSON.stringify(json) === JSON.stringify(otherJson);
+			}
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+				return this.x.isSameDefinition(dynamic.x) && this.y.isSameDefinition(dynamic.y);
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				return (
+					this.x.isSameDefinition(dynamic.x) &&
+					this.y.isSameDefinition(dynamic.y) &&
+					this.z.isSameDefinition(dynamic.z)
+				);
+			default:
+				return true;
+		}
+	}
+
 	isFixNumberValue(): boolean {
 		return [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL].includes(
 			this.kind,
@@ -276,9 +309,7 @@ class DynamicValue extends Serializable {
 		}
 		if (this.kind === DYNAMIC_VALUE_KIND.VARIABLE) {
 			const variable = Project.current?.variables.getVariableByID(this.value as number) as
-				| Model.Variable
-				| null
-				| undefined;
+				Model.Variable | null | undefined;
 			const value = variable?.defaultValue;
 			return typeof value === 'number' ? value : 1;
 		}

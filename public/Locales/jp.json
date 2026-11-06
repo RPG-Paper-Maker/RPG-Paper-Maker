@@ -2060,5 +2060,18 @@
 	"light.angle.softness": "角度 / 柔らかさ",
 	"error.dialog.outdated": "バージョン {{currentVersion}} を使用中ですが、バージョン {{latestVersion}} が利用できます。このエラーを報告する前に RPG Paper Maker を更新してください。OK をクリックすると、それでもレポートを送信できます。",
 	"variable.usages.map.path": "\u30de\u30c3\u30d7\u306e\u30d1\u30b9",
-	"variable.usages.object.name": "\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u540d"
+	"variable.usages.object.name": "\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u540d",
+	"variable.usages": "変数の使用箇所",
+	"find.variable.usages": "使用箇所を検索",
+	"no.variable.usages": "使用箇所が見つかりません。",
+	"variable.usages.error": "変数の使用箇所を検索できませんでした。",
+	"searching": "検索中...",
+	"variables.save.error": "変数を保存できませんでした。",
+	"from.model": "モデル {{model}} から",
+	"overrides.model": "モデル {{model}} を上書き",
+	"partially.overrides.model": "モデル {{model}} を部分的に上書き",
+	"revert.to.model": "モデルに戻す",
+	"revert.all.to.model": "すべてモデルに戻す",
+	"replaces.model.reaction": "モデル {{model}} の反応を置き換え",
+	"override": "モデルを上書き"
 }

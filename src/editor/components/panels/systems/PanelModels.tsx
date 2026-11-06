@@ -175,6 +175,10 @@ const PanelModels = forwardRef(
 							initialStateID={selectedStateID}
 							ref={panelMapObjectRef}
 							hideNameID
+							isModel={
+								selectedModel !== Project.current!.commonEvents.defaultObject &&
+								selectedModel !== Project.current!.commonEvents.heroObject
+							}
 							saveOnUpdate
 							onPlayCommand={
 								onPlayCommand

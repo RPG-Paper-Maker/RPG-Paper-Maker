@@ -756,3 +756,19 @@ export enum AXIS {
 	Y = 'y',
 	Z = 'z',
 }
+
+export enum STATE_OVERRIDE_GROUP {
+	GRAPHICS = 'graphics',
+	MOVING = 'moving',
+	OPTIONS = 'options',
+	TRANSFORM = 'transform',
+	LIGHTS = 'lights',
+	DETECTION = 'detection',
+}
+
+export enum INHERITANCE_ORIGIN {
+	OWN = 'own',
+	INHERITED = 'inherited',
+	OVERRIDDEN = 'overridden',
+	PARTIAL = 'partial',
+}
