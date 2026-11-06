@@ -45,7 +45,7 @@ enum HOVERED_DIRECTION_TYPE {
 	CENTER,
 }
 
-const COLLISION_OPTIONS = ['praticable', 'directions', 'terrain', 'climbing'];
+const COLLISION_OPTIONS = ['blocking.area', 'floor.directions', 'terrain', 'climbing'];
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
