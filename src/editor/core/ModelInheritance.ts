@@ -277,7 +277,10 @@ class ModelInheritance {
 			};
 		});
 		for (const event of object.events) {
-			const existing = events.find((resolved) => ModelInheritance.isEventMatching(resolved.event, event));
+			const existing = events.find(
+				(resolved) =>
+					resolved.origin !== INHERITANCE_ORIGIN.OWN && ModelInheritance.isEventMatching(resolved.event, event),
+			);
 			if (!existing) {
 				events.push(ModelInheritance.createOwnEvent(event));
 				continue;
