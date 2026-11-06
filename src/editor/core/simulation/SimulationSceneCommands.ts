@@ -124,6 +124,7 @@ type SubMove =
 	| {
 			kind: SUB_MOVE_KIND.STEP;
 			square: boolean;
+			pixels: DynamicValue | null;
 			vector: THREE.Vector3 | null;
 			facing: SIM_ORIENTATION | null;
 			special: 'random' | 'front' | 'back' | 'towardHero' | 'awayFromHero' | null;
@@ -197,36 +198,39 @@ class CommandMoveObject extends CommandBase {
 		while (iterator.i < l) {
 			const kind = command[iterator.i++] as COMMAND_MOVE_KIND;
 			if (kind >= COMMAND_MOVE_KIND.MOVE_NORTH && kind <= COMMAND_MOVE_KIND.MOVE_BACK) {
-				const square = command[iterator.i++] === 0;
+				const squareStep = command[iterator.i++];
+				const square = squareStep === 0;
+				const pixels = squareStep === 2 ? DynamicValue.createCommand(command, iterator) : null;
 				switch (kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
-						this.pushStep(square, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.NORTH], SIM_ORIENTATION.NORTH);
+						this.pushStep(square, pixels, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.NORTH], SIM_ORIENTATION.NORTH);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH:
-						this.pushStep(square, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.SOUTH], SIM_ORIENTATION.SOUTH);
+						this.pushStep(square, pixels, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.SOUTH], SIM_ORIENTATION.SOUTH);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_WEST:
-						this.pushStep(square, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.WEST], SIM_ORIENTATION.WEST);
+						this.pushStep(square, pixels, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.WEST], SIM_ORIENTATION.WEST);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_EAST:
-						this.pushStep(square, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.EAST], SIM_ORIENTATION.EAST);
+						this.pushStep(square, pixels, SIM_ORIENTATION_VECTORS[SIM_ORIENTATION.EAST], SIM_ORIENTATION.EAST);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_NORTH_WEST:
-						this.pushStep(square, new THREE.Vector3(-1, 0, -1), SIM_ORIENTATION.NORTH, true);
+						this.pushStep(square, pixels, new THREE.Vector3(-1, 0, -1), SIM_ORIENTATION.NORTH, true);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_NORTH_EAST:
-						this.pushStep(square, new THREE.Vector3(1, 0, -1), SIM_ORIENTATION.NORTH, true);
+						this.pushStep(square, pixels, new THREE.Vector3(1, 0, -1), SIM_ORIENTATION.NORTH, true);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH_WEST:
-						this.pushStep(square, new THREE.Vector3(-1, 0, 1), SIM_ORIENTATION.SOUTH, true);
+						this.pushStep(square, pixels, new THREE.Vector3(-1, 0, 1), SIM_ORIENTATION.SOUTH, true);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH_EAST:
-						this.pushStep(square, new THREE.Vector3(1, 0, 1), SIM_ORIENTATION.SOUTH, true);
+						this.pushStep(square, pixels, new THREE.Vector3(1, 0, 1), SIM_ORIENTATION.SOUTH, true);
 						break;
 					case COMMAND_MOVE_KIND.MOVE_RANDOM:
 						this.subMoves.push({
 							kind: SUB_MOVE_KIND.STEP,
 							square,
+							pixels,
 							vector: null,
 							facing: null,
 							special: 'random',
@@ -237,6 +241,7 @@ class CommandMoveObject extends CommandBase {
 						this.subMoves.push({
 							kind: SUB_MOVE_KIND.STEP,
 							square,
+							pixels,
 							vector: null,
 							facing: null,
 							special: 'front',
@@ -247,6 +252,7 @@ class CommandMoveObject extends CommandBase {
 						this.subMoves.push({
 							kind: SUB_MOVE_KIND.STEP,
 							square,
+							pixels,
 							vector: null,
 							facing: null,
 							special: 'back',
@@ -257,6 +263,7 @@ class CommandMoveObject extends CommandBase {
 						this.subMoves.push({
 							kind: SUB_MOVE_KIND.STEP,
 							square,
+							pixels,
 							vector: null,
 							facing: null,
 							special: 'towardHero',
@@ -267,6 +274,7 @@ class CommandMoveObject extends CommandBase {
 						this.subMoves.push({
 							kind: SUB_MOVE_KIND.STEP,
 							square,
+							pixels,
 							vector: null,
 							facing: null,
 							special: 'awayFromHero',
@@ -475,8 +483,14 @@ class CommandMoveObject extends CommandBase {
 		this.parallel = !this.isWaitEnd;
 	}
 
-	private pushStep(square: boolean, vector: THREE.Vector3, facing: SIM_ORIENTATION, diagonal = false) {
-		this.subMoves.push({ kind: SUB_MOVE_KIND.STEP, square, vector, facing, special: null, diagonal });
+	private pushStep(
+		square: boolean,
+		pixels: DynamicValue | null,
+		vector: THREE.Vector3,
+		facing: SIM_ORIENTATION,
+		diagonal = false,
+	) {
+		this.subMoves.push({ kind: SUB_MOVE_KIND.STEP, square, pixels, vector, facing, special: null, diagonal });
 	}
 
 	private resolveTarget(ctx: SimulationContext): SimulationObject | null {
@@ -558,6 +572,7 @@ class CommandMoveObject extends CommandBase {
 					}
 					state.from = target.worldPosition.clone();
 					state.vector = vector!.clone();
+					state.target = move.pixels ? ctx.game.resolveNumber(move.pixels) / Project.SQUARE_SIZE : 1;
 					if (facing !== null) {
 						target.setOrientation(facing);
 					}
@@ -565,7 +580,7 @@ class CommandMoveObject extends CommandBase {
 				}
 				const speed = target.speedValue * SPEED_NORMAL * elapsedTime * (move.diagonal ? Math.SQRT1_2 : 1);
 				state.progress = (state.progress as number) + speed;
-				const advance = Math.min(state.progress as number, 1);
+				const advance = Math.min(state.progress as number, state.target as number);
 				const desired = (state.from as THREE.Vector3)
 					.clone()
 					.addScaledVector(state.vector as THREE.Vector3, advance);
@@ -579,7 +594,8 @@ class CommandMoveObject extends CommandBase {
 						)
 					: desired;
 				target.setWorldPosition(next);
-				const done = move.square ? advance >= 1 : elapsedTime > 0;
+				const done =
+					move.square || move.pixels ? advance >= (state.target as number) : elapsedTime > 0;
 				if (done) {
 					target.moveFrequencyTick = target.frequencyValue * 1000;
 				}

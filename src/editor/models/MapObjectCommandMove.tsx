@@ -62,8 +62,14 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.MOVE_HERO:
 			case COMMAND_MOVE_KIND.MOVE_OPPOSITE_HERO:
 			case COMMAND_MOVE_KIND.MOVE_FRONT:
-			case COMMAND_MOVE_KIND.MOVE_BACK:
-				break;
+			case COMMAND_MOVE_KIND.MOVE_BACK: {
+				const start = iterator.i;
+				if (list[iterator.i++] === 2) {
+					DynamicValue.createCommand(list, iterator);
+				}
+				this.command.push(...list.slice(start, iterator.i));
+				return;
+			}
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS:
 				j = 10;
 				break;
@@ -164,7 +170,12 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.MOVE_OPPOSITE_HERO:
 			case COMMAND_MOVE_KIND.MOVE_FRONT:
 			case COMMAND_MOVE_KIND.MOVE_BACK: {
-				const squareStep = t(this.command[iterator.i++] === 0 ? 'square' : 'step');
+				const squareStepKind = this.command[iterator.i++];
+				let pixels: DynamicValue | null = null;
+				if (squareStepKind === 2) {
+					pixels = new DynamicValue();
+					pixels.updateCommand(this.command, iterator);
+				}
 				let direction = '';
 				switch (kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
@@ -207,7 +218,10 @@ class MapObjectCommandMove extends Base {
 						direction = t('back').toLowerCase();
 						break;
 				}
-				str += `${t('move.1')} ${squareStep} ${t('to')} ${direction}`;
+				const amount = pixels
+					? `${t('move.of')} ${pixels.toString()}${t('px')}`
+					: `${t('move.1')} ${t(squareStepKind === 0 ? 'square' : 'step').toLowerCase()}`;
+				str += `${amount} ${t('to').toLowerCase()} ${direction.toLowerCase()}`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.JUMP: {

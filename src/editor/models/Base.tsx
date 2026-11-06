@@ -155,7 +155,7 @@ class Base extends Serializable {
 	public static TRANSITION_DIRECTION_OPTIONS = Base.mapListIndex(['unchanged', 'south', 'west', 'north', 'east']);
 	public static TRANSITION_START_OPTIONS = Base.mapListIndex(['none', 'fade.in', 'zoom.in']);
 	public static TRANSITION_END_OPTIONS = Base.mapListIndex(['none', 'fade.out', 'zoom.out']);
-	public static SQUARE_STEP_OPTIONS = Base.mapListIndex(['square', 'step']);
+	public static SQUARE_STEP_OPTIONS = Base.mapListIndex(['square', 'step', 'pixel.s']);
 	public static SQUARES_PIXELS_OPTIONS = Base.mapListIndex(['square.s', 'pixel.s']);
 	public static TOP_LEFT_CENTER_OPTIONS = Base.mapListIndex(['top.left', 'center']);
 	public static DISPLAY_PICTURE_KIND_OPTIONS = Base.mapListIndex(['picture', 'text']);

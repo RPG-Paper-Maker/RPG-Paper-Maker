@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrayUtils, COMMAND_MOVE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Model, Scene } from '../../../Editor';
+import useLivePreview from '../../../hooks/useLivePreview';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -29,7 +30,6 @@ import Tree from '../../Tree';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
-import useLivePreview from '../../../hooks/useLivePreview';
 import DialogCommandMoveObjectChangeGraphics from './DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from './DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from './DialogCommandMoveObjectJump';
@@ -54,6 +54,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	const [isWaitEnd, setIsWaitEnd] = useStateBool();
 	const [isWithCameraOrientation, setIsWithCameraOrientation] = useStateBool();
 	const [squareStepMoveType, setSquareStepMoveType] = useStateNumber();
+	const [movePixels] = useStateDynamicValue();
 	const [objectOptionsType, setObjectOptionsType] = useStateNumber();
 	const [isPermanent, setIsPermanent] = useStateBool();
 	const [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex] = useState<number | null>(null);
@@ -101,6 +102,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 			setIsWithCameraOrientation(false);
 		}
 		setSquareStepMoveType(0);
+		movePixels.updateToDefaultNumber(1);
 		setObjectOptionsType(0);
 		setIsPermanent(false);
 		setForcedCurrentSelectedItemIndex(0);
@@ -117,6 +119,9 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	const addMoveStepSquare = (kind: COMMAND_MOVE_KIND) => {
 		const command = Model.MapObjectCommandMove.createMove(kind);
 		command.command.push(squareStepMoveType);
+		if (squareStepMoveType === 2) {
+			movePixels.getCommand(command.command);
+		}
 		addCommand(command);
 	};
 
@@ -141,7 +146,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 	};
 
 	const handleAcceptJump = () => {
-		ArrayUtils.insertAt(jump.command, 1, squareStepMoveType);
+		ArrayUtils.insertAt(jump.command, 1, squareStepMoveType === 0 ? 0 : 1);
 		addCommand(jump);
 		setJump(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.JUMP));
 	};
@@ -260,7 +265,7 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 				isOpen
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
-				initialWidth='850px'
+				initialWidth='950px'
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spacedLarge fillWidth>
@@ -365,7 +370,17 @@ function DialogCommandMoveObject({ commandKind, setIsOpen, list, onAccept, onRej
 								</Flex>
 								<Flex column spaced>
 									<div>{t('change.direction')}:</div>
-									<Flex fillSmallSpace />
+									<Flex
+										spaced
+										centerV
+										className={squareStepMoveType === 2 ? undefined : 'visibilityHidden'}
+									>
+										<DynamicValueSelector
+											value={movePixels}
+											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+										/>
+										{t('px')}
+									</Flex>
 									<Button onClick={() => addMoveEmpty(COMMAND_MOVE_KIND.TURN_NORTH)}>
 										{t('turn.north')}
 									</Button>
