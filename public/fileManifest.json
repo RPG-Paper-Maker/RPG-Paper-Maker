@@ -871,6 +871,7 @@
         "CommonReaction.js",
         "CommonSkillItem.js",
         "Cost.js",
+        "Credits.js",
         "Currency.js",
         "Detection.js",
         "DynamicValue.js",
