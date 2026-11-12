@@ -97,6 +97,7 @@
 	"display.choices": "選択肢の表示",
 	"script": "スクリプト",
 	"credits": "クレジット",
+	"credits.options": "クレジットのオプション",
 	"play.credits": "クレジットを再生",
 	"scroll.speed": "スクロール速度（ピクセル/秒）",
 	"display.a.picture": "ピクチャ/テキストの表示",

@@ -19,6 +19,7 @@ export * from './CommonReaction';
 export * from './CommonSkillItem';
 export * from './Cost';
 export * from './CreateParameter';
+export * from './Credits';
 export * from './Currency';
 export * from './CustomStructure';
 export * from './Detection';

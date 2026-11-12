@@ -101,6 +101,7 @@
 	"display.choices": "Display choices",
 	"script": "Script",
 	"credits": "Credits",
+	"credits.options": "Credits options",
 	"play.credits": "Play credits",
 	"scroll.speed": "Scroll speed (pixels/second)",
 	"display.a.picture": "Display a picture/text",

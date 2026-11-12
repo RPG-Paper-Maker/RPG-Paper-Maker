@@ -97,6 +97,7 @@
 	"display.choices": "선택지 표시",
 	"script": "스크립트",
 	"credits": "크레딧",
+	"credits.options": "크레딧 옵션",
 	"play.credits": "크레딧 재생",
 	"scroll.speed": "스크롤 속도(픽셀/초)",
 	"display.a.picture": "이미지/텍스트 표시",

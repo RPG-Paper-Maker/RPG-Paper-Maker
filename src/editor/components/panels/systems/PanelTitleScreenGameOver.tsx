@@ -17,6 +17,7 @@ import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
+import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -24,6 +25,7 @@ import Groupbox from '../../Groupbox';
 import InputNumber from '../../InputNumber';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import Tree from '../../Tree';
+import DialogCredits from '../../dialogs/DialogCredits';
 
 const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const { t } = useTranslation();
@@ -41,6 +43,8 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const [titleCommandsWindowY, setTitleCommandsWindowY] = useStateNumber();
 	const [titleCommands, setTitleCommands] = useState<Node[]>([]);
 	const [settingsConfiguration, setSettingsConfiguration] = useState<Node[]>([]);
+	const [credits, setCredits] = useState<Model.Credits>(new Model.Credits());
+	const [isDialogCreditsOpen, setIsDialogCreditsOpen] = useState(false);
 	const [isGameOverBackgroundImage, setIsGameOverBackgroundImage] = useState<boolean>(true);
 	const [isGameOverBackgroundVideo, setIsGameOverBackgroundVideo] = useState<boolean>(false);
 	const [gameOverBackgroundImageID, setGameOverBackgroundImageID] = useStateNumber();
@@ -62,6 +66,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setTitleCommandsWindowY(titleScreenGameOver.titleCommandsWindowY);
 		setTitleCommands(Node.createList(titleScreenGameOver.titleCommands));
 		setSettingsConfiguration(Node.createList(titleScreenGameOver.titleSettings));
+		setCredits(titleScreenGameOver.credits.clone());
 		setIsGameOverBackgroundImage(titleScreenGameOver.isGameOverBackgroundImage);
 		setIsGameOverBackgroundVideo(titleScreenGameOver.isGameOverBackgroundVideo);
 		setGameOverBackgroundImageID(titleScreenGameOver.gameOverBackgroundImageID);
@@ -85,6 +90,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		titleScreenGameOver.titleCommandsWindowY = titleCommandsWindowY;
 		titleScreenGameOver.titleCommands = Node.createListFromNodes(titleCommands);
 		titleScreenGameOver.titleSettings = Node.createListFromNodes(settingsConfiguration);
+		titleScreenGameOver.credits = credits.clone();
 		titleScreenGameOver.isGameOverBackgroundImage = isGameOverBackgroundImage;
 		titleScreenGameOver.isGameOverBackgroundVideo = isGameOverBackgroundVideo;
 		titleScreenGameOver.gameOverBackgroundImageID = gameOverBackgroundImageID;
@@ -171,6 +177,10 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 									ref={playTitleMusicSelectorRef}
 									noDynamic
 								/>
+							</Flex>
+							<Flex spaced centerV>
+								<div>{t('credits.options')}:</div>
+								<Button onClick={() => setIsDialogCreditsOpen(true)}>...</Button>
 							</Flex>
 						</Flex>
 						<Flex one>
@@ -290,6 +300,7 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 					</Flex>
 				</Groupbox>
 			</Flex>
+			{isDialogCreditsOpen && <DialogCredits setIsOpen={setIsDialogCreditsOpen} credits={credits} />}
 		</Flex>
 	);
 });

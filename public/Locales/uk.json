@@ -97,6 +97,7 @@
 	"display.choices": "Дати вибір",
 	"script": "Скрипт",
 	"credits": "Титри",
+	"credits.options": "Налаштування титрів",
 	"play.credits": "Відтворити титри",
 	"scroll.speed": "Швидкість прокручування (пікселів/с)",
 	"display.a.picture": "Показати малюнок/текст",

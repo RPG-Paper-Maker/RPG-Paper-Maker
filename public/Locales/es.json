@@ -97,6 +97,7 @@
 	"display.choices": "Mostrar opciones",
 	"script": "Script",
 	"credits": "Créditos",
+	"credits.options": "Opciones de créditos",
 	"play.credits": "Reproducir créditos",
 	"scroll.speed": "Velocidad de desplazamiento (píxeles/segundo)",
 	"display.a.picture": "Mostrar imagen/texto",

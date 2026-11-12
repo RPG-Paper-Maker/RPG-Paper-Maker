@@ -97,6 +97,7 @@
 	"display.choices": "Zeige Auswahlmöglichkeiten",
 	"script": "Skript",
 	"credits": "Abspann",
+	"credits.options": "Abspann-Optionen",
 	"play.credits": "Abspann abspielen",
 	"scroll.speed": "Scrollgeschwindigkeit (Pixel/Sekunde)",
 	"display.a.picture": "Zeige ein Bild/Text",

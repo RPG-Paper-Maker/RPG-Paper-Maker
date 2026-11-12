@@ -97,6 +97,7 @@
 	"display.choices": "Mostra scelte",
 	"script": "Script",
 	"credits": "Titoli di coda",
+	"credits.options": "Opzioni dei titoli di coda",
 	"play.credits": "Riproduci i titoli di coda",
 	"scroll.speed": "Velocità di scorrimento (pixel/secondo)",
 	"display.a.picture": "Mostra un'immagine/testo",

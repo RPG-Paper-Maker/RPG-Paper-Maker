@@ -13,7 +13,7 @@ import i18next from 'i18next';
 import { BINDING, JSONType, Paths, SONG_KIND } from '../common';
 import { Project } from '../core/Project';
 import { BindingType, Serializable } from '../core/Serializable';
-import { Checkable, GameOverCommand, PlaySong, TitleCommand } from '../models';
+import { Checkable, Credits, GameOverCommand, PlaySong, TitleCommand } from '../models';
 
 const { t } = i18next;
 
@@ -29,6 +29,7 @@ class TitleScreenGameOver extends Serializable {
 	public titleSettings!: Checkable[];
 	public titleCommandsWindowX!: number;
 	public titleCommandsWindowY!: number;
+	public credits!: Credits;
 	public isGameOverBackgroundImage!: boolean;
 	public isGameOverBackgroundVideo!: boolean;
 	public gameOverBackgroundImageID!: number;
@@ -50,6 +51,7 @@ class TitleScreenGameOver extends Serializable {
 		['titleSettings', 'ts', undefined, BINDING.LIST, Checkable],
 		['titleCommandsWindowX', 'tcwx', 440, BINDING.NUMBER],
 		['titleCommandsWindowY', 'tcwy', 450, BINDING.NUMBER],
+		['credits', 'cr', undefined, BINDING.OBJECT, Credits],
 		['isGameOverBackgroundImage', 'isGameOverBackgroundImage', true, BINDING.BOOLEAN],
 		['isGameOverBackgroundVideo', 'isGameOverBackgroundVideo', false, BINDING.BOOLEAN],
 		['gameOverBackgroundImageID', 'gameOverBackgroundImage', 1, BINDING.NUMBER],
