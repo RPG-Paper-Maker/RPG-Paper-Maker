@@ -20,7 +20,6 @@ import FooterOK from './footers/FooterOK';
 
 type PatreonJSONType = {
 	current: string;
-	previous: string;
 };
 
 type Props = {
