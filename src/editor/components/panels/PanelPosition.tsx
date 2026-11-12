@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Scene } from '../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR } from '../../common';
@@ -65,12 +65,16 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 	const [z, setZ] = useStateNumber();
 	const [xPixels] = useStateDynamicValue();
 	const [zPixels] = useStateDynamicValue();
+	const [enterXPixels] = useStateDynamicValue();
+	const [enterZPixels] = useStateDynamicValue();
 	const [enterMapID] = useStateDynamicValue();
 	const [enterX] = useStateDynamicValue();
 	const [enterY] = useStateDynamicValue();
 	const [enterYp] = useStateDynamicValue();
 	const [enterZ] = useStateDynamicValue();
 	const [positionObjectID] = useStateDynamicValue();
+
+	const initialSelectionType = useRef<number | null>(null);
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
 	const isID = selectionType === SELECTION_BATTLE_MAP_TYPE.ID;
@@ -92,9 +96,13 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 		positionObjectID.updateToDefaultDatabase(-1);
 		xPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
 		zPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
+		enterXPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
+		enterZPixels.updateToDefaultNumber(Project.SQUARE_SIZE / 2);
+		initialSelectionType.current = null;
 		if (list && iterator) {
 			const selectionType = list[iterator.i++] as number;
 			setSelectionType(selectionType);
+			initialSelectionType.current = selectionType;
 			if (isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ID) {
 				battleMapID.updateCommand(list, iterator);
 			} else if (
@@ -131,8 +139,13 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 
 	const initializePixels = (list?: MapObjectCommandType[], iterator?: ITERATOR) => {
 		if (hasPixels && list && iterator && list[iterator.i++] === 'pixels') {
-			xPixels.updateCommand(list, iterator);
-			zPixels.updateCommand(list, iterator);
+			if (initialSelectionType.current === SELECTION_TYPE.ENTER) {
+				enterXPixels.updateCommand(list, iterator);
+				enterZPixels.updateCommand(list, iterator);
+			} else {
+				xPixels.updateCommand(list, iterator);
+				zPixels.updateCommand(list, iterator);
+			}
 		}
 	};
 
@@ -164,10 +177,14 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 	};
 
 	const getPixelsCommand = (newList: MapObjectCommandType[]) => {
-		if (hasPixels) {
+		if (hasPixels && isSelect) {
 			newList.push('pixels');
 			xPixels.getCommand(newList);
 			zPixels.getCommand(newList);
+		} else if (hasPixels && isEnter) {
+			newList.push('pixels');
+			enterXPixels.getCommand(newList);
+			enterZPixels.getCommand(newList);
 		}
 	};
 
@@ -299,7 +316,7 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 								{hasPixels && (
 									<Value>
 										<DynamicValueSelector
-											value={xPixels}
+											value={enterXPixels}
 											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 											disabled={!isEnter}
 										/>
@@ -333,7 +350,7 @@ const PanelPosition = forwardRef(({ isBattleMap = false, hasPixels = false }: Pr
 								{hasPixels && (
 									<Value>
 										<DynamicValueSelector
-											value={zPixels}
+											value={enterZPixels}
 											optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 											disabled={!isEnter}
 										/>

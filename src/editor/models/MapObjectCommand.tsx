@@ -1679,6 +1679,8 @@ class MapObjectCommand extends Base {
 				Project.current!.commonEvents.commonObjects,
 			)} ${t('to.the.coordinates').toLowerCase()}`,
 		);
+		const positionIndex = texts.length;
+		const selectionKind = this.command[iterator.i] as number;
 		this.toStringPosition(texts, iterator, properties, parameters);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
@@ -1691,6 +1693,14 @@ class MapObjectCommand extends Base {
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(`[${t('permanent').toLowerCase()}]`);
+		}
+		if (this.command[iterator.i++] === 'pixels') {
+			const xPixels = this.toStringDynamicValue(iterator, properties, parameters);
+			const zPixels = this.toStringDynamicValue(iterator, properties, parameters);
+			if (selectionKind === 0 || selectionKind === 1) {
+				texts.splice(positionIndex + 5, 0, `Z+: ${zPixels}`);
+				texts.splice(positionIndex + 2, 0, `X+: ${xPixels}`);
+			}
 		}
 		return texts;
 	}
