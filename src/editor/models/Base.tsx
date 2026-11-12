@@ -20,6 +20,7 @@ import {
 	OBJECT_COLLISION_KIND,
 	OBJECT_MOVING_KIND,
 	SHAPE_KIND,
+	TROOP_REACTION_FREQUENCY_KIND,
 	Utils,
 } from '../common';
 import DialogName from '../components/dialogs/models/DialogName';
@@ -250,12 +251,24 @@ class Base extends Serializable {
 	public static ALLOW_FORBID_OPTIONS = Base.mapListIndex(['allow', 'forbid']);
 	public static MONSTER_ACTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'weak.enemies']);
 	public static NONE_WEAPON_ARMOR_OPTIONS = Base.mapListIndex(['none', 'weapon', 'armor']);
-	public static TROOP_REACTION_FREQUENCY_OPTIONS = Base.mapListIndex([
-		'one.time',
-		'each.turn.begin',
-		'each.turn.end',
-		'always',
-	]);
+	public static TROOP_REACTION_FREQUENCY_OPTIONS = [
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.ONE_TIME, 'one.time'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.ALWAYS, 'always'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_PHASE_BEGIN, 'each.phase.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_PHASE_END, 'each.phase.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ALLY_PHASE_BEGIN, 'each.ally.phase.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ALLY_PHASE_END, 'each.ally.phase.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ENEMY_PHASE_BEGIN, 'each.enemy.phase.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ENEMY_PHASE_END, 'each.enemy.phase.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ROUND_BEGIN, 'each.round.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ROUND_END, 'each.round.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_BEGIN, 'each.turn.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_END, 'each.turn.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ALLY_TURN_BEGIN, 'each.ally.turn.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ALLY_TURN_END, 'each.ally.turn.end'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ENEMY_TURN_BEGIN, 'each.enemy.turn.begin'),
+		Base.create(TROOP_REACTION_FREQUENCY_KIND.EACH_ENEMY_TURN_END, 'each.enemy.turn.end'),
+	];
 	public static HEROES_MONSTERS_OPTIONS = Base.mapListIndex(['heroes', 'monsters']);
 	public static CONDITION_HEROES_OPTIONS = Base.mapListIndex([
 		'all.players',

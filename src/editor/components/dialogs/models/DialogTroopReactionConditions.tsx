@@ -22,6 +22,7 @@ import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -114,7 +115,7 @@ function DialogTroopReactionConditions({ setIsOpen, conditions }: Props) {
 			<Flex column spacedLarge>
 				<Flex spaced centerV>
 					<Checkbox isChecked={isNumberOfTurn} onChange={setIsNumberOfTurn}>
-						{t('number.of.turns')}
+						{t('number.of.rounds')}
 					</Checkbox>
 					<DynamicValueSelector
 						value={numberOfTurnPlus}
@@ -128,6 +129,7 @@ function DialogTroopReactionConditions({ setIsOpen, conditions }: Props) {
 						disabled={!isNumberOfTurn}
 					/>
 					<Flex disabledLabel={!isNumberOfTurn}>x</Flex>
+					<TooltipInformation text={t('tooltip.number.of.rounds')} disabled={!isNumberOfTurn} />
 				</Flex>
 				<Flex spaced centerV>
 					<Checkbox isChecked={isHeroesMonsters} onChange={setIsHeroesMonsters}>

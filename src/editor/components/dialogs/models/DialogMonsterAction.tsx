@@ -259,7 +259,7 @@ function DialogMonsterAction({ setIsOpen, model, onAccept, onReject }: Props) {
 					<Flex column spacedLarge>
 						<Flex spaced centerV>
 							<Checkbox isChecked={isConditionTurn} onChange={setIsConditionTurn}>
-								{t('turn.value.is')}
+								{t('round.value.is')}
 							</Checkbox>
 							<Dropdown
 								selectedID={operationKindTurn}

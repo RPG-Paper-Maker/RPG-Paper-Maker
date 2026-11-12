@@ -25,6 +25,7 @@ import DialogTroopReactionConditions from '../../dialogs/models/DialogTroopReact
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import TooltipInformation from '../../TooltipInformation';
 import Tree, { TREES_LARGE_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
 import TreeCommands from '../../TreeCommands';
 
@@ -209,6 +210,10 @@ const PanelTroops = forwardRef((props, ref) => {
 														options={Base.TROOP_REACTION_FREQUENCY_OPTIONS}
 														disabled={isTroopDisabled || isReactionDisabled}
 														translateOptions
+													/>
+													<TooltipInformation
+														text={t('tooltip.troop.reaction.frequency')}
+														disabled={isTroopDisabled || isReactionDisabled}
 													/>
 												</Flex>
 											</Flex>

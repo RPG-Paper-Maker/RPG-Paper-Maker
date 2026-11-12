@@ -156,7 +156,7 @@ class MonsterAction extends Base {
 		const conditions: string[] = [];
 		if (this.isConditionTurn) {
 			conditions.push(
-				`${t('turn.value.is')} ${
+				`${t('round.value.is')} ${
 					Base.getCompareOptions()[this.operationKindTurn].name
 				} ${this.turnValueCompare.toString()}`,
 			);
