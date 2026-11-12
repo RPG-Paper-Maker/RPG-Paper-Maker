@@ -12,12 +12,11 @@
 import { EVENT_COMMAND_KIND } from '../../common';
 import { Node as EditorNode } from '../Node';
 import { SimNode } from './SimNode';
-import { CommandChoice, CommandElse, CommandWhile } from './SimulationCommands';
+import { CommandChoice, CommandElse } from './SimulationCommands';
 import { SimTree, SimulationContext, SimulationInterpreter } from './SimulationInterpreter';
 
 class SimulationFastForward {
-	static readonly WHILE_CAP = 1000;
-	static readonly STEP_CAP = 100000;
+	static readonly STEP_CAP = 10000;
 
 	static run(ctx: SimulationContext, tree: SimTree, targetEditorNode: EditorNode): SimNode | null {
 		const target = tree.map.get(targetEditorNode) ?? null;
@@ -106,7 +105,6 @@ class SimulationFastForward {
 
 	static executeWhole(ctx: SimulationContext, tree: SimTree, node: SimNode): SimNode | null {
 		const interpreter = new SimulationInterpreter(ctx, tree, node, true);
-		const whileCounts = new Map<SimNode, number>();
 		let guard = 0;
 		while (guard++ < SimulationFastForward.STEP_CAP) {
 			const current = interpreter.currentCommand;
@@ -118,14 +116,6 @@ class SimulationFastForward {
 			}
 			if (current.data === null) {
 				return current.next;
-			}
-			if (current.data instanceof CommandWhile) {
-				const count = (whileCounts.get(current) ?? 0) + 1;
-				whileCounts.set(current, count);
-				if (count > SimulationFastForward.WHILE_CAP) {
-					interpreter.jumpTo(interpreter.goToNextCommand(current));
-					continue;
-				}
 			}
 			if (!interpreter.step() && !interpreter.isFinished()) {
 				const blocked = interpreter.currentCommand!;

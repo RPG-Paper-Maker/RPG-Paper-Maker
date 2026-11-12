@@ -31,6 +31,7 @@ import { SimulationObject } from './SimulationObject';
 import { SimulationScreen } from './SimulationScreen';
 
 const MAX_DIRECT_COMMANDS_PER_UPDATE = 1000;
+const MAX_LOOP_ITERATIONS = 10;
 
 export type SimulationContext = {
 	game: GameStateSimulation;
@@ -178,6 +179,8 @@ export class SimTree {
 class SimulationInterpreter {
 	public currentCommand: SimNode | null;
 	public currentState: CommandState;
+	private loopCounts = new Map<SimNode, number>();
+	private labelJumpCounts = new Map<SimNode, number>();
 
 	constructor(
 		public ctx: SimulationContext,
@@ -186,7 +189,7 @@ class SimulationInterpreter {
 		public fastMode = false,
 		public boundary: SimNode | null = null,
 	) {
-		this.currentCommand = command ?? tree.root.firstChild;
+		this.currentCommand = this.limitLoops(null, command ?? tree.root.firstChild);
 		this.currentState = this.initializeState();
 	}
 
@@ -206,8 +209,22 @@ class SimulationInterpreter {
 			: this.currentCommand.data.initialize(this.ctx);
 	}
 
+	limitLoops(previous: SimNode | null, next: SimNode | null): SimNode | null {
+		while (next !== null && next.data instanceof CommandWhile) {
+			const count = next.isAncestorOf(previous) ? (this.loopCounts.get(next) ?? 0) + 1 : 1;
+			if (count <= MAX_LOOP_ITERATIONS) {
+				this.loopCounts.set(next, count);
+				return next;
+			}
+			this.loopCounts.delete(next);
+			previous = next;
+			next = this.goToNextCommand(next);
+		}
+		return next;
+	}
+
 	jumpTo(node: SimNode | null) {
-		this.currentCommand = node;
+		this.currentCommand = this.limitLoops(this.currentCommand, node);
 		this.currentState = this.initializeState();
 	}
 
@@ -223,7 +240,10 @@ class SimulationInterpreter {
 		let directCommands = 0;
 		while (directNode && directCommands++ < MAX_DIRECT_COMMANDS_PER_UPDATE) {
 			if (this.currentCommand!.data === null) {
-				this.currentCommand = this.endOfBlock(this.currentCommand!, this.currentCommand!.next);
+				this.currentCommand = this.limitLoops(
+					this.currentCommand,
+					this.endOfBlock(this.currentCommand!, this.currentCommand!.next),
+				);
 				this.currentState = this.initializeState();
 				directNode = this.currentCommand !== null;
 				continue;
@@ -242,7 +262,7 @@ class SimulationInterpreter {
 				this.ctx.parallelCommands.push(interpreter);
 			}
 			const computed = this.updateCommand();
-			const newCommand = this.isWithinBoundary(computed) ? computed : null;
+			const newCommand = this.isWithinBoundary(computed) ? this.limitLoops(this.currentCommand, computed) : null;
 			if (newCommand !== this.currentCommand) {
 				this.currentCommand = newCommand;
 				if (this.currentCommand !== null && this.currentCommand.data !== null) {
@@ -267,12 +287,15 @@ class SimulationInterpreter {
 			return false;
 		}
 		if (this.currentCommand!.data === null) {
-			this.currentCommand = this.endOfBlock(this.currentCommand!, this.currentCommand!.next);
+			this.currentCommand = this.limitLoops(
+				this.currentCommand,
+				this.endOfBlock(this.currentCommand!, this.currentCommand!.next),
+			);
 			this.currentState = this.initializeState();
 			return this.currentCommand !== null;
 		}
 		const computed = this.updateCommand();
-		const newCommand = this.isWithinBoundary(computed) ? computed : null;
+		const newCommand = this.isWithinBoundary(computed) ? this.limitLoops(this.currentCommand, computed) : null;
 		if (newCommand === this.currentCommand) {
 			return false;
 		}
@@ -302,6 +325,11 @@ class SimulationInterpreter {
 			: data.update(this.currentState, this.ctx);
 		let value: SimNode | null = null;
 		if (typeof result === 'string') {
+			const jumps = (this.labelJumpCounts.get(command) ?? 0) + 1;
+			if (jumps > MAX_LOOP_ITERATIONS) {
+				return this.goToNextCommand(command);
+			}
+			this.labelJumpCounts.set(command, jumps);
 			for (const [label, node] of this.tree.labels) {
 				if (result === this.ctx.game.resolveString(label.name)) {
 					value = node.next;
