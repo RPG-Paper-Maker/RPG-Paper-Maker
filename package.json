@@ -69,7 +69,7 @@
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"update-version": "node scripts/update-version.mjs",
 		"update-updater-version": "node scripts/update-updater-version.mjs",
-		"deploy-web": "bash scripts/deploy-web.sh prod",
+		"deploy-web": "bash scripts/deploy-web.sh",
 		"countdown-web": "bash scripts/countdown-web.sh",
 		"ssh": "bash scripts/ssh.sh",
 		"tag-master-all": "bash scripts/tag-master-all.sh",

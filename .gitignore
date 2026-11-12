@@ -10,3 +10,5 @@ tsconfig.tsbuildinfo
 /dist
 .continue
 /DLCs
+# Private deployment settings (server address), see .env.example
+.env

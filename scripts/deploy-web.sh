@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Configuration
+# Configuration (server address and folder: in .env, see .env.example)
+source "$(dirname "$0")/../.env" || exit 1
 SECONDS=0
-FOLDER_NAME="play"
-SERVER="$2"
+SERVER="${DEPLOY_WEB_SERVER%$'\r'}"
 BUILD_DIR=dist
-REMOTE_DIR=/var/www/html/rpg-paper-maker.com/$FOLDER_NAME
+REMOTE_DIR="${DEPLOY_WEB_DIR%$'\r'}"
+DATE_FILE="date"
 
 # Step 1: Upload maintenance index.html
 echo "Uploading maintenance page..."
