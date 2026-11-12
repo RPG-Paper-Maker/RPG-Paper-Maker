@@ -192,6 +192,7 @@ function MainMenuBar() {
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
 	const [isWarning2011, setIsWarning2011] = useState(false);
 	const [currentVersion, setCurrentVersion] = useState('');
+	const [, setDisplayRefresh] = useState(0);
 	const [warningImportPath, setWarningImportPath] = useState('');
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
 	const [isDialogWarningPortalPath, setIsDialogWarningPortalPath] = useState(false);
@@ -738,12 +739,21 @@ function MainMenuBar() {
 		Project.current!.settings.showGrid = !Project.current!.settings.showGrid;
 		await Project.current!.settings.save();
 		Scene.Map.current?.showGrid(Project.current!.settings.showGrid);
+		setDisplayRefresh((v) => v + 1);
 	};
 
 	const handleChangeShowHideSquareInformation = async () => {
 		Project.current!.settings.showSquareInformation = !Project.current!.settings.showSquareInformation;
 		await Project.current!.settings.save();
 		Scene.Map.current?.showSquareCoordinates(Project.current!.settings.showSquareInformation);
+		setDisplayRefresh((v) => v + 1);
+	};
+
+	const handleChangeShowHidePreviewObjectsBoxes = async () => {
+		Project.current!.settings.showPreviewObjectsBoxes = !Project.current!.settings.showPreviewObjectsBoxes;
+		await Project.current!.settings.save();
+		Scene.Map.current?.showPreviewObjectsBoxes(Project.current!.settings.showPreviewObjectsBoxes);
+		setDisplayRefresh((v) => v + 1);
 	};
 
 	const play = async () => await openGame(currentProject!.location);
@@ -1138,16 +1148,22 @@ function MainMenuBar() {
 			title: t('display'),
 			children: [
 				{
-					title: `${t('show.hide.grid')}...`,
+					title: t('show.hide.grid'),
+					checked: isProjectOpened && Project.current!.settings.showGrid,
 					onClick: handleChangeShowHideGrid,
 					disabled: !isProjectOpened,
-					shortcut: [KEY.G],
 				},
 				{
-					title: `${t('show.hide.square.information')}...`,
+					title: t('show.hide.square.information'),
+					checked: isProjectOpened && Project.current!.settings.showSquareInformation,
 					onClick: handleChangeShowHideSquareInformation,
 					disabled: !isProjectOpened,
-					shortcut: [KEY.I],
+				},
+				{
+					title: t('show.hide.preview.objects.boxes'),
+					checked: isProjectOpened && Project.current!.settings.showPreviewObjectsBoxes,
+					onClick: handleChangeShowHidePreviewObjectsBoxes,
+					disabled: !isProjectOpened,
 				},
 			],
 		},

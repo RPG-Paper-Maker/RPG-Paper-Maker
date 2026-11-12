@@ -1151,6 +1151,7 @@ class MapPortion {
 		geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 		this.previewBoxesMesh = new THREE.LineSegments(geometry, MapPortion.PREVIEW_BOX_MATERIAL);
 		this.previewBoxesMesh.renderOrder = 4;
+		this.previewBoxesMesh.visible = Project.current!.settings.showPreviewObjectsBoxes;
 		this.map.scene.add(this.previewBoxesMesh);
 	}
 

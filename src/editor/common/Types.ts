@@ -21,6 +21,7 @@ export type MenuItemType = {
 	title: ReactNode | string;
 	icon?: JSX.Element;
 	disabled?: boolean;
+	checked?: boolean;
 	onClick?: (...args: unknown[]) => Promise<void>;
 	shortcut?: (SPECIAL_KEY | KEY)[];
 	children?: MenuItemType[];

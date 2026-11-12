@@ -11,6 +11,7 @@
 
 import { ReactElement, useEffect } from 'react';
 import { MenuItemType, SPECIAL_KEY } from '../common';
+import Checkbox from './Checkbox';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
@@ -50,7 +51,13 @@ function MenuCustom({
 			return (
 				<MenuItem
 					key={index}
-					icon={item.icon}
+					icon={
+						item.checked === undefined ? (
+							item.icon
+						) : (
+							<Checkbox isChecked={item.checked} disabled={item.disabled} />
+						)
+					}
 					disabled={item.disabled}
 					shortcut={item.shortcut}
 					onClick={item.onClick}

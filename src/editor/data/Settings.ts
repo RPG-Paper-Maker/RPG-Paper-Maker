@@ -51,6 +51,7 @@ class Settings extends Serializable {
 	public lastMinorVersion!: number;
 	public showGrid!: boolean;
 	public showSquareInformation!: boolean;
+	public showPreviewObjectsBoxes!: boolean;
 	public lastTabIndexData!: number;
 	public lastTabIndexSystems!: number;
 	public lastTabIndexObjectCommandTest!: number;
@@ -96,6 +97,7 @@ class Settings extends Serializable {
 		['lastMinorVersion', 'lmiv', 0, BINDING.NUMBER],
 		['showGrid', 'sg', true, BINDING.BOOLEAN],
 		['showSquareInformation', 'ssi', true, BINDING.BOOLEAN],
+		['showPreviewObjectsBoxes', 'spob', true, BINDING.BOOLEAN],
 		['lastTabIndexData', 'ltid', 0, BINDING.NUMBER],
 		['lastTabIndexSystems', 'ltis', 0, BINDING.NUMBER],
 		['lastTabIndexObjectCommandTest', 'ltioct', 0, BINDING.NUMBER],

@@ -1666,6 +1666,14 @@ class Map extends Base {
 		}
 	}
 
+	showPreviewObjectsBoxes(b: boolean) {
+		this.forEachMapPortions((mapPortion) => {
+			if (mapPortion.previewBoxesMesh) {
+				mapPortion.previewBoxesMesh.visible = b;
+			}
+		});
+	}
+
 	showSquareCoordinates(b: boolean) {
 		this.showCoordinates = b;
 		this.requestPaintHUD = true;
