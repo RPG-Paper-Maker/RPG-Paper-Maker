@@ -7,8 +7,14 @@ Core.MapObject.prototype.getFuturPosition = function(orientation, distance, angl
 {
 	const w = Scene.Map.current.mapProperties.length;
 	const h = Scene.Map.current.mapProperties.width;
-	const dx = distance * Math.cos((angle + 90 * orientation) * Math.PI / 180.0);
-	const dz = distance * Math.sin((angle + 90 * orientation) * Math.PI / 180.0);
+	var dx = distance * Math.cos((angle + 90 * orientation) * Math.PI / 180.0);
+	var dz = distance * Math.sin((angle + 90 * orientation) * Math.PI / 180.0);
+	const po = this.previousOrientation;
+	if (po !== null && po !== undefined && po !== orientation && po >= Common.ORIENTATION.SOUTH && po <= Common.ORIENTATION.EAST)
+	{
+		dx += distance * Math.cos((angle + 90 * po) * Math.PI / 180.0);
+		dz += distance * Math.sin((angle + 90 * po) * Math.PI / 180.0);
+	}
 	var position = new THREE.Vector3(this.previousPosition.x - dx, this.previousPosition.y, this.previousPosition.z - dz);
 	var halfBBX = 0;
 	var halfBBZ = 0;
