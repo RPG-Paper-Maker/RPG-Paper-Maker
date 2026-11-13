@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
+import { BsBug } from 'react-icons/bs';
 import { FaDiscord, FaHandsHelping, FaRegPlayCircle } from 'react-icons/fa';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +21,13 @@ import { BUTTON_TYPE, Constants } from '../../common';
 import { openWebsite } from '../../common/Platform';
 import { Project } from '../../core/Project';
 import { Manager } from '../../Editor';
-import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
+import {
+	RootState,
+	setErrorDialog,
+	triggerImportProject,
+	triggerNewProject,
+	triggerOpenDialogProject,
+} from '../../store';
 import '../../styles/ChangelogPreview.css';
 import Button from '../Button';
 import Flex from '../Flex';
@@ -254,16 +261,27 @@ function PanelNoProject() {
 						<FaHandsHelping />
 						{t('contribute')}
 					</Button>
-					<a
-						href=''
-						onClick={async () =>
-							await openWebsite(
-								'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0',
-							)
-						}
-					>
-						{t('how.convert.project.2.0')}
-					</a>
+					<Flex spaced centerV>
+						<a
+							href=''
+							onClick={async () =>
+								await openWebsite(
+									'https://rpg-paper-maker.gitbook.io/rpg-paper-maker/others/convert-a-2.0-project-to-3.0',
+								)
+							}
+						>
+							{t('how.convert.project.2.0')}
+						</a>
+						<Flex one />
+						<Button
+							icon={<BsBug />}
+							onClick={() =>
+								dispatch(setErrorDialog({ message: 'Bug report', stack: '', isBugReport: true }))
+							}
+						>
+							{t('report.bug.tool')}
+						</Button>
+					</Flex>
 					{changelogHtml !== null && (
 						<div className='changelogPreview'>
 							<div className='changelogPreviewTitle'>{t('last.update.changes')}</div>

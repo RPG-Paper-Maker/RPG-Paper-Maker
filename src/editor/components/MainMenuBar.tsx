@@ -20,12 +20,13 @@ import {
 	AiOutlineFolder,
 	AiOutlineFolderOpen,
 	AiOutlineFontSize,
+	AiOutlineInfoCircle,
 	AiOutlinePicture,
 	AiOutlineZoomIn,
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
 import { BiCube, BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
-import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
+import { BsBug, BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { FaArrowDown, FaArrowsAlt, FaArrowUp, FaBackward, FaPlug, FaRegKeyboard } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
@@ -78,6 +79,7 @@ import {
 	RootState,
 	setCurrentProject,
 	setCurrentTreeMapTag,
+	setErrorDialog,
 	setLoading,
 	setLoadingBar,
 	setNeedsReloadMap,
@@ -800,6 +802,10 @@ function MainMenuBar() {
 		setDialogType(DIALOG_TYPE.ABOUT);
 	};
 
+	const handleReportBug = async () => {
+		dispatch(setErrorDialog({ message: 'Bug report', stack: '', isBugReport: true }));
+	};
+
 	const handleMinimize = async () => {
 		await IO.minimize();
 	};
@@ -1184,7 +1190,13 @@ function MainMenuBar() {
 			children: [
 				{
 					title: `${t('about')}...`,
+					icon: <AiOutlineInfoCircle />,
 					onClick: handleAbout,
+				},
+				{
+					title: `${t('report.bug.tool')}...`,
+					icon: <BsBug />,
+					onClick: handleReportBug,
 				},
 			],
 		},

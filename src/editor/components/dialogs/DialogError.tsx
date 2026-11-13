@@ -27,6 +27,51 @@ import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import DialogManageBackups from './DialogManageBackups';
 import FooterOK from './footers/FooterOK';
 
+const GPU_FEATURES = ['gpu_compositing', '2d_canvas', 'rasterization', 'opengl', 'webgl', 'webgpu', 'video_decode'];
+
+type GraphicsInformation = {
+	error?: string;
+	features?: Record<string, string>;
+	info?: {
+		auxAttributes?: Record<string, unknown>;
+		gpuDevice?: {
+			active?: boolean;
+			deviceString?: string;
+			driverVersion?: string;
+			vendorId?: number;
+			deviceId?: number;
+		}[];
+	};
+};
+
+export function summarizeGraphics(graphics: unknown): string {
+	const data = (graphics ?? {}) as GraphicsInformation;
+	if (data.error) {
+		return `Error: ${data.error}`;
+	}
+	const aux = data.info?.auxAttributes ?? {};
+	const lines = (Array.isArray(data.info?.gpuDevice) ? data.info.gpuDevice : []).map(
+		(device) =>
+			`GPU (${device.active ? 'active' : 'inactive'}): ${device.deviceString || `vendor ${device.vendorId} device ${device.deviceId}`}, driver ${device.driverVersion ?? 'unknown'}`,
+	);
+	for (const [label, key] of [
+		['Renderer', 'glRenderer'],
+		['OpenGL', 'glVersion'],
+		['Display', 'displayType'],
+		['DirectX 12', 'dx12FeatureLevel'],
+		['Vulkan', 'vulkanVersion'],
+	]) {
+		if (aux[key] !== undefined && aux[key] !== '') {
+			lines.push(`${label}: ${aux[key]}`);
+		}
+	}
+	const features = GPU_FEATURES.filter((name) => data.features?.[name] !== undefined);
+	if (features.length > 0) {
+		lines.push(`Features: ${features.map((name) => `${name}=${data.features?.[name]}`).join(', ')}`);
+	}
+	return lines.join('\n') || '(empty)';
+}
+
 function DialogError() {
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
@@ -43,6 +88,9 @@ function DialogError() {
 	useEffect(() => {
 		setEngineUpdate(null);
 		setIsUpdateWarningAcknowledged(false);
+		setSendStatus(null);
+		setDescription('');
+		setIsDescription(false);
 		if (!errorDialog) {
 			return;
 		}
@@ -61,6 +109,9 @@ function DialogError() {
 		return null;
 	}
 
+	const isBugReport = !!errorDialog.isBugReport;
+	const isDescriptionVisible = isBugReport || isDescription;
+
 	const sendErrorReport = async () => {
 		setSendStatus(null);
 		setLoading(true);
@@ -69,7 +120,7 @@ function DialogError() {
 			const updaterVersion = Constants.IS_DESKTOP ? await IO.getUpdaterVersion() : undefined;
 			const graphicsInformation = Constants.IS_DESKTOP ? await IO.getGraphicsInformation() : undefined;
 			const message = graphicsInformation
-				? `${errorDialog.message}\n\nChromium GPU information:\n${JSON.stringify(graphicsInformation, null, 2)}`
+				? `${errorDialog.message}\n\nGPU summary:\n${summarizeGraphics(graphicsInformation)}`
 				: errorDialog.message;
 			const res = await fetch('https://rpg-paper-maker.com/wp-json/rpm/v1/report', {
 				method: 'POST',
@@ -83,9 +134,14 @@ function DialogError() {
 					message,
 					stack: errorDialog.stack,
 					email,
-					description: isDescription ? description : undefined,
+					description: isDescriptionVisible ? description : undefined,
 				}),
 			});
+			if (res.status === 429) {
+				setSendStatus({ ok: false, message: t('error.dialog.send.too.many.requests') });
+				setLoading(false);
+				return;
+			}
 			if (!res.ok) {
 				throw new Error(`${res.status} ${res.statusText}`);
 			}
@@ -104,7 +160,7 @@ function DialogError() {
 		<>
 			<Dialog
 				isOpen
-				title={t('error.dialog.title')}
+				title={t(isBugReport ? 'bug.report.dialog.title' : 'error.dialog.title')}
 				footer={
 					<FooterOK
 						onOK={
@@ -113,7 +169,7 @@ function DialogError() {
 								: handleClose
 						}
 						leftContent={
-							engineUpdate && !isUpdateWarningAcknowledged ? undefined : (
+							(engineUpdate && !isUpdateWarningAcknowledged) || isBugReport ? undefined : (
 								<Flex centerV spaced>
 									<Checkbox isChecked={isDescription} onChange={setIsDescription}>
 										{t('error.dialog.optional.description')}
@@ -139,7 +195,7 @@ function DialogError() {
 					</Flex>
 				) : (
 					<Flex column spaced>
-						<p>{t('error.dialog.intro')}</p>
+						<p>{t(isBugReport ? 'bug.report.dialog.intro' : 'error.dialog.intro')}</p>
 						{sendStatus ? (
 							<div
 								style={{
@@ -149,19 +205,23 @@ function DialogError() {
 								{sendStatus.message}
 							</div>
 						) : (
-							<Flex column={isDescription} spaced fillWidth fillHeight centerV>
+							<Flex column={isDescriptionVisible} spaced fillWidth fillHeight centerV>
 								<Flex one />
 								<InputText
 									value={email}
 									onChange={setEmail}
 									placeholder={t('error.dialog.optional.mail')}
-									style={{ width: isDescription ? '100%' : undefined }}
+									style={{ width: isDescriptionVisible ? '100%' : undefined }}
 								/>
-								{isDescription && (
+								{isDescriptionVisible && (
 									<TextArea
 										text={description}
 										onChange={setDescription}
-										placeholder={t('error.dialog.optional.description')}
+										placeholder={t(
+											isBugReport
+												? 'bug.report.dialog.description'
+												: 'error.dialog.optional.description',
+										)}
 										smallDefaultHeight
 									/>
 								)}
@@ -169,10 +229,10 @@ function DialogError() {
 									icon={<IoIosSend />}
 									buttonType={BUTTON_TYPE.PRIMARY}
 									onClick={sendErrorReport}
-									disabled={!!sendStatus}
-									fillWidth={isDescription}
+									disabled={!!sendStatus || (isBugReport && description.trim().length === 0)}
+									fillWidth={isDescriptionVisible}
 								>
-									{t('error.dialog.mail')}
+									{t(isBugReport ? 'bug.report.dialog.send' : 'error.dialog.mail')}
 								</Button>
 								<Flex one />
 							</Flex>
