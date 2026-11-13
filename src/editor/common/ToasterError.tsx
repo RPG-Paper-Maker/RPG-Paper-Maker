@@ -83,8 +83,9 @@ console.error = (...args) => {
 		toast.warn(tr('warning.corrupted.files'), TOASTER_OPTIONS);
 		return;
 	}
-	notifyError(<ToasterError message={message} stack={stack} />);
-	if (!isGameMode) {
+	if (isGameMode) {
+		notifyError(<ToasterError message={message} stack={stack} />);
+	} else {
 		store.dispatch(setErrorDialog({ message, stack }));
 	}
 };
@@ -102,8 +103,9 @@ window.onerror = function (message, source, lineno, colno, error) {
 		console.warn(error ?? text);
 		return;
 	}
-	notifyError(<ToasterError message={text} stack={stack} />);
-	if (!isGameMode) {
+	if (isGameMode) {
+		notifyError(<ToasterError message={text} stack={stack} />);
+	} else {
 		store.dispatch(setErrorDialog({ message: text, stack }));
 	}
 };
@@ -132,8 +134,9 @@ window.addEventListener('unhandledrejection', (event) => {
 	if (message.includes('interrupted by a new load request')) {
 		return;
 	}
-	notifyError(<ToasterError message={message} stack={stack} />);
-	if (!isGameMode) {
+	if (isGameMode) {
+		notifyError(<ToasterError message={message} stack={stack} />);
+	} else {
 		store.dispatch(setErrorDialog({ message, stack }));
 	}
 });

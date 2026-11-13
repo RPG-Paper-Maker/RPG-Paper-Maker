@@ -11,20 +11,23 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AiOutlineClear } from 'react-icons/ai';
 import { IoIosSend } from 'react-icons/io';
-import { MdHistory } from 'react-icons/md';
+import { MdCheck, MdContentCopy, MdHistory, MdKeyboardArrowDown, MdKeyboardArrowRight } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants, IO } from '../../common';
+import { LocalFile } from '../../core/LocalFile';
 import { Project } from '../../core/Project';
 import { getEngineUpdate, type EngineUpdate } from '../../data/EngineVersion';
 import { RootState, setErrorDialog } from '../../store';
 import Button from '../Button';
-import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import InputText from '../InputText';
 import TextArea from '../TextArea';
+import '../../styles/DialogError.css';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import DialogManageBackups from './DialogManageBackups';
+import FooterNoYes from './footers/FooterNoYes';
 import FooterOK from './footers/FooterOK';
 
 const GPU_FEATURES = ['gpu_compositing', '2d_canvas', 'rasterization', 'opengl', 'webgl', 'webgpu', 'video_decode'];
@@ -77,8 +80,11 @@ function DialogError() {
 	const dispatch = useDispatch();
 	const errorDialog = useSelector((state: RootState) => state.projects.errorDialog);
 	const [email, setEmail] = useState('');
-	const [isDescription, setIsDescription] = useState(false);
 	const [description, setDescription] = useState('');
+	const [isOptionalOpen, setIsOptionalOpen] = useState(false);
+	const [isCopied, setIsCopied] = useState(false);
+	const [isClearCacheOpen, setIsClearCacheOpen] = useState(false);
+	const [isClearingCache, setIsClearingCache] = useState(false);
 	const [sendStatus, setSendStatus] = useState<{ ok: boolean; message: string } | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [isBackupsOpen, setIsBackupsOpen] = useState(false);
@@ -87,10 +93,6 @@ function DialogError() {
 
 	useEffect(() => {
 		setEngineUpdate(null);
-		setIsUpdateWarningAcknowledged(false);
-		setSendStatus(null);
-		setDescription('');
-		setIsDescription(false);
 		if (!errorDialog) {
 			return;
 		}
@@ -110,7 +112,6 @@ function DialogError() {
 	}
 
 	const isBugReport = !!errorDialog.isBugReport;
-	const isDescriptionVisible = isBugReport || isDescription;
 
 	const sendErrorReport = async () => {
 		setSendStatus(null);
@@ -134,7 +135,7 @@ function DialogError() {
 					message,
 					stack: errorDialog.stack,
 					email,
-					description: isDescriptionVisible ? description : undefined,
+					description: description.trim() ? description : undefined,
 				}),
 			});
 			if (res.status === 429) {
@@ -152,9 +153,65 @@ function DialogError() {
 		setLoading(false);
 	};
 
+	const handleCopy = async () => {
+		const text = errorDialog.stack ? `${errorDialog.message.trim()}\n${errorDialog.stack}` : errorDialog.message;
+		try {
+			await navigator.clipboard.writeText(text);
+			setIsCopied(true);
+			setTimeout(() => setIsCopied(false), 1500);
+		} catch {
+			setIsCopied(false);
+		}
+	};
+
+	const handleAcceptClearCache = async () => {
+		setIsClearingCache(true);
+		const all = await LocalFile.allStorage();
+		for (const path of all) {
+			await LocalFile.brutRemove(path);
+		}
+		window.location.reload();
+	};
+
 	const handleClose = () => {
+		setIsUpdateWarningAcknowledged(false);
+		setSendStatus(null);
+		setDescription('');
+		setIsOptionalOpen(false);
 		dispatch(setErrorDialog(null));
 	};
+
+	const optionalFields = (
+		<>
+			<InputText
+				value={email}
+				onChange={setEmail}
+				placeholder={t('error.dialog.optional.mail')}
+				style={{ width: '100%', flexGrow: 0 }}
+			/>
+			<Flex column one className='dialogErrorDescription'>
+				<TextArea
+					text={description}
+					onChange={setDescription}
+					placeholder={t(isBugReport ? 'bug.report.dialog.description' : 'error.dialog.optional.description')}
+					fillHeight
+				/>
+			</Flex>
+		</>
+	);
+
+	const sendButton = (
+		<Button
+			icon={<IoIosSend />}
+			buttonType={BUTTON_TYPE.PRIMARY}
+			onClick={sendErrorReport}
+			disabled={!!sendStatus || (isBugReport && description.trim().length === 0)}
+			fillWidth
+			medium
+		>
+			{t(isBugReport ? 'bug.report.dialog.send' : 'error.dialog.mail')}
+		</Button>
+	);
 
 	return (
 		<>
@@ -162,39 +219,22 @@ function DialogError() {
 				isOpen
 				title={t(isBugReport ? 'bug.report.dialog.title' : 'error.dialog.title')}
 				footer={
-					<FooterOK
-						onOK={
-							engineUpdate && !isUpdateWarningAcknowledged
-								? () => setIsUpdateWarningAcknowledged(true)
-								: handleClose
-						}
-						leftContent={
-							(engineUpdate && !isUpdateWarningAcknowledged) || isBugReport ? undefined : (
-								<Flex centerV spaced>
-									<Checkbox isChecked={isDescription} onChange={setIsDescription}>
-										{t('error.dialog.optional.description')}
-									</Checkbox>
-									{Project.current && (
-										<Button icon={<MdHistory />} onClick={() => setIsBackupsOpen(true)}>
-											{t('manage.backups')}
-										</Button>
-									)}
-								</Flex>
-							)
-						}
-					/>
+					engineUpdate && !isUpdateWarningAcknowledged ? (
+						<FooterOK onOK={() => setIsUpdateWarningAcknowledged(true)} />
+					) : undefined
 				}
 				onClose={handleClose}
 				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 				isLoading={loading}
-				initialHeight='300px'
+				initialWidth='700px'
+				initialHeight='400px'
 			>
 				{engineUpdate && !isUpdateWarningAcknowledged ? (
 					<Flex column spaced>
 						<p>{t('error.dialog.outdated', engineUpdate)}</p>
 					</Flex>
 				) : (
-					<Flex column spaced>
+					<Flex column spaced one>
 						<p>{t(isBugReport ? 'bug.report.dialog.intro' : 'error.dialog.intro')}</p>
 						{sendStatus ? (
 							<div
@@ -205,41 +245,75 @@ function DialogError() {
 								{sendStatus.message}
 							</div>
 						) : (
-							<Flex column={isDescriptionVisible} spaced fillWidth fillHeight centerV>
-								<Flex one />
-								<InputText
-									value={email}
-									onChange={setEmail}
-									placeholder={t('error.dialog.optional.mail')}
-									style={{ width: isDescriptionVisible ? '100%' : undefined }}
-								/>
-								{isDescriptionVisible && (
-									<TextArea
-										text={description}
-										onChange={setDescription}
-										placeholder={t(
-											isBugReport
-												? 'bug.report.dialog.description'
-												: 'error.dialog.optional.description',
-										)}
-										smallDefaultHeight
-									/>
+							<Flex column spaced fillWidth one>
+								{!isBugReport && (
+									<div className='dialogErrorMessage'>
+										<div className='dialogErrorMessageContent'>
+											<pre>{errorDialog.message.trim()}</pre>
+											{errorDialog.stack && (
+												<details>
+													<summary>{t('details')}</summary>
+													<pre>{errorDialog.stack}</pre>
+												</details>
+											)}
+										</div>
+										<div className='dialogErrorCopy'>
+											<Button
+												icon={isCopied ? <MdCheck /> : <MdContentCopy />}
+												title={t('copy')}
+												onClick={handleCopy}
+												square
+												small
+											/>
+										</div>
+									</div>
 								)}
-								<Button
-									icon={<IoIosSend />}
-									buttonType={BUTTON_TYPE.PRIMARY}
-									onClick={sendErrorReport}
-									disabled={!!sendStatus || (isBugReport && description.trim().length === 0)}
-									fillWidth={isDescriptionVisible}
-								>
-									{t(isBugReport ? 'bug.report.dialog.send' : 'error.dialog.mail')}
-								</Button>
-								<Flex one />
+								{isBugReport ? optionalFields : sendButton}
+								{!isBugReport && (
+									<Flex centerV spaced>
+										<div
+											className='dialogErrorOptionalToggle'
+											onClick={() => setIsOptionalOpen((value) => !value)}
+										>
+											{isOptionalOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
+											{t('error.dialog.add.details')}
+										</div>
+										<Flex one />
+										{!Constants.IS_DESKTOP && (
+											<Button
+												icon={<AiOutlineClear />}
+												buttonType={BUTTON_TYPE.RED}
+												onClick={() => setIsClearCacheOpen(true)}
+											>
+												{t('clear.all.cache')}
+											</Button>
+										)}
+										{Project.current && (
+											<Button icon={<MdHistory />} onClick={() => setIsBackupsOpen(true)}>
+												{t('manage.backups')}
+											</Button>
+										)}
+									</Flex>
+								)}
+								{!isBugReport && isOptionalOpen && optionalFields}
+								{isBugReport && sendButton}
 							</Flex>
 						)}
 					</Flex>
 				)}
 			</Dialog>
+			{isClearCacheOpen && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					isLoading={isClearingCache}
+					footer={<FooterNoYes onNo={() => setIsClearCacheOpen(false)} onYes={handleAcceptClearCache} />}
+					onClose={() => setIsClearCacheOpen(false)}
+					zIndex={Z_INDEX_LEVEL.LAYER_TOP}
+				>
+					<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
+				</Dialog>
+			)}
 			{Project.current && (
 				<DialogManageBackups isOpen={isBackupsOpen} setIsOpen={setIsBackupsOpen} onAfterRestore={handleClose} />
 			)}

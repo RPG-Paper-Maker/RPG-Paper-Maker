@@ -24,6 +24,7 @@ type Props = {
 	activable?: boolean;
 	active?: boolean;
 	big?: boolean;
+	medium?: boolean;
 	backgroundOnHoverOnly?: boolean;
 	square?: boolean;
 	small?: boolean;
@@ -46,6 +47,7 @@ function Button({
 	activable = false,
 	active = false,
 	big = false,
+	medium = false,
 	backgroundOnHoverOnly = false,
 	square = false,
 	small = false,
@@ -104,7 +106,7 @@ function Button({
 		<button
 			ref={ref}
 			className={Utils.getClassName(
-				{ disabled, active: activeState, big, backgroundOnHoverOnly, square, small, fillWidth },
+				{ disabled, active: activeState, big, medium, backgroundOnHoverOnly, square, small, fillWidth },
 				`${buttonType} ${className ?? ''}`,
 			)}
 			onClick={handleClick}

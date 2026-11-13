@@ -83,6 +83,10 @@ button.primary:hover:not(.disabled) {
 	background-color: var(--hover-primary-dark-color);
 }
 
+button.medium {
+	height: 32px;
+}
+
 button.big {
 	padding: 15px 35px 15px 35px;
 	font-size: 1.25em;
