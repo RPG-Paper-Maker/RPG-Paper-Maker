@@ -863,6 +863,7 @@
 	"conversion.needed": "Требуется преобразование",
 	"error.dialog.optional.description": "Необязательное дополнительное описание",
 	"error.dialog.optional.mail": "Необязательный email (для обратной связи)",
+	"error.dialog.add.details": "Добавить email или описание (необязательно)",
 	"error.dialog.title": "Произошла ошибка",
 	"report.bug.tool": "Сообщить об ошибке",
 	"bug.report.dialog.title": "Сообщить об ошибке",
@@ -2096,5 +2097,11 @@
 	"revert.to.model": "Вернуть к модели",
 	"revert.all.to.model": "Вернуть всё к модели",
 	"replaces.model.reaction": "Заменяет реакцию модели {{model}}",
-	"override": "Переопределить модель"
+	"override": "Переопределить модель",
+	"typewriter": "Печатная машинка",
+	"typewriter.effect": "Эффект печатной машинки",
+	"interval.ms": "Интервал (мс)",
+	"typewriter.interval": "Интервал печатной машинки (мс)",
+	"typewriter.sound": "Звук печатной машинки",
+	"typewriter.volume": "Громкость печатной машинки"
 }

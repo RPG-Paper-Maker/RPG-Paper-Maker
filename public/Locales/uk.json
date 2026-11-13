@@ -863,6 +863,7 @@
 	"conversion.needed": "Необхідно перетворення",
 	"error.dialog.optional.description": "Необов'язковий додатковий опис",
 	"error.dialog.optional.mail": "Необов'язковий email (для зворотного зв'язку)",
+	"error.dialog.add.details": "Додати email або опис (необов'язково)",
 	"error.dialog.title": "Виникла помилка",
 	"report.bug.tool": "Повідомити про помилку",
 	"bug.report.dialog.title": "Повідомити про помилку",
@@ -2096,5 +2097,11 @@
 	"revert.to.model": "Повернути до моделі",
 	"revert.all.to.model": "Повернути все до моделі",
 	"replaces.model.reaction": "Замінює реакцію моделі {{model}}",
-	"override": "Перевизначити модель"
+	"override": "Перевизначити модель",
+	"typewriter": "Друкарська машинка",
+	"typewriter.effect": "Ефект друкарської машинки",
+	"interval.ms": "Інтервал (мс)",
+	"typewriter.interval": "Інтервал друкарської машинки (мс)",
+	"typewriter.sound": "Звук друкарської машинки",
+	"typewriter.volume": "Гучність друкарської машинки"
 }

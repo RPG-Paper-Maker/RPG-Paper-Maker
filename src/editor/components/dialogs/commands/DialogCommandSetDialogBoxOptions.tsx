@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { ReactNode, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR, Utils } from '../../../common';
+import { Constants, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR, SONG_KIND, Utils } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
@@ -19,6 +19,7 @@ import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
+import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -29,7 +30,18 @@ import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAccept, onReject }: CommandProps) {
+type Props = CommandProps & {
+	isSystemDefault?: boolean;
+};
+
+function DialogCommandSetDialogBoxOptions({
+	commandKind,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+	isSystemDefault = false,
+}: Props) {
 	const { t } = useTranslation();
 
 	const [isWindowSkinID, setIsWindowSkinID] = useStateBool();
@@ -83,6 +95,15 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 	const [isInterlocutorH, setIsInterlocutorH] = useStateBool();
 	const [interlocutorH] = useStateDynamicValue();
 
+	const [isTypewriter, setIsTypewriter] = useStateBool();
+	const [typewriterIndex, setTypewriterIndex] = useStateNumber();
+	const [isTypewriterInterval, setIsTypewriterInterval] = useStateBool();
+	const [typewriterInterval] = useStateDynamicValue();
+	const [isTypewriterSound, setIsTypewriterSound] = useStateBool();
+	const [typewriterSound] = useStateDynamicValue();
+	const [isTypewriterVolume, setIsTypewriterVolume] = useStateBool();
+	const [typewriterVolume] = useStateDynamicValue();
+
 	const [, setTrigger] = useStateBool();
 
 	const initializeCheck = (
@@ -101,6 +122,77 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			dynamic.kind = defaultKind;
 			dynamic.value = defaultValue;
 		}
+	};
+
+	const getDefaultTextColorID = () => {
+		const colors = Project.current!.systems.colors;
+		if (isSystemDefault) {
+			const white = colors.find((color) => color.red === 255 && color.green === 255 && color.blue === 255);
+			if (white) {
+				return white.id;
+			}
+		}
+		return colors[0]?.id ?? 1;
+	};
+
+	const getDefaultFontSizeID = () => {
+		const fontSizes = Project.current!.systems.fontSizes;
+		if (isSystemDefault) {
+			const fontSize = fontSizes.find((size) => size.size.getFixNumberValue() === Constants.DEFAULT_FONT_SIZE);
+			if (fontSize) {
+				return fontSize.id;
+			}
+		}
+		return fontSizes[0]?.id ?? 1;
+	};
+
+	const getDefaultFontNameID = () => {
+		const fontNames = Project.current!.systems.fontNames;
+		if (isSystemDefault) {
+			const fontName = fontNames.find(
+				(font) =>
+					(font.isBasic ? String(font.font?.value ?? '') : font.getName()).toLowerCase() ===
+					Constants.DEFAULT_FONT_NAME.toLowerCase(),
+			);
+			if (fontName) {
+				return fontName.id;
+			}
+		}
+		return fontNames[0]?.id ?? 1;
+	};
+
+	const getDefaultOutlineIndex = () => (isSystemDefault ? 1 : 0);
+
+	const forceSystemDefaultChecks = () => {
+		if (!isSystemDefault) {
+			return;
+		}
+		setIsWindowSkinID(true);
+		setIsTransformX(true);
+		setIsTransformY(true);
+		setIsTransformWidth(true);
+		setIsTransformHeight(true);
+		setIsPaddingLeft(true);
+		setIsPaddingTop(true);
+		setIsPaddingRight(true);
+		setIsPaddingBottom(true);
+		setIsFacesetPosition(true);
+		setIsFacesetX(true);
+		setIsFacesetY(true);
+		setIsOutline(true);
+		setIsColorID(true);
+		setIsColorText(true);
+		setIsColorOutline(true);
+		setIsSizeID(true);
+		setIsFontID(true);
+		setIsInterlocutorX(true);
+		setIsInterlocutorY(true);
+		setIsInterlocutorW(true);
+		setIsInterlocutorH(true);
+		setIsTypewriter(true);
+		setIsTypewriterInterval(true);
+		setIsTypewriterSound(true);
+		setIsTypewriterVolume(true);
 	};
 
 	const initialize = () => {
@@ -143,7 +235,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			if (checked) {
 				setOutlineIndex(list[iterator.i++] as number);
 			} else {
-				setOutlineIndex(0);
+				setOutlineIndex(getDefaultOutlineIndex());
 			}
 			checked = Utils.initializeBoolCommand(list, iterator);
 			setIsColorID(false);
@@ -153,7 +245,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				colorTextID.updateCommand(list, iterator);
 			} else {
 				setIsColorText(false);
-				colorTextID.updateToDefaultDatabase(Project.current!.systems.colors);
+				colorTextID.update(DYNAMIC_VALUE_KIND.DATABASE, getDefaultTextColorID());
 			}
 			checked = Utils.initializeBoolCommand(list, iterator);
 			if (checked) {
@@ -173,26 +265,28 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 				setIsColorBackground(false);
 				colorBackgroundID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
-			initializeCheck(
-				list,
-				iterator,
-				setIsSizeID,
-				sizeID,
-				DYNAMIC_VALUE_KIND.DATABASE,
-				Project.current!.systems.fontSizes[0]?.id ?? 1,
-			);
-			initializeCheck(
-				list,
-				iterator,
-				setIsFontID,
-				fontID,
-				DYNAMIC_VALUE_KIND.DATABASE,
-				Project.current!.systems.fontNames[0]?.id ?? 1,
-			);
+			initializeCheck(list, iterator, setIsSizeID, sizeID, DYNAMIC_VALUE_KIND.DATABASE, getDefaultFontSizeID());
+			initializeCheck(list, iterator, setIsFontID, fontID, DYNAMIC_VALUE_KIND.DATABASE, getDefaultFontNameID());
 			initializeCheck(list, iterator, setIsInterlocutorX, interlocutorX, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 30);
 			initializeCheck(list, iterator, setIsInterlocutorY, interlocutorY, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, -30);
 			initializeCheck(list, iterator, setIsInterlocutorW, interlocutorW, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 400);
 			initializeCheck(list, iterator, setIsInterlocutorH, interlocutorH, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 60);
+			checked = Utils.initializeBoolCommand(list, iterator);
+			setIsTypewriter(checked);
+			if (checked) {
+				setTypewriterIndex(list[iterator.i++] as number);
+			} else {
+				setTypewriterIndex(1);
+			}
+			initializeCheck(list, iterator, setIsTypewriterInterval, typewriterInterval, DYNAMIC_VALUE_KIND.NUMBER, 30);
+			checked = Utils.initializeBoolCommand(list, iterator);
+			setIsTypewriterSound(checked);
+			if (checked) {
+				typewriterSound.updateCommand(list, iterator, true);
+			} else {
+				typewriterSound.updateToDefaultNumber(10);
+			}
+			initializeCheck(list, iterator, setIsTypewriterVolume, typewriterVolume, DYNAMIC_VALUE_KIND.NUMBER, 100);
 		} else {
 			setIsWindowSkinID(false);
 			windowSkinID.updateToDefaultDatabase(Project.current!.systems.windowSkins);
@@ -219,18 +313,18 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			setIsFacesetY(false);
 			facesetY.updateToDefaultNumber(0, true);
 			setIsOutline(false);
-			setOutlineIndex(0);
+			setOutlineIndex(getDefaultOutlineIndex());
 			setIsColorID(false);
 			setIsColorText(false);
-			colorTextID.updateToDefaultDatabase(Project.current!.systems.colors);
+			colorTextID.update(DYNAMIC_VALUE_KIND.DATABASE, getDefaultTextColorID());
 			setIsColorOutline(false);
 			colorOutlineID.updateToDefaultDatabase(Project.current!.systems.colors);
 			setIsColorBackground(false);
 			colorBackgroundID.updateToDefaultDatabase(Project.current!.systems.colors);
 			setIsSizeID(false);
-			sizeID.updateToDefaultDatabase(Project.current!.systems.fontSizes);
+			sizeID.update(DYNAMIC_VALUE_KIND.DATABASE, getDefaultFontSizeID());
 			setIsFontID(false);
-			fontID.updateToDefaultDatabase(Project.current!.systems.fontNames);
+			fontID.update(DYNAMIC_VALUE_KIND.DATABASE, getDefaultFontNameID());
 			setIsInterlocutorX(false);
 			interlocutorX.updateToDefaultNumber(30, true);
 			setIsInterlocutorY(false);
@@ -239,9 +333,29 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 			interlocutorW.updateToDefaultNumber(400, true);
 			setIsInterlocutorH(false);
 			interlocutorH.updateToDefaultNumber(60, true);
+			setIsTypewriter(false);
+			setTypewriterIndex(1);
+			setIsTypewriterInterval(false);
+			typewriterInterval.updateToDefaultNumber(30);
+			setIsTypewriterSound(false);
+			typewriterSound.updateToDefaultNumber(10);
+			setIsTypewriterVolume(false);
+			typewriterVolume.updateToDefaultNumber(100);
 		}
+		forceSystemDefaultChecks();
 		setTrigger((v) => !v);
 	};
+
+	const isTypewriterOff = isTypewriter && typewriterIndex === 1;
+
+	const getCheckbox = (isChecked: boolean, onChange: (b: boolean) => void, label: ReactNode, disabled = false) =>
+		isSystemDefault ? (
+			label
+		) : (
+			<Checkbox isChecked={isChecked} onChange={onChange} disabled={disabled}>
+				{label}
+			</Checkbox>
+		);
 
 	const getCommandCheck = (newList: Model.MapObjectCommandType[], checked: boolean, dynamic: DynamicValue) => {
 		newList.push(Utils.boolToNum(checked));
@@ -281,6 +395,16 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 		getCommandCheck(newList, isInterlocutorY, interlocutorY);
 		getCommandCheck(newList, isInterlocutorW, interlocutorW);
 		getCommandCheck(newList, isInterlocutorH, interlocutorH);
+		newList.push(Utils.boolToNum(isTypewriter));
+		if (isTypewriter) {
+			newList.push(typewriterIndex);
+		}
+		getCommandCheck(newList, isTypewriterInterval, typewriterInterval);
+		newList.push(Utils.boolToNum(isTypewriterSound));
+		if (isTypewriterSound) {
+			typewriterSound.getCommand(newList, true);
+		}
+		getCommandCheck(newList, isTypewriterVolume, typewriterVolume);
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -303,9 +427,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 		>
 			<Flex column spaced>
 				<Flex spaced>
-					<Checkbox isChecked={isWindowSkinID} onChange={setIsWindowSkinID}>
-						{t('window.skin.id')}:
-					</Checkbox>
+					{getCheckbox(isWindowSkinID, setIsWindowSkinID, `${t('window.skin.id')}:`)}
 					<DynamicValueSelector
 						value={windowSkinID}
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
@@ -317,11 +439,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 					<Flex column spaced>
 						<Groupbox title={t('transform')}>
 							<Form>
-								<Label>
-									<Checkbox isChecked={isTransformX} onChange={setIsTransformX}>
-										X
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isTransformX, setIsTransformX, 'X')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={transformX}
@@ -329,11 +447,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isTransformX}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isTransformY} onChange={setIsTransformY}>
-										Y
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isTransformY, setIsTransformY, 'Y')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={transformY}
@@ -341,11 +455,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isTransformY}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isTransformWidth} onChange={setIsTransformWidth}>
-										{t('width')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isTransformWidth, setIsTransformWidth, t('width'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={transformWidth}
@@ -353,11 +463,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isTransformWidth}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isTransformHeight} onChange={setIsTransformHeight}>
-										{t('height')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isTransformHeight, setIsTransformHeight, t('height'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={transformHeight}
@@ -369,11 +475,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 						</Groupbox>
 						<Groupbox title={t('padding')}>
 							<Form>
-								<Label>
-									<Checkbox isChecked={isPaddingLeft} onChange={setIsPaddingLeft}>
-										{t('left')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isPaddingLeft, setIsPaddingLeft, t('left'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={paddingLeft}
@@ -381,11 +483,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isPaddingLeft}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isPaddingTop} onChange={setIsPaddingTop}>
-										{t('top')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isPaddingTop, setIsPaddingTop, t('top'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={paddingTop}
@@ -393,11 +491,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isPaddingTop}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isPaddingRight} onChange={setIsPaddingRight}>
-										{t('right')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isPaddingRight, setIsPaddingRight, t('right'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={paddingRight}
@@ -405,11 +499,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isPaddingRight}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isPaddingBottom} onChange={setIsPaddingBottom}>
-										{t('bottom')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isPaddingBottom, setIsPaddingBottom, t('bottom'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={paddingBottom}
@@ -421,11 +511,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 						</Groupbox>
 						<Groupbox title={t('interlocutor')}>
 							<Form>
-								<Label>
-									<Checkbox isChecked={isInterlocutorX} onChange={setIsInterlocutorX}>
-										X
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isInterlocutorX, setIsInterlocutorX, 'X')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={interlocutorX}
@@ -433,11 +519,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isInterlocutorX}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isInterlocutorY} onChange={setIsInterlocutorY}>
-										Y
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isInterlocutorY, setIsInterlocutorY, 'Y')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={interlocutorY}
@@ -445,11 +527,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isInterlocutorY}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isInterlocutorW} onChange={setIsInterlocutorW}>
-										{t('width')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isInterlocutorW, setIsInterlocutorW, t('width'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={interlocutorW}
@@ -457,11 +535,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isInterlocutorW}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isInterlocutorH} onChange={setIsInterlocutorH}>
-										{t('height')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isInterlocutorH, setIsInterlocutorH, t('height'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={interlocutorH}
@@ -475,11 +549,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 					<Flex column spaced>
 						<Groupbox title={t('faceset')}>
 							<Form>
-								<Label>
-									<Checkbox isChecked={isFacesetPosition} onChange={setIsFacesetPosition}>
-										{t('position')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isFacesetPosition, setIsFacesetPosition, t('position'))}</Label>
 								<Value>
 									<Dropdown
 										selectedID={facesetPositionIndex}
@@ -489,11 +559,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										translateOptions
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isFacesetX} onChange={setIsFacesetX}>
-										X
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isFacesetX, setIsFacesetX, 'X')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={facesetX}
@@ -501,11 +567,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isFacesetX}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isFacesetY} onChange={setIsFacesetY}>
-										Y
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isFacesetY, setIsFacesetY, 'Y')}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={facesetY}
@@ -517,11 +579,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 						</Groupbox>
 						<Groupbox title={t('text')}>
 							<Form>
-								<Label>
-									<Checkbox isChecked={isOutline} onChange={setIsOutline}>
-										{t('outline')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isOutline, setIsOutline, t('outline'))}</Label>
 								<Value>
 									<Dropdown
 										selectedID={outlineIndex}
@@ -531,21 +589,11 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										translateOptions
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isColorID} onChange={setIsColorID}>
-										{t('color.id')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isColorID, setIsColorID, t('color.id'))}</Label>
 								<Value>
 									<Form>
 										<Label disabledColon={!isColorID}>
-											<Checkbox
-												isChecked={isColorText}
-												onChange={setIsColorText}
-												disabled={!isColorID}
-											>
-												{t('text')}
-											</Checkbox>
+											{getCheckbox(isColorText, setIsColorText, t('text'), !isColorID)}
 										</Label>
 										<Value>
 											<DynamicValueSelector
@@ -556,13 +604,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 											/>
 										</Value>
 										<Label disabledColon={!isColorID}>
-											<Checkbox
-												isChecked={isColorOutline}
-												onChange={setIsColorOutline}
-												disabled={!isColorID}
-											>
-												{t('outline')}
-											</Checkbox>
+											{getCheckbox(isColorOutline, setIsColorOutline, t('outline'), !isColorID)}
 										</Label>
 										<Value>
 											<DynamicValueSelector
@@ -591,11 +633,7 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										</Value>
 									</Form>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isSizeID} onChange={setIsSizeID}>
-										{t('size.id')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isSizeID, setIsSizeID, t('size.id'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={sizeID}
@@ -604,17 +642,69 @@ function DialogCommandSetDialogBoxOptions({ commandKind, setIsOpen, list, onAcce
 										disabled={!isSizeID}
 									/>
 								</Value>
-								<Label>
-									<Checkbox isChecked={isFontID} onChange={setIsFontID}>
-										{t('font.id')}
-									</Checkbox>
-								</Label>
+								<Label>{getCheckbox(isFontID, setIsFontID, t('font.id'))}</Label>
 								<Value>
 									<DynamicValueSelector
 										value={fontID}
 										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
 										databaseOptions={Project.current!.systems.fontNames}
 										disabled={!isFontID}
+									/>
+								</Value>
+							</Form>
+						</Groupbox>
+						<Groupbox title={t('typewriter')}>
+							<Form>
+								<Label>{getCheckbox(isTypewriter, setIsTypewriter, t('typewriter.effect'))}</Label>
+								<Value>
+									<Dropdown
+										selectedID={typewriterIndex}
+										onChange={setTypewriterIndex}
+										options={Model.Base.YES_NO_OPTIONS}
+										disabled={!isTypewriter}
+										translateOptions
+									/>
+								</Value>
+								<Label>
+									{getCheckbox(
+										isTypewriterInterval,
+										setIsTypewriterInterval,
+										t('interval.ms'),
+										isTypewriterOff,
+									)}
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={typewriterInterval}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+										disabled={isTypewriterOff || !isTypewriterInterval}
+									/>
+								</Value>
+								<Label>
+									{getCheckbox(isTypewriterSound, setIsTypewriterSound, t('sound'), isTypewriterOff)}
+								</Label>
+								<Value>
+									<AssetSelector
+										selectionType={ASSET_SELECTOR_TYPE.SONGS}
+										kind={SONG_KIND.SOUND}
+										selectedDynamic={typewriterSound}
+										disabled={isTypewriterOff || !isTypewriterSound}
+										active
+									/>
+								</Value>
+								<Label>
+									{getCheckbox(
+										isTypewriterVolume,
+										setIsTypewriterVolume,
+										t('volume'),
+										isTypewriterOff,
+									)}
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={typewriterVolume}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+										disabled={isTypewriterOff || !isTypewriterVolume}
 									/>
 								</Value>
 							</Form>

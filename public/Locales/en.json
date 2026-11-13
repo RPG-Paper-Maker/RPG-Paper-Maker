@@ -867,6 +867,7 @@
 	"conversion.needed": "Conversion needed",
 	"error.dialog.optional.description": "Optional additional description",
 	"error.dialog.optional.mail": "Optional email (for feedback)",
+	"error.dialog.add.details": "Add email or description (optional)",
 	"error.dialog.title": "An error occurred",
 	"report.bug.tool": "Report a bug",
 	"bug.report.dialog.title": "Report a bug",
@@ -2100,5 +2101,11 @@
 	"revert.to.model": "Revert to model",
 	"revert.all.to.model": "Revert all to model",
 	"replaces.model.reaction": "Replaces reaction of model {{model}}",
-	"override": "Override model"
+	"override": "Override model",
+	"typewriter": "Typewriter",
+	"typewriter.effect": "Typewriter effect",
+	"interval.ms": "Interval (ms)",
+	"typewriter.interval": "Typewriter interval (ms)",
+	"typewriter.sound": "Typewriter sound",
+	"typewriter.volume": "Typewriter volume"
 }

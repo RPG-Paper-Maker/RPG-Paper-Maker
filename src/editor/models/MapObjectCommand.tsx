@@ -1226,6 +1226,24 @@ class MapObjectCommand extends Base {
 			properties,
 			parameters,
 		);
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${t('typewriter.effect')}: ${t(this.command[iterator.i++] === 0 ? 'yes' : 'no')}`);
+		}
+		this.toStringSetDialogBoxOptionsSimple(texts, t('typewriter.interval'), iterator, properties, parameters);
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(
+				`${t('typewriter.sound')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.songs.getList(SONG_KIND.SOUND),
+					true,
+				)}`,
+			);
+		}
+		this.toStringSetDialogBoxOptionsSimple(texts, t('typewriter.volume'), iterator, properties, parameters);
 		return texts;
 	}
 

@@ -864,6 +864,7 @@
 	"conversion.needed": "需要转换",
 	"error.dialog.optional.description": "可选附加描述",
 	"error.dialog.optional.mail": "可选邮箱（用于反馈）",
+	"error.dialog.add.details": "添加邮箱或描述（可选）",
 	"error.dialog.title": "发生错误",
 	"report.bug.tool": "报告错误",
 	"bug.report.dialog.title": "报告错误",
@@ -2097,5 +2098,11 @@
 	"revert.to.model": "恢复为模型",
 	"revert.all.to.model": "全部恢复为模型",
 	"replaces.model.reaction": "替换模型 {{model}} 的反应",
-	"override": "覆盖模型"
+	"override": "覆盖模型",
+	"typewriter": "打字机",
+	"typewriter.effect": "打字机效果",
+	"interval.ms": "间隔 (毫秒)",
+	"typewriter.interval": "打字机间隔 (毫秒)",
+	"typewriter.sound": "打字机音效",
+	"typewriter.volume": "打字机音量"
 }

@@ -864,6 +864,7 @@
 	"conversion.needed": "변환 필요",
 	"error.dialog.optional.description": "선택 추가 설명",
 	"error.dialog.optional.mail": "선택 이메일 (피드백용)",
+	"error.dialog.add.details": "이메일 또는 설명 추가 (선택 사항)",
 	"error.dialog.title": "오류가 발생했습니다",
 	"report.bug.tool": "버그 신고",
 	"bug.report.dialog.title": "버그 신고",
@@ -2099,5 +2100,11 @@
 	"revert.to.model": "모델로 되돌리기",
 	"revert.all.to.model": "모두 모델로 되돌리기",
 	"replaces.model.reaction": "모델 {{model}}의 반응을 대체",
-	"override": "모델 재정의"
+	"override": "모델 재정의",
+	"typewriter": "타자기",
+	"typewriter.effect": "타자기 효과",
+	"interval.ms": "간격 (ms)",
+	"typewriter.interval": "타자기 간격 (ms)",
+	"typewriter.sound": "타자기 효과음",
+	"typewriter.volume": "타자기 볼륨"
 }

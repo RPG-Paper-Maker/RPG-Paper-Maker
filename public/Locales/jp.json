@@ -863,6 +863,7 @@
 	"conversion.needed": "変換が必要です",
 	"error.dialog.optional.description": "任意の追加説明",
 	"error.dialog.optional.mail": "任意のメール（フィードバック用）",
+	"error.dialog.add.details": "メールアドレスや説明を追加（任意）",
 	"error.dialog.title": "エラーが発生しました",
 	"report.bug.tool": "バグを報告",
 	"bug.report.dialog.title": "バグを報告",
@@ -2096,5 +2097,11 @@
 	"revert.to.model": "モデルに戻す",
 	"revert.all.to.model": "すべてモデルに戻す",
 	"replaces.model.reaction": "モデル {{model}} の反応を置き換え",
-	"override": "モデルを上書き"
+	"override": "モデルを上書き",
+	"typewriter": "タイプライター",
+	"typewriter.effect": "タイプライター効果",
+	"interval.ms": "間隔 (ms)",
+	"typewriter.interval": "タイプライター間隔 (ms)",
+	"typewriter.sound": "タイプライター効果音",
+	"typewriter.volume": "タイプライター音量"
 }

@@ -863,6 +863,7 @@
 	"conversion.needed": "Conversión necesaria",
 	"error.dialog.optional.description": "Descripción adicional opcional",
 	"error.dialog.optional.mail": "Correo electrónico opcional (para comentarios)",
+	"error.dialog.add.details": "Añadir correo electrónico o descripción (opcional)",
 	"error.dialog.title": "Se produjo un error",
 	"report.bug.tool": "Informar de un error",
 	"bug.report.dialog.title": "Informar de un error",
@@ -2096,5 +2097,11 @@
 	"revert.to.model": "Volver al modelo",
 	"revert.all.to.model": "Volver todo al modelo",
 	"replaces.model.reaction": "Reemplaza la reacción del modelo {{model}}",
-	"override": "Reemplazar modelo"
+	"override": "Reemplazar modelo",
+	"typewriter": "Máquina de escribir",
+	"typewriter.effect": "Efecto máquina de escribir",
+	"interval.ms": "Intervalo (ms)",
+	"typewriter.interval": "Intervalo de máquina de escribir (ms)",
+	"typewriter.sound": "Sonido de máquina de escribir",
+	"typewriter.volume": "Volumen de máquina de escribir"
 }

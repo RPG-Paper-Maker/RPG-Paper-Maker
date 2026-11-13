@@ -473,6 +473,7 @@ const PanelSystem = forwardRef((props, ref) => {
 										list={dialogBoxbOptions.command}
 										onAccept={handleAcceptDefaultDialogBoxOptions}
 										onReject={() => {}}
+										isSystemDefault
 									/>
 								)}
 							</Flex>
