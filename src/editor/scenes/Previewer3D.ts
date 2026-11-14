@@ -474,17 +474,21 @@ class Previewer3D extends Base {
 						this.previewTransformControls.setRotationSnap(isSquare ? Mathf.degreesToRadians(45) : null);
 					}
 					this.previewTransformControls.addEventListener('objectChange', () => {
-						if (
-							this.previewMode === ACTION_KIND.SCALE &&
-							this.meshes.length > 0 &&
-							Project.current?.settings.mapEditorCurrentElementPositionIndex ===
-								ELEMENT_POSITION_KIND.SQUARE
-						) {
+						if (this.previewMode === ACTION_KIND.SCALE && this.meshes.length > 0) {
 							const mesh = this.meshes[0];
-							const s = 1;
-							mesh.scale.setX(Math.max(s, mesh.scale.x - (mesh.scale.x % s)));
-							mesh.scale.setY(Math.max(s, mesh.scale.y - (mesh.scale.y % s)));
-							mesh.scale.setZ(Math.max(s, mesh.scale.z - (mesh.scale.z % s)));
+							if (
+								Project.current?.settings.mapEditorCurrentElementPositionIndex ===
+								ELEMENT_POSITION_KIND.SQUARE
+							) {
+								const s = 1;
+								mesh.scale.setX(Math.max(s, mesh.scale.x - (mesh.scale.x % s)));
+								mesh.scale.setY(Math.max(s, mesh.scale.y - (mesh.scale.y % s)));
+								mesh.scale.setZ(Math.max(s, mesh.scale.z - (mesh.scale.z % s)));
+							} else {
+								mesh.scale.setX(Math.max(0.001, mesh.scale.x));
+								mesh.scale.setY(Math.max(0.001, mesh.scale.y));
+								mesh.scale.setZ(Math.max(0.001, mesh.scale.z));
+							}
 						}
 						this.syncPreviewTransform();
 						this.onTransformChange?.();

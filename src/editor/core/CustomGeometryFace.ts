@@ -41,6 +41,9 @@ class CustomGeometryFace extends CustomGeometry {
 		const vertices = this.getVertices();
 		const vertex = new THREE.Vector3();
 		const center = new THREE.Vector3();
+		if (scaled) {
+			scaled = new THREE.Vector3(scaled.x || 1, scaled.y || 1, scaled.z || 1);
+		}
 		let ic = 0;
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			ic = Math.floor(i / 12) * 3;
