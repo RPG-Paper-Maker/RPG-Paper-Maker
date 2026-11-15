@@ -570,8 +570,11 @@ class CommandMoveObject extends CommandBase {
 						default:
 							break;
 					}
+					if (!vector) {
+						return true;
+					}
 					state.from = target.worldPosition.clone();
-					state.vector = vector!.clone();
+					state.vector = vector.clone();
 					state.target = move.pixels ? ctx.game.resolveNumber(move.pixels) / Project.SQUARE_SIZE : 1;
 					if (facing !== null) {
 						target.setOrientation(facing);

@@ -34,6 +34,13 @@ export const SIM_ORIENTATION_VECTORS: ReadonlyArray<THREE.Vector3> = [
 	new THREE.Vector3(1, 0, 0),
 ];
 
+export function normalizeOrientation(value: number): SIM_ORIENTATION {
+	if (!Number.isFinite(value)) {
+		return SIM_ORIENTATION.SOUTH;
+	}
+	return (((Math.floor(value) % 4) + 4) % 4) as SIM_ORIENTATION;
+}
+
 class SimulationObject {
 	public mesh: THREE.Object3D | null = null;
 	public worldPosition: THREE.Vector3;
@@ -103,8 +110,10 @@ class SimulationObject {
 		}
 		this.state = state.clone();
 		this.opacity = this.state.opacity.getFixNumberValue();
-		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
-		this.orientation = (this.state.graphicsIndexY % 4) as SIM_ORIENTATION;
+		this.orientation = normalizeOrientation(this.state.graphicsIndexY);
+		this.baseRow = Number.isFinite(this.state.graphicsIndexY)
+			? Math.floor(this.state.graphicsIndexY) - this.orientation
+			: 0;
 		this.frame = this.state.graphicsIndexX % Project.current!.systems.FRAMES;
 		this.frameTick = 0;
 		if (!preserveLightAnimation) {
@@ -144,9 +153,11 @@ class SimulationObject {
 		this.state.graphicsIndexX = indexX;
 		this.state.graphicsIndexY = changeOrientation ? indexY : this.orientation;
 		this.state.rectTileset = id === 0 || kind === ELEMENT_MAP_KIND.AUTOTILE ? rectTileset?.clone() : undefined;
-		this.baseRow = this.state.graphicsIndexY - (this.state.graphicsIndexY % 4);
+		this.baseRow = Number.isFinite(this.state.graphicsIndexY)
+			? Math.floor(this.state.graphicsIndexY) - normalizeOrientation(this.state.graphicsIndexY)
+			: 0;
 		if (changeOrientation) {
-			this.orientation = (indexY % 4) as SIM_ORIENTATION;
+			this.orientation = normalizeOrientation(indexY);
 		}
 		this.build();
 	}
@@ -167,6 +178,7 @@ class SimulationObject {
 	}
 
 	setOrientation(orientation: SIM_ORIENTATION) {
+		orientation = normalizeOrientation(orientation);
 		if (this.directionFix || this.orientation === orientation) {
 			return;
 		}
