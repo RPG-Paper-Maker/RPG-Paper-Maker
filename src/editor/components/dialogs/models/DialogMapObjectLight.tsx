@@ -87,7 +87,12 @@ function DialogMapObjectLight({
 			isOpen
 			footer={<FooterCancelOK onCancel={reject} onOK={accept} />}
 			onClose={reject}
-			initialHeight='400px'
+			initialHeight='600px'
+			// Hide the Edit object window (it comes back on close) so the whole map is visible while tuning the light
+			className='dialogLight'
+			initialPlacement='right'
+			hideOtherDialogs
+			allowMapInteraction
 		>
 			<PanelMapObjectLight
 				light={light}

@@ -626,9 +626,17 @@ function MapEditor() {
 		}
 		const measure = () => {
 			const container = canvas.parentElement;
-			const dialog = document.querySelector(
-				'.dialogObjectEditor, .dialogMapPropertiesStartup, .dialogSystemsCommandPreview',
-			) as HTMLElement | null;
+			// The first of these dialogs that is actually shown: a hidden one (like the Edit object window
+			// while a light is edited) measures as zero and would otherwise shrink the map to nothing
+			const dialog =
+				Array.from(
+					document.querySelectorAll<HTMLElement>(
+						'.dialogObjectEditor, .dialogMapPropertiesStartup, .dialogSystemsCommandPreview, .dialogLight',
+					),
+				).find((element) => {
+					const rect = element.getBoundingClientRect();
+					return rect.width > 0 && rect.height > 0;
+				}) ?? null;
 			let horizontalReserved = 0;
 			let verticalReserved = 0;
 			if (container && dialog && window.innerWidth > 1000) {

@@ -477,9 +477,11 @@ function Dialog({
 
 	useEffect(() => {
 		if (isOpen && allowMapInteraction) {
+			// Restore the previous value: a parent dialog may allow map interaction too
+			const previous = Inputs.allowMapMouseDuringDialog;
 			Inputs.allowMapMouseDuringDialog = true;
 			return () => {
-				Inputs.allowMapMouseDuringDialog = false;
+				Inputs.allowMapMouseDuringDialog = previous;
 			};
 		}
 	}, [isOpen, allowMapInteraction]);
