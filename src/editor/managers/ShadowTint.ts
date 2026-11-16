@@ -641,14 +641,19 @@ class ShadowTint {
 	}
 
 	/**
-	 * Semitransparent sprites (meshes marked userData.rpmGlassDepth) must not write depth while they are drawn:
-	 * three.js sorts transparent objects by their position, and a pane drawn too early would hide everything
-	 * behind it. Solid 3D shapes are not marked: their inner faces would show through their front faces. The
-	 * change is made only around the draw of each mesh, since the material is shared with the static map.
+	 * Semitransparent sprites and objects must not write depth while they are drawn: three.js sorts transparent
+	 * objects by their position, and a pane drawn too early would hide everything behind it. The static map
+	 * (renderOrder 0 or below, often sharing its material with them) keeps writing depth, unless its mesh is
+	 * marked userData.rpmGlassDepth (sprites). The change is made only around the draw of each mesh, since the
+	 * material is shared.
 	 */
 	private static updateGlassDepthWrite(scene: THREE.Scene, threshold: number) {
 		scene.traverse((object) => {
-			if (!(object instanceof THREE.Mesh) || !object.userData.rpmGlassDepth || object.userData.rpmGlassChecked) {
+			if (
+				!(object instanceof THREE.Mesh) ||
+				(object.renderOrder <= 0 && !object.userData.rpmGlassDepth) ||
+				object.userData.rpmGlassChecked
+			) {
 				return;
 			}
 			const materials = (Array.isArray(object.material) ? object.material : [object.material]).filter(

@@ -1393,7 +1393,6 @@ class MapPortion {
 					let mesh = this.spritesFaceMeshes[position.layer];
 					if (!mesh) {
 						mesh = new THREE.Mesh(new CustomGeometryFace(), this.map.materialTileset);
-						mesh.userData.rpmGlassDepth = true;
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -1440,7 +1439,6 @@ class MapPortion {
 					let mesh = this.spritesFixMeshes[side][position.layer];
 					if (!mesh) {
 						mesh = new THREE.Mesh(new CustomGeometry(), this.map.materialTileset);
-						mesh.userData.rpmGlassDepth = true;
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -2050,7 +2048,6 @@ class MapPortion {
 							);
 						}
 						mesh = new THREE.Mesh(geometrySprite, this.getObjectMaterial(material, state));
-						mesh.userData.rpmGlassDepth = true;
 						Manager.GL.applyShadowMaterials(mesh, mesh.material as THREE.Material);
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
 							this.objectsMeshes.push(mesh);
