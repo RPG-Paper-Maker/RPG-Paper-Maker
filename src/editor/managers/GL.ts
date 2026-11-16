@@ -298,7 +298,16 @@ gl_FragColor.rgb = mix(
 			shader.uniforms.enableShadows = { value: shadows };
 			shader.uniforms.hovered = { value: hovered };
 			shader.uniforms.alpha_threshold = { value: 0.01 };
-			Object.assign(shader.uniforms, ShadowTint.uniforms);
+			// Not enumerable: the uniforms end up in userData, which three.js copies as JSON when cloning a material,
+			// and the tint textures cannot be serialized
+			for (const [name, uniform] of Object.entries(ShadowTint.uniforms)) {
+				Object.defineProperty(shader.uniforms, name, {
+					value: uniform,
+					enumerable: false,
+					writable: true,
+					configurable: true,
+				});
+			}
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use
