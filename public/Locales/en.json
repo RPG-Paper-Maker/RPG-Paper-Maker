@@ -2107,5 +2107,11 @@
 	"interval.ms": "Interval (ms)",
 	"typewriter.interval": "Typewriter interval (ms)",
 	"typewriter.sound": "Typewriter sound",
-	"typewriter.volume": "Typewriter volume"
+	"typewriter.volume": "Typewriter volume",
+	"change.sunlight.ambient.light": "Change sunlight / ambient light",
+	"screen.tone.legacy": "Legacy mode (deprecated)",
+	"tooltip.screen.tone.legacy": "Deprecated, kept only for projects created before version 3.2.30 and will be removed in a future version. Applies the tone like before: very bright object lights still show through a dark tone. Uncheck it and use Change sunlight / ambient light to darken a place while keeping lights visible.",
+	"default.map.properties.values": "Default map properties values",
+	"keep.values.other.maps": "Keep values for other maps",
+	"sync.both": "Sync both"
 }

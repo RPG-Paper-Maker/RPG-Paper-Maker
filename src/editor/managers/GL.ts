@@ -13,6 +13,11 @@ import * as THREE from 'three';
 import { Paths, Utils } from '../common';
 import { readPublicFile } from '../common/Platform';
 
+export type LightingOverride = {
+	color: THREE.Color;
+	intensity: number;
+};
+
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;
 	public static SHADER_DEFAULT_FRAGMENT: string;
@@ -23,6 +28,12 @@ class GL {
 	public static isGameTestOpen = false;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
+	/** @deprecated Screen tone legacy mode (pre-3.2.30 projects), to remove. */
+	public static screenToneLegacy = { value: false };
+	public static lightingSun: LightingOverride | null = null;
+	public static lightingAmbient: LightingOverride | null = null;
+	public static lightingSky = new THREE.Color(1, 1, 1);
+	private static skyTintRGB = { r: 1, g: 1, b: 1 };
 	public parent!: HTMLElement;
 	public renderer!: THREE.WebGLRenderer;
 	public canvasWidth: number = 0;
@@ -149,6 +160,29 @@ class GL {
 		}
 	}
 
+	static resetLighting() {
+		this.lightingSun = null;
+		this.lightingAmbient = null;
+		this.lightingSky.setRGB(1, 1, 1);
+	}
+
+	static updateLightingSky(mapLight: THREE.Color, currentLight: THREE.Color) {
+		this.lightingSky.setRGB(
+			mapLight.r > 0 ? currentLight.r / mapLight.r : 1,
+			mapLight.g > 0 ? currentLight.g / mapLight.g : 1,
+			mapLight.b > 0 ? currentLight.b / mapLight.b : 1,
+		);
+	}
+
+	static updateSkyTint(materials: THREE.Material | THREE.Material[]) {
+		const sky = this.lightingSky.getRGB(this.skyTintRGB, THREE.SRGBColorSpace);
+		for (const material of Array.isArray(materials) ? materials : [materials]) {
+			if (material instanceof THREE.MeshPhongMaterial) {
+				material.color.setRGB(sky.r, sky.g, sky.b);
+			}
+		}
+	}
+
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
 		return {
 			width: (material?.map?.image as HTMLImageElement)?.width ?? 0,
@@ -173,13 +207,14 @@ class GL {
 		material.onBeforeCompile = (shader, renderer): void => {
 			onBeforeCompile(shader, renderer);
 			shader.uniforms.rpmScreenTone = { value: GL.screenTone };
+			shader.uniforms.rpmScreenToneLegacy = GL.screenToneLegacy;
 			shader.fragmentShader = shader.fragmentShader.replace(
 				'#include <common>',
-				'#include <common>\nuniform vec4 rpmScreenTone;',
+				'#include <common>\nuniform vec4 rpmScreenTone;\nuniform bool rpmScreenToneLegacy;',
 			);
 			shader.fragmentShader = shader.fragmentShader.replace(
 				'#include <fog_fragment>',
-				`vec3 rpmScreenToneRgb = gl_FragColor.rgb + rpmScreenTone.rgb;
+				`vec3 rpmScreenToneRgb = (rpmScreenToneLegacy ? gl_FragColor.rgb : clamp(gl_FragColor.rgb, 0.0, 1.0)) + rpmScreenTone.rgb;
 const vec3 rpmScreenToneWeights = vec3(0.2125, 0.7154, 0.0721);
 gl_FragColor.rgb = mix(
 	vec3(dot(rpmScreenToneRgb, rpmScreenToneWeights)),
@@ -256,6 +291,7 @@ gl_FragColor.rgb = mix(
 			shader.fragmentShader = fragment;
 			shader.vertexShader = vertex;
 			shader.uniforms.colorD = uniforms.colorD;
+			shader.uniforms.screenToneLegacy = GL.screenToneLegacy;
 			shader.uniforms.reverseH = { value: opts.flipX };
 			shader.uniforms.repeat = { value: repeat };
 			shader.uniforms.offset = uniforms.offset;

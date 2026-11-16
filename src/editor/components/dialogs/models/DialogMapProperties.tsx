@@ -32,6 +32,7 @@ import { RootState, setMapStartupReactionsOpen, setNeedsReloadMap } from '../../
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
+import TooltipInformation from '../../TooltipInformation';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
@@ -160,6 +161,8 @@ function DialogMapProperties({
 	const [screenToneGreen] = useStateDynamicValue();
 	const [screenToneBlue] = useStateDynamicValue();
 	const [screenToneGrey] = useStateDynamicValue();
+	const [screenToneLegacy, setScreenToneLegacy] = useStateBool();
+	const [isScreenToneLegacyVisible, setIsScreenToneLegacyVisible] = useStateBool();
 	const [skySelection, setSkySelection] = useStateNumber();
 	const [skyColorID] = useStateDynamicValue();
 	const [skyImageID, setSkyImageID] = useStateNumber();
@@ -277,7 +280,7 @@ function DialogMapProperties({
 		scene.updateFog();
 	};
 
-	const previewScreenTone = () => {
+	const previewScreenTone = (legacy = screenToneLegacy) => {
 		const scene = getPreviewScene();
 		if (!scene || !readyRef.current) {
 			return;
@@ -287,6 +290,7 @@ function DialogMapProperties({
 		scene.model.screenToneGreen.copy(screenToneGreen);
 		scene.model.screenToneBlue.copy(screenToneBlue);
 		scene.model.screenToneGrey.copy(screenToneGrey);
+		scene.model.screenToneLegacy = legacy;
 		scene.updateScreenTone();
 	};
 
@@ -367,6 +371,8 @@ function DialogMapProperties({
 		screenToneGreen.copy(model.screenToneGreen);
 		screenToneBlue.copy(model.screenToneBlue);
 		screenToneGrey.copy(model.screenToneGrey);
+		setScreenToneLegacy(model.screenToneLegacy);
+		setIsScreenToneLegacyVisible(model.screenToneLegacy);
 		setSkySelection(model.getSkySelection());
 		skyColorID.copy(model.skyColorID);
 		setSkyImageID(model.skyImageID);
@@ -428,6 +434,7 @@ function DialogMapProperties({
 		model.screenToneGreen.copy(screenToneGreen);
 		model.screenToneBlue.copy(screenToneBlue);
 		model.screenToneGrey.copy(screenToneGrey);
+		model.screenToneLegacy = screenToneLegacy;
 		model.isSkyColor = skySelection === SELECTION_SKY_TYPE.COLOR;
 		if (model.isSkyColor) {
 			model.skyColorID.copy(skyColorID);
@@ -927,6 +934,20 @@ function DialogMapProperties({
 						/>
 					</Value>
 				</Form>
+				{isScreenToneLegacyVisible && (
+					<Flex spaced centerV>
+						<Checkbox
+							isChecked={screenToneLegacy}
+							onChange={(value) => {
+								setScreenToneLegacy(value);
+								previewScreenTone(value);
+							}}
+						>
+							{t('screen.tone.legacy')}
+						</Checkbox>
+						<TooltipInformation text={t('tooltip.screen.tone.legacy')} />
+					</Flex>
+				)}
 			</Groupbox>
 			<Groupbox title={t('sky')}>
 				<RadioGroup

@@ -2103,5 +2103,11 @@
 	"interval.ms": "Interwał (ms)",
 	"typewriter.interval": "Interwał maszyny do pisania (ms)",
 	"typewriter.sound": "Dźwięk maszyny do pisania",
-	"typewriter.volume": "Głośność maszyny do pisania"
+	"typewriter.volume": "Głośność maszyny do pisania",
+	"change.sunlight.ambient.light": "Zmień światło słoneczne / otoczenia",
+	"screen.tone.legacy": "Tryb starszy (przestarzały)",
+	"tooltip.screen.tone.legacy": "Przestarzały, zachowany tylko dla projektów sprzed wersji 3.2.30 i zostanie usunięty w przyszłej wersji. Stosuje ton jak wcześniej: bardzo jasne światła obiektów przenikają przez ciemny ton. Odznacz go i użyj Zmień światło słoneczne / otoczenia, aby przyciemnić miejsce, zachowując widoczne światła.",
+	"default.map.properties.values": "Domyślne wartości właściwości mapy",
+	"keep.values.other.maps": "Zachowaj wartości dla innych map",
+	"sync.both": "Synchronizuj oba"
 }

@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { DISPLAY_PICTURE_KIND, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Manager, Model } from '../../Editor';
+import type { LightingOverride } from '../../managers';
 import { MapObjectCommandType } from '../../models';
 import { DynamicValue } from '../DynamicValue';
 import { Project } from '../Project';
@@ -448,6 +450,7 @@ class CommandChangeScreenTone extends CommandBase {
 	private colorID: DynamicValue | null = null;
 	private waitEnd: boolean;
 	private time: DynamicValue;
+	private legacy: boolean;
 
 	constructor(command: MapObjectCommandType[]) {
 		super();
@@ -462,12 +465,14 @@ class CommandChangeScreenTone extends CommandBase {
 		}
 		this.waitEnd = Utils.numToBool(command[iterator.i++] as number);
 		this.time = DynamicValue.createCommand(command, iterator);
+		this.legacy = Utils.numToBool(command[iterator.i++] as number);
 		this.parallel = !this.waitEnd;
 	}
 
 	initialize(ctx: SimulationContext): CommandState {
 		const game = ctx.game;
 		const tone = Manager.GL.screenTone;
+		Manager.GL.screenToneLegacy.value = this.legacy;
 		const time = game.resolveNumber(this.time) * 1000;
 		const color = this.colorID === null ? null : getColor(game.resolveNumber(this.colorID));
 		return {
@@ -494,6 +499,112 @@ class CommandChangeScreenTone extends CommandBase {
 			return 1;
 		}
 		this.apply(state!, getTimeRate(state!, ctx.getElapsedTime()));
+		return (state!.timeLeft as number) === 0 ? 1 : 0;
+	}
+
+	updateFast(state: CommandState): number {
+		this.apply(state!, 1);
+		return 1;
+	}
+}
+
+type LightChange = { isDefault: boolean; color: DynamicValue; intensity: DynamicValue } | null;
+
+type LightTransition = {
+	isSun: boolean;
+	isDefault: boolean;
+	start: LightingOverride;
+	target: LightingOverride;
+};
+
+class CommandChangeSunlightAmbientLight extends CommandBase {
+	private changes: LightChange[] = [];
+	private waitEnd: boolean;
+	private time: DynamicValue;
+
+	constructor(command: MapObjectCommandType[]) {
+		super();
+		const iterator = Utils.generateIterator();
+		for (let i = 0; i < 2; i++) {
+			this.changes.push(
+				Utils.numToBool(command[iterator.i++] as number)
+					? {
+							isDefault: Number(command[iterator.i++]) === 0,
+							color: DynamicValue.createCommand(command, iterator),
+							intensity: DynamicValue.createCommand(command, iterator),
+						}
+					: null,
+			);
+		}
+		iterator.i += 2;
+		this.waitEnd = Utils.numToBool(command[iterator.i++] as number);
+		this.time = DynamicValue.createCommand(command, iterator);
+		this.parallel = !this.waitEnd;
+	}
+
+	initialize(ctx: SimulationContext): CommandState {
+		const game = ctx.game;
+		const map = ctx.map;
+		const time = game.resolveNumber(this.time) * 1000;
+		const transitions: LightTransition[] = [];
+		if (map) {
+			for (const [index, change] of this.changes.entries()) {
+				if (change) {
+					const isSun = index === 0;
+					const color =
+						change.color.kind === DYNAMIC_VALUE_KIND.TEXT ? (change.color.value as string) : '#ffffff';
+					transitions.push({
+						isSun,
+						isDefault: change.isDefault,
+						start: map.getCurrentLight(isSun),
+						target: change.isDefault
+							? map.getMapLight(isSun)
+							: {
+									color: new THREE.Color(color),
+									intensity: Math.max(0, game.resolveNumber(change.intensity)),
+								},
+					});
+				}
+			}
+		}
+		return {
+			parallel: this.waitEnd,
+			transitions,
+			time,
+			timeLeft: time,
+		};
+	}
+
+	private apply(state: Record<string, unknown>, progress: number) {
+		for (const transition of state.transitions as LightTransition[]) {
+			const value: LightingOverride | null =
+				progress === 1 && transition.isDefault
+					? null
+					: {
+							color: new THREE.Color().lerpColors(
+								transition.start.color,
+								transition.target.color,
+								progress,
+							),
+							intensity:
+								transition.start.intensity +
+								(transition.target.intensity - transition.start.intensity) * progress,
+						};
+			if (transition.isSun) {
+				Manager.GL.lightingSun = value;
+			} else {
+				Manager.GL.lightingAmbient = value;
+			}
+		}
+	}
+
+	update(state: CommandState, ctx: SimulationContext): number {
+		if (!state!.parallel) {
+			return 1;
+		}
+		const time = state!.time as number;
+		state!.timeLeft = time === 0 ? 0 : Math.max(0, (state!.timeLeft as number) - ctx.getElapsedTime());
+		this.apply(state!, time === 0 ? 1 : 1 - (state!.timeLeft as number) / time);
 		return (state!.timeLeft as number) === 0 ? 1 : 0;
 	}
 
@@ -769,6 +880,10 @@ extraSimulationCommandFactories.set(
 	(command: MapObjectCommandType[]) => new CommandChangeScreenTone(command),
 );
 extraSimulationCommandFactories.set(
+	EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT,
+	(command: MapObjectCommandType[]) => new CommandChangeSunlightAmbientLight(command),
+);
+extraSimulationCommandFactories.set(
 	EVENT_COMMAND_KIND.CHANGE_FOG,
 	(command: MapObjectCommandType[]) => new CommandChangeFog(command),
 );
@@ -784,6 +899,7 @@ extraSimulationCommandFactories.set(EVENT_COMMAND_KIND.RESET_CAMERA, () => new C
 
 export {
 	CommandChangeFog,
+	CommandChangeSunlightAmbientLight,
 	CommandChangeScreenTone,
 	CommandChangeWeather,
 	CommandDisplayAPicture,

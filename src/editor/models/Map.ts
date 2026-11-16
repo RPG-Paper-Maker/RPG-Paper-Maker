@@ -80,6 +80,8 @@ class Map extends Localization {
 	public screenToneGreen = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
 	public screenToneBlue = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
 	public screenToneGrey = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+	/** @deprecated Screen tone legacy mode (pre-3.2.30 projects), to remove. */
+	public screenToneLegacy = false;
 	public isSkyColor = false;
 	public skyColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSkyImage = false;
@@ -159,6 +161,7 @@ class Map extends Localization {
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
+		['screenToneLegacy', 'stl', false, BINDING.BOOLEAN],
 		['isSkyColor', 'isky', undefined, BINDING.BOOLEAN],
 		['isSkyImage', 'isi', undefined, BINDING.BOOLEAN],
 		['startupObject', 'so', undefined, BINDING.OBJECT, CommonObject],

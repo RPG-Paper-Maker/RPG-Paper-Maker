@@ -2106,5 +2106,11 @@
 	"interval.ms": "간격 (ms)",
 	"typewriter.interval": "타자기 간격 (ms)",
 	"typewriter.sound": "타자기 효과음",
-	"typewriter.volume": "타자기 볼륨"
+	"typewriter.volume": "타자기 볼륨",
+	"change.sunlight.ambient.light": "햇빛 / 주변광 변경",
+	"screen.tone.legacy": "레거시 모드 (지원 중단)",
+	"tooltip.screen.tone.legacy": "지원 중단됨: 3.2.30 버전 이전에 만든 프로젝트를 위해서만 유지되며 향후 버전에서 제거됩니다. 이전과 같은 방식으로 색조를 적용하여 매우 밝은 오브젝트 조명이 어두운 색조를 통과해 보입니다. 체크를 해제하고 조명을 유지한 채 장소를 어둡게 하려면 \"햇빛 / 주변광 변경\"을 사용하세요.",
+	"default.map.properties.values": "맵 속성 기본값",
+	"keep.values.other.maps": "다른 맵에서도 값 유지",
+	"sync.both": "둘 다 동기화"
 }

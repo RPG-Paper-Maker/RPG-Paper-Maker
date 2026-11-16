@@ -2103,5 +2103,11 @@
 	"interval.ms": "Intervallo (ms)",
 	"typewriter.interval": "Intervallo macchina da scrivere (ms)",
 	"typewriter.sound": "Suono macchina da scrivere",
-	"typewriter.volume": "Volume macchina da scrivere"
+	"typewriter.volume": "Volume macchina da scrivere",
+	"change.sunlight.ambient.light": "Cambia luce solare / ambientale",
+	"screen.tone.legacy": "Modalità legacy (deprecata)",
+	"tooltip.screen.tone.legacy": "Deprecata, mantenuta solo per i progetti creati prima della versione 3.2.30 e verrà rimossa in una versione futura. Applica il tono come prima: le luci degli oggetti molto intense restano visibili attraverso un tono scuro. Deselezionala e usa Cambia luce solare / ambientale per scurire un luogo mantenendo visibili le luci.",
+	"default.map.properties.values": "Valori predefiniti delle proprietà della mappa",
+	"keep.values.other.maps": "Mantieni i valori per le altre mappe",
+	"sync.both": "Sincronizza entrambi"
 }

@@ -44,7 +44,7 @@ import { TextureBundle } from '../core/TextureBundle';
 import { UndoRedoState } from '../core/UndoRedoState';
 import { Manager, MapElement, Model } from '../Editor';
 import { default as i18n, default as i18next } from '../i18n/i18n';
-import { Inputs } from '../managers';
+import { Inputs, LightingOverride } from '../managers';
 import { Previewer3D } from './Previewer3D';
 
 const { t } = i18next;
@@ -565,6 +565,50 @@ class Map extends Base {
 		}
 	}
 
+	getMapLight(isSun: boolean): LightingOverride {
+		const light = isSun ? this.model.sunlightLight : this.model.ambientLight;
+		const isEnabled = isSun ? this.model.isSunlight : this.model.isAmbientLight;
+		return {
+			color: new THREE.Color(light.color.value as string),
+			intensity: isEnabled ? light.intensity.getFixNumberValue() : 0,
+		};
+	}
+
+	getCurrentLight(isSun: boolean): LightingOverride {
+		const override = isSun ? Manager.GL.lightingSun : Manager.GL.lightingAmbient;
+		return override ? { color: override.color.clone(), intensity: override.intensity } : this.getMapLight(isSun);
+	}
+
+	updateLights() {
+		const getFactor = (light: Model.MapObjectLight) => {
+			const offset = light.intensityOffset.getFixNumberValue();
+			const time = light.intensityTime.getFixNumberValue();
+			return (
+				1 +
+				(offset / 100) *
+					(time > 0 && offset !== 0 ? (1 - Math.cos((Math.PI * performance.now()) / time)) / 2 : 0)
+			);
+		};
+		const mapLight = new THREE.Color(0, 0, 0);
+		const currentLight = new THREE.Color(0, 0, 0);
+		const lights: [THREE.Light | null, boolean, Model.MapObjectLight][] = [
+			[this.sunLight, true, this.model.sunlightLight],
+			[this.ambientLight, false, this.model.ambientLight],
+		];
+		for (const [light, isSun, model] of lights) {
+			if (!light) {
+				continue;
+			}
+			const map = this.getMapLight(isSun);
+			const current = this.getCurrentLight(isSun);
+			light.intensity = Math.max(0, current.intensity * getFactor(model));
+			light.color.copy(current.color);
+			mapLight.add(map.color.multiplyScalar(map.intensity));
+			currentLight.add(current.color.multiplyScalar(current.intensity));
+		}
+		Manager.GL.updateLightingSky(mapLight, currentLight);
+	}
+
 	removeLights() {
 		if (this.ambientLight) {
 			this.scene.remove(this.ambientLight);
@@ -676,6 +720,7 @@ class Map extends Base {
 			Math.max(Math.min(this.model.screenToneBlue.getFixNumberValue() / 255, 1), -1),
 			Math.max(Math.min(1 - this.model.screenToneGrey.getFixNumberValue() / 100, 1), -1),
 		);
+		Manager.GL.screenToneLegacy.value = this.model.screenToneLegacy;
 	}
 
 	async updateBackground() {
@@ -837,7 +882,9 @@ class Map extends Base {
 				Project.current!.systems.colors,
 				this.model.skyColorID.getFixNumberValue(),
 			) as Model.Color
-		).getTHREEColor();
+		)
+			.getTHREEColor()
+			.multiply(Manager.GL.lightingSky);
 	}
 
 	updateBackgroundImage() {
@@ -3170,23 +3217,12 @@ class Map extends Base {
 			}
 
 			this.camera.update(this);
-			if (this.sunLight) {
-				const intensity = this.model.sunlightLight.intensity.getFixNumberValue();
-				const offset = this.model.sunlightLight.intensityOffset.getFixNumberValue();
-				const time = this.model.sunlightLight.intensityTime.getFixNumberValue();
-				const factor = time > 0 && offset !== 0 ? (1 - Math.cos((Math.PI * performance.now()) / time)) / 2 : 0;
-				this.sunLight.intensity = Math.max(0, intensity * (1 + (offset / 100) * factor));
+			this.updateLights();
+			if (this.skyboxMesh) {
+				Manager.GL.updateSkyTint(this.skyboxMesh.material);
 			}
-			if (this.ambientLight) {
-				const light = this.model.ambientLight;
-				const intensity = light.intensity.getFixNumberValue();
-				const offset = light.intensityOffset.getFixNumberValue();
-				const time = light.intensityTime.getFixNumberValue();
-				const factor = time > 0 && offset !== 0 ? (1 - Math.cos((Math.PI * performance.now()) / time)) / 2 : 0;
-				this.ambientLight.intensity = this.model.isAmbientLight
-					? Math.max(0, intensity * (1 + (offset / 100) * factor))
-					: 0;
-				this.ambientLight.color.set(light.color.value as string);
+			if (this.model.isSkyColor && this.scene.background instanceof THREE.Color) {
+				this.updateBackgroundColor();
 			}
 
 			if (!this.isLoadingPortions && this.updateCurrentPortion()) {

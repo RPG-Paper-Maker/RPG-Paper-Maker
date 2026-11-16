@@ -2104,5 +2104,11 @@
 	"interval.ms": "间隔 (毫秒)",
 	"typewriter.interval": "打字机间隔 (毫秒)",
 	"typewriter.sound": "打字机音效",
-	"typewriter.volume": "打字机音量"
+	"typewriter.volume": "打字机音量",
+	"change.sunlight.ambient.light": "更改阳光 / 环境光",
+	"screen.tone.legacy": "旧版模式（已弃用）",
+	"tooltip.screen.tone.legacy": "已弃用，仅为 3.2.30 版本之前创建的项目保留，将在未来版本中移除。按以前的方式应用色调：非常明亮的物体光源仍会透过暗色调显示。请取消勾选，并使用“更改阳光 / 环境光”来使场景变暗并保留光源可见。",
+	"default.map.properties.values": "地图属性默认值",
+	"keep.values.other.maps": "在其他地图保留数值",
+	"sync.both": "同步两者"
 }

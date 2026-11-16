@@ -25,6 +25,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import SliderDynamic from '../../SliderDynamic';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -49,6 +50,8 @@ function DialogCommandChangeScreenTone({
 	const [isAddingColorID, setIsAddingColorID] = useStateBool();
 	const [addingColorIndex, setAddingColorIndex] = useStateNumber();
 	const [addingColorID] = useStateDynamicValue();
+	const [isLegacy, setIsLegacy] = useStateBool();
+	const [isLegacyVisible, setIsLegacyVisible] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -68,6 +71,9 @@ function DialogCommandChangeScreenTone({
 				addingColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 			}
 			panelWaitTimeRef.current?.initialize(list, iterator);
+			const legacy = Utils.initializeBoolCommand(list, iterator);
+			setIsLegacy(legacy);
+			setIsLegacyVisible(legacy);
 		} else {
 			red.updateToDefaultNumber();
 			green.updateToDefaultNumber();
@@ -77,6 +83,8 @@ function DialogCommandChangeScreenTone({
 			setAddingColorIndex(0);
 			addingColorID.updateToDefaultDatabase(Project.current!.systems.colors);
 			panelWaitTimeRef.current?.initialize();
+			setIsLegacy(false);
+			setIsLegacyVisible(false);
 		}
 		setTrigger((v) => !v);
 	};
@@ -93,6 +101,7 @@ function DialogCommandChangeScreenTone({
 			addingColorID.getCommand(newList);
 		}
 		panelWaitTimeRef.current?.getCommand(newList);
+		newList.push(Utils.boolToNum(isLegacy));
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
 
@@ -158,6 +167,14 @@ function DialogCommandChangeScreenTone({
 					/>
 				</Flex>
 				<PanelWaitTime ref={panelWaitTimeRef} />
+				{isLegacyVisible && (
+					<Flex spaced centerV>
+						<Checkbox isChecked={isLegacy} onChange={setIsLegacy}>
+							{t('screen.tone.legacy')}
+						</Checkbox>
+						<TooltipInformation text={t('tooltip.screen.tone.legacy')} />
+					</Flex>
+				)}
 			</Flex>
 		</Dialog>
 	);

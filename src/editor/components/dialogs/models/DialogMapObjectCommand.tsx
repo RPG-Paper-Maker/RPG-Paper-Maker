@@ -30,6 +30,7 @@ import DialogCommandChangeClass from '../commands/DialogCommandChangeClass';
 import DialogCommandChangeEquipment from '../commands/DialogCommandChangeEquipment';
 import DialogCommandChangeExperienceCurve from '../commands/DialogCommandChangeExperienceCurve';
 import DialogCommandChangeFog from '../commands/DialogCommandChangeFog';
+import DialogCommandChangeSunlightAmbientLight from '../commands/DialogCommandChangeSunlightAmbientLight';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeName from '../commands/DialogCommandChangeName';
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
@@ -174,6 +175,7 @@ function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept,
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE)}
 						{getButton(EVENT_COMMAND_KIND.CHANGE_FOG)}
+						{getButton(EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT)}
 						{getButton(EVENT_COMMAND_KIND.SHAKE_SCREEN)}
 						{getButton(EVENT_COMMAND_KIND.FLASH_SCREEN)}
 						{getButton(EVENT_COMMAND_KIND.CHANGE_WEATHER)}
@@ -362,6 +364,8 @@ function DialogMapObjectCommand({ setIsOpen, model, node, list, isNew, onAccept,
 				return <DialogCommandChangeScreenTone {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_FOG:
 				return <DialogCommandChangeFog {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
+				return <DialogCommandChangeSunlightAmbientLight {...options} />;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return <DialogCommandShakeScreen {...options} />;
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:

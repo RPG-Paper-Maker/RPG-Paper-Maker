@@ -2103,5 +2103,11 @@
 	"interval.ms": "Intervall (ms)",
 	"typewriter.interval": "Schreibmaschinen-Intervall (ms)",
 	"typewriter.sound": "Schreibmaschinen-Sound",
-	"typewriter.volume": "Schreibmaschinen-Lautstärke"
+	"typewriter.volume": "Schreibmaschinen-Lautstärke",
+	"change.sunlight.ambient.light": "Sonnenlicht / Umgebungslicht ändern",
+	"screen.tone.legacy": "Legacy-Modus (veraltet)",
+	"tooltip.screen.tone.legacy": "Veraltet, nur für Projekte vor Version 3.2.30 beibehalten und wird in einer zukünftigen Version entfernt. Wendet den Farbton wie früher an: Sehr helle Objektlichter scheinen durch einen dunklen Farbton hindurch. Deaktiviere ihn und verwende Sonnenlicht / Umgebungslicht ändern, um einen Ort abzudunkeln und die Lichter sichtbar zu lassen.",
+	"default.map.properties.values": "Standardwerte der Karteneigenschaften",
+	"keep.values.other.maps": "Werte für andere Karten beibehalten",
+	"sync.both": "Beide synchronisieren"
 }

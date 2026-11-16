@@ -198,6 +198,7 @@ class MapObjectCommand extends Base {
 				return <GiTeleport />;
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
 				return <IoMdMove />;
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
 			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
 				return <HiOutlineLightBulb />;
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
@@ -323,6 +324,8 @@ class MapObjectCommand extends Base {
 				return t('change.screen.tone');
 			case EVENT_COMMAND_KIND.CHANGE_FOG:
 				return t('change.fog');
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
+				return t('change.sunlight.ambient.light');
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return t('shake.screen');
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
@@ -479,6 +482,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 			case EVENT_COMMAND_KIND.CHANGE_FOG:
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
@@ -690,6 +694,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_FOG:
 				texts = this.toStringChangeFog(iterator, properties, parameters);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
+				texts = this.toStringChangeSunlightAmbientLight(iterator, properties, parameters);
 				break;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				texts = this.toStringShakeScreen(iterator, properties, parameters);
@@ -1275,6 +1282,9 @@ class MapObjectCommand extends Base {
 			'seconds',
 		).toLowerCase()}`;
 		texts.push(time);
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`[${t('screen.tone.legacy')}]`);
+		}
 		return texts;
 	}
 
@@ -1288,6 +1298,35 @@ class MapObjectCommand extends Base {
 		return [
 			`[${t('enable').toLowerCase()}] ${t('intensity')}: ${intensity}, ${t('color').toLowerCase()}: ${color}`,
 		];
+	}
+
+	toStringChangeSunlightAmbientLight(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		for (const name of ['sun.light', 'ambient.light']) {
+			if (Utils.initializeBoolCommand(this.command, iterator)) {
+				const isDefault = Number(this.command[iterator.i++]) === 0;
+				const color = this.toStringDynamicValue(iterator, properties, parameters);
+				const intensity = this.toStringDynamicValue(iterator, properties, parameters);
+				texts.push(
+					isDefault
+						? `${t(name)}: ${t('default.map.properties.values').toLowerCase()}`
+						: `${t(name)}: ${t('color').toLowerCase()} ${color}, ${t('intensity').toLowerCase()} ${intensity}`,
+				);
+			}
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`[${t('keep.values.other.maps')}]`);
+		}
+		iterator.i++;
+		let time = '';
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			time += `[${t('wait.end')}] `;
+		}
+		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+			'seconds',
+		).toLowerCase()}`;
+		texts.push(time);
+		return texts;
 	}
 
 	toStringShakeScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {

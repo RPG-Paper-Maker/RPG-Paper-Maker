@@ -2103,5 +2103,11 @@
 	"interval.ms": "Intervalle (ms)",
 	"typewriter.interval": "Intervalle machine à écrire (ms)",
 	"typewriter.sound": "Son machine à écrire",
-	"typewriter.volume": "Volume machine à écrire"
+	"typewriter.volume": "Volume machine à écrire",
+	"change.sunlight.ambient.light": "Changer la lumière du soleil / ambiante",
+	"screen.tone.legacy": "Mode hérité (obsolète)",
+	"tooltip.screen.tone.legacy": "Obsolète, conservé uniquement pour les projets créés avant la version 3.2.30 et sera supprimé dans une future version. Applique le ton comme avant : les lumières d'objets très vives restent visibles à travers un ton sombre. Décochez-le et utilisez Changer la lumière du soleil / ambiante pour assombrir un lieu tout en gardant les lumières visibles.",
+	"default.map.properties.values": "Valeurs par défaut des propriétés de la carte",
+	"keep.values.other.maps": "Conserver les valeurs pour les autres cartes",
+	"sync.both": "Synchroniser les deux"
 }

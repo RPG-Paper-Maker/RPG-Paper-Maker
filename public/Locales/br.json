@@ -2103,5 +2103,11 @@
 	"interval.ms": "Intervalo (ms)",
 	"typewriter.interval": "Intervalo da máquina de escrever (ms)",
 	"typewriter.sound": "Som da máquina de escrever",
-	"typewriter.volume": "Volume da máquina de escrever"
+	"typewriter.volume": "Volume da máquina de escrever",
+	"change.sunlight.ambient.light": "Alterar luz do sol / ambiente",
+	"screen.tone.legacy": "Modo legado (obsoleto)",
+	"tooltip.screen.tone.legacy": "Obsoleto, mantido apenas para projetos criados antes da versão 3.2.30 e será removido em uma versão futura. Aplica o tom como antes: luzes de objetos muito fortes continuam visíveis através de um tom escuro. Desmarque e use Alterar luz do sol / ambiente para escurecer um lugar mantendo as luzes visíveis.",
+	"default.map.properties.values": "Valores padrão das propriedades do mapa",
+	"keep.values.other.maps": "Manter valores para outros mapas",
+	"sync.both": "Sincronizar ambos"
 }

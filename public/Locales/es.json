@@ -2103,5 +2103,11 @@
 	"interval.ms": "Intervalo (ms)",
 	"typewriter.interval": "Intervalo de máquina de escribir (ms)",
 	"typewriter.sound": "Sonido de máquina de escribir",
-	"typewriter.volume": "Volumen de máquina de escribir"
+	"typewriter.volume": "Volumen de máquina de escribir",
+	"change.sunlight.ambient.light": "Cambiar luz solar / ambiental",
+	"screen.tone.legacy": "Modo heredado (obsoleto)",
+	"tooltip.screen.tone.legacy": "Obsoleto, se mantiene solo para proyectos creados antes de la versión 3.2.30 y se eliminará en una versión futura. Aplica el tono como antes: las luces de objetos muy intensas siguen viéndose a través de un tono oscuro. Desmárcalo y usa Cambiar luz solar / ambiental para oscurecer un lugar manteniendo las luces visibles.",
+	"default.map.properties.values": "Valores predeterminados de las propiedades del mapa",
+	"keep.values.other.maps": "Mantener valores para otros mapas",
+	"sync.both": "Sincronizar ambos"
 }

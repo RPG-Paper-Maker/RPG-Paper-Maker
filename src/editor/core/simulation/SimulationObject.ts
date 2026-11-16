@@ -579,16 +579,9 @@ class SimulationObject {
 				light.userData.isObjectLight = true;
 				light.userData.castShadow = settings.castShadow.getFixNumberValue() === 1;
 				light.castShadow = this.map.model.objectLightsShadows && light.userData.castShadow;
-				if (light instanceof THREE.PointLight) {
-					light.shadow.mapSize.set(256, 256);
-					light.shadow.autoUpdate = false;
-					light.shadow.needsUpdate = true;
-				}
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
-					light.shadow.camera.near = 0.01;
-					light.shadow.camera.updateProjectionMatrix();
 					light.shadow.bias = -0.0003;
-					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
+					light.shadow.normalBias = 0.5 / Project.SQUARE_SIZE;
 				}
 			}
 			light.position.set(
@@ -760,6 +753,7 @@ class SimulationObject {
 					? SimulationObject.getOutlineFragment()
 					: Manager.GL.SHADER_DEFAULT_FRAGMENT;
 				shader.uniforms.colorD = uniforms.colorD ?? { value: Manager.GL.screenTone };
+				shader.uniforms.screenToneLegacy = Manager.GL.screenToneLegacy;
 				shader.uniforms.offset = uniforms.offset ?? { value: new THREE.Vector2() };
 				shader.uniforms.repeat = { value: (uniforms.repeat?.value as number) ?? 1 };
 				shader.uniforms.enableShadows = { value: (uniforms.enableShadows?.value as boolean) ?? true };

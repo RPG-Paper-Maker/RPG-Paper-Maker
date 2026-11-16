@@ -2292,16 +2292,9 @@ class MapPortion {
 				light.userData.isObjectLight = true;
 				light.userData.castShadow = settings.castShadow.getFixNumberValue() === 1;
 				light.castShadow = this.map.model.objectLightsShadows && light.userData.castShadow;
-				if (light instanceof THREE.PointLight) {
-					light.shadow.mapSize.set(256, 256);
-					light.shadow.autoUpdate = false;
-					light.shadow.needsUpdate = true;
-				}
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
-					light.shadow.camera.near = 0.01;
-					light.shadow.camera.updateProjectionMatrix();
 					light.shadow.bias = -0.0003;
-					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
+					light.shadow.normalBias = 0.5 / Project.SQUARE_SIZE;
 				}
 			}
 			light.position.set(

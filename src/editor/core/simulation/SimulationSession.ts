@@ -57,6 +57,7 @@ type CameraSnapshot = {
 
 type ScreenSnapshot = {
 	tone: THREE.Vector4;
+	toneLegacy: boolean;
 	isFog: boolean;
 	fogColorID: DynamicValue;
 	fogIntensity: DynamicValue;
@@ -121,6 +122,7 @@ class SimulationSession {
 		};
 		this.screenSnapshot = {
 			tone: Manager.GL.screenTone.clone(),
+			toneLegacy: Manager.GL.screenToneLegacy.value,
 			isFog: options.map.model.isFog,
 			fogColorID: options.map.model.fogColorID,
 			fogIntensity: options.map.model.fogIntensity,
@@ -364,6 +366,8 @@ class SimulationSession {
 		this.map.camera.far = this.cameraSnapshot.far;
 		this.map.camera.applyProjection();
 		Manager.GL.screenTone.copy(this.screenSnapshot.tone);
+		Manager.GL.screenToneLegacy.value = this.screenSnapshot.toneLegacy;
+		Manager.GL.resetLighting();
 		this.map.model.isFog = this.screenSnapshot.isFog;
 		this.map.model.fogColorID = this.screenSnapshot.fogColorID;
 		this.map.model.fogIntensity = this.screenSnapshot.fogIntensity;

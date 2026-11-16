@@ -2103,5 +2103,11 @@
 	"interval.ms": "間隔 (ms)",
 	"typewriter.interval": "タイプライター間隔 (ms)",
 	"typewriter.sound": "タイプライター効果音",
-	"typewriter.volume": "タイプライター音量"
+	"typewriter.volume": "タイプライター音量",
+	"change.sunlight.ambient.light": "太陽光 / 環境光を変更",
+	"screen.tone.legacy": "レガシーモード（非推奨）",
+	"tooltip.screen.tone.legacy": "非推奨です。バージョン3.2.30より前に作成されたプロジェクトのためだけに残されており、今後のバージョンで削除されます。以前と同じ方法で色調を適用し、非常に明るいオブジェクトの光は暗い色調を通して見えます。チェックを外し、照明を残したまま場所を暗くするには「太陽光 / 環境光を変更」を使用してください。",
+	"default.map.properties.values": "マップ設定のデフォルト値",
+	"keep.values.other.maps": "他のマップでも値を維持",
+	"sync.both": "両方を同期"
 }
