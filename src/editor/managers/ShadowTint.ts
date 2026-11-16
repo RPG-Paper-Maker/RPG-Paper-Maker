@@ -246,6 +246,22 @@ class ShadowTint {
 	}
 #endif
 `;
+		// Stained glass: a semitransparent surface is lit from both sides, so its back glows with the light that
+		// passes through it instead of being black when the light is on the other side. rpmTranslucent is set by
+		// the default fragment shader, so only the materials of the engine (USE_SHADOW_TINT) use it.
+		const dotNL = 'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );';
+		if (chunks.lights_phong_pars_fragment.includes(dotNL)) {
+			chunks.lights_phong_pars_fragment = chunks.lights_phong_pars_fragment.replace(
+				dotNL,
+				`#ifdef USE_SHADOW_TINT
+	float dotNL = rpmTranslucent > 0.5 ? abs( dot( geometryNormal, directLight.direction ) ) : saturate( dot( geometryNormal, directLight.direction ) );
+	#else
+	${dotNL}
+	#endif`,
+			);
+		} else {
+			console.warn('ShadowTint: lights_phong_pars_fragment changed, translucent back lighting disabled');
+		}
 		const replaceOnce = (name: string, marker: string, addition: string) => {
 			if (!chunks[name].includes(marker)) {
 				console.warn(`ShadowTint: ${name} changed, colored shadows disabled for that light type`);
