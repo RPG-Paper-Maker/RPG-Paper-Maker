@@ -1,4 +1,4 @@
-// Quick Time Battle v1.1.0 - RPG Paper Maker 3.0 plugin.
+// Quick Time Battle v1.2.5 - RPG Paper Maker 3.0 plugin.
 // Hero attacks and skills run a WASD + Enter quick-time challenge; the grade scales damage.
 // Press any key just before an enemy hit lands to dodge it. See FULL_INSTRUCTIONS.md.
 // Plugins run through `new Function(...)`: no imports. Globals: Common, Core, Data, Manager, Model, Scene.
@@ -28,6 +28,7 @@ const DEFAULT_CONFIG = Object.assign({
 	volume: 0.5,
 	tiering: true, // "Fire 1/2/3" style names get harder challenges
 	uiScale: 1, // size of the challenge UI
+	skin: "classic", // colours: "classic" (light paper stickers) or "noir" (black and white, blue accents, hearts)
 	uiStyle: "pixel", // "pixel" (chunky, matches the engine) or "polished" (smooth)
 	pixelSize: 0, // screen pixels per UI pixel; 0 = automatic
 	fxScale: 1.6, // size of particles and bursts
@@ -76,6 +77,7 @@ function loadConfig() {
 		volume: numParam("Volume", D.volume),
 		tiering: boolParam("Tiering", D.tiering),
 		uiScale: numParam("UI Scale", D.uiScale),
+		skin: String(param("UI Theme", D.skin)).toLowerCase(),
 		uiStyle: String(param("UI Style", D.uiStyle)).toLowerCase(),
 		pixelSize: numParam("Pixel Size", D.pixelSize),
 		fxScale: numParam("Effects Scale", D.fxScale),
@@ -109,6 +111,8 @@ function loadConfig() {
 		else cfg[k] = over[k];
 	}
 	cfg.uiScale = Math.max(0.2, cfg.uiScale);
+	if (!SKINS[cfg.skin]) cfg.skin = "classic";
+	applySkin(cfg.skin);
 	return cfg;
 }
 
@@ -187,7 +191,12 @@ const THEMES = {
 	heal:      { accent: "#7dff9a", zone: "#2fa36b", bar: "#12301f", colors: ["#ffffff", "#b8ffcb", "#7dff9a"], wave: "sine",     style: "rise"    },
 	shadow:    { accent: "#c06bff", zone: "#5a2a8a", bar: "#1d1230", colors: ["#7a3fb8", "#c06bff", "#2a1040"], wave: "sawtooth", style: "wisp"    }
 };
-function themeOf(name) { return THEMES[name] || THEMES.plain; }
+const noirThemes = {}; // cache of the blue/white versions of each theme (noir and moth skins)
+function themeOf(name) {
+	const base = THEMES[name] || THEMES.plain;
+	if (!SK.theme) return base;
+	return noirThemes[SK.name + name] || (noirThemes[SK.name + name] = Object.assign({}, base, SK.theme)); // same motion and sound, blue and white colours
+}
 
 // ---------------------------------------------------------------- sound (synthesised, no asset files)
 let actx = null;
@@ -267,7 +276,7 @@ function updateScales() {
 function clearFx() { particles = []; bolts = []; slashes = []; rings = []; flash = 0; auras = []; }
 
 function confetti(n, x, y) {
-	const cols = ["#ff5a5a", "#ffb02e", "#ffe27a", "#8fe388", "#4fc3ff", "#c58bff", "#ffffff"], E = fxE;
+	const cols = SK.confetti, E = fxE;
 	for (let i = 0; i < n; i++) {
 		const a = -Math.PI / 2 + rnd(-1.1, 1.1), sp = rnd(180, 460) * E;
 		particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rnd(0.9, 1.6), max: 1.2, size: rnd(7, 13) * E, c: pick(cols), conf: true, rot: rnd(0, 6), vr: rnd(-9, 9) });
@@ -504,8 +513,29 @@ function pixelFlush(target, w, h) {
 
 // ---------------------------------------------------------------- ui kit (everything is drawn from shapes: no art files)
 // Look: paper-cutout stickers with a dark ink outline, springy pop-ins, themed motifs, confetti for big hits.
-const INK = "#2a2036", PAPER = "#fffaf0";
-const GRADE_COLORS = ["#9aa3b5", "#8fe388", "#4fc3ff", "#ffb02e", "#ffffff"];
+// Colour skins. "classic" is the original look. "noir" is dark: black and white with blue accents, a dark blue outline and black hearts.
+// "moth" is the light version: off-white panels, an outline fading from blue to black, black hearts.
+const SKINS = {
+	classic: {
+		name: "classic", ink: "#2a2036", paper: "#fffaf0", hl: "#ffffff", grade: ["#9aa3b5", "#8fe388", "#4fc3ff", "#ffb02e", "#ffffff"],
+		hearts: false, star: "#ffd23f", starOff: "#8c849c", starPending: "#e3dcef", starInk: undefined, glow: "#ffd23f", spark: "#ffe27a",
+		track: "rgba(60,45,80,0.55)", warn: ["#ff5a5a", "#ffb02e"], confetti: ["#ff5a5a", "#ffb02e", "#ffe27a", "#8fe388", "#4fc3ff", "#c58bff", "#ffffff"], theme: null
+	},
+	moth: { // light panels, outline fading from blue to black, black hearts
+		name: "moth", ink: "#0a2a6b", paper: "#f7f6f2", hl: "#ffffff", grade: ["#6b7280", "#b9d4ff", "#4da3ff", "#8cc2ff", "#ffffff"], grad: true,
+		hearts: true, star: "#000000", starOff: "#9aa0ad", starPending: "#000000", starInk: "#0a2a6b", glow: "#4da3ff", spark: "#ffffff",
+		track: "rgba(8,16,36,0.85)", warn: ["#ffffff", "#9cc8ff"], confetti: ["#ffffff", "#9cc8ff", "#4da3ff", "#1f6fe0", "#cfe3ff"],
+		theme: { accent: "#4da3ff", zone: "#1f6fe0", bar: "#05080f", colors: ["#ffffff", "#9cc8ff", "#4da3ff"] }
+	},
+	noir: {
+		name: "noir", ink: "#0a2a6b", paper: "#06080f", hl: "#4da3ff", grade: ["#6b7280", "#b9d4ff", "#4da3ff", "#8cc2ff", "#ffffff"],
+		hearts: true, star: "#000000", starOff: "#3a4152", starPending: "#000000", starInk: "#ffffff", glow: "#4da3ff", spark: "#ffffff",
+		track: "rgba(8,16,36,0.85)", warn: ["#ffffff", "#9cc8ff"], confetti: ["#ffffff", "#9cc8ff", "#4da3ff", "#1f6fe0", "#cfe3ff"],
+		theme: { accent: "#4da3ff", zone: "#1f6fe0", bar: "#05080f", colors: ["#ffffff", "#9cc8ff", "#4da3ff"] }
+	}
+};
+let SK = SKINS.classic, INK = SK.ink, PAPER = SK.paper, GRADE_COLORS = SK.grade;
+function applySkin(name) { SK = SKINS[name] || SKINS.classic; INK = SK.ink; PAPER = SK.paper; GRADE_COLORS = SK.grade; }
 let uiU = 1; // UI unit in pixels (set every frame)
 let beatAt = 0; // last time any tick/note played, drives the beat pulse
 const clamp01 = t => Math.max(0, Math.min(1, t));
@@ -534,7 +564,16 @@ function rr(ctx, x, y, w, h, r) {
 	ctx.arcTo(x, y, x + w, y, r);
 	ctx.closePath();
 }
+function heartPath(ctx, cx, cy, r) {
+	const s = r * 1.1;
+	ctx.beginPath();
+	ctx.moveTo(cx, cy + s * 0.85);
+	ctx.bezierCurveTo(cx - s * 1.3, cy + s * 0.05, cx - s * 0.7, cy - s * 0.95, cx, cy - s * 0.35);
+	ctx.bezierCurveTo(cx + s * 0.7, cy - s * 0.95, cx + s * 1.3, cy + s * 0.05, cx, cy + s * 0.85);
+	ctx.closePath();
+}
 function starPath(ctx, cx, cy, ro, ri, n, rot) {
+	if (SK.hearts && n === 5) return heartPath(ctx, cx, cy, ro); // noir skin: hearts instead of five-point stars
 	ctx.beginPath();
 	for (let i = 0; i < n * 2; i++) {
 		const a = (rot || 0) + i * Math.PI / n - Math.PI / 2, r = i % 2 ? ri : ro;
@@ -563,6 +602,7 @@ function checkMark(ctx, x, y, s, color) {
 // A small themed emblem (flame, bolt, snowflake...) drawn as a sticker.
 function motif(ctx, theme, x, y, s, rot, fill) {
 	ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0);
+	if (SK.hearts) { heartPath(ctx, 0, 0, s); sticker(ctx, "#000000", Math.max(1.5, s * 0.14), SK.grad ? "#0a2a6b" : "#ffffff"); ctx.restore(); return; }
 	ctx.beginPath();
 	switch (theme) {
 		case "fire":
@@ -636,13 +676,15 @@ function bubble(ctx, c, p, u) {
 		body(); ctx.lineWidth = (6 + 10 * c.beat) * u; ctx.strokeStyle = alpha(T.accent, 0.18 + 0.5 * c.beat); ctx.stroke();
 	}
 	// outline + paper body
-	body(); ctx.lineWidth = 6 * u; ctx.strokeStyle = INK; ctx.stroke();
+	body(); ctx.lineWidth = 6 * u;
+		if (SK.grad) { const gg = ctx.createLinearGradient(0, y, 0, y + h + 14 * u); gg.addColorStop(0, "#1d56c7"); gg.addColorStop(0.5, "#0a2a6b"); gg.addColorStop(1, "#000000"); ctx.strokeStyle = gg; } else ctx.strokeStyle = INK;
+		ctx.stroke();
 	const g = ctx.createLinearGradient(0, y, 0, y + h);
 	g.addColorStop(0, mix(PAPER, T.accent, 0.22)); g.addColorStop(0.35, PAPER); g.addColorStop(1, mix(PAPER, T.accent, 0.10));
 	body(); ctx.fillStyle = g; ctx.fill();
 	// inner highlight line
 	rr(ctx, x + 5 * u, y + 5 * u, w - 10 * u, h - 10 * u, r - 4 * u);
-	ctx.lineWidth = 1.6 * u; ctx.strokeStyle = alpha("#ffffff", 0.9); ctx.stroke();
+	ctx.lineWidth = 1.6 * u; ctx.strokeStyle = alpha(SK.hl, 0.9); ctx.stroke();
 	// themed corner stickers
 	motif(ctx, c.themeName, x + 8 * u, y + 4 * u, 13 * u, -0.35, T.accent);
 	motif(ctx, c.themeName, x + w - 8 * u, y + 4 * u, 13 * u, 0.35, T.accent);
@@ -746,7 +788,7 @@ function drawGrade(ctx, c, x, y, u) {
 	const tw = ctx.measureText(label).width;
 	if (g === 4) { // rainbow shimmer
 		const gr = ctx.createLinearGradient(-tw / 2, 0, tw / 2, 0);
-		for (let i = 0; i <= 5; i++) gr.addColorStop(i / 5, "hsl(" + ((t * 260 + i * 55) % 360) + ",95%,62%)");
+		for (let i = 0; i <= 5; i++) gr.addColorStop(i / 5, SK.hearts ? "hsl(" + (205 + 25 * Math.sin(t * 5 + i)) + ",100%," + (68 + 14 * Math.sin(t * 7 + i * 2)) + "%)" : "hsl(" + ((t * 260 + i * 55) % 360) + ",95%,62%)");
 		ctx.fillStyle = gr;
 	} else ctx.fillStyle = GRADE_COLORS[g];
 	ctx.fillText(label, 0, 0);
@@ -855,7 +897,7 @@ class TimingChallenge extends Challenge {
 		for (const [k, col] of [[1, T.zone], [0.62, mix(T.zone, "#ffffff", 0.4)], [0.3, T.accent]]) { rr(ctx, cx - zw * k / 2, y + 3 * u, zw * k, bh - 6 * u, (bh - 6 * u) / 2); ctx.fillStyle = col; ctx.fill(); }
 		ctx.restore();
 		const bob = Math.sin(now * 5) * 2.5 * u, sk = inZ ? 1.25 : 1;
-		starPath(ctx, cx, y - 12 * u + bob, 10 * u * sk, 4.4 * u * sk, 5, now * 0.9); sticker(ctx, "#ffd23f", 1.6 * u);
+		starPath(ctx, cx, y - 12 * u + bob, 10 * u * sk, 4.4 * u * sk, 5, now * 0.9); sticker(ctx, SK.star, 1.6 * u, SK.starInk);
 		const mx = x + this.pos * bw;
 		if (this.running && this.grade === null) for (let k = 4; k >= 1; k--) {
 			ctx.fillStyle = alpha("#ffffff", 0.07 * (5 - k)); rr(ctx, mx - k * 6 * u - 3 * u, y + 2 * u, 6 * u, bh - 4 * u, 3 * u); ctx.fill();
@@ -964,11 +1006,11 @@ class SequenceChallenge extends Challenge {
 		if (this.running) {
 			const left = Math.max(0, 1 - (this.t - LEAD_IN) / this.limit), fy = p.bottom - 6 * u, fx = p.x - total / 2, fw = total;
 			rr(ctx, fx, fy - 5 * u, fw, 10 * u, 5 * u); ctx.lineWidth = 4 * u; ctx.strokeStyle = INK; ctx.stroke();
-			rr(ctx, fx, fy - 5 * u, fw, 10 * u, 5 * u); ctx.fillStyle = "rgba(60,45,80,0.55)"; ctx.fill();
+			rr(ctx, fx, fy - 5 * u, fw, 10 * u, 5 * u); ctx.fillStyle = SK.track; ctx.fill();
 			if (left > 0.01) {
 				rr(ctx, fx, fy - 5 * u, fw * left, 10 * u, 5 * u);
-				ctx.fillStyle = left < 0.25 ? "#ff5a5a" : left < 0.5 ? "#ffb02e" : T.accent; ctx.fill();
-				if (this.grade === null) sparkle(ctx, fx + fw * left, fy, (7 + 3 * Math.sin(now * 30)) * u, now * 6, "#ffe27a", true);
+				ctx.fillStyle = left < 0.25 ? SK.warn[0] : left < 0.5 ? SK.warn[1] : T.accent; ctx.fill();
+				if (this.grade === null) sparkle(ctx, fx + fw * left, fy, (7 + 3 * Math.sin(now * 30)) * u, now * 6, SK.spark, true);
 			}
 		}
 		return "KEYS IN ORDER!";
@@ -1018,7 +1060,7 @@ class MashChallenge extends Challenge {
 		rr(ctx, x, y, bw, bh, bh / 2); ctx.fillStyle = mix(T.bar, "#000000", 0.3); ctx.fill();
 		if (fill > 0.01) {
 			ctx.save(); rr(ctx, x + 2 * u, y + 2 * u, (bw - 4 * u) * fill, bh - 4 * u, (bh - 4 * u) / 2); ctx.clip();
-			const c1 = danger && Math.sin(now * 20) > 0 ? "#ff5a5a" : T.accent;
+			const c1 = danger && Math.sin(now * 20) > 0 ? SK.warn[0] : T.accent;
 			ctx.fillStyle = c1; ctx.fillRect(x, y, bw, bh);
 			ctx.fillStyle = "rgba(255,255,255,0.35)";
 			for (let i = -2; i < 24; i++) {
@@ -1030,8 +1072,8 @@ class MashChallenge extends Challenge {
 		}
 		for (const [pos, big] of [[1 / MASH_TOP, 0.8], [1.3 / MASH_TOP, 0.95], [1, 1.2]]) {
 			const lit = fill >= pos - 0.001, sx = x + bw * pos - (pos === 1 ? 4 * u : 0), sy = y - 11 * u;
-			ctx.save(); if (lit) { ctx.shadowColor = "#ffd23f"; ctx.shadowBlur = 10 * u; }
-			starPath(ctx, sx, sy, 9 * u * big * (lit ? 1.1 : 1), 4 * u * big, 5, 0); sticker(ctx, lit ? "#ffd23f" : "#8c849c", 1.4 * u);
+			ctx.save(); if (lit) { ctx.shadowColor = SK.glow; ctx.shadowBlur = 10 * u; }
+			starPath(ctx, sx, sy, 9 * u * big * (lit ? 1.1 : 1), 4 * u * big, 5, 0); sticker(ctx, lit ? SK.star : SK.starOff, 1.4 * u, SK.starInk);
 			ctx.restore();
 		}
 		const press = this.pressAt !== undefined ? clamp01(1 - (this.t - this.pressAt) / 0.12) : 0;
@@ -1096,7 +1138,7 @@ class HoldChallenge extends Challenge {
 			const ex = x + bw * this.gauge; rr(ctx, ex - 3.5 * u, y - 4 * u, 7 * u, bh + 8 * u, 3.5 * u); sticker(ctx, inZ ? T.accent : "#ffffff", 1.6 * u);
 		}
 		const bob = Math.sin(now * 5) * 2.5 * u, sk = inZ ? 1.25 : 1;
-		starPath(ctx, cx, y - 12 * u + bob, 10 * u * sk, 4.4 * u * sk, 5, now * 0.9); sticker(ctx, "#ffd23f", 1.6 * u);
+		starPath(ctx, cx, y - 12 * u + bob, 10 * u * sk, 4.4 * u * sk, 5, now * 0.9); sticker(ctx, SK.star, 1.6 * u, SK.starInk);
 		drawKeyCap(ctx, "ENTER", p.x - bw / 2 - 22 * u, y + bh / 2, 26 * u, { fill: this.holding ? T.accent : "#ffffff", text: INK, press: this.holding ? 1 : 0 });
 		return this.holding ? "RELEASE IN THE ZONE!" : "HOLD ENTER!";
 	}
@@ -1226,7 +1268,7 @@ class ComboChallenge extends Challenge {
 			const g = this.results[i], px = p.x - total / 2 + pip + i * (pip * 2 + gp);
 			let s = pip; if (g !== undefined && this.doneAt && this.doneAt[i] !== undefined) s = pip * (1 + 0.5 * Math.sin(Math.PI * clamp01((this.t - this.doneAt[i]) / 0.3)));
 			starPath(ctx, px, p.y, s, s * 0.48, 5, g === undefined ? 0 : (this.t * 0.6));
-			sticker(ctx, g === undefined ? "#e3dcef" : GRADE_COLORS[g], 1.6 * u);
+			sticker(ctx, g === undefined ? SK.starPending : GRADE_COLORS[g], 1.6 * u, SK.hearts && g === undefined ? "#ffffff" : undefined);
 		}
 		return "ENTER ON EVERY HIT!";
 	}

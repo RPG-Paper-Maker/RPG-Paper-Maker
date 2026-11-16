@@ -1,7 +1,7 @@
 {
 	"name": "Quick Time Battle",
 	"description": "Timed WASD + Enter challenges on hero attacks scale damage; press a key before an enemy hit to dodge it.",
-	"version": "1.1.0",
+	"version": "1.2.5",
 	"tutorial": "https://bigwoodart.github.io/RPGPM-Action-Battle-System/Tester.html",
 	"defaultParameters": [
 		{
@@ -56,6 +56,15 @@
 			"defaultValue": {
 				"k": 12,
 				"v": 1000
+			}
+		},
+		{
+			"id": -1,
+			"name": "UI Theme",
+			"description": "classic (light paper stickers), noir (dark: black and white, blue accents, dark blue outline, black hearts) or moth (light: off-white panels, outline fading blue to black, black hearts). Works with either UI Style.",
+			"defaultValue": {
+				"k": 8,
+				"v": "classic"
 			}
 		},
 		{
@@ -199,7 +208,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 3
 			}
 		},
 		{
@@ -208,7 +217,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 4
 			}
 		},
 		{
@@ -217,7 +226,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 8
 			}
 		},
 		{
@@ -226,7 +235,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 9
 			}
 		},
 		{
@@ -280,7 +289,7 @@
 			"description": "JSON. Class ID -> {default:{...}, skills:{id:{...}}}.",
 			"defaultValue": {
 				"k": 8,
-				"v": "{}"
+				"v": "{\"1\":{\"default\":{\"type\":\"timing\",\"duration\":1.1}},\"2\":{\"default\":{\"type\":\"mash\"}},\"3\":{\"default\":{\"type\":\"hold\"}},\"4\":{\"default\":{\"type\":\"combo\"}},\"5\":{\"default\":{\"type\":\"greenlight\"}},\"6\":{\"default\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2}},\"7\":{\"default\":{\"type\":\"crosshair\",\"duration\":1.0}},\"8\":{\"default\":{\"type\":\"aim\",\"duration\":1.75}}}"
 			}
 		},
 		{
@@ -289,7 +298,7 @@
 			"description": "JSON. Hero ID -> {default:{...}, skills:{id:{...}}}. Overrides class.",
 			"defaultValue": {
 				"k": 8,
-				"v": "{}"
+				"v": "{\"1\":{\"default\":{\"type\":\"timing\",\"duration\":1.1},\"skills\":{\"1\":{\"type\":\"timing\",\"duration\":1.1}},\"variable\":1},\"2\":{\"default\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2},\"skills\":{\"1\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2}},\"variable\":3},\"3\":{\"default\":{\"type\":\"greenlight\"},\"skills\":{\"1\":{\"type\":\"greenlight\"}},\"ranged\":true},\"4\":{\"default\":{\"type\":\"combo\"},\"skills\":{\"1\":{\"type\":\"combo\"}}},\"5\":{\"default\":{\"type\":\"mash\"},\"skills\":{\"1\":{\"type\":\"mash\"}}},\"6\":{\"default\":{\"type\":\"hold\"},\"skills\":{\"1\":{\"type\":\"hold\"}}},\"7\":{\"default\":{\"type\":\"crosshair\",\"duration\":1},\"skills\":{\"1\":{\"type\":\"crosshair\",\"duration\":1}},\"ranged\":true},\"8\":{\"default\":{\"type\":\"aim\",\"duration\":1.75},\"skills\":{\"1\":{\"type\":\"aim\",\"duration\":1.75}},\"ranged\":true}}"
 			}
 		},
 		{
@@ -413,6 +422,15 @@
 		},
 		{
 			"id": -1,
+			"name": "UI Theme",
+			"description": "classic (light paper stickers), noir (dark: black and white, blue accents, dark blue outline, black hearts) or moth (light: off-white panels, outline fading blue to black, black hearts). Works with either UI Style.",
+			"defaultValue": {
+				"k": 8,
+				"v": "classic"
+			}
+		},
+		{
+			"id": -1,
 			"name": "UI Style",
 			"description": "pixel (chunky, matches the engine) or polished (smooth).",
 			"defaultValue": {
@@ -552,7 +570,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 3
 			}
 		},
 		{
@@ -561,7 +579,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 4
 			}
 		},
 		{
@@ -570,7 +588,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 8
 			}
 		},
 		{
@@ -579,7 +597,7 @@
 			"description": "Variable holding a ranged hero's ID. That hero never runs up to the enemy. Empty = unused.",
 			"defaultValue": {
 				"k": 4,
-				"v": 0
+				"v": 9
 			}
 		},
 		{
@@ -633,7 +651,7 @@
 			"description": "JSON. Class ID -> {default:{...}, skills:{id:{...}}}.",
 			"defaultValue": {
 				"k": 8,
-				"v": "{}"
+				"v": "{\"1\":{\"default\":{\"type\":\"timing\",\"duration\":1.1}},\"2\":{\"default\":{\"type\":\"mash\"}},\"3\":{\"default\":{\"type\":\"hold\"}},\"4\":{\"default\":{\"type\":\"combo\"}},\"5\":{\"default\":{\"type\":\"greenlight\"}},\"6\":{\"default\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2}},\"7\":{\"default\":{\"type\":\"crosshair\",\"duration\":1.0}},\"8\":{\"default\":{\"type\":\"aim\",\"duration\":1.75}}}"
 			}
 		},
 		{
@@ -642,7 +660,7 @@
 			"description": "JSON. Hero ID -> {default:{...}, skills:{id:{...}}}. Overrides class.",
 			"defaultValue": {
 				"k": 8,
-				"v": "{}"
+				"v": "{\"1\":{\"default\":{\"type\":\"timing\",\"duration\":1.1},\"skills\":{\"1\":{\"type\":\"timing\",\"duration\":1.1}},\"variable\":1},\"2\":{\"default\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2},\"skills\":{\"1\":{\"type\":\"sequence\",\"length\":3,\"duration\":2.2}},\"variable\":3},\"3\":{\"default\":{\"type\":\"greenlight\"},\"skills\":{\"1\":{\"type\":\"greenlight\"}},\"ranged\":true},\"4\":{\"default\":{\"type\":\"combo\"},\"skills\":{\"1\":{\"type\":\"combo\"}}},\"5\":{\"default\":{\"type\":\"mash\"},\"skills\":{\"1\":{\"type\":\"mash\"}}},\"6\":{\"default\":{\"type\":\"hold\"},\"skills\":{\"1\":{\"type\":\"hold\"}}},\"7\":{\"default\":{\"type\":\"crosshair\",\"duration\":1},\"skills\":{\"1\":{\"type\":\"crosshair\",\"duration\":1}},\"ranged\":true},\"8\":{\"default\":{\"type\":\"aim\",\"duration\":1.75},\"skills\":{\"1\":{\"type\":\"aim\",\"duration\":1.75}},\"ranged\":true}}"
 			}
 		},
 		{

@@ -28,6 +28,7 @@ Open Plugins > Quick Time Battle to edit these.
 - **Popup Linger** - milliseconds that damage and heal numbers stay on screen.
 
 ### Look and sound
+- **UI Theme** - `classic` (light paper stickers; default), `noir` (dark: black and white, blue gradients, dark blue outline, black hearts instead of stars) or `moth` (light: off-white panels, outline fading from blue to black, black hearts). Works with either UI Style.
 - **UI Style** - `pixel` (chunky, hard edges, bitmap font; default) or `polished` (smooth).
 - **Pixel Size** - screen pixels per UI pixel in pixel style. 0 = automatic. Bigger is chunkier.
 - **UI Scale** - size of the prompts. 1 = default.
