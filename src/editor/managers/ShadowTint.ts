@@ -641,28 +641,44 @@ class ShadowTint {
 	}
 
 	/**
-	 * Semitransparent materials must not write depth: three.js sorts transparent objects by their center, and a
-	 * pane drawn too early would hide everything behind it. Opaque materials are left alone.
+	 * Semitransparent sprites and objects must not write depth while they are drawn: three.js sorts transparent
+	 * objects by their position, and a pane drawn too early would hide everything behind it. The static map
+	 * (renderOrder 0 or below, often sharing its material with them) keeps writing depth. The change is made
+	 * only around the draw of each mesh, since the material is shared.
 	 */
 	private static updateGlassDepthWrite(scene: THREE.Scene, threshold: number) {
 		scene.traverse((object) => {
-			if (!(object instanceof THREE.Mesh)) {
+			if (!(object instanceof THREE.Mesh) || object.renderOrder <= 0 || object.userData.rpmGlassChecked) {
 				return;
 			}
-			const materials = Array.isArray(object.material) ? object.material : [object.material];
-			for (const material of materials) {
-				if (!material || !material.depthWrite || material.userData.rpmGlassChecked === material.opacity) {
-					continue;
-				}
+			const materials = (Array.isArray(object.material) ? object.material : [object.material]).filter(
 				// Only the materials of the engine (see USE_SHADOW_TINT)
-				if ((material as THREE.MeshPhongMaterial).defines?.USE_SHADOW_TINT === undefined) {
-					continue;
-				}
-				material.userData.rpmGlassChecked = material.opacity;
-				if (this.isTranslucent(material, threshold)) {
-					material.depthWrite = false;
-				}
+				(material) => (material as THREE.MeshPhongMaterial)?.defines?.USE_SHADOW_TINT !== undefined,
+			);
+			if (materials.length === 0) {
+				return;
 			}
+			object.userData.rpmGlassChecked = true;
+			const previousBefore = object.onBeforeRender;
+			const previousAfter = object.onAfterRender;
+			const saved = new Map<THREE.Material, boolean>();
+			object.onBeforeRender = (...args) => {
+				previousBefore.apply(object, args);
+				const material = Array.isArray(object.material) ? object.material : [object.material];
+				for (const m of material) {
+					if (m.depthWrite && this.isTranslucent(m, threshold)) {
+						saved.set(m, true);
+						m.depthWrite = false;
+					}
+				}
+			};
+			object.onAfterRender = (...args) => {
+				for (const m of saved.keys()) {
+					m.depthWrite = true;
+				}
+				saved.clear();
+				previousAfter.apply(object, args);
+			};
 		});
 	}
 
