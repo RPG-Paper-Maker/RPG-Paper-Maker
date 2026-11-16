@@ -246,15 +246,15 @@ class ShadowTint {
 	}
 #endif
 `;
-		// Stained glass: a semitransparent surface is lit from both sides, so its back glows with the light that
-		// passes through it instead of being black when the light is on the other side. rpmTranslucent is set by
-		// the default fragment shader, so only the materials of the engine (USE_SHADOW_TINT) use it.
+		// Stained glass: the other side of a semitransparent surface glows with the light that passes through it,
+		// the less opaque the brighter (rpmTranslucent = 1 - alpha, set by the default fragment shader), instead of
+		// being black. Only the materials of the engine (USE_SHADOW_TINT) use it.
 		const dotNL = 'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );';
 		if (chunks.lights_phong_pars_fragment.includes(dotNL)) {
 			chunks.lights_phong_pars_fragment = chunks.lights_phong_pars_fragment.replace(
 				dotNL,
 				`#ifdef USE_SHADOW_TINT
-	float dotNL = rpmTranslucent > 0.5 ? abs( dot( geometryNormal, directLight.direction ) ) : saturate( dot( geometryNormal, directLight.direction ) );
+	float dotNL = saturate( dot( geometryNormal, directLight.direction ) ) + saturate( - dot( geometryNormal, directLight.direction ) ) * rpmTranslucent;
 	#else
 	${dotNL}
 	#endif`,
