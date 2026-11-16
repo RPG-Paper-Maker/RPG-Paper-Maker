@@ -1,6 +1,7 @@
 interface Window {
 	rpgPaperMakerProjectLocation: string;
 	battleTest: string;
+	rpgPaperMakerAdvancedShadows?: boolean;
 	documentsFolder: string;
 	ipcRenderer: {
 		invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;

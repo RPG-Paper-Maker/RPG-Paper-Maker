@@ -32,6 +32,8 @@ class Languages extends Serializable {
 	public language!: Model.Localization;
 	public languageDescription!: Model.Localization;
 	public languageSelectedDescription!: Model.Localization;
+	public advancedShadows!: Model.Localization;
+	public advancedShadowsDescription!: Model.Localization;
 	public confirm!: Model.Localization;
 	public ok!: Model.Localization;
 	public yes!: Model.Localization;
@@ -72,6 +74,8 @@ class Languages extends Serializable {
 		['language', 'l', undefined, BINDING.OBJECT, Model.Localization],
 		['languageDescription', 'ld', undefined, BINDING.OBJECT, Model.Localization],
 		['languageSelectedDescription', 'lsd', undefined, BINDING.OBJECT, Model.Localization],
+		['advancedShadows', 'ash', undefined, BINDING.OBJECT, Model.Localization],
+		['advancedShadowsDescription', 'ashd', undefined, BINDING.OBJECT, Model.Localization],
 		['confirm', 'co', undefined, BINDING.OBJECT, Model.Localization],
 		['ok', 'ok', undefined, BINDING.OBJECT, Model.Localization],
 		['yes', 'ye', undefined, BINDING.OBJECT, Model.Localization],
@@ -121,6 +125,8 @@ class Languages extends Serializable {
 			language: this.language,
 			'language.description': this.languageDescription,
 			'language.selected.description': this.languageSelectedDescription,
+			'advanced.shadows.setting': this.advancedShadows,
+			'advanced.shadows.setting.description': this.advancedShadowsDescription,
 			'confirm.question': this.confirm,
 			ok: this.ok,
 			yes: this.yes,
@@ -165,6 +171,8 @@ class Languages extends Serializable {
 		setter(this.language, tFunc('language'));
 		setter(this.languageDescription, tFunc('language.description'));
 		setter(this.languageSelectedDescription, tFunc('language.selected.description'));
+		setter(this.advancedShadows, tFunc('advanced.shadows.setting'));
+		setter(this.advancedShadowsDescription, tFunc('advanced.shadows.setting.description'));
 		setter(this.confirm, tFunc('confirm.question'));
 		setter(this.ok, tFunc('ok'));
 		setter(this.yes, tFunc('yes'));

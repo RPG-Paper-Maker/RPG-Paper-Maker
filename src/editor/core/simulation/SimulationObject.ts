@@ -19,6 +19,7 @@ import { CustomGeometryFace } from '../CustomGeometryFace';
 import { Position } from '../Position';
 import { Project } from '../Project';
 import { Rectangle } from '../Rectangle';
+import { ShadowTint } from '../../managers/ShadowTint';
 
 export enum SIM_ORIENTATION {
 	SOUTH,
@@ -392,7 +393,7 @@ class SimulationObject {
 				sprite.updateGeometry(this.map, geometrySprite, width, height, position, 0, false, localPosition);
 				geometrySprite.updateAttributes();
 				mesh = new THREE.Mesh(geometrySprite, this.applyPreviewEffect(material));
-				mesh.customDepthMaterial = material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(mesh, material);
 				this.meshIsFace = state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 				break;
 			}
@@ -580,8 +581,18 @@ class SimulationObject {
 				light.userData.castShadow = settings.castShadow.getFixNumberValue() === 1;
 				light.castShadow = this.map.model.objectLightsShadows && light.userData.castShadow;
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+					const shadowMapSize = ShadowTint.getLightShadowMapSize(light);
+					light.shadow.mapSize.set(shadowMapSize, shadowMapSize);
+				}
+				if (light instanceof THREE.PointLight) {
+					light.shadow.autoUpdate = false;
+					light.shadow.needsUpdate = true;
+				}
+				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+					light.shadow.camera.near = 0.01;
+					light.shadow.camera.updateProjectionMatrix();
 					light.shadow.bias = -0.0003;
-					light.shadow.normalBias = 0.5 / Project.SQUARE_SIZE;
+					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
 				}
 			}
 			light.position.set(

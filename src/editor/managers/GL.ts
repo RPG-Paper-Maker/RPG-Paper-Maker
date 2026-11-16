@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { Paths, Utils } from '../common';
 import { readPublicFile } from '../common/Platform';
+import { ShadowTint } from './ShadowTint';
 
 export type LightingOverride = {
 	color: THREE.Color;
@@ -92,6 +93,7 @@ class GL {
 		if (!fragment.trimStart().startsWith('#')) {
 			throw new Error(`Invalid fragment shader content: ${fragmentPath}`);
 		}
+		ShadowTint.patchShaderChunks();
 		this.SHADER_DEFAULT_VERTEX = vertex;
 		this.SHADER_DEFAULT_FRAGMENT = fragment;
 	}
@@ -280,11 +282,11 @@ gl_FragColor.rgb = mix(
 			specular: new THREE.Color(0x000000),
 		});
 		material.userData.uniforms = uniforms;
-		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
-			depthPacking: THREE.RGBADepthPacking,
-			map: opts.texture,
-			alphaTest: 0.5,
-		});
+		// Receives the colored translucent shadows (see ShadowTint)
+		material.defines = { USE_SHADOW_TINT: '' };
+		const shadowMaterials = GL.createShadowMaterials(opts.texture, opacity);
+		material.userData.customDepthMaterial = shadowMaterials.depth;
+		material.userData.customDistanceMaterial = shadowMaterials.distance;
 
 		// Edit shader information before compiling shader
 		material.onBeforeCompile = (shader) => {
@@ -298,6 +300,7 @@ gl_FragColor.rgb = mix(
 			shader.uniforms.enableShadows = { value: shadows };
 			shader.uniforms.hovered = { value: hovered };
 			shader.uniforms.alpha_threshold = { value: 0.01 };
+			Object.assign(shader.uniforms, ShadowTint.uniforms);
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use
@@ -308,6 +311,38 @@ gl_FragColor.rgb = mix(
 		};
 
 		return material;
+	}
+
+	/** Alpha below this (texture alpha * opacity) casts no shadow. */
+	static SHADOW_ALPHA_THRESHOLD = 0.9;
+
+	static createShadowMaterials(
+		map?: THREE.Texture | null,
+		opacity = 1,
+		alphaMap?: THREE.Texture | null,
+	): { depth: THREE.MeshDepthMaterial; distance: THREE.MeshDistanceMaterial } {
+		// Only set maps that exist: three.js warns on undefined parameters
+		const opts: THREE.MeshDepthMaterialParameters & THREE.MeshDistanceMaterialParameters = { opacity };
+		if (map) opts.map = map;
+		if (alphaMap) opts.alphaMap = alphaMap;
+		const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, ...opts });
+		const distance = new THREE.MeshDistanceMaterial(opts);
+
+		// The depth and distance shaders ignore material opacity, so fold it into
+		// the threshold: texture alpha * opacity < T  <=>  texture alpha < T / opacity.
+		// three.js copies alphaTest from the scene material into custom shadow
+		// materials on every shadow pass (the engine uses 0.01), so lock the value.
+		const threshold = opacity > 0 ? GL.SHADOW_ALPHA_THRESHOLD / opacity : 2;
+		for (const material of [depth, distance]) {
+			Object.defineProperty(material, 'alphaTest', { get: () => threshold, set: () => {} });
+		}
+		return { depth, distance };
+	}
+
+	static applyShadowMaterials(mesh: THREE.Mesh, material?: THREE.Material | null) {
+		if (!material) return;
+		mesh.customDepthMaterial = material.userData.customDepthMaterial;
+		mesh.customDistanceMaterial = material.userData.customDistanceMaterial;
 	}
 
 	static cloneMaterial(material: THREE.MeshPhongMaterial): THREE.MeshPhongMaterial {

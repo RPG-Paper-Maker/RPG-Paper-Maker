@@ -213,7 +213,10 @@ class Camera {
 				map.sunLight.shadow.camera.bottom = -d;
 				map.sunLight.shadow.camera.far = far;
 				map.sunLight.shadow.camera.updateProjectionMatrix();
-				map.sunLight.shadow.bias = -0.0001 * (d / 10);
+				// Small depth bias (a large one detaches shadows from the objects casting them)
+				// plus a normal offset of about a texel to keep the floor free of acne
+				map.sunLight.shadow.bias = -0.00002 * (d / 10);
+				map.sunLight.shadow.normalBias = ((2 * d) / map.sunLight.shadow.mapSize.x) * 1.0;
 			}
 			const texelSize = (2 * this._stableD) / map.sunLight.shadow.mapSize.x;
 			const snappedR = Math.round(Camera.SUN_RIGHT.dot(this.targetPosition) / texelSize) * texelSize;

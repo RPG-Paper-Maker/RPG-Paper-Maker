@@ -11,11 +11,25 @@
 
 import { useEffect } from 'react';
 import { Constants, Paths, Utils } from '../editor/common';
+import { readJSON } from '../editor/common/Platform';
 import { LocalFile } from '../editor/core/LocalFile';
 
 type Props = {
 	location: string;
 	battleTest?: boolean;
+};
+
+/** Advanced shadows option of the editor (Options > General options), saved in the engine settings. */
+const readAdvancedShadows = async (): Promise<boolean> => {
+	if (!Constants.IS_DESKTOP) {
+		return false;
+	}
+	try {
+		const json = await readJSON(Paths.join(window.env.appPath, 'dist', Paths.FILE_ENGINE_SETTINGS));
+		return json?.as === true;
+	} catch {
+		return false;
+	}
 };
 
 function Game({ location, battleTest = false }: Props) {
@@ -71,6 +85,7 @@ function Game({ location, battleTest = false }: Props) {
 			script.async = true;
 			window.rpgPaperMakerProjectLocation = location;
 			window.battleTest = battleTest ? 'battleTroop' : '';
+			window.rpgPaperMakerAdvancedShadows = await readAdvancedShadows();
 			document.body.appendChild(script);
 		};
 		initialize().catch(console.error);
