@@ -664,6 +664,9 @@ class ShadowTint {
 				return;
 			}
 			object.userData.rpmGlassChecked = true;
+			// Without depth writing it can no longer protect itself from what is drawn after it, so it must be drawn
+			// after the static map (the ground would otherwise paint over it)
+			object.renderOrder = Math.max(object.renderOrder, 1);
 			const previousBefore = object.onBeforeRender;
 			const previousAfter = object.onAfterRender;
 			const saved = new Map<THREE.Material, boolean>();
