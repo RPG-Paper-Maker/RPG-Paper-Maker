@@ -141,6 +141,14 @@
             ]
         },
         {
+            "name": "Mouse camera",
+            "files": [
+                "code.js",
+                "details.json",
+                "pic.png"
+            ]
+        },
+        {
             "name": "Mouse lock and raycaster",
             "files": [
                 "code.js",
