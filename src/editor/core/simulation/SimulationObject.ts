@@ -754,6 +754,7 @@ class SimulationObject {
 			material.opacity = this.opacity;
 			material.depthWrite = false;
 			material.userData = { ...src.userData };
+			Manager.GL.attachShadowMaterials(material);
 			const uniforms = (src.userData.uniforms ?? {}) as Record<string, THREE.IUniform<unknown>>;
 			const { width, height } = Manager.GL.getMaterialTextureSize(src);
 			const border = 1;

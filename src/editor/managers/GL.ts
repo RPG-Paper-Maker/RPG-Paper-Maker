@@ -284,9 +284,7 @@ gl_FragColor.rgb = mix(
 		material.userData.uniforms = uniforms;
 		// Receives the colored translucent shadows (see ShadowTint)
 		material.defines = { USE_SHADOW_TINT: '' };
-		const shadowMaterials = GL.createShadowMaterials(opts.texture, opacity);
-		material.userData.customDepthMaterial = shadowMaterials.depth;
-		material.userData.customDistanceMaterial = shadowMaterials.distance;
+		GL.attachShadowMaterials(material);
 
 		// Edit shader information before compiling shader
 		material.onBeforeCompile = (shader) => {
@@ -318,11 +316,12 @@ gl_FragColor.rgb = mix(
 
 	static createShadowMaterials(
 		map?: THREE.Texture | null,
-		opacity = 1,
+		opacity: number | (() => number) = 1,
 		alphaMap?: THREE.Texture | null,
 	): { depth: THREE.MeshDepthMaterial; distance: THREE.MeshDistanceMaterial } {
+		const getOpacity = typeof opacity === 'function' ? opacity : () => opacity;
 		// Only set maps that exist: three.js warns on undefined parameters
-		const opts: THREE.MeshDepthMaterialParameters & THREE.MeshDistanceMaterialParameters = { opacity };
+		const opts: THREE.MeshDepthMaterialParameters & THREE.MeshDistanceMaterialParameters = {};
 		if (map) opts.map = map;
 		if (alphaMap) opts.alphaMap = alphaMap;
 		const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, ...opts });
@@ -332,11 +331,36 @@ gl_FragColor.rgb = mix(
 		// the threshold: texture alpha * opacity < T  <=>  texture alpha < T / opacity.
 		// three.js copies alphaTest from the scene material into custom shadow
 		// materials on every shadow pass (the engine uses 0.01), so lock the value.
-		const threshold = opacity > 0 ? GL.SHADOW_ALPHA_THRESHOLD / opacity : 2;
+		// The opacity is read when drawing, so an object whose opacity changes keeps the right shadow.
+		const threshold = () => {
+			const value = getOpacity();
+			return value > 0 ? GL.SHADOW_ALPHA_THRESHOLD / value : 2;
+		};
 		for (const material of [depth, distance]) {
-			Object.defineProperty(material, 'alphaTest', { get: () => threshold, set: () => {} });
+			Object.defineProperty(material, 'alphaTest', { get: threshold, set: () => {} });
 		}
 		return { depth, distance };
+	}
+
+	/**
+	 *  Give an engine material its shadow materials. They follow the opacity of the material, and are kept out of
+	 *  the enumerable userData: three.js copies the userData as JSON when cloning a material, and the textures in
+	 *  the shadow materials cannot be serialized (it would log a warning for each clone).
+	 */
+	static attachShadowMaterials(material: THREE.MeshPhongMaterial) {
+		const shadows = GL.createShadowMaterials(material.map, () => material.opacity, material.alphaMap);
+		Object.defineProperty(material.userData, 'customDepthMaterial', {
+			value: shadows.depth,
+			enumerable: false,
+			writable: true,
+			configurable: true,
+		});
+		Object.defineProperty(material.userData, 'customDistanceMaterial', {
+			value: shadows.distance,
+			enumerable: false,
+			writable: true,
+			configurable: true,
+		});
 	}
 
 	static applyShadowMaterials(mesh: THREE.Mesh, material?: THREE.Material | null) {
