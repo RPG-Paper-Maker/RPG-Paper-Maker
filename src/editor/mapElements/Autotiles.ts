@@ -440,7 +440,7 @@ class Autotiles {
 				const mesh = new THREE.Mesh(new CustomGeometry(), this.bundle.material);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
-				mesh.customDepthMaterial = this.bundle.material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(mesh, this.bundle.material);
 				mesh.layers.enable(RAYCASTING_LAYER.LANDS);
 				this.meshes[side][position.layer] = mesh;
 				this.counts[side][position.layer] = 0;

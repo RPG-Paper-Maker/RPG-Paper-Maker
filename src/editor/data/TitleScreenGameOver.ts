@@ -17,6 +17,9 @@ import { Checkable, Credits, GameOverCommand, PlaySong, TitleCommand } from '../
 
 const { t } = i18next;
 
+/** ID of the Advanced shadows entry in the title screen settings (see TITLE_SETTING_KIND in the game). */
+const ADVANCED_SHADOWS_SETTING_ID = 2;
+
 class TitleScreenGameOver extends Serializable {
 	public isTitleBackgroundImage!: boolean;
 	public isTitleBackgroundVideo!: boolean;
@@ -82,6 +85,13 @@ class TitleScreenGameOver extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TitleScreenGameOver.getBindings(additionnalBinding));
+		// Projects made before Advanced shadows existed do not list it yet
+		this.titleSettings ??= [];
+		if (!this.titleSettings.some((setting) => setting.id === ADVANCED_SHADOWS_SETTING_ID)) {
+			this.titleSettings.push(
+				Checkable.createCheckable(ADVANCED_SHADOWS_SETTING_ID, t('advanced.shadows.setting'), true),
+			);
+		}
 		this.titleMusic ??= PlaySong.createPlaySong(SONG_KIND.MUSIC);
 		this.gameOverMusic ??= PlaySong.createPlaySong(SONG_KIND.MUSIC);
 		this.titleMusic.kind = SONG_KIND.MUSIC;

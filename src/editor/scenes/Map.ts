@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
+import { ShadowTint } from '../managers/ShadowTint';
 import {
 	ACTION_KIND,
 	ArrayUtils,
@@ -403,7 +404,7 @@ class Map extends Base {
 				)?.updateObjects3DGeometry();
 			});
 			this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
-			this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
+			Manager.GL.applyShadowMaterials(this.hoveredMesh, this.materialTilesetHover);
 			this.hoveredMesh.receiveShadow = true;
 			this.hoveredMesh.castShadow = true;
 		}
@@ -643,8 +644,9 @@ class Map extends Base {
 			this.sunLight.target.position.set(0, 0, 0);
 			this.scene.add(this.sunLight);
 			this.sunLight.castShadow = true;
-			this.sunLight.shadow.mapSize.width = 2048;
-			this.sunLight.shadow.mapSize.height = 2048;
+			const shadowMapSize = ShadowTint.advanced ? ShadowTint.SUN_MAP_SIZE_ADVANCED : ShadowTint.SUN_MAP_SIZE;
+			this.sunLight.shadow.mapSize.width = shadowMapSize;
+			this.sunLight.shadow.mapSize.height = shadowMapSize;
 			const d = 10;
 			this.sunLight.shadow.camera.left = -d;
 			this.sunLight.shadow.camera.right = d;
@@ -3332,6 +3334,8 @@ class Map extends Base {
 		}
 		if (GL.renderer) {
 			this.limitObjectLightShadows(GL);
+			ShadowTint.applyQuality(this.sunLight);
+			ShadowTint.render(GL.renderer, this.scene, Manager.GL.SHADOW_ALPHA_THRESHOLD);
 		}
 		super.draw3D(GL);
 	}
