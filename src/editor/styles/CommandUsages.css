@@ -1,5 +1,5 @@
 /* Keep the usage tree headers aligned with their rows while the command fills the remaining width. */
-.variableUsages {
+.commandUsages {
 	--usage-map-width: 25%;
 	--usage-id-width: 10%;
 	--usage-name-width: 20%;
@@ -34,12 +34,29 @@
 		flex: 0 0 var(--usage-action-width);
 	}
 
-	.variableUsageAction {
+	.commandUsagesTree {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
+	}
+
+	.commandUsagesLoader {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+	}
+
+	.commandUsageAction {
 		align-items: center;
 		justify-content: center;
 	}
 
-	.variableUsageGoTo {
+	.commandUsageGoTo {
 		width: 22px;
 		height: 20px;
 		padding: 0;

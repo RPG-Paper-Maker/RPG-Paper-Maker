@@ -23,6 +23,8 @@ class Camera {
 	public static readonly SUN_UP = new THREE.Vector3();
 	private static readonly _sunOffset = new THREE.Vector3();
 	private static _snapTarget = new THREE.Vector3();
+	private static readonly MIN_VIEW_DISTANCE_SQ = 1e-6;
+	private static readonly _lookTarget = new THREE.Vector3();
 
 	public perspectiveCamera: THREE.PerspectiveCamera;
 	public orthographicCamera: THREE.OrthographicCamera | null = null;
@@ -97,6 +99,20 @@ class Camera {
 		return this._effectiveTarget.copy(this.targetPosition).add(this.targetOffset);
 	}
 
+	getPositionFromAngles(): THREE.Vector3 {
+		const distance = this.getDistance();
+		const target = this.getEffectiveTarget();
+		return new THREE.Vector3(
+			target.x - distance * Math.cos((this.horizontalAngle * Math.PI) / 180.0),
+			target.y + this.getHeight(),
+			target.z - distance * Math.sin((this.horizontalAngle * Math.PI) / 180.0),
+		);
+	}
+
+	updateTargetOffset(position: THREE.Vector3) {
+		this.targetOffset.add(position.clone().sub(this.getPositionFromAngles()));
+	}
+
 	applyProjection() {
 		if (this.isPerspective) {
 			this.perspectiveCamera.fov = this.fov;
@@ -148,7 +164,18 @@ class Camera {
 	}
 
 	updateView() {
-		this.getThreeCamera().lookAt(this.getEffectiveTarget());
+		const camera = this.getThreeCamera();
+		const target = this.getEffectiveTarget();
+		if (camera.position.distanceToSquared(target) < Camera.MIN_VIEW_DISTANCE_SQ) {
+			const h = (this.horizontalAngle * Math.PI) / 180.0;
+			const v = (this.verticalAngle * Math.PI) / 180.0;
+			Camera._lookTarget
+				.set(Math.sin(v) * Math.cos(h), -Math.cos(v), Math.sin(v) * Math.sin(h))
+				.add(camera.position);
+			camera.lookAt(Camera._lookTarget);
+		} else {
+			camera.lookAt(target);
+		}
 	}
 
 	update(map?: Scene.Map) {

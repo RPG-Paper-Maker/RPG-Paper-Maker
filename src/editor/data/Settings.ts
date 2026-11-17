@@ -59,6 +59,8 @@ class Settings extends Serializable {
 	public mapObjectLightsOpened!: boolean;
 	public mapEditorSpecialElementsGridView!: boolean;
 	public picturesZoom!: number;
+	/** @deprecated Move camera / screen tone legacy modes (pre-3.2.30 projects), to remove. */
+	public legacyCount!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -105,6 +107,7 @@ class Settings extends Serializable {
 		['mapObjectLightsOpened', 'molo', false, BINDING.BOOLEAN],
 		['mapEditorSpecialElementsGridView', 'mesegv', true, BINDING.BOOLEAN],
 		['picturesZoom', 'pz', 6, BINDING.NUMBER],
+		['legacyCount', 'lc', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

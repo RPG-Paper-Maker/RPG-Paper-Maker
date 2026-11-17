@@ -2107,6 +2107,12 @@
 	"change.sunlight.ambient.light": "Sonnenlicht / Umgebungslicht ändern",
 	"screen.tone.legacy": "Legacy-Modus (veraltet)",
 	"tooltip.screen.tone.legacy": "Veraltet, nur für Projekte vor Version 3.2.30 beibehalten und wird in einer zukünftigen Version entfernt. Wendet den Farbton wie früher an: Sehr helle Objektlichter scheinen durch einen dunklen Farbton hindurch. Deaktiviere ihn und verwende Sonnenlicht / Umgebungslicht ändern, um einen Ort abzudunkeln und die Lichter sichtbar zu lassen.",
+	"move.camera.legacy": "Legacy-Modus (veraltet)",
+	"tooltip.move.camera.legacy": "Veraltet, nur für Projekte erhalten, die vor Version 3.2.30 erstellt wurden, und wird in einer zukünftigen Version entfernt. Verwendet das alte X/Y/Z-Verhalten: Gleich setzt die Kamera auf eine Kartenposition, und die Bewegung wird ignoriert, wenn sich auch die Winkel ändern. Deaktivieren, um das neue Verhalten zu nutzen: X/Y/Z ist relativ zum Ziel und die Kamera bleibt darauf gerichtet.",
+	"legacy.to.check": "Zu prüfende Legacy-Funktionen",
+	"legacy.description": "Einige Funktionen arbeiten seit Version 3.2.30 anders (X/Y/Z von „Bewege Kamera“, Bildschirmton mit Lichtern). Diese Befehle und Karten verwenden noch das alte Verhalten. Öffne jeden Eintrag, deaktiviere den Legacy-Modus und prüfe das Ergebnis im Spiel.",
+	"legacy.none": "Alles ist aktuell.",
+	"legacy.warning.bubble": "Hey! Da muss altes Zeug repariert werden! 🛠️",
 	"default.map.properties.values": "Standardwerte der Karteneigenschaften",
 	"keep.values.other.maps": "Werte für andere Karten beibehalten",
 	"sync.both": "Beide synchronisieren"

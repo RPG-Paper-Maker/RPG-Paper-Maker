@@ -27,6 +27,7 @@ import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOper
 import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import TooltipInformation from '../../TooltipInformation';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -56,6 +57,8 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 	const [horizontal] = useStateDynamicValue();
 	const [vertical] = useStateDynamicValue();
 	const [distance] = useStateDynamicValue();
+	const [isLegacy, setIsLegacy] = useStateBool();
+	const [isLegacyVisible, setIsLegacyVisible] = useStateBool();
 	const [, setTrigger] = useStateBool();
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
@@ -83,6 +86,9 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 			vertical.updateCommand(list, iterator);
 			distance.updateCommand(list, iterator);
 			panelWaitTimeRef.current?.initialize(list, iterator);
+			const legacy = Utils.initializeBoolCommand(list, iterator);
+			setIsLegacy(legacy);
+			setIsLegacyVisible(legacy);
 		} else {
 			setSelectionTargetType(SELECTION_TARGET_TYPE.UNCHANGED);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.PLUS);
@@ -98,6 +104,8 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 			vertical.updateToDefaultNumber(0, true);
 			distance.updateToDefaultNumber();
 			panelWaitTimeRef.current?.initialize();
+			setIsLegacy(false);
+			setIsLegacyVisible(false);
 		}
 		setTrigger((v) => !v);
 	};
@@ -122,6 +130,7 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 		vertical.getCommand(newList);
 		distance.getCommand(newList);
 		panelWaitTimeRef.current?.getCommand(newList);
+		newList.push(Utils.boolToNum(isLegacy));
 		return Model.MapObjectCommand.createCommand(commandKind, newList);
 	};
 
@@ -148,6 +157,7 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			heightRefreshKey={isLegacyVisible ? 1 : 0}
 		>
 			<Flex column spacedLarge>
 				<Groupbox title={t('camera.target')}>
@@ -231,14 +241,20 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 							<Label>{t('horizontal')}</Label>
 							<Value>
 								<Flex spaced centerV>
-									<DynamicValueSelector value={horizontal} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+									<DynamicValueSelector
+										value={horizontal}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+									/>
 									°
 								</Flex>
 							</Value>
 							<Label>{t('vertical')}</Label>
 							<Value>
 								<Flex spaced centerV>
-									<DynamicValueSelector value={vertical} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
+									<DynamicValueSelector
+										value={vertical}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+									/>
 									°
 								</Flex>
 							</Value>
@@ -253,6 +269,14 @@ function DialogCommandMoveCamera({ commandKind, setIsOpen, list, onAccept, onRej
 					</Flex>
 				</Groupbox>
 				<PanelWaitTime ref={panelWaitTimeRef} />
+				{isLegacyVisible && (
+					<Flex spaced centerV>
+						<Checkbox isChecked={isLegacy} onChange={setIsLegacy}>
+							{t('move.camera.legacy')}
+						</Checkbox>
+						<TooltipInformation text={t('tooltip.move.camera.legacy')} />
+					</Flex>
+				)}
 			</Flex>
 		</Dialog>
 	);

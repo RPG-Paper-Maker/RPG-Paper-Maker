@@ -17,7 +17,7 @@ import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, KEY, MOBILE_ACTION, RPM, SPEC
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
 import { EngineSettings } from '../data';
-import { pendingVariableObject, setPendingVariableObject } from '../data/VariableUsages';
+import { pendingVariableObject, setPendingVariableObject } from '../data/CommandUsages';
 import { Position } from '../core/Position';
 import { Data, Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';

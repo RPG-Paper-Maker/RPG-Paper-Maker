@@ -129,24 +129,41 @@ function DialogCommandChangeScreenTone({
 			onClose={handleReject}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			initialWidth='600px'
+			heightRefreshKey={isLegacyVisible ? 1 : 0}
 		>
 			<Flex column spaced fillWidth>
 				<Form>
 					<Label>{t('red')}</Label>
 					<Value>
-						<SliderDynamic dynamic={red} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
+						<SliderDynamic
+							dynamic={red}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+						/>
 					</Value>
 					<Label>{t('green')}</Label>
 					<Value>
-						<SliderDynamic dynamic={green} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
+						<SliderDynamic
+							dynamic={green}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+						/>
 					</Value>
 					<Label>{t('blue')}</Label>
 					<Value>
-						<SliderDynamic dynamic={blue} min={Model.Map.SCREEN_TONE_COLOR_MIN} max={Model.Map.SCREEN_TONE_COLOR_MAX} />
+						<SliderDynamic
+							dynamic={blue}
+							min={Model.Map.SCREEN_TONE_COLOR_MIN}
+							max={Model.Map.SCREEN_TONE_COLOR_MAX}
+						/>
 					</Value>
 					<Label>{t('grey')}</Label>
 					<Value>
-						<SliderDynamic dynamic={grey} min={Model.Map.SCREEN_TONE_GREY_MIN} max={Model.Map.SCREEN_TONE_GREY_MAX} />
+						<SliderDynamic
+							dynamic={grey}
+							min={Model.Map.SCREEN_TONE_GREY_MIN}
+							max={Model.Map.SCREEN_TONE_GREY_MAX}
+						/>
 					</Value>
 				</Form>
 				<Flex spaced centerV>

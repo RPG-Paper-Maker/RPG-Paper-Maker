@@ -16,6 +16,7 @@ import {
 	DYNAMIC_VALUE_KIND,
 	ELEMENT_MAP_KIND,
 	EVENT_COMMAND_KIND,
+	Mathf,
 	SONG_KIND,
 	Utils,
 } from '../../common';
@@ -814,6 +815,7 @@ class CommandMoveCamera extends CommandBase {
 	private targetID: DynamicValue | null;
 	private operation: number;
 	private moveTargetOffset: boolean;
+	private rotationTargetOffset: boolean;
 	private x: DynamicValue;
 	private xSquare: boolean;
 	private y: DynamicValue;
@@ -825,6 +827,10 @@ class CommandMoveCamera extends CommandBase {
 	private distance: DynamicValue;
 	private isWaitEnd: boolean;
 	private time: DynamicValue;
+	/** @deprecated Move camera legacy mode (pre-3.2.30 projects), to remove. */
+	private isLegacy: boolean;
+
+	static runningMoves = new Set<CommandState>();
 
 	constructor(command: MapObjectCommandType[]) {
 		super();
@@ -843,53 +849,164 @@ class CommandMoveCamera extends CommandBase {
 		this.ySquare = !Utils.numToBool(command[iterator.i++] as number);
 		this.z = DynamicValue.createCommand(command, iterator);
 		this.zSquare = !Utils.numToBool(command[iterator.i++] as number);
-		iterator.i++;
+		this.rotationTargetOffset = Utils.numToBool(command[iterator.i++] as number);
 		this.h = DynamicValue.createCommand(command, iterator);
 		this.v = DynamicValue.createCommand(command, iterator);
 		this.distance = DynamicValue.createCommand(command, iterator);
 		this.isWaitEnd = Utils.numToBool(command[iterator.i++] as number);
 		this.time = DynamicValue.createCommand(command, iterator);
+		this.isLegacy = Utils.numToBool(command[iterator.i++] as number);
 		this.parallel = !this.isWaitEnd;
 	}
 
 	initialize(ctx: SimulationContext): CommandState {
-		const camera = ctx.camera;
-		if (!camera) {
+		if (!ctx.camera) {
 			return { parallel: this.isWaitEnd, noCamera: true };
 		}
 		const game = ctx.game;
-		const operation = OPERATORS_NUMBERS[this.operation];
-		const three = camera.getThreeCamera();
 		const time = game.resolveNumber(this.time) * 1000;
-		const finalPosition = new THREE.Vector3(
-			operation(three.position.x, game.resolveNumber(this.x) / (this.xSquare ? 1 : Project.SQUARE_SIZE)),
-			operation(three.position.y, game.resolveNumber(this.y) / (this.ySquare ? 1 : Project.SQUARE_SIZE)),
-			operation(three.position.z, game.resolveNumber(this.z) / (this.zSquare ? 1 : Project.SQUARE_SIZE)),
-		);
-		let newTarget: SimulationObject | null = null;
-		if (this.targetID !== null) {
-			newTarget = findObject(ctx, game.resolveNumber(this.targetID));
-		}
 		return {
 			parallel: this.isWaitEnd,
-			newTarget,
+			newTarget: this.targetID === null ? null : findObject(ctx, game.resolveNumber(this.targetID)),
 			targetApplied: false,
 			targetStartPosition: null,
 			targetEndPosition: null,
-			finalDifPosition: finalPosition.sub(three.position),
-			finalDifH: operation(camera.horizontalAngle, game.resolveNumber(this.h)) - camera.horizontalAngle,
-			finalDifV: operation(camera.verticalAngle, game.resolveNumber(this.v)) - camera.verticalAngle,
-			finalDifDistance:
-				operation(camera.distance, game.resolveNumber(this.distance) / Constants.BASE_SQUARE_SIZE) -
-				camera.distance,
+			x: game.resolveNumber(this.x) / (this.xSquare ? 1 : Project.SQUARE_SIZE),
+			y: game.resolveNumber(this.y) / (this.ySquare ? 1 : Project.SQUARE_SIZE),
+			z: game.resolveNumber(this.z) / (this.zSquare ? 1 : Project.SQUARE_SIZE),
+			h: game.resolveNumber(this.h),
+			v: game.resolveNumber(this.v),
+			distance: game.resolveNumber(this.distance) / Constants.BASE_SQUARE_SIZE,
 			time,
 			timeLeft: time,
 		};
 	}
 
+	start(state: CommandState, ctx: SimulationContext) {
+		if (this.operation === 0) {
+			for (const move of CommandMoveCamera.runningMoves) {
+				move!.cancelled = true;
+			}
+			CommandMoveCamera.runningMoves.clear();
+		}
+		CommandMoveCamera.runningMoves.add(state);
+		const camera = ctx.camera!;
+		const operation = OPERATORS_NUMBERS[this.operation];
+		const position = camera.getThreeCamera().position;
+		state!.finalDifPosition =
+			this.operation === 0 && this.moveTargetOffset && !this.isLegacy
+				? new THREE.Vector3(state!.x as number, state!.y as number, state!.z as number).sub(
+						camera.targetOffset,
+					)
+				: new THREE.Vector3(
+						operation(position.x, state!.x as number),
+						operation(position.y, state!.y as number),
+						operation(position.z, state!.z as number),
+					).sub(position);
+		state!.finalDifH = operation(camera.horizontalAngle, state!.h as number) - camera.horizontalAngle;
+		state!.finalDifV = operation(camera.verticalAngle, state!.v as number) - camera.verticalAngle;
+		state!.finalDifDistance = operation(camera.distance, state!.distance as number) - camera.distance;
+		if (this.operation === 0 && !this.moveTargetOffset && !this.isLegacy) {
+			const h = ((state!.h as number) * Math.PI) / 180;
+			const v = ((state!.v as number) * Math.PI) / 180;
+			const d = state!.distance as number;
+			const x = d * Math.sin(v) * Math.cos(h) - (state!.x as number);
+			const y = -d * Math.cos(v) - (state!.y as number);
+			const z = d * Math.sin(v) * Math.sin(h) - (state!.z as number);
+			const distance = Math.sqrt(x * x + y * y + z * z);
+			if (distance > 0) {
+				const aimH = (Math.atan2(z, x) * 180) / Math.PI;
+				const finalH = (state!.h as number) + Mathf.mod(aimH - (state!.h as number) + 180, 360) - 180;
+				const finalV = 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180) / Math.PI;
+				state!.finalDifH = finalH - camera.horizontalAngle;
+				state!.finalDifV = finalV - camera.verticalAngle;
+				state!.finalDifDistance = distance - camera.distance;
+			}
+			state!.finalDifPosition = new THREE.Vector3();
+		}
+		if (this.operation !== 0 && !this.moveTargetOffset && !this.isLegacy && !state!.newTarget) {
+			const offset = state!.finalDifPosition as THREE.Vector3;
+			if (offset.lengthSq() > 0) {
+				const target = camera.getEffectiveTarget();
+				const finalPosition = position.clone().add(offset);
+				const x = target.x - finalPosition.x;
+				const y = target.y - finalPosition.y;
+				const z = target.z - finalPosition.z;
+				const distance = finalPosition.distanceTo(target);
+				if (distance >= 0.001) {
+					const aimH = (Math.atan2(z, x) * 180) / Math.PI;
+					const aimV = 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180) / Math.PI;
+					state!.finalDifH =
+						(state!.finalDifH as number) + Mathf.mod(aimH - camera.horizontalAngle + 180, 360) - 180;
+					state!.finalDifV = (state!.finalDifV as number) + aimV - camera.verticalAngle;
+				}
+				state!.finalDifDistance = (state!.finalDifDistance as number) + distance - camera.distance;
+			}
+			state!.finalDifPosition = new THREE.Vector3();
+		}
+		state!.started = true;
+	}
+
+	rotate(state: CommandState, ctx: SimulationContext, timeRate: number) {
+		const camera = ctx.camera!;
+		const position = this.rotationTargetOffset ? camera.getPositionFromAngles() : null;
+		camera.horizontalAngle += timeRate * (state!.finalDifH as number);
+		camera.verticalAngle += timeRate * (state!.finalDifV as number);
+		if (position) {
+			camera.updateTargetOffset(position);
+		}
+	}
+
+	updateCamera(state: CommandState, ctx: SimulationContext, timeRate: number) {
+		const camera = ctx.camera!;
+		if (this.isLegacy) {
+			this.updateCameraLegacy(state, ctx, timeRate);
+		} else {
+			this.rotate(state, ctx, timeRate);
+		}
+		camera.distance += timeRate * (state!.finalDifDistance as number);
+	}
+
+	/** @deprecated Move camera legacy mode (pre-3.2.30 projects), to remove. */
+	updateCameraLegacy(state: CommandState, ctx: SimulationContext, timeRate: number) {
+		const camera = ctx.camera!;
+		this.rotate(state, ctx, timeRate);
+		if (this.moveTargetOffset || state!.newTarget) {
+			return;
+		}
+		const offset = state!.finalDifPosition as THREE.Vector3;
+		const position = camera
+			.getThreeCamera()
+			.position.clone()
+			.add(new THREE.Vector3(timeRate * offset.x, timeRate * offset.y, timeRate * offset.z));
+		const target = camera.getEffectiveTarget();
+		if (
+			(state!.finalDifH as number) === 0 &&
+			(state!.finalDifV as number) === 0 &&
+			position.distanceToSquared(target) >= 1e-6
+		) {
+			const x = target.x - position.x;
+			const y = target.y - position.y;
+			const z = target.z - position.z;
+			camera.horizontalAngle = (Math.atan2(z, x) * 180) / Math.PI;
+			camera.verticalAngle = 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180) / Math.PI;
+		}
+		if (this.operation !== 0) {
+			camera.distance = position.distanceTo(target);
+		}
+	}
+
+	finish(state: CommandState): number {
+		CommandMoveCamera.runningMoves.delete(state);
+		return 1;
+	}
+
 	update(state: CommandState, ctx: SimulationContext): number {
-		if (!state!.parallel || state!.noCamera) {
+		if (!state!.parallel || state!.noCamera || state!.cancelled) {
 			return 1;
+		}
+		if (!state!.started) {
+			this.start(state, ctx);
 		}
 		const camera = ctx.camera!;
 		let timeRate: number;
@@ -904,9 +1021,7 @@ class CommandMoveCamera extends CommandBase {
 			}
 			timeRate = difNb / (state!.time as number);
 		}
-		camera.horizontalAngle += timeRate * (state!.finalDifH as number);
-		camera.verticalAngle += timeRate * (state!.finalDifV as number);
-		camera.distance += timeRate * (state!.finalDifDistance as number);
+		this.updateCamera(state, ctx, timeRate);
 		ctx.map?.updateLayerOffsets();
 		if (!state!.targetApplied) {
 			state!.targetApplied = true;
@@ -928,9 +1043,11 @@ class CommandMoveCamera extends CommandBase {
 				ctx.cameraTargetPosition = null;
 			}
 		}
-		const offset = state!.finalDifPosition as THREE.Vector3;
-		camera.targetOffset.add(new THREE.Vector3(timeRate * offset.x, timeRate * offset.y, timeRate * offset.z));
-		return (state!.time as number) === 0 || (state!.timeLeft as number) === 0 ? 1 : 0;
+		if (this.moveTargetOffset) {
+			const offset = state!.finalDifPosition as THREE.Vector3;
+			camera.targetOffset.add(new THREE.Vector3(timeRate * offset.x, timeRate * offset.y, timeRate * offset.z));
+		}
+		return (state!.time as number) === 0 || (state!.timeLeft as number) === 0 ? this.finish(state) : 0;
 	}
 
 	initializeFast(ctx: SimulationContext): CommandState {
@@ -942,18 +1059,19 @@ class CommandMoveCamera extends CommandBase {
 		if (!state || state.noCamera || !ctx.camera) {
 			return 1;
 		}
+		this.start(state, ctx);
 		const camera = ctx.camera;
-		camera.horizontalAngle += state.finalDifH as number;
-		camera.verticalAngle += state.finalDifV as number;
-		camera.distance += state.finalDifDistance as number;
+		this.updateCamera(state, ctx, 1);
 		ctx.map?.updateLayerOffsets();
 		if (state.newTarget) {
 			ctx.cameraTarget = state.newTarget as SimulationObject;
 			ctx.cameraTargetPosition = null;
 		}
-		camera.targetOffset.add(state.finalDifPosition as THREE.Vector3);
+		if (this.moveTargetOffset) {
+			camera.targetOffset.add(state.finalDifPosition as THREE.Vector3);
+		}
 		camera.update();
-		return 1;
+		return this.finish(state);
 	}
 }
 

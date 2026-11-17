@@ -188,6 +188,7 @@ class Map extends Base {
 	public previewShiftZ = 0;
 	public simulationHiddenObjectKeys = new Set<string>();
 	public simulationActive = false;
+	public viewEnabled = false;
 	public objectDialogActive = false;
 	public previewObjectSquarePosition: Position | null = null;
 	public cameraPreviewSnapshot: {
@@ -1692,6 +1693,7 @@ class Map extends Base {
 	}
 
 	enableView(b: boolean) {
+		this.viewEnabled = b;
 		if (!this.initialized) {
 			return;
 		}

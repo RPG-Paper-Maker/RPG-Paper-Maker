@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TROOP_REACTION_FREQUENCY_KIND } from '../../../common';
 import { Node } from '../../../core/Node';
@@ -29,11 +29,16 @@ import TooltipInformation from '../../TooltipInformation';
 import Tree, { TREES_LARGE_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
 import TreeCommands from '../../TreeCommands';
 
-const PanelTroops = forwardRef((props, ref) => {
+type Props = {
+	selectedTroopID?: number;
+};
+
+const PanelTroops = forwardRef(({ selectedTroopID }: Props, ref) => {
 	const { t } = useTranslation();
 
 	const [isDialogBattleTestOpen, setIsDialogBattleTestOpen] = useState(false);
 	const [troops, setTroops] = useState<Node[]>([]);
+	const [forcedTroopID, setForcedTroopID] = useState<number | null>(null);
 	const [selectedTroop, setSelectedTroop] = useState<Model.Troop | null>(null);
 	const [monsters, setMonsters] = useState<Node[]>([]);
 	const [reactions, setReactions] = useState<Node[]>([]);
@@ -123,6 +128,12 @@ const PanelTroops = forwardRef((props, ref) => {
 		initialize();
 	}, []);
 
+	useEffect(() => {
+		if (selectedTroopID !== undefined && troops.length > 0) {
+			setForcedTroopID(selectedTroopID);
+		}
+	}, [selectedTroopID, troops.length > 0]);
+
 	return (
 		<>
 			<Flex columnMobile spacedLarge fillWidth fillHeight>
@@ -133,6 +144,8 @@ const PanelTroops = forwardRef((props, ref) => {
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectTroop}
 						onListUpdated={handleListUpdated}
+						forcedCurrentSelectedItemID={forcedTroopID}
+						setForcedCurrentSelectedItemID={setForcedTroopID}
 						scrollable
 						showEditName
 						applyDefault

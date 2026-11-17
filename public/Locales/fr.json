@@ -2107,6 +2107,12 @@
 	"change.sunlight.ambient.light": "Changer la lumière du soleil / ambiante",
 	"screen.tone.legacy": "Mode hérité (obsolète)",
 	"tooltip.screen.tone.legacy": "Obsolète, conservé uniquement pour les projets créés avant la version 3.2.30 et sera supprimé dans une future version. Applique le ton comme avant : les lumières d'objets très vives restent visibles à travers un ton sombre. Décochez-le et utilisez Changer la lumière du soleil / ambiante pour assombrir un lieu tout en gardant les lumières visibles.",
+	"move.camera.legacy": "Mode hérité (obsolète)",
+	"tooltip.move.camera.legacy": "Obsolète, conservé uniquement pour les projets créés avant la version 3.2.30 et sera supprimé dans une future version. Utilise l'ancien comportement de X/Y/Z : Égal place la caméra à une position de la carte, et le déplacement est ignoré quand les angles changent aussi. Décochez-le pour utiliser le nouveau comportement : X/Y/Z est relatif à la cible et la caméra continue de la regarder.",
+	"legacy.to.check": "Fonctionnalités héritées à vérifier",
+	"legacy.description": "Certaines fonctionnalités fonctionnent différemment depuis la version 3.2.30 (X/Y/Z de Déplacer la caméra, ton d'écran avec des lumières). Ces commandes et cartes utilisent encore l'ancien comportement. Ouvrez chacune d'elles, décochez Mode hérité et vérifiez le résultat en jeu.",
+	"legacy.none": "Tout est à jour.",
+	"legacy.warning.bubble": "Hé ! Des vieux trucs ont besoin d'être réparés ! 🛠️",
 	"default.map.properties.values": "Valeurs par défaut des propriétés de la carte",
 	"keep.values.other.maps": "Conserver les valeurs pour les autres cartes",
 	"sync.both": "Synchroniser les deux"

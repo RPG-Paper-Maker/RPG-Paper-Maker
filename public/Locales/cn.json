@@ -2108,6 +2108,12 @@
 	"change.sunlight.ambient.light": "更改阳光 / 环境光",
 	"screen.tone.legacy": "旧版模式（已弃用）",
 	"tooltip.screen.tone.legacy": "已弃用，仅为 3.2.30 版本之前创建的项目保留，将在未来版本中移除。按以前的方式应用色调：非常明亮的物体光源仍会透过暗色调显示。请取消勾选，并使用“更改阳光 / 环境光”来使场景变暗并保留光源可见。",
+	"move.camera.legacy": "旧版模式（已弃用）",
+	"tooltip.move.camera.legacy": "已弃用，仅为 3.2.30 版本之前创建的项目保留，将在未来版本中移除。使用旧的 X/Y/Z 行为：“等于”会把摄像机放到地图上的某个位置，并且当角度也改变时会忽略移动。取消勾选以使用新行为：X/Y/Z 相对于目标，摄像机会一直看向目标。",
+	"legacy.to.check": "需要检查的旧版功能",
+	"legacy.description": "自 3.2.30 版本起，部分功能的行为已改变（“移动摄像机”的 X/Y/Z、带光源的屏幕色调）。这些指令和地图仍在使用旧行为。请逐个打开，取消勾选“旧版模式”，并在游戏中检查效果。",
+	"legacy.none": "全部已更新。",
+	"legacy.warning.bubble": "嘿！有些旧东西需要修一修！🛠️",
 	"default.map.properties.values": "地图属性默认值",
 	"keep.values.other.maps": "在其他地图保留数值",
 	"sync.both": "同步两者"

@@ -29,6 +29,7 @@ const ProjectsSlice = createSlice({
 		errorDialog: null as { message: string; stack: string; isBugReport?: boolean } | null,
 		dialogsOpen: false,
 		isSystemsDialogOpen: false,
+		legacyCount: 0,
 	},
 	reducers: {
 		setCurrentProject(state, action: PayloadAction<Model.ProjectPreview | null>) {
@@ -68,6 +69,9 @@ const ProjectsSlice = createSlice({
 		setIsSystemsDialogOpen(state, action: PayloadAction<boolean>) {
 			state.isSystemsDialogOpen = action.payload;
 		},
+		setLegacyCount(state, action: PayloadAction<number>) {
+			state.legacyCount = action.payload;
+		},
 	},
 });
 
@@ -84,5 +88,6 @@ export const {
 	setErrorDialog,
 	setDialogsOpen,
 	setIsSystemsDialogOpen,
+	setLegacyCount,
 } = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

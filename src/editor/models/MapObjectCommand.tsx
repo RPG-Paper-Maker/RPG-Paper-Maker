@@ -95,6 +95,8 @@ class MapObjectCommand extends Base {
 	public kind!: EVENT_COMMAND_KIND;
 	public command!: MapObjectCommandType[];
 	public disabled!: boolean;
+	/** @deprecated Move camera / screen tone legacy modes (pre-3.2.30 projects), to remove. */
+	private isLegacyText = false;
 
 	public static bindings: BindingType[] = [
 		['kind', 'kind', undefined, BINDING.NUMBER],
@@ -649,6 +651,7 @@ class MapObjectCommand extends Base {
 
 	toString(): string | ReactNode {
 		let texts: string[] = [];
+		this.isLegacyText = false;
 		const commandName = MapObjectCommand.getCommandName(this.kind, this.command);
 		const color = this.getColor();
 		const iterator = Utils.generateIterator();
@@ -853,7 +856,11 @@ class MapObjectCommand extends Base {
 		return (
 			<Flex
 				spaced
-				style={{ opacity: this.disabled ? 0.5 : 1, textDecoration: this.disabled ? 'line-through' : 'none' }}
+				style={{
+					opacity: this.disabled ? 0.5 : 1,
+					textDecoration: this.disabled ? 'line-through' : 'none',
+					color: this.isLegacyText ? 'var(--orange-color)' : undefined,
+				}}
 			>
 				<Flex column spaced>
 					<Flex spaced>
@@ -1283,7 +1290,8 @@ class MapObjectCommand extends Base {
 		).toLowerCase()}`;
 		texts.push(time);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			texts.push(`[${t('screen.tone.legacy')}]`);
+			texts.push(`⚠ [${t('screen.tone.legacy')}]`);
+			this.isLegacyText = true;
 		}
 		return texts;
 	}
@@ -1723,6 +1731,10 @@ class MapObjectCommand extends Base {
 		}
 		time += `${t('time')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`;
 		texts.push(time);
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`⚠ [${t('move.camera.legacy')}]`);
+			this.isLegacyText = true;
+		}
 		return texts;
 	}
 

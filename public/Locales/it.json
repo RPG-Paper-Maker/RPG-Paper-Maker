@@ -2107,6 +2107,12 @@
 	"change.sunlight.ambient.light": "Cambia luce solare / ambientale",
 	"screen.tone.legacy": "Modalità legacy (deprecata)",
 	"tooltip.screen.tone.legacy": "Deprecata, mantenuta solo per i progetti creati prima della versione 3.2.30 e verrà rimossa in una versione futura. Applica il tono come prima: le luci degli oggetti molto intense restano visibili attraverso un tono scuro. Deselezionala e usa Cambia luce solare / ambientale per scurire un luogo mantenendo visibili le luci.",
+	"move.camera.legacy": "Modalità legacy (deprecata)",
+	"tooltip.move.camera.legacy": "Deprecata, mantenuta solo per i progetti creati prima della versione 3.2.30 e verrà rimossa in una versione futura. Usa il vecchio comportamento di X/Y/Z: Uguale posiziona la camera in un punto della mappa, e lo spostamento viene ignorato quando cambiano anche gli angoli. Deselezionala per usare il nuovo comportamento: X/Y/Z è relativo al bersaglio e la camera continua a guardarlo.",
+	"legacy.to.check": "Funzionalità legacy da controllare",
+	"legacy.description": "Alcune funzionalità funzionano diversamente dalla versione 3.2.30 (X/Y/Z di Muovi camera, tono dello schermo con luci). Questi comandi e mappe usano ancora il vecchio comportamento. Apri ciascuno, deseleziona Modalità legacy e controlla il risultato nel gioco.",
+	"legacy.none": "Tutto è aggiornato.",
+	"legacy.warning.bubble": "Ehi! Ci sono vecchie cose da sistemare! 🛠️",
 	"default.map.properties.values": "Valori predefiniti delle proprietà della mappa",
 	"keep.values.other.maps": "Mantieni i valori per le altre mappe",
 	"sync.both": "Sincronizza entrambi"

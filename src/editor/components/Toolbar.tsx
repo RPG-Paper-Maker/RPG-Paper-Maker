@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
 	AiOutlineFileAdd,
@@ -22,6 +23,7 @@ import { BiCube, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { FaArrowsAlt, FaPlug, FaRegKeyboard } from 'react-icons/fa';
 import { GiBrickWall } from 'react-icons/gi';
+import { IoWarning } from 'react-icons/io5';
 import { LuLanguages, LuMountain, LuSaveAll } from 'react-icons/lu';
 import { MdAutoAwesomeMosaic, MdOutlineAddchart } from 'react-icons/md';
 import { TbNumbers } from 'react-icons/tb';
@@ -29,8 +31,10 @@ import { TfiVideoClapper } from 'react-icons/tfi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../common';
 import { Project } from '../core/Project';
+import { updateLegacyCount } from '../data/Legacy';
 import {
 	RootState,
+	setLegacyCount,
 	triggerAutotiles,
 	triggerCollisions,
 	triggerData,
@@ -59,6 +63,7 @@ import {
 import '../styles/Toolbar.css';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
+import DialogLegacy from './dialogs/DialogLegacy';
 
 function Toolbar() {
 	const { t } = useTranslation();
@@ -74,7 +79,8 @@ function Toolbar() {
 		if (!toolbar || !menu) {
 			return;
 		}
-		const available = toolbar.clientWidth;
+		const warning = toolbar.querySelector<HTMLElement>('.toolbarLegacyWarning');
+		const available = toolbar.clientWidth - (warning?.offsetWidth ?? 0);
 		const natural = menu.scrollWidth;
 		if (available <= 0 || natural <= 0) {
 			if (retryRef.current < 30) {
@@ -108,7 +114,14 @@ function Toolbar() {
 
 	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
-	useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
+	const treeMapTrigger = useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
+	const dialogsOpen = useSelector((state: RootState) => state.projects.dialogsOpen);
+	const legacyCount = useSelector((state: RootState) => state.projects.legacyCount);
+
+	const [isDialogLegacyOpen, setIsDialogLegacyOpen] = useState(false);
+	const [legacyBubblePosition, setLegacyBubblePosition] = useState<{ top: number; right: number } | null>(null);
+	const [isLegacyBubbleClosed, setIsLegacyBubbleClosed] = useState(false);
+	const legacyWarningRef = useRef<HTMLButtonElement>(null);
 
 	const isProjectOpened = currentProject !== null;
 
@@ -214,6 +227,47 @@ function Toolbar() {
 		dispatch(triggerPlay(true));
 	};
 
+	useLayoutEffect(() => {
+		if (!isProjectOpened || legacyCount === 0 || isLegacyBubbleClosed) {
+			setLegacyBubblePosition(null);
+			return;
+		}
+		const updatePosition = () => {
+			const rect = legacyWarningRef.current?.getBoundingClientRect();
+			if (rect) {
+				setLegacyBubblePosition({ top: rect.bottom + 8, right: window.innerWidth - rect.right });
+			}
+		};
+		updatePosition();
+		window.addEventListener('resize', updatePosition);
+		return () => window.removeEventListener('resize', updatePosition);
+	}, [isProjectOpened, legacyCount, isLegacyBubbleClosed]);
+
+	useEffect(() => {
+		setIsLegacyBubbleClosed(false);
+	}, [currentProject]);
+
+	const refreshLegacyCount = useCallback(async () => {
+		if (Project.current) {
+			dispatch(setLegacyCount(await updateLegacyCount()));
+		}
+	}, []);
+
+	useEffect(() => {
+		dispatch(setLegacyCount(currentProject ? (Project.current?.settings.legacyCount ?? 0) : 0));
+		if (currentProject) {
+			refreshLegacyCount().catch(console.error);
+		}
+	}, [currentProject]);
+
+	useEffect(() => {
+		if (!currentProject || dialogsOpen || legacyCount === 0) {
+			return;
+		}
+		const timeout = setTimeout(() => refreshLegacyCount().catch(console.error), 500);
+		return () => clearTimeout(timeout);
+	}, [treeMapTrigger, dialogsOpen]);
+
 	return (
 		<>
 			<div className='toolbar' ref={toolbarRef}>
@@ -311,8 +365,38 @@ function Toolbar() {
 						{t('play')}
 					</MenuItem>
 				</Menu>
+				{isProjectOpened && legacyCount > 0 && (
+					<button
+						type='button'
+						ref={legacyWarningRef}
+						className='toolbarLegacyWarning'
+						aria-label={`${t('legacy.warning.bubble')} (${legacyCount})`}
+						onClick={() => {
+							setIsLegacyBubbleClosed(true);
+							setIsDialogLegacyOpen(true);
+						}}
+					>
+						<IoWarning />
+						<span>{legacyCount}</span>
+					</button>
+				)}
+				{isProjectOpened &&
+					legacyCount > 0 &&
+					!isLegacyBubbleClosed &&
+					legacyBubblePosition &&
+					createPortal(
+						<div
+							className='toolbarLegacyBubble'
+							style={legacyBubblePosition}
+							onClick={() => setIsLegacyBubbleClosed(true)}
+						>
+							{t('legacy.warning.bubble')}
+						</div>,
+						document.body,
+					)}
 			</div>
 			<div className='toolbarMobileSeparator'></div>
+			{isDialogLegacyOpen && <DialogLegacy setIsOpen={setIsDialogLegacyOpen} />}
 		</>
 	);
 }

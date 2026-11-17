@@ -2107,6 +2107,12 @@
 	"change.sunlight.ambient.light": "Cambiar luz solar / ambiental",
 	"screen.tone.legacy": "Modo heredado (obsoleto)",
 	"tooltip.screen.tone.legacy": "Obsoleto, se mantiene solo para proyectos creados antes de la versión 3.2.30 y se eliminará en una versión futura. Aplica el tono como antes: las luces de objetos muy intensas siguen viéndose a través de un tono oscuro. Desmárcalo y usa Cambiar luz solar / ambiental para oscurecer un lugar manteniendo las luces visibles.",
+	"move.camera.legacy": "Modo heredado (obsoleto)",
+	"tooltip.move.camera.legacy": "Obsoleto, se conserva solo para proyectos creados antes de la versión 3.2.30 y se eliminará en una versión futura. Usa el comportamiento antiguo de X/Y/Z: Igual coloca la cámara en una posición del mapa, y el movimiento se ignora cuando los ángulos también cambian. Desmárcalo para usar el nuevo comportamiento: X/Y/Z es relativo al objetivo y la cámara sigue mirándolo.",
+	"legacy.to.check": "Funciones heredadas por revisar",
+	"legacy.description": "Algunas funciones funcionan de otra forma desde la versión 3.2.30 (X/Y/Z de Mover cámara, tono de pantalla con luces). Estos comandos y mapas todavía usan el comportamiento antiguo. Abre cada uno, desmarca Modo heredado y comprueba el resultado en el juego.",
+	"legacy.none": "Todo está actualizado.",
+	"legacy.warning.bubble": "¡Eh! ¡Hay cosas antiguas que arreglar! 🛠️",
 	"default.map.properties.values": "Valores predeterminados de las propiedades del mapa",
 	"keep.values.other.maps": "Mantener valores para otros mapas",
 	"sync.both": "Sincronizar ambos"

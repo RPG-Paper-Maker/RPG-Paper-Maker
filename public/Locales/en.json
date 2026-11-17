@@ -2111,6 +2111,12 @@
 	"change.sunlight.ambient.light": "Change sunlight / ambient light",
 	"screen.tone.legacy": "Legacy mode (deprecated)",
 	"tooltip.screen.tone.legacy": "Deprecated, kept only for projects created before version 3.2.30 and will be removed in a future version. Applies the tone like before: very bright object lights still show through a dark tone. Uncheck it and use Change sunlight / ambient light to darken a place while keeping lights visible.",
+	"move.camera.legacy": "Legacy mode (deprecated)",
+	"tooltip.move.camera.legacy": "Deprecated, kept only for projects created before version 3.2.30 and will be removed in a future version. Uses the old X/Y/Z behavior: Equals places the camera at a map position, and the move is ignored when the angles also change. Uncheck it to use the new behavior: X/Y/Z is relative to the target and the camera keeps looking at it.",
+	"legacy.to.check": "Legacy features to check",
+	"legacy.description": "Some features work differently since version 3.2.30 (Move camera X/Y/Z, screen tone with lights). These commands and maps still use the old behavior. Open each one, uncheck Legacy mode and check the result in game.",
+	"legacy.none": "Everything is up to date.",
+	"legacy.warning.bubble": "Hey! Some old stuff needs fixing! 🛠️",
 	"default.map.properties.values": "Default map properties values",
 	"keep.values.other.maps": "Keep values for other maps",
 	"sync.both": "Sync both"

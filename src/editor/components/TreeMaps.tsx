@@ -86,7 +86,7 @@ function TreeMaps({
 	};
 
 	useEffect(() => {
-		const handleNavigateStartup = (event: Event) => {
+		const openMapProperties = (event: Event, tab: number) => {
 			const id = (event as CustomEvent<number>).detail;
 			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
 			if (!node) return;
@@ -97,12 +97,18 @@ function TreeMaps({
 				setSelectedNode(node);
 				setEditedMap(map);
 				setIsNew(false);
-				setMapPropertiesInitialTab(1);
+				setMapPropertiesInitialTab(tab);
 				setIsOpenMapProperties(true);
 			})();
 		};
+		const handleNavigateStartup = (event: Event) => openMapProperties(event, 1);
+		const handleNavigateProperties = (event: Event) => openMapProperties(event, 0);
 		window.addEventListener('variable-usage-startup', handleNavigateStartup);
-		return () => window.removeEventListener('variable-usage-startup', handleNavigateStartup);
+		window.addEventListener('command-usage-map-properties', handleNavigateProperties);
+		return () => {
+			window.removeEventListener('variable-usage-startup', handleNavigateStartup);
+			window.removeEventListener('command-usage-map-properties', handleNavigateProperties);
+		};
 	}, []);
 
 	useEffect(() => {

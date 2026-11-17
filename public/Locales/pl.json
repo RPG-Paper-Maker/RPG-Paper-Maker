@@ -2107,6 +2107,12 @@
 	"change.sunlight.ambient.light": "Zmień światło słoneczne / otoczenia",
 	"screen.tone.legacy": "Tryb starszy (przestarzały)",
 	"tooltip.screen.tone.legacy": "Przestarzały, zachowany tylko dla projektów sprzed wersji 3.2.30 i zostanie usunięty w przyszłej wersji. Stosuje ton jak wcześniej: bardzo jasne światła obiektów przenikają przez ciemny ton. Odznacz go i użyj Zmień światło słoneczne / otoczenia, aby przyciemnić miejsce, zachowując widoczne światła.",
+	"move.camera.legacy": "Tryb starszy (przestarzały)",
+	"tooltip.move.camera.legacy": "Przestarzały, zachowany tylko dla projektów utworzonych przed wersją 3.2.30 i zostanie usunięty w przyszłej wersji. Używa starego działania X/Y/Z: Równa się umieszcza kamerę w pozycji na mapie, a ruch jest ignorowany, gdy zmieniają się też kąty. Odznacz, aby użyć nowego działania: X/Y/Z jest względne wobec celu, a kamera nadal na niego patrzy.",
+	"legacy.to.check": "Starsze funkcje do sprawdzenia",
+	"legacy.description": "Niektóre funkcje działają inaczej od wersji 3.2.30 (X/Y/Z w Ruszaj kamerą, ton ekranu ze światłami). Te polecenia i mapy nadal używają starego działania. Otwórz każde z nich, odznacz Tryb starszy i sprawdź wynik w grze.",
+	"legacy.none": "Wszystko jest aktualne.",
+	"legacy.warning.bubble": "Hej! Trzeba naprawić stare rzeczy! 🛠️",
 	"default.map.properties.values": "Domyślne wartości właściwości mapy",
 	"keep.values.other.maps": "Zachowaj wartości dla innych map",
 	"sync.both": "Synchronizuj oba"

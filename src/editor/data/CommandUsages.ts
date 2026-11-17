@@ -1,14 +1,18 @@
+import i18next from 'i18next';
 import { DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, JSONType, Paths } from '../common';
 import { checkFileExists, getFiles, readJSON } from '../common/Platform';
+import { Node } from '../core/Node';
+import { Position } from '../core/Position';
 import { Project } from '../core/Project';
-import { Model } from '../Editor';
+import { Model, Scene } from '../Editor';
 
-export type VariableUsage = {
+export type CommandUsage = {
 	mapID: number | null;
 	mapPath: string;
 	objectID: number | null;
 	objectName: string;
-	command: Model.MapObjectCommand;
+	command?: Model.MapObjectCommand;
+	text?: string;
 	reactionID?: number;
 	modelID?: number;
 	modelKind?: 'default' | 'hero';
@@ -16,7 +20,12 @@ export type VariableUsage = {
 	stateID?: number;
 	position?: number[];
 	isStartup?: boolean;
+	troopID?: number;
+	isMapProperties?: boolean;
 };
+
+export type CommandMatcher = (command: Model.MapObjectCommand) => boolean;
+export type MapInfosMatcher = (infos: JSONType) => string | null;
 
 export let pendingVariableObject: { mapID: number; position: number[] } | null = null;
 export const setPendingVariableObject = (target: typeof pendingVariableObject) => {
@@ -54,7 +63,7 @@ const usesVariable = (command: Model.MapObjectCommand, variableID: number): bool
 
 const scanCommands = (
 	jsonNodes: JSONType[] | undefined,
-	variableID: number,
+	match: CommandMatcher,
 	add: (command: Model.MapObjectCommand) => void,
 ) => {
 	for (const jsonNode of jsonNodes ?? []) {
@@ -62,23 +71,23 @@ const scanCommands = (
 		if (typeof jsonCommand?.kind === 'number' && Array.isArray(jsonCommand.command)) {
 			const command = new Model.MapObjectCommand();
 			command.read(jsonCommand);
-			if (usesVariable(command, variableID)) add(command);
+			if (match(command)) add(command);
 		}
-		scanCommands(jsonNode.children as JSONType[] | undefined, variableID, add);
+		scanCommands(jsonNode.children as JSONType[] | undefined, match, add);
 	}
 };
 
 const scanObject = (
 	jsonObject: JSONType,
-	variableID: number,
-	base: Omit<VariableUsage, 'command'>,
-	results: VariableUsage[],
+	match: CommandMatcher,
+	base: CommandUsage,
+	results: CommandUsage[],
 	includeReactionTarget = false,
 ) => {
 	for (const [eventIndex, event] of ((jsonObject.events as JSONType[] | undefined) ?? []).entries()) {
 		const reactions = event.r as Record<string, JSONType> | undefined;
 		for (const [stateKey, reaction] of Object.entries(reactions ?? {})) {
-			scanCommands(reaction.c as JSONType[] | undefined, variableID, (command) =>
+			scanCommands(reaction.c as JSONType[] | undefined, match, (command) =>
 				results.push({
 					...base,
 					command,
@@ -89,13 +98,16 @@ const scanObject = (
 	}
 };
 
-export async function findVariableUsages(variableID: number): Promise<VariableUsage[]> {
+export async function findCommandUsages(
+	match: CommandMatcher,
+	matchMapInfos?: MapInfosMatcher,
+): Promise<CommandUsage[]> {
 	const project = Project.current!;
-	const results: VariableUsage[] = [];
+	const results: CommandUsage[] = [];
 	for (const reaction of project.commonEvents.commonReactions) {
 		const json: JSONType = {};
 		reaction.write(json);
-		scanCommands(json.c as JSONType[] | undefined, variableID, (command) =>
+		scanCommands(json.c as JSONType[] | undefined, match, (command) =>
 			results.push({
 				mapID: null,
 				mapPath: '-',
@@ -111,7 +123,7 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 		model.write(json);
 		scanObject(
 			json,
-			variableID,
+			match,
 			{ mapID: null, mapPath: '-', objectID: null, objectName: model.name, modelID: model.id },
 			results,
 			true,
@@ -125,7 +137,7 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 		model.write(json);
 		scanObject(
 			json,
-			variableID,
+			match,
 			{
 				mapID: null,
 				mapPath: '-',
@@ -136,6 +148,22 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 			results,
 			true,
 		);
+	}
+	for (const troop of project.troops.list) {
+		const json: JSONType = {};
+		troop.write(json);
+		for (const reaction of (json.reactions as JSONType[] | undefined) ?? []) {
+			scanCommands(reaction.c as JSONType[] | undefined, match, (command) =>
+				results.push({
+					mapID: null,
+					mapPath: '-',
+					objectID: null,
+					objectName: troop.name,
+					command,
+					troopID: troop.id,
+				}),
+			);
+		}
 	}
 	const scanMap = async (mapID: number, mapPath: string) => {
 		const folder = Paths.join(project.getPathMaps(), Model.Map.generateMapName(mapID));
@@ -151,7 +179,7 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 				if (object)
 					scanObject(
 						object,
-						variableID,
+						match,
 						{
 							mapID,
 							mapPath,
@@ -169,10 +197,20 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 				? Paths.join(tempFolder, Paths.FILE_MAP_INFOS)
 				: infosPath,
 		)) as JSONType | null;
+		const mapInfosText = infos && matchMapInfos ? matchMapInfos(infos) : null;
+		if (mapInfosText !== null)
+			results.push({
+				mapID,
+				mapPath,
+				objectID: null,
+				objectName: i18next.t('map.properties'),
+				text: mapInfosText,
+				isMapProperties: true,
+			});
 		if (infos?.so)
 			scanObject(
 				infos.so as JSONType,
-				variableID,
+				match,
 				{
 					mapID,
 					mapPath,
@@ -192,4 +230,43 @@ export async function findVariableUsages(variableID: number): Promise<VariableUs
 	};
 	await visit(project.treeMaps.tree[0]?.children ?? []);
 	return results;
+}
+
+export async function findVariableUsages(variableID: number): Promise<CommandUsage[]> {
+	return findCommandUsages((command) => usesVariable(command, variableID));
+}
+
+export function goToCommandUsage(usage: CommandUsage) {
+	if (usage.mapID !== null && usage.isMapProperties) {
+		Scene.Map.onSelectMapID?.(usage.mapID);
+		window.dispatchEvent(new CustomEvent('command-usage-map-properties', { detail: usage.mapID }));
+	} else if (usage.mapID !== null && usage.isStartup) {
+		Scene.Map.onSelectMapID?.(usage.mapID);
+		window.dispatchEvent(new CustomEvent('variable-usage-startup', { detail: usage.mapID }));
+	} else if (usage.mapID !== null && usage.position) {
+		setPendingVariableObject({ mapID: usage.mapID, position: usage.position });
+		const tag = Node.getNodeByID(Project.current!.treeMaps.tree, usage.mapID)?.content as
+			Model.TreeMapTag | undefined;
+		if (tag) {
+			const position = new Position();
+			position.read(usage.position);
+			tag.cursorPosition = position;
+		}
+		Scene.Map.onSelectMapID?.(usage.mapID);
+		window.dispatchEvent(new Event('variable-usage-map-object'));
+	} else if (usage.troopID !== undefined) {
+		window.dispatchEvent(new CustomEvent('variable-usage-troop', { detail: usage.troopID }));
+	} else if (usage.reactionID !== undefined || usage.modelID !== undefined || usage.modelKind) {
+		window.dispatchEvent(
+			new CustomEvent('variable-usage-systems', {
+				detail: {
+					reactionID: usage.reactionID,
+					modelID: usage.modelID,
+					modelKind: usage.modelKind,
+					eventIndex: usage.eventIndex,
+					stateID: usage.stateID,
+				},
+			}),
+		);
+	}
 }

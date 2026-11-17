@@ -2166,6 +2166,7 @@ class MapPortion {
 			this.objectsMesh.receiveShadow = true;
 			this.objectsMesh.renderOrder = 0;
 			this.objectsMesh.layers.enable(RAYCASTING_LAYER.OBJECTS);
+			this.objectsMesh.visible = !this.map.viewEnabled;
 			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
 			this.map.scene.add(this.objectsMesh);
 		}

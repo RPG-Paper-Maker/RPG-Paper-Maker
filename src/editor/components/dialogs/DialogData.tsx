@@ -31,9 +31,10 @@ import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 type Props = {
 	setIsOpen: (b: boolean) => void;
+	selectedTroopID?: number;
 };
 
-function DialogData({ setIsOpen }: Props) {
+function DialogData({ setIsOpen, selectedTroopID }: Props) {
 	const { t } = useTranslation();
 
 	const dispatch = useDispatch();
@@ -166,7 +167,7 @@ function DialogData({ setIsOpen }: Props) {
 					<PanelClasses key={0} ref={panelClassesRef} />,
 					<PanelHeroes key={1} ref={panelHeroesRef} />,
 					<PanelMonsters key={2} ref={panelMonstersRef} />,
-					<PanelTroops key={3} ref={panelTroopsRef} />,
+					<PanelTroops key={3} ref={panelTroopsRef} selectedTroopID={selectedTroopID} />,
 					<PanelCommonSkillItem key={4} kind={COMMON_SKILL_ITEM_KIND.ITEM} ref={panelItemsRef} />,
 					<PanelCommonSkillItem key={5} kind={COMMON_SKILL_ITEM_KIND.WEAPON} ref={panelWeaponsRef} />,
 					<PanelCommonSkillItem key={6} kind={COMMON_SKILL_ITEM_KIND.ARMOR} ref={panelArmorsRef} />,

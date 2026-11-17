@@ -149,6 +149,8 @@ import MenuCustom from './MenuCustom';
 import MenuItem from './MenuItem';
 import Toolbar from './Toolbar';
 
+const DATA_TAB_TROOPS = 3;
+
 enum DIALOG_TYPE {
 	NEW_PROJECT,
 	DEPLOY,
@@ -189,6 +191,7 @@ function MainMenuBar() {
 		eventIndex?: number;
 		stateID?: number;
 	} | null>(null);
+	const [usageTroopID, setUsageTroopID] = useState<number | undefined>(undefined);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
@@ -247,6 +250,7 @@ function MainMenuBar() {
 		if (!b) {
 			setDialogType(null);
 			setVariableUsageSystemsTarget(null);
+			setUsageTroopID(undefined);
 		}
 	};
 
@@ -267,6 +271,16 @@ function MainMenuBar() {
 		};
 		window.addEventListener('variable-usage-systems', handleNavigate);
 		return () => window.removeEventListener('variable-usage-systems', handleNavigate);
+	}, []);
+
+	useEffect(() => {
+		const handleNavigate = (event: Event) => {
+			Project.current!.settings.lastTabIndexData = DATA_TAB_TROOPS;
+			setUsageTroopID((event as CustomEvent<number>).detail);
+			setDialogType(DIALOG_TYPE.DATA);
+		};
+		window.addEventListener('variable-usage-troop', handleNavigate);
+		return () => window.removeEventListener('variable-usage-troop', handleNavigate);
 	}, []);
 
 	const handleNewProject = async () => {
@@ -1340,7 +1354,7 @@ function MainMenuBar() {
 			case DIALOG_TYPE.DEPLOY:
 				return <DialogDeploy setIsOpen={handleSetIsDialogOpen} />;
 			case DIALOG_TYPE.DATA:
-				return <DialogData setIsOpen={handleSetIsDialogOpen} />;
+				return <DialogData setIsOpen={handleSetIsDialogOpen} selectedTroopID={usageTroopID} />;
 			case DIALOG_TYPE.SYSTEMS:
 				return (
 					<DialogSystems
