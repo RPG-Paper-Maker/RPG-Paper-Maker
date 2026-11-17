@@ -591,8 +591,9 @@ class SimulationObject {
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					light.shadow.camera.near = 0.01;
 					light.shadow.camera.updateProjectionMatrix();
-					light.shadow.bias = -0.0003;
-					light.shadow.normalBias = 0.1 / Project.SQUARE_SIZE;
+					// No depth bias (it opens a gap for point lights); a small normal offset prevents acne
+					light.shadow.bias = 0;
+					light.shadow.normalBias = 0.1;
 				}
 			}
 			light.position.set(
