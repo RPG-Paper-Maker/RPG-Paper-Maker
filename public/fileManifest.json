@@ -690,6 +690,7 @@
         "ChangeScreenTone.js",
         "ChangeState.js",
         "ChangeStatus.js",
+        "ChangeSunlightAmbientLight.js",
         "ChangeVariables.js",
         "ChangeVictoryMusic.js",
         "ChangeWeather.js",
