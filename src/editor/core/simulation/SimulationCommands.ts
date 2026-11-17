@@ -517,7 +517,7 @@ class CommandElse extends CommandBase {
 
 class CommandWhile extends CommandBase {
 	update(): number {
-		return -1;
+		return 2;
 	}
 
 	goToNextCommand = () => 2;
