@@ -132,13 +132,8 @@ function DialogCommandModifyLight({ commandKind, setIsOpen, list, onAccept, onRe
 			isOpen
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialHeight={isDelete ? undefined : '720px'}
+			initialHeight={isDelete ? undefined : '500px'}
 			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			// Hide the windows behind it (they come back on close) so the whole map is visible
-			className='dialogLight'
-			initialPlacement='right'
-			hideOtherDialogs
-			allowMapInteraction
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
 				<Form>

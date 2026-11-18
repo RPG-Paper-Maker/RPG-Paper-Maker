@@ -393,7 +393,6 @@ class SimulationObject {
 				sprite.updateGeometry(this.map, geometrySprite, width, height, position, 0, false, localPosition);
 				geometrySprite.updateAttributes();
 				mesh = new THREE.Mesh(geometrySprite, this.applyPreviewEffect(material));
-				Manager.GL.applyShadowMaterials(mesh, material);
 				this.meshIsFace = state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 				break;
 			}
@@ -434,6 +433,12 @@ class SimulationObject {
 								return material;
 							});
 							child.material = Array.isArray(child.material) ? previewMaterials : previewMaterials[0];
+							const first = previewMaterials[0] as THREE.MeshPhongMaterial | undefined;
+							if (first) {
+								const shadows = Manager.GL.createShadowMaterials(first.map, () => first.opacity, first.alphaMap);
+								child.customDepthMaterial = shadows.depth;
+								child.customDistanceMaterial = shadows.distance;
+							}
 							child.receiveShadow = true;
 							child.castShadow = !hasPointLight;
 						}
@@ -473,6 +478,9 @@ class SimulationObject {
 				break;
 		}
 		if (mesh) {
+			if (mesh instanceof THREE.Mesh) {
+				Manager.GL.applyShadowMaterials(mesh, mesh.material as THREE.Material);
+			}
 			mesh.receiveShadow = true;
 			mesh.castShadow = !hasPointLight;
 			mesh.renderOrder = 4;
@@ -583,10 +591,6 @@ class SimulationObject {
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					const shadowMapSize = ShadowTint.getLightShadowMapSize(light);
 					light.shadow.mapSize.set(shadowMapSize, shadowMapSize);
-				}
-				if (light instanceof THREE.PointLight) {
-					light.shadow.autoUpdate = false;
-					light.shadow.needsUpdate = true;
 				}
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					light.shadow.camera.near = 0.01;

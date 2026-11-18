@@ -1377,10 +1377,9 @@ class MapPortion {
 						true,
 						new THREE.Vector3(),
 					);
-					geometry.updateAttributes();
-					geometry.rotate(this.map.getFaceSpriteAngle(), MapElement.Base.Y_AXIS);
 					this.map.selectedPivotOffset.set(0, 0, 0);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
+					geometry.rotate(this.map.getFaceSpriteAngle(), MapElement.Base.Y_AXIS);
 				} else if (
 					Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.ROTATE &&
 					isPointedSprite &&
@@ -2306,10 +2305,6 @@ class MapPortion {
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					const shadowMapSize = ShadowTint.getLightShadowMapSize(light);
 					light.shadow.mapSize.set(shadowMapSize, shadowMapSize);
-				}
-				if (light instanceof THREE.PointLight) {
-					light.shadow.autoUpdate = false;
-					light.shadow.needsUpdate = true;
 				}
 				if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 					light.shadow.camera.near = 0.01;

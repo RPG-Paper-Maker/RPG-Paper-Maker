@@ -89,7 +89,7 @@ class TitleScreenGameOver extends Serializable {
 		this.titleSettings ??= [];
 		if (!this.titleSettings.some((setting) => setting.id === ADVANCED_SHADOWS_SETTING_ID)) {
 			this.titleSettings.push(
-				Checkable.createCheckable(ADVANCED_SHADOWS_SETTING_ID, t('advanced.shadows.setting'), true),
+				Checkable.createCheckable(ADVANCED_SHADOWS_SETTING_ID, t('advanced.shadows.setting'), false),
 			);
 		}
 		this.titleMusic ??= PlaySong.createPlaySong(SONG_KIND.MUSIC);

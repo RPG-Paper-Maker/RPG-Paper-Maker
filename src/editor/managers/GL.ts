@@ -285,6 +285,13 @@ gl_FragColor.rgb = mix(
 		// Receives the colored translucent shadows (see ShadowTint)
 		material.defines = { USE_SHADOW_TINT: '' };
 		GL.attachShadowMaterials(material);
+		const alphaThreshold = { value: 0.01 };
+		Object.defineProperty(material.userData, 'rpmAlphaThreshold', {
+			value: alphaThreshold,
+			enumerable: false,
+			writable: true,
+			configurable: true,
+		});
 
 		// Edit shader information before compiling shader
 		material.onBeforeCompile = (shader) => {
@@ -297,7 +304,7 @@ gl_FragColor.rgb = mix(
 			shader.uniforms.offset = uniforms.offset;
 			shader.uniforms.enableShadows = { value: shadows };
 			shader.uniforms.hovered = { value: hovered };
-			shader.uniforms.alpha_threshold = { value: 0.01 };
+			shader.uniforms.alpha_threshold = alphaThreshold;
 			// Not enumerable: the uniforms end up in userData, which three.js copies as JSON when cloning a material,
 			// and the tint textures cannot be serialized
 			for (const [name, uniform] of Object.entries(ShadowTint.uniforms)) {
@@ -322,6 +329,7 @@ gl_FragColor.rgb = mix(
 
 	/** Alpha below this (texture alpha * opacity) casts no shadow. */
 	static SHADOW_ALPHA_THRESHOLD = 0.9;
+	static SHADOW_ALPHA_THRESHOLD_SIMPLE = 0.5;
 
 	static createShadowMaterials(
 		map?: THREE.Texture | null,
@@ -343,7 +351,8 @@ gl_FragColor.rgb = mix(
 		// The opacity is read when drawing, so an object whose opacity changes keeps the right shadow.
 		const threshold = () => {
 			const value = getOpacity();
-			return value > 0 ? GL.SHADOW_ALPHA_THRESHOLD / value : 2;
+			const cut = ShadowTint.advanced ? GL.SHADOW_ALPHA_THRESHOLD : GL.SHADOW_ALPHA_THRESHOLD_SIMPLE;
+			return value > 0 ? cut / value : 2;
 		};
 		for (const material of [depth, distance]) {
 			Object.defineProperty(material, 'alphaTest', { get: threshold, set: () => {} });
