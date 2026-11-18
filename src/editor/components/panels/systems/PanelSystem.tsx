@@ -54,6 +54,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [windowHeight, setWindowHeight] = useStateNumber();
 	const [screenWindow, setScreenWindow] = useStateNumber();
 	const [antialias, setAntialias] = useStateBool();
+	const [advancedShadows, setAdvancedShadows] = useStateBool();
 	const [isMouseControls, setIsMouseControls] = useStateBool();
 	const [squareSize, setSquareSize] = useStateNumber();
 	const [rayPortionsEngine, setRayPortionsEngine] = useStateNumber();
@@ -103,6 +104,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setWindowHeight(systems.windowHeight);
 		setScreenWindow(systems.isScreenWindow ? 0 : 1);
 		setAntialias(systems.antialias);
+		setAdvancedShadows(systems.advancedShadows);
 		setIsMouseControls(systems.isMouseControls);
 		setSquareSize(systems.SQUARE_SIZE);
 		squareSizeBeforeChange.current = systems.SQUARE_SIZE;
@@ -197,6 +199,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.windowHeight = windowHeight;
 		systems.isScreenWindow = screenWindow === 0;
 		systems.antialias = antialias;
+		systems.advancedShadows = advancedShadows;
 		systems.isMouseControls = isMouseControls;
 		systems.SQUARE_SIZE = squareSize;
 		systems.PORTIONS_RAY = rayPortionsEngine;
@@ -292,6 +295,12 @@ const PanelSystem = forwardRef((props, ref) => {
 							<Checkbox isChecked={antialias} onChange={setAntialias}>
 								{t('antialiasing')}
 							</Checkbox>
+							<Flex spaced centerV>
+								<Checkbox isChecked={advancedShadows} onChange={setAdvancedShadows}>
+									{t('advanced.shadows.setting')}
+								</Checkbox>
+								<TooltipInformation text={t('tooltip.advanced.shadows.project')} />
+							</Flex>
 							<Checkbox isChecked={isMouseControls} onChange={setIsMouseControls}>
 								{t('mouse.controls')}
 							</Checkbox>

@@ -29,7 +29,6 @@ class EngineSettings extends Serializable {
 	public theme!: number;
 	public engineFontSize!: number;
 	public livePreview!: boolean;
-	public advancedShadows!: boolean;
 	public simulationDialogSpacePercent!: number;
 	public updaterType!: number;
 	public getUnstableVersions!: boolean;
@@ -47,7 +46,6 @@ class EngineSettings extends Serializable {
 		['theme', 't', 0, BINDING.NUMBER],
 		['engineFontSize', 'efs', 12, BINDING.NUMBER],
 		['livePreview', 'lp', true, BINDING.BOOLEAN],
-		['advancedShadows', 'as', false, BINDING.BOOLEAN],
 		['simulationDialogSpacePercent', 'sdp', 66.6667, BINDING.NUMBER],
 		['updaterType', 'ut', 1, BINDING.NUMBER],
 		['getUnstableVersions', 'guv', false, BINDING.BOOLEAN],

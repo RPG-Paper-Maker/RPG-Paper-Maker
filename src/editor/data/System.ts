@@ -26,6 +26,7 @@ class System extends Serializable {
 	public windowHeight!: number;
 	public isScreenWindow!: boolean;
 	public antialias!: boolean;
+	public advancedShadows!: boolean;
 	public isMouseControls!: boolean;
 	public SQUARE_SIZE!: number;
 	public PORTIONS_RAY!: number;
@@ -86,6 +87,7 @@ class System extends Serializable {
 		['windowHeight', 'sh', undefined, BINDING.NUMBER],
 		['isScreenWindow', 'isw', undefined, BINDING.BOOLEAN],
 		['antialias', 'aa', false, BINDING.BOOLEAN],
+		['advancedShadows', 'as', false, BINDING.BOOLEAN],
 		['isMouseControls', 'isMouseControls', true, BINDING.BOOLEAN],
 		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
 		['PORTIONS_RAY', 'portionRayEngine', 6, BINDING.NUMBER],

@@ -20,7 +20,6 @@ import { Picture2D } from '../../core/Picture2D';
 import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Manager, Scene } from '../../Editor';
-import { ShadowTint } from '../../managers/ShadowTint';
 import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
 import { setEngineFontSize, setLivePreview, setProjects, setTheme } from '../../store';
 import Loader from '../Loader';
@@ -113,7 +112,6 @@ function PanelLoading({ setLoaded }: Props) {
 		dispatch(setTheme(Constants.THEMES[EngineSettings.current.theme]));
 		dispatch(setEngineFontSize(EngineSettings.current.engineFontSize));
 		dispatch(setLivePreview(EngineSettings.current.livePreview));
-		ShadowTint.advanced = EngineSettings.current.advancedShadows;
 	};
 
 	const initializeLocales = async () => {

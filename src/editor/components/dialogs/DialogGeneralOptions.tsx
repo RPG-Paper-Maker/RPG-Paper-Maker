@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../../common';
 import { EngineSettings } from '../../data';
 import { Model } from '../../Editor';
-import { ShadowTint } from '../../managers/ShadowTint';
 import { RootState, setEngineFontSize, setLivePreview, setTheme } from '../../store';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
@@ -35,7 +34,6 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [updaterType, setUpdaterType] = useState(EngineSettings.current!.updaterType);
 	const [getUnstableVersions, setGetUnstableVersions] = useState(EngineSettings.current!.getUnstableVersions);
-	const [advancedShadows, setAdvancedShadows] = useState(EngineSettings.current!.advancedShadows);
 
 	const theme = useSelector((state: RootState) => state.settings.theme);
 	const engineFontSize = useSelector((state: RootState) => state.settings.engineFontSize);
@@ -62,8 +60,6 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 		EngineSettings.current!.theme = themeID;
 		EngineSettings.current!.engineFontSize = engineFontSize;
 		EngineSettings.current!.livePreview = livePreview;
-		EngineSettings.current!.advancedShadows = advancedShadows;
-		ShadowTint.advanced = advancedShadows;
 		EngineSettings.current!.updaterType = updaterType;
 		EngineSettings.current!.getUnstableVersions = getUnstableVersions;
 		await EngineSettings.current!.save();
@@ -110,10 +106,6 @@ function DialogGeneralOptions({ setIsOpen }: Props) {
 						<Label>{t('live.preview')}</Label>
 						<Value>
 							<Checkbox isChecked={livePreview} onChange={handleChangeLivePreview} />
-						</Value>
-						<Label>{t('advanced.shadows')}</Label>
-						<Value>
-							<Checkbox isChecked={advancedShadows} onChange={setAdvancedShadows} />
 						</Value>
 						{Constants.IS_DESKTOP && (
 							<>
