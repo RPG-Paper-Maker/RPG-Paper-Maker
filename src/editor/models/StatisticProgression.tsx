@@ -56,7 +56,7 @@ class StatisticProgression extends Base {
 	applyDefault(additionnalBinding: BindingType[] = []): void {
 		super.applyDefault(StatisticProgression.getBindings(additionnalBinding));
 		this.id = 1;
-		this.maxValue = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+		this.maxValue = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 9999);
 		this.isFix = true;
 	}
 
