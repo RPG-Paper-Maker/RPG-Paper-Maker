@@ -200,6 +200,7 @@ class SimulationObject {
 		finalTime: number,
 		elapsedTime: number,
 	): number {
+		peak = Math.max(peak, start.y + 1 / Project.SQUARE_SIZE, end.y);
 		const a = -(peak - start.y) / ((finalTime / 2) * (finalTime / 2));
 		let coef = 1;
 		if (start.y !== end.y) {
