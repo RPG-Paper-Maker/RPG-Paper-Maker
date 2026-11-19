@@ -66,6 +66,11 @@ type Props = {
 	onAccept: (data: Model.ProjectPreview) => void;
 };
 
+const resetPlaySong = (song: Model.PlaySong) => {
+	song.id = -1;
+	song.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+};
+
 function DialogNewProject({ setIsOpen, onAccept }: Props) {
 	const { t } = useTranslation();
 
@@ -307,10 +312,10 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			project.fonts.list = [];
 			project.systems.windowSkins.splice(1);
 			project.systems.fontNames[0].isBasic = true;
-			project.systems.soundCancel.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
-			project.systems.soundCursor.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
-			project.systems.soundConfirmation.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
-			project.systems.soundImpossible.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			resetPlaySong(project.systems.soundCancel);
+			resetPlaySong(project.systems.soundCursor);
+			resetPlaySong(project.systems.soundConfirmation);
+			resetPlaySong(project.systems.soundImpossible);
 			project.systems.skyboxes.splice(1);
 			project.systems.skyboxes[0].back = -1;
 			project.systems.skyboxes[0].front = -1;
@@ -321,15 +326,15 @@ function DialogNewProject({ setIsOpen, onAccept }: Props) {
 			for (const currency of project.systems.currencies) {
 				currency.pictureID = -1;
 			}
-			project.battleSystem.battleMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
-			project.battleSystem.battleVictory.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
-			project.battleSystem.battleLevelUp.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			resetPlaySong(project.battleSystem.battleMusic);
+			resetPlaySong(project.battleSystem.battleVictory);
+			resetPlaySong(project.battleSystem.battleLevelUp);
 			project.battleSystem.elements.splice(1);
 			for (const element of project.battleSystem.elements) {
 				element.pictureID = -1;
 			}
 			project.titleScreenGameOver.gameOverBackgroundImageID = -1;
-			project.titleScreenGameOver.gameOverMusic.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+			resetPlaySong(project.titleScreenGameOver.gameOverMusic);
 			project.commonEvents.commonReactions.splice(1);
 			project.commonEvents.heroObject.states[0].graphicsID = -1;
 		}

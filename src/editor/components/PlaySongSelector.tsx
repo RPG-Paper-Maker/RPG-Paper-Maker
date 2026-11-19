@@ -47,7 +47,11 @@ const PlaySongSelector = forwardRef(
 
 		const initialize = (song: Model.PlaySong) => {
 			setSongSelection(song.isKeepCurrent ? SELECTION_SONG.KEEP_CURRENT : SELECTION_SONG.ASSET);
-			setID(song.id);
+			setID(
+				!song.songID.isActivated && song.songID.kind === DYNAMIC_VALUE_KIND.NUMBER
+					? (song.songID.value as number)
+					: song.id,
+			);
 			if (dynamicUpdate) {
 				setDynamicID(song.songID);
 				setSongOptions(song);
