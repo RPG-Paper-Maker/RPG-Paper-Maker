@@ -132,7 +132,7 @@ class SimulationSkinRenderer {
 		}
 		const families = new Set<string>();
 		for (const fontName of systems.fontNames) {
-			const family = fontName.getName();
+			const family = fontName.getFamily();
 			if (!fontName.isBasic && family.length > 0) {
 				families.add(family);
 			}
@@ -169,7 +169,7 @@ class SimulationSkinRenderer {
 	}
 
 	private extractFontFamily(fontName: Model.FontName): string {
-		return fontName.isBasic ? String(fontName.font?.value ?? '') : fontName.getName();
+		return fontName.getFamily();
 	}
 
 	private defaultFontFamily(): string {

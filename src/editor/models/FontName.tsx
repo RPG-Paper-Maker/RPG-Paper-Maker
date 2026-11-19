@@ -38,6 +38,14 @@ class FontName extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	static getCustomFamily(id: number): string {
+		return `RPM-Font-${id}`;
+	}
+
+	getFamily(): string {
+		return this.isBasic ? String(this.font?.value ?? '') : FontName.getCustomFamily(this.id);
+	}
+
 	applyDefault() {
 		super.applyDefault(FontName.getBindings([]));
 	}
