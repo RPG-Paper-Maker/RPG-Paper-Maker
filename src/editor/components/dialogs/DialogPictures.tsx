@@ -12,7 +12,7 @@
 import { ReactNode, useLayoutEffect, useMemo, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { PICTURE_KIND } from '../../common';
+import { Constants, PICTURE_KIND } from '../../common';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Node } from '../../core/Node';
 import { Project } from '../../core/Project';
@@ -411,7 +411,7 @@ function DialogPictures({
 							adjustPositionSize
 							base64={!selectedPicture.isBR}
 							doNotUpdateTexture
-							selectionSquareSize={Project.SQUARE_SIZE}
+							selectionSquareSize={Constants.BASE_SQUARE_SIZE / 2}
 						/>,
 					);
 				case PICTURE_KIND.TILESETS:
@@ -425,7 +425,7 @@ function DialogPictures({
 						/>
 					);
 				case PICTURE_KIND.ICONS: {
-					const size = Project.current!.systems.iconsSize / Project.SQUARE_SIZE;
+					const size = (Project.current!.systems.iconsSize * 2) / Constants.BASE_SQUARE_SIZE;
 					return (
 						<TextureSquareSelector
 							texture={path}
@@ -440,8 +440,8 @@ function DialogPictures({
 					);
 				}
 				case PICTURE_KIND.FACESETS: {
-					const squareW = Project.current!.systems.facesetsSizeWidth / Project.SQUARE_SIZE / 2;
-					const squareH = Project.current!.systems.facesetsSizeHeight / Project.SQUARE_SIZE / 2;
+					const squareW = Project.current!.systems.facesetsSizeWidth / Constants.BASE_SQUARE_SIZE;
+					const squareH = Project.current!.systems.facesetsSizeHeight / Constants.BASE_SQUARE_SIZE;
 					return (
 						<TextureSquareSelector
 							texture={path}

@@ -92,6 +92,7 @@ class SimulationSkinRenderer {
 	private skin: Model.WindowSkin;
 	private skinImage: HTMLImageElement | null = null;
 	private facesetImages = new Map<number, HTMLImageElement | null>();
+	private facesetFrames = new WeakMap<HTMLImageElement, Map<string, HTMLCanvasElement>>();
 	private iconImages = new Map<number, HTMLImageElement | null>();
 	private options: DialogBoxOptions;
 	private readonly baseOptions: DialogBoxOptions;
@@ -456,6 +457,24 @@ class SimulationSkinRenderer {
 		ctx.fillText(text, x, y);
 	}
 
+	private getFacesetFrame(image: HTMLImageElement, sx: number, sy: number, sw: number, sh: number): HTMLCanvasElement {
+		let frames = this.facesetFrames.get(image);
+		if (!frames) {
+			frames = new Map();
+			this.facesetFrames.set(image, frames);
+		}
+		const key = `${sx};${sy};${sw};${sh}`;
+		let frame = frames.get(key);
+		if (!frame) {
+			frame = document.createElement('canvas');
+			frame.width = Math.max(1, sw);
+			frame.height = Math.max(1, sh);
+			frame.getContext('2d')?.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
+			frames.set(key, frame);
+		}
+		return frame;
+	}
+
 	private drawFaceset(
 		ctx: CanvasRenderingContext2D,
 		image: HTMLImageElement,
@@ -469,11 +488,13 @@ class SimulationSkinRenderer {
 		const facesetY = scaledH <= contentH ? contentY + (contentH - scaledH) / 2 : contentY + contentH - scaledH;
 		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(
-			image,
-			content.facesetIndexX * systems.facesetsSizeWidth,
-			content.facesetIndexY * systems.facesetsSizeHeight,
-			systems.facesetsSizeWidth,
-			systems.facesetsSizeHeight,
+			this.getFacesetFrame(
+				image,
+				content.facesetIndexX * systems.facesetsSizeWidth,
+				content.facesetIndexY * systems.facesetsSizeHeight,
+				systems.facesetsSizeWidth,
+				systems.facesetsSizeHeight,
+			),
 			contentX + this.options.fX,
 			facesetY + this.options.fY,
 			systems.facesetScalingWidth,

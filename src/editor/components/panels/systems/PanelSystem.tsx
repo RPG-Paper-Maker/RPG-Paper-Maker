@@ -523,7 +523,7 @@ const PanelSystem = forwardRef((props, ref) => {
 								<InputNumber value={iconsSize} onChange={setIconsSize} />
 							</Flex>
 							<Flex column spaced>
-								<div>{t('max.number.save.slots')}):</div>
+								<div>{t('max.number.save.slots')}:</div>
 								<InputNumber value={saveSlots} onChange={setSaveSlots} />
 							</Flex>
 							<Flex column spaced>
