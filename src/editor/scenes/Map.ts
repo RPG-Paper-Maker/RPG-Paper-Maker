@@ -2811,6 +2811,7 @@ class Map extends Base {
 			this.pointedMapElementPosition !== null &&
 			this.pointedMapElement?.kind === Map.currentSelectedMapElementKind
 		) {
+			this.updateLockedY(this.pointedMapElementPosition);
 			this.remove(this.pointedMapElementPosition);
 			this.lastPosition = this.pointedMapElementPosition;
 			return;
@@ -2899,10 +2900,18 @@ class Map extends Base {
 										this.forEachMapPortions((mapPortion) => {
 											mapPortion.removeLastPreview();
 										});
-										this.rectangleStartPosition = this.lastPosition.clone();
-										this.lastRectangleEndPosition = this.lastPosition.clone();
+										const start = this.lastPosition.clone();
+										if (
+											Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON &&
+											this.pointedMapElementPosition !== null &&
+											this.pointedMapElement?.kind === Map.currentSelectedMapElementKind
+										) {
+											start.layer = this.pointedMapElementPosition.layer;
+										}
+										this.rectangleStartPosition = start;
+										this.lastRectangleEndPosition = start.clone();
 										this.isRectangleAdding = false;
-										this.remove(this.lastPosition, true, false);
+										this.remove(start, true, false);
 									}
 									break;
 								case ACTION_KIND.PIN:
