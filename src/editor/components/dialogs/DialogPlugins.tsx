@@ -48,14 +48,18 @@ import Tree, { TREES_LARGE_MIN_WIDTH, TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
+const HIDDEN_SOURCE_FILES = ['main.js'];
+
+const isSourceFileVisible = (file: string) => !file.endsWith('.map') && !HIDDEN_SOURCE_FILES.includes(file);
+
 const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: ITERATOR, path: string): Node[] => {
 	const nodes: Node[] = [];
 	for (const key in manifest) {
 		if (key === 'files') {
 			nodes.push(
-				...(manifest[key] as string[]).map((file) =>
-					Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file))),
-				),
+				...(manifest[key] as string[])
+					.filter(isSourceFileVisible)
+					.map((file) => Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file)))),
 			);
 		} else {
 			const folder = Node.create(Model.TreeMapTag.create(foldersID.i--, key));
@@ -82,7 +86,7 @@ const folderToTreeMapTag = async (foldersID: ITERATOR, filesID: ITERATOR, path: 
 		tag.children = await folderToTreeMapTag(foldersID, filesID, Paths.join(path, folder));
 		nodes.push(tag);
 	}
-	for (const file of files) {
+	for (const file of files.filter(isSourceFileVisible)) {
 		nodes.push(Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file))));
 	}
 	return nodes;
@@ -114,6 +118,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 	const [commands, setCommands] = useState<Node[]>([]);
 	const [triggerUpdateParameters, setTriggerUpdateParameters] = useStateBool();
 	const [sourceCode, setSourceCode] = useStateString();
+	const [isSourceTypeScript, setIsSourceTypeScript] = useStateBool();
 	const [autoUpdate, setAutoUpdate] = useStateBool();
 	const [folders, setFolders] = useState<Node[]>([]);
 	const [triggerNewItem, setTriggerNewItem] = useStateBool();
@@ -328,6 +333,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 		if (node) {
 			const tag = node.content as Model.TreeMapTag;
 			if (tag.path) {
+				setIsSourceTypeScript(tag.path.endsWith('.ts'));
 				setSourceCode(
 					Constants.IS_DESKTOP
 						? (((await IO.readFile(tag.path)) as string) ?? '')
@@ -620,7 +626,7 @@ function DialogPlugins({ setIsOpen }: Props) {
 								<CodeMirror
 									value={sourceCode}
 									theme={vscodeDark}
-									extensions={[javascript({ jsx: true })]}
+									extensions={[javascript(isSourceTypeScript ? { typescript: true } : { jsx: true })]}
 									readOnly
 								/>
 							</Flex>

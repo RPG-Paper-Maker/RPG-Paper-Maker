@@ -467,7 +467,7 @@ class LocalFile extends Serializable {
 		await this.createFile(dst, content);
 	}
 
-	static async copyPublicFolder(publicFolders: string[], dst: string) {
+	static async copyPublicFolder(publicFolders: string[], dst: string, exclude: string[] = []) {
 		await this.createFolder(dst);
 		let currentFolder = LocalFile.manifest;
 		for (const folder of publicFolders) {
@@ -476,10 +476,13 @@ class LocalFile extends Serializable {
 		for (const name in currentFolder) {
 			if (name === 'files') {
 				for (const fileName of currentFolder[name] as string[]) {
+					if (exclude.includes(fileName)) {
+						continue;
+					}
 					await this.copyPublicFile(Paths.join(publicFolders.join('/'), fileName), Paths.join(dst, fileName));
 				}
-			} else {
-				await this.copyPublicFolder([...publicFolders, name], Paths.join(dst, name));
+			} else if (!exclude.includes(name)) {
+				await this.copyPublicFolder([...publicFolders, name], Paths.join(dst, name), exclude);
 			}
 		}
 	}

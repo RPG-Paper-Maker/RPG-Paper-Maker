@@ -313,10 +313,10 @@ export const copyPublicFile = async (publicPath: string, dst: string, isBlob = f
 		: LocalFile.copyPublicFile(publicPath, dst, isBlob));
 };
 
-export const copyPublicFolder = async (publicFolders: string[], dst: string) => {
+export const copyPublicFolder = async (publicFolders: string[], dst: string, exclude: string[] = []) => {
 	return await (Constants.IS_DESKTOP
-		? IO.copyPublicFolder(Paths.join(...publicFolders), dst)
-		: LocalFile.copyPublicFolder(publicFolders, dst));
+		? IO.copyPublicFolder(Paths.join(...publicFolders), dst, exclude)
+		: LocalFile.copyPublicFolder(publicFolders, dst, exclude));
 };
 
 export const getAllFilesFromFolder = async (path: string): Promise<string[]> => {

@@ -121,7 +121,7 @@ ${stderr}`);
 };
 
 const ensureScriptsBuild = async (scriptsPath) => {
-	if (await exists(`${scriptsPath}/build/Scripts`)) {
+	if (await exists(`${scriptsPath}/build/Scripts/main.js.map`)) {
 		return;
 	}
 	await runCommand('npm install', scriptsPath);
@@ -153,6 +153,7 @@ const main = async () => {
 		const webPath = `${destinationPaths.dependencies}/web/`;
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
 		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/Common/Platform.js');
+		await fs.rm('./public/Scripts/Common/Platform.js.map', { force: true });
 		const deployPath = './public/Deploy';
 		if (await exists(deployPath)) {
 			await fs.rm(deployPath, { recursive: true });

@@ -177,8 +177,8 @@ class IO {
 		return (await IO.readFile(path, true)) as string;
 	}
 
-	static async copyPublicFolder(path: string, dst: string): Promise<void> {
-		await IO.copyFolder(Paths.join(Paths.DIST, path), dst);
+	static async copyPublicFolder(path: string, dst: string, exclude: string[] = []): Promise<void> {
+		await IO.copyFolder(Paths.join(Paths.DIST, path), dst, exclude);
 	}
 
 	static async openGame(projectName: string, isBattleTest?: boolean) {

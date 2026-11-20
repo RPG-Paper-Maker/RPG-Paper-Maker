@@ -49,6 +49,8 @@ enum EXPORT_TYPE {
 	WEB,
 }
 
+const SCRIPTS_DEPLOY_EXCLUDE = ['src', 'main.js.map', 'Platform.js.map'];
+
 type Props = {
 	setIsOpen: (b: boolean) => void;
 };
@@ -227,7 +229,7 @@ function DialogDeploy({ setIsOpen }: Props) {
 
 	const copyAllProject = async (path: string) => {
 		await copyFolder(Project.current!.getPath(), Paths.join(path, Paths.BUILD));
-		await copyPublicFolder([Paths.SCRIPTS], Paths.join(path, Paths.BUILD, Paths.SCRIPTS));
+		await copyPublicFolder([Paths.SCRIPTS], Paths.join(path, Paths.BUILD, Paths.SCRIPTS), SCRIPTS_DEPLOY_EXCLUDE);
 		await createFile(
 			Paths.join(path, Paths.BUILD, Paths.STYLES, Paths.FILE_FONTS_CSS),
 			await Project.current!.systems.getStyleCSS(true),
