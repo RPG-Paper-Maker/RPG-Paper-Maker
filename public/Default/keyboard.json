@@ -68,7 +68,7 @@
 			"abr": "Action",
 			"id": 11,
 			"names": { "1": "Action" },
-			"sc": [["Enter"], ["Enter"]]
+			"sc": [["Enter"]]
 		},
 		{
 			"abr": "Cancel",
