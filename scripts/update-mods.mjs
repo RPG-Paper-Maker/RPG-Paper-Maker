@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { exec } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 import { simpleGit } from 'simple-git';
@@ -32,21 +33,18 @@ const downloadRepo = async (gitUrl, destination, branch) => {
 
 const gitUrls = {
 	scripts: 'https://github.com/RPG-Paper-Maker/Game-Scripts.git',
-	scriptsBuild: 'https://github.com/RPG-Paper-Maker/Game-Scripts-Build.git',
 	br: 'https://github.com/RPG-Paper-Maker/Basic-Ressources.git',
 	dependencies: 'https://github.com/RPG-Paper-Maker/Dependencies.git',
 };
 
 const destinationPaths = {
 	scripts: `${modsPath}/Game-Scripts`,
-	scriptsBuild: `${modsPath}/Game-Scripts-Build`,
 	br: `${modsPath}/Basic-Ressources`,
 	dependencies: `${modsPath}/Dependencies`,
 };
 
 const localPaths = {
 	scripts: '../Game-Scripts',
-	scriptsBuild: '../Game-Scripts-Build',
 	br: '../Basic-Ressources',
 	dependencies: '../Dependencies',
 };
@@ -107,6 +105,29 @@ const downloadOrCopyRepo = async (source, destination, localSource, branch) => {
 	}
 };
 
+const runCommand = (command, cwd) => {
+	return new Promise((resolve, reject) => {
+		console.log(`${command} (${cwd})`);
+		exec(command, { cwd }, (error, stdout, stderr) => {
+			if (error) {
+				reject(`${error.message}
+${stdout}
+${stderr}`);
+			} else {
+				resolve();
+			}
+		});
+	});
+};
+
+const ensureScriptsBuild = async (scriptsPath) => {
+	if (await exists(`${scriptsPath}/build/Scripts`)) {
+		return;
+	}
+	await runCommand('npm install', scriptsPath);
+	await runCommand('node scripts/build.mjs', scriptsPath);
+};
+
 const createEmptyBRFolder = async (path) => {
 	// Because git won't create empty dirs...
 	await fs.mkdir(`${path}/Shapes/MTL`);
@@ -123,12 +144,12 @@ const main = async () => {
 
 		// Download or copy repositories and files
 		await downloadOrCopyRepo(gitUrls.scripts, destinationPaths.scripts, localPaths.scripts, '3.0.0');
-		await downloadOrCopyRepo(gitUrls.scriptsBuild, destinationPaths.scriptsBuild, localPaths.scriptsBuild, '3.0.0');
+		await ensureScriptsBuild(destinationPaths.scripts);
 		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
 		createEmptyBRFolder('./public/BR');
-		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
+		await copyDirAndPrint(`${destinationPaths.scripts}/build/Scripts`, './public/Scripts');
 		const webPath = `${destinationPaths.dependencies}/web/`;
 		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
 		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/Common/Platform.js');
@@ -142,7 +163,7 @@ const main = async () => {
 		await copyFileAndPrint(`${destinationPaths.scripts}/preload.js`, `${deployPath}/preload.js`);
 		await copyFileAndPrint(`${destinationPaths.scripts}/package.json`, `${deployPath}/package.json`);
 		await copyFileAndPrint(
-			`${destinationPaths.scriptsBuild}/Scripts/Common/Platform.js`,
+			`${destinationPaths.scripts}/build/Scripts/Common/Platform.js`,
 			`${deployPath}/Platform.js`,
 		);
 		await fs.rm(modsPath, { recursive: true });
