@@ -676,6 +676,7 @@
           "ReactionInterpreter.ts",
           "Rectangle.ts",
           "Skill.ts",
+          "SongIntro.ts",
           "SpinBox.ts",
           "Sprite.ts",
           "SpriteWall.ts",
