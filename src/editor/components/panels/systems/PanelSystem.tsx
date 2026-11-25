@@ -419,11 +419,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Flex>
 							<Flex column spaced>
 								<div>{t('animation.frames')}:</div>
-								<InputNumber value={frames} onChange={setFrames} />
+								<InputNumber value={frames} onChange={setFrames} min={1} />
 							</Flex>
 							<Flex column spaced>
 								<div>{t('battlers.frames')}:</div>
-								<InputNumber value={battlersFrames} onChange={setBattlersFrames} />
+								<InputNumber value={battlersFrames} onChange={setBattlersFrames} min={1} />
 							</Flex>
 							<Flex column spaced>
 								<div>{t('battlers.frame.duration')}:</div>
@@ -438,11 +438,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Flex>
 							<Flex column spaced>
 								<div>{t('battlers.rows')}:</div>
-								<InputNumber value={battlersRows} onChange={setBattlersRows} />
+								<InputNumber value={battlersRows} onChange={setBattlersRows} min={1} />
 							</Flex>
 							<Flex column spaced>
 								<div>{t('autotiles.frames')}:</div>
-								<InputNumber value={autotilesFrames} onChange={setAutotilesFrames} />
+								<InputNumber value={autotilesFrames} onChange={setAutotilesFrames} min={1} />
 							</Flex>
 							<Flex column spaced>
 								<div>{t('autotiles.frame.duration')}:</div>
