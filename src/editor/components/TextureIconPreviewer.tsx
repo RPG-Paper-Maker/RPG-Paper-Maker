@@ -26,10 +26,11 @@ function TextureIconPreviewer({ id, indexX, indexY }: Props) {
 	const picture = useMemo(
 		() =>
 			Project.current!.pictures.getByID(PICTURE_KIND.ICONS, id) ??
-			Project.current!.pictures.getByID(PICTURE_KIND.ICONS, -1),
+			Project.current!.pictures.getByID(PICTURE_KIND.ICONS, -1) ??
+			null,
 		[id],
 	);
-	const texture = useMemo(() => picture.getPath(), [picture]);
+	const texture = useMemo(() => picture?.getPath() ?? '', [picture]);
 	const sourceRectangle = useMemo(
 		() =>
 			new Rectangle(
@@ -40,6 +41,10 @@ function TextureIconPreviewer({ id, indexX, indexY }: Props) {
 			),
 		[indexX, indexY],
 	);
+
+	if (!picture) {
+		return null;
+	}
 
 	return (
 		<TexturePreviewer
