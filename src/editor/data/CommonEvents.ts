@@ -20,7 +20,7 @@ const { t } = i18next;
 class CommonEvents extends Serializable {
 	public static readonly SYSTEM_EVENTS: JSONType[] = [
 		{ id: 1, name: 'Time', p: [
-			{ id: 1, name: 'Interval', d: { k: 3, v: 0 } },
+			{ id: 1, name: 'Interval (in seconds)', d: { k: 3, v: 0 } },
 			{ id: 2, name: 'Repeat', d: { k: 10, v: true } },
 		]},
 		{ id: 2, name: 'Chronometer finished', p: [
