@@ -195,7 +195,7 @@ class Serializable {
 				case BINDING.POSITION: {
 					const jsonObj = json[jsonName] as number[];
 					if (jsonObj == null) {
-						(this as JSONType)[name] = defaultValue;
+						(this as JSONType)[name] = defaultValue ? (defaultValue as Rectangle).clone() : defaultValue;
 					} else {
 						const obj = new positionConstructor!();
 						obj.read(jsonObj);

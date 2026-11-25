@@ -192,7 +192,7 @@ class System extends Serializable {
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['PATH_DLCS', 'pathDLCS', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', undefined, BINDING.NUMBER],
-		['heroMapPosition', 'hmp', undefined, BINDING.POSITION, undefined, undefined, Position],
+		['heroMapPosition', 'hmp', new Position(), BINDING.POSITION, undefined, undefined, Position],
 		['showBB', 'bb', false, BINDING.BOOLEAN],
 		['showFPS', 'fps', false, BINDING.BOOLEAN],
 	];
